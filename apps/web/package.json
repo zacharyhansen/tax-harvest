@@ -13,7 +13,7 @@
     "url": "npx next-typesafe-url -w"
   },
   "dependencies": {
-    "@clerk/nextjs": "^5.7.1",
+    "@clerk/nextjs": "^6.12.2",
     "@clerk/themes": "^2.2.19",
     "@dagrejs/dagre": "^1.1.4",
     "@hookform/resolvers": "^3.9.0",
