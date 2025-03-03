@@ -1,0 +1,14 @@
+{
+  "name": "@repo/utils",
+  "version": "1.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "peerDependencies": {
+    "kysely": "^0.27.4",
+    "reactflow": "^11.11.4",
+    "zod": "^3.24.1"
+  }
+}

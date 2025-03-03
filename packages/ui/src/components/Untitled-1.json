@@ -1,0 +1,19 @@
+{
+  "view": "_p_opportunity",
+  "columns": ["id", "active_deal_id"],
+  "filters": [
+    { "column": "active_deal_id", "operator": "is not", "value": null }
+  ],
+  "children": [
+    {
+      "view": "_p_deal",
+      "constraint": "opportunity_active_deal_id_fkey",
+      "columns": ["id", "active_deal_id"]
+    },
+    {
+      "view": "_p_business",
+      "constraint": "opportunity_borrower_business_id_fkey",
+      "columns": ["id"]
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+💻 Source (API):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/api/src/**
+
+💻 Source (WEB):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/web/app/**
+
+🧪 Tests (API):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/api/tests/**
+          - apps/api/.env.test
+          - apps/api/scripts/calculate-global-test-coverage.ts
+          - apps/api/vitest.config.**.ts
+          - apps/api/create-vitest-test-config.ts
+          - apps/api/.nycrc.json
+
+📝 Documentation (API):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/api/docs/**
+          - apps/api/README.md
+          - apps/api/images/**
+
+📝 Documentation (WEB):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/web/docs/**
+          - apps/web/README.md
+          - apps/web/images/**
+
+🐳 Build (API):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/api/.dockerignore
+          - apps/api/Dockerfile
+          - apps/api/docker-compose.yml
+          - apps/api/.nvmrc
+          - apps/api/.swcrc
+          - apps/api/tsconfig.json
+          - apps/api/tsconfig.prod.json
+
+⚙️ Configuration (API):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/api/.dockerignore
+          - apps/api/.editorconfig
+          - apps/api/.env.example
+          - apps/api/.eslintignore
+          - apps/api/.eslintrc
+          - apps/api/.gitignore
+          - apps/api/.npmignore
+          - apps/api/.npmrc
+          - apps/api/.nvmrc
+          - apps/api/.prettierignore
+          - apps/api/.swcrc
+          - apps/api/.yamllint.yml
+          - apps/api/lint-staged.config.mjs
+          - apps/api/vitest.config.**.ts
+          - apps/api/create-vitest-test-config.ts
+          - apps/api/commitlint.config.ts
+          - apps/api/nest-cli.json
+          - apps/api/.nycrc.json
+          - apps/api/prettier.config.mjs
+          - apps/api/tsconfig.json
+          - apps/api/tsconfig.prod.json
+
+📦 Dependencies (API):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/api/package.json
+          - apps/api/pnpm-lock.yaml
+
+📦 Dependencies (WEB):
+  - changed-files:
+      - any-glob-to-any-file:
+          - apps/web/package.json
+          - apps/web/pnpm-lock.yaml
+
+🚀 CI/CD:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/workflows/**
+          - .github/dependabot.yml
+          - .github/pr-scope-labeler.yml
+          - .husky/**
+
+🏠 Github Configuration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/ISSUE_TEMPLATE/**
+          - .github/CODEOWNERS
+          - .github/labels.yml
+          - .github/PULL_REQUEST_TEMPLATE.md

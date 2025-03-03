@@ -1,0 +1,80 @@
+// Its integral to understand that models in this file are global - i.e they are the sum of records
+// across all tenant, orgs, and their env's. It should really only be things that are truly unique to our
+// entire business (like users, tenants, and their business units/env's)
+
+// !IMPORTANT: The web app should only ever access these models through views that are created in the specific schema
+// the web app is using
+
+/// Represents an entire customer (nothing higher than this)
+enum tenant {
+  /// This is the foundation tenant which only has system fields (no extensions at all) 
+  /// Its fields are used code generation (i.e. we only code features that have access to fields that exist for every tenant)
+  foundation_tenant
+
+  @@schema("auth")
+}
+
+/// All schemas across all orgs. Schema is synomous with both an environment and clerk organization
+enum schema {
+  foundation
+  // example_customer_1_uat
+  // example_customer_1_prod
+  // example_customer_2_uat
+  // example_customer_2_prod
+
+  @@schema("auth")
+}
+
+enum env {
+  uat
+  prod
+
+  @@schema("auth")
+}
+
+/// A unique group of environments that share the same schema (a tenant can have one or more "orgs" each with their own schema structure )
+/// Each env within an org must have the same schema structure - the name of the enum here has to match one of the schemas in the schema enums
+/// This could also be considered as a business unit
+model business_unit {
+  configuration_schema schema @id
+  tenant               tenant
+
+  environment environment[]
+
+  @@schema("auth")
+}
+
+model environment {
+  schema               schema   @id @unique
+  clerk_id             String   @unique @db.VarChar(255)
+  configuration_schema schema
+  env                  env      @default(prod)
+  name                 String   @db.VarChar(255)
+  tenant               tenant
+  external_id          String?  @unique
+  created_at           DateTime @default(now())
+  updated_at           DateTime @default(now()) @updatedAt
+
+  business_unit       business_unit         @relation(fields: [configuration_schema], references: [configuration_schema])
+  published_component published_component[]
+
+  @@unique([tenant, name])
+  @@unique([tenant, configuration_schema, env])
+  @@index([clerk_id])
+  @@schema("auth")
+}
+
+model auth_user {
+  clerk_id   String   @id @unique @db.VarChar(255)
+  email      String   @unique @db.VarChar(255)
+  name       String?
+  created_at DateTime @default(now())
+
+  user__foundation    user__foundation?
+  form_instance       form_instance[]
+  published_component published_component[]
+  component_version   component_version[]
+  component           component[]
+
+  @@schema("auth")
+}

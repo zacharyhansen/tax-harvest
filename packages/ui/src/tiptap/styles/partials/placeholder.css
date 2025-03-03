@@ -1,0 +1,9 @@
+.minimal-tiptap-editor .ProseMirror > p.is-editor-empty::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-[var(--mt-secondary)];
+}
+
+.minimal-tiptap-editor-slash-command .ProseMirror > p.is-empty::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-[var(--mt-secondary)];
+}

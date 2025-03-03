@@ -1,0 +1,98 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema", "prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["auth", "foundation", "public", "configuration"]
+}
+
+enum property_type {
+  commercial
+  residential
+
+  @@schema("public")
+}
+
+enum building_type {
+  condo
+  multi_family
+  single_family
+
+  @@schema("public")
+}
+
+enum environment_type {
+  production
+  uat
+  development
+
+  @@schema("public")
+}
+
+enum state_usa {
+  AL
+  AK
+  AZ
+  AR
+  CA
+  CO
+  CT
+  DE
+  FL
+  GA
+  HI
+  ID
+  IL
+  IN
+  IA
+  KS
+  KY
+  LA
+  ME
+  MD
+  MA
+  MI
+  MN
+  MS
+  MO
+  MT
+  NE
+  NV
+  NH
+  NJ
+  NM
+  NY
+  NC
+  ND
+  OH
+  OK
+  OR
+  PA
+  RI
+  SC
+  SD
+  TN
+  TX
+  UT
+  VT
+  VA
+  WA
+  WV
+  WI
+  WY
+
+  @@schema("public")
+}
+
+enum deal_event_type {
+  update
+  state_change
+  event
+  error
+  info
+
+  @@schema("public")
+}

@@ -1,0 +1,60 @@
+{
+  "name": "riska",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Super cool risk app",
+  "author": "Zachary Hansen",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/zacharyhansen/riska/issues"
+  },
+  "homepage": "https://github.com/zacharyhansen/riska#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zacharyhansen/riska.git"
+  },
+  "keywords": [
+    "typescript",
+    "nestjs",
+    "template"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "start": "turbo start",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "codegen": "turbo codegen",
+    "ui": "pnpm --filter @repo/ui ui",
+    "test:coverage": "turbo test:coverage",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky",
+    "commit": "cz"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@commitlint/types": "^19.5.0",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "8.57.1",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "turbo": "^2.1.2",
+    "typescript": "5.7.3"
+  },
+  "packageManager": "pnpm@9.14.2",
+  "engines": {
+    "node": ">=22.x",
+    "pnpm": ">=9.x",
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm",
+    "bun": "please-use-pnpm"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

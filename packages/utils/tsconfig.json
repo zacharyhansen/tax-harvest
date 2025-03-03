@@ -1,0 +1,12 @@
+{
+  "extends": "@repo/typescript-config/nestjs.json",
+  "compilerOptions": {
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "sourceMap": true,
+    "verbatimModuleSyntax": false
+  },
+  "include": ["src/**/*.ts", "index.ts"],
+  "exclude": ["node_modules", "dist", "**/node_modules/**"]
+}

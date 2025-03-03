@@ -1,0 +1,350 @@
+/// This is the model to join views on to filter global models to create access views (i.e. joining users here gives thes users that have access to an env/schema)
+model user__foundation {
+  user_id              String     @id @unique
+  email                String     @unique @db.VarChar(255)
+  external_id          String?    @unique
+  configuration_schema schema
+  created_at           DateTime   @default(now())
+  updated_at           DateTime   @updatedAt
+  role_name            String
+  address              String?
+  address_line_2       String?
+  city                 String?    @db.VarChar(255)
+  zip                  String?    @db.VarChar(255)
+  state                state_usa?
+  county               String?
+  name                 String?
+  phone                String?    @db.VarChar(255)
+  ssn                  String?    @db.VarChar(9)
+  date_of_birth        DateTime?  @db.Date
+  credit_score         Int?
+
+  user                 auth_user                     @relation(fields: [user_id], references: [clerk_id], onDelete: Restrict)
+  role                 role                          @relation(fields: [role_name, configuration_schema], references: [name, configuration_schema], onDelete: Restrict)
+  business_user        business_user__foundation[]
+  deal_creator         deal__foundation[]            @relation("creator_deal")
+  deal_user            deal_user__foundation[]
+  opportunity          opportunity__foundation[]     @relation("agent_opportunity")
+  opportunity_borrower opportunity__foundation[]     @relation("borrower_opportunity")
+  opportunity_creator  opportunity__foundation[]     @relation("creator_opportunity")
+  task_creator         task__foundation[]            @relation("creator_task")
+  deal_event           deal_event__foundation[]
+  task_event           task_event__foundation[]
+  task                 task__foundation[]            @relation("assignee_task")
+  task_subscriber      task_subscriber__foundation[]
+  deal_assignee        deal_assignee__foundation[]
+
+  // For now a user can only have a single role in an org (TBD if we allow users to switch between roles)
+  @@map("user")
+  @@schema("foundation")
+}
+
+model deal_state__foundation {
+  // basic
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  external_id String?  @unique
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  // foundational attributes
+  order       Int
+  label       String   @unique
+  // custom attributes
+
+  deal deal__foundation[]
+
+  @@map("deal_state")
+  @@schema("foundation")
+}
+
+model opportunity__foundation {
+  // basic
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  external_id          String?  @unique
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+  // foundation attributes
+  label                String?
+  // relations
+  active_deal_id       String?  @unique @db.Uuid
+  created_by_id        String
+  borrower_user_id     String?
+  borrower_business_id String?  @db.Uuid
+  agent_id             String?
+  // custom attributes
+
+  deal              deal__foundation[]    @relation("deals")
+  active_deal       deal__foundation?     @relation("active_deal", fields: [active_deal_id], references: [id], onDelete: Restrict)
+  agent             user__foundation?     @relation("agent_opportunity", fields: [agent_id], references: [user_id], onDelete: SetNull)
+  borrower_business business__foundation? @relation(fields: [borrower_business_id], references: [id], onDelete: Restrict)
+  borrower_user     user__foundation?     @relation("borrower_opportunity", fields: [borrower_user_id], references: [user_id], onDelete: Restrict)
+  created_by        user__foundation      @relation("creator_opportunity", fields: [created_by_id], references: [user_id], onDelete: Restrict)
+
+  @@map("opportunity")
+  @@schema("foundation")
+}
+
+model deal_assignee__foundation {
+  deal_id String           @db.Uuid
+  user_id String
+  deal    deal__foundation @relation(fields: [deal_id], references: [id], onDelete: Cascade)
+  user    user__foundation @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@id([deal_id, user_id])
+  @@map("deal_assignee")
+  @@schema("foundation")
+}
+
+model deal__foundation {
+  // basic
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  external_id         String?  @unique
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  // foundation attributes
+  source              String?
+  winnability         Int?
+  appetite            Int?
+  loan_amount         Decimal? @db.Decimal(14, 3)
+  interest_rate       Decimal? @db.Decimal(7, 6)
+  loan_processing_fee Decimal? @db.Decimal(10, 3)
+  label               String
+  // relations
+  opportunity_id      String   @db.Uuid
+  created_by_id       String
+  deal_state_id       String   @db.Uuid
+  // custom attributes
+  ssbs_score          Int?
+
+  created_by         user__foundation            @relation("creator_deal", fields: [created_by_id], references: [user_id], onDelete: Restrict)
+  opportunity        opportunity__foundation     @relation("deals", fields: [opportunity_id], references: [id], onDelete: Cascade)
+  deal_state         deal_state__foundation      @relation(fields: [deal_state_id], references: [id], onDelete: Restrict)
+  deal_user          deal_user__foundation[]
+  opportunity_active opportunity__foundation?    @relation("active_deal")
+  property           property__foundation[]
+  task               task__foundation[]
+  deal_event         deal_event__foundation[]
+  deal_assignee      deal_assignee__foundation[]
+
+  @@map("deal")
+  @@schema("foundation")
+}
+
+model task_status__foundation {
+  // basic
+  id          Int      @id @default(autoincrement())
+  external_id String?  @unique
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  // foundation attributes
+  label       String   @unique
+
+  task task__foundation[]
+
+  @@map("task_status")
+  @@schema("foundation")
+}
+
+model task_priority__foundation {
+  // basic
+  id          Int      @id @default(autoincrement())
+  external_id String?  @unique
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  // foundation attributes
+  label       String   @unique
+  // custom attributes
+  // realtions
+
+  tasks task__foundation[]
+
+  @@map("task_priority")
+  @@schema("foundation")
+}
+
+model task__foundation {
+  // basic
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  external_id   String?  @unique
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  // foundation attributes
+  title         String
+  description   String?
+  // custom attributes
+  // relations
+  created_by_id String
+  assignee_id   String?
+  deal_id       String?  @db.Uuid
+  status_id     Int
+  priority_id   Int
+
+  assignee        user__foundation?             @relation("assignee_task", fields: [assignee_id], references: [user_id], onDelete: SetNull)
+  creator         user__foundation              @relation("creator_task", fields: [created_by_id], references: [user_id], onDelete: Restrict)
+  deal            deal__foundation?             @relation(fields: [deal_id], references: [id], onDelete: Cascade)
+  priority        task_priority__foundation     @relation(fields: [priority_id], references: [id], onDelete: Restrict)
+  status          task_status__foundation       @relation(fields: [status_id], references: [id], onDelete: Restrict)
+  task_event      task_event__foundation[]
+  task_subscriber task_subscriber__foundation[]
+
+  @@map("task")
+  @@schema("foundation")
+}
+
+model task_subscriber__foundation {
+  task_id String           @db.Uuid
+  user_id String
+  task    task__foundation @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  user    user__foundation @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@id([user_id, task_id])
+  @@map("task_subscriber")
+  @@schema("foundation")
+}
+
+model task_event__foundation {
+  id         BigInt   @id @default(autoincrement())
+  timestamp  DateTime @default(now()) @db.Timestamptz(6)
+  // relations
+  created_by String
+  task_id    String   @db.Uuid
+  // attributes
+  comment    String?
+  metadata   Json?    @db.JsonB
+  source     String?  @db.VarChar(255)
+
+  creator user__foundation @relation(fields: [created_by], references: [user_id], onDelete: Restrict)
+  task    task__foundation @relation(fields: [task_id], references: [id], onDelete: Cascade)
+
+  // Indexes for efficient querying and pagination
+  @@index([timestamp(sort: Desc), id(sort: Desc)])
+  @@index([task_id, timestamp(sort: Desc), id(sort: Desc)])
+  @@index([source, timestamp(sort: Desc), id(sort: Desc)])
+  @@map("task_event")
+  @@schema("foundation")
+}
+
+model property__foundation {
+  // basic
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  external_id    String?        @unique
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+  // foundation attributes
+  address        String?
+  address_line_2 String?
+  city           String?        @db.VarChar(255)
+  zip            String?        @db.VarChar(255)
+  state          state_usa?
+  county         String?
+  building_type  building_type?
+  type           property_type?
+  tags           String[]
+  year_built     Int?
+  description    String?
+  // custom attributes
+  amenities      String[]
+  area_sq_km     Float?
+  last_census_at DateTime?
+  // relations
+  deal_id        String         @db.Uuid
+
+  deal deal__foundation @relation(fields: [deal_id], references: [id], onDelete: Cascade)
+
+  @@map("property")
+  @@schema("foundation")
+}
+
+model deal_user__foundation {
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  // relations
+  user_id    String
+  deal_id    String   @db.Uuid
+
+  deal deal__foundation @relation(fields: [deal_id], references: [id], onDelete: Cascade)
+  user user__foundation @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@id([deal_id, user_id])
+  @@map("deal_user")
+  @@schema("foundation")
+}
+
+model business__foundation {
+  // basic
+  id                  String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  external_id         String?    @unique
+  created_at          DateTime   @default(now())
+  updated_at          DateTime   @updatedAt
+  // foundation attributes
+  duns                String?    @unique @db.VarChar(9)
+  dba                 String?    @unique @db.VarChar(255)
+  tin                 String?    @unique @db.VarChar(9)
+  email               String?    @db.VarChar(255)
+  address             String?
+  address_line_2      String?
+  city                String?    @db.VarChar(255)
+  zip                 String?    @db.VarChar(255)
+  state               state_usa?
+  county              String?
+  name_display        String?
+  name_legal          String?
+  phone               String?
+  // custom attributes
+  business_type       String?
+  industry            String?
+  date_business_began DateTime?  @db.Date
+  revenue_average     Float?
+  debt                Float?
+
+  business_user business_user__foundation[]
+  opportunity   opportunity__foundation[]
+
+  @@map("business")
+  @@schema("foundation")
+}
+
+model business_user__foundation {
+  // basic
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  created_at              DateTime @default(now())
+  updated_at              DateTime @updatedAt
+  // relations
+  business_id             String   @db.Uuid
+  user_id                 String
+  // foundation attributes
+  job_title               String?
+  // custom attributes
+  owernship               Float?
+  income_average_monthly  Float?
+  expense_average_monthly Float?
+
+  business business__foundation @relation(fields: [business_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user     user__foundation     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([business_id, user_id])
+  @@map("business_user")
+  @@schema("foundation")
+}
+
+model deal_event__foundation {
+  id         BigInt          @id @default(autoincrement())
+  timestamp  DateTime        @default(now()) @db.Timestamptz(6)
+  // relations
+  created_by String
+  deal_id    String          @db.Uuid
+  // attributes
+  type       deal_event_type @default(info)
+  message    String
+  metadata   Json?           @db.JsonB
+  source     String?         @db.VarChar(255)
+
+  creator user__foundation @relation(fields: [created_by], references: [user_id], onDelete: Restrict)
+  deal    deal__foundation @relation(fields: [deal_id], references: [id], onDelete: Cascade)
+
+  // Indexes for efficient querying and pagination
+  @@index([timestamp(sort: Desc), id(sort: Desc)])
+  @@index([deal_id, type, timestamp(sort: Desc), id(sort: Desc)])
+  @@index([source, timestamp(sort: Desc), id(sort: Desc)])
+  @@map("deal_event")
+  @@schema("foundation")
+}

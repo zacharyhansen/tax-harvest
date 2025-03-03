@@ -1,0 +1,330 @@
+@import './tiptap/styles/index.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --primary: 220.47 98.26% 36.08%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 210 40% 93.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 92.99% 56.11%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 220.67 97.83% 36.08%;
+    --chart-1: 220.47 98.26% 36.08%;
+    --chart-2: 210 40% 96.1%;
+    --chart-3: 210 40% 96.1%;
+    --chart-4: 210 40% 99.1%;
+    --chart-5: 220.47 101.26% 36.08%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 13.73% 10%;
+    --foreground: 229.76 31.78% 74.71%;
+    --muted: 232.5 15.44% 18.32%;
+    --muted-foreground: 233.79 11.37% 50%;
+    --popover: 234.55 17.46% 12.35%;
+    --popover-foreground: 234 12.4% 52.55%;
+    --card: 234.55 17.46% 12.35%;
+    --card-foreground: 229.76 31.78% 74.71%;
+    --border: 232.5 15.38% 30.59%;
+    --input: 232 20% 14.71%;
+    --primary: 225.45 71.22% 72.75%;
+    --primary-foreground: 234.55 17.46% 12.35%;
+    --secondary: 0 0% 82.75%;
+    --secondary-foreground: 0 0% 20%;
+    --accent: 227.73 48.05% 48.58%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 1.58 47.5% 52.94%;
+    --destructive-foreground: 210 40% 98.04%;
+    --ring: 225.45 71.22% 72.75%;
+    --chart-1: 225.45 71.22% 72.75%;
+    --chart-2: 0 0% 82.75%;
+    --chart-3: 227.73 48.05% 48.58%;
+    --chart-4: 0 0% 85.75%;
+    --chart-5: 225.45 74.22% 72.75%;
+  }
+}
+
+/* Sidebar */
+@layer base {
+  :root {
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222.2 84% 4.9%;
+    --sidebar-primary: 220.47 98.26% 36.08%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 210 40% 93.1%;
+    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+    --sidebar-border: 214.3 31.8% 91.4%;
+    --sidebar-ring: 220.67 97.83% 36.08%;
+  }
+
+  .dark {
+    --sidebar-background: 240 13.73% 10%;
+    --sidebar-foreground: 229.76 31.78% 74.71%;
+    --sidebar-primary: 225.45 71.22% 72.75%;
+    --sidebar-primary-foreground: 234.55 17.46% 12.35%;
+    --sidebar-accent: 227.73 48.05% 48.58%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 232.5 15.38% 30.59%;
+    --sidebar-ring: 225.45 71.22% 72.75%;
+  }
+}
+
+/* Random custom  */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .link {
+    @apply font-medium text-blue-600 hover:underline dark:text-blue-500;
+  }
+}
+
+/* Apply Geist as the default font */
+body {
+  font-family: 'Geist', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Clerk Matching */
+
+.cl-formButtonPrimary {
+  @apply bg-primary text-primary-foreground ring-offset-background hover:bg-primary/90 focus-visible:ring-ring inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md px-3 font-medium !shadow-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+}
+
+.cl-card,
+.cl-socialButtonsBlockButton,
+.cl-alert,
+.cl-phoneInputBox,
+.cl-userButtonPopoverCard {
+  @apply border-input bg-background text-primary rounded-lg border;
+}
+
+.cl-headerTitle,
+.cl-socialButtonsBlockButtonText,
+.cl-loading,
+.cl-formFieldLabel,
+.cl-formHeaderTitle,
+.cl-selectButton__countryCode,
+.cl-selectButton__countryCode p,
+.cl-selectOption p,
+.cl-selectOption div,
+.cl-modalCloseButton,
+.cl-navbarButton,
+.cl-breadcrumbsItem.cl-breadcrumbsItem__currentPage,
+.cl-profileSectionTitle p,
+.cl-userPreviewTextContainer,
+.cl-profileSectionContent p,
+.cl-form p,
+.cl-accordionTriggerButton {
+  @apply text-foreground;
+}
+
+.cl-headerSubtitle,
+.cl-dividerText,
+.cl-footerActionText,
+.cl-alertText,
+.cl-formFieldInfoText,
+.cl-formFieldSuccessText,
+.cl-identityPreviewText,
+.cl-userButtonPopoverActionButton,
+.cl-userButtonPopoverActionButton svg,
+.cl-userButtonPopoverActionButtonText,
+.cl-userButtonPopoverFooter p,
+.cl-userButtonPopoverFooter a,
+.cl-formHeaderSubtitle,
+.cl-breadcrumbsItem,
+.cl-breadcrumbsItemDivider,
+.cl-fileDropAreaHint,
+.cl-fileDropAreaFooterHint,
+.cl-form
+  p[data-localization-key='userProfile.emailAddressPage.emailCode.formHint'],
+p[data-localization-key='userProfile.profilePage.successMessage'] {
+  @apply text-muted-foreground;
+}
+
+.cl-dividerLine {
+  @apply bg-border;
+}
+
+.cl-formFieldInput[type='text'],
+.cl-formFieldInput[type='email'],
+.cl-formFieldInput[type='password'] {
+  @apply border-input bg-background text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.cl-footerActionLink {
+  @apply text-accent-foreground hover:text-accent-foreground/90 underline;
+}
+
+.cl-otpCodeFieldInput {
+  @apply !border-input text-foreground !border;
+}
+
+.cl-formResendCodeLink {
+  @apply text-primary disabled:opacity-90;
+}
+
+.cl-selectSearchInput__countryCode {
+  @apply border-input bg-background text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border border-b file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.cl-selectOptionsContainer__countryCode {
+  @apply border-input bg-background border;
+}
+
+.cl-internal-icon,
+.cl-userPreviewSecondaryIdentifier__userButton {
+  @apply text-foreground;
+}
+
+button[data-localization-key='userProfile.start.dangerSection.deleteAccountButton'] {
+  @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
+}
+
+.cl-fileDropAreaBox {
+  @apply dark:bg-gray-900;
+}
+
+.cl-fileDropAreaIconBox {
+  @apply dark:bg-gray-800;
+}
+
+.cl-fileDropAreaIcon {
+  @apply dark:text-gray-400;
+}
+
+.cl-fileDropAreaButtonPrimary {
+  @apply text-foreground hover:bg-secondary hover:text-accent-foreground h-10 px-4 py-2 transition-colors;
+}
+
+.cl-userButtonPopoverActionButton,
+.cl-profileSectionPrimaryButton,
+.cl-accordionTriggerButton,
+.cl-navbarButton {
+  @apply hover:bg-accent hover:text-accent-foreground;
+}
+
+.cl-card {
+  @apply rounded-lg shadow-md;
+}
+
+.cl-userButtonPopoverCard {
+  @apply rounded-md;
+}
+
+.cl-userButtonPopoverFooter a {
+  @apply hover:text-muted-foreground;
+}
+
+.cl-badge {
+  @apply border-input bg-background text-foreground rounded-full border px-2.5 py-0.5 text-xs !shadow-none;
+}
+
+.cl-badge[data-localization-key='badge__unverified'] {
+  @apply text-destructive border bg-transparent dark:text-red-500;
+}
+
+.cl-formButtonReset {
+  @apply text-foreground hover:bg-secondary;
+}
+
+.cl-footer {
+  @apply border-input bg-background from-background to-background text-muted-foreground rounded-b-lg border-x border-b bg-gradient-to-t;
+}
+.cl-userButtonPopoverFooter {
+  @apply from-background to-background rounded-b-lg bg-gradient-to-t;
+}
+
+.cl-signIn-start,
+.cl-signUp-start,
+.cl-signIn-password,
+.cl-signIn-alternativeMethods,
+.cl-signIn-emailCode {
+  @apply rounded-b-none border-b-0;
+}
+
+.cl-cardBox {
+  @apply rounded-lg shadow-sm;
+}
+
+.cl-socialButtonsBlockButton {
+  @apply h-10 !border;
+}
+
+.cl-alternativeMethods .cl-alternativeMethodsBlockButton {
+  @apply border-input text-muted-foreground h-10 !border;
+}
+
+.cl-alternativeMethodsBlockButton {
+  @apply h-10 !shadow-none;
+}
+
+.cl-navbar {
+  @apply from-background to-background rounded-lg border-y border-l bg-gradient-to-t;
+}
+
+.cl-scrollBox {
+  @apply border-input from-background to-background rounded-lg rounded-l-none border bg-gradient-to-t;
+}
+
+h1[data-localization-key='userProfile.navbar.title'] {
+  @apply text-foreground;
+}
+
+.cl-profilePage > .cl-header {
+  @apply border-b;
+}
+
+.cl-profileSection__profile,
+.cl-profileSection__emailAddresses {
+  @apply border-b;
+}
+
+.cl-menuButton {
+  @apply text-foreground hover:text-foreground;
+}
+
+.cl-menuList {
+  @apply border-input bg-background border;
+}
+
+.cl-actionCard {
+  @apply border-input bg-background border;
+}
+
+.cl-menuItem[data-color='neutral'] {
+  @apply text-foreground hover:bg-muted;
+}
+
+.cl-avatarImageActionsUpload {
+  @apply border-input text-foreground !border;
+}
+
+.cl-userButtonPopoverMain {
+  @apply border-input bg-background rounded-lg;
+}
