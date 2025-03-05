@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
-    "@commitlint/config-conventional": "^19.5.0",
+    "@commitlint/config-conventional": "^19.7.1",
     "@commitlint/types": "^19.5.0",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
