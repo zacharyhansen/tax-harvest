@@ -798,8 +798,8 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.1)
       chromatic:
-        specifier: ^11.20.2
-        version: 11.25.2
+        specifier: ^11.27.0
+        version: 11.27.0
       eslint-plugin-storybook:
         specifier: ^0.11.1
         version: 0.11.2(eslint@9.20.0(jiti@1.21.6))(typescript@5.7.3)
@@ -5514,8 +5514,8 @@ packages:
     resolution: {integrity: sha512-+IxzY9BZOQd/XuYPRmrvEVjF/nqj5kgT4kEq7VofrDoM1MxoRjEWkrCC3EtLi59TVawxTAn+orJwFQcrqEN1+g==}
     engines: {node: '>=18'}
 
-  chromatic@11.25.2:
-    resolution: {integrity: sha512-/9eQWn6BU1iFsop86t8Au21IksTRxwXAl7if8YHD05L2AbuMjClLWZo5cZojqrJHGKDhTqfrC2X2xE4uSm0iKw==}
+  chromatic@11.27.0:
+    resolution: {integrity: sha512-jQ2ufjS+ePpg+NtcPI9B2eOi+pAzlRd2nhd1LgNMsVCC9Bzf5t8mJtyd8v2AUuJS0LdX0QVBgkOnlNv9xviHzA==}
     hasBin: true
     peerDependencies:
       '@chromatic-com/cypress': ^0.*.* || ^1.0.0
@@ -11614,7 +11614,7 @@ snapshots:
 
   '@chromatic-com/storybook@3.2.4(react@19.0.0)(storybook@8.5.3(prettier@3.3.3))':
     dependencies:
-      chromatic: 11.25.2
+      chromatic: 11.27.0
       filesize: 10.1.6
       jsonfile: 6.1.0
       react-confetti: 6.2.2(react@19.0.0)
@@ -16683,7 +16683,7 @@ snapshots:
 
   chownr@3.0.0: {}
 
-  chromatic@11.25.2: {}
+  chromatic@11.27.0: {}
 
   chrome-trace-event@1.0.4: {}
 
