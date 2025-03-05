@@ -1,0 +1,21 @@
+query PlaidLinkToken {
+  linkToken
+}
+
+mutation PlaidSetAccessTokenAndSyncAccounts(
+  $publicToken: String!
+  $metaData: PlaidLinkOnSuccessMetadata!
+) {
+  setAccessTokenAndSyncAccounts(
+    publicToken: $publicToken
+    metaData: $metaData
+  ) {
+    id
+  }
+}
+
+mutation PlaidSync($authConnectionId: String!) {
+  syncAuthConnection(id: $authConnectionId) {
+    id
+  }
+}

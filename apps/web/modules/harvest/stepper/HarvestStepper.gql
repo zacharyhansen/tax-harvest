@@ -1,0 +1,121 @@
+query LotsCurrentForLotType($lotValueType: LotValueType!) {
+  lotCurrent(lotValueType: $lotValueType) {
+    ...LotCurrentItem
+  }
+}
+
+query DirectedHarvest(
+  $targetRealized: Float!
+  $targetUnrealized: Float!
+  $lots: [DirectedHarvestLot!]!
+) {
+  directedHarvest(
+    lots: $lots
+    targetRealized: $targetRealized
+    targetUnrealized: $targetUnrealized
+  ) {
+    realizedOrders {
+      ...HarvestLotOrderItem
+    }
+    unrealizedOrders {
+      ...HarvestLotOrderItem
+    }
+    allOrders {
+      ...HarvestLotOrderItem
+    }
+  }
+}
+
+fragment HarvestTransactionItemRecord on HarvestTransactionItem {
+  id
+  quantity
+  completedDate
+  orderType
+  lotSold {
+    id
+    acquiredDate
+  }
+  asset {
+    lastPrice
+    symbol
+  }
+}
+fragment HarvestTransactionRecord on HarvestTransaction {
+  id
+  revert
+  notify
+  revertDate
+  counterTransaction
+  harvestTransactionItem {
+    ...HarvestTransactionItemRecord
+  }
+  replacementTransactionItem {
+    ...HarvestTransactionItemRecord
+  }
+  revertHarvestTransactionItem {
+    ...HarvestTransactionItemRecord
+  }
+  revertReplacementTransactionItem {
+    ...HarvestTransactionItemRecord
+  }
+}
+
+fragment HarvestItem on Harvest {
+  id
+  date
+  step
+  amount
+  type
+  label
+  harvestTransactions {
+    ...HarvestTransactionRecord
+  }
+}
+
+mutation CreateHarvest(
+  $directedHarvestLots: [DirectedHarvestLot!]!
+  $harvestType: HarvestType!
+) {
+  createHarvest(
+    directedHarvestLots: $directedHarvestLots
+    harvestType: $harvestType
+  ) {
+    ...HarvestItem
+  }
+}
+
+mutation UpdateHarvest($id: String!, $data: HarvestUpdateInput!) {
+  updateHarvest(id: $id, data: $data) {
+    ...HarvestItem
+  }
+}
+
+mutation updateHarvestTransaction(
+  $id: String!
+  $data: HarvestTransactionUpdateInput!
+) {
+  updateHarvestTransaction(id: $id, data: $data) {
+    ...HarvestTransactionRecord
+  }
+}
+
+mutation updateHarvestTransactionItem(
+  $id: String!
+  $data: HarvestTransactionItemUpdateInput!
+) {
+  updateHarvestTransactionItem(id: $id, data: $data) {
+    ...HarvestTransactionItemRecord
+  }
+}
+
+query Harvest($id: String!) {
+  harvest(id: $id) {
+    ...HarvestItem
+  }
+}
+
+mutation FinalizeHarvest($id: String!) {
+  finalizeHarvest(id: $id) {
+    ...HarvestItem
+  }
+}

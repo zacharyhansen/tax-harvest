@@ -1,0 +1,38 @@
+fragment AccountTransactionItem on Account {
+  id
+  displayName
+  authConnection {
+    source
+  }
+}
+
+fragment TransactionTableItem on Transaction {
+  id
+  quantity
+  type
+  description
+  assetSymbol
+  settlementDate
+  securityType
+  displaySymbol
+  # Plaid filled
+  amount
+  externalId
+  fee
+  memo
+  price
+  quantity
+  subtype
+  type
+  transactionDate
+  assetSymbol
+  account {
+    ...AccountTransactionItem
+  }
+}
+
+query Transactions($where: TransactionWhereInput) {
+  transactions(where: $where) {
+    ...TransactionTableItem
+  }
+}

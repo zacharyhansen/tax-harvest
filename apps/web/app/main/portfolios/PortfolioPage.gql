@@ -1,0 +1,33 @@
+fragment PortfolioTableItem on Portfolio {
+  createdBy {
+    name
+    id
+    photo
+    email
+  }
+  createdById
+  id
+  name
+  accounts {
+    id
+    status
+    displayName
+    institution
+  }
+  createdAt
+  usersOnPortfolios {
+    user {
+      name
+      id
+      photo
+      email
+    }
+    role
+  }
+}
+
+query PortfolioTable {
+  portfolios {
+    ...PortfolioTableItem
+  }
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "accountId": "fdfa65e4-b20e-4dec-a0cc-c89a0b95c68e",
+    "acquiredDate": "2024-06-20T14:00:00.000Z",
+    "assetSymbol": "RIVN",
+    "costBasis": "3133.5",
+    "dollarPerSharePnL": "-0.2050",
+    "gainTotal": "-61.5",
+    "id": "24644b66-e71a-4d36-9682-7b917be3b1ad",
+    "lastPrice": "10.2400",
+    "lotId": "9d4cccfa-7aec-42ad-ab8d-17209eecbcaa",
+    "orderType": "SELL_TO_CLOSE",
+    "pricePaid": "10.4450",
+    "quantity": "300",
+    "taxGain": "SHORT",
+    "valueTotal": "3072"
+  }
+]

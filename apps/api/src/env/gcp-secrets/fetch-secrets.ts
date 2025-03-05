@@ -16,20 +16,24 @@ export const fetchGCPSecrets = async () => {
       });
   }
 
-  try {
-    const secrets = await Promise.all([
-      getSecret("DATABASE_NAME"),
-      getSecret("DATABASE_HOST"),
-      getSecret("DATABASE_PASSWORD"),
-      getSecret("DATABASE_PORT"),
-      getSecret("DATABASE_USER"),
-      getSecret("GOOGLE_PROJECT"),
-    ]);
-    return secrets.reduce(
-      (current, accumulator) => ({ ...accumulator, ...current }),
-      {},
-    );
-  } catch (error) {
-    throw error;
-  }
+  const secrets = await Promise.all([
+    getSecret("DATABASE_NAME"),
+    getSecret("DATABASE_HOST"),
+    getSecret("DATABASE_PASSWORD"),
+    getSecret("DATABASE_PORT"),
+    getSecret("DATABASE_USER"),
+    getSecret("POLYGON_API_KEY"),
+    getSecret("ETRADE_API_KEY"),
+    getSecret("ETRADE_API_SECRET"),
+    getSecret("GOOGLE_PROJECT"),
+    getSecret("STRIPE_SECRET_KEY"),
+    getSecret("PLAID_SECRET_KEY"),
+    getSecret("PLAID_CLIENT_ID"),
+    getSecret("CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET"),
+  ]);
+  // eslint-disable-next-line unicorn/no-array-reduce
+  return secrets.reduce(
+    (current, accumulator) => ({ ...accumulator, ...current }),
+    {},
+  );
 };

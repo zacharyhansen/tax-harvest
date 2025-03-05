@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "module": "esnext",
     "target": "esnext",
+    "strictNullChecks": true,
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "strict": true,

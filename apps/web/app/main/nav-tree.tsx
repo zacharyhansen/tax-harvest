@@ -1,18 +1,9 @@
 import {
-  CircuitBoard,
-  DatabaseZap,
-  GitFork,
-  Goal,
-  Handshake,
-  HardDrive,
-  IdCard,
-  Layers3,
+  Folders,
   LayoutDashboard,
-  ListTodo,
-  Puzzle,
-  Settings,
-  TrendingUpDown,
-  Users,
+  NotebookText,
+  Waypoints,
+  Wheat,
 } from 'lucide-react';
 import { type NavGroup } from '@repo/ui/layouts/dashboard';
 
@@ -20,7 +11,7 @@ import { TypedRoutes } from '~/lib/routes';
 
 export const NavTree: NavGroup[] = [
   {
-    title: 'Platform',
+    title: 'Harvest',
     items: [
       {
         title: 'Home',
@@ -28,81 +19,29 @@ export const NavTree: NavGroup[] = [
         icon: LayoutDashboard,
       },
       {
-        title: 'Tasks',
-        url: TypedRoutes.tasks(),
-        icon: ListTodo,
+        title: 'Harvests',
+        url: TypedRoutes.harvests(),
+        icon: Wheat,
       },
       {
-        title: 'Deals',
-        url: TypedRoutes.opportunities(),
-        icon: Handshake,
-      },
-    ],
-  },
-  {
-    title: 'Organization',
-    items: [
-      {
-        title: 'Users',
-        url: TypedRoutes.users(),
-        icon: Users,
-      },
-      {
-        title: 'Roles',
-        url: TypedRoutes.roles(),
-        icon: IdCard,
-      },
-      {
-        title: 'Settings',
-        url: TypedRoutes.settings(),
-        icon: Settings,
+        title: 'Transactions',
+        url: TypedRoutes.transactions(),
+        icon: NotebookText,
       },
     ],
   },
   {
-    title: 'Configure',
+    title: 'Manage',
     items: [
       {
-        title: 'State Machines',
-        url: TypedRoutes.stateMachines(),
-        icon: CircuitBoard,
+        title: 'Accounts',
+        url: TypedRoutes.accounts(),
+        icon: Waypoints,
       },
       {
-        url: TypedRoutes.goals(),
-        icon: Goal,
-        title: 'Goals',
-      },
-      {
-        title: 'Views',
-        url: TypedRoutes.views(),
-        icon: Layers3,
-      },
-      {
-        title: 'Components',
-        url: TypedRoutes.components(),
-        icon: Puzzle,
-      },
-      {
-        title: 'Data',
-        url: TypedRoutes.data(),
-        icon: HardDrive,
-        items: [
-          {
-            title: 'Data Tree',
-            url: TypedRoutes.data(),
-            icon: GitFork,
-          },
-          {
-            title: 'Rules',
-            url: '#',
-            icon: TrendingUpDown,
-          },
-          {
-            title: 'Query Playground',
-            url: TypedRoutes.views() + '/playground',
-            icon: DatabaseZap,
-          },
-        ],
+        title: 'Portfolio Settings',
+        url: TypedRoutes.portfolios(),
+        icon: Folders,
       },
     ],
   },

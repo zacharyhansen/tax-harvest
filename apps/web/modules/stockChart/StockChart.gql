@@ -1,0 +1,12 @@
+query Chart3Month($asset: String!) {
+  chartThreeMonth(asset: $asset) {
+    c
+    t
+    o
+    h
+    l
+    vw
+    v
+    n
+  }
+}

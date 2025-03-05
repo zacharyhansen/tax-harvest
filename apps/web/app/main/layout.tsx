@@ -2,15 +2,12 @@
 
 import {
   ClerkLoaded,
-  OrganizationList,
-  OrganizationSwitcher,
   RedirectToSignIn,
   SignedIn,
   SignedOut,
   useAuth,
   UserButton,
 } from '@clerk/nextjs';
-import { dark } from '@clerk/themes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import MediaProvider from '@repo/ui/providers/media-provider';
@@ -27,21 +24,18 @@ import {
 } from '@repo/ui/components/breadcrumb';
 import { httpBatchLink, httpLink } from '@trpc/client';
 import { useState } from 'react';
-import { Building, Pencil } from 'lucide-react';
-import { Button } from '@repo/ui/components/button';
-import { Combobox } from '@repo/ui/components/combobox';
-import { useTheme } from 'next-themes';
 import { usePathname } from 'next/navigation';
 
 import ThemeButton from './theme-button';
-import { EnvironmentProvider, useEnvironment } from './environment.provider';
 import { NavTree } from './nav-tree';
-import { UserProvider, useUser } from './user.provider';
+import { UserProvider } from './user.provider';
 import { ViewContextProvider } from './view-context.provider';
 
 import { trpc } from '~/lib/trpc';
 import { clientEnvironment } from '~/lib/env/clientEnvironment';
 import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs';
+import { PlaidConnectButton } from '~/modules/plaid';
+import { PortfolioProvider, PortfolioSwitcher } from '~/modules/portfolio';
 
 const queryClient = new QueryClient();
 
@@ -67,10 +61,9 @@ export default function MainLayout({
 }
 
 const TrpcApp = ({ children }: { children: React.ReactNode }) => {
-  const { getToken, orgId } = useAuth();
+  const { getToken } = useAuth();
   const breadcrumbs = useBreadcrumbs();
   const pathname = usePathname();
-  const { theme } = useTheme();
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
@@ -96,34 +89,15 @@ const TrpcApp = ({ children }: { children: React.ReactNode }) => {
     })
   );
 
-  if (!orgId) {
-    return (
-      <div className="text-card-foreground grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
-        <div className="text-center">
-          <div className="text-primary flex justify-center space-x-2 align-middle text-xl font-bold">
-            <Building className="inline" />
-            <p>Select your organization</p>
-          </div>
-          <div className="text-sm text-gray-600">
-            If you do not have any active organizations, please contact your
-            company to add you to their org.
-          </div>
-          <div className="mt-4 flex items-center justify-center gap-x-6">
-            <OrganizationList hidePersonal />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <EnvironmentProvider>
-          <UserProvider>
+        <UserProvider>
+          <PortfolioProvider>
             <ViewContextProvider>
               <Dashboard
                 pathname={pathname}
+                header={<PortfolioSwitcher />}
                 breadcrumb={
                   <Breadcrumb>
                     <BreadcrumbList>
@@ -155,16 +129,10 @@ const TrpcApp = ({ children }: { children: React.ReactNode }) => {
                 sidebarOptions={
                   <>
                     <SignedIn>
-                      <OrganizationSwitcher
-                        hidePersonal={true}
-                        appearance={{
-                          baseTheme: theme === 'dark' ? dark : undefined,
-                        }}
-                      />
-                      <ConfiguratorButton />
+                      <PlaidConnectButton />
                       <UserButton />
+                      <ThemeButton />
                     </SignedIn>
-                    <ThemeButton />
                   </>
                 }
                 navGroups={NavTree}
@@ -174,55 +142,9 @@ const TrpcApp = ({ children }: { children: React.ReactNode }) => {
               <ReactQueryDevtools initialIsOpen={false} />
               <Toaster />
             </ViewContextProvider>
-          </UserProvider>
-        </EnvironmentProvider>
+          </PortfolioProvider>
+        </UserProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );
-};
-
-const ConfiguratorButton = () => {
-  const {
-    isConfigurator,
-    isConfiguring,
-    toggleConfiguring,
-    user,
-    setRoleImpersonation,
-  } = useUser();
-  const { configuration_schema } = useEnvironment();
-
-  return isConfigurator ? (
-    <div className="flex items-center space-x-2">
-      {isConfiguring ? (
-        <Combobox
-          value={user.role_name}
-          placeholder="Configure for role..."
-          onChange={value => {
-            setRoleImpersonation({
-              name: value!,
-              configuration_schema,
-            });
-          }}
-          options={[
-            {
-              label: 'Admin',
-              value: 'admin',
-            },
-            {
-              label: 'Agent',
-              value: 'agent',
-            },
-          ]}
-        />
-      ) : null}
-      <Button
-        variant={isConfiguring ? 'default' : 'outline'}
-        size="icon"
-        className="h-8 w-8 flex-none rounded-full"
-        onClick={toggleConfiguring}
-      >
-        <Pencil className="h-3 w-3" />
-      </Button>
-    </div>
-  ) : null;
 };

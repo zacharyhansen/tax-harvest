@@ -1,0 +1,11 @@
+mutation UpdatePortfolio($data: PortfolioUpdateInput!) {
+  updatePortfolio(data: $data) {
+    ...PortfolioDetailItem
+  }
+}
+
+query PortfolioById($id: String!) {
+  portfolioById(id: $id) {
+    ...PortfolioDetailItem
+  }
+}

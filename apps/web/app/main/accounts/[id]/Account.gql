@@ -1,0 +1,70 @@
+fragment AccountItem on Account {
+  id
+  displayName
+  type
+  portfolioId
+  provider
+  externalId
+  key
+  description
+  institution
+  type
+  mode
+  status
+  optionLevel
+  cashForOpenOrders
+  balanceMoneyMarket
+  cashAvailableForInvestment
+  accountValueTotal
+  marketValueTotal
+  cashNet
+  cashBalance
+  balanceAccount
+  createdAt
+  updatedAt
+  createdBy {
+    ...UserItem
+  }
+  _realizedProfitAndLoss {
+    id
+    longTerm
+    shortTerm
+    dividend
+    year
+    deferredLoss
+  }
+}
+
+query Account($id: String!) {
+  account(id: $id) {
+    ...AccountItem
+  }
+}
+
+mutation UpdateAccount(
+  $accountUpdateInput: AccountUpdateInput!
+  $accountWhereUniqueInput: AccountWhereUniqueInput!
+) {
+  updateAccount(
+    accountUpdateInput: $accountUpdateInput
+    accountWhereUniqueInput: $accountWhereUniqueInput
+  ) {
+    id
+    displayName
+    type
+    portfolioId
+  }
+}
+
+mutation UpdateAccountRealizedPAndL(
+  $id: String!
+  $input: RealizedPAndLUpdateInput!
+) {
+  updateRealizedPAndL(id: $id, input: $input) {
+    id
+    shortTerm
+    longTerm
+    deferredLoss
+    dividend
+  }
+}

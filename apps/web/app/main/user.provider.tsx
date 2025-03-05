@@ -1,34 +1,14 @@
 import { useAuth } from '@clerk/nextjs';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import type React from 'react';
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
-import { useEnvironment } from './environment.provider';
-
-import type { Database } from '~/lib/database/database.types';
+import type { Tables } from '~/lib/database/database.types';
 import postgrest from '~/lib/database/postgrest';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 
-type User = Database['foundation']['Tables']['user']['Row'];
-type Role = Database['configuration']['Tables']['role']['Row'];
-const clerkConfiguratorRoles = new Set(['org:admin', 'org:configurator']);
-
-interface Configurator {
-  isConfigurator: boolean;
-  isAdmin: boolean;
-  isConfiguring: boolean;
-}
-
-interface UserContextType extends Configurator {
-  user: User;
-  setRoleImpersonation: (role?: Role) => void;
-  toggleConfiguring: VoidFunction;
+interface UserContextType {
+  user: Tables<'User'>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -38,52 +18,19 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  // read isConfiguring from local storage
-  const isConfiguring = localStorage.getItem('isConfiguring');
-
-  const { environment_schema } = useEnvironment();
-  const { userId, orgRole } = useAuth();
-  const [roleImpersonation, setRoleImpersonation] = useState<Role>();
-  const [configurator, setConfigurator] = useState<Configurator>({
-    isConfigurator: clerkConfiguratorRoles.has(orgRole ?? ''),
-    isAdmin: orgRole === 'org:admin',
-    isConfiguring: isConfiguring === 'true',
-  });
+  const { userId } = useAuth();
 
   const { data, isLoading, error } = useQuery(
-    postgrest
-      .schema(environment_schema)
-      .from('user')
-      .select(`*`)
-      .eq('user_id', userId!)
-      .single()
+    postgrest.from('User').select(`*`).eq('id', userId!).single()
   );
 
   const value = useMemo(
     () => ({
       user: {
         ...data,
-        role_name:
-          roleImpersonation?.name && configurator.isConfiguring
-            ? roleImpersonation.name
-            : data?.role_name,
-      },
-      setRoleImpersonation,
-      ...configurator,
-      toggleConfiguring: () => {
-        setConfigurator(previous => {
-          localStorage.setItem(
-            'isConfiguring',
-            (!previous.isConfiguring).toString()
-          );
-          return {
-            ...previous,
-            isConfiguring: !previous.isConfiguring,
-          };
-        });
       },
     }),
-    [data, roleImpersonation, setConfigurator, configurator]
+    [data]
   );
 
   if (isLoading) {

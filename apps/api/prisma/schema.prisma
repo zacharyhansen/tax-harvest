@@ -1,0 +1,807 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"] // Enable the postgresqlExtensions. Currently in preview
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector")]
+}
+
+generator zod {
+  // see https://github.com/chrishoermann/zod-prisma-types
+  provider = "zod-prisma-types"
+  output   = "../src/generated/prisma-zod" // default is ./generated/zod
+}
+
+model User {
+  /// This is the clerk user id
+  id                 String   @id
+  /// Stripe user id
+  stripeCustomerId   String   @unique
+  // Plaid User uid
+  plaidCustomerId    String?
+  plaidUserToken     String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+  email              String?
+  phoneNumber        String?
+  /// @HideField({ output: true, input: true })  
+  hashedRefreshToken String?
+  name               String?
+  photo              String?
+
+  Portfolio         Portfolio[]
+  Account           Account[]
+  UsersOnPortfolios UsersOnPortfolios[]
+  favorites         Asset[]
+  authConnections   AuthConnection[]
+  Harvest           Harvest[]
+}
+
+enum PlaidLinkStatus {
+  /// Portfolio needs a plaid link
+  NONE
+  /// We have created the link in plaid and are waiting for the SESSION_FINISHED webhook 
+  CREATED
+  /// We recieved the webhook link data - now we are downloading/syncing data for the accounts
+  SESSION_FINISHED
+  /// Data for the link/accoutns ahs been downloaded
+  SYNCED
+}
+
+model Portfolio {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+  createdById       String?
+  name              String   @default("Main")
+  /// How often should we harvest for the portfolio
+  harvestCycleWeeks Int      @default(4)
+
+  // Harvest Fields
+  /// How much $ amount does a single share need to exceed to be a valid harvest share (i.e. shares with a p/l lower we shouldnt even care about)
+  harvestShareDollarThreshold        Decimal @default(".01") @db.Decimal(14, 2)
+  /// As we iterate through different tickets to build a harvest, how much $ should we target before moving to the next one
+  harvestTickerBucketDollarSizeLong  Decimal @default(1500) @db.Decimal(14, 2)
+  /// How much is a valid bucket (otherwise a ticker is considered 'slop')
+  harvestTickerBucketLowerLimitLong  Decimal @default(".01") @db.Decimal(14, 2)
+  /// As we iterate through different tickets to build a harvest, how much $ should we target before moving to the next one
+  harvestTickerBucketDollarSizeShort Decimal @default(1000) @db.Decimal(14, 2)
+  /// How much is a valid bucket (otherwise a ticker is considered 'slop')
+  harvestTickerBucketLowerLimitShort Decimal @default(".01") @db.Decimal(14, 2)
+
+  accounts          Account[]
+  usersOnPortfolios UsersOnPortfolios[]
+  createdBy         User?               @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  authConnections   AuthConnection[]
+  harvests          Harvest[]
+}
+
+enum HarvestType {
+  SELL
+  REDUCE_COST_BASIS
+  REDUCE_TAXES
+  CAPTURE_GAINS_TAX_FREE
+}
+
+enum HarvestStep {
+  CONFIGURE
+  REVIEW
+  COMPLETE
+}
+
+model Harvest {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now()) @updatedAt
+  label       String
+  createdById String
+  portfolioId String      @db.Uuid
+  amount      Decimal     @db.Decimal(14, 4)
+  date        DateTime    @default(now())
+  type        HarvestType
+  step        HarvestStep @default(CONFIGURE)
+
+  createdBy           User                 @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  portfolio           Portfolio            @relation(fields: [portfolioId], references: [id])
+  harvestTransactions HarvestTransaction[]
+}
+
+/// Represent the logical unit of a harvest transactiont whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy
+model HarvestTransaction {
+  id                                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt                          DateTime @default(now())
+  updatedAt                          DateTime @default(now()) @updatedAt
+  harvestId                          String   @db.Uuid
+  /// Is this transaction part of counter group of transactions for harvest (i.e. selling a gain to counter the loss that was selected)
+  counterTransaction                 Boolean  @default(false)
+  /// Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
+  revertDate                         DateTime @default(now())
+  /// should revert transactions be performed
+  revert                             Boolean  @default(true)
+  /// Should we notify post wash window? No date is no notify
+  notify                             Boolean  @default(true)
+  harvestTransactionItemId           String   @unique @db.Uuid
+  replacementTransactionItemId       String?  @unique @db.Uuid
+  revertHarvestTransactionItemId     String?  @unique @db.Uuid
+  revertReplacementTransactionItemId String?  @unique @db.Uuid
+
+  harvest                          Harvest                 @relation(fields: [harvestId], references: [id], onDelete: Cascade)
+  harvestTransactionItem           HarvestTransactionItem  @relation(name: "harvestTransaction", fields: [harvestTransactionItemId], references: [id], onDelete: Restrict)
+  replacementTransactionItem       HarvestTransactionItem? @relation(name: "replacementTransaction", fields: [replacementTransactionItemId], references: [id], onDelete: SetNull)
+  revertHarvestTransactionItem     HarvestTransactionItem? @relation(name: "revertHarvestTransaction", fields: [revertHarvestTransactionItemId], references: [id], onDelete: Restrict)
+  revertReplacementTransactionItem HarvestTransactionItem? @relation(name: "revertReplacementTransaction", fields: [revertReplacementTransactionItemId], references: [id], onDelete: SetNull)
+}
+
+model HarvestTransactionItem {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  orderType     OrderType
+  assetSymbol   String
+  completedDate DateTime?
+  lotId         String?   @db.Uuid
+  quantity      Decimal   @db.Decimal(14, 4)
+  price         Decimal   @db.Decimal(14, 4)
+
+  asset                        Asset               @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  lotSold                      Lot?                @relation(fields: [lotId], references: [id], onDelete: SetNull)
+  harvestTransaction           HarvestTransaction? @relation(name: "harvestTransaction")
+  replacementTransaction       HarvestTransaction? @relation(name: "replacementTransaction")
+  revertHarvestTransaction     HarvestTransaction? @relation(name: "revertHarvestTransaction")
+  revertReplacementTransaction HarvestTransaction? @relation(name: "revertReplacementTransaction")
+}
+
+// Account ------------------------------------------------------------------------------------------------------------------------------
+model Account {
+  /// Internal account identifier
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt
+  /// External provider of the account - null if its an system generated account
+  provider         AccountProvider    @default(SYSTEM)
+  /// The auth connection the account has been provided from 
+  authConnectionId String             @db.Uuid
+  /// The unique id in the external system for the account (only unique in combination with provider)
+  externalId       String?
+  plaidAccountName String?
+  plaidAccountMask String?
+  key              String?
+  /// Who created the model
+  createdById      String
+  /// Display Name of the account
+  displayName      String             @default("New Account")
+  /// The description of the account
+  description      String?
+  /// What institution does this account fall under
+  institution      AccountInstitution
+  /// The type of account
+  type             String             @default("Unknown")
+  subType          String?
+  /// The mode of the account
+  mode             AccountMode?
+  /// Is this account archived
+  status           AccountStatus      @default(ACTIVE)
+  /// Which portfolio does this account belong to
+  /// @HideField({ match: '@(Account)Create*Input' })
+  portfolioId      String             @db.Uuid
+  /// If the account was closed
+  closedDate       DateTime?
+  /// Option level for the account
+  optionLevel      OptionLevel?
+
+  // Setup fields
+  uploadedPositions Boolean @default(false)
+  setRealizedValues Boolean @default(false)
+
+  // Browserless io fields
+  liveURL        String?
+  liveURLCreated DateTime?
+
+  // Balance fields
+  cashForOpenOrders                Decimal? @db.Decimal(14, 4)
+  balanceMoneyMarket               Decimal? @db.Decimal(14, 4)
+  // Computed
+  accountValueTotal                Decimal? @db.Decimal(14, 4)
+  marketValueTotal                 Decimal? @db.Decimal(14, 4)
+  cashAvailableForInvestment       Decimal? @db.Decimal(14, 4)
+  cashNet                          Decimal? @db.Decimal(14, 4)
+  cashBalance                      Decimal? @db.Decimal(14, 4)
+  cashSettledForInvestment         Decimal? @db.Decimal(14, 4)
+  cashUnsettledForInvestment       Decimal? @db.Decimal(14, 4)
+  cashBuyingPower                  Decimal? @db.Decimal(14, 4)
+  fundsWithheldFromPurchasingPower Decimal? @db.Decimal(14, 4)
+  fundsWithheldFromWithdrawal      Decimal? @db.Decimal(14, 4)
+  marginBuyingPower                Decimal? @db.Decimal(14, 4)
+  marginBuyingPowerDT              Decimal? @db.Decimal(14, 4)
+  balanceShortAdjustment           Decimal? @db.Decimal(14, 4)
+  balanceAccount                   Decimal? @db.Decimal(14, 4)
+  equityRegt                       Decimal? @db.Decimal(14, 4)
+  equityRegtPercent                Decimal? @db.Decimal(14, 4)
+  cashOpenOrderReserveDT           Decimal? @db.Decimal(14, 4)
+  marginOpenOrderReserveDT         Decimal? @db.Decimal(14, 4)
+  raw                              Json?
+
+  /// @HideField({ match: '@(Account)Create*Input' })
+  createdBy      User            @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  authConnection AuthConnection  @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
+  portfolio      Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  positions      Position[]
+  transactions   Transaction[]
+  realizedPAndL  RealizedPAndL[]
+  lots           Lot[]
+  files          File[]
+
+  @@unique([provider, externalId])
+}
+
+model RealizedPAndL {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+  accountId    String   @db.Uuid
+  year         Int
+  shortTerm    Decimal  @default(0) @db.Decimal(14, 4)
+  longTerm     Decimal  @default(0) @db.Decimal(14, 4)
+  dividend     Decimal  @default(0) @db.Decimal(14, 4)
+  deferredLoss Decimal  @default(0) @db.Decimal(14, 4)
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, year])
+}
+
+model Transaction {
+  /// Internal transaction identifier
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @default(now()) @updatedAt
+  externalId         String
+  accountId          String    @db.Uuid
+  securityType       String?
+  type               String?
+  subtype            String?
+  transactionDate    DateTime?
+  postDate           DateTime?
+  settlementDate     DateTime?
+  description        String?
+  datailsURI         String?
+  memo               String?
+  assetSymbol        String
+  quantity           Decimal?  @db.Decimal(14, 4)
+  price              Decimal?  @db.Decimal(14, 4)
+  amount             Decimal?  @db.Decimal(14, 4)
+  settlementCurrency String?
+  paymentCurrency    String?
+  fee                Decimal?  @db.Decimal(14, 4)
+  displaySymbol      String?
+  detailsURI         String?
+
+  asset   Asset   @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, externalId])
+}
+
+/// This model really should never be shown to the user - most api's have it but its
+/// just a grouping of open lots. We track it as its needed for calculations derived from plaid 
+/// but user facing tables etc. and harvest calc's should roll up lots 
+model Position {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @default(now()) @updatedAt
+  accountId      String    @db.Uuid
+  /// The unique id in the external system for the position
+  externalId     String?
+  dateAcquired   DateTime?
+  dateExpiration DateTime?
+  assetSymbol    String
+  pricePaid      Decimal?  @db.Decimal(14, 4)
+  quantity       Decimal   @db.Decimal(14, 4)
+  type           String?
+
+  commissionTotal Decimal? @db.Decimal(14, 4)
+  feesOther       Decimal? @db.Decimal(14, 4)
+  feesDay         Decimal? @db.Decimal(14, 4)
+  gainDay         Decimal? @db.Decimal(14, 4)
+  marketValue     Decimal? @db.Decimal(14, 4)
+  costTotal       Decimal? @db.Decimal(14, 4)
+  gainTotal       Decimal? @db.Decimal(14, 4)
+  gainTotalPCT    Decimal? @db.Decimal(14, 4)
+  costPerShare    Decimal? @db.Decimal(14, 4)
+  commissionDay   Decimal? @db.Decimal(14, 4)
+  changePCT       Decimal? @db.Decimal(14, 4)
+  change          Decimal? @db.Decimal(14, 4)
+  quoteStatus     String?
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  asset   Asset   @relation(fields: [assetSymbol], references: [symbol])
+  lots    Lot[]
+
+  @@unique([accountId, externalId])
+}
+
+enum TaxGain {
+  LONG
+  SHORT
+}
+
+model Lot {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+  positionId         String?  @db.Uuid
+  accountId          String   @db.Uuid
+  assetSymbol        String
+  /// The unique id in the external system for the lot (positionLotId)
+  externalId         String?
+  excludeFromHarvest Int      @default(0)
+  /// The file this lot was created from if it was from ingestion
+  fileId             String?  @db.Uuid
+
+  price               Decimal?  @db.Decimal(14, 4)
+  gainDay             Decimal?  @db.Decimal(14, 4)
+  gainDayPct          Decimal?  @db.Decimal(14, 4)
+  marketValue         Decimal?  @db.Decimal(14, 4)
+  costTotal           Decimal?  @db.Decimal(14, 4)
+  totalCostForGainPct Decimal?  @db.Decimal(14, 4)
+  gainTotal           Decimal?  @db.Decimal(14, 4)
+  originalQty         Decimal?  @db.Decimal(14, 4)
+  remainingQty        Decimal?  @db.Decimal(14, 4)
+  availableQty        Decimal?  @db.Decimal(14, 4)
+  orderNo             Decimal?  @db.Decimal(14, 4)
+  acquiredDate        DateTime?
+  exchangeRate        Decimal?  @db.Decimal(14, 4)
+  settlementCurrency  String?   @default("USD")
+  paymentCurrency     String?   @default("USD")
+  adjPrice            Decimal?  @db.Decimal(14, 4)
+  commPerShare        Decimal?  @db.Decimal(14, 4)
+  feesPerShare        Decimal?  @db.Decimal(14, 4)
+  // TODO: Unkown etrade fields 
+  lotSourceCode       Int?
+  termCode            Int?
+  legNo               Int?
+  locationCode        Int?
+  shortType           Int?
+
+  file                    File?                    @relation(fields: [fileId], references: [id], onDelete: SetNull)
+  asset                   Asset                    @relation(fields: [assetSymbol], references: [symbol])
+  position                Position?                @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  account                 Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  harvestTransactionItems HarvestTransactionItem[]
+
+  @@unique([positionId, externalId])
+}
+
+enum PortfolioRole {
+  ADMIN
+  VIEWER
+}
+
+model UsersOnPortfolios {
+  userId      String
+  portfolioId String        @db.Uuid
+  role        PortfolioRole @default(ADMIN)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@id([userId, portfolioId])
+}
+
+enum AssetLocale {
+  us
+  global
+}
+
+/// Pulled from polygon api
+enum AssetClass {
+  stocks
+  cryto
+  fx
+  otc
+  indices
+  UNKNOWN
+}
+
+/// Pulled from Etrade api
+// enum ProductType {
+//   EQUITY
+//   OPTION
+//   MUTUAL_FUND
+//   INDEX
+//   MONEY_MARKET_FUND
+//   BOND
+//   UNKNOWN
+//   WILDCARD
+//   MOVE
+//   ETF
+//   EQUITY_OPTION_ETF
+//   EQUITY_ETF
+//   CLOSED_END_FUND
+//   PREFERRED
+//   EQUITY_OPTN
+//   EXCHANGE_TRADED_FUND
+//   MUTUAL_FUND_MONEY_MARKET_FUND
+// }
+
+model AssetType {
+  code        String      @id
+  assetClass  AssetClass
+  description String
+  locale      AssetLocale
+
+  assets Asset[]
+}
+
+model Asset {
+  symbol            String  @id
+  active            Boolean @default(true)
+  plaid_security_id String? @unique
+
+  // udpated daily from polygon
+  lastPrice          Decimal  @default(0) @db.Decimal(14, 4)
+  lastOpen           Decimal  @default(0) @db.Decimal(14, 4)
+  lastClose          Decimal  @default(0) @db.Decimal(14, 4)
+  lastLow            Decimal  @default(0) @db.Decimal(14, 4)
+  lastHigh           Decimal  @default(0) @db.Decimal(14, 4)
+  lastVolume         Decimal  @default(0) @db.Decimal(14, 4)
+  lastVolumeWeighted Decimal  @default(0) @db.Decimal(14, 4)
+  todaysChange       Decimal  @default(0) @db.Decimal(14, 4)
+  todaysChangePerc   Decimal  @default(0) @db.Decimal(14, 4)
+  lastUpdated        DateTime @default(now())
+
+  iconUrl                     String?
+  logoUrl                     String?
+  description                 String?
+  homepageUrl                 String?
+  listDate                    DateTime?
+  cik                         String?
+  compositeFigi               String?
+  currencyName                String?
+  delistedDate                DateTime?
+  locale                      AssetLocale @default(us)
+  assetClass                  AssetClass  @default(UNKNOWN)
+  type                        String      @default("Unknown")
+  marketCap                   Decimal?    @db.Decimal(16, 0)
+  name                        String?
+  primaryExchange             String?
+  shareClassSharesOutstanding Decimal?    @db.Decimal(16, 0)
+  sicCode                     String?
+  sicDescription              String?
+  totalEmployees              Int?
+  assetTypeCode               String?
+
+  priceHourly             PriceHourly[]
+  assetType               AssetType?               @relation(fields: [assetTypeCode], references: [code])
+  priceHourlyVectors      PriceHourlyVector[]
+  favoritedBy             User[]
+  positions               Position[]
+  vectorGraphs            VectorGraph[]
+  transactions            Transaction[]
+  lots                    Lot[]
+  harvestTransactionItems HarvestTransactionItem[]
+}
+
+model PriceHourly {
+  open                 Int // 4
+  close                Int // 8
+  high                 Int // 12
+  low                  Int // 16
+  assetSymbol          String // 20?
+  numberOfTransactions Int? // 24
+  startDate            DateTime // 32
+  volumeWeightAverage  Int // 36
+  volume               Int // 40 gbytes * 1 billion rows ~ 40 Gigs
+
+  assset Asset @relation(fields: [assetSymbol], references: [symbol])
+
+  @@id([assetSymbol, startDate])
+}
+
+// Vector Models ------------------------------------------------------------------------------------------------------------------------------
+
+enum VectorWindow {
+  MONTH_1
+  MONTH_3
+  MONTH_6
+  YEAR_1
+  YEAR_2
+}
+
+/// PriceHourlyVector is a % daily change going back # weeks from the start date for a given asset - up to 1000 days (~ > 3 months)
+model PriceHourlyVector {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assetSymbol String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+
+  /// Asset this vector is for
+  asset        Asset        @relation(fields: [assetSymbol], references: [symbol])
+  /// The date that we start the vector from and go backwards in time to reach the total number of days
+  startDate    DateTime
+  /// The number of days (including weekends) that we want the vector to span
+  vectorWindow VectorWindow
+
+  /// @HideField({ output: true, input: true })
+  vector       Unsupported("vector(1060)")?
+  vectorGraphs VectorGraph[]
+
+  @@unique([assetSymbol, startDate, vectorWindow])
+}
+
+// Plaid ------------------------------------------------------------------------------------------------------------------------------
+
+// Graphs ------------------------------------------------------------------------------------------------------------------------------
+enum Graph {
+  /// Return percent over the length of days in hudredths of a percent
+  RETURN_PCT_LINE
+}
+
+model VectorGraph {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  type                Graph
+  priceHourlyVectorId String @db.Uuid
+  assetSymbol         String
+  data                Json[]
+
+  asset             Asset             @relation(fields: [assetSymbol], references: [symbol])
+  priceHourlyVector PriceHourlyVector @relation(fields: [priceHourlyVectorId], references: [id])
+
+  // Only one type of graph per vector
+  @@unique([assetSymbol, type, priceHourlyVectorId])
+}
+
+// Auth ------------------------------------------------------------------------------------------------------------------------------
+
+/// The source of the auth connection
+enum AuthSource {
+  /// Access to the auth api to eventuially get access to the core api (https://api.etrade.com/oauth/request_token)
+  ETRADE_REQUEST
+  /// Access to the core api (https://api.etrade.com)
+  ETRADE_ACCESS
+  PLAID
+  /// LOCAL Testing / System Generated
+  LOCAL
+}
+
+enum AuthType {
+  OAUTH_1
+  PLAID_LINK
+}
+
+/// An authorized connection to some external system
+model AuthConnection {
+  /// Internal identifier
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  /// User this provider pertains to
+  userId          String
+  /// The portfolio this provider belongs to
+  portfolioId     String     @db.Uuid
+  /// When the model was created
+  createdAt       DateTime   @default(now())
+  /// When the model was updated
+  updatedAt       DateTime   @default(now()) @updatedAt
+  /// Source of the auth
+  source          AuthSource
+  /// The type of auth
+  type            AuthType
+  /// Used for etrade to store the url where the user can get their verifier code (valid for 5 minutes)
+  verificationUrl String?
+  /// PLAID -> Plaid Item id, ETRADE -> random UUID since they dont have one
+  externalId      String
+  /// Is the connection currently syncing
+  isSyncing       Boolean    @default(false)
+  /// When were current authentication credentials generated with the provider
+  authedAt        DateTime   @default(now())
+  /// When was the sync made
+  syncedAt        DateTime?
+
+  // Oauth Fields -------
+  /// @HideField({ output: true, input: true })
+  token    String?
+  /// @HideField({ output: true, input: true })
+  secret   String?
+  /// @HideField({ output: true, input: true })
+  verifier String?
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  accounts  Account[]
+
+  @@unique([source, userId, portfolioId, externalId])
+}
+
+enum FileType {
+  ETRADE_LOTS
+}
+
+model File {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  gcpFilename String
+  type        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  uploadedBy  String
+  accountId   String   @db.Uuid
+  displayName String
+  fileType    FileType @default(ETRADE_LOTS)
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  lots    Lot[]
+}
+
+enum LogType {
+  EXTERNAL_SYNC
+  AUTH
+}
+
+model Log {
+  id             Int         @id @default(autoincrement())
+  type           LogType
+  createdAt      DateTime    @default(now())
+  source         AuthSource?
+  description    String?
+  responseStatus Int?
+  data           Json
+}
+
+// ENUMS 
+
+enum OrderType {
+  BUY
+  SELL
+  SELL_TO_CLOSE
+  SELL_TO_OPEN
+  BUY_TO_CLOSE
+  BUY_TO_OPEN
+}
+
+enum EtradeAccountType {
+  AMMCHK
+  ARO
+  BCHK
+  BENFIRA
+  BENFROTHIRA
+  BENF_ESTATE_IRA
+  BENF_MINOR_IRA
+  BENF_ROTH_ESTATE_IRA
+  BENF_ROTH_MINOR_IRA
+  BENF_ROTH_TRUST_IRA
+  BENF_TRUST_IRA
+  BRKCD
+  BROKER
+  CASH
+  C_CORP
+  CONTRIBUTORY
+  COVERDELL_ESA
+  CONVERSION_ROTH_IRA
+  COMM_PROP
+  CONSERVATOR
+  CORPORATION
+  CSA
+  CUSTODIAL
+  DVP
+  ESTATE
+  EMPCHK
+  EMPMMCA
+  ETCHK
+  ETMMCHK
+  HEIL
+  HELOC
+  INDCHK
+  INDIVIDUAL
+  INDIVIDUAL_K
+  INVCLUB
+  INVCLUB_C_CORP
+  INVCLUB_LLC_C_CORP
+  INVCLUB_LLC_PARTNERSHIP
+  INVCLUB_LLC_S_CORP
+  INVCLUB_PARTNERSHIP
+  INVCLUB_S_CORP
+  INVCLUB_TRUST
+  IRA_ROLLOVER
+  JOINT
+  JTTEN
+  JTWROS
+  LLC_C_CORP
+  LLC_PARTNERSHIP
+  LLC_S_CORP
+  LLP
+  LLP_C_CORP
+  LLP_S_CORP
+  IRA
+  IRACD
+  MONEY_PURCHASE
+  MARGIN
+  MRCHK
+  MUTUAL_FUND
+  NONCUSTODIAL
+  NON_PROFIT
+  OTHER
+  PARTNER
+  PARTNERSHIP
+  PARTNERSHIP_C_CORP
+  PARTNERSHIP_S_CORP
+  PDT_ACCOUNT
+  PM_ACCOUNT
+  PREFCD
+  PREFIRACD
+  PROFIT_SHARING
+  PROPRIETARY
+  REGCD
+  ROTHIRA
+  ROTH_INDIVIDUAL_K
+  ROTH_IRA_MINORS
+  SARSEPIRA
+  S_CORP
+  SEPIRA
+  SIMPLE_IRA
+  TIC
+  TRD_IRA_MINORS
+  TRUST
+  VARCD
+  VARIRACD
+}
+
+enum AccountInstitution {
+  BROKERAGE
+  GLOBALTRADING
+  NONUS
+  STOCKPLAN
+  LENDING
+  HELOC
+  HEIL
+  ONTRACK
+  GENPACT
+  AUTO
+  AUTOLOAN
+  BETA
+  LOYALTY
+  SBASKET
+  CC_BALANCETRANSFER
+  GENPACT_LEAD
+  GANIS
+  MORTGAGE
+  EXTERNAL
+  FUTURES
+  VISA
+  RJO
+  WDBH
+}
+
+enum AccountMode {
+  CASH
+  MARGIN
+  CHECKING
+  IRA
+  SAVINGS
+  CD
+}
+
+/// The provider of the account
+enum AccountProvider {
+  ETRADE
+  PLAID
+  SYSTEM
+}
+
+enum AccountStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum OptionLevel {
+  NO_OPTIONS
+  LEVEL_1
+  LEVEL_2
+  LEVEL_3
+  LEVEL_4
+}

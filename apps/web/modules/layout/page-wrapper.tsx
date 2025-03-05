@@ -42,10 +42,7 @@ export default function PageWrapper({
 
   return (
     <div
-      className={clsx(
-        'bg-primary-foreground flex flex-col overflow-auto px-4 py-2',
-        className
-      )}
+      className={clsx('flex flex-col overflow-auto px-4 py-2', className)}
       style={{ height: height ?? 'calc(100vh - 3rem)' }} // default is little less than the screen to account for the header bar
     >
       {(title ?? description) ? (

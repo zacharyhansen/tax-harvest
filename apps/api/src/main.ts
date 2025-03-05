@@ -17,7 +17,7 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-  // app.setGlobalPrefix("api");
+  app.setGlobalPrefix("core");
 
   const envService = app.get(EnvService);
   const port = envService.get("PORT");

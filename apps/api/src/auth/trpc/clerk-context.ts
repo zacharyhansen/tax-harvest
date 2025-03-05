@@ -9,12 +9,14 @@ export class AppContext implements TRPCContext {
   private readonly logger = new Logger(AppContext.name);
 
   async create({ req }: ContextOptions): Promise<Record<string, unknown>> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       throw new TRPCError({ code: "UNAUTHORIZED", message: "Missing token" });
     }
     try {
       const clerkclaims = (await clerkClient.verifyToken(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         token,
       )) as unknown as ClerkClaims;
 
@@ -22,14 +24,10 @@ export class AppContext implements TRPCContext {
         throw new TRPCError({ code: "UNAUTHORIZED", message: "Missing token" });
       }
 
-      if (
-        !clerkclaims.environment_schema ||
-        !clerkclaims.configuration_schema
-      ) {
+      if (!clerkclaims.metadata.portfolioId) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message:
-            "Missing environment or configuration schema for organization",
+          message: "Missing portfolio id",
         });
       }
 

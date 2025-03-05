@@ -1,9 +1,6 @@
-import { AudioWaveform, GalleryVerticalEnd } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-import { TeamSwitcher } from './components/team-switcher';
 import { NavMain, type NavItem } from './components/nav-main';
-import { NavUser } from './components/nav-user';
 
 import { Separator } from '@repo/ui/components/separator';
 import {
@@ -28,32 +25,19 @@ export function Dashboard({
   children,
   sidebarOptions,
   pathname,
+  header,
 }: Readonly<{
   navGroups: NavGroup[];
   breadcrumb: ReactNode;
   children: ReactNode;
   sidebarOptions: ReactNode;
   pathname: string;
+  header?: ReactNode;
 }>) {
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
-        <SidebarHeader>
-          <TeamSwitcher
-            teams={[
-              {
-                name: 'Acme Inc',
-                logo: GalleryVerticalEnd,
-                plan: 'Enterprise',
-              },
-              {
-                name: 'Acme Corp.',
-                logo: AudioWaveform,
-                plan: 'Startup',
-              },
-            ]}
-          />
-        </SidebarHeader>
+        <SidebarHeader>{header ?? null}</SidebarHeader>
         <SidebarContent>
           {navGroups.map(group => (
             <NavMain
@@ -65,13 +49,13 @@ export function Dashboard({
           ))}
         </SidebarContent>
         <SidebarFooter>
-          <NavUser
+          {/* <NavUser
             user={{
               name: 'shadcn',
               email: 'm@example.com',
               avatar: 'https://avatars.githubusercontent.com/u/21320719?v=4',
             }}
-          />
+          /> */}
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

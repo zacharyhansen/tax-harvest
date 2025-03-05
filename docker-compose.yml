@@ -5,18 +5,18 @@ services:
     image: ankane/pgvector
     restart: always
     environment:
-      - POSTGRES_DB=core
+      - POSTGRES_DB=taxharvest
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     volumes:
       - pgodigos_data:/var/lib/postgresql/data
     ports:
-      - '5433:5432'
+      - '5434:5432'
   postgrest:
     image: postgrest/postgrest
     restart: always
     environment:
-      PGRST_DB_URI: postgres://postgres:password@postgres:5432/core
+      PGRST_DB_URI: postgres://postgres:password@postgres:5432/taxharvest
       # TODO: must change this before going live
       # PGRST_DB_ANON_ROLE: anonymous
       PGRST_DB_ANON_ROLE: super_admin
@@ -25,8 +25,8 @@ services:
       PGRST_DB_PRE_CONFIG: 'postgrest.pre_config'
       PGRST_JWT_SECRET: '{"use":"sig","kty":"RSA","kid":"ins_2kD41URoiBWs4ArsIA61su5oD9Z","alg":"RS256","n":"vnOiPTCR4APnNVFXDWdRZjgKkGFUQbU7DarpWVK66eGUUoTtKfYUK40vvwwTH7gNYPitBqHvxdVPHhqbjYnKYF8HEebqsX9B4O8LAOoeqq9jX_L_hYzVqmAaxeZHAH1GM4WCA7TQ6w_Tj2A4AcVv-vD28WX_GnbCtDui17UZ1CJCyc4JME6PqnZUXRJ4vNjQwo-5dIKtUY_KLtEa3K9Hs_HUedASkn8TPRXHKv7zBMXg2I1VWMSk5Qg-JCF0_eQHZnN3-U1Pzp8IcQW-T-bSdRLGEXsy9JyD53ItMU1PQ3J3M16CFEH3d4BsTSq4kwIFFVAUqW5w8MsN8udGAZLebQ","e":"AQAB"}'
     ports:
-      - '3003:3000'
-      - '3004:3002'
+      - '3005:3000'
+      - '3006:3002'
   swagger:
     image: swaggerapi/swagger-ui
     ports:

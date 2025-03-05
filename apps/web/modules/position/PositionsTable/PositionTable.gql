@@ -1,0 +1,35 @@
+fragment PositionItem on Position {
+  account {
+    id
+    externalId
+    displayName
+    type
+  }
+  change
+  changePCT
+  commissionDay
+  commissionTotal
+  costPerShare
+  costTotal
+  dateAcquired
+  dateExpiration
+  externalId
+  feesDay
+  feesOther
+  gainDay
+  gainTotal
+  gainTotalPCT
+  id
+  marketValue
+  pricePaid
+  quantity
+  quoteStatus
+  assetSymbol
+  type
+}
+
+query PortfolioPositions {
+  portfolioPositions {
+    ...PositionItem
+  }
+}

@@ -1,0 +1,98 @@
+import 'server-only';
+
+import { Check } from 'lucide-react';
+import Stripe from 'stripe';
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from 'ui';
+import { PricingOptions } from 'modules/pricing';
+import Price from 'modules/pricing/Price';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+export default async function CheckoutForm({
+  params: { stripeCustomerId },
+}: {
+  params: { stripeCustomerId: string };
+}) {
+  const { data } = await stripe.subscriptions.list({
+    customer: stripeCustomerId,
+  });
+
+  return (
+    <div className="flex flex-col space-y-4">
+      <Card>
+        <CardHeader>
+          <CardTitle>Your Plan</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {data.flatMap(sub =>
+            sub.items.data.map(item => (
+              <ActiveProduct
+                key={item.id}
+                productId={item.price.product as string}
+                subscriptionId={sub.id}
+              />
+            ))
+          )}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>All Plans</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <PricingOptions stripeCustomerId={stripeCustomerId} />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+async function ActiveProduct({
+  productId,
+  // subscriptionId,
+}: {
+  productId: string;
+  subscriptionId: string;
+}) {
+  const product = await stripe.products.retrieve(productId);
+
+  return (
+    <Card
+      key={product.id}
+      className="shadow-black/10 drop-shadow-xl dark:shadow-white/10"
+    >
+      <CardHeader>
+        <CardTitle className="item-center flex justify-between space-x-4">
+          <Badge className="text-lg">{product.name}</Badge>
+          <Button variant="outline">Cancel</Button>
+        </CardTitle>
+        {typeof product.default_price === 'string' ? (
+          <Price priceId={product.default_price} />
+        ) : null}
+        <CardDescription>{product.description}</CardDescription>
+      </CardHeader>
+
+      <hr className="m-auto mb-2 w-4/5" />
+
+      <CardFooter className="flex">
+        <div className="mx-auto space-y-4">
+          {product.marketing_features.map(feature => (
+            <span key={feature.name} className="flex">
+              <Check className="text-green-500" />{' '}
+              <h3 className="ml-2">{feature.name}</h3>
+            </span>
+          ))}
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}

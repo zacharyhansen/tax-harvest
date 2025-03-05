@@ -1,0 +1,35 @@
+query VectorGraphs($where: VectorGraphWhereInput!) {
+  vectorGraphs(where: $where) {
+    id
+    type
+    priceHourlyVectorId
+    assetSymbol
+    data
+  }
+}
+
+query SimilarityChart(
+  $parentVectorId: String!
+  $neighborVectorIds: [String!]!
+) {
+  similarityChart(
+    parentVectorId: $parentVectorId
+    neighborVectorIds: $neighborVectorIds
+  ) {
+    dateTimes
+    maxValue
+    minValue
+    assetSymbol
+    assets
+    values
+  }
+}
+
+query SimlarityTable($assets: [String!]!) {
+  assets(where: { symbol: { in: $assets } }) {
+    symbol
+    lastPrice
+    assetClass
+    marketCap
+  }
+}

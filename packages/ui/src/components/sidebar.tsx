@@ -419,11 +419,14 @@ const SidebarGroup = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<'div'>
 >(({ className, ...props }, ref) => {
+  const { state } = useSidebar();
   return (
     <div
       ref={ref}
       data-sidebar="group"
-      className={cn('relative flex w-full min-w-0 flex-col p-2', className)}
+      className={cn('relative flex w-full min-w-0 flex-col p-2', className, {
+        'px-4': state === 'expanded',
+      })}
       {...props}
     />
   );
@@ -503,14 +506,16 @@ SidebarMenu.displayName = 'SidebarMenu';
 const SidebarMenuItem = React.forwardRef<
   HTMLLIElement,
   React.ComponentProps<'li'>
->(({ className, ...props }, ref) => (
-  <li
-    ref={ref}
-    data-sidebar="menu-item"
-    className={cn('group/menu-item relative mb-1', className)}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  return (
+    <li
+      ref={ref}
+      data-sidebar="menu-item"
+      className={cn('group/menu-item relative mb-1', className)}
+      {...props}
+    />
+  );
+});
 SidebarMenuItem.displayName = 'SidebarMenuItem';
 
 const sidebarMenuButtonVariants = cva(

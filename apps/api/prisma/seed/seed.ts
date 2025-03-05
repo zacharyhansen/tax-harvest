@@ -3,14 +3,8 @@ import { execSync } from "node:child_process";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 async function main() {
-  console.log("🧩 Seeding customer schemas...");
-  execSync("tsx prisma/seed/seed.schema.ts", { stdio: "inherit" });
-
-  console.log("🔄 Syncing customer schemas and roles...");
-  execSync("pnpm run sync", { stdio: "inherit" });
-
-  console.log("📦 Seeding configuration...");
-  execSync("pnpm run seed:configuration", { stdio: "inherit" });
+  console.log("🧩 Seeding...");
+  execSync("tsx prisma/seed/seed.default.ts", { stdio: "inherit" });
 
   console.log("🚀 Completed!");
 }

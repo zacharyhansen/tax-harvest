@@ -6,129 +6,52 @@ import {
 } from 'next/navigation';
 import queryString from 'query-string';
 
+import { HarvestType } from './constants/enums.dto';
 // see https://www.flightcontrol.dev/blog/fix-nextjs-routing-to-have-full-type-safety
 
 export const TypedRoutes = {
-  components: makeRoute(() => `/main/components`),
-  component: makeRoute(
-    ({ componentId }) => `/main/components/${componentId}`,
-    z.object({
-      componentId: z.string(),
-    })
+  accounts: makeRoute(() => `/main/accounts`),
+  account: makeRoute(
+    ({ accountId }) => `/main/accounts/${accountId}`,
+    z.object({ accountId: z.string() })
   ),
-  componentVersion: makeRoute(
-    ({ componentId, version }) =>
-      `/main/components/${componentId}/version/${version}/builder`,
-    z.object({
-      componentId: z.string(),
-      version: z.coerce.number(),
-    })
+  admin: makeRoute(() => `/admin`),
+  connect: makeRoute(() => `/connect`),
+  explore: makeRoute(() => `/explore`),
+  harvests: makeRoute(() => `/main/harvests`),
+  harvest: makeRoute(
+    ({ harvestId }) => `/main/harvests/${harvestId}`,
+    z.object({ harvestId: z.string() })
   ),
-  componentPreview: makeRoute(
-    ({ componentId, version }) =>
-      `/main/components/${componentId}/version/${version}/preview`,
-    z.object({
-      componentId: z.string(),
-      version: z.coerce.number(),
-    })
+  harvestFlowRoot: makeRoute(() => `/harvest-flow`),
+  harvestFlowType: makeRoute(
+    ({ harvestFlowTypeId }) => `/harvest-flow/${harvestFlowTypeId}`,
+    z.object({ harvestFlowTypeId: z.string(), type: z.nativeEnum(HarvestType) })
   ),
-  componentConfiguration: makeRoute(
-    ({ componentId, version }) =>
-      `/main/components/${componentId}/version/${version}/configuration`,
-    z.object({
-      componentId: z.string(),
-      version: z.coerce.number(),
-    })
-  ),
-  componentLayout: makeRoute(
-    ({ componentId, version }) =>
-      `/main/components/${componentId}/version/${version}/layout`,
-    z.object({
-      componentId: z.string(),
-      version: z.coerce.number(),
-    })
-  ),
-  componentSettings: makeRoute(
-    ({ componentId, version }) =>
-      `/main/components/${componentId}/version/${version}/settings`,
-    z.object({
-      componentId: z.string(),
-      version: z.coerce.number(),
-    })
-  ),
-  deal: makeRoute(
-    ({ opportunityId, dealId }) =>
-      `/main/opportunities/${opportunityId}/deal/${dealId}`,
-    z.object({
-      opportunityId: z.string(),
-      dealId: z.string(),
-    })
-  ),
-  data: makeRoute(() => 'main/data'),
-  datasets: makeRoute(() => '/main/dataset'),
-  dataset: makeRoute(
-    ({ datasetId }) => `/main/dataset/${datasetId}`,
-    z.object({
-      datasetId: z.string(),
-    })
-  ),
-  datasetVersion: makeRoute(
-    ({ datasetId, version }) => `/main/dataset/${datasetId}/version/${version}`,
-    z.object({
-      datasetId: z.string(),
-      version: z.number(),
-    })
-  ),
-  forms: makeRoute(() => '/main/forms'),
-  form: makeRoute(
-    ({ slug }) => `/main/forms/${slug}`,
-    z.object({
-      slug: z.string(),
-    })
-  ),
-  goals: makeRoute(() => '/main/goals'),
   home: makeRoute(() => `/main/home`),
-  layouts: makeRoute(() => '/main/layouts'),
-  opportunities: makeRoute(() => `/main/opportunities`),
-  roles: makeRoute(() => '/main/roles'),
-  role: makeRoute(
-    ({ roleId }) => `/main/roles/${roleId}`,
-    z.object({
-      roleId: z.string(),
-    })
+  lotSelection: makeRoute(() => `/harvest-flow/lot-selection`),
+  lots: makeRoute(() => `/main/lots`),
+  lot: makeRoute(
+    ({ lotId }) => `/main/lots/${lotId}`,
+    z.object({ lotId: z.string() })
   ),
-  settings: makeRoute(() => `/main/settings`),
-  signin: makeRoute(() => '/auth/signin'),
-  signup: makeRoute(() => '/auth/signup'),
-  stateMachines: makeRoute(() => '/main/state-machines'),
-  tables: makeRoute(() => '/main/tables'),
-  table: makeRoute(
-    ({ slug }) => `/main/tables/${slug}`,
-    z.object({
-      slug: z.string(),
-    })
-  ),
-  tasks: makeRoute(() => '/main/tasks'),
-  task: makeRoute(
-    ({ taskId }) => `/main/tasks/${taskId}`,
-    z.object({
-      taskId: z.string(),
-    })
-  ),
-  users: makeRoute(() => '/main/users'),
+  logs: makeRoute(() => `/admin/logs`),
+  portfolios: makeRoute(() => `/main/portfolios`),
+  settings: makeRoute(() => `/admin/settings`),
+  transactions: makeRoute(() => `/main/transactions`),
+  users: makeRoute(() => `/admin/users`),
   user: makeRoute(
-    ({ userId }) => `/main/users/${userId}`,
-    z.object({
-      userId: z.string(),
-    })
+    ({ userId }) => `/admin/users/${userId}`,
+    z.object({ userId: z.string() })
   ),
+
   view: makeRoute(
-    ({ viewId }) => `main/views/${viewId}`,
+    ({ viewId }) => `/main/views/${viewId}`,
     z.object({
       viewId: z.string(),
     })
   ),
-  views: makeRoute(() => 'main/views'),
+  views: makeRoute(() => '/main/views'),
 };
 
 interface RouteBuilder<Params extends z.ZodSchema, Search extends z.ZodSchema> {
