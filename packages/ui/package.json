@@ -111,7 +111,7 @@
     "react-medium-image-zoom": "^5.2.12",
     "react-phone-number-input": "^3.4.10",
     "sonner": "^1.5.0",
-    "tailwind-merge": "^2.5.2",
+    "tailwind-merge": "^3.1.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.0.0",
     "xstate": "^5.19.0",
