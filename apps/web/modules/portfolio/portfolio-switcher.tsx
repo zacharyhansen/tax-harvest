@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  ChevronsUpDown,
-  GalleryHorizontal,
-  Plus,
-  Wallet,
-  Wallet2,
-} from 'lucide-react';
+import { ChevronsUpDown, Wallet2 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,34 +17,34 @@ import {
   useSidebar,
 } from '@repo/ui/components/sidebar';
 import { toast } from '@repo/ui/components/toast-sonner';
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { Button } from '@repo/ui/components/button';
 
 import { usePortfolio } from './providers/PortfolioProvider';
+import CreatePortfolioDialog from './CreatePortfolioDialog';
 
-import { trpc } from '~/lib/trpc';
-import postgrest from '~/lib/database/postgrest';
+import {
+  usePortfoliosQuery,
+  useSwitchPortfolioMutation,
+} from '~/generated/gql';
 
 export function PortfolioSwitcher() {
   const { isMobile } = useSidebar();
-  const { data } = useQuery(postgrest.from('Portfolio').select('*'));
+  const { data } = usePortfoliosQuery();
   const { portfolio, reload } = usePortfolio();
-  const mutate = trpc.portfolio.switchPortfolio.useMutation({
-    onSuccess: () => {
-      reload();
-    },
+  const [switchPortfolio] = useSwitchPortfolioMutation({
     onError: () => {
       toast.error('Unable to switch porfolio');
     },
   });
 
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
+    <SidebarMenu className="h-full">
+      <SidebarMenuItem className="mb-0 flex h-full flex-col justify-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mb-0 py-0"
             >
               <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                 <Wallet2 className="size-4" />
@@ -73,12 +67,15 @@ export function PortfolioSwitcher() {
             <DropdownMenuLabel className="text-muted-foreground text-xs">
               Portfolios
             </DropdownMenuLabel>
-            {data?.map((portfolio, index) => (
+            {data?.portfolios.map((portfolio, index) => (
               <DropdownMenuItem
                 key={portfolio.name}
                 onClick={() => {
-                  void mutate.mutateAsync({
-                    porfolioId: portfolio.id,
+                  void switchPortfolio({
+                    onCompleted: reload,
+                    variables: {
+                      porfolioId: portfolio.id,
+                    },
                   });
                 }}
                 className="gap-2 p-2"
@@ -91,14 +88,11 @@ export function PortfolioSwitcher() {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
-              <div className="bg-background flex size-6 items-center justify-center rounded-lg border">
-                <Plus className="size-4" />
-              </div>
-              <div className="text-muted-foreground font-medium">
+            <CreatePortfolioDialog>
+              <Button className="w-full" variant="outline">
                 Create Portfolio
-              </div>
-            </DropdownMenuItem>
+              </Button>
+            </CreatePortfolioDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

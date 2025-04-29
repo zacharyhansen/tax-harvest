@@ -1,6 +1,6 @@
 fragment AccountItem on Account {
   id
-  displayName
+  name
   type
   portfolioId
   provider
@@ -50,8 +50,7 @@ mutation UpdateAccount(
     accountWhereUniqueInput: $accountWhereUniqueInput
   ) {
     id
-    displayName
-    type
+    name
     portfolioId
   }
 }

@@ -1,7 +1,7 @@
 import type { CellContext } from '@tanstack/react-table';
 
-import type { BadgeProps } from '../../../index';
-import { Badge } from '../../../index';
+import { Badge } from '../../badge';
+import type { BadgeProps } from '../../badge';
 
 export default function BadgeCell<TData, TValue>({
   getValue,

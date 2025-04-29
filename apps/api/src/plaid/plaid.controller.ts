@@ -1,14 +1,10 @@
-import {
-  Controller,
-  Logger,
-  Post,
-  type RawBodyRequest,
-  Req,
-  Res,
-} from "@nestjs/common";
+import type { FastifyReply } from "fastify";
+
+import { Body, Controller, Logger, Post, Res } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 import { Public } from "../auth/decorators/public.decorator";
+import { type PlaidWebhook } from "./plaid.dto";
 import { PlaidService } from "./plaid.service";
 
 @Controller("plaid")
@@ -16,54 +12,61 @@ export class PlaidController {
   private readonly logger = new Logger(PlaidController.name);
 
   constructor(
-    private readonly userService: PlaidService,
+    private readonly plaidService: PlaidService,
     private readonly configService: ConfigService,
   ) {}
+  // switch (evt.type) {
+  //   case 'user.created':
+  //     this.logger.log(`Clerk user create event for ${evt.data.id}`);
+  //     break;
+  //   case 'user.updated':
+  //     this.logger.log(`Clerk user update event for ${evt.data.id}`);
 
+  //     // Handle user update
+  //     await this.userService.updateUser({
+  //       data: {
+  //         email,
+  //         id: evt.data.id,
+  //         name,
+  //         phoneNumber,
+  //         photo: evt.data.image_url,
+  //       },
+  //       where: {
+  //         id: evt.data.id,
+  //       },
+  //     });
+  //     break;
+  // }
   @Post("webhook")
   @Public()
-  handleWebhook(@Req() request: RawBodyRequest<Request>, @Res() res: Response) {
+  async handleWebhook(@Body() body: PlaidWebhook, @Res() res: FastifyReply) {
     try {
-      console.log("hit webhook");
-      console.log({ clerkweb: request.rawBody?.toString("utf8") });
+      this.logger.log("Processing Plaid webhook:", body);
 
-      // switch (evt.type) {
-      //   case 'user.created':
-      //     this.logger.log(`Clerk user create event for ${evt.data.id}`);
-      //     break;
-      //   case 'user.updated':
-      //     this.logger.log(`Clerk user update event for ${evt.data.id}`);
+      switch (body.webhook_type) {
+        case "HOLDINGS": {
+          await this.plaidService.processWebhook(body);
+          this.logger.log("Successfully processed Plaid webhook:", body);
+          break;
+        }
+        default: {
+          this.logger.warn(`Unhandled webhook type: ${body.webhook_type}`);
+        }
+      }
 
-      //     // Handle user update
-      //     await this.userService.updateUser({
-      //       data: {
-      //         email,
-      //         id: evt.data.id,
-      //         name,
-      //         phoneNumber,
-      //         photo: evt.data.image_url,
-      //       },
-      //       where: {
-      //         id: evt.data.id,
-      //       },
-      //     });
-      //     break;
-      // }
+      await this.plaidService.processWebhook(body);
 
-      //   return res.status(200).json({
-      //     message: "Webhook processed successfully",
-      //     success: true,
-      //   });
-      // } catch (error) {
-      //   console.error("Webhook error:", error);
-      //   return res.status(400).json({
-      //     message: error,
-      //     success: false,
-      //   });
-      return "ok";
+      return res.code(200).send({
+        message: "Webhook processed successfully",
+        success: true,
+      });
     } catch (error) {
-      console.error("Webhook error:", error);
-      return "error";
+      this.logger.error("Webhook processing error:", error);
+      return res.code(400).send({
+        message: "Failed to process webhook",
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
     }
   }
 }

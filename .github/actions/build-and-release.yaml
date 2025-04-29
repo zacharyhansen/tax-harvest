@@ -1,0 +1,231 @@
+# .github/workflows/build-and-release.yml
+name: Build and Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version increment type (major/minor/patch)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      manual_version:
+        description: 'Manual version override (leave empty for automatic)'
+        required: false
+        type: string
+
+permissions:
+  contents: 'read'
+  id-token: 'write'
+  pull-requests: 'write'
+
+env:
+  PROJECT_ID: harvester-ai-428202
+  AR_REPO_LOCATION: us-central1
+  AR_URL_PREFIX: us-central1-docker.pkg.dev/harvester-ai-428202/harvester
+  SERVICE_ACCOUNT: githubactions@harvester-ai-428202.iam.gserviceaccount.com
+  WORKLOAD_IDENTITY_PROVIDER: projects/415549375710/locations/global/workloadIdentityPools/harvester-pool/providers/github-actions-provider
+
+jobs:
+  version:
+    name: Generate Version
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.version.outputs.new_version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Generate New Version
+        id: version
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "Latest tag: $latest_tag"
+          
+          if [[ -n "${{ inputs.manual_version }}" ]]; then
+            new_version="${{ inputs.manual_version }}"
+            echo "Using manual version: $new_version"
+          else
+            version=$(echo $latest_tag | sed 's/v//')
+            IFS='.' read -ra version_parts <<< "$version"
+            
+            case "${{ inputs.version_type }}" in
+              major)
+                version_parts[0]=$((version_parts[0]+1))
+                version_parts[1]=0
+                version_parts[2]=0
+                ;;
+              minor)
+                version_parts[1]=$((version_parts[1]+1))
+                version_parts[2]=0
+                ;;
+              patch)
+                version_parts[2]=$((version_parts[2]+1))
+                ;;
+            esac
+            
+            new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
+          fi
+          
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+  
+  build-and-push:
+    name: Build and Push Docker Images (API, WEB, STUDIO)
+    needs: [version]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+          
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          token_format: 'access_token'
+          project_id: ${{ env.PROJECT_ID }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Docker Auth
+        id: docker-auth
+        uses: 'docker/login-action@v3'
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ env.AR_REPO_LOCATION }}-docker.pkg.dev'
+
+      - name: Build and Push Web Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: apps/harvester-web/Dockerfile
+          push: true
+          tags: |
+            ${{ env.AR_URL_PREFIX }}-web/harvester-web:v${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
+          cache-from: type=registry,ref=user/app:latest
+          cache-to: type=inline
+
+      - name: Build and Push API Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.nodejs.microservice
+          push: true
+          build-args: |
+            PROJECT=harvester-api
+          tags: |
+            ${{ env.AR_URL_PREFIX }}-api/harvester-api:v${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-api/harvester-api:latest
+          cache-from: type=registry,ref=user/app:latest
+          cache-to: type=inline
+
+      - name: Build and Push Studio Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.prisma.microservice
+          push: true
+          build-args: |
+            PROJECT=harvester-api
+          tags: |
+            ${{ env.AR_URL_PREFIX }}-api/harvester-studio:v${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-api/harvester-studio:latest
+          cache-from: type=registry,ref=user/app:latest
+          cache-to: type=inline
+
+  update-helm-chart:
+    name: Update Helm Chart
+    needs: [version, build-and-push]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Update Helm Chart values.yaml
+        run: |
+          # Update the values.yaml file
+          yq eval ".harvester-web.image.tag = \"v${{ needs.version.outputs.new_version }}\" | .harvester-api.image.tag = \"v${{ needs.version.outputs.new_version }}\" | .harvester-studio.image.tag = \"v${{ needs.version.outputs.new_version }}\"" -i helm/harvester/values.yaml
+          
+          # Verify the file was updated
+          if ! grep -q "v${{ needs.version.outputs.new_version }}" helm/harvester/values.yaml; then
+            echo "Failed to update values.yaml"
+            exit 1
+          fi
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          base: trunk
+          branch: update-image-tags-v${{ needs.version.outputs.new_version }}
+          delete-branch: true
+          title: "release: update image tags to v${{ needs.version.outputs.new_version }}"
+          commit-message: "release: update image tags to v${{ needs.version.outputs.new_version }}"
+          body: |
+            This PR updates the Helm chart values.yaml with new image tags:
+            - Web: `v${{ needs.version.outputs.new_version }}`
+            - API: `v${{ needs.version.outputs.new_version }}`
+            - Studio: `v${{ needs.version.outputs.new_version }}`
+            
+            This update was automatically generated by the CI/CD pipeline.
+          labels: |
+            automated-pr
+            helm-update
+
+  create-tag:
+    name: Create Git Tag and Release
+    needs: [version, build-and-push, update-helm-chart]
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: 'write'
+      id-token: 'write'
+      pull-requests: 'write'
+    steps:
+      - name: Setup Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Create and Push Tag
+        run: |
+          VERSION=${{ needs.version.outputs.new_version }}
+          git tag -a "v$VERSION" -m "Release v$VERSION"
+          git push origin "v$VERSION"
+      
+      - name: Create Release Branch
+        run: |
+          # Create a new branch based on the latest commit (or a specific commit if necessary)
+          git checkout -b release-v${{ needs.version.outputs.new_version }}
+          git push origin release-v${{ needs.version.outputs.new_version }}
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.version.outputs.new_version }}
+          name: Release v${{ needs.version.outputs.new_version }}
+          body: |
+            ## Docker Images
+            ```
+            ${{ env.AR_URL_PREFIX }}-api/harvester-api:${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-web/harvester-web:${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-api/harvester-studio:${{ needs.version.outputs.new_version }}
+            ```
+            
+            ## Changes
+            ${{ inputs.description }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true

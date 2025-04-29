@@ -1,0 +1,79 @@
+fragment LotCurrentItem on LotCurrent {
+  id
+  accountId
+  remainingQty
+  acquiredDate
+  price
+  symbol
+  lastPrice
+  costBasis
+  value
+  gainTotal
+  gainTotalPct
+  dollarPerSharePnL
+  taxGain
+}
+
+fragment AccountSummary on Account {
+  id
+  uploadedPositions
+  setRealizedValues
+  name
+  type
+  subType
+  accountValueTotal
+  skipSetup
+}
+
+query PortfolioSummary {
+  portfolioSummary {
+    realized {
+      accountCount
+      dividend
+      gainLongTerm
+      gainShortTerm
+      gainTotal
+    }
+    unrealized {
+      gainTotal
+      lossTotal
+      accountCount
+      positionCount
+    }
+    harvest {
+      realized
+      unrealized
+      total
+    }
+    setUpStatus
+    harvestRecommendations {
+      harvestType
+      amountRealized
+      amountTotal
+      amountUnrealized
+      recommended
+    }
+  }
+}
+
+query AccountSummaries {
+  accounts {
+    ...AccountSummary
+  }
+}
+
+query AccountRealizedPL {
+  accounts {
+    id
+    name
+    realizedPAndL {
+      id
+      year
+      shortTerm
+      longTerm
+      dividend
+      deferredLoss
+      updatedAt
+    }
+  }
+}

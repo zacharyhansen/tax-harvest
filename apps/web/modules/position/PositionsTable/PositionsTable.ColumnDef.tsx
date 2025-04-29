@@ -2,9 +2,11 @@
 
 import type { ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
-import { Badge, DataTable } from 'ui';
-import { Format, isOlderThanOneYear } from 'utilities';
-import type { PositionItemFragment } from 'generated/gql';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
+import { Badge } from '@repo/ui/components/badge';
+
+import { isOlderThanOneYear, Format } from '~/modules/utils';
+import type { PositionItemFragment } from '~/generated/gql';
 
 const columnHelper = createColumnHelper<PositionItemFragment>();
 
@@ -64,7 +66,7 @@ const columns: ColumnDef<PositionItemFragment, never>[] = [
       }>();
       return (
         <span>
-          {account?.displayName || Format.hideNumbers(account?.externalId)}
+          {account.displayName ?? Format.hideNumbers(account.externalId)}
         </span>
       );
     },

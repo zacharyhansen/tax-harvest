@@ -1,0 +1,13 @@
+fragment UserItem on User {
+  id
+  name
+  email
+  photo
+  stripeCustomerId
+}
+
+query User {
+  userCurrent {
+    ...UserItem
+  }
+}

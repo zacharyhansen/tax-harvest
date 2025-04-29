@@ -404,7 +404,6 @@ const GlobalDragHandle = Extension.create({
 
   addProseMirrorPlugins() {
     return [
-      // eslint-disable-next-line sonarjs/new-cap
       DragHandlePlugin({
         pluginKey: 'globalDragHandle',
         dragHandleWidth: this.options.dragHandleWidth,

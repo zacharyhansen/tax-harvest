@@ -1,5 +1,7 @@
 import type { AgGridReactProps } from 'ag-grid-react';
 
+import { DateFormatter } from '../utils/DateFormatter';
+
 // import { inputTypeStringFormatter } from './cell-renderer-selector';
 
 export const dataTypeDefinitions = {
@@ -26,22 +28,35 @@ export const dataTypeDefinitions = {
   //   valueFormatter: params => inputTypeStringFormatter.percentage(params.value),
   //   columnTypes: ['edit'],
   // },
-  // usd: {
-  //   baseDataType: 'number',
-  //   extendsDataType: 'number',
-  //   valueFormatter: ({ value }) => inputTypeStringFormatter.usd(value),
-  //   columnTypes: ['edit'],
-  // },
-  // timeStamp: {
-  //   baseDataType: 'dateString',
-  //   extendsDataType: 'dateString',
-  //   valueFormatter: params => inputTypeStringFormatter.timestamp(params.value),
-  //   columnTypes: ['edit'],
-  // },
-  // date: {
-  //   baseDataType: 'dateString',
-  //   extendsDataType: 'dateString',
-  //   valueFormatter: params => inputTypeStringFormatter.date(params.value),
-  //   columnTypes: ['edit'],
-  // },
+  usd: {
+    baseDataType: 'number',
+    extendsDataType: 'number',
+    valueFormatter: ({ value }) =>
+      value
+        ? new Intl.NumberFormat('en-US', {
+            currency: 'USD',
+            style: 'currency',
+          }).format(parseFloat(value.toString()))
+        : '',
+    columnTypes: ['edit'],
+  },
+
+  timeStamp: {
+    baseDataType: 'dateString',
+    extendsDataType: 'dateString',
+    valueFormatter: params =>
+      params.value !== undefined && params.value !== null
+        ? DateFormatter.timestamp(params.value.toString())
+        : '',
+    columnTypes: ['edit'],
+  },
+  date: {
+    baseDataType: 'dateString',
+    extendsDataType: 'dateString',
+    valueFormatter: params =>
+      params.value !== undefined && params.value !== null
+        ? DateFormatter.shortDay(params.value.toString())
+        : '',
+    columnTypes: ['edit'],
+  },
 } satisfies AgGridReactProps['dataTypeDefinitions'];

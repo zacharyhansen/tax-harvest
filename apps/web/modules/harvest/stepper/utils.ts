@@ -1,6 +1,6 @@
-import { HarvestStep, HarvestType } from 'generated/gql';
-
 import type { StepperStep } from './HarvestStepper';
+
+import { HarvestStep, HarvestType } from '~/generated/gql';
 
 export const headerMap: Record<
   StepperStep,
@@ -89,7 +89,7 @@ export const headerMap: Record<
     },
     [HarvestType.CaptureGainsTaxFree]: {
       description: 'Use your portolio losses to capture tax free gains.',
-      title: 'Plan a Sale Event',
+      title: 'Capture Tax Free Gains',
     },
   },
 };

@@ -21,12 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'ui';
+import PageWrapper from 'modules/page/page-wrapper';
+import { LoadingPage } from 'modules/utilityComponents';
+
 import {
   useAccountLiveUrlQuery,
   useInitiateConnectionMutation,
-} from 'generated/gql';
-import PageWrapper from 'modules/page/page-wrapper';
-import { LoadingPage } from 'modules/utilityComponents';
+} from '~/generated/gql';
 
 interface Provider {
   id: string;

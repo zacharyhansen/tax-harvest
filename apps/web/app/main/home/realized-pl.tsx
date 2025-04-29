@@ -25,8 +25,8 @@ export default function RealizedPL() {
         account.realizedPAndL?.map(pl => ({
           ...(pl.year === currentYear ? pl : {}),
           accountId: account.id,
-          accountName: account.displayName,
-        })) || [{ accountId: account.id, accountName: account.displayName }]
+          name: account.displayName,
+        })) || [{ accountId: account.id, name: account.displayName }]
     ) || [];
 
   return (

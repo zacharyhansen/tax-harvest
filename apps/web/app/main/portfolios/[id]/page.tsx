@@ -3,36 +3,39 @@
 import { DollarSign } from 'lucide-react';
 import { FormProvider } from 'react-hook-form';
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-  FormInput,
-  Separator,
-  toast,
-  useReactHookForm,
-} from 'ui';
+} from '@repo/ui/components/card';
+import { Button } from '@repo/ui/components/button';
+import { Separator } from '@repo/ui/components/separator';
+import { toast } from '@repo/ui/components/toast-sonner';
 import { z } from 'zod';
-import type { PortfolioDetailItemFragment } from 'generated/gql';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
+import InputField from '@repo/ui/form-builder/fields/input.field';
+
+import type { PortfolioDetailItemFragment } from '~/generated/gql';
 import {
   usePortfolioByIdQuery,
   useUpdatePortfolioMutation,
-} from 'generated/gql';
-import { AlertError } from 'modules/alerts';
-import { LoadingPage } from 'modules/utilityComponents';
+} from '~/generated/gql';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { zodNumber } from '~/modules/utils/zod-utils';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface PortfolioPageProps {}
 
 const formSchema = z.object({
-  harvestCycleWeeks: z.coerce.number().gte(1),
-  harvestShareDollarThreshold: z.coerce.number().gte(0),
-  harvestTickerBucketDollarSizeLong: z.coerce.number().gte(0),
-  harvestTickerBucketDollarSizeShort: z.coerce.number().gte(0),
-  harvestTickerBucketLowerLimitLong: z.coerce.number().gte(0),
-  harvestTickerBucketLowerLimitShort: z.coerce.number().gte(0),
+  harvestCycleWeeks: zodNumber.pipe(z.coerce.number().gte(1)),
+  harvestShareDollarThreshold: zodNumber.pipe(z.coerce.number().gte(0)),
+  harvestTickerBucketDollarSizeLong: zodNumber.pipe(z.coerce.number().gte(0)),
+  harvestTickerBucketDollarSizeShort: zodNumber.pipe(z.coerce.number().gte(0)),
+  harvestTickerBucketLowerLimitLong: zodNumber.pipe(z.coerce.number().gte(0)),
+  harvestTickerBucketLowerLimitShort: zodNumber.pipe(z.coerce.number().gte(0)),
   name: z.string().min(3),
 });
 
@@ -45,12 +48,7 @@ export default function PortfolioPage({ params }: { params: { id: string } }) {
 
   if (error) {
     return (
-      <div>
-        <AlertError>
-          Could not load portfolio at this time. If the issue persists, please
-          constact support @support
-        </AlertError>
-      </div>
+      <ErrorPage message="Could not load portfolio at this time. If the issue persists, please contact support @support" />
     );
   }
 
@@ -71,24 +69,22 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
     },
   });
 
-  const [form, onSumbit] = useReactHookForm<z.infer<typeof formSchema>>({
-    formProps: {
-      defaultValues: {
-        harvestCycleWeeks: portfolio.harvestCycleWeeks,
-        harvestShareDollarThreshold: portfolio.harvestShareDollarThreshold,
-        harvestTickerBucketDollarSizeLong:
-          portfolio.harvestTickerBucketDollarSizeLong,
-        harvestTickerBucketDollarSizeShort:
-          portfolio.harvestTickerBucketDollarSizeShort,
-        harvestTickerBucketLowerLimitLong:
-          portfolio.harvestTickerBucketLowerLimitLong,
-        harvestTickerBucketLowerLimitShort:
-          portfolio.harvestTickerBucketLowerLimitShort,
-        name: portfolio.name,
-      },
+  const { form, handleSubmit } = useStandardForm<z.infer<typeof formSchema>>({
+    defaultValues: {
+      harvestCycleWeeks: portfolio.harvestCycleWeeks,
+      harvestShareDollarThreshold: portfolio.harvestShareDollarThreshold,
+      harvestTickerBucketDollarSizeLong:
+        portfolio.harvestTickerBucketDollarSizeLong,
+      harvestTickerBucketDollarSizeShort:
+        portfolio.harvestTickerBucketDollarSizeShort,
+      harvestTickerBucketLowerLimitLong:
+        portfolio.harvestTickerBucketLowerLimitLong,
+      harvestTickerBucketLowerLimitShort:
+        portfolio.harvestTickerBucketLowerLimitShort,
+      name: portfolio.name,
     },
-    formSchema,
-    handleSubmit: async ({
+    resolver: zodResolver(formSchema),
+    handleSubmit: ({
       harvestCycleWeeks,
       harvestShareDollarThreshold,
       harvestTickerBucketDollarSizeLong,
@@ -146,17 +142,17 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
             Manage your portfolio settings and preferences.
           </CardDescription>
         </CardHeader>
-        <form onSubmit={onSumbit}>
+        <form onSubmit={handleSubmit} noValidate={true}>
           <CardContent className="space-y-8">
             {/* Miscellaneous Inputs */}
             <div className="space-y-4">
-              <FormInput name="name" label="Portfolio Name" />
-              <FormInput
+              <InputField name="name" label="Portfolio Name" />
+              <InputField
                 name="harvestCycleWeeks"
                 label="Harvest Cycle - Number of Weeks"
                 type="number"
               />
-              <FormInput
+              <InputField
                 name="harvestShareDollarThreshold"
                 startIcon={DollarSign}
                 label="Per Share Minimum"
@@ -172,14 +168,14 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
                 Short Term Capital Settings
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <FormInput
+                <InputField
                   startIcon={DollarSign}
                   name="harvestTickerBucketDollarSizeShort"
                   label="Asset Bucket Size"
                   type="number"
                   description="The max dollar amount harvested for a single asset before trying the next."
                 />
-                <FormInput
+                <InputField
                   startIcon={DollarSign}
                   name="harvestTickerBucketLowerLimitShort"
                   label="Asset Dollar Minimum"
@@ -196,14 +192,14 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
                 Long Term Capital Settings
               </h3>
               <div className="grid grid-cols-2 gap-4">
-                <FormInput
+                <InputField
                   startIcon={DollarSign}
                   name="harvestTickerBucketDollarSizeLong"
                   label="Asset Bucket Size"
                   type="number"
                   description="The max dollar amount harvested for a single asset before trying the next."
                 />
-                <FormInput
+                <InputField
                   startIcon={DollarSign}
                   name="harvestTickerBucketLowerLimitLong"
                   label="Asset Dollar Minimum"

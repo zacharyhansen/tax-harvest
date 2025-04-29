@@ -2,7 +2,7 @@ fragment PositionItem on Position {
   account {
     id
     externalId
-    displayName
+    name
     type
   }
   change

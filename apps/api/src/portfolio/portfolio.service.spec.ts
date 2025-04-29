@@ -1,8 +1,7 @@
-import { ConfigService } from "@nestjs/config";
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { DatabaseModule } from "../database/database.module";
-import { PrismaModule } from "../prisma/prisma.module";
+import { AppModule } from "~/app/app.module";
+
 import Harvest from "./portfolio.harvest";
 import { PortfolioService } from "./portfolio.service";
 import HarvestInput_1 from "./test/harvest_1/input.json";
@@ -22,26 +21,10 @@ describe("PortfolioService", () => {
   let service: PortfolioService;
 
   beforeEach(async () => {
-    const portfolioModule: TestingModule = await Test.createTestingModule({
-      exports: [
-        {
-          provide: ConfigService,
-          useValue: new Map(), // Mock ConfigService directly
-        },
-      ],
-      imports: [DatabaseModule, PrismaModule],
-      providers: [
-        PortfolioService,
-        {
-          provide: ConfigService,
-          useValue: new Map(), // Mock ConfigService directly
-        },
-      ],
-    })
-
-      .compile();
-
-    service = portfolioModule.get<PortfolioService>(PortfolioService);
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+    service = moduleFixture.get<PortfolioService>(PortfolioService);
   });
 
   it("should handle a positive realized gain and a larger unrealized gain", () => {

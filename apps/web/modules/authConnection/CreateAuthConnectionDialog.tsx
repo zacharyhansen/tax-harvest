@@ -10,12 +10,13 @@ import {
   useReactHookForm,
 } from '@repo/ui/components/button';
 import { z } from 'zod';
+
+import { usePortfolio } from '../portfolio/providers/PortfolioProvider';
+
 import {
   useOauthEtradeMutation,
   useVerificationEtradeQuery,
-} from 'generated/gql';
-
-import { usePortfolio } from '../portfolio/providers/PortfolioProvider';
+} from '~/generated/gql';
 
 const verifificationFormSchema = z.object({
   verifier: z.string().length(5),
@@ -86,7 +87,7 @@ export default function CreateAuthConnectionDialog({
       ) : (
         <>
           <a
-            href={verification?.requestOauthConnection.verificationUrl}
+            href={verification.requestOauthConnection.verificationUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="link text-center"

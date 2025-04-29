@@ -6,8 +6,9 @@ import {
   useStripe,
 } from '@stripe/react-stripe-js';
 import { useCallback } from 'react';
-import { useStripeSessionLazyQuery } from 'generated/gql';
-import { LoadingPage } from 'modules/utilityComponents';
+
+import { useStripeSessionLazyQuery } from '~/generated/gql';
+import { LoadingPage } from '~/modules/utility-components';
 
 export interface StripePriceIdPageProps {}
 

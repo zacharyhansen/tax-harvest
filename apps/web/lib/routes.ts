@@ -6,42 +6,50 @@ import {
 } from 'next/navigation';
 import queryString from 'query-string';
 
-import { HarvestType } from './constants/enums.dto';
+import { HarvestType } from '~/generated/gql';
+
 // see https://www.flightcontrol.dev/blog/fix-nextjs-routing-to-have-full-type-safety
 
 export const TypedRoutes = {
   accounts: makeRoute(() => `/main/accounts`),
   account: makeRoute(
-    ({ accountId }) => `/main/accounts/${accountId}`,
-    z.object({ accountId: z.string() })
+    ({ id }) => `/main/accounts/${id}`,
+    z.object({ id: z.string() })
   ),
-  admin: makeRoute(() => `/admin`),
+  actions: makeRoute(() => `/main/admin/actions`),
+  admin: makeRoute(() => `/main/admin`),
   connect: makeRoute(() => `/connect`),
   explore: makeRoute(() => `/explore`),
   harvests: makeRoute(() => `/main/harvests`),
   harvest: makeRoute(
-    ({ harvestId }) => `/main/harvests/${harvestId}`,
-    z.object({ harvestId: z.string() })
+    ({ id }) => `/main/harvests/${id}`,
+    z.object({ id: z.string() })
   ),
-  harvestFlowRoot: makeRoute(() => `/harvest-flow`),
+  harvestFlowRoot: makeRoute(() => `/main/harvest-flow`),
   harvestFlowType: makeRoute(
-    ({ harvestFlowTypeId }) => `/harvest-flow/${harvestFlowTypeId}`,
-    z.object({ harvestFlowTypeId: z.string(), type: z.nativeEnum(HarvestType) })
+    ({ harvestId, type }) => `/main/harvest-flow/${type}/${harvestId}`,
+    z.object({
+      harvestId: z.string(),
+      type: z.nativeEnum(HarvestType),
+    })
   ),
   home: makeRoute(() => `/main/home`),
-  lotSelection: makeRoute(() => `/harvest-flow/lot-selection`),
+  lotSelection: makeRoute(
+    ({ type }) => `/main/harvest-flow/lot-selection/${type}`,
+    z.object({ type: z.nativeEnum(HarvestType) })
+  ),
   lots: makeRoute(() => `/main/lots`),
   lot: makeRoute(
     ({ lotId }) => `/main/lots/${lotId}`,
     z.object({ lotId: z.string() })
   ),
-  logs: makeRoute(() => `/admin/logs`),
+  logs: makeRoute(() => `/main/logs`),
   portfolios: makeRoute(() => `/main/portfolios`),
-  settings: makeRoute(() => `/admin/settings`),
+  settings: makeRoute(() => `/main/settings`),
   transactions: makeRoute(() => `/main/transactions`),
-  users: makeRoute(() => `/admin/users`),
+  users: makeRoute(() => `/main/users`),
   user: makeRoute(
-    ({ userId }) => `/admin/users/${userId}`,
+    ({ userId }) => `/main/users/${userId}`,
     z.object({ userId: z.string() })
   ),
 

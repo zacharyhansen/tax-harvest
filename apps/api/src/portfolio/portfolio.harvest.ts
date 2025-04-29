@@ -1,7 +1,6 @@
-import Decimal from "decimal.js";
-
 import { OrderType } from "@prisma/client";
 import { Prisma } from "@prisma/client";
+import Decimal from "decimal.js";
 
 import { LotValueType } from "../lot/lot.dto";
 import { HarvestLotOrder, TaxGain } from "./portfolio.dto";
@@ -291,7 +290,6 @@ export default class Harvest {
         const resultLots = curr.filter(
           lot => lot.processQty !== lot.remainingQty,
         );
-        // eslint-disable-next-line unicorn/prefer-spread
         return acc.concat(resultLots);
       },
       [],

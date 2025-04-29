@@ -1,12 +1,12 @@
 'use client';
 
-import { DataTable } from 'ui';
-import { useTransactionsQuery } from 'generated/gql';
-import { AlertError } from 'modules/alerts';
-import PageWrapper from 'modules/page/page-wrapper';
-import { LoadingPage } from 'modules/utilityComponents';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
 
 import columns from './TransactionsTable.ColumnDef';
+
+import { useTransactionsQuery } from '~/generated/gql';
+import { PageWrapper } from '~/modules/layout';
+import { LoadingPage, ErrorPage } from '~/modules/utility-components';
 
 export default function AccountIndex() {
   const { data, error, loading } = useTransactionsQuery();
@@ -17,21 +17,16 @@ export default function AccountIndex() {
 
   if (error) {
     return (
-      <div>
-        <AlertError>
-          Could not load accounts at this time. If this issue persists please
-          contact support @support
-        </AlertError>
-      </div>
+      <ErrorPage message="Could not load transactions at this time. If this issue persists please contact support" />
     );
   }
 
   return (
-    <PageWrapper title="Transactions">
+    <PageWrapper>
       <DataTable
         columns={columns}
         data={data?.transactions}
-        noResultsAlert="No accounts were found for the search criteria"
+        noResultsAlert="No transactions were found for the search criteria"
       />
     </PageWrapper>
   );

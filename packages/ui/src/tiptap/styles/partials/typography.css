@@ -31,7 +31,7 @@
 }
 
 .minimal-tiptap-editor .ProseMirror a.link {
-  @apply cursor-pointer text-primary;
+  @apply text-primary cursor-pointer;
 }
 
 .minimal-tiptap-editor .ProseMirror a.link:hover {

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 
 import { Database } from "../database/database";
-import { Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AccountService {
     return this.prismaService.account.findMany({
       ...args,
       orderBy: {
-        displayName: "asc",
+        name: "asc",
       },
       where: {
         AND: [
@@ -31,6 +31,36 @@ export class AccountService {
           args.where ?? {},
         ],
       },
+    });
+  }
+
+  async setupAccounts({
+    id,
+    select,
+  }: {
+    id: string;
+    select: Prisma.AccountSelect;
+  }) {
+    return this.prismaService.account.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              {
+                uploadedPositions: false,
+              },
+              {
+                setRealizedValues: false,
+              },
+            ],
+          },
+          {
+            portfolioId: id,
+            skipSetup: false,
+          },
+        ],
+      },
+      select,
     });
   }
 

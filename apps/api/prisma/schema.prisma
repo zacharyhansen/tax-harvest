@@ -3,16 +3,16 @@ generator client {
   previewFeatures = ["postgresqlExtensions"] // Enable the postgresqlExtensions. Currently in preview
 }
 
+generator nestgraphql {
+  provider   = "prisma-nestjs-graphql"
+  output     = "../src/generated/graphql"
+  emitSingle = true
+}
+
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
   extensions = [pgvector(map: "vector")]
-}
-
-generator zod {
-  // see https://github.com/chrishoermann/zod-prisma-types
-  provider = "zod-prisma-types"
-  output   = "../src/generated/prisma-zod" // default is ./generated/zod
 }
 
 model User {
@@ -72,11 +72,13 @@ model Portfolio {
   /// How much is a valid bucket (otherwise a ticker is considered 'slop')
   harvestTickerBucketLowerLimitShort Decimal @default(".01") @db.Decimal(14, 2)
 
-  accounts          Account[]
-  usersOnPortfolios UsersOnPortfolios[]
-  createdBy         User?               @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  authConnections   AuthConnection[]
-  harvests          Harvest[]
+  accounts            Account[]
+  usersOnPortfolios   UsersOnPortfolios[]
+  createdBy           User?                 @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  authConnections     AuthConnection[]
+  harvests            Harvest[]
+  Log                 Log[]
+  LotTransactionBatch LotTransactionBatch[]
 }
 
 enum HarvestType {
@@ -107,6 +109,8 @@ model Harvest {
   createdBy           User                 @relation(fields: [createdById], references: [id], onDelete: Cascade)
   portfolio           Portfolio            @relation(fields: [portfolioId], references: [id])
   harvestTransactions HarvestTransaction[]
+
+  @@index([portfolioId])
 }
 
 /// Represent the logical unit of a harvest transactiont whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy
@@ -152,6 +156,8 @@ model HarvestTransactionItem {
   replacementTransaction       HarvestTransaction? @relation(name: "replacementTransaction")
   revertHarvestTransaction     HarvestTransaction? @relation(name: "revertHarvestTransaction")
   revertReplacementTransaction HarvestTransaction? @relation(name: "revertReplacementTransaction")
+
+  @@index([lotId])
 }
 
 // Account ------------------------------------------------------------------------------------------------------------------------------
@@ -166,13 +172,11 @@ model Account {
   authConnectionId String             @db.Uuid
   /// The unique id in the external system for the account (only unique in combination with provider)
   externalId       String?
-  plaidAccountName String?
+  name             String?
   plaidAccountMask String?
   key              String?
   /// Who created the model
   createdById      String
-  /// Display Name of the account
-  displayName      String             @default("New Account")
   /// The description of the account
   description      String?
   /// What institution does this account fall under
@@ -191,10 +195,13 @@ model Account {
   closedDate       DateTime?
   /// Option level for the account
   optionLevel      OptionLevel?
+  /// The date the account was seeded with lots using a CSV or other import - transactions after this date will be applied using our algorithim
+  lotSeededDate    DateTime?
 
   // Setup fields
   uploadedPositions Boolean @default(false)
   setRealizedValues Boolean @default(false)
+  skipSetup         Boolean @default(false)
 
   // Browserless io fields
   liveURL        String?
@@ -235,6 +242,8 @@ model Account {
   files          File[]
 
   @@unique([provider, externalId])
+  @@index([authConnectionId])
+  @@index([portfolioId])
 }
 
 model RealizedPAndL {
@@ -278,11 +287,71 @@ model Transaction {
   fee                Decimal?  @db.Decimal(14, 4)
   displaySymbol      String?
   detailsURI         String?
+  appliedToLots      Boolean   @default(false)
 
-  asset   Asset   @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  asset        Asset          @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  account      Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  lotChangeLog LotChangeLog[]
 
   @@unique([accountId, externalId])
+}
+
+model LotTransactionBatch {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
+  authConnectionId String   @db.Uuid
+  portfolioId      String   @db.Uuid
+  /// Snapshot of positions before the transaction batch
+  positionsBefore  Json?
+  /// Snapshot of positions after the transaction batch
+  positionsAfter   Json?
+  /// Plaid holdings payload for the transaction batch
+  holdingsPayload  Json?
+  /// Map of lot tuples for the transaction batch
+  lotTupleMap      Json?
+  /// Initial lots for the transaction batch
+  initialLots      Json?
+  /// New transactions for the transaction batch
+  newTransactions  Json?
+  /// New buys for the transaction batch
+  newBuys          Json?
+  /// New sells for the transaction batch
+  newSells         Json?
+
+  authConnection AuthConnection @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
+  lotChangeLog   LotChangeLog[]
+  portfolio      Portfolio      @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId])
+}
+
+model LotChangeLog {
+  id                    String        @id @default(uuid())
+  createdAt             DateTime      @default(now())
+  operationType         OperationType
+  lotId                 String?       @db.Uuid
+  accountId             String        @db.Uuid
+  portfolioId           String        @db.Uuid
+  lotBefore             Json?
+  lotAfter              Json?
+  source                String?
+  processed             Boolean       @default(false)
+  lotTransactionBatchId String?       @db.Uuid
+  transactionId         String?       @db.Uuid
+
+  lotTransactionBatch LotTransactionBatch? @relation(fields: [lotTransactionBatchId], references: [id], onDelete: SetNull)
+  transaction         Transaction?         @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  lot                 Lot?                 @relation(fields: [lotId], references: [id], onDelete: SetNull)
+
+  @@index([portfolioId, lotTransactionBatchId])
+  @@index([portfolioId, transactionId])
+}
+
+enum OperationType {
+  create
+  update
+  delete
 }
 
 /// This model really should never be shown to the user - most api's have it but its
@@ -321,6 +390,7 @@ model Position {
   lots    Lot[]
 
   @@unique([accountId, externalId])
+  @@index([accountId])
 }
 
 enum TaxGain {
@@ -340,25 +410,28 @@ model Lot {
   excludeFromHarvest Int      @default(0)
   /// The file this lot was created from if it was from ingestion
   fileId             String?  @db.Uuid
+  // The required fields (price paid per share and how many)
+  /// The quantity of the asset owned in the lot 
+  remainingQty       Decimal  @db.Decimal(14, 4)
+  /// The price paid per asset unit in the lot (share price paid)
+  price              Decimal  @db.Decimal(14, 4)
+  acquiredDate       DateTime
 
-  price               Decimal?  @db.Decimal(14, 4)
-  gainDay             Decimal?  @db.Decimal(14, 4)
-  gainDayPct          Decimal?  @db.Decimal(14, 4)
-  marketValue         Decimal?  @db.Decimal(14, 4)
-  costTotal           Decimal?  @db.Decimal(14, 4)
-  totalCostForGainPct Decimal?  @db.Decimal(14, 4)
-  gainTotal           Decimal?  @db.Decimal(14, 4)
-  originalQty         Decimal?  @db.Decimal(14, 4)
-  remainingQty        Decimal?  @db.Decimal(14, 4)
-  availableQty        Decimal?  @db.Decimal(14, 4)
-  orderNo             Decimal?  @db.Decimal(14, 4)
-  acquiredDate        DateTime?
-  exchangeRate        Decimal?  @db.Decimal(14, 4)
-  settlementCurrency  String?   @default("USD")
-  paymentCurrency     String?   @default("USD")
-  adjPrice            Decimal?  @db.Decimal(14, 4)
-  commPerShare        Decimal?  @db.Decimal(14, 4)
-  feesPerShare        Decimal?  @db.Decimal(14, 4)
+  gainDay             Decimal? @db.Decimal(14, 4)
+  gainDayPct          Decimal? @db.Decimal(14, 4)
+  marketValue         Decimal? @db.Decimal(14, 4)
+  costTotal           Decimal? @db.Decimal(14, 4)
+  totalCostForGainPct Decimal? @db.Decimal(14, 4)
+  gainTotal           Decimal? @db.Decimal(14, 4)
+  originalQty         Decimal? @db.Decimal(14, 4)
+  availableQty        Decimal? @db.Decimal(14, 4)
+  orderNo             Decimal? @db.Decimal(14, 4)
+  exchangeRate        Decimal? @db.Decimal(14, 4)
+  settlementCurrency  String?  @default("USD")
+  paymentCurrency     String?  @default("USD")
+  adjPrice            Decimal? @db.Decimal(14, 4)
+  commPerShare        Decimal? @db.Decimal(14, 4)
+  feesPerShare        Decimal? @db.Decimal(14, 4)
   // TODO: Unkown etrade fields 
   lotSourceCode       Int?
   termCode            Int?
@@ -371,8 +444,10 @@ model Lot {
   position                Position?                @relation(fields: [positionId], references: [id], onDelete: Cascade)
   account                 Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   harvestTransactionItems HarvestTransactionItem[]
+  lotChangeLog            LotChangeLog[]
 
   @@unique([positionId, externalId])
+  @@index([accountId])
 }
 
 enum PortfolioRole {
@@ -580,29 +655,31 @@ enum AuthType {
 /// An authorized connection to some external system
 model AuthConnection {
   /// Internal identifier
-  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   /// User this provider pertains to
-  userId          String
+  userId                       String
   /// The portfolio this provider belongs to
-  portfolioId     String     @db.Uuid
+  portfolioId                  String     @db.Uuid
   /// When the model was created
-  createdAt       DateTime   @default(now())
+  createdAt                    DateTime   @default(now())
   /// When the model was updated
-  updatedAt       DateTime   @default(now()) @updatedAt
+  updatedAt                    DateTime   @default(now()) @updatedAt
   /// Source of the auth
-  source          AuthSource
+  source                       AuthSource
   /// The type of auth
-  type            AuthType
+  type                         AuthType
   /// Used for etrade to store the url where the user can get their verifier code (valid for 5 minutes)
-  verificationUrl String?
+  verificationUrl              String?
   /// PLAID -> Plaid Item id, ETRADE -> random UUID since they dont have one
-  externalId      String
+  externalId                   String     @unique
   /// Is the connection currently syncing
-  isSyncing       Boolean    @default(false)
+  isSyncing                    Boolean    @default(false)
   /// When were current authentication credentials generated with the provider
-  authedAt        DateTime   @default(now())
+  authedAt                     DateTime   @default(now())
   /// When was the sync made
-  syncedAt        DateTime?
+  syncedAt                     DateTime?
+  /// When was the last transaction sync Plaid
+  lastTransactionSyncedAtPlaid DateTime?
 
   // Oauth Fields -------
   /// @HideField({ output: true, input: true })
@@ -612,11 +689,14 @@ model AuthConnection {
   /// @HideField({ output: true, input: true })
   verifier String?
 
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  accounts  Account[]
+  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  portfolio           Portfolio             @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  accounts            Account[]
+  lotTransactionBatch LotTransactionBatch[]
 
   @@unique([source, userId, portfolioId, externalId])
+  @@index([portfolioId])
+  @@index([externalId])
 }
 
 enum FileType {
@@ -641,6 +721,8 @@ model File {
 enum LogType {
   EXTERNAL_SYNC
   AUTH
+  PLAID_WEBHOOK
+  PLAID_TRX_MERGE
 }
 
 model Log {
@@ -651,6 +733,11 @@ model Log {
   description    String?
   responseStatus Int?
   data           Json
+  portfolioId    String      @db.Uuid
+
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId, type])
 }
 
 // ENUMS 

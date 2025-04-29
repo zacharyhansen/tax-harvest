@@ -11,7 +11,7 @@ fragment PortfolioTableItem on Portfolio {
   accounts {
     id
     status
-    displayName
+    name
     institution
   }
   createdAt

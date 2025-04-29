@@ -1,0 +1,11 @@
+# mutation GenerateEmbeddings($startDate: DateTime!) {
+#   generateEmbeddings(startDate: $startDate)
+# }
+
+# mutation UpdateHourlyAssetPrices($from: DateTime!, $to: DateTime!) {
+#   updateHourlyAssetPrices(from: $from, to: $to)
+# }
+
+mutation UpdateAllAssetPrices {
+  updateAllAssetPrices
+}

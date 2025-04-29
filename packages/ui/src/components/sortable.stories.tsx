@@ -60,7 +60,7 @@ const SortableForm = () => {
   });
 
   function onSubmit(input: Schema) {
-    console.log({ input });
+    console.info({ input });
   }
 
   const { fields, append, move, remove } = useFieldArray({
@@ -198,7 +198,6 @@ export const Default: Story = {
 
 export const Modal: Story = {
   render: () => {
-    // eslint-disable-next-line sonarjs/pluginRules-of-hooks
     const [open, setOpen] = useState(false);
 
     return (

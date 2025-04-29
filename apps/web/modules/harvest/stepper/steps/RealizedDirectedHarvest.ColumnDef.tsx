@@ -3,10 +3,14 @@
 import type { CellContext, ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
-import { Badge, DataTable } from 'ui';
-import { Format } from 'utilities';
-import type { LotCurrentItemFragment } from 'generated/gql';
-import { TaxGain } from 'generated/gql';
+import { Badge } from '@repo/ui/components/badge';
+import DataTable, {
+  sortDecimalValue,
+} from '@repo/ui/components/dataTable/dataTable';
+
+import { Format } from '~/modules/utils';
+import type { LotCurrentItemFragment } from '~/generated/gql';
+import { TaxGain } from '~/generated/gql';
 
 const columnHelper = createColumnHelper<
   LotCurrentItemFragment & { selectedQuantity: number }
@@ -54,10 +58,15 @@ const columns: ColumnDef<
       return <DataTable.FooterCell label="Total" value={total.toFixed(2)} />;
     },
     header: 'Selected Qty',
+    sortingFn: sortDecimalValue,
     size: 130,
   }),
   columnHelper.accessor('remainingQty', {
     aggregationFn: 'sum',
+    cell: ({ getValue }) => {
+      const value = getValue();
+      return Number(value).toFixed(1);
+    },
     footer: ({ table }) => {
       const total = table
         .getFilteredRowModel()
@@ -68,6 +77,7 @@ const columns: ColumnDef<
       return <DataTable.FooterCell label="Total" value={total.toFixed(2)} />;
     },
     header: 'Available Qty',
+    sortingFn: sortDecimalValue,
     size: 130,
   }),
   columnHelper.accessor('symbol', {
@@ -96,7 +106,8 @@ const columns: ColumnDef<
       return <DataTable.FooterCell label="Total" value={Format.money(total)} />;
     },
     header: 'Current Value',
-    size: 130,
+    sortingFn: sortDecimalValue,
+    size: 150,
   }),
   columnHelper.accessor('costBasis', {
     aggregationFn: 'sumMoney',
@@ -127,6 +138,7 @@ const columns: ColumnDef<
     },
     header: 'P & L',
     size: 130,
+    sortingFn: sortDecimalValue,
   }),
   columnHelper.accessor('taxGain', {
     cell: ({ getValue }) => {

@@ -1,23 +1,24 @@
 'use client';
 
-import { HARVEST_ID } from 'constants/routes';
-
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, DollarSign, Rows3, Wheat } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Badge, Button } from 'ui';
-import { formatDate } from 'utilities';
-import { useHarvestQuery } from 'generated/gql';
-import { useCurrentUser } from 'modules/user';
-import { LoadingPage } from 'modules/utilityComponents';
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+
+import { useHarvestQuery } from '~/generated/gql';
+import { useUser } from '~/app/main/user.provider';
+import { LoadingPage } from '~/modules/utility-components';
+import { formatDate } from '~/modules/utils';
+import { TypedRoutes } from '~/lib/routes';
 
 interface HarvestSuccessProps {
   harvestId: string;
 }
 
 export default function Complete({ harvestId }: HarvestSuccessProps) {
-  const user = useCurrentUser();
+  const { user } = useUser();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const { data, loading } = useHarvestQuery({
@@ -88,7 +89,7 @@ export default function Complete({ harvestId }: HarvestSuccessProps) {
           <div className="rounded-full bg-green-500 p-3">
             <p className="flex items-center justify-center text-2xl font-bold text-white">
               <DollarSign className="mr-1 h-6 w-6" />
-              {data?.harvest.amount.toLocaleString('en-US', {
+              {Number(data?.harvest.amount).toLocaleString('en-US', {
                 maximumFractionDigits: 2,
                 minimumFractionDigits: 2,
               })}
@@ -131,13 +132,7 @@ export default function Complete({ harvestId }: HarvestSuccessProps) {
         </p>
         <Button
           variant="outline"
-          onClick={() =>
-            router.push(
-              HARVEST_ID({
-                id: harvestId,
-              })
-            )
-          }
+          onClick={() => router.push(TypedRoutes.harvest({ id: harvestId }))}
         >
           View Details <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

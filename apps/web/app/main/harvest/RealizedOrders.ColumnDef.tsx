@@ -3,10 +3,12 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
 import { capitalCase } from 'change-case';
-import { Badge, DataTable } from 'ui';
-import { Format } from 'utilities';
-import type { HarvestLotOrderItemFragment } from 'generated/gql';
-import { TaxGain } from 'generated/gql';
+import { Badge } from '@repo/ui/components/badge';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
+
+import { Format } from '~/modules/utils';
+import type { HarvestLotOrderItemFragment } from '~/generated/gql';
+import { TaxGain } from '~/generated/gql';
 
 const columnHelper = createColumnHelper<HarvestLotOrderItemFragment>();
 

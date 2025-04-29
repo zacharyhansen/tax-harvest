@@ -1,21 +1,28 @@
 'use client';
 
-import {
-  HARVEST_FLOW,
-  HARVEST_FLOW_ROOT,
-  LOT_SELECTION,
-} from 'constants/routes';
-
 import NumberFlow from '@number-flow/react';
 import { ArrowLeftCircle, ArrowRightCircle, Wheat } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { Alert, Button, Card, CardContent, CardHeader, CardTitle } from 'ui';
-import { Format, MoneyUtil } from 'utilities';
-import type { LotCurrentItemFragment } from 'generated/gql';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@repo/ui/components/card';
+import { Alert } from '@repo/ui/components/alert';
+import { Button } from '@repo/ui/components/button';
+
+import Complete from './steps/Complete';
+import BuyBack from './steps/buy-back';
+import LotSelection from './steps/LotSelection';
+import Finalize from './steps/Review';
+import { headerMap } from './utils';
+
 import {
   HarvestStep,
   HarvestType,
+  type LotCurrentItemFragment,
   LotValueType,
   useCreateHarvestMutation,
   useFinalizeHarvestMutation,
@@ -23,15 +30,11 @@ import {
   useLotsCurrentForLotTypeQuery,
   usePortfolioSummaryQuery,
   useUpdateHarvestMutation,
-} from 'generated/gql';
-import PageWrapper from 'modules/page/page-wrapper';
-import { LoadingPage } from 'modules/utilityComponents';
-
-import Complete from './steps/Complete';
-import BuyBack from './steps/Configure';
-import LotSelection from './steps/LotSelection';
-import Finalize from './steps/Review';
-import { headerMap } from './utils';
+} from '~/generated/gql';
+import { Format, MoneyUtil } from '~/modules/utils';
+import { PageWrapper } from '~/modules/layout';
+import { LoadingPage } from '~/modules/utility-components';
+import { TypedRoutes } from '~/lib/routes';
 
 export type LotRowType = LotCurrentItemFragment & { selectedQuantity: number };
 
@@ -49,11 +52,11 @@ export default function HarvestStepper({
   harvestType,
 }: HarvestStepperProps) {
   const router = useRouter();
-
   const [harvestLots, setHarvestLots] = useState<LotRowType[]>([]);
   const [counterLots, setCounterLots] = useState<LotRowType[]>([]);
 
   const { data, loading } = usePortfolioSummaryQuery();
+
   const { data: dataHarvest, loading: loadingHarvest } = useHarvestQuery({
     skip: !harvestId,
     variables: {
@@ -98,7 +101,7 @@ export default function HarvestStepper({
           }))
         );
       },
-      skip: !harvestTarget || HarvestType.ReduceCostBasis !== harvestType,
+      skip: !harvestTarget,
       variables: {
         lotValueType:
           MoneyUtil.amountDirection(harvestTarget) === 'positive'
@@ -114,7 +117,7 @@ export default function HarvestStepper({
   const [finalizeHarvest, { loading: finalizingHarvest }] =
     useFinalizeHarvestMutation();
 
-  const step: StepperStep = dataHarvest?.harvest.step || 'LOT_SELECTION';
+  const step: StepperStep = dataHarvest?.harvest.step ?? 'LOT_SELECTION';
 
   const selectedHarvest: number = useMemo(
     () =>
@@ -138,10 +141,13 @@ export default function HarvestStepper({
 
   const handleNext = () => {
     if (step === 'LOT_SELECTION') {
-      createHarvest({
+      void createHarvest({
         onCompleted: data => {
           router.push(
-            HARVEST_FLOW({ harvestId: data.createHarvest.id, harvestType })
+            TypedRoutes.harvestFlowType({
+              harvestId: data.createHarvest.id,
+              type: harvestType,
+            })
           );
         },
         variables: {
@@ -167,13 +173,13 @@ export default function HarvestStepper({
         },
       });
     } else if (step === HarvestStep.Configure) {
-      finalizeHarvest({
+      void finalizeHarvest({
         variables: {
           id: harvestId!,
         },
       });
     } else if (step === HarvestStep.Review) {
-      updateHarvest({
+      void updateHarvest({
         variables: {
           data: {
             step: {
@@ -188,11 +194,14 @@ export default function HarvestStepper({
 
   const handlePrev = () => {
     if (step === 'LOT_SELECTION') {
-      router.push(HARVEST_FLOW_ROOT);
+      TypedRoutes.harvestFlowRoot();
     } else if (step === HarvestStep.Configure) {
-      router.push(LOT_SELECTION({ harvestType }));
+      TypedRoutes.harvestFlowType({
+        harvestId: harvestId!,
+        type: harvestType,
+      });
     } else if (step === HarvestStep.Review) {
-      updateHarvest({
+      void updateHarvest({
         variables: {
           data: {
             step: {
@@ -205,7 +214,7 @@ export default function HarvestStepper({
     }
   };
 
-  if (errorLots || errorCounterLots) {
+  if (errorLots ?? errorCounterLots) {
     return <Alert>There was an error loading the lots.</Alert>;
   }
 
@@ -217,7 +226,7 @@ export default function HarvestStepper({
     creatingHarvest || updatingHarvest || finalizingHarvest;
 
   const recommendedHarvestAmounts =
-    data?.portfolioSummary.harvestRecommendations?.find(
+    data?.portfolioSummary.harvestRecommendations.find(
       rec => rec.harvestType === harvestType
     );
 
@@ -225,16 +234,17 @@ export default function HarvestStepper({
     <PageWrapper
       title={headerMap[step][harvestType].title}
       description={headerMap[step][harvestType].description}
+      className="mx-auto"
       cornerElement={
         <Card className="mx-0 border-none p-0 shadow-none">
           <CardHeader className="text-primary flex flex-row items-center justify-between space-y-0 pb-2 pr-0 pt-0">
             <CardTitle className="flex space-x-4 text-sm font-medium">
-              <span>Selected Harvest</span>
+              <span className="whitespace-nowrap">Selected Harvest</span>
               <Wheat className="h-5 w-5" />
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="whitespace-nowrap text-2xl font-bold">
               <NumberFlow
                 value={dataHarvest?.harvest.amount || selectedHarvest}
                 format={{ currency: 'USD', style: 'currency' }}
@@ -243,7 +253,7 @@ export default function HarvestStepper({
                 <p className="text-muted-foreground inline text-sm font-bold">
                   /{' '}
                   {Format.money(
-                    Math.abs(recommendedHarvestAmounts?.amountTotal || 0)
+                    Math.abs(recommendedHarvestAmounts?.amountTotal ?? 0)
                   )}
                 </p>
               )}
@@ -287,9 +297,9 @@ export default function HarvestStepper({
           harvestType={harvestType}
           selectedHarvest={selectedHarvest}
           selectedCounter={selectedCounter}
-          targetRealized={recommendedHarvestAmounts?.amountRealized || 0}
-          targetTotal={recommendedHarvestAmounts?.amountTotal || 0}
-          targetUnrealized={recommendedHarvestAmounts?.amountUnrealized || 0}
+          targetRealized={recommendedHarvestAmounts?.amountRealized ?? 0}
+          targetTotal={recommendedHarvestAmounts?.amountTotal ?? 0}
+          targetUnrealized={recommendedHarvestAmounts?.amountUnrealized ?? 0}
         />
       ) : step === HarvestStep.Configure ? (
         <BuyBack harvestId={harvestId} />

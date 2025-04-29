@@ -1,4 +1,4 @@
-import { FileUploader } from 'ui';
+import { FileUploader } from '@repo/ui/components/file-uploader';
 
 import { useUploadFiles } from './useUploadFiles';
 

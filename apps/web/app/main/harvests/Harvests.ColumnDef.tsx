@@ -3,9 +3,11 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
 import { capitalCase } from 'change-case';
-import { Badge, DataTable } from 'ui';
-import type { HarvestTableItemFragment } from 'generated/gql';
-import { HarvestStep } from 'generated/gql';
+import { Badge } from '@repo/ui/components/badge';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
+
+import type { HarvestTableItemFragment } from '~/generated/gql';
+import { HarvestStep } from '~/generated/gql';
 
 const columnHelper = createColumnHelper<HarvestTableItemFragment>();
 

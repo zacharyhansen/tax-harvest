@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { toast } from '@repo/ui/components/toast-sonner';
-import { useInsertMutation } from '@supabase-cache-helpers/postgrest-react-query';
 
-import { getErrorMessage } from '~/lib/getErrorMessage';
-import { useUser } from '~/modules/user';
-import type { Database, Tables } from '~/lib/database/database.types';
-import postgrest from '~/lib/database/postgrest';
+import { getErrorMessage } from '../utils/get-error-message';
+
+import type { FileItemFragment } from '~/generated/gql';
+import {
+  useCreateFilesMutation,
+  useSignedUrlsForUploadLazyQuery,
+} from '~/generated/gql';
+import { useUser } from '~/app/main/user.provider';
 
 interface UseUploadFileOptions {
-  defaultUploadedFiles?: Tables<'File'>[];
+  defaultUploadedFiles?: FileItemFragment[];
   accountId: string;
 }
 
@@ -19,24 +22,10 @@ export function useUploadFiles({
   const { user } = useUser();
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] =
-    useState<Tables<'File'>[]>(defaultUploadedFiles);
+    useState<FileItemFragment[]>(defaultUploadedFiles);
 
   const [signedUrls] = useSignedUrlsForUploadLazyQuery();
-
-  const insertFile = useInsertMutation<
-    Database,
-    Tables<'File'>,
-    'File',
-    'File',
-    '*',
-    Tables<'File'>[]
-  >(postgrest.from('File'), ['id'], '*', {
-    onSuccess: results => {
-      results.map(result => {
-        result.setUploadedFiles(prev => (prev ? [...prev, result] : [result]));
-      });
-    },
-  });
+  const [createFiles] = useCreateFilesMutation();
 
   const onUpload = async (files: File[]) => {
     return new Promise<void>((resolve, reject) => {
@@ -50,43 +39,52 @@ export function useUploadFiles({
       }));
       console.error({ fileInput });
 
-      signedUrls({
+      void signedUrls({
         onCompleted: async results => {
           // Upload files to GCP using signed urls
           await Promise.all(
             files.map((file, i) =>
-              fetch(results.generateSignedUrlsForUpload.uploadUrls[i], {
+              fetch(results.generateSignedUrlsForUpload.uploadUrls[i]!, {
                 body: file,
                 method: 'PUT',
               })
             )
           ).catch(err => {
             console.error(err);
-            reject(err);
+            reject(err as Error);
           });
 
           // Add records to DB for said files
-          const result = await insertFile
-            .mutateAsync(
-              fileInput.map((file, i) => ({
+          await createFiles({
+            onCompleted: ({ createFiles }) => {
+              console.error('setUploadedFiles');
+
+              setUploadedFiles(prev =>
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                prev ? [...prev, ...createFiles] : createFiles
+              );
+            },
+            onError: err => {
+              console.error(err);
+              reject(err);
+            },
+            variables: {
+              data: fileInput.map((file, i) => ({
                 accountId,
-                displayName: files[i]?.name ?? 'unknown',
+                displayName: files[i]?.name ?? '',
                 gcpFilename: file.fileName,
                 type: file.type,
                 uploadedBy: user.id,
-              }))
-            )
-            .then(result => {
-              setUploadedFiles(prev => (prev ? [...prev, ...result] : result));
-            });
-
+              })),
+            },
+          });
           setIsUploading(false);
           resolve();
         },
         onError: err => {
           toast.error(getErrorMessage(err));
           setIsUploading(false);
-          reject();
+          reject(err as Error);
         },
         variables: {
           files: fileInput,

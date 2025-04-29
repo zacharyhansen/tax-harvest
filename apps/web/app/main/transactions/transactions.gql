@@ -1,6 +1,6 @@
 fragment AccountTransactionItem on Account {
   id
-  displayName
+  name
   authConnection {
     source
   }

@@ -76,7 +76,6 @@ export const FormBooleanLabel = (props: NodeViewProps) => {
             <ResponsiveDialogContent>
               <FormProvider {...form}>
                 <form
-                  // eslint-disable-next-line sonarjs/no-misused-promises
                   onSubmit={form.handleSubmit(handleSubmit)}
                   className="flex-flex-col space-y-4"
                 >

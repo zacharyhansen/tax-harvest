@@ -1,7 +1,9 @@
 import {
-  Folders,
-  LayoutDashboard,
+  Logs,
   NotebookText,
+  Play,
+  Settings,
+  Wallet2,
   Waypoints,
   Wheat,
 } from 'lucide-react';
@@ -14,9 +16,9 @@ export const NavTree: NavGroup[] = [
     title: 'Harvest',
     items: [
       {
-        title: 'Home',
+        title: 'Portfolio',
         url: TypedRoutes.home(),
-        icon: LayoutDashboard,
+        icon: Wallet2,
       },
       {
         title: 'Harvests',
@@ -41,7 +43,23 @@ export const NavTree: NavGroup[] = [
       {
         title: 'Portfolio Settings',
         url: TypedRoutes.portfolios(),
-        icon: Folders,
+        icon: Settings,
+      },
+    ],
+  },
+
+  {
+    title: 'Admin',
+    items: [
+      {
+        title: 'Actions',
+        url: TypedRoutes.actions(),
+        icon: Play,
+      },
+      {
+        title: 'Logs',
+        url: TypedRoutes.logs(),
+        icon: Logs,
       },
     ],
   },

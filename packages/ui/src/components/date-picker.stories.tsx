@@ -11,7 +11,6 @@ const meta = {
     layout: 'centered',
   },
   render: args => {
-    // eslint-disable-next-line sonarjs/pluginRules-of-hooks
     const [value, setValue] = useState(new Date());
 
     return <DatePicker {...args} value={value} onChange={setValue} />;

@@ -1,0 +1,18 @@
+fragment HarvestTableItem on Harvest {
+  id
+  date
+  type
+  step
+  createdAt
+  amount
+  label
+  createdBy {
+    ...UserItem
+  }
+}
+
+query Harvests($where: HarvestWhereInput) {
+  harvests(where: $where) {
+    ...HarvestTableItem
+  }
+}

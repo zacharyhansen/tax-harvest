@@ -126,7 +126,6 @@ export const DateRangePicker = React.forwardRef<
       numberOfMonths === 2 ? date.to?.getFullYear() : date.from?.getFullYear()
     );
 
-    // eslint-disable-next-line sonarjs/new-cap
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const handleClose = () => {
@@ -170,7 +169,6 @@ export const DateRangePicker = React.forwardRef<
       setSelectedRange(null);
     };
 
-    // eslint-disable-next-line sonarjs/cognitive-complexity
     const handleMonthChange = (newMonthIndex: number, part: string) => {
       setSelectedRange(null);
       if (part === 'from') {
@@ -217,7 +215,6 @@ export const DateRangePicker = React.forwardRef<
       }
     };
 
-    // eslint-disable-next-line sonarjs/cognitive-complexity
     const handleYearChange = (newYear: number, part: string) => {
       setSelectedRange(null);
       if (part === 'from') {

@@ -2,11 +2,15 @@
   - changed-files:
       - any-glob-to-any-file:
           - apps/api/src/**
+          - apps/api/prisma/**
 
 💻 Source (WEB):
   - changed-files:
       - any-glob-to-any-file:
           - apps/web/app/**
+          - apps/web/lib/**
+          - apps/web/modules/**
+          - apps/web/public/**
 
 🧪 Tests (API):
   - changed-files:

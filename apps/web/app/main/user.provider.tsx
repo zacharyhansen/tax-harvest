@@ -1,14 +1,11 @@
-import { useAuth } from '@clerk/nextjs';
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import type React from 'react';
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
-import type { Tables } from '~/lib/database/database.types';
-import postgrest from '~/lib/database/postgrest';
+import { useUserQuery, type UserItemFragment } from '~/generated/gql';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 
 interface UserContextType {
-  user: Tables<'User'>;
+  user: UserItemFragment;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -18,22 +15,18 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const { userId } = useAuth();
-
-  const { data, isLoading, error } = useQuery(
-    postgrest.from('User').select(`*`).eq('id', userId!).single()
-  );
+  const { data, error, loading } = useUserQuery();
 
   const value = useMemo(
     () => ({
       user: {
-        ...data,
+        ...data?.userCurrent,
       },
     }),
     [data]
   );
 
-  if (isLoading) {
+  if (loading) {
     return <LoadingPage />;
   }
 

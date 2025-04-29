@@ -1,5 +1,6 @@
 import type { CellContext } from '@tanstack/react-table';
-import { cn } from 'ui/shadcn/lib/utils';
+
+import { cn } from '@repo/ui/utils/cn';
 
 export default function MoneyCell<TData, TValue>({
   colored = true,
@@ -18,6 +19,7 @@ export default function MoneyCell<TData, TValue>({
   const formatted = new Intl.NumberFormat('en-US', {
     currency: 'USD',
     style: 'currency',
+    maximumFractionDigits: 2,
   }).format(cellValue);
 
   return (

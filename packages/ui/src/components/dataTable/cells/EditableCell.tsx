@@ -1,7 +1,7 @@
 import type { CellContext } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
 
-import { Input } from '../../../index';
+import { Input } from '../../input';
 
 export default function EditableCell<TData, TValue>({
   column: { id },

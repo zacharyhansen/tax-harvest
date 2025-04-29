@@ -1,10 +1,22 @@
 import type { ReactNode } from 'react';
+import { cn } from '@repo/ui/utils';
 
 import LoadingIcon from './loading-icon';
 
-export const LoadingPage = ({ message }: { message?: ReactNode }) => {
+export const LoadingPage = ({
+  className,
+  message,
+}: {
+  className?: string;
+  message?: ReactNode;
+}) => {
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div
+      className={cn(
+        'flex h-full w-full items-center justify-center',
+        className
+      )}
+    >
       <div className="flex items-center justify-center space-x-1 text-sm">
         <LoadingIcon />
         <div>{message ?? 'Loading'}</div>

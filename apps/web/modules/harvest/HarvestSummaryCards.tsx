@@ -1,35 +1,34 @@
 import { ShuffleIcon } from '@radix-ui/react-icons';
 import { TrendingDown, TrendingUp, Wheat } from 'lucide-react';
-import { cn } from '@repo/ui/utils';
 import { Badge } from '@repo/ui/components/badge';
 import DataCard from '@repo/ui/components/dataCard';
+import { cn } from '@repo/ui/utils';
 
-import { LoadingPage } from '../utility-components';
-import { Format, MoneyUtil } from '../utils';
-
-import { trpc } from '~/lib/trpc';
+import { Format, MoneyUtil } from '~/modules/utils';
+import { usePortfolioSummaryQuery } from '~/generated/gql';
+import { LoadingPage } from '~/modules/utility-components';
 
 export default function HarvestSummaryCards() {
-  const { data, isLoading, error } = trpc.portfolio.summary.useQuery();
+  const { data, loading } = usePortfolioSummaryQuery();
 
-  if (!data && isLoading) {
+  if (!data && loading) {
     return <LoadingPage message="Retrieving your portfolio information" />;
   }
 
   return (
     <div className="mb-8 flex flex-col gap-2 md:flex-row">
       <DataCard
-        loading={isLoading}
+        loading={loading}
         data={
           <p
             className={cn({
               'text-green-600':
                 MoneyUtil.amountDirection(
-                  data.portfolioSummary.harvest.total
+                  data?.portfolioSummary.harvest.total
                 ) === 'positive',
             })}
           >
-            {Format.money(data.portfolioSummary.harvest.total)}
+            {Format.money(data?.portfolioSummary.harvest.total)}
           </p>
         }
         title="The Harvest"
@@ -40,27 +39,27 @@ export default function HarvestSummaryCards() {
         <ShuffleIcon className="rotate-180" height={20} width={20} />
       </div>
       <DataCard
-        loading={isLoading}
+        loading={loading}
         data={
           <p
             className={cn({
               'text-green-600':
                 MoneyUtil.amountDirection(
-                  data.portfolioSummary.realized.gainTotal
+                  data?.portfolioSummary.realized.gainTotal
                 ) === 'positive',
               'text-red-600':
                 MoneyUtil.amountDirection(
-                  data.portfolioSummary.realized.gainTotal
+                  data?.portfolioSummary.realized.gainTotal
                 ) === 'negative',
             })}
           >
-            {Format.money(data.portfolioSummary.realized.gainTotal)}
+            {Format.money(data?.portfolioSummary.realized.gainTotal)}
           </p>
         }
         title="Calender Year P & L"
         icon={
           MoneyUtil.amountDirection(
-            data.portfolioSummary.realized.gainTotal
+            data?.portfolioSummary.realized.gainTotal
           ) !== 'negative' ? (
             <TrendingUp className="text-green-600" />
           ) : (
@@ -74,17 +73,17 @@ export default function HarvestSummaryCards() {
         </Badge>
       </DataCard>
       <DataCard
-        loading={isLoading}
+        loading={loading}
         data={
           <p
             className={cn({
               'text-green-600':
                 MoneyUtil.amountDirection(
-                  data.portfolioSummary.unrealized.gainTotal
+                  data?.portfolioSummary.unrealized.gainTotal
                 ) === 'positive',
             })}
           >
-            {Format.money(data.portfolioSummary.unrealized.gainTotal)}
+            {Format.money(data?.portfolioSummary.unrealized.gainTotal)}
           </p>
         }
         title="The Gains"
@@ -96,17 +95,17 @@ export default function HarvestSummaryCards() {
         </Badge>
       </DataCard>
       <DataCard
-        loading={isLoading}
+        loading={loading}
         data={
           <p
             className={cn({
               'text-red-600':
                 MoneyUtil.amountDirection(
-                  data.portfolioSummary.unrealized.lossTotal
+                  data?.portfolioSummary.unrealized.lossTotal
                 ) === 'negative',
             })}
           >
-            {Format.money(data.portfolioSummary.unrealized.lossTotal)}
+            {Format.money(data?.portfolioSummary.unrealized.lossTotal)}
           </p>
         }
         title="The Losses"

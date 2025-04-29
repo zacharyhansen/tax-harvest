@@ -25,11 +25,11 @@ query SimilarityChart(
   }
 }
 
-query SimlarityTable($assets: [String!]!) {
-  assets(where: { symbol: { in: $assets } }) {
-    symbol
-    lastPrice
-    assetClass
-    marketCap
-  }
-}
+# query SimlarityTable($assets: [String!]!) {
+#   assets(where: { symbol: { in: $assets } }) {
+#     symbol
+#     lastPrice
+#     assetClass
+#     marketCap
+#   }
+# }

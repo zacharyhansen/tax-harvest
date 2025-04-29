@@ -31,7 +31,6 @@ export const fetchGCPSecrets = async () => {
     getSecret("PLAID_CLIENT_ID"),
     getSecret("CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET"),
   ]);
-  // eslint-disable-next-line unicorn/no-array-reduce
   return secrets.reduce(
     (current, accumulator) => ({ ...accumulator, ...current }),
     {},

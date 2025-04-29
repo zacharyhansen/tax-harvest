@@ -2,8 +2,9 @@
 
 import type { ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
-import { DataTable } from 'ui';
-import type { TransactionTableItemFragment } from 'generated/gql';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
+
+import type { TransactionTableItemFragment } from '~/generated/gql';
 
 const columnHelper = createColumnHelper<TransactionTableItemFragment>();
 

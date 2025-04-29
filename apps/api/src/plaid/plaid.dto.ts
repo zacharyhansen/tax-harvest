@@ -1,36 +1,47 @@
-import { z } from "zod";
+import { Field, InputType } from "@nestjs/graphql";
 
-export const PlaidInstitutionSchema = z.object({
-  name: z.string(),
-  institution_id: z.string(),
-});
+@InputType()
+class PlaidInstitution {
+  @Field(() => String)
+  name: string;
+  @Field(() => String)
+  institution_id: string;
+}
 
-export type PlaidInstitution = z.infer<typeof PlaidInstitutionSchema>;
+@InputType()
+class PlaidAccount {
+  @Field(() => String)
+  id: string;
+  @Field(() => String)
+  name: string;
+  @Field(() => String)
+  mask: string;
+  @Field(() => String)
+  type: string;
+  @Field(() => String, { nullable: true })
+  subtype?: string;
+  @Field(() => String, { nullable: true })
+  verification_status?: string;
+}
 
-export const PlaidAccountSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  mask: z.string(),
-  type: z.string(),
-  subtype: z.string().optional(),
-  verification_status: z.string().optional(),
-});
+@InputType()
+export class PlaidLinkOnSuccessMetadata {
+  @Field(() => PlaidInstitution, { nullable: true })
+  institution?: PlaidInstitution;
+  @Field(() => [PlaidAccount])
+  accounts: PlaidAccount[];
+  @Field(() => String)
+  link_session_id: string;
+  @Field(() => String, { nullable: true })
+  transfer_status?: string;
+}
 
-export type PlaidAccount = z.infer<typeof PlaidAccountSchema>;
-
-export const PlaidLinkOnSuccessMetadataSchema = z.object({
-  institution: PlaidInstitutionSchema.optional(),
-  accounts: z.array(PlaidAccountSchema),
-  link_session_id: z.string(),
-  transfer_status: z.string().optional(),
-});
-
-export type PlaidLinkOnSuccessMetadata = z.infer<
-  typeof PlaidLinkOnSuccessMetadataSchema
->;
-
-export const LinkTokeOutputSchema = z.object({
-  linkToken: z.string(),
-});
-
-export type LinkTokenOutput = z.infer<typeof LinkTokeOutputSchema>;
+export interface PlaidWebhook {
+  environment: "sandbox" | "production";
+  error: null;
+  item_id: string;
+  new_holdings: number;
+  updated_holdings: number;
+  webhook_code: string;
+  webhook_type: string;
+}

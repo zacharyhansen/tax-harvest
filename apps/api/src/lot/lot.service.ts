@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { Insertable, Selectable, SelectExpression } from "kysely";
-import { DB, Lot, LotCurrent } from "kysely-codegen";
+import { Prisma } from "@prisma/client";
+import { Selectable, SelectExpression } from "kysely";
+import { DB, LotCurrent } from "kysely-codegen";
+
+import { taxAdvantadedSubTypes } from "~/plaid/plaid.utils";
 
 import { Database } from "../database/database";
 import { PrismaService } from "../prisma/prisma.service";
@@ -14,21 +17,21 @@ export class LotService {
   ) {}
 
   upsertLotsForAccount({
+    lotSeededDate,
     accountId,
     lots,
     replace,
   }: {
     accountId: string;
-    lots: Omit<
-      Insertable<Lot>,
-      "accountId" | "id" | "createdAt" | "updatedAt" | "excludeFromHarvest"
-    >[];
+    lots: Prisma.LotCreateManyInput[];
     replace: boolean;
+    lotSeededDate?: Date;
   }) {
     return this.prismaService.$transaction(async trx => {
       await trx.account.update({
         data: {
           uploadedPositions: true,
+          lotSeededDate,
         },
         where: {
           id: accountId,
@@ -82,8 +85,12 @@ export class LotService {
       .selectFrom("LotCurrent")
       .innerJoin("Account", "Account.id", "LotCurrent.accountId")
       .select(LotService.lotCurrentFields)
-      .where("Account.portfolioId", "=", portfolioId);
-    // Order is important to remeber here - biggest winners at top, biggest losers at bottom by per share $
+      .where("Account.portfolioId", "=", portfolioId)
+      // remove tax advantaged accounts
+      .where("Account.subType", "not in", [...taxAdvantadedSubTypes])
+      // Filter out fractional shares
+      .where("LotCurrent.remainingQty", ">=", "1");
+    // Order is important  here - biggest winners at top, biggest losers at bottom by per share $
 
     if (lotIds) {
       query = query.where("LotCurrent.id", "in", lotIds);

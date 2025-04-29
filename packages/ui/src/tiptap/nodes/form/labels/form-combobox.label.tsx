@@ -144,7 +144,6 @@ export const FormComboboxLabel = (props: NodeViewProps) => {
                 <div>{JSON.stringify(form.formState.errors)}</div>
                 <FormProvider {...form}>
                   <form
-                    // eslint-disable-next-line sonarjs/no-misused-promises
                     onSubmit={form.handleSubmit(handleSubmit)}
                     className="flex-flex-col space-y-4"
                   >
@@ -216,7 +215,6 @@ export const FormComboboxLabel = (props: NodeViewProps) => {
               <ResponsiveDialogContent>
                 <FormProvider {...form}>
                   <form
-                    // eslint-disable-next-line sonarjs/no-misused-promises
                     onSubmit={optionsForm.handleSubmit(handleOptionsSubmit)}
                     className="flex-flex-col space-y-4"
                   >

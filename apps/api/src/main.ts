@@ -5,7 +5,6 @@ import {
   NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { AppRouterHost } from "nestjs-trpc";
 
 import { AppModule } from "~/app";
 import { EnvService } from "~/env/env.service";
@@ -24,9 +23,11 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: [envService.get("CLIENT_ORIGIN")],
+    origin: [
+      process.env.CLIENT_ORIGIN ?? "http://localhost:3000",
+      "https://sandbox.embed.apollographql.com",
+    ],
   });
-
   const config = new DocumentBuilder()
     .setTitle("Tracker")
     .setDescription("Api Docs")
@@ -37,7 +38,6 @@ async function bootstrap() {
   SwaggerModule.setup("docs", app, document);
 
   await app.listen(port, "0.0.0.0");
-  const { appRouter } = app.get(AppRouterHost);
   logger.log(`App is ready and listening on port ${port} 🚀`);
 }
 
@@ -46,7 +46,6 @@ bootstrap().catch(handleError);
 function handleError(error: unknown) {
   // eslint-disable-next-line no-console
   console.error(error);
-  // eslint-disable-next-line unicorn/no-process-exit
   process.exit(1);
 }
 

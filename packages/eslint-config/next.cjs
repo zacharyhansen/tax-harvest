@@ -97,6 +97,7 @@ module.exports = {
     },
   ],
   rules: {
+    '@next/next/no-html-link-for-pages': 'off',
     'no-console': ['warn', { allow: ['error', 'info'] }],
     'no-undef': 'off',
     'prefer-const': 'warn',
@@ -106,7 +107,6 @@ module.exports = {
       { ignoreRestSiblings: true },
     ],
     '@typescript-eslint/unbound-method': 'off',
-    '@typescript-eslint/no-deprecated': 'off',
     '@typescript-eslint/no-confusing-void-expression': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-empty-function': 'off',

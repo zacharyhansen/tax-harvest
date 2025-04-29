@@ -1,10 +1,14 @@
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { TRPCModule } from "nestjs-trpc";
+import { APP_GUARD } from "@nestjs/core";
+import { GraphQLModule } from "@nestjs/graphql";
+import GraphQLJSON from "graphql-type-json";
 
 import { AccountModule } from "~/account/account.module";
 import { AssetModule } from "~/asset/asset.module";
-import { AppContext } from "~/auth/trpc/clerk-context";
+import { ClerkGuard } from "~/auth/guards/clerk.guard";
 import { AuthConnectionModule } from "~/auth-connection/auth-connection.module";
 import { CacheModule } from "~/cache/cache.module";
 import { ClerkModule } from "~/clerk/clerk.module";
@@ -13,6 +17,7 @@ import { EnvModule } from "~/env/env.module";
 import { envSchema } from "~/env/env.schema";
 import getConfigService from "~/env/gcp-secrets/get-config-service";
 import { EtradeModule } from "~/etrade/etrade.module";
+import { FileModule } from "~/file/file.module";
 import { HealthModule } from "~/health/health.module";
 import { LotModule } from "~/lot/lot.module";
 import { OauthModule } from "~/oauth/oauth.module";
@@ -27,14 +32,21 @@ import { TransactionModule } from "~/transaction/transaction.module";
 import { UserModule } from "~/user/user.module";
 import { VectorGraphModule } from "~/vector-graph/vector-graph.module";
 
-import { AppRouter } from "./app.router";
+import { errorFormatPlugin } from "../plugins/error-format";
 
 @Module({
   imports: [
-    TRPCModule.forRoot({
-      autoSchemaFile: "./@generated",
-      context: AppContext,
-      basePath: "/core/trpc",
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      autoSchemaFile:
+        process.env.NODE_ENV === "development" ? "./schema.graphql" : true,
+      buildSchemaOptions: {},
+      driver: ApolloDriver,
+      introspection: process.env.NODE_ENV === "development",
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault(), errorFormatPlugin],
+      resolvers: { JSON: GraphQLJSON },
+      sortSchema: true,
+      useGlobalPrefix: true,
     }),
     ConfigModule.forRoot({
       load: [getConfigService],
@@ -63,7 +75,8 @@ import { AppRouter } from "./app.router";
     VectorGraphModule,
     LotModule,
     HealthModule,
+    FileModule,
   ],
-  providers: [AppRouter, AppContext],
+  providers: [{ provide: APP_GUARD, useClass: ClerkGuard }],
 })
 export class AppModule {}

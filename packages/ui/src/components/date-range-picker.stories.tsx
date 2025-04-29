@@ -23,7 +23,6 @@ export const Default: Story = {
     value: { from: new Date(new Date().getFullYear(), 0, 1), to: new Date() },
   },
   render: ({ value: date }) => {
-    // eslint-disable-next-line sonarjs/pluginRules-of-hooks
     const [selectedDateRange, setSelectedDateRange] = useState(date);
 
     return (
@@ -41,7 +40,6 @@ export const Empty: Story = {
     value: { from: undefined },
   },
   render: ({ value: date }) => {
-    // eslint-disable-next-line sonarjs/pluginRules-of-hooks
     const [selectedDateRange, setSelectedDateRange] = useState(date);
 
     return (
@@ -60,7 +58,6 @@ export const Disabled: Story = {
     disabled: true,
   },
   render: args => {
-    // eslint-disable-next-line sonarjs/pluginRules-of-hooks
     const [selectedDateRange, setSelectedDateRange] = useState(args.value);
 
     return (

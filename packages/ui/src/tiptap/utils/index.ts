@@ -52,7 +52,6 @@ export function generateRandomFieldName(prefix = 'name', length = 10): string {
   let randomString = '';
 
   for (let index = 0; index < length; index++) {
-    // eslint-disable-next-line sonarjs/pseudo-random
     const randomIndex = Math.floor(Math.random() * characters.length);
     randomString += characters[randomIndex];
   }
@@ -81,7 +80,6 @@ type FileInput = File | { src: string | File; alt?: string; title?: string };
 export const isClient = (): boolean => typeof window !== 'undefined';
 export const isServer = (): boolean => !isClient();
 export const isMacOS = (): boolean =>
-  // eslint-disable-next-line @typescript-eslint/no-deprecated, sonarjs/deprecation
   isClient() && window.navigator.platform === 'MacIntel';
 
 const shortcutKeyMap: Record<string, ShortcutKeyResult> = {
@@ -119,7 +117,6 @@ export const getOutput = (
 
 export const isUrl = (
   text: string,
-  // eslint-disable-next-line unicorn/no-object-as-default-parameter
   options: { requireHostname: boolean; allowBase64?: boolean } = {
     requireHostname: false,
   }
@@ -129,7 +126,6 @@ export const isUrl = (
   try {
     const url = new URL(text);
     const blockedProtocols = [
-      // eslint-disable-next-line sonarjs/code-eval
       'javascript:',
       'file:',
       'vbscript:',
@@ -184,13 +180,11 @@ export const blobUrlToBase64 = async (blobUrl: string): Promise<string> => {
         reject(new Error('Failed to convert Blob to base64'));
       }
     };
-    // eslint-disable-next-line unicorn/prefer-add-event-listener
     reader.onerror = reject;
     reader.readAsDataURL(blob);
   });
 };
 
-// eslint-disable-next-line sonarjs/pseudo-random
 export const randomId = (): string => Math.random().toString(36).slice(2, 11);
 
 export const fileToBase64 = (file: File | Blob): Promise<string> => {
@@ -203,7 +197,6 @@ export const fileToBase64 = (file: File | Blob): Promise<string> => {
         reject(new Error('Failed to convert File to base64'));
       }
     };
-    // eslint-disable-next-line unicorn/prefer-add-event-listener
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
@@ -245,7 +238,6 @@ const checkTypeAndSize = (
 };
 
 const base64MimeType = (encoded: string): string => {
-  // eslint-disable-next-line sonarjs/slow-regex
   const result = /data:([\dA-Za-z]+\/[\d+.A-Za-z-]+).*,.*/.exec(encoded);
   return result && result.length > 1 ? (result[1] ?? 'unknown') : 'unknown';
 };
@@ -270,7 +262,6 @@ const isBase64 = (string_: string): boolean => {
 export const filterFiles = <T extends FileInput>(
   files: T[],
   options: FileValidationOptions
-  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): [T[], FileError[]] => {
   const validFiles: T[] = [];
   const errors: FileError[] = [];

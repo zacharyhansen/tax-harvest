@@ -1,15 +1,15 @@
 'use client';
 
-import { LOT_SELECTION } from 'constants/routes';
-
 import { clsx } from 'clsx';
 import { motion } from 'framer-motion';
 import { Wheat } from 'lucide-react';
 import Link from 'next/link';
-import { Badge } from 'ui';
-import { Format } from 'utilities';
-import { HarvestType, usePortfolioSummaryQuery } from 'generated/gql';
-import { LoadingPage } from 'modules/utilityComponents';
+import { Badge } from '@repo/ui/components/badge';
+
+import { Format } from '~/modules/utils';
+import { HarvestType, usePortfolioSummaryQuery } from '~/generated/gql';
+import { LoadingPage } from '~/modules/utility-components';
+import { TypedRoutes } from '~/lib/routes';
 
 function BentoCard({
   className = '',
@@ -80,7 +80,7 @@ function BentoCard({
         </div>
         <div className="relative isolate z-20 mt-[-110px] h-[14rem] p-10 backdrop-blur-xl">
           <h1 className="flex space-x-2">
-            <span>{eyebrow || ''}</span>
+            <span>{eyebrow ?? ''}</span>
           </h1>
           <p className="mt-1 text-2xl/8 font-medium tracking-tight">{title}</p>
           <p className="text-secondary-foreground mt-2 max-w-[600px] text-sm/6">
@@ -99,10 +99,6 @@ export default function HarvestFlowPage() {
     return <LoadingPage />;
   }
 
-  if (!data && loading) {
-    return <LoadingPage message="Retrieving your portfolio information" />;
-  }
-
   return (
     <div className="container mx-auto">
       <h1 className="text-xl tracking-tight md:text-3xl">
@@ -117,7 +113,7 @@ export default function HarvestFlowPage() {
             title={valueMap[harvest.harvestType].title}
             recommended={harvest.recommended}
             description={valueMap[harvest.harvestType].description(
-              data?.portfolioSummary?.realized.gainTotal || 0
+              data.portfolioSummary.realized.gainTotal || 0
             )}
             graphic={
               <div
@@ -150,7 +146,9 @@ const valueMap: Record<
     backgroundImage: "url('/images/gainOrLoss.png')",
     description: () => 'Use your realized losses to capture gains tax free.',
     eyebrow: 'Tax Free',
-    link: LOT_SELECTION({ harvestType: HarvestType.CaptureGainsTaxFree }),
+    link: TypedRoutes.lotSelection({
+      type: HarvestType.CaptureGainsTaxFree,
+    }),
     title: 'Utilize Losses to Capture Gains',
   },
   [HarvestType.Sell]: {
@@ -158,7 +156,9 @@ const valueMap: Record<
     description: () =>
       'Tell us how much cash you want, and we will tell you the best tax lots to sell.',
     eyebrow: 'Liquidation Event',
-    link: LOT_SELECTION({ harvestType: HarvestType.Sell }),
+    link: TypedRoutes.lotSelection({
+      type: HarvestType.Sell,
+    }),
     title: 'Sell Stocks',
   },
   [HarvestType.ReduceCostBasis]: {
@@ -166,7 +166,9 @@ const valueMap: Record<
     description: () =>
       'We will slowly reduce your unrealized capital gains tax bill over time.',
     eyebrow: 'Continuous',
-    link: LOT_SELECTION({ harvestType: HarvestType.ReduceCostBasis }),
+    link: TypedRoutes.lotSelection({
+      type: HarvestType.ReduceCostBasis,
+    }),
     title: 'Raise Average Cost Basis',
   },
   [HarvestType.ReduceTaxes]: {
@@ -174,7 +176,9 @@ const valueMap: Record<
     description: (gain: number) =>
       `In December, your tax bill will be about ${Format.money(gain * 0.3)}. We will help you lower it.`,
     eyebrow: 'End of Year',
-    link: LOT_SELECTION({ harvestType: HarvestType.ReduceTaxes }),
+    link: TypedRoutes.lotSelection({
+      type: HarvestType.ReduceTaxes,
+    }),
     title: 'Offset Realized Gains',
   },
 };

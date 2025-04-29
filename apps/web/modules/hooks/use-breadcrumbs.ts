@@ -41,5 +41,6 @@ export function useBreadcrumbs() {
       };
     });
   }, [pathname]);
+
   return breadcrumbs;
 }

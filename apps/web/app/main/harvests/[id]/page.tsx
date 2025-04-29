@@ -1,5 +1,5 @@
-import Review from 'modules/harvest/stepper/steps/Review';
-import PageWrapper from 'modules/page/page-wrapper';
+import Review from '~/modules/harvest/stepper/steps/Review';
+import { PageWrapper } from '~/modules/layout';
 
 interface HarvestPageProps {
   params: {

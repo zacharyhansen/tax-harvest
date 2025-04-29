@@ -63,5 +63,9 @@
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.fontFamily": "JetBrains Mono",
-  "editor.fontSize": 13
+  "editor.fontSize": 13,
+  "yaml.schemas": {
+    "file:///Users/zacharyhansen/.vscode/extensions/atlassian.atlascode-3.0.2/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
+    "https://unpkg.com/graphql-config/config-schema.json": "file:///Users/zacharymartinezhansen/Desktop/Code/tax-harvest/.graphqlrc.yml"
+  }
 }

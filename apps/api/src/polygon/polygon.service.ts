@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { Field, ObjectType } from "@nestjs/graphql";
 import { IAggs, IGlobalOptions, type IRestClient } from "@polygon.io/client-js";
 import { Insertable, Updateable } from "kysely";
 import { Asset } from "kysely-codegen";
@@ -7,22 +8,48 @@ import { Asset } from "kysely-codegen";
 import { Database } from "../database/database";
 import { PolygonAggregateInput, PolygonTimespan } from "./polygon.dto";
 
-export interface PolygonStockData {
-  // The Unix Msec timestamp for the start of the aggregate window.
+@ObjectType()
+export class PolygonStockData {
+  @Field(() => Number, {
+    description:
+      "The Unix Msec timestamp for the start of the aggregate window.",
+    nullable: true,
+  })
   t?: number;
-  // The open price for the symbol in the given time period.
+  @Field(() => Number, {
+    description: "The open price for the symbol in the given time period.",
+    nullable: true,
+  })
   o?: number;
-  // The highest price for the symbol in the given time period.
+  @Field(() => Number, {
+    description: "The highest price for the symbol in the given time period.",
+    nullable: true,
+  })
   h?: number;
-  // The lowest price for the symbol in the given time period.
+  @Field(() => Number, {
+    description: "The lowest price for the symbol in the given time period.",
+    nullable: true,
+  })
   l?: number;
-  // The close price for the symbol in the given time period.
+  @Field(() => Number, {
+    description: "The close price for the symbol in the given time period.",
+    nullable: true,
+  })
   c?: number;
-  // The trading volume of the symbol in the given time period.
+  @Field(() => Number, {
+    description: "The trading volume of the symbol in the given time period.",
+    nullable: true,
+  })
   v?: number;
-  // The volume weighted average price.
+  @Field(() => Number, {
+    description: "The volume weighted average price.",
+    nullable: true,
+  })
   vw?: number;
-  // The number of transactions in the aggregate window.
+  @Field(() => Number, {
+    description: "The number of transactions in the aggregate window.",
+    nullable: true,
+  })
   n?: number;
 }
 
@@ -305,7 +332,6 @@ export class PolygonService {
    * @returns
    */
 
-  // eslint-disable-next-line unicorn/no-abusive-eslint-disable
   /* eslint-disable */
   private transformAPIAssetObject(tickerObject: any): Insertable<Asset> {
     return {

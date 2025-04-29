@@ -224,25 +224,23 @@ export class HarvestService {
       });
 
       await Promise.all(
-        Object.keys(indexMap).map(transactionId =>
-          tx.harvestTransaction.update({
+        Object.keys(indexMap).map(transactionId => {
+          return tx.harvestTransaction.update({
             data: {
               revertHarvestTransactionItemId:
                 indexMap[transactionId].harvest === undefined
                   ? undefined
-                  : // @ts-expect-error come back to tthis
-                    createdItems[indexMap[transactionId].harvest].id,
+                  : createdItems[indexMap[transactionId].harvest ?? -1].id,
               revertReplacementTransactionItemId:
                 indexMap[transactionId].replacement === undefined
                   ? undefined
-                  : // @ts-expect-error come back to tthis
-                    createdItems[indexMap[transactionId].replacement].id,
+                  : createdItems[indexMap[transactionId].replacement ?? -1].id,
             },
             where: {
               id: transactionId,
             },
-          }),
-        ),
+          });
+        }),
       );
       return tx.harvest.update({
         data: {

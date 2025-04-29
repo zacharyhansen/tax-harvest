@@ -1,5 +1,12 @@
-import { HarvestType, OrderType } from "@prisma/client";
-import { z } from "zod";
+import {
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from "@nestjs/graphql";
+import { OrderType as PrismaOrderType } from "@prisma/client";
+
+import { HarvestType, OrderType } from "../generated/graphql";
 
 export enum TaxGain {
   LONG = "LONG",
@@ -12,100 +19,160 @@ export enum SetUpStatus {
   COMPLETE = "COMPLETE",
 }
 
-export const HarvestRecomendationSchema = z.object({
-  harvestType: z.enum(
-    Object.values(HarvestType) as [
-      keyof typeof HarvestType,
-      ...(keyof typeof HarvestType)[],
-    ],
-  ),
-  amountRealized: z.number(),
-  amountUnrealized: z.number(),
-  amountTotal: z.number(),
-  recommended: z.boolean(),
+registerEnumType(TaxGain, {
+  name: "TaxGain",
 });
 
-export const PortfolioSummaryUnrealizedSchema = z.object({
-  gainTotal: z.number(),
-  lossTotal: z.number(),
-  accountCount: z.number(),
-  positionCount: z.number(),
+registerEnumType(SetUpStatus, {
+  name: "SetUpStatus",
 });
 
-export const PortfolioSummaryRealizedSchema = z.object({
-  accountCount: z.number(),
-  gainTotal: z.number(),
-  gainShortTerm: z.number(),
-  gainLongTerm: z.number(),
-  dividend: z.number(),
-});
+@ObjectType()
+export class HarvestRecomendation {
+  @Field(() => HarvestType)
+  harvestType: HarvestType;
 
-export const HarvestPotentialSchema = z.object({
-  realized: z.number(),
-  unrealized: z.number(),
-  total: z.number(),
-});
+  @Field(() => Number)
+  amountRealized: number;
 
-export const PortfolioSummarySchema = z.object({
-  realized: PortfolioSummaryRealizedSchema,
-  unrealized: PortfolioSummaryUnrealizedSchema,
-  harvest: HarvestPotentialSchema,
-  setUpStatus: z.enum(
-    Object.values(SetUpStatus) as [
-      keyof typeof SetUpStatus,
-      ...(keyof typeof SetUpStatus)[],
-    ],
-  ),
-  harvestRecommendations: z.array(HarvestRecomendationSchema),
-});
+  @Field(() => Number)
+  amountUnrealized: number;
 
-export const HarvestOrderSchema = z.object({
-  lotId: z.string().optional(),
-  assetSymbol: z.string(),
-  quantity: z.number(),
-  type: z.enum(["sell", "buy"]),
-  profitAndLoss: z.number(),
-});
+  @Field(() => Number)
+  amountTotal: number;
 
-export const HarvestLotOrderSchema = z.object({
-  id: z.string(),
-  lotId: z.string(),
-  accountId: z.string(),
-  pricePaid: z.string(),
-  costBasis: z.string(),
-  valueTotal: z.string(),
-  gainTotal: z.string(),
-  quantity: z.string(),
-  lastPrice: z.string(),
-  assetSymbol: z.string(),
-  dollarPerSharePnL: z.string(),
-  taxGain: z.nativeEnum(TaxGain),
-  orderType: z.nativeEnum(OrderType),
-  acquiredDate: z.date(),
-});
+  @Field(() => Boolean)
+  recommended: boolean;
+}
 
-export const HarvestResultSchema = z.object({
-  realizedOrders: z.array(HarvestLotOrderSchema),
-  unrealizedOrders: z.array(HarvestLotOrderSchema),
-  allOrders: z.array(HarvestLotOrderSchema),
-  portfolioSummary: PortfolioSummarySchema,
-});
+@ObjectType()
+export class PortfolioSummaryUnrealized {
+  @Field()
+  gainTotal: number;
+  @Field()
+  lossTotal: number;
+  @Field()
+  accountCount: number;
+  @Field()
+  positionCount: number;
+}
 
-export const DirectedHarvestLotSchema = z.object({
-  lotId: z.string(),
-  quantity: z.number(),
-  counterTransaction: z.boolean().optional(),
-});
+@ObjectType()
+export class PortfolioSummaryRealized {
+  @Field()
+  accountCount: number;
+  @Field()
+  gainTotal: number;
+  @Field()
+  gainShortTerm: number;
+  @Field()
+  gainLongTerm: number;
+  @Field()
+  dividend: number;
+}
 
-export type HarvestResult = z.infer<typeof HarvestResultSchema>;
-export type HarvestOrder = z.infer<typeof HarvestOrderSchema>;
-export type HarvestLotOrder = z.infer<typeof HarvestLotOrderSchema>;
-export type DirectedHarvestLot = z.infer<typeof DirectedHarvestLotSchema>;
-export type PortfolioSummary = z.infer<typeof PortfolioSummarySchema>;
-export type PortfolioSummaryRealized = z.infer<
-  typeof PortfolioSummaryRealizedSchema
->;
-export type PortfolioSummaryUnrealized = z.infer<
-  typeof PortfolioSummaryUnrealizedSchema
->;
-export type HarvestRecomendation = z.infer<typeof HarvestRecomendationSchema>;
+@ObjectType()
+export class HarvestPotential {
+  @Field(() => Number, {
+    description: "The realized gain or loss that can be harvested",
+  })
+  realized: number;
+  @Field(() => Number, {
+    description: "The unrealized gain or loss that can be harvested",
+  })
+  unrealized: number;
+  @Field(() => Number, {
+    description: "The total amount to be harvested (should always be positive)",
+  })
+  total: number;
+}
+
+@ObjectType()
+export class PortfolioSummary {
+  @Field(() => PortfolioSummaryRealized)
+  realized: PortfolioSummaryRealized;
+
+  @Field(() => PortfolioSummaryUnrealized)
+  unrealized: PortfolioSummaryUnrealized;
+
+  @Field(() => HarvestPotential)
+  harvest: HarvestPotential;
+
+  @Field(() => SetUpStatus)
+  setUpStatus: SetUpStatus;
+
+  @Field(() => [HarvestRecomendation])
+  harvestRecommendations: HarvestRecomendation[];
+}
+
+@ObjectType()
+export class HarvestOrder {
+  @Field(() => String, { nullable: true })
+  lotId?: string;
+
+  @Field(() => String)
+  assetSymbol: string;
+
+  @Field(() => Number)
+  quantity: number;
+
+  @Field(() => String)
+  type: "sell" | "buy";
+
+  @Field(() => Number)
+  profitAndLoss: number;
+}
+
+@ObjectType()
+export class HarvestLotOrder {
+  @Field()
+  id: string;
+  @Field({ description: "Lot Id" })
+  lotId: string;
+  @Field()
+  accountId: string;
+  @Field()
+  pricePaid: string;
+  @Field()
+  costBasis: string;
+  @Field()
+  valueTotal: string;
+  @Field()
+  gainTotal: string;
+  @Field()
+  quantity: string;
+  @Field()
+  lastPrice: string;
+  @Field()
+  assetSymbol: string;
+  @Field()
+  dollarPerSharePnL: string;
+  @Field(() => TaxGain)
+  taxGain: TaxGain;
+  @Field(() => OrderType)
+  orderType: PrismaOrderType;
+  @Field(() => Date)
+  acquiredDate: Date;
+}
+
+@ObjectType()
+export class HarvestResult {
+  @Field(() => [HarvestLotOrder])
+  realizedOrders: HarvestLotOrder[];
+  @Field(() => [HarvestLotOrder])
+  unrealizedOrders: HarvestLotOrder[];
+  @Field(() => [HarvestLotOrder])
+  allOrders: HarvestLotOrder[];
+  @Field(() => PortfolioSummary)
+  portfolioSummary: PortfolioSummary;
+}
+
+@InputType()
+export class DirectedHarvestLot {
+  @Field(() => String)
+  lotId: string;
+  @Field(() => Number)
+  quantity: number;
+  @Field(() => Boolean, { nullable: true })
+  counterTransaction?: boolean;
+}

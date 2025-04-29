@@ -1,0 +1,52 @@
+fragment PortfolioItem on Portfolio {
+  id
+  name
+  harvestCycleWeeks
+  createdAt
+  createdById
+}
+
+fragment PortfolioDetailItem on Portfolio {
+  ...PortfolioItem
+  harvestShareDollarThreshold
+  harvestTickerBucketDollarSizeLong
+  harvestTickerBucketDollarSizeShort
+  harvestTickerBucketLowerLimitLong
+  harvestTickerBucketLowerLimitShort
+  accounts {
+    name
+    id
+  }
+  usersOnPortfolios {
+    role
+    user {
+      id
+      name
+      email
+      photo
+    }
+  }
+}
+
+query Portfolios {
+  portfolios {
+    ...PortfolioItem
+  }
+}
+
+mutation createPortfolio($portfolioInsertObject: PortfolioCreateInput!) {
+  createPortfolio(portfolioInsertObject: $portfolioInsertObject) {
+    ...PortfolioDetailItem
+  }
+}
+
+query PortfolioAuthed {
+  portfolioAuthed {
+    ...PortfolioItem
+  }
+}
+mutation SwitchPortfolio($porfolioId: String!) {
+  switchPortfolio(porfolioId: $porfolioId) {
+    ...PortfolioItem
+  }
+}

@@ -65,7 +65,6 @@ export const useFormLabel = <
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      // eslint-disable-next-line sonarjs/different-types-comparison
       if (name === 'label' && !value.nameLocked && value.label) {
         // @ts-expect-error cant get the types to always include name and label
         setValue('name', snakeCase(value.label));

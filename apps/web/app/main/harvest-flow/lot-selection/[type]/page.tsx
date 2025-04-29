@@ -1,13 +1,17 @@
-import { HarvestType } from 'generated/gql';
-import { HarvestStepper } from 'modules/harvest';
+'use client';
 
-export default async function Page({
+import type { TypedRoutes } from '~/lib/routes';
+import { HarvestStepper } from '~/modules/harvest';
+import PageWrapper from '~/modules/layout/page-wrapper';
+export default function Page({
   params,
 }: {
-  params: { type: HarvestType };
+  params: typeof TypedRoutes.lotSelection.params;
 }) {
-  const harvestType = (await params).type;
+  const harvestType = params.type;
   return (
-    <HarvestStepper harvestType={harvestType || HarvestType.ReduceTaxes} />
+    <PageWrapper>
+      <HarvestStepper harvestType={harvestType} />
+    </PageWrapper>
   );
 }

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-
-import { EtradeService } from "../etrade/etrade.service";
 import { AuthSource } from "@prisma/client";
 import { AuthConnection, Prisma } from "@prisma/client";
+
+import { EtradeService } from "../etrade/etrade.service";
 import { PlaidService } from "../plaid/plaid.service";
 import { PrismaService } from "../prisma/prisma.service";
 

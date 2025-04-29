@@ -2,8 +2,9 @@
 
 import type { ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
-import { DataTable } from 'ui';
-import type { PortfolioTableItemFragment } from 'generated/gql';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
+
+import type { PortfolioTableItemFragment } from '~/generated/gql';
 
 const columnHelper = createColumnHelper<PortfolioTableItemFragment>();
 
@@ -25,15 +26,12 @@ const columns: ColumnDef<PortfolioTableItemFragment, never>[] = [
     id: 'members',
     size: 300,
   }),
-  columnHelper.accessor(
-    row => row.accounts?.map(account => account.displayName),
-    {
-      cell: DataTable.ListCell,
-      header: 'Accounts',
-      id: 'accounts',
-      size: 300,
-    }
-  ),
+  columnHelper.accessor(row => row.accounts?.map(account => account.name), {
+    cell: DataTable.ListCell,
+    header: 'Accounts',
+    id: 'accounts',
+    size: 300,
+  }),
   columnHelper.accessor('createdAt', {
     cell: DataTable.DateCell,
     header: 'Created',

@@ -1,6 +1,6 @@
-mutation InitiateConnection($accountId: String!) {
-  initiateConnection(accountId: $accountId)
-}
+# mutation InitiateConnection($accountId: String!) {
+#   initiateConnection(accountId: $accountId)
+# }
 
 fragment AccountLiveURLItem on Account {
   id

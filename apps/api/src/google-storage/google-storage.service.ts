@@ -1,8 +1,8 @@
-import { Storage } from '@google-cloud/storage';
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Storage } from "@google-cloud/storage";
+import { Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
-import { GCPUploadFile } from './google-storage.dto';
+import { GCPUploadFile } from "./google-storage.dto";
 
 @Injectable()
 export class GoogleStorageService {
@@ -12,7 +12,8 @@ export class GoogleStorageService {
 
   constructor(private configService: ConfigService) {
     this.storage = new Storage();
-    this.bucketName = this.configService.get<string>('GCS_LOTS_BUCKET_NAME')!;
+    this.bucketName =
+      this.configService.get<string>("GCS_LOTS_BUCKET_NAME") ?? "";
   }
 
   async getGCPFileAsString({
@@ -24,18 +25,17 @@ export class GoogleStorageService {
       .bucket(this.bucketName)
       .file(gcpFileName)
       .download();
-    return contents.toString('utf-8');
+    return contents.toString("utf8");
   }
 
   // Generate signed URL for file upload
   async generateSignedUrlsForUpload(files: GCPUploadFile[]): Promise<string[]> {
     const bucket = this.storage.bucket(this.bucketName);
-    const bucketFiles = files.map((file) => bucket.file(file.fileName));
-
+    const bucketFiles = files.map(file => bucket.file(file.fileName));
     const urls = await Promise.all(
       bucketFiles.map((file, i) =>
         file.getSignedUrl({
-          action: 'write',
+          action: "write",
           contentType: files[i].type,
           expires: Date.now() + 5 * 60 * 1000,
         }),
@@ -48,12 +48,12 @@ export class GoogleStorageService {
   // Generate signed URL for file download
   async generateSignedUrlsForDownload(fileNames: string[]): Promise<string[]> {
     const bucket = this.storage.bucket(this.bucketName);
-    const files = fileNames.map((fileName) => bucket.file(fileName));
+    const files = fileNames.map(fileName => bucket.file(fileName));
 
     const urls = await Promise.all(
-      files.map((file) =>
+      files.map(file =>
         file.getSignedUrl({
-          action: 'read', // Action is 'read' for downloads
+          action: "read", // Action is 'read' for downloads
           expires: Date.now() + 5 * 60 * 1000, // URL expires in 5 minutes
         }),
       ),

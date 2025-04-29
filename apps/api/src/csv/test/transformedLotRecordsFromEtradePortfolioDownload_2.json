@@ -3,30 +3,30 @@
     "acquiredDate": "2024-04-22T07:00:00.000Z",
     "assetSymbol": "META",
     "price": "483.305",
-    "remainingQty": "4.0000"
+    "remainingQty": "4"
   },
   {
     "acquiredDate": "2024-04-22T07:00:00.000Z",
     "assetSymbol": "RIVN",
     "price": "8.835",
-    "remainingQty": "169.0000"
+    "remainingQty": "169"
   },
   {
     "acquiredDate": "2024-06-20T07:00:00.000Z",
     "assetSymbol": "RIVN",
     "price": "10.445",
-    "remainingQty": "300.0000"
+    "remainingQty": "300"
   },
   {
     "acquiredDate": "2024-11-26T08:00:00.000Z",
     "assetSymbol": "RIVN",
     "price": "12.08",
-    "remainingQty": "1656.0000"
+    "remainingQty": "1656"
   },
   {
     "acquiredDate": "2024-04-22T07:00:00.000Z",
     "assetSymbol": "TWLO",
     "price": "58.7943",
-    "remainingQty": "7.0000"
+    "remainingQty": "7"
   }
 ]

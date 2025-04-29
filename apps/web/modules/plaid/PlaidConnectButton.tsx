@@ -2,14 +2,14 @@ import type { ButtonProps } from '@repo/ui/components/button';
 
 import PlaidLink from './PlaidLink';
 
-import { trpc } from '~/lib/trpc';
+import { usePlaidLinkTokenQuery } from '~/generated/gql';
 
 type PlaidConnectButtonProps = ButtonProps;
 
 export default function PlaidConnectButton({
   ...buttonProps
 }: PlaidConnectButtonProps) {
-  const { data } = trpc.plaid.linkToken.useQuery();
+  const { data } = usePlaidLinkTokenQuery();
   return data?.linkToken ? (
     <PlaidLink {...buttonProps} token={data.linkToken} />
   ) : null;

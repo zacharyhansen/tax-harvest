@@ -1,26 +1,30 @@
+import type { ClerkClaims } from "~/auth/types";
+
 import { Injectable, Logger } from "@nestjs/common";
-import { HarvestType, Portfolio, PortfolioRole, Prisma } from "@prisma/client";
+import { Portfolio, PortfolioRole, Prisma } from "@prisma/client";
 import Decimal from "decimal.js";
 import { sql } from "kysely";
 
-import { ClerkClaims } from "../auth/types";
+import { taxAdvantadedSubTypes } from "~/plaid/plaid.utils";
+
+import { AccountService } from "../account/account.service";
 import { ClerkService } from "../clerk/clerk.service";
 import { Database } from "../database/database";
+import { HarvestType } from "../generated/graphql";
 import { HarvestService } from "../harvest/harvest.service";
 import { LotService } from "../lot/lot.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { UserService } from "../user/user.service";
 import {
-  type DirectedHarvestLot,
-  type HarvestRecomendation,
-  type HarvestResult,
-  type PortfolioSummary,
-  type PortfolioSummaryRealized,
-  type PortfolioSummaryUnrealized,
+  DirectedHarvestLot,
+  HarvestRecomendation,
+  HarvestResult,
+  PortfolioSummary,
+  PortfolioSummaryRealized,
+  PortfolioSummaryUnrealized,
   SetUpStatus,
 } from "./portfolio.dto";
 import Harvest, { LotHarvestInput } from "./portfolio.harvest";
-
 @Injectable()
 export class PortfolioService {
   private readonly logger = new Logger(PortfolioService.name);
@@ -32,6 +36,7 @@ export class PortfolioService {
     private readonly userService: UserService,
     private readonly lotService: LotService,
     private readonly harvestService: HarvestService,
+    private readonly accountService: AccountService,
   ) {}
 
   getPortfoliosByUserId(userId: string, args: Prisma.PortfolioFindManyArgs) {
@@ -64,12 +69,14 @@ export class PortfolioService {
    */
   async getPortfolioAndAssertUserExistsAndHasPortfolio(
     userId: string,
+    select: Prisma.PortfolioSelect,
     portfolioId?: string,
   ) {
     const user = await this.userService.asserUserExists(userId);
 
     return this.prismaService.portfolio
       .findFirstOrThrow({
+        select,
         where: {
           id: portfolioId,
           usersOnPortfolios: {
@@ -178,7 +185,6 @@ export class PortfolioService {
     });
 
     let authedPortfolio = portfolio;
-
     // If the user does not have at least 1 portfolio we create it and connect them to it as an admin
     if (!portfolio) {
       authedPortfolio = await this.prismaService.portfolio
@@ -194,8 +200,7 @@ export class PortfolioService {
             },
           },
         })
-        .catch(error => {
-          this.logger.error("Unauthorized access to portfolio", error);
+        .catch(() => {
           throw new Error("Unauthorized access to portfolio");
         });
     }
@@ -216,18 +221,17 @@ export class PortfolioService {
     const [realized, unrealized, accounts, setupAccounts] = await Promise.all([
       this.summaryRealized({ id }),
       this.summaryUnrealized({ id }),
-      this.prismaService.account.count({ where: { portfolioId: id } }),
       this.prismaService.account.count({
         where: {
-          OR: [
-            {
-              uploadedPositions: false,
-            },
-            {
-              setRealizedValues: false,
-            },
-          ],
-          portfolioId: id,
+          ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
+            portfolioId: id,
+          }),
+        },
+      }),
+      this.accountService.setupAccounts({
+        id,
+        select: {
+          id: true,
         },
       }),
     ]);
@@ -240,8 +244,7 @@ export class PortfolioService {
       setUpStatus:
         accounts === 0
           ? SetUpStatus.NO_ACCOUNTS
-          : // eslint-disable-next-line unicorn/no-nested-ternary
-            setupAccounts > 0
+          : setupAccounts.length > 0
             ? SetUpStatus.ACCOUNT_SETUP_REQUIRED
             : SetUpStatus.COMPLETE,
     };
@@ -328,22 +331,25 @@ export class PortfolioService {
       .selectFrom("LotCurrent")
       .innerJoin("Account", "Account.id", "LotCurrent.accountId")
       .select([
-        sql<number>`SUM(CASE WHEN "LotCurrent"."gainTotal" < 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
+        sql<
+          number | null
+        >`SUM(CASE WHEN "LotCurrent"."gainTotal" < 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
           "lossTotal",
         ),
-        sql<number>`SUM(CASE WHEN "LotCurrent"."gainTotal" >= 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
+        sql<
+          number | null
+        >`SUM(CASE WHEN "LotCurrent"."gainTotal" >= 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
           "gainTotal",
         ),
         sql<number>`COUNT(DISTINCT "Account"."id")`.as("accountCount"),
         sql<number>`COUNT("LotCurrent"."id")`.as("lotCount"),
       ])
       .where("Account.portfolioId", "=", id)
+      .where("Account.subType", "not in", [...taxAdvantadedSubTypes])
       .executeTakeFirst();
 
     if (result) {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       const gainTotal = new Decimal(result.gainTotal ?? 0);
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       const lossTotal = new Decimal(result.lossTotal ?? 0);
       return {
         accountCount: Number(result.accountCount),
@@ -369,9 +375,9 @@ export class PortfolioService {
     const pAndL = await this.prismaService.realizedPAndL.findMany({
       where: {
         account: {
-          portfolioId: {
-            equals: id,
-          },
+          ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
+            portfolioId: id,
+          }),
         },
         year: {
           equals: new Date().getFullYear(),
@@ -380,13 +386,11 @@ export class PortfolioService {
     });
 
     const gainShortTerm = pAndL.reduce((acc, curr) => {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      return (acc += Number(curr.shortTerm || 0));
+      return (acc += Number(curr.shortTerm));
     }, 0);
 
     const gainLongTerm = pAndL.reduce((acc, curr) => {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      return (acc += Number(curr.longTerm || 0));
+      return (acc += Number(curr.longTerm));
     }, 0);
 
     const dividend = pAndL.reduce((acc, curr) => {
@@ -429,8 +433,7 @@ export class PortfolioService {
         lot =>
           ({
             ...lot,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            accountId: lot.accountId!,
+            accountId: lot.accountId,
             originalQty: lot.remainingQty,
             processQty: lot.remainingQty,
           }) as LotHarvestInput,
@@ -576,5 +579,18 @@ export class PortfolioService {
     );
 
     return result;
+  }
+
+  public static RELEVANT_HARVEST_ACCOUNTS_WHERE({
+    portfolioId,
+  }: {
+    portfolioId: string;
+  }): Prisma.AccountWhereInput {
+    return {
+      portfolioId,
+      subType: {
+        notIn: [...taxAdvantadedSubTypes],
+      },
+    };
   }
 }

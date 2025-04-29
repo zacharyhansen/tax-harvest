@@ -89,12 +89,11 @@ const handleError = (
 
 const handleDataUrl = (source: string): { blob: Blob; extension: string } => {
   const [header, base64Data] = source.split(',');
-  const mimeType = header?.split(':')[1]?.split(';')?.[0];
+  const mimeType = header?.split(':')[1]?.split(';')[0];
   const extension = mimeType?.split('/')[1];
   const byteCharacters = atob(base64Data ?? '');
   const byteArray = new Uint8Array(byteCharacters.length);
   for (let index = 0; index < byteCharacters.length; index++) {
-    // eslint-disable-next-line unicorn/prefer-code-point
     byteArray[index] = byteCharacters.charCodeAt(index);
   }
   const blob = new Blob([byteArray], { type: mimeType });
@@ -107,7 +106,6 @@ const handleImageUrl = async (
   const response = await fetch(source);
   if (!response.ok) throw new Error('Failed to fetch image');
   const blob = await response.blob();
-  // eslint-disable-next-line sonarjs/single-character-alternation
   const extension = blob.type.split(/\/|\+/)[1];
   return { blob, extension: extension ?? '' };
 };
@@ -304,7 +302,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
 
       toggleImage:
         () =>
-        // eslint-disable-next-line unicorn/consistent-function-scoping
         ({ editor }) => {
           const input = document.createElement('input');
           input.type = 'file';
@@ -343,7 +340,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
     };
   },
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   onTransaction({ transaction }) {
     for (const step of transaction.steps) {
       if (step instanceof ReplaceStep && step.slice.size === 0) {

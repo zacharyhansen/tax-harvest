@@ -1,17 +1,15 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Decimal } from "@prisma/client/runtime/library";
-import { OAuth } from "oauth";
-
 import {
   AccountInstitution,
   AuthSource,
   AuthType,
-  LogType,
   OptionLevel,
 } from "@prisma/client";
 import { Account, AuthConnection, Prisma } from "@prisma/client";
-import { InputJsonValue } from "@prisma/client/runtime/library";
+import { Decimal } from "@prisma/client/runtime/library";
+import { OAuth } from "oauth";
+
 import { PrismaService } from "../prisma/prisma.service";
 import ConnectionProvider from "../utilities/abstractClass/ConnectionProvider";
 import { dateOrNull } from "../utilities/dateLoad";
@@ -250,17 +248,17 @@ export class EtradeService implements ConnectionProvider {
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           if (err) {
             this.logger.error(err);
-            void this.prismaService.log.create({
-              data: {
-                data: err as unknown as InputJsonValue,
-                description: "/getRequestToken",
-                // @ts-expect-error log code if its there
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                responseStatus: err.statusCode || undefined,
-                source: AuthSource.ETRADE_REQUEST,
-                type: LogType.AUTH,
-              },
-            });
+            // void this.prismaService.log.create({
+            //   data: {
+            //     data: err as unknown as InputJsonValue,
+            //     description: "/getRequestToken",
+            //     // @ts-expect-error log code if its there
+            //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            //     responseStatus: err.statusCode || undefined,
+            //     source: AuthSource.ETRADE_REQUEST,
+            //     type: LogType.AUTH,
+            //   },
+            // });
             // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
             reject(err);
             return;
@@ -393,7 +391,7 @@ export class EtradeService implements ConnectionProvider {
                 },
               },
               description: account.accountDesc,
-              displayName: account.accountName,
+              name: account.accountName,
               equityRegt: balance?.Computed?.regtEquity,
               equityRegtPercent: balance?.Computed?.regtEquityPercent,
               externalId: account.accountId,
@@ -438,7 +436,7 @@ export class EtradeService implements ConnectionProvider {
               closedDate:
                 account.closedDate === 0 ? null : new Date(account.closedDate),
               description: account.accountDesc,
-              displayName: account.accountName,
+              name: account.accountName,
               equityRegt: balance?.Computed?.regtEquity,
               equityRegtPercent: balance?.Computed?.regtEquityPercent,
               externalId: account.accountId,
@@ -776,7 +774,7 @@ export class EtradeService implements ConnectionProvider {
               accountId: position.accountId,
               acquiredDate: lot.acquiredDate
                 ? new Date(lot.acquiredDate)
-                : null,
+                : new Date(),
               adjPrice: lot.adjPrice,
               assetSymbol: position.assetSymbol,
               availableQty: lot.availableQty,
@@ -816,40 +814,40 @@ export class EtradeService implements ConnectionProvider {
     resolve: (value: any) => void,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     reject: (reason?: any) => void,
-    description?: string,
+    _description?: string,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return async (err: any, data: any, res: any) => {
+    return (err: any, data: any, res: any) => {
       if (err) {
         this.logger.error(err);
-        await this.prismaService.log.create({
-          data: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            data: err,
-            description: description,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-            responseStatus: res.statusCode,
-            source: AuthSource.ETRADE_ACCESS,
-            type: LogType.EXTERNAL_SYNC,
-          },
-        });
+        // await this.prismaService.log.create({
+        //   data: {
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        //     data: err,
+        //     description: description,
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        //     responseStatus: res.statusCode,
+        //     source: AuthSource.ETRADE_ACCESS,
+        //     type: LogType.EXTERNAL_SYNC,
+        //   },
+        // });
         reject(err);
         return;
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (res.statusCode !== 200) {
-        await this.prismaService.log.create({
-          data: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            data: err,
-            description: description,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-            responseStatus: res.statusCode,
-            source: AuthSource.ETRADE_ACCESS,
-            type: LogType.EXTERNAL_SYNC,
-          },
-        });
+        // await this.prismaService.log.create({
+        //   data: {
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        //     data: err,
+        //     description: description,
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+        //     responseStatus: res.statusCode,
+        //     source: AuthSource.ETRADE_ACCESS,
+        //     type: LogType.EXTERNAL_SYNC,
+        //   },
+        // });
         // Reject with an error for non-200 status codes
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         reject(new Error(`Unexpected status code: ${res.statusCode}`));
@@ -860,30 +858,30 @@ export class EtradeService implements ConnectionProvider {
         // Process the data
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
         const result = JSON.parse(data);
-        await this.prismaService.log.create({
-          data: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            data: result,
-            description: description,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
-            responseStatus: res.statusCode,
-            source: AuthSource.ETRADE_ACCESS,
-            type: LogType.EXTERNAL_SYNC,
-          },
-        });
+        // await this.prismaService.log.create({
+        //   data: {
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        //     data: result,
+        //     description: description,
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+        //     responseStatus: res.statusCode,
+        //     source: AuthSource.ETRADE_ACCESS,
+        //     type: LogType.EXTERNAL_SYNC,
+        //   },
+        // });
         // Resolve with the result
         resolve(result);
       } catch (parseError) {
-        await this.prismaService.log.create({
-          data: {
-            data: parseError as InputJsonValue,
-            description: description,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-            responseStatus: res.statusCode,
-            source: AuthSource.ETRADE_ACCESS,
-            type: LogType.EXTERNAL_SYNC,
-          },
-        });
+        // await this.prismaService.log.create({
+        //   data: {
+        //     data: parseError as InputJsonValue,
+        //     description: description,
+        //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        //     responseStatus: res.statusCode,
+        //     source: AuthSource.ETRADE_ACCESS,
+        //     type: LogType.EXTERNAL_SYNC,
+        //   },
+        // });
         // Reject with an error for JSON parsing issues
         reject(
           new Error(

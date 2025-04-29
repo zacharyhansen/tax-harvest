@@ -24,11 +24,7 @@ export class FileService {
   }) {
     const createdFiles = await this.prismaService.file.createManyAndReturn({
       data,
-      select: {
-        ...select,
-        gcpFilename: true,
-        id: true,
-      },
+      select,
     });
     for (const file of createdFiles) {
       const fileContent = await this.googleStorageService.getGCPFileAsString({
@@ -36,26 +32,33 @@ export class FileService {
       });
       await this.csvService
         .etradeCSVToLots({ content: fileContent })
-        .then(records => {
-          return this.csvService.etradeTransformCSVRecords({ records });
+        .then(({ records, lotSeededDate }) => {
+          return {
+            lots: this.csvService.etradeTransformCSVRecords({
+              records,
+            }),
+            lotSeededDate,
+          };
         })
-        .then(lots => {
+        .then(({ lots, lotSeededDate }) => {
           return this.lotService.upsertLotsForAccount({
             accountId: file.accountId,
-            lots: lots.map(lot => ({
-              ...lot,
-              fileId: file.id,
-              price: lot.price.toString(),
-              remainingQty: lot.remainingQty.toString(),
-            })),
+            lots: lots.map(
+              lot =>
+                ({
+                  ...lot,
+                  fileId: file.id,
+                  price: lot.price.toString(),
+                  remainingQty: lot.remainingQty.toString(),
+                  accountId: file.accountId,
+                }) satisfies Prisma.LotCreateManyInput,
+            ),
+            lotSeededDate,
             replace: true,
           });
         });
     }
 
-    return this.prismaService.file.createManyAndReturn({
-      data,
-      select,
-    });
+    return createdFiles;
   }
 }

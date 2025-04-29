@@ -1,8 +1,10 @@
-import { z } from "zod";
+import { Field, InputType } from "@nestjs/graphql";
 
-export const GCPUploadFileSchema = z.object({
-  fileName: z.string(),
-  type: z.string(),
-});
+@InputType()
+export class GCPUploadFile {
+  @Field(() => String)
+  fileName: string;
 
-export type GCPUploadFile = z.infer<typeof GCPUploadFileSchema>;
+  @Field(() => String)
+  type: string;
+}

@@ -4,9 +4,12 @@ import { Button } from '@repo/ui/components/button';
 import { ArrowRight, Wheat } from 'lucide-react';
 import Link from 'next/link';
 
-import { HarvestType } from '~/lib/constants/enums.dto';
+import {
+  HarvestType,
+  SetUpStatus,
+  usePortfolioSummaryQuery,
+} from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
-import { trpc } from '~/lib/trpc';
 import { NoAccounts, OutstandingAccountSetupList } from '~/modules/account';
 import HarvestSummaryCards from '~/modules/harvest/HarvestSummaryCards';
 import { PageWrapper } from '~/modules/layout';
@@ -15,24 +18,28 @@ import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 
 // TODO: this is repeated in the backend too - combine somehow
 const harvestTypeLabel: Record<HarvestType, string> = {
-  [HarvestType.REDUCE_COST_BASIS]: 'Raise Average Cost Basis',
-  [HarvestType.REDUCE_TAXES]: 'Offset Realized Gains',
-  [HarvestType.SELL]: 'Sell Stock',
-  [HarvestType.CAPTURE_GAINS_TAX_FREE]: 'Capture Gains Tax Free',
+  [HarvestType.ReduceCostBasis]: 'Raise Average Cost Basis',
+  [HarvestType.ReduceTaxes]: 'Offset Realized Gains',
+  [HarvestType.Sell]: 'Sell Stock',
+  [HarvestType.CaptureGainsTaxFree]: 'Capture Gains Tax Free',
 };
 
 export default function HomePage() {
-  const { data, isLoading, error } = trpc.portfolio.summary.useQuery({});
+  const { data, loading, error } = usePortfolioSummaryQuery();
+
+  if (!data && loading) {
+    return <LoadingPage message="Retrieving your portfolio information" />;
+  }
 
   if (error) {
     return <ErrorPage message={error.message} />;
   }
 
-  if (!data && isLoading) {
+  if (!data && loading) {
     return <LoadingPage message="Retrieving your portfolio information" />;
   }
 
-  if (data?.setUpStatus === 'NO_ACCOUNTS') {
+  if (data?.portfolioSummary.setUpStatus === SetUpStatus.NoAccounts) {
     return (
       <PageWrapper>
         <NoAccounts />
@@ -40,7 +47,7 @@ export default function HomePage() {
     );
   }
 
-  if (data?.setUpStatus === 'ACCOUNT_SETUP_REQUIRED') {
+  if (data?.portfolioSummary.setUpStatus === SetUpStatus.AccountSetupRequired) {
     return (
       <PageWrapper
         title="Account Setup"
@@ -51,12 +58,12 @@ export default function HomePage() {
     );
   }
 
-  const recommendedHarvest = data?.harvestRecommendations.find(
+  const recommendedHarvest = data?.portfolioSummary.harvestRecommendations.find(
     rec => rec.recommended
   );
 
   return (
-    <PageWrapper>
+    <PageWrapper className="mx-auto">
       {recommendedHarvest ? (
         <div className="mb-4 w-full">
           <div className="relative overflow-hidden rounded-lg bg-gradient-to-r from-yellow-500 to-green-500">
@@ -95,7 +102,7 @@ export default function HomePage() {
 
             <div className="relative px-4 py-5 sm:p-6">
               <div className="flex flex-col items-center justify-between sm:flex-row">
-                <div className="mb-4 text-center text-white sm:mb-0 sm:text-left">
+                <div className="text-background mb-4 text-center sm:mb-0 sm:text-left">
                   <h2 className="text-xl font-bold sm:text-2xl">
                     Ready to improve your portfolio?
                   </h2>
@@ -104,15 +111,11 @@ export default function HomePage() {
                     <Link
                       className="group"
                       href={TypedRoutes.lotSelection({
-                        harvestType: recommendedHarvest.harvestType,
+                        type: recommendedHarvest.harvestType,
                       })}
                     >
                       <span className="underline">
-                        {
-                          harvestTypeLabel[
-                            recommendedHarvest.harvestType as HarvestType
-                          ]
-                        }
+                        {harvestTypeLabel[recommendedHarvest.harvestType]}
                       </span>
                     </Link>{' '}
                     harvest.
@@ -122,7 +125,7 @@ export default function HomePage() {
                   <Link className="group" href={TypedRoutes.harvestFlowRoot()}>
                     <Button
                       variant="link"
-                      className="text-white"
+                      className="text-background"
                       iconRight={<Wheat className="h-4 w-4" />}
                     >
                       All Harvest Options
@@ -131,7 +134,7 @@ export default function HomePage() {
                   <Link
                     className="group"
                     href={TypedRoutes.lotSelection({
-                      harvestType: recommendedHarvest.harvestType,
+                      type: recommendedHarvest.harvestType,
                     })}
                   >
                     <Button
@@ -140,11 +143,7 @@ export default function HomePage() {
                       }
                       className="text-sm font-semibold"
                     >
-                      {
-                        harvestTypeLabel[
-                          recommendedHarvest.harvestType as HarvestType
-                        ]
-                      }
+                      {harvestTypeLabel[recommendedHarvest.harvestType]}
                     </Button>
                   </Link>
                 </div>

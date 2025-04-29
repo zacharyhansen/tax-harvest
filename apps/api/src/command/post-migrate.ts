@@ -10,7 +10,6 @@ async function bootstrap() {
 
 bootstrap().catch((error: unknown) => {
   console.error("Migration failed:", error);
-  // eslint-disable-next-line unicorn/no-process-exit
   process.exit(1);
 });
 

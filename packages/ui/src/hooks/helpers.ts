@@ -60,7 +60,6 @@ function isExactHotkey(hotkey: Hotkey, event: KeyboardEvent): boolean {
     return false;
   }
 
-  // eslint-disable-next-line sonarjs/prefer-single-boolean-return
   if (
     key &&
     (pressedKey.toLowerCase() === key.toLowerCase() ||

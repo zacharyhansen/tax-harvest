@@ -1,6 +1,7 @@
 import type { CellContext } from '@tanstack/react-table';
-import { formatDate } from 'utilities';
-import { cn } from 'ui/shadcn/lib/utils';
+
+import { cn } from '@repo/ui/utils/cn';
+import { DateFormatter } from '@repo/ui/utils/date-formatter';
 
 export default function DateTimeCell<TData, TValue>({
   getValue,
@@ -11,18 +12,7 @@ export default function DateTimeCell<TData, TValue>({
 
   return (
     <div className={cn('font-medium')}>
-      {formatDate(
-        getValue<string | Date | null | undefined>(),
-        new Intl.DateTimeFormat(undefined, {
-          day: 'numeric',
-          fractionalSecondDigits: 2,
-          hour: 'numeric',
-          minute: 'numeric',
-          month: 'numeric',
-          second: 'numeric',
-          year: 'numeric',
-        })
-      )}
+      {DateFormatter.timestamp(getValue<string | Date | null | undefined>())}
     </div>
   );
 }

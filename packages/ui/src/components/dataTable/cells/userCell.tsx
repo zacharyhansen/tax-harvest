@@ -1,30 +1,27 @@
 import type { CellContext } from '@tanstack/react-table';
 
-import type { UserObject } from '../../../composed/avatars/AvatarGroup';
-import { Avatar, AvatarFallback, AvatarImage } from '../../../index';
+import { Avatar, AvatarFallback, AvatarImage } from '../../avatar';
+import { type UserObject } from '../../avatar-group';
 
 export default function UserCell<TData, TValue>({
   getValue,
 }: CellContext<TData, TValue>) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const { email, name, photo } = getValue<UserObject>() || {};
 
   return (
     <div className="ml-auto flex items-center space-x-2">
       <div className="flex-shrink-0">
         <Avatar>
-          <AvatarImage src={photo || undefined} alt="avatar" />
+          <AvatarImage src={photo ?? undefined} alt="avatar" />
           <AvatarFallback>
             {name?.split(' ').map(name => name[0])}
           </AvatarFallback>
         </Avatar>
       </div>
       <div className="ms-4 min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-          {name}
-        </p>
-        <p className="truncate text-sm text-gray-500 dark:text-gray-400">
-          {email}
-        </p>
+        <p className="truncate text-sm font-medium">{name}</p>
+        <p className="truncate text-sm">{email}</p>
       </div>
     </div>
   );

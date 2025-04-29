@@ -2,33 +2,32 @@
 
 import type { ReactNode } from 'react';
 import clsx from 'clsx';
-import type { PostgrestError } from '@supabase/postgrest-js';
 
 import { ErrorPage, LoadingPage } from '../utility-components';
 
-import type { TablesConfiguration } from '~/lib/database/helpers';
-import type { LayoutSlug } from '~/lib/constants/layout.slugs';
-
 export interface PageWrapperProps {
-  height?: string;
   description?: ReactNode;
   children: ReactNode;
   title?: ReactNode;
-  error?: PostgrestError | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-redundant-type-constituents
+  error?: any | null;
   loading?: boolean;
-  layout?: TablesConfiguration<'layout'>;
-  layoutSlug?: LayoutSlug;
   className?: string;
+  cornerElement?: ReactNode;
+  next?: ReactNode;
+  prev?: ReactNode;
 }
 
 export default function PageWrapper({
   children,
-  height,
   title,
   description,
   error,
   loading,
   className,
+  cornerElement,
+  next,
+  prev,
 }: Readonly<PageWrapperProps>) {
   if (error) {
     console.error({ error });
@@ -42,11 +41,19 @@ export default function PageWrapper({
 
   return (
     <div
-      className={clsx('flex flex-col overflow-auto px-4 py-2', className)}
-      style={{ height: height ?? 'calc(100vh - 3rem)' }} // default is little less than the screen to account for the header bar
+      className={clsx(
+        'flex max-w-full flex-grow flex-col overflow-auto px-4 py-2',
+        className
+      )}
     >
-      {(title ?? description) ? (
-        <div className="flex">
+      {(next ?? prev) ? (
+        <div className="flex pb-4">
+          {prev ? <div>{prev}</div> : null}
+          {next ? <div className="ml-auto">{next}</div> : null}
+        </div>
+      ) : null}
+      <div className="flex">
+        {(title ?? description) ? (
           <div className={clsx('w-full py-2')}>
             {title ? (
               <h3 className="text-foreground flex items-center space-y-4 text-xl font-semibold">
@@ -58,8 +65,9 @@ export default function PageWrapper({
               <div className="text-muted-foreground text-sm">{description}</div>
             ) : null}
           </div>
-        </div>
-      ) : null}
+        ) : null}
+        {cornerElement ? <div className="ml-auto">{cornerElement}</div> : null}
+      </div>
       {children}
     </div>
   );

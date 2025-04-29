@@ -1,7 +1,12 @@
 import '@repo/ui/tailwind.css';
-import { GeistSans } from 'geist/font/sans';
 import { ClerkProvider } from '@clerk/nextjs';
 import { cn } from '@repo/ui/utils';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  display: 'swap',
+  subsets: ['latin'],
+});
 
 export default function LocaleLayout({
   children,
@@ -11,7 +16,7 @@ export default function LocaleLayout({
   return (
     <html
       lang="en"
-      className={cn(GeistSans.className, 'max-h-screen overflow-y-hidden')}
+      className={cn(inter.className, 'max-h-screen overflow-y-hidden')}
       suppressHydrationWarning={true}
     >
       <body>

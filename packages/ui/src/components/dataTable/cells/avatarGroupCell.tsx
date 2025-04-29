@@ -1,7 +1,6 @@
 import type { CellContext } from '@tanstack/react-table';
 
-import type { UserObject } from '../../../composed/avatars/AvatarGroup';
-import { AvatarGroup } from '../../../composed/avatars/AvatarGroup';
+import { AvatarGroup, type UserObject } from '../../avatar-group';
 
 export default function AvatarGroupCell<TData, TValue extends UserObject>({
   getValue,

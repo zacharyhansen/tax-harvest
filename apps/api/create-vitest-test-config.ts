@@ -7,7 +7,7 @@ export const createVitestTestConfig = (testingType: string): InlineConfig => {
     globals: true,
     isolate: false,
     passWithNoTests: true,
-    include: [`tests/${testingType}/**/*.test.ts`],
+    include: [`tests/${testingType}/**/*.test.ts`, "**/*.spec.ts"],
     env: loadEnv("test", process.cwd(), ""),
     coverage: {
       provider: "istanbul",

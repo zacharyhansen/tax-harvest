@@ -1,0 +1,59 @@
+fragment AccountTableItem on Account {
+  id
+  name
+  type
+  portfolioId
+  provider
+  externalId
+  key
+  institution
+  type
+  mode
+  status
+  optionLevel
+  cashForOpenOrders
+  balanceMoneyMarket
+  cashAvailableForInvestment
+  accountValueTotal
+  cashNet
+  cashBalance
+  balanceAccount
+  createdAt
+  updatedAt
+  createdBy {
+    ...UserItem
+  }
+  authConnectionId
+  # authConnectionExt {
+  #   ...AccountTableAuthConnection
+  # }
+}
+
+fragment AccountTableAuthConnection on AuthConnectionExt {
+  id
+  syncedAt
+  authedAt
+  source
+  _requiresReAuth
+}
+
+query Accounts($where: AccountWhereInput) {
+  accounts(where: $where) {
+    ...AccountTableItem
+    positions {
+      gainTotal
+    }
+  }
+}
+
+mutation CreateAccountForPortfolio($accountCreateInput: AccountCreateInput!) {
+  createAccountForPortfolio(accountCreateInput: $accountCreateInput) {
+    ...AccountTableItem
+  }
+}
+
+mutation SyncAccount($authConnectionId: String!) {
+  syncAuthConnection(id: $authConnectionId) {
+    id
+  }
+}

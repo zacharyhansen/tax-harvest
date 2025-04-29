@@ -2,5 +2,5 @@
 module.exports = {
   root: true,
   extends: ['@repo/eslint-config/next.cjs'],
-  ignorePatterns: ['lib/database.types.ts'],
+  ignorePatterns: ['lib/database.types.ts', 'generated'],
 };

@@ -5,17 +5,17 @@ import {
   EyeNoneIcon,
 } from '@radix-ui/react-icons';
 import type { Column } from '@tanstack/react-table';
-import { cn } from 'ui/shadcn/lib/utils';
 
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../../../index';
+} from '../../dropdown-menu';
+import { Button } from '../../button';
 
+import { cn } from '@repo/ui/utils/cn';
 interface BasicHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
