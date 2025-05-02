@@ -41,7 +41,7 @@
     "build:clean": "rimraf dist; exit 0",
     "typos": "chmod +x scripts/check_typos.sh && ./scripts/check_typos.sh",
     "codegen:snaplet": "npx @snaplet/seed sync",
-    "codegen:kysely": "npx kysely-codegen",
+    "codegen:kysely": "npx kysely-codegen --out-file ./src/database/db.d.ts",
     "codegen": "pnpm codegen:kysely && pnpm codegen:snaplet",
     "migrate": "prisma migrate dev",
     "migrate:reset": "prisma migrate reset",

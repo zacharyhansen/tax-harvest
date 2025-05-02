@@ -1,4 +1,4 @@
-import type { DB } from "kysely-codegen";
+import type { DB } from "./db.d";
 
 import { Kysely } from "kysely";
 
