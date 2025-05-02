@@ -78,7 +78,7 @@
     "graphql-codegen-typescript-client": "0.17.0",
     "graphql-codegen-typescript-common": "0.17.0",
     "graphql-codegen-typescript-graphql-files-modules": "0.17.0",
-    "graphql-codegen-typescript-react-apollo": "0.17.0",
+    "graphql-codegen-typescript-react-apollo": "0.18.2",
     "graphql-codegen-typescript-server": "0.17.0",
     "happy-dom": "^15.7.4",
     "patch-package": "^8.0.0",
