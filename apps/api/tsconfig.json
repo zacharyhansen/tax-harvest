@@ -30,7 +30,9 @@
     "seed.client.ts",
     "prisma/seed",
     "src/command/post-migrate.ts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "vitest.config.unit.ts",
+    "vitest.config.e2e.ts"
   ],
   "exclude": ["node_modules", "dist", "@generated/server.ts"]
 }
