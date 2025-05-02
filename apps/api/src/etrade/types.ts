@@ -1,5 +1,3 @@
-import { EtradeAccountTypeEnum } from "@snaplet/seed";
-
 import { AccountInstitution, AccountMode, AccountStatus } from "@prisma/client";
 
 export interface EtradeAccount {
@@ -8,7 +6,7 @@ export interface EtradeAccount {
   accountMode: AccountMode;
   accountDesc: string;
   accountName: string;
-  accountType: EtradeAccountTypeEnum;
+  accountType: string;
   institutionType: AccountInstitution;
   accountStatus: AccountStatus;
   closedDate: number;
