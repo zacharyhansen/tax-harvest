@@ -1,7 +1,7 @@
 repository:
-  name: riska-ai
-  description: Very cool repo for riska ai app
-  homepage: github.com/zacharyhansen/riska
+  name: tax-harvest
+  description: Very cool repo for tax harvesting
+  homepage: github.com/zacharyhansen/tax-harvest
   topics: nodejs, template, typescript, nestjs
   has_wiki: false
   private: false
