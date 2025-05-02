@@ -1,9 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { Graph, VectorWindow } from "@prisma/client";
 import { QueryResult, sql } from "kysely";
 
 import { Database } from "../database/database";
-import { Graph, VectorWindow } from "@prisma/client";
-import { PriceHourlyVector, Prisma } from "@prisma/client";
 import { PolygonService } from "../polygon/polygon.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { GraphTimeValue } from "../vector-graph/vector-graph.types";
@@ -66,6 +65,7 @@ export class PriceHourlyVectorService {
       .selectFrom("PriceHourly")
       .select(["startDate", "open"])
       .where("startDate", ">=", dates[0])
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       .where("startDate", "<=", dates.at(-1)!)
       .where("assetSymbol", "=", assetSymbol)
       .orderBy("startDate", "asc")
@@ -141,6 +141,7 @@ export class PriceHourlyVectorService {
           vectorResults.map(({ returnPCT, vectorWindow }) => ({
             assetSymbol,
             data: returnPCT,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             priceHourlyVectorId: vectors.find(
               vector => vector.vectorWindow === vectorWindow,
             )!.id,
