@@ -2,9 +2,15 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [trunk]
   pull_request:
-    branches: [main]
+    branches: [trunk]
+
+# Add permissions for GITHUB_TOKEN
+permissions:
+  contents: write
+  actions: write
+  pull-requests: write
 
 jobs:
   build:
@@ -50,3 +56,26 @@ jobs:
 
       - name: Run unit tests 🧪
         run: pnpm run test
+
+  build-and-release:
+    name: 'Build and Release 🚀'
+    needs: [build, lint, test]
+    # Only run this job on pushes to trunk, not on pull requests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/trunk'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Build and Release Workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-and-release.yaml',
+              ref: 'trunk',
+              inputs: {
+                version_type: 'patch'  /* Default to patch version increment */
+              }
+            })
