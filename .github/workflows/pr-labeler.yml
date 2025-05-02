@@ -20,6 +20,6 @@ jobs:
       - name: PR Scope Labeler 🏷️
         uses: actions/labeler@v5
         with:
-          repo-token: '${{ secrets.PAT_TOKEN }}'
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
           configuration-path: .github/pr-scope-labeler.yml
           sync-labels: true
