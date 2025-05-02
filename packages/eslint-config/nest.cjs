@@ -48,6 +48,7 @@ module.exports = {
     'nestjs',
     'only-warn',
     'eslint-plugin-import-helpers',
+    'simple-import-sort',
     'prettier',
   ],
   extends: [
@@ -77,6 +78,8 @@ module.exports = {
     'no-undef': 'off',
     'prefer-const': 'warn',
     'prettier/prettier': 'warn',
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'off',
