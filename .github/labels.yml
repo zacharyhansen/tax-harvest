@@ -5,7 +5,7 @@
   description: Ignore pull request for a new release
   color: 9C28FC
 - name: todo
-  description: Action we need to perform at some moment
+  description: Action we need to perform at some time
   color: 82FC28
 - name: 💻 Source
   description: Indicates the scope is related to the own service logic
