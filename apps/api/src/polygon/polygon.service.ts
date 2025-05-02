@@ -3,9 +3,9 @@ import { ConfigService } from "@nestjs/config";
 import { Field, ObjectType } from "@nestjs/graphql";
 import { IAggs, IGlobalOptions, type IRestClient } from "@polygon.io/client-js";
 import { Insertable, Updateable } from "kysely";
-import { Asset } from "kysely-codegen";
 
 import { Database } from "../database/database";
+import { Asset } from "../database/db.d";
 import { PolygonAggregateInput, PolygonTimespan } from "./polygon.dto";
 
 @ObjectType()

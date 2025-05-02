@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { Selectable, SelectExpression } from "kysely";
-import { DB, LotCurrent } from "kysely-codegen";
 
 import { taxAdvantadedSubTypes } from "~/plaid/plaid.utils";
 
 import { Database } from "../database/database";
+import { DB, LotCurrent } from "../database/db.d";
 import { PrismaService } from "../prisma/prisma.service";
 import { LotValueType } from "./lot.dto";
 
