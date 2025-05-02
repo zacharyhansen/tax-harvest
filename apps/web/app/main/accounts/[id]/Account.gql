@@ -52,6 +52,7 @@ mutation UpdateAccount(
     id
     name
     portfolioId
+    description
   }
 }
 

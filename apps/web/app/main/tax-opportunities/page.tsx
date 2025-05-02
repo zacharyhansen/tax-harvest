@@ -249,8 +249,8 @@ export default function TaxOpportunitiesPage() {
                   </h2>
                 </div>
                 <p className="text-muted-foreground">
-                  We couldn't find any suitable tax harvesting opportunities for
-                  your portfolio at this time
+                  We couldn&apos;t find any suitable tax harvesting
+                  opportunities for your portfolio at this time
                 </p>
               </div>
 

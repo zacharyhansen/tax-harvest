@@ -1,20 +1,18 @@
 import 'server-only';
 
-import { SUBSCRIPTION } from 'constants/routes';
-
 import { ArrowRightIcon, CheckCircledIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import Stripe from 'stripe';
 import {
-  Badge,
-  Button,
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from 'ui';
+} from '@repo/ui/components/card';
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
 
 import Price from './Price';
 
@@ -32,8 +30,8 @@ export default async function PricingOptions({
     .then(p =>
       p.data.sort(
         (p1, p2) =>
-          (parseInt(p1.metadata.order) || 0) -
-          (parseInt(p2.metadata.order) || 0)
+          (parseInt(p1.metadata.order ?? '0') || 0) -
+          (parseInt(p2.metadata.order ?? '0') || 0)
       )
     );
 
@@ -68,11 +66,12 @@ export default async function PricingOptions({
 
             <CardContent>
               <Link
-                href={
-                  stripeCustomerId
-                    ? `${SUBSCRIPTION}/${stripeCustomerId}/${product.default_price}`
-                    : `${SUBSCRIPTION}/all`
-                }
+                href="todo"
+                // href={
+                //   stripeCustomerId
+                //     ? `${SUBSCRIPTION}/${stripeCustomerId}/${product.default_price}`
+                //     : `${SUBSCRIPTION}/all`
+                // }
               >
                 <Button className="w-full" iconRight={<ArrowRightIcon />}>
                   Get Started

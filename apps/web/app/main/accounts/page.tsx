@@ -1,18 +1,25 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { AgGridReact } from 'ag-grid-react';
 import type { ColDef } from 'ag-grid-community';
 import { useMemo } from 'react';
+import { AgGridReact } from 'ag-grid-react';
+import dynamic from 'next/dynamic';
 
 import { NoAccounts } from '~/modules/account';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-import { AgGridWrapper } from '~/modules/client-ag-grid';
 import { TypedRoutes } from '~/lib/routes';
 import { useAccountsQuery } from '~/generated/gql';
 
-export default function AccountIndex() {
+const AgGridWrapper = dynamic(
+  () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
+  {
+    ssr: false,
+  }
+);
+
+export default function AccountPage() {
   const router = useRouter();
   const { data, error, loading } = useAccountsQuery();
 

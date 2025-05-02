@@ -36,6 +36,11 @@ export interface AgGridWrapperProps {
   quickFilterEnabled?: boolean;
 }
 
+/**
+ * This component is a wrapper for the AgGridReact component.
+ * It provides a few extra features like a quick filter and a right bar.
+ * It must always be imported using dynamic import.
+ */
 export default function AgGridWrapper({
   children,
   height,

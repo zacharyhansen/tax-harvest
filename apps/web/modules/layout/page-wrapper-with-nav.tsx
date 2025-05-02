@@ -18,11 +18,7 @@ export default function PageWrapperWithNav({
       className={clsx('flex overflow-auto')}
       style={{ height: 'calc(100vh - 3rem)' }} // default is little less than the screen to account for the header bar
     >
-      <PageWrapper
-        {...pageWrapperProps}
-        height="100%"
-        className="h-full flex-1"
-      >
+      <PageWrapper {...pageWrapperProps} className="h-full flex-1">
         {childrenArray[0]}
       </PageWrapper>
       <nav className="w-72 border-l">

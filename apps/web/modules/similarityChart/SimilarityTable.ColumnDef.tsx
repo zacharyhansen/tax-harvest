@@ -59,7 +59,7 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
     size: 110,
   }),
   columnHelper.accessor(
-    row => Number((row.remainingQty || 0) * (row.price || 0)),
+    row => Number(Number(row.remainingQty || 0) * Number(row.price || 0)),
     {
       aggregationFn: 'sumMoney',
       cell: props => <DataTable.MoneyCell {...props} colored={false} />,
@@ -85,7 +85,9 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
 
   columnHelper.accessor(
     row =>
-      Number((row.remainingQty || 0) * (row.asset.lastPrice || 0)).toFixed(2),
+      Number(
+        Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0)
+      ).toFixed(2),
     {
       aggregationFn: 'sumMoney',
       cell: props => <DataTable.MoneyCell {...props} colored={false} />,
@@ -97,8 +99,9 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
   ),
   columnHelper.accessor(
     row => {
-      const cost = (row.remainingQty || 0) * (row.price || 0);
-      const value = (row.remainingQty || 0) * (row.asset.lastPrice || 0);
+      const cost = Number(row.remainingQty || 0) * Number(row.price || 0);
+      const value =
+        Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0);
       return value - cost;
     },
     {

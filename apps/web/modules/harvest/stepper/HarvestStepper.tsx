@@ -1,6 +1,5 @@
 'use client';
 
-import NumberFlow from '@number-flow/react';
 import { ArrowLeftCircle, ArrowRightCircle, Wheat } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -245,10 +244,10 @@ export default function HarvestStepper({
           </CardHeader>
           <CardContent>
             <div className="whitespace-nowrap text-2xl font-bold">
-              <NumberFlow
+              {/* <NumberFlow
                 value={dataHarvest?.harvest.amount || selectedHarvest}
                 format={{ currency: 'USD', style: 'currency' }}
-              />
+              /> */}
               {harvestType === HarvestType.Sell ? null : (
                 <p className="text-muted-foreground inline text-sm font-bold">
                   /{' '}

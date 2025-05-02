@@ -1,4 +1,3 @@
-export { default as AgGridWrapper } from './ag-grid-wrapper';
 export { default as LinkCell } from './cells/link.cell';
 export { default as NavLinkCell } from './cells/nav-link.cell';
 export { default as OptionsCell } from './cells/options.cell';

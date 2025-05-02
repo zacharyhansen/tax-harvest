@@ -89,11 +89,11 @@ export default function Review({ harvestId }: ReviewProps) {
                           transaction.replacementTransactionItem.orderType
                         )} ${transaction.replacementTransactionItem.asset.symbol} for ${transaction.harvestTransactionItem.asset.symbol}`}</span>
                         <Badge className="ml-4">
-                          {Format.money(
+                          {/* {Format.money(
                             Number(
                               transaction.harvestTransactionItem.asset.lastPrice
                             ) * transaction.harvestTransactionItem.quantity
-                          )}
+                          )} */}
                         </Badge>
                       </div>
                     ) : (
@@ -154,12 +154,12 @@ export default function Review({ harvestId }: ReviewProps) {
                             {transaction.harvestTransactionItem.quantity}
                           </TableCell>
                           <TableCell>
-                            {Format.money(
+                            {/* {Format.money(
                               Number(
                                 transaction.harvestTransactionItem.asset
                                   .lastPrice
                               ) * transaction.harvestTransactionItem.quantity
-                            )}
+                            )} */}
                           </TableCell>
                         </TableRow>
                         {transaction.replacementTransactionItem ? (
@@ -188,14 +188,14 @@ export default function Review({ harvestId }: ReviewProps) {
                               {transaction.replacementTransactionItem.quantity}
                             </TableCell>
                             <TableCell>
-                              {Format.money(
+                              {/* {Format.money(
                                 Number(
                                   transaction.replacementTransactionItem.asset
                                     .lastPrice
                                 ) *
                                   transaction.replacementTransactionItem
                                     .quantity
-                              )}
+                              )} */}
                             </TableCell>
                           </TableRow>
                         ) : null}
@@ -257,14 +257,14 @@ export default function Review({ harvestId }: ReviewProps) {
                                 }
                               </TableCell>
                               <TableCell>
-                                {Format.money(
+                                {/* {Format.money(
                                   Number(
                                     transaction.revertHarvestTransactionItem
                                       .asset.lastPrice
                                   ) *
                                     transaction.revertHarvestTransactionItem
                                       .quantity
-                                )}
+                                )} */}
                               </TableCell>
                             </TableRow>
                             <TableRow>
@@ -295,14 +295,14 @@ export default function Review({ harvestId }: ReviewProps) {
                                 }
                               </TableCell>
                               <TableCell>
-                                {Format.money(
+                                {/* {Format.money(
                                   Number(
                                     transaction.revertReplacementTransactionItem
                                       ?.asset.lastPrice
                                   ) *
                                     transaction.revertReplacementTransactionItem
                                       ?.quantity
-                                )}
+                                )} */}
                               </TableCell>
                             </TableRow>
                           </TableBody>

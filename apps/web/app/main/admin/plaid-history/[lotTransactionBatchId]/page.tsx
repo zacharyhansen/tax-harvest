@@ -11,12 +11,19 @@ import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useTheme } from 'next-themes';
 import { useMemo } from 'react';
+import dynamic from 'next/dynamic';
 
 import { useLotTransactionBatchQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
-import { AgGridWrapper } from '~/modules/client-ag-grid';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+
+const AgGridWrapper = dynamic(
+  () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
+  {
+    ssr: false,
+  }
+);
 
 export default function LotTransactionBatchPage({
   params,

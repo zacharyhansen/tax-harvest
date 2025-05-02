@@ -12882,7 +12882,7 @@ export type UpdateAccountMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAccountMutation = { __typename?: 'Mutation', updateAccount: { __typename?: 'Account', id: string, name?: string | null, portfolioId: string } };
+export type UpdateAccountMutation = { __typename?: 'Mutation', updateAccount: { __typename?: 'Account', id: string, name?: string | null, portfolioId: string, description?: string | null } };
 
 export type UpdateAccountRealizedPAndLMutationVariables = Exact<{
   id: Scalars['String']['input'];
@@ -12956,13 +12956,6 @@ export type LotTransactionBatchQueryVariables = Exact<{
 
 export type LotTransactionBatchQuery = { __typename?: 'Query', lotTransactionBatch?: { __typename?: 'LotTransactionBatch', id: string, createdAt: any, updatedAt: any, authConnectionId: string, positionsBefore?: any | null, positionsAfter?: any | null, holdingsPayload?: any | null, lotTupleMap?: any | null, initialLots?: any | null, newTransactions?: any | null, newBuys?: any | null, newSells?: any | null, lotChangeLog?: Array<{ __typename?: 'LotChangeLog', id: string, createdAt: any, lotId?: string | null, accountId: string, portfolioId: string, lotBefore?: any | null, lotAfter?: any | null, operationType: OperationType, source?: string | null, processed: boolean, quantityChange?: string | null, lotTransactionBatchId: string, lot?: { __typename?: 'Lot', id: string, remainingQty: string, price: string, acquiredDate: any, assetSymbol: string, account: { __typename?: 'Account', id: string, name?: string | null } } | null }> | null } | null };
 
-export type HarvestLotOrderItemFragment = { __typename?: 'HarvestLotOrder', accountId: string, costBasis: string, gainTotal: string, id: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any };
-
-export type HarvestEvalQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type HarvestEvalQuery = { __typename?: 'Query', harvestEval: { __typename?: 'HarvestResult', realizedOrders: Array<{ __typename?: 'HarvestLotOrder', accountId: string, costBasis: string, gainTotal: string, id: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any }>, unrealizedOrders: Array<{ __typename?: 'HarvestLotOrder', accountId: string, costBasis: string, gainTotal: string, id: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any }>, portfolioSummary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', accountCount: number, dividend: number, gainLongTerm: number, gainShortTerm: number, gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, accountCount: number, positionCount: number }, harvest: { __typename?: 'HarvestPotential', realized: number, unrealized: number, total: number } } } };
-
 export type HarvestTableItemFragment = { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
 
 export type HarvestsQueryVariables = Exact<{
@@ -13011,23 +13004,6 @@ export type PortfolioByIdQueryVariables = Exact<{
 
 
 export type PortfolioByIdQuery = { __typename?: 'Query', portfolioById: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
-
-export type AccountLiveUrlItemFragment = { __typename?: 'Account', id: string, liveURL?: string | null, liveURLCreated?: any | null };
-
-export type AccountLiveUrlQueryVariables = Exact<{
-  accountId: Scalars['String']['input'];
-}>;
-
-
-export type AccountLiveUrlQuery = { __typename?: 'Query', account: { __typename?: 'Account', id: string, liveURL?: string | null, liveURLCreated?: any | null } };
-
-export type UpdateAccountLiveUrlMutationVariables = Exact<{
-  accountId: Scalars['String']['input'];
-  accountUpdateInput: AccountUpdateInput;
-}>;
-
-
-export type UpdateAccountLiveUrlMutation = { __typename?: 'Mutation', updateAccount: { __typename?: 'Account', id: string, liveURL?: string | null, liveURLCreated?: any | null } };
 
 export type StripeSessionQueryVariables = Exact<{
   stripePriceId: Scalars['String']['input'];
@@ -13121,6 +13097,8 @@ export type CreateFilesMutationVariables = Exact<{
 
 
 export type CreateFilesMutation = { __typename?: 'Mutation', createFiles: Array<{ __typename?: 'File', id: string, accountId: string, displayName: string, gcpFilename: string, type: string }> };
+
+export type HarvestLotOrderItemFragment = { __typename?: 'HarvestLotOrder', accountId: string, costBasis: string, gainTotal: string, id: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any };
 
 export type LotsCurrentForLotTypeQueryVariables = Exact<{
   lotValueType: LotValueType;
@@ -13397,23 +13375,6 @@ export const LotTransactionBatchDetailsFragmentDoc = gql`
   }
 }
     `;
-export const HarvestLotOrderItemFragmentDoc = gql`
-    fragment HarvestLotOrderItem on HarvestLotOrder {
-  accountId
-  costBasis
-  gainTotal
-  id
-  lotId
-  pricePaid
-  quantity
-  taxGain
-  assetSymbol
-  dollarPerSharePnL
-  valueTotal
-  orderType
-  acquiredDate
-}
-    `;
 export const HarvestTableItemFragmentDoc = gql`
     fragment HarvestTableItem on Harvest {
   id
@@ -13486,13 +13447,6 @@ export const PortfolioTableItemFragmentDoc = gql`
   }
 }
     `;
-export const AccountLiveUrlItemFragmentDoc = gql`
-    fragment AccountLiveURLItem on Account {
-  id
-  liveURL
-  liveURLCreated
-}
-    `;
 export const LotOpportunityItemFragmentDoc = gql`
     fragment LotOpportunityItem on Lot {
   id
@@ -13555,6 +13509,23 @@ export const FileItemFragmentDoc = gql`
   displayName
   gcpFilename
   type
+}
+    `;
+export const HarvestLotOrderItemFragmentDoc = gql`
+    fragment HarvestLotOrderItem on HarvestLotOrder {
+  accountId
+  costBasis
+  gainTotal
+  id
+  lotId
+  pricePaid
+  quantity
+  taxGain
+  assetSymbol
+  dollarPerSharePnL
+  valueTotal
+  orderType
+  acquiredDate
 }
     `;
 export const HarvestTransactionItemRecordFragmentDoc = gql`
@@ -13740,6 +13711,7 @@ export const UpdateAccountDocument = gql`
     id
     name
     portfolioId
+    description
   }
 }
     `;
@@ -14107,70 +14079,6 @@ export type LotTransactionBatchQueryHookResult = ReturnType<typeof useLotTransac
 export type LotTransactionBatchLazyQueryHookResult = ReturnType<typeof useLotTransactionBatchLazyQuery>;
 export type LotTransactionBatchSuspenseQueryHookResult = ReturnType<typeof useLotTransactionBatchSuspenseQuery>;
 export type LotTransactionBatchQueryResult = Apollo.QueryResult<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>;
-export const HarvestEvalDocument = gql`
-    query HarvestEval {
-  harvestEval {
-    realizedOrders {
-      ...HarvestLotOrderItem
-    }
-    unrealizedOrders {
-      ...HarvestLotOrderItem
-    }
-    portfolioSummary {
-      realized {
-        accountCount
-        dividend
-        gainLongTerm
-        gainShortTerm
-        gainTotal
-      }
-      unrealized {
-        gainTotal
-        lossTotal
-        accountCount
-        positionCount
-      }
-      harvest {
-        realized
-        unrealized
-        total
-      }
-    }
-  }
-}
-    ${HarvestLotOrderItemFragmentDoc}`;
-
-/**
- * __useHarvestEvalQuery__
- *
- * To run a query within a React component, call `useHarvestEvalQuery` and pass it any options that fit your needs.
- * When your component renders, `useHarvestEvalQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useHarvestEvalQuery({
- *   variables: {
- *   },
- * });
- */
-export function useHarvestEvalQuery(baseOptions?: Apollo.QueryHookOptions<HarvestEvalQuery, HarvestEvalQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<HarvestEvalQuery, HarvestEvalQueryVariables>(HarvestEvalDocument, options);
-      }
-export function useHarvestEvalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HarvestEvalQuery, HarvestEvalQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<HarvestEvalQuery, HarvestEvalQueryVariables>(HarvestEvalDocument, options);
-        }
-export function useHarvestEvalSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<HarvestEvalQuery, HarvestEvalQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<HarvestEvalQuery, HarvestEvalQueryVariables>(HarvestEvalDocument, options);
-        }
-export type HarvestEvalQueryHookResult = ReturnType<typeof useHarvestEvalQuery>;
-export type HarvestEvalLazyQueryHookResult = ReturnType<typeof useHarvestEvalLazyQuery>;
-export type HarvestEvalSuspenseQueryHookResult = ReturnType<typeof useHarvestEvalSuspenseQuery>;
-export type HarvestEvalQueryResult = Apollo.QueryResult<HarvestEvalQuery, HarvestEvalQueryVariables>;
 export const HarvestsDocument = gql`
     query Harvests($where: HarvestWhereInput) {
   harvests(where: $where) {
@@ -14475,83 +14383,6 @@ export type PortfolioByIdQueryHookResult = ReturnType<typeof usePortfolioByIdQue
 export type PortfolioByIdLazyQueryHookResult = ReturnType<typeof usePortfolioByIdLazyQuery>;
 export type PortfolioByIdSuspenseQueryHookResult = ReturnType<typeof usePortfolioByIdSuspenseQuery>;
 export type PortfolioByIdQueryResult = Apollo.QueryResult<PortfolioByIdQuery, PortfolioByIdQueryVariables>;
-export const AccountLiveUrlDocument = gql`
-    query AccountLiveURL($accountId: String!) {
-  account(id: $accountId) {
-    ...AccountLiveURLItem
-  }
-}
-    ${AccountLiveUrlItemFragmentDoc}`;
-
-/**
- * __useAccountLiveUrlQuery__
- *
- * To run a query within a React component, call `useAccountLiveUrlQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccountLiveUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAccountLiveUrlQuery({
- *   variables: {
- *      accountId: // value for 'accountId'
- *   },
- * });
- */
-export function useAccountLiveUrlQuery(baseOptions: Apollo.QueryHookOptions<AccountLiveUrlQuery, AccountLiveUrlQueryVariables> & ({ variables: AccountLiveUrlQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AccountLiveUrlQuery, AccountLiveUrlQueryVariables>(AccountLiveUrlDocument, options);
-      }
-export function useAccountLiveUrlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountLiveUrlQuery, AccountLiveUrlQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AccountLiveUrlQuery, AccountLiveUrlQueryVariables>(AccountLiveUrlDocument, options);
-        }
-export function useAccountLiveUrlSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccountLiveUrlQuery, AccountLiveUrlQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AccountLiveUrlQuery, AccountLiveUrlQueryVariables>(AccountLiveUrlDocument, options);
-        }
-export type AccountLiveUrlQueryHookResult = ReturnType<typeof useAccountLiveUrlQuery>;
-export type AccountLiveUrlLazyQueryHookResult = ReturnType<typeof useAccountLiveUrlLazyQuery>;
-export type AccountLiveUrlSuspenseQueryHookResult = ReturnType<typeof useAccountLiveUrlSuspenseQuery>;
-export type AccountLiveUrlQueryResult = Apollo.QueryResult<AccountLiveUrlQuery, AccountLiveUrlQueryVariables>;
-export const UpdateAccountLiveUrlDocument = gql`
-    mutation UpdateAccountLiveURL($accountId: String!, $accountUpdateInput: AccountUpdateInput!) {
-  updateAccount(
-    accountWhereUniqueInput: {id: $accountId}
-    accountUpdateInput: $accountUpdateInput
-  ) {
-    ...AccountLiveURLItem
-  }
-}
-    ${AccountLiveUrlItemFragmentDoc}`;
-export type UpdateAccountLiveUrlMutationFn = Apollo.MutationFunction<UpdateAccountLiveUrlMutation, UpdateAccountLiveUrlMutationVariables>;
-
-/**
- * __useUpdateAccountLiveUrlMutation__
- *
- * To run a mutation, you first call `useUpdateAccountLiveUrlMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAccountLiveUrlMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateAccountLiveUrlMutation, { data, loading, error }] = useUpdateAccountLiveUrlMutation({
- *   variables: {
- *      accountId: // value for 'accountId'
- *      accountUpdateInput: // value for 'accountUpdateInput'
- *   },
- * });
- */
-export function useUpdateAccountLiveUrlMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAccountLiveUrlMutation, UpdateAccountLiveUrlMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateAccountLiveUrlMutation, UpdateAccountLiveUrlMutationVariables>(UpdateAccountLiveUrlDocument, options);
-      }
-export type UpdateAccountLiveUrlMutationHookResult = ReturnType<typeof useUpdateAccountLiveUrlMutation>;
-export type UpdateAccountLiveUrlMutationResult = Apollo.MutationResult<UpdateAccountLiveUrlMutation>;
-export type UpdateAccountLiveUrlMutationOptions = Apollo.BaseMutationOptions<UpdateAccountLiveUrlMutation, UpdateAccountLiveUrlMutationVariables>;
 export const StripeSessionDocument = gql`
     query StripeSession($stripePriceId: String!, $stripeCustomerId: String!) {
   stripeSession(

@@ -1,3 +1,5 @@
+'use client';
+
 import { z } from 'zod';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import {

@@ -149,10 +149,10 @@ function TransactionCard({
             )}
           </div>
           <Badge className="ml-4">
-            {Format.money(
+            {/* {Format.money(
               Number(transaction.harvestTransactionItem.asset.lastPrice) *
                 transaction.harvestTransactionItem.quantity
-            )}
+            )} */}
           </Badge>
         </CardTitle>
       </CardHeader>
@@ -203,10 +203,10 @@ function TransactionCard({
                   Total Change
                 </p>
                 <p className="text-md">
-                  {Format.money(
+                  {/* {Format.money(
                     Number(transaction.harvestTransactionItem.asset.lastPrice) *
                       transaction.harvestTransactionItem.quantity
-                  )}
+                  )} */}
                 </p>
               </div>
             </div>
@@ -256,11 +256,11 @@ function TransactionCard({
                     Total Change
                   </p>
                   <p className="text-md">
-                    {Format.money(
+                    {/* {Format.money(
                       Number(
                         transaction.replacementTransactionItem.asset.lastPrice
                       ) * transaction.replacementTransactionItem.quantity
-                    )}
+                    )} */}
                   </p>
                 </div>
               </div>

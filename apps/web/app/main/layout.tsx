@@ -26,7 +26,6 @@ import { capitalCase } from 'change-case';
 import ThemeButton from './theme-button';
 import { NavTree } from './nav-tree';
 import { UserProvider } from './user.provider';
-import { ViewContextProvider } from './view-context.provider';
 import ApolloProviderWrapper from './ApolloProviderWrapper';
 
 import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs';
@@ -51,61 +50,57 @@ export default function MainLayout({
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <UserProvider>
                 <PortfolioProvider>
-                  <ViewContextProvider>
-                    <Dashboard
-                      pathname={pathname}
-                      header={<PortfolioSwitcher />}
-                      breadcrumb={
-                        <Breadcrumb>
-                          <BreadcrumbList>
-                            {breadcrumbs.map(({ title, link }, index) => {
-                              const formattedTitle = capitalCase(title);
-                              return index === breadcrumbs.length - 1 ? (
-                                <BreadcrumbItem key={title}>
-                                  <BreadcrumbPage>
+                  <Dashboard
+                    pathname={pathname}
+                    header={<PortfolioSwitcher />}
+                    breadcrumb={
+                      <Breadcrumb>
+                        <BreadcrumbList>
+                          {breadcrumbs.map(({ title, link }, index) => {
+                            const formattedTitle = capitalCase(title);
+                            return index === breadcrumbs.length - 1 ? (
+                              <BreadcrumbItem key={title}>
+                                <BreadcrumbPage>
+                                  {formattedTitle}
+                                </BreadcrumbPage>
+                              </BreadcrumbItem>
+                            ) : (
+                              <div
+                                className="flex items-center gap-x-2"
+                                key={title}
+                              >
+                                <BreadcrumbItem className="hidden md:flex">
+                                  <BreadcrumbLink href={link}>
                                     {formattedTitle}
-                                  </BreadcrumbPage>
+                                  </BreadcrumbLink>
                                 </BreadcrumbItem>
-                              ) : (
-                                <div
-                                  className="flex items-center gap-x-2"
-                                  key={title}
-                                >
-                                  <BreadcrumbItem className="hidden md:flex">
-                                    <BreadcrumbLink href={link}>
-                                      {formattedTitle}
-                                    </BreadcrumbLink>
-                                  </BreadcrumbItem>
-                                  <BreadcrumbSeparator
-                                    key={title + 'separtor'}
-                                    className="hidden md:flex"
-                                  />
-                                </div>
-                              );
-                            })}
-                          </BreadcrumbList>
-                        </Breadcrumb>
-                      }
-                      sidebarOptions={
-                        <>
-                          <SignedIn>
-                            <PlaidConnectButton />
-                            <UserButton />
-                            <ThemeButton />
-                          </SignedIn>
-                        </>
-                      }
-                      navGroups={NavTree}
-                      userRole={
-                        clerkUser.user?.publicMetadata.role as
-                          | string
-                          | undefined
-                      }
-                    >
-                      {children}
-                    </Dashboard>
-                    <Toaster />
-                  </ViewContextProvider>
+                                <BreadcrumbSeparator
+                                  key={title + 'separtor'}
+                                  className="hidden md:flex"
+                                />
+                              </div>
+                            );
+                          })}
+                        </BreadcrumbList>
+                      </Breadcrumb>
+                    }
+                    sidebarOptions={
+                      <>
+                        <SignedIn>
+                          <PlaidConnectButton />
+                          <UserButton />
+                          <ThemeButton />
+                        </SignedIn>
+                      </>
+                    }
+                    navGroups={NavTree}
+                    userRole={
+                      clerkUser.user?.publicMetadata.role as string | undefined
+                    }
+                  >
+                    {children}
+                  </Dashboard>
+                  <Toaster />
                 </PortfolioProvider>
               </UserProvider>
             </ThemeProvider>

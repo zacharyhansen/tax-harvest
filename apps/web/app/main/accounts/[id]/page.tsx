@@ -80,11 +80,11 @@ function AccountForm({ account }: { account: AccountItemFragment }) {
     z.infer<typeof accountFormSchema>
   >({
     defaultValues: {
-      deferredLoss: account._realizedProfitAndLoss.deferredLoss,
+      deferredLoss: Number(account._realizedProfitAndLoss.deferredLoss),
       description: account.description,
-      dividend: account._realizedProfitAndLoss.dividend,
-      longTerm: account._realizedProfitAndLoss.longTerm,
-      shortTerm: account._realizedProfitAndLoss.shortTerm,
+      dividend: Number(account._realizedProfitAndLoss.dividend),
+      longTerm: Number(account._realizedProfitAndLoss.longTerm),
+      shortTerm: Number(account._realizedProfitAndLoss.shortTerm),
     },
     resolver: zodResolver(accountFormSchema),
     handleSubmit: ({
@@ -113,24 +113,35 @@ function AccountForm({ account }: { account: AccountItemFragment }) {
               id: account._realizedProfitAndLoss.id,
               input: {
                 deferredLoss: {
-                  set: deferredLoss,
+                  set: deferredLoss.toString(),
                 },
                 dividend: {
-                  set: dividend,
+                  set: dividend.toString(),
                 },
                 longTerm: {
-                  set: longTerm,
+                  set: longTerm.toString(),
                 },
                 shortTerm: {
-                  set: shortTerm,
+                  set: shortTerm.toString(),
                 },
               },
             },
           }),
         ]).then(([updateAccount, updateRealizedPAndL]) => {
           form.reset({
-            ...updateAccount.data?.updateAccount,
-            ...updateRealizedPAndL.data?.updateRealizedPAndL,
+            deferredLoss: Number(
+              updateRealizedPAndL.data?.updateRealizedPAndL.deferredLoss
+            ),
+            description: updateAccount.data?.updateAccount.description,
+            dividend: Number(
+              updateRealizedPAndL.data?.updateRealizedPAndL.dividend
+            ),
+            longTerm: Number(
+              updateRealizedPAndL.data?.updateRealizedPAndL.longTerm
+            ),
+            shortTerm: Number(
+              updateRealizedPAndL.data?.updateRealizedPAndL.shortTerm
+            ),
           });
         }),
         {

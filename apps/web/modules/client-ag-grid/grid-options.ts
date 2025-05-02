@@ -1,3 +1,5 @@
+'use client';
+
 import { themeBalham, themeQuartz, type GridOptions } from 'ag-grid-community';
 
 import { dataTypeDefinitions } from './data-type-definitions';

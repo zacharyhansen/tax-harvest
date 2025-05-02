@@ -3,17 +3,18 @@ import 'server-only';
 import { Check } from 'lucide-react';
 import Stripe from 'stripe';
 import {
-  Badge,
-  Button,
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from 'ui';
-import { PricingOptions } from 'modules/pricing';
-import Price from 'modules/pricing/Price';
+} from '@repo/ui/components/card';
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+
+import { PricingOptions } from '~/modules/pricing';
+import Price from '~/modules/pricing/Price';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
