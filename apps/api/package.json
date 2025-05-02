@@ -25,7 +25,7 @@
   "packageManager": "pnpm@9.14.2",
   "main": "dist/main.js",
   "scripts": {
-    "build": "npx prisma generate && pnpm codegen && node --run build:clean && nest build --path tsconfig.prod.json",
+    "build": "npx prisma generate && pnpm codegen:kysely && node --run build:clean && nest build --path tsconfig.prod.json",
     "start": "node dist/main.js",
     "dev": "nest start --watch --debug=0.0.0.0:9229",
     "test": "rimraf coverage .nyc_output && concurrently 'node --run test:unit' 'node --run test:e2e' && node --run calculate-global-test-coverage",
