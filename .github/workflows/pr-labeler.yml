@@ -7,7 +7,7 @@ on:
 
 jobs:
   label-pr:
-    name: 'Label PR based on changed files 🏷️'
+    name: 'PR labeler 🏷️'
     runs-on: ubuntu-latest
     permissions:
       contents: read
