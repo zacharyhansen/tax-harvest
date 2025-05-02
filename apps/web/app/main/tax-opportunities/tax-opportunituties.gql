@@ -1,0 +1,53 @@
+fragment LotOpportunityItem on Lot {
+  id
+  acquiredDate
+  costTotal
+  price
+  remainingQty
+  assetSymbol
+  totalCostForGainPct
+  asset {
+    symbol
+    lastPrice
+  }
+  account {
+    id
+    externalId
+    name
+    type
+  }
+}
+
+query LotFilteredOpportunities($where: LotWhereInput) {
+  lots(where: $where) {
+    ...LotOpportunityItem
+  }
+  portfolioSummary {
+    realized {
+      accountCount
+      dividend
+      gainLongTerm
+      gainShortTerm
+      gainTotal
+    }
+    unrealized {
+      gainTotal
+      lossTotal
+      accountCount
+      positionCount
+    }
+    harvest {
+      realized
+      unrealized
+      total
+    }
+    setUpStatus
+    harvestRecommendations {
+      harvestType
+      amountRealized
+      amountTotal
+      amountUnrealized
+      recommended
+    }
+  }
+}

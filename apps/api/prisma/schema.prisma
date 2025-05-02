@@ -323,7 +323,7 @@ model LotTransactionBatch {
   lotChangeLog   LotChangeLog[]
   portfolio      Portfolio      @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
-  @@index([portfolioId])
+  @@index([portfolioId, createdAt(sort: Desc)])
 }
 
 model LotChangeLog {
@@ -335,14 +335,15 @@ model LotChangeLog {
   portfolioId           String        @db.Uuid
   lotBefore             Json?
   lotAfter              Json?
+  quantityChange        Decimal?      @db.Decimal(14, 4)
   source                String?
   processed             Boolean       @default(false)
-  lotTransactionBatchId String?       @db.Uuid
+  lotTransactionBatchId String        @db.Uuid
   transactionId         String?       @db.Uuid
 
-  lotTransactionBatch LotTransactionBatch? @relation(fields: [lotTransactionBatchId], references: [id], onDelete: SetNull)
-  transaction         Transaction?         @relation(fields: [transactionId], references: [id], onDelete: SetNull)
-  lot                 Lot?                 @relation(fields: [lotId], references: [id], onDelete: SetNull)
+  lotTransactionBatch LotTransactionBatch @relation(fields: [lotTransactionBatchId], references: [id], onDelete: Cascade)
+  transaction         Transaction?        @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  lot                 Lot?                @relation(fields: [lotId], references: [id], onDelete: SetNull)
 
   @@index([portfolioId, lotTransactionBatchId])
   @@index([portfolioId, transactionId])

@@ -1,7 +1,6 @@
 'use client';
 
 import { Alert } from '@repo/ui/components/alert';
-import type { PostgrestError } from '@supabase/postgrest-js';
 import clsx from 'clsx';
 import type { ReactNode, ReactElement } from 'react';
 import {
@@ -17,11 +16,11 @@ import { useTheme } from 'next-themes';
 import { cn } from '@repo/ui/utils';
 import { Input } from '@repo/ui/components/input';
 import { Button } from '@repo/ui/components/button';
-import type { TRPCClientErrorBase } from '@trpc/client';
-import type { DefaultErrorShape } from '@trpc/server/unstable-core-do-not-import';
 import type { AgGridReact } from 'ag-grid-react';
 
 import { LoadingIcon } from '../utility-components';
+
+import { themeQuartzGridOptions } from './grid-options';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -30,7 +29,7 @@ export interface AgGridWrapperProps {
   children: ReactElement;
   rightBar?: ReactNode;
   title?: string;
-  error?: PostgrestError | TRPCClientErrorBase<DefaultErrorShape> | null;
+  error?: Error | null;
   loading?: boolean;
   className?: string;
   gridApi?: GridApi;
@@ -52,12 +51,28 @@ export default function AgGridWrapper({
   const theme = useTheme();
 
   // Clone the AgGridReact child with the ref, with proper type checking
+  const childProps = isValidElement(children)
+    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (children as ReactElement<any>).props
+    : {};
+
+  // Determine if we need to add the cursor-pointer class
+  const hasOnRowClicked = !!childProps.onRowClicked;
+  const existingRowClass = childProps.rowClass || '';
+  const rowClass = hasOnRowClicked
+    ? existingRowClass
+      ? `${existingRowClass} cursor-pointer`
+      : 'cursor-pointer'
+    : existingRowClass;
+
   const childWithRef = isValidElement(children)
     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cloneElement(children as ReactElement<any>, {
         ref: gridRef,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ...(children as ReactElement<any>).props,
+        ...themeQuartzGridOptions,
+        ...childProps,
+        // Apply the determined rowClass if needed
+        ...(hasOnRowClicked ? { rowClass } : {}),
       })
     : children;
 

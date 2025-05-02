@@ -3447,7 +3447,7 @@
           "name": "lotTransactionBatchId",
           "columnName": "lotTransactionBatchId",
           "type": "uuid",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -3499,6 +3499,20 @@
           "maxLength": null
         },
         {
+          "id": "public.LotChangeLog.quantityChange",
+          "name": "quantityChange",
+          "columnName": "quantityChange",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Lot",
           "type": "Lot",
           "isRequired": false,
@@ -3515,7 +3529,7 @@
         {
           "name": "LotTransactionBatch",
           "type": "LotTransactionBatch",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "object",
           "relationName": "LotChangeLogToLotTransactionBatch",
           "relationFromFields": ["lotTransactionBatchId"],

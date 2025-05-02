@@ -1,0 +1,58 @@
+fragment lotTransactionBatch on LotTransactionBatch {
+  id
+  createdAt
+  updatedAt
+  authConnectionId
+}
+
+query LotTransactionBatches {
+  lotTransactionBatches {
+    ...lotTransactionBatch
+  }
+}
+
+fragment lotTransactionBatchDetails on LotTransactionBatch {
+  id
+  createdAt
+  updatedAt
+  authConnectionId
+  positionsBefore
+  positionsAfter
+  holdingsPayload
+  lotTupleMap
+  initialLots
+  newTransactions
+  newBuys
+  newSells
+  lotChangeLog {
+    id
+    createdAt
+    lotId
+    accountId
+    portfolioId
+    lotBefore
+    lotAfter
+    operationType
+    source
+    processed
+    quantityChange
+    lotTransactionBatchId
+    lot {
+      id
+      remainingQty
+      price
+      acquiredDate
+      assetSymbol
+      account {
+        id
+        name
+      }
+    }
+  }
+}
+
+query LotTransactionBatch($lotTransactionBatchId: String!) {
+  lotTransactionBatch(lotTransactionBatchId: $lotTransactionBatchId) {
+    ...lotTransactionBatchDetails
+  }
+}

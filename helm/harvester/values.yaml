@@ -1,0 +1,173 @@
+harvester-web:
+  fullnameOverride: harvester-web
+  serviceAccountName: google-secret-service-account
+  namespace: harvester
+  labels:
+    app: frontend
+  selectorLabels:
+    app: harvester-web
+  service:
+    port: 3000
+  image:
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
+    tag: 'v2.0.0'
+  livenessProbe:
+    httpGet:
+      path: /api/health
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /api/health
+      port: http
+  extraEnvVars:
+    - name: CLERK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: clerk
+          key: CLERK_SECRET_KEY
+    - name: STRIPE_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: stripe
+          key: STRIPE_SECRET_KEY
+    - name: 'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY'
+      value: 'pk_test_aGVscGVkLWVtdS04NC5jbGVyay5hY2NvdW50cy5kZXYk'
+    - name: 'NEXT_PUBLIC_CLERK_SIGN_IN_URL'
+      value: '/auth/signin'
+    - name: 'NEXT_PUBLIC_CLERK_SIGN_UP_URL'
+      value: '/auth/signup'
+    - name: 'NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL'
+      value: '/dashboard/home'
+    - name: 'NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL'
+      value: '/dashboard/home'
+    - name: 'NEXT_PUBLIC_STRIPE_PUBLIC_KEY'
+      value: 'pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk'
+    - name: 'NEXT_PUBLIC_CORE_SERVER_URL'
+      value: 'http://34.49.198.140'
+harvester-api:
+  fullnameOverride: harvester-api
+  serviceAccountName: google-secret-service-account
+  namespace: harvester
+  labels:
+    app: backend
+  image:
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
+    tag: 'v2.0.0'
+  service:
+    port: 5000
+  nodeSelector:
+    iam.gke.io/gke-metadata-server-enabled: 'true'
+  cloudSqlProxy:
+    enabled: true
+    port: 5432
+  livenessProbe:
+    httpGet:
+      path: /core/health
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /core/health
+      port: http
+  migrationsJob:
+    enabled: false
+    containerCommand: ['/bin/sh', '-c']
+    containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
+    cloudSqlProxy:
+      enabled: true
+      port: 5432
+    extraEnvVars:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: database
+            key: DATABASE_URL
+  extraEnvVars:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: database
+          key: DATABASE_URL
+    - name: CLERK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: clerk
+          key: CLERK_SECRET_KEY
+    - name: 'PLAID_ENV'
+      value: 'https://production.plaid.com'
+    - name: 'CLIENT_ORIGIN'
+      value: 'http://dev.taxharvest.ai'
+    - name: 'CLIENT_HOME_PAGE_PATH'
+      value: '/main/home'
+    - name: CRON
+      value: true
+    - name: 'NODE_ENV'
+      value: 'production'
+    - name: 'ETRADE_OAUTH_AUTHORIZE_URL'
+      value: 'https://us.etrade.com/e/t/etws/authorize'
+    - name: 'ETRADE_HOSTNAME'
+      value: 'api.etrade.com'
+    - name: 'GOOGLE_PROJECT'
+      value: 'harvester-ai-428202'
+    - name: 'SECRET_SOURCE'
+      value: 'GSM'
+    - name: 'GCS_LOTS_BUCKET_NAME'
+      value: 'lot_upload'
+    - name: 'PORT'
+      value: 5000
+    - name: 'ORIGIN'
+      value: 'http://34.49.198.140'
+harvester-studio:
+  fullnameOverride: harvester-studio
+  serviceAccountName: google-secret-service-account
+  namespace: harvester
+  labels:
+    app: backend
+  image:
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-studio
+    tag: 'v2.0.0'
+  service:
+    port: 5555
+  nodeSelector:
+    iam.gke.io/gke-metadata-server-enabled: 'true'
+  cloudSqlProxy:
+    enabled: true
+    port: 5432
+  livenessProbe:
+    httpGet:
+      path: /
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /
+      port: http
+  extraEnvVars:
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: database
+          key: DATABASE_URL
+    - name: 'NODE_ENV'
+      value: 'production'
+    - name: 'GOOGLE_PROJECT'
+      value: 'harvester-ai-428202'
+# ingress-nginx:
+#   namespaceOverride: harvester
+#   controller:
+#     autoscaling:
+#       minReplicas: 1
+#       maxReplicas: 3
+#       enabled: true
+external-secrets:
+  namespaceOverride: secrets
+# example service spec
+# my-example:
+#   image:
+#     repository: nginxdemos/hello
+#   # Scaling
+#   autoscaling:
+#     minReplicas: 2
+#     maxReplicas: 10
+#     enabled: true
+#   extraEnvVars:
+#     - name: 'EXAMPLE_ENV_VAR'
+#       value: 'example_env_var'

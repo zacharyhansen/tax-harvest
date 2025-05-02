@@ -43,13 +43,24 @@ export const TypedRoutes = {
     ({ lotId }) => `/main/lots/${lotId}`,
     z.object({ lotId: z.string() })
   ),
-  logs: makeRoute(() => `/main/logs`),
+  logs: makeRoute(() => `/main/admin/logs`),
+  log: makeRoute(
+    ({ logId }) => `/main/admin/logs/${logId}`,
+    z.object({ logId: z.coerce.number() })
+  ),
+  lotTransactionBatch: makeRoute(
+    ({ lotTransactionBatchId }) =>
+      `/main/admin/plaid-history/${lotTransactionBatchId}`,
+    z.object({ lotTransactionBatchId: z.string() })
+  ),
+  plaidHistory: makeRoute(() => `/main/admin/plaid-history`),
   portfolios: makeRoute(() => `/main/portfolios`),
   settings: makeRoute(() => `/main/settings`),
+  taxOpportunities: makeRoute(() => `/main/tax-opportunities`),
   transactions: makeRoute(() => `/main/transactions`),
-  users: makeRoute(() => `/main/users`),
+  users: makeRoute(() => `/main/admin/users`),
   user: makeRoute(
-    ({ userId }) => `/main/users/${userId}`,
+    ({ userId }) => `/main/admin/users/${userId}`,
     z.object({ userId: z.string() })
   ),
 

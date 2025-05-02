@@ -17,6 +17,7 @@ import {
 export interface NavGroup {
   title: string;
   items: NavItem[];
+  roles?: string[];
 }
 
 export function Dashboard({
@@ -26,6 +27,7 @@ export function Dashboard({
   sidebarOptions,
   pathname,
   header,
+  userRole,
 }: Readonly<{
   navGroups: NavGroup[];
   breadcrumb: ReactNode;
@@ -33,20 +35,25 @@ export function Dashboard({
   sidebarOptions: ReactNode;
   pathname: string;
   header?: ReactNode;
+  userRole?: string;
 }>) {
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
         <SidebarHeader className="h-14">{header ?? null}</SidebarHeader>
         <SidebarContent>
-          {navGroups.map(group => (
-            <NavMain
-              key={group.title}
-              title={group.title}
-              items={group.items}
-              pathname={pathname}
-            />
-          ))}
+          {navGroups
+            .filter(group =>
+              group.roles ? group.roles.includes(userRole ?? '') : true
+            )
+            .map(group => (
+              <NavMain
+                key={group.title}
+                title={group.title}
+                items={group.items}
+                pathname={pathname}
+              />
+            ))}
         </SidebarContent>
         <SidebarFooter>
           {/* <NavUser

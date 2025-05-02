@@ -56,6 +56,7 @@ export class PortfolioService {
     const portfolio = await this.getPortfolioById(portfolioId);
 
     await this.clerkService.updatePublicMetaData(clerkContext.sub, {
+      ...clerkContext.metadata,
       portfolioId: portfolio.id,
     });
 
@@ -152,6 +153,7 @@ export class PortfolioService {
     });
 
     await this.clerkService.updatePublicMetaData(clerkContext.sub, {
+      ...clerkContext.metadata,
       portfolioId: portfolio.id,
     });
 
@@ -209,8 +211,10 @@ export class PortfolioService {
       throw new Error("Unauthorized access to portfolio");
     }
 
+    const clerkUser = await this.clerkService.user(userId);
     // Set the portfolio on the clerk meta data so they are authed for it
     await this.clerkService.updatePublicMetaData(userId, {
+      ...clerkUser.publicMetadata,
       portfolioId: authedPortfolio.id,
     });
 
