@@ -1,4 +1,4 @@
-name: PR Scope Labeler
+name: Scope
 
 on:
   pull_request:
