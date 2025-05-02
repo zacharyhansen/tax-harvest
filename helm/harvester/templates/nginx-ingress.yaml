@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  namespace: harvester
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.allow-http: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: harvester-web
+                port:
+                  name: http
+          - pathType: Prefix
+            path: /core
+            backend:
+              service:
+                name: harvester-api
+                port:
+                  name: http
+          - pathType: ImplementationSpecific
+            path: /api
+            backend:
+              service:
+                name: harvester-studio
+                port:
+                  name: http
+          - pathType: ImplementationSpecific
+            path: /http
+            backend:
+              service:
+                name: harvester-studio
+                port:
+                  name: http
+          - pathType: ImplementationSpecific
+            path: /assets
+            backend:
+              service:
+                name: harvester-studio
+                port:
+                  name: http
+          - pathType: ImplementationSpecific
+            path: /index.css
+            backend:
+              service:
+                name: harvester-studio
+                port:
+                  name: http

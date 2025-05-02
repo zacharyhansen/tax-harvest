@@ -1,0 +1,66 @@
+'use client';
+
+import type { ColDef } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
+
+import { useLogsQuery } from '~/generated/gql';
+import { TypedRoutes } from '~/lib/routes';
+import { AgGridWrapper } from '~/modules/client-ag-grid';
+import { PageWrapper } from '~/modules/layout';
+import { ErrorPage } from '~/modules/utility-components';
+
+export default function LogsPage() {
+  const router = useRouter();
+  const { data, error, loading } = useLogsQuery({
+    variables: {},
+  });
+
+  const columnDefs: ColDef[] = useMemo(() => {
+    return [
+      {
+        headerName: 'ID',
+        field: 'id',
+        width: 50,
+      },
+      {
+        headerName: 'Description',
+        field: 'description',
+        flex: 1,
+      },
+      {
+        headerName: 'Response Status',
+        field: 'responseStatus',
+      },
+      {
+        headerName: 'Source',
+        field: 'source',
+      },
+      { headerName: 'Type', field: 'type' },
+      { headerName: 'Created At', field: 'createdAt', cellDataType: 'date' },
+    ] satisfies ColDef[];
+  }, []);
+
+  if (error) {
+    return <ErrorPage message={JSON.stringify(error)} />;
+  }
+
+  return (
+    <PageWrapper>
+      <AgGridWrapper>
+        <AgGridReact
+          columnDefs={columnDefs}
+          rowData={data?.logs}
+          rowSelection="single"
+          onRowClicked={row => {
+            if (row.data) {
+              router.push(TypedRoutes.log({ logId: row.data.id }));
+            }
+          }}
+          loading={loading}
+        />
+      </AgGridWrapper>
+    </PageWrapper>
+  );
+}

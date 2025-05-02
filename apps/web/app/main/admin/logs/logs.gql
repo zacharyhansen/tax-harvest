@@ -1,0 +1,31 @@
+fragment log on Log {
+  id
+  createdAt
+  description
+  responseStatus
+  source
+  type
+}
+
+query Logs($pagination: PaginationProps) {
+  logs(pagination: $pagination) {
+    ...log
+  }
+  logsCount
+}
+
+fragment logDetails on Log {
+  id
+  createdAt
+  description
+  responseStatus
+  source
+  type
+  data
+}
+
+query Log($logId: Int!) {
+  log(logId: $logId) {
+    ...logDetails
+  }
+}

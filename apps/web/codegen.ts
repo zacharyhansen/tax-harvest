@@ -18,6 +18,9 @@ const config: CodegenConfig = {
         withHooks: true,
         withComponent: false,
         withHOC: false,
+        scalars: {
+          Decimal: 'string',
+        },
       },
     },
   },

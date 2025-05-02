@@ -6,6 +6,7 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useUser,
 } from '@clerk/nextjs';
 import MediaProvider from '@repo/ui/providers/media-provider';
 import { ThemeProvider } from '@repo/ui/providers/theme-provider';
@@ -40,6 +41,8 @@ export default function MainLayout({
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const breadcrumbs = useBreadcrumbs() || [];
   const pathname = usePathname();
+  const clerkUser = useUser();
+
   return (
     <ClerkLoaded>
       <ApolloProviderWrapper>
@@ -93,6 +96,11 @@ export default function MainLayout({
                         </>
                       }
                       navGroups={NavTree}
+                      userRole={
+                        clerkUser.user?.publicMetadata.role as
+                          | string
+                          | undefined
+                      }
                     >
                       {children}
                     </Dashboard>

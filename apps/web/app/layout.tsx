@@ -2,6 +2,7 @@ import '@repo/ui/tailwind.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { cn } from '@repo/ui/utils';
 import { Inter } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({
   display: 'swap',
@@ -20,6 +21,8 @@ export default function LocaleLayout({
       suppressHydrationWarning={true}
     >
       <body>
+        <NextTopLoader color="#faa700" showSpinner={false} />
+
         <ClerkProvider
           afterSignOutUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
           signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}

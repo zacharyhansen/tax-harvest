@@ -366,6 +366,7 @@ export class PlaidService {
   }: {
     authConnection: AuthConnection;
   }): Promise<void> {
+    this.logger.log("Applying new transactions");
     const [finalPositions, initialLots, transactions] = await Promise.all([
       this.prismaService.position.findMany({
         where: {
@@ -393,6 +394,10 @@ export class PlaidService {
             },
           },
           appliedToLots: false,
+        },
+        // Important to order by transaction date descending since greedy FIFO assume newest first
+        orderBy: {
+          transactionDate: "desc",
         },
       }),
     ]);
@@ -443,16 +448,6 @@ export class PlaidService {
           }).lotChanges;
         },
       );
-
-      await this.prismaService.log.create({
-        data: {
-          data: JSON.parse(JSON.stringify({ lotResults })),
-          description: "Trx merge results",
-          source: AuthSource.PLAID,
-          type: LogType.PLAID_TRX_MERGE,
-          portfolioId: authConnection.portfolioId,
-        },
-      });
     } catch (error) {
       console.error(error);
       await this.prismaService.log.create({
@@ -472,12 +467,14 @@ export class PlaidService {
         data: {
           authConnectionId: authConnection.id,
           portfolioId: authConnection.portfolioId,
-          positionsAfter: JSON.stringify(finalPositions),
-          lotTupleMap: JSON.stringify(lotTupleMap),
-          initialLots: JSON.stringify(initialLots),
-          newTransactions: JSON.stringify(newTransactions),
-          newBuys: JSON.stringify(newBuys),
-          newSells: JSON.stringify(newSells),
+          positionsAfter: finalPositions,
+          lotTupleMap: JSON.parse(
+            JSON.stringify(Array.from(lotTupleMap.entries())),
+          ),
+          initialLots,
+          newTransactions,
+          newBuys,
+          newSells,
         },
       });
 
@@ -499,21 +496,58 @@ export class PlaidService {
         ),
       );
 
-      await trx.lotChangeLog.createMany({
-        data: lotUpsertResults.map((upsert, index) => {
-          return {
-            lotTransactionBatchId: lotTransactionBatch.id,
-            lotId: upsert.id,
-            accountId: upsert.account.connect?.id ?? "",
-            portfolioId: authConnection.portfolioId,
-            lotBefore: intitialLotMap.get(upsert.id ?? ""),
-            lotAfter: JSON.parse(JSON.stringify(upsert)),
-            operationType: lotResults[index].isNewBuy
-              ? OperationType.create
-              : OperationType.update,
-          };
+      await Promise.all([
+        // update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
+        trx.account.updateMany({
+          where: {
+            authConnection: {
+              id: authConnection.id,
+            },
+          },
+          data: {
+            lotSeededDate: transactions[0]?.transactionDate ?? undefined,
+          },
         }),
-      });
+        // update appliedToLots to true so we know we do not need to process these again
+        trx.transaction.updateMany({
+          where: {
+            account: {
+              authConnectionId: authConnection.id,
+            },
+          },
+          data: {
+            appliedToLots: true,
+          },
+        }),
+        trx.log.create({
+          data: {
+            data: JSON.parse(JSON.stringify({ lotResults })),
+            description: "Trx merge results",
+            source: AuthSource.PLAID,
+            type: LogType.PLAID_TRX_MERGE,
+            portfolioId: authConnection.portfolioId,
+          },
+        }),
+        trx.lotChangeLog.createMany({
+          data: lotUpsertResults.map((upsert, index) => {
+            return {
+              lotTransactionBatchId: lotTransactionBatch.id,
+              lotId: upsert.id,
+              quantityChange: (
+                intitialLotMap.get(upsert.id ?? "")?.remainingQty ??
+                new Decimal(0)
+              ).minus(upsert.remainingQty as Decimal),
+              accountId: upsert.account.connect?.id ?? "",
+              portfolioId: authConnection.portfolioId,
+              lotBefore: intitialLotMap.get(upsert.id ?? ""),
+              lotAfter: JSON.parse(JSON.stringify(upsert)),
+              operationType: lotResults[index].isNewBuy
+                ? OperationType.create
+                : OperationType.update,
+            };
+          }),
+        }),
+      ]);
     });
   }
 
@@ -664,11 +698,32 @@ export class PlaidService {
       });
   }
 
+  async mostRecentTransaction({
+    authConnectionId,
+  }: {
+    authConnectionId: string;
+  }) {
+    return this.prismaService.transaction.findFirst({
+      where: {
+        account: {
+          authConnectionId: {
+            equals: authConnectionId,
+          },
+        },
+      },
+      orderBy: {
+        transactionDate: "desc",
+      },
+      select: {
+        transactionDate: true,
+      },
+    });
+  }
+
   /**
    * Updates and records plaid transactions but DOES NOT affect lots
    *
    * @param startDate The earliest/earlier date (i.e. 2 years ago)
-   * @param endDate The latest/later date (i.e. today)
    * @param page The page number to fetch
    * @param plaidAuthConnection The plaid auth connection to use
    * @param applyToLots Whether to try and apply the transactions to lots (for those transactions for the account that have occured with date > account.lotSeededDate)
@@ -690,22 +745,9 @@ export class PlaidService {
     const end_date = endDate ?? new Date();
 
     // Only need to get from most recent transaction if we are not providing a start date
-    const mostRecentTransaction =
-      await this.prismaService.transaction.findFirst({
-        where: {
-          account: {
-            authConnectionId: {
-              equals: plaidAuthConnection.id,
-            },
-          },
-        },
-        orderBy: {
-          transactionDate: "desc",
-        },
-        select: {
-          transactionDate: true,
-        },
-      });
+    const mostRecentTransaction = await this.mostRecentTransaction({
+      authConnectionId: plaidAuthConnection.id,
+    });
 
     const plaidResponse = await this.client.investmentsTransactionsGet({
       access_token: plaidAuthConnection.secret,
@@ -893,7 +935,7 @@ export class PlaidService {
   async processWebhook(webhookData: PlaidWebhook): Promise<void> {
     switch (webhookData.webhook_type) {
       case "HOLDINGS": {
-        this.logger.log("Processing Plaid holdings update:", webhookData);
+        this.logger.log("Processing Plaid holdings update");
         await this.handleHoldingsUpdate(webhookData);
         break;
       }
@@ -1004,7 +1046,7 @@ export class PlaidService {
           // Consider the transaction applied if its after the account was seeded
           appliedToLots: Boolean(
             account.lotSeededDate &&
-              account.lotSeededDate > new Date(transaction.date),
+              account.lotSeededDate >= new Date(transaction.date),
           ),
           asset: {
             // these should already exist due to the assert

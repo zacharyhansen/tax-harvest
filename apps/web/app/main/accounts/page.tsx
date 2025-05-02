@@ -8,9 +8,8 @@ import { useMemo } from 'react';
 import { NoAccounts } from '~/modules/account';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-import { AgGridWrapper, UserCell } from '~/modules/client-ag-grid';
+import { AgGridWrapper } from '~/modules/client-ag-grid';
 import { TypedRoutes } from '~/lib/routes';
-import { dataTypeDefinitions } from '~/modules/client-ag-grid/data-type-definitions';
 import { useAccountsQuery } from '~/generated/gql';
 
 export default function AccountIndex() {
@@ -36,7 +35,7 @@ export default function AccountIndex() {
       },
       { headerName: 'Type', field: 'type' },
       { headerName: 'Updated At', field: 'updatedAt', cellDataType: 'date' },
-      { headerName: 'Owner', field: 'createdBy', cellRenderer: UserCell },
+      // { headerName: 'Owner', field: 'createdBy', cellRenderer: UserCell },
     ] satisfies ColDef[];
   }, []);
 
@@ -58,10 +57,8 @@ export default function AccountIndex() {
     <PageWrapper>
       <AgGridWrapper>
         <AgGridReact
-          dataTypeDefinitions={dataTypeDefinitions}
           columnDefs={columnDefs}
           rowData={data.accounts}
-          rowSelection="single"
           onRowClicked={row => {
             if (row.data) {
               router.push(TypedRoutes.account({ id: row.data.id }));

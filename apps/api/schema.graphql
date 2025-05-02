@@ -6133,6 +6133,10 @@ type LogMinAggregate {
   type: LogType
 }
 
+input LogOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
 input LogScalarWhereInput {
   AND: [LogScalarWhereInput!]
   NOT: [LogScalarWhereInput!]
@@ -6319,14 +6323,19 @@ type LotChangeLog {
   lotAfter: JSON
   lotBefore: JSON
   lotId: String
-  lotTransactionBatch: LotTransactionBatch
-  lotTransactionBatchId: String
+  lotTransactionBatch: LotTransactionBatch!
+  lotTransactionBatchId: String!
   operationType: OperationType!
   portfolioId: String!
   processed: Boolean!
+  quantityChange: Decimal
   source: String
   transaction: Transaction
   transactionId: String
+}
+
+type LotChangeLogAvgAggregate {
+  quantityChange: Decimal
 }
 
 type LotChangeLogCountAggregate {
@@ -6341,6 +6350,7 @@ type LotChangeLogCountAggregate {
   operationType: Int!
   portfolioId: Int!
   processed: Int!
+  quantityChange: Int!
   source: Int!
   transactionId: Int!
 }
@@ -6351,10 +6361,11 @@ input LotChangeLogCreateManyLotInput {
   id: String
   lotAfter: JSON
   lotBefore: JSON
-  lotTransactionBatchId: String
+  lotTransactionBatchId: String!
   operationType: OperationType!
   portfolioId: String!
   processed: Boolean
+  quantityChange: Decimal
   source: String
   transactionId: String
 }
@@ -6374,6 +6385,7 @@ input LotChangeLogCreateManyLotTransactionBatchInput {
   operationType: OperationType!
   portfolioId: String!
   processed: Boolean
+  quantityChange: Decimal
   source: String
   transactionId: String
 }
@@ -6390,10 +6402,11 @@ input LotChangeLogCreateManyTransactionInput {
   lotAfter: JSON
   lotBefore: JSON
   lotId: String
-  lotTransactionBatchId: String
+  lotTransactionBatchId: String!
   operationType: OperationType!
   portfolioId: String!
   processed: Boolean
+  quantityChange: Decimal
   source: String
 }
 
@@ -6444,10 +6457,11 @@ input LotChangeLogCreateWithoutLotInput {
   id: String
   lotAfter: JSON
   lotBefore: JSON
-  lotTransactionBatch: LotTransactionBatchCreateNestedOneWithoutLotChangeLogInput
+  lotTransactionBatch: LotTransactionBatchCreateNestedOneWithoutLotChangeLogInput!
   operationType: OperationType!
   portfolioId: String!
   processed: Boolean
+  quantityChange: Decimal
   source: String
   transaction: TransactionCreateNestedOneWithoutLotChangeLogInput
 }
@@ -6462,6 +6476,7 @@ input LotChangeLogCreateWithoutLotTransactionBatchInput {
   operationType: OperationType!
   portfolioId: String!
   processed: Boolean
+  quantityChange: Decimal
   source: String
   transaction: TransactionCreateNestedOneWithoutLotChangeLogInput
 }
@@ -6473,10 +6488,11 @@ input LotChangeLogCreateWithoutTransactionInput {
   lot: LotCreateNestedOneWithoutLotChangeLogInput
   lotAfter: JSON
   lotBefore: JSON
-  lotTransactionBatch: LotTransactionBatchCreateNestedOneWithoutLotChangeLogInput
+  lotTransactionBatch: LotTransactionBatchCreateNestedOneWithoutLotChangeLogInput!
   operationType: OperationType!
   portfolioId: String!
   processed: Boolean
+  quantityChange: Decimal
   source: String
 }
 
@@ -6495,6 +6511,7 @@ type LotChangeLogMaxAggregate {
   operationType: OperationType
   portfolioId: String
   processed: Boolean
+  quantityChange: Decimal
   source: String
   transactionId: String
 }
@@ -6508,6 +6525,7 @@ type LotChangeLogMinAggregate {
   operationType: OperationType
   portfolioId: String
   processed: Boolean
+  quantityChange: Decimal
   source: String
   transactionId: String
 }
@@ -6522,12 +6540,17 @@ input LotChangeLogScalarWhereInput {
   lotAfter: JsonNullableFilter
   lotBefore: JsonNullableFilter
   lotId: UuidNullableFilter
-  lotTransactionBatchId: UuidNullableFilter
+  lotTransactionBatchId: UuidFilter
   operationType: EnumOperationTypeFilter
   portfolioId: UuidFilter
   processed: BoolFilter
+  quantityChange: DecimalNullableFilter
   source: StringNullableFilter
   transactionId: UuidNullableFilter
+}
+
+type LotChangeLogSumAggregate {
+  quantityChange: Decimal
 }
 
 input LotChangeLogUpdateManyMutationInput {
@@ -6539,6 +6562,7 @@ input LotChangeLogUpdateManyMutationInput {
   operationType: EnumOperationTypeFieldUpdateOperationsInput
   portfolioId: StringFieldUpdateOperationsInput
   processed: BoolFieldUpdateOperationsInput
+  quantityChange: NullableDecimalFieldUpdateOperationsInput
   source: NullableStringFieldUpdateOperationsInput
 }
 
@@ -6620,10 +6644,11 @@ input LotChangeLogUpdateWithoutLotInput {
   id: StringFieldUpdateOperationsInput
   lotAfter: JSON
   lotBefore: JSON
-  lotTransactionBatch: LotTransactionBatchUpdateOneWithoutLotChangeLogNestedInput
+  lotTransactionBatch: LotTransactionBatchUpdateOneRequiredWithoutLotChangeLogNestedInput
   operationType: EnumOperationTypeFieldUpdateOperationsInput
   portfolioId: StringFieldUpdateOperationsInput
   processed: BoolFieldUpdateOperationsInput
+  quantityChange: NullableDecimalFieldUpdateOperationsInput
   source: NullableStringFieldUpdateOperationsInput
   transaction: TransactionUpdateOneWithoutLotChangeLogNestedInput
 }
@@ -6638,6 +6663,7 @@ input LotChangeLogUpdateWithoutLotTransactionBatchInput {
   operationType: EnumOperationTypeFieldUpdateOperationsInput
   portfolioId: StringFieldUpdateOperationsInput
   processed: BoolFieldUpdateOperationsInput
+  quantityChange: NullableDecimalFieldUpdateOperationsInput
   source: NullableStringFieldUpdateOperationsInput
   transaction: TransactionUpdateOneWithoutLotChangeLogNestedInput
 }
@@ -6649,10 +6675,11 @@ input LotChangeLogUpdateWithoutTransactionInput {
   lot: LotUpdateOneWithoutLotChangeLogNestedInput
   lotAfter: JSON
   lotBefore: JSON
-  lotTransactionBatch: LotTransactionBatchUpdateOneWithoutLotChangeLogNestedInput
+  lotTransactionBatch: LotTransactionBatchUpdateOneRequiredWithoutLotChangeLogNestedInput
   operationType: EnumOperationTypeFieldUpdateOperationsInput
   portfolioId: StringFieldUpdateOperationsInput
   processed: BoolFieldUpdateOperationsInput
+  quantityChange: NullableDecimalFieldUpdateOperationsInput
   source: NullableStringFieldUpdateOperationsInput
 }
 
@@ -6685,11 +6712,12 @@ input LotChangeLogWhereInput {
   lotAfter: JsonNullableFilter
   lotBefore: JsonNullableFilter
   lotId: UuidNullableFilter
-  lotTransactionBatch: LotTransactionBatchNullableRelationFilter
-  lotTransactionBatchId: UuidNullableFilter
+  lotTransactionBatch: LotTransactionBatchRelationFilter
+  lotTransactionBatchId: UuidFilter
   operationType: EnumOperationTypeFilter
   portfolioId: UuidFilter
   processed: BoolFilter
+  quantityChange: DecimalNullableFilter
   source: StringNullableFilter
   transaction: TransactionNullableRelationFilter
   transactionId: UuidNullableFilter
@@ -6706,11 +6734,12 @@ input LotChangeLogWhereUniqueInput {
   lotAfter: JsonNullableFilter
   lotBefore: JsonNullableFilter
   lotId: UuidNullableFilter
-  lotTransactionBatch: LotTransactionBatchNullableRelationFilter
-  lotTransactionBatchId: UuidNullableFilter
+  lotTransactionBatch: LotTransactionBatchRelationFilter
+  lotTransactionBatchId: UuidFilter
   operationType: EnumOperationTypeFilter
   portfolioId: UuidFilter
   processed: BoolFilter
+  quantityChange: DecimalNullableFilter
   source: StringNullableFilter
   transaction: TransactionNullableRelationFilter
   transactionId: UuidNullableFilter
@@ -7566,7 +7595,11 @@ type LotTransactionBatchMinAggregate {
   updatedAt: DateTime
 }
 
-input LotTransactionBatchNullableRelationFilter {
+input LotTransactionBatchOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input LotTransactionBatchRelationFilter {
   is: LotTransactionBatchWhereInput
   isNot: LotTransactionBatchWhereInput
 }
@@ -7642,12 +7675,10 @@ input LotTransactionBatchUpdateManyWithoutPortfolioNestedInput {
   upsert: [LotTransactionBatchUpsertWithWhereUniqueWithoutPortfolioInput!]
 }
 
-input LotTransactionBatchUpdateOneWithoutLotChangeLogNestedInput {
+input LotTransactionBatchUpdateOneRequiredWithoutLotChangeLogNestedInput {
   connect: LotTransactionBatchWhereUniqueInput
   connectOrCreate: LotTransactionBatchCreateOrConnectWithoutLotChangeLogInput
   create: LotTransactionBatchCreateWithoutLotChangeLogInput
-  delete: LotTransactionBatchWhereInput
-  disconnect: LotTransactionBatchWhereInput
   update: LotTransactionBatchUpdateToOneWithWhereWithoutLotChangeLogInput
   upsert: LotTransactionBatchUpsertWithoutLotChangeLogInput
 }
@@ -8648,6 +8679,11 @@ enum OrderType {
   SELL
   SELL_TO_CLOSE
   SELL_TO_OPEN
+}
+
+input PaginationProps {
+  skip: Int
+  take: Int
 }
 
 input PlaidAccount {
@@ -10539,9 +10575,14 @@ type Query {
 
   """Get plaid link token for user"""
   linkToken: String!
+  log(logId: Int!): Log
+  logs(orderBy: LogOrderByRelationAggregateInput, pagination: PaginationProps): [Log!]!
+  logsCount: Int!
 
   """Lot current view"""
   lotCurrent(lotIds: [String!], lotValueType: LotValueType): [LotCurrent!]!
+  lotTransactionBatch(lotTransactionBatchId: String!): LotTransactionBatch
+  lotTransactionBatches(orderBy: LotTransactionBatchOrderByRelationAggregateInput): [LotTransactionBatch!]!
   lots(includeTaxAdvantaged: Boolean, where: LotWhereInput): [Lot!]!
 
   """Get authenticated portfolio"""
@@ -10824,6 +10865,11 @@ type SignedUrlsForDownloadPayload {
 
 type SignedUrlsForUploadPayload {
   uploadUrls: [String!]!
+}
+
+enum SortOrder {
+  asc
+  desc
 }
 
 input StringFieldUpdateOperationsInput {

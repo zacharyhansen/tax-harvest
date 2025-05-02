@@ -1,11 +1,13 @@
 import {
   Logs,
+  Merge,
   NotebookText,
   Play,
+  Scissors,
   Settings,
+  Users,
   Wallet2,
   Waypoints,
-  Wheat,
 } from 'lucide-react';
 import { type NavGroup } from '@repo/ui/layouts/dashboard';
 
@@ -13,17 +15,17 @@ import { TypedRoutes } from '~/lib/routes';
 
 export const NavTree: NavGroup[] = [
   {
-    title: 'Harvest',
+    title: 'Portfolio',
     items: [
       {
-        title: 'Portfolio',
+        title: 'Dashboard',
         url: TypedRoutes.home(),
         icon: Wallet2,
       },
       {
-        title: 'Harvests',
-        url: TypedRoutes.harvests(),
-        icon: Wheat,
+        title: 'Tax Opportunities',
+        url: TypedRoutes.taxOpportunities(),
+        icon: Scissors,
       },
       {
         title: 'Transactions',
@@ -50,6 +52,7 @@ export const NavTree: NavGroup[] = [
 
   {
     title: 'Admin',
+    roles: ['admin'],
     items: [
       {
         title: 'Actions',
@@ -60,6 +63,16 @@ export const NavTree: NavGroup[] = [
         title: 'Logs',
         url: TypedRoutes.logs(),
         icon: Logs,
+      },
+      {
+        title: 'Plaid History',
+        url: TypedRoutes.plaidHistory(),
+        icon: Merge,
+      },
+      {
+        title: 'Users',
+        url: TypedRoutes.users(),
+        icon: Users,
       },
     ],
   },

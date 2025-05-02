@@ -54,8 +54,6 @@ export class PlaidController {
         }
       }
 
-      await this.plaidService.processWebhook(body);
-
       return res.code(200).send({
         message: "Webhook processed successfully",
         success: true,

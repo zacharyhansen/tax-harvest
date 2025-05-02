@@ -19,7 +19,9 @@ import getConfigService from "~/env/gcp-secrets/get-config-service";
 import { EtradeModule } from "~/etrade/etrade.module";
 import { FileModule } from "~/file/file.module";
 import { HealthModule } from "~/health/health.module";
+import { LogsModule } from "~/logs/logs.module";
 import { LotModule } from "~/lot/lot.module";
+import { LotTransactionBatchModule } from "~/lot-transaction-batch/lot-transaction-batch.module";
 import { OauthModule } from "~/oauth/oauth.module";
 import { PlaidModule } from "~/plaid/plaid.module";
 import { PolygonModule } from "~/polygon/polygon.module";
@@ -76,6 +78,8 @@ import { errorFormatPlugin } from "../plugins/error-format";
     LotModule,
     HealthModule,
     FileModule,
+    LogsModule,
+    LotTransactionBatchModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ClerkGuard }],
 })
