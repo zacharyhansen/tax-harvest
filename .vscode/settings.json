@@ -1,6 +1,5 @@
 {
   "editor.tabSize": 2,
-  "editor.formatOnSave": true,
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "$(capture).js, $(capture).*.ts, $(capture).*.js",
@@ -16,24 +15,6 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "workbench.editor.tabSizing": "shrink",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": ["source.fixAll.eslint"],
-
-  // "editor.codeActionsOnSave": {
-  //   // "source.fixAll.eslint": "explicit",
-  //   "source.fixAll.prettier": "explicit",
-  //   "source.fixAll.markdownlint": "explicit"
-  // },
-  "eslint.validate": ["javascript", "typescript"],
-  "eslint.options": {
-    "cache": true
-  },
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
-  "material-icon-theme.activeIconPack": "nest",
   "files.eol": "\n",
   "[dotenv]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
@@ -57,9 +38,6 @@
   ],
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[snippets]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.fontFamily": "JetBrains Mono",
