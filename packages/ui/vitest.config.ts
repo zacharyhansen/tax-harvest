@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 
-import React from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
+import React from '@vitejs/plugin-react'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [React()],
@@ -39,6 +39,6 @@ export default defineConfig({
       ],
       all: true,
     },
-    exclude: ['**/tests/**', '**/node_modules/**'],
+    exclude: ['**/node_modules/**'],
   },
-});
+})

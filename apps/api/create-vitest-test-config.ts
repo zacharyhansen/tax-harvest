@@ -10,7 +10,7 @@ export function createVitestTestConfig(testingType: string): InlineConfig {
     include: [`tests/${testingType}/**/*.test.ts`, '**/*.spec.ts'],
     env: loadEnv('test', process.cwd(), ''),
     coverage: {
-      provider: 'istanbul',
+      provider: 'v8',
       reporter: ['text', 'json', 'html'],
       reportsDirectory: `coverage/${testingType}`,
       include: ['src/**/*.ts'],
