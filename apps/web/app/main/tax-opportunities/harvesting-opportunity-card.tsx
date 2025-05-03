@@ -1,13 +1,13 @@
-import { Check } from 'lucide-react';
+import type { LotOpportunityItemFragment } from '~/generated/gql';
 import { Button } from '@repo/ui/components/button';
 import { Decimal } from 'decimal.js';
 
+import { Check } from 'lucide-react';
 import { Format } from '~/modules/utils';
-import type { LotOpportunityItemFragment } from '~/generated/gql';
 
-interface HarvestingOpportunityCardProps {
+type HarvestingOpportunityCardProps = {
   lot: LotOpportunityItemFragment;
-}
+};
 
 export function HarvestingOpportunityCard({
   lot,
@@ -15,7 +15,7 @@ export function HarvestingOpportunityCard({
   // Determine if this is a gain position by comparing current value to cost basis
   const costBasis = new Decimal(lot.costTotal ?? 0);
   const currentValue = new Decimal(lot.asset.lastPrice ?? 0).mul(
-    lot.remainingQty ?? 0
+    lot.remainingQty ?? 0,
   );
   const isGain = currentValue.gt(costBasis);
 
@@ -36,11 +36,11 @@ export function HarvestingOpportunityCard({
   }
 
   return (
-    <div className="bg-muted mb-6 overflow-hidden rounded-lg border shadow-md">
+    <div className="mb-6 overflow-hidden rounded-lg border bg-muted shadow-md">
       {/* Header row */}
-      <div className="bg-muted flex items-center justify-between px-4 py-3">
+      <div className="flex items-center justify-between bg-muted px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="bg-muted-foreground text-background flex h-8 w-8 items-center justify-center rounded-full font-bold uppercase">
+          <div className="flex size-8 items-center justify-center rounded-full bg-muted-foreground font-bold uppercase text-background">
             {symbol.substring(0, 2)}
           </div>
           <div>
@@ -61,34 +61,40 @@ export function HarvestingOpportunityCard({
 
         <div className="text-right">
           <Button>
-            <Check className="mr-2 h-4 w-4" /> Add Reminder
+            <Check className="mr-2 size-4" />
+            {' '}
+            Add Reminder
           </Button>
         </div>
       </div>
 
       {/* Details row */}
-      <div className="flex flex-wrap border border-t px-4 py-4">
+      <div className="flex flex-wrap border p-4">
         {/* Left side - first 4 fields */}
-        <div className="grid flex-1 grid-cols-2 gap-x-4 gap-y-4 md:grid-cols-4">
+        <div className="grid flex-1 grid-cols-2 gap-4 md:grid-cols-4">
           <div>
-            <div className="text-muted-foreground text-sm">Quantity</div>
-            <div className="text-base">{quantity.toString()} shares</div>
+            <div className="text-sm text-muted-foreground">Quantity</div>
+            <div className="text-base">
+              {quantity.toString()}
+              {' '}
+              shares
+            </div>
           </div>
 
           <div>
-            <div className="text-muted-foreground text-sm">Purchase Date</div>
+            <div className="text-sm text-muted-foreground">Purchase Date</div>
             <div className="text-base">{purchaseDate}</div>
           </div>
 
           <div>
-            <div className="text-muted-foreground text-sm">Cost Basis</div>
+            <div className="text-sm text-muted-foreground">Cost Basis</div>
             <div className="text-base">
               {Format.money(costBasis.toString())}
             </div>
           </div>
 
           <div>
-            <div className="text-muted-foreground text-sm">Current Value</div>
+            <div className="text-sm text-muted-foreground">Current Value</div>
             <div className="text-base">
               {Format.money(currentValue.toString())}
             </div>

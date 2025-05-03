@@ -1,6 +1,6 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common'
 
-import { EtradeService } from "./etrade.service";
+import { EtradeService } from './etrade.service'
 
 @Module({
   exports: [EtradeService],

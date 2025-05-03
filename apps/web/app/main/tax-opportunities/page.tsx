@@ -1,29 +1,28 @@
 'use client';
 
-import { BarChart3, ArrowUpCircle, TrendingDown, Info } from 'lucide-react';
+import { Button } from '@repo/ui/components/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { Button } from '@repo/ui/components/button';
 import {
-  TooltipProvider,
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from '@repo/ui/components/tooltip';
+import { BarChart3, Info } from 'lucide-react';
 import Link from 'next/link';
 
-import { CostBasisPairCard } from './api-cost-basis-pair-card';
-import { HarvestingOpportunityCard } from './harvesting-opportunity-card';
-
-import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { useLotFilteredOpportunitiesQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
-import { Format } from '~/modules/utils';
+
 import { PageWrapper } from '~/modules/layout';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { Format } from '~/modules/utils';
+import { CostBasisPairCard } from './api-cost-basis-pair-card';
 
 /**
  * Tax Harvesting Page - New server-driven version
@@ -51,7 +50,7 @@ export default function TaxOpportunitiesPage() {
   };
 
   const opportunities = [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any
   const pairs: any[] = [];
 
   return (
@@ -69,8 +68,8 @@ export default function TaxOpportunitiesPage() {
           </div>
 
           {/* Portfolio Summary Card - Show realized gain/loss position */}
-          <Card className="bg-muted w-full rounded-xl border-0 md:w-auto">
-            <CardHeader className="bg-secondary rounded-t-xl p-4 pb-2">
+          <Card className="w-full rounded-xl border-0 bg-muted md:w-auto">
+            <CardHeader className="rounded-t-xl bg-secondary p-4 pb-2">
               <CardTitle className="text-sm font-medium">
                 Net Realized Position
               </CardTitle>
@@ -83,7 +82,7 @@ export default function TaxOpportunitiesPage() {
                   {Format.money(taxStatus.netRealizedPosition)}
                 </span>
               </div>
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {taxStatus.isNeutralAccount
                   ? 'Balanced position: Look for cost basis management opportunities'
                   : taxStatus.netRealizedPosition > 0
@@ -97,16 +96,16 @@ export default function TaxOpportunitiesPage() {
         {/* Portfolio Status */}
         <div className="mb-8 flex flex-col items-start">
           {/* Tax Status */}
-          <div className="bg-muted w-full overflow-hidden rounded-xl border-0">
-            <div className="bg-secondary flex items-center justify-between border-b p-4">
+          <div className="w-full overflow-hidden rounded-xl border-0 bg-muted">
+            <div className="flex items-center justify-between border-b bg-secondary p-4">
               <div className="flex items-center space-x-2">
-                <BarChart3 className="text-primary h-5 w-5" />
+                <BarChart3 className="size-5 text-primary" />
                 <h2 className="text-lg font-semibold">Portfolio Tax Status</h2>
               </div>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Info className="h-4 w-4 cursor-help" />
+                    <Info className="size-4 cursor-help" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>
@@ -121,12 +120,12 @@ export default function TaxOpportunitiesPage() {
             <div className="grid grid-cols-3 divide-x">
               <div className="p-6">
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground text-sm">
+                  <span className="text-sm text-muted-foreground">
                     Realized Gains
                   </span>
                   <span className="mt-1 text-3xl font-semibold text-green-500">
                     {Format.money(
-                      data?.portfolioSummary.realized.gainTotal ?? 0
+                      data?.portfolioSummary.realized.gainTotal ?? 0,
                     )}
                   </span>
                 </div>
@@ -134,13 +133,13 @@ export default function TaxOpportunitiesPage() {
 
               <div className="p-6">
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground text-sm">
+                  <span className="text-sm text-muted-foreground">
                     Unrealized Losses
                   </span>
                   <span className="mt-1 text-3xl font-semibold text-red-500">
                     -
                     {Format.money(
-                      Math.abs(data?.portfolioSummary.unrealized.lossTotal ?? 0)
+                      Math.abs(data?.portfolioSummary.unrealized.lossTotal ?? 0),
                     )}
                   </span>
                 </div>
@@ -148,7 +147,7 @@ export default function TaxOpportunitiesPage() {
 
               <div className="p-6">
                 <div className="flex flex-col">
-                  <span className="text-muted-foreground text-sm">
+                  <span className="text-sm text-muted-foreground">
                     Net Position
                   </span>
                   <span
@@ -157,7 +156,7 @@ export default function TaxOpportunitiesPage() {
                     {taxStatus.netRealizedPosition >= 0 ? '' : '-'}
                     {Format.money(Math.abs(taxStatus.netRealizedPosition))}
                   </span>
-                  <span className="text-muted-foreground mt-2 text-sm">
+                  <span className="mt-2 text-sm text-muted-foreground">
                     {taxStatus.isNeutralAccount
                       ? 'Balanced position: Optimize cost basis'
                       : taxStatus.netRealizedPosition > 0
@@ -178,11 +177,12 @@ export default function TaxOpportunitiesPage() {
               {/* Cost basis reset strategy header removed as requested */}
 
               <div className="grid grid-cols-1 gap-6">
+                {/* eslint-disable-next-line ts/no-explicit-any */}
                 {pairs.map((pair: any) => (
                   <CostBasisPairCard
                     key={
-                      pair.pairId ||
-                      `pair-${pair.gainOpportunity?.id}-${pair.lossOpportunity?.id}`
+                      pair.pairId
+                      || `pair-${pair.gainOpportunity?.id}-${pair.lossOpportunity?.id}`
                     }
                     pair={pair}
                   />
@@ -193,10 +193,10 @@ export default function TaxOpportunitiesPage() {
                 <Card className="border-0">
                   <CardContent className="p-6">
                     <div className="flex flex-col items-center justify-center py-6">
-                      <p className="text-muted-foreground text-center">
+                      <p className="text-center text-muted-foreground">
                         No balanced pairs were found that meet our criteria.
                       </p>
-                      <p className="text-muted-foreground mt-2 text-center">
+                      <p className="mt-2 text-center text-muted-foreground">
                         We pair positions with similar gain/loss amounts (within
                         15%) to minimize tax impact.
                       </p>
@@ -243,26 +243,26 @@ export default function TaxOpportunitiesPage() {
             <div className="space-y-6">
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center space-x-2">
-                  <Info className="text-primary h-5 w-5" />
+                  <Info className="size-5 text-primary" />
                   <h2 className="text-lg font-semibold">
                     No Tax Harvesting Opportunities
                   </h2>
                 </div>
                 <p className="text-muted-foreground">
-                  We couldn't find any suitable tax harvesting opportunities for
-                  your portfolio at this time
+                  We couldn&apos;t find any suitable tax harvesting
+                  opportunities for your portfolio at this time
                 </p>
               </div>
 
               <div className="overflow-hidden rounded-xl border-0">
                 <div className="flex flex-col items-center justify-center p-10">
                   <div className="mb-4 rounded-full p-3">
-                    <Info className="text-muted-foreground h-6 w-6" />
+                    <Info className="size-6 text-muted-foreground" />
                   </div>
                   <h3 className="mb-2 text-lg font-medium">
                     No Available Opportunities
                   </h3>
-                  <p className="text-muted-foreground max-w-lg text-center">
+                  <p className="max-w-lg text-center text-muted-foreground">
                     Check back later as market conditions change, or consider
                     diversifying your portfolio to create more potential
                     harvesting opportunities.

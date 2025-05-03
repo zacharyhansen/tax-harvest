@@ -31,7 +31,7 @@ export default function LogPage({
   return (
     <PageWrapper
       title="Log Explorer"
-      description={
+      description={(
         <div className="grid grid-cols-2 gap-2">
           <div className="flex gap-2">
             <span className="font-bold">ID:</span>
@@ -50,7 +50,7 @@ export default function LogPage({
             <span>{data?.log?.source}</span>
           </div>
         </div>
-      }
+      )}
     >
       <ReactJsonView
         src={data?.log?.data}

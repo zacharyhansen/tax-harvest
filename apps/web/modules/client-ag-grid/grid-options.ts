@@ -1,8 +1,11 @@
-import { themeBalham, themeQuartz, type GridOptions } from 'ag-grid-community';
+'use client';
 
-import { dataTypeDefinitions } from './data-type-definitions';
-import { defaultColumnTypes } from './column-types';
+import type { GridOptions } from 'ag-grid-community';
+import { themeBalham, themeQuartz } from 'ag-grid-community';
+
 import { cellRendererSelector } from './cell-renderer-selector';
+import { defaultColumnTypes } from './column-types';
+import { dataTypeDefinitions } from './data-type-definitions';
 
 const baseGridOptions: GridOptions = {
   dataTypeDefinitions,
@@ -17,7 +20,7 @@ const baseGridOptions: GridOptions = {
     sortable: true,
     filter: true,
     cellRendererSelector,
-    //pagination: true,
+    // pagination: true,
   },
 };
 
@@ -29,14 +32,14 @@ export const themeBalhamGridOptions: GridOptions = {
         backgroundColor: '#ffffff',
         accentColor: '#020817',
       },
-      'light'
+      'light',
     )
     .withParams(
       {
         backgroundColor: '#16161d',
         accentColor: '#aab1d3',
       },
-      'dark'
+      'dark',
     ),
   headerHeight: 32,
 };
@@ -49,14 +52,14 @@ export const themeQuartzGridOptions: GridOptions = {
         backgroundColor: '#ffffff',
         accentColor: '#020817',
       },
-      'light'
+      'light',
     )
     .withParams(
       {
         backgroundColor: '#16161d',
         accentColor: '#aab1d3',
       },
-      'dark'
+      'dark',
     ),
   headerHeight: 40,
 };

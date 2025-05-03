@@ -1,16 +1,16 @@
-import type * as React from 'react';
+import type { toggleVariants } from '@repo/ui/components/toggle.variants';
 import type { Editor } from '@tiptap/react';
 import type { VariantProps } from 'class-variance-authority';
-import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons';
-import type { toggleVariants } from '@repo/ui/components/toggle.variants';
-
+import type * as React from 'react';
 import type { FormatAction } from '../../types';
+
+import { CaretDownIcon, ListBulletIcon } from '@radix-ui/react-icons';
 import { ToolbarSection } from '../toolbar-section';
 
 type ListItemAction = 'orderedList' | 'bulletList';
-interface ListItem extends FormatAction {
+type ListItem = {
   value: ListItemAction;
-}
+} & FormatAction;
 
 const formatActions: ListItem[] = [
   {
@@ -44,11 +44,11 @@ const formatActions: ListItem[] = [
   },
 ];
 
-interface SectionFourProps extends VariantProps<typeof toggleVariants> {
+type SectionFourProps = {
   editor: Editor;
   activeActions?: ListItemAction[];
   mainActionCount?: number;
-}
+} & VariantProps<typeof toggleVariants>;
 
 export const SectionFour: React.FC<SectionFourProps> = ({
   editor,
@@ -63,12 +63,12 @@ export const SectionFour: React.FC<SectionFourProps> = ({
       actions={formatActions}
       activeActions={activeActions}
       mainActionCount={mainActionCount}
-      dropdownIcon={
+      dropdownIcon={(
         <>
           <ListBulletIcon className="size-5" />
           <CaretDownIcon className="size-5" />
         </>
-      }
+      )}
       dropdownTooltip="Lists"
       size={size}
       variant={variant}

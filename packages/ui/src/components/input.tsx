@@ -1,66 +1,52 @@
-import * as React from 'react';
 import type { LucideIcon } from 'lucide-react';
-
-import { Label } from './label';
 import type { BaseInputProps } from './input.types';
-import { inputVariants } from './input.variants';
 
 import { cn } from '@repo/ui/utils';
+import * as React from 'react';
+import { inputVariants } from './input.variants';
 
-export interface InputProps
-  extends BaseInputProps,
-    React.InputHTMLAttributes<HTMLInputElement> {
+import { Label } from './label';
+
+export type InputProps = {
   label?: React.ReactNode;
   actionElement?: React.ReactNode;
   variant?: 'default' | 'ghost';
   startIcon?: LucideIcon;
   endIcon?: LucideIcon;
-}
+} & BaseInputProps & React.InputHTMLAttributes<HTMLInputElement>;
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      className,
-      type,
-      label,
-      actionElement,
-      startIcon,
-      // endIcon: _endIcon,
-      variant = 'default',
-      ...props
-    },
-    ref
-  ) => {
-    useDisableNumberInputScroll();
-    const StartIcon = startIcon;
-    // const EndIcon = endIcon;
-    return (
-      <div className="items-center gap-1.5">
-        {label ? <Label htmlFor={props.id}>{label}</Label> : null}
-        <div className="flex items-center space-x-2">
-          {StartIcon && (
-            <div className="left-1">
-              <StartIcon size={18} className="text-muted-foreground" />
-            </div>
-          )}
-          <input
-            type={type}
-            className={cn(inputVariants({ variant }), className)}
-            autoComplete="off"
-            ref={ref}
-            {...props}
-          />
-          {actionElement ?? null}
-        </div>
+const Input = (
+  { ref, className, type, label, actionElement, startIcon, variant = 'default', ...props }: InputProps & { ref?: React.RefObject<HTMLInputElement | null> },
+) => {
+  useDisableNumberInputScroll();
+  const StartIcon = startIcon;
+  // const EndIcon = endIcon;
+  return (
+    <div className="items-center gap-1.5">
+      {label ? <Label htmlFor={props.id}>{label}</Label> : null}
+      <div className="flex items-center space-x-2">
+        {StartIcon && (
+          <div className="left-1">
+            <StartIcon size={18} className="text-muted-foreground" />
+          </div>
+        )}
+        <input
+          type={type}
+          className={cn(inputVariants({ variant }), className)}
+          autoComplete="off"
+          ref={ref}
+          {...props}
+        />
+        {actionElement ?? null}
       </div>
-    );
-  }
-);
+    </div>
+  );
+};
 Input.displayName = 'Input';
 
 export { Input };
 
-const useDisableNumberInputScroll = () => {
+function useDisableNumberInputScroll() {
   // Use the useEffect hook to manage side effects
   React.useEffect(() => {
     // Define a function to prevent the default scroll behavior
@@ -83,4 +69,4 @@ const useDisableNumberInputScroll = () => {
       }
     };
   }, []); // The empty dependency array ensures that this effect runs once, like componentDidMount
-};
+}

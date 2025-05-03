@@ -1,15 +1,5 @@
-import { Asterisk, Info, Pencil, Rows3, Trash2 } from 'lucide-react';
 import type { NodeViewProps } from '@tiptap/core';
-import { Fragment } from 'react/jsx-runtime';
-import { snakeCase } from 'change-case';
-
 import type { BaseFormNodeAttributes } from '../types';
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@repo/ui/components/tooltip';
 import { Button } from '@repo/ui/components/button';
 import {
   ResponsiveDialogDescription,
@@ -19,10 +9,20 @@ import {
   ResponsiveDialogTrigger,
 } from '@repo/ui/components/reponsive-dialog';
 
-interface FooterProps {
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/ui/components/tooltip';
+
+import { snakeCase } from 'change-case';
+import { Asterisk, Info, Pencil, Rows3, Trash2 } from 'lucide-react';
+import { Fragment } from 'react/jsx-runtime';
+
+type FooterProps = {
   isDirty?: boolean;
   setOpen: (open: boolean) => void;
-}
+};
 
 export function Footer({ isDirty, setOpen }: Readonly<FooterProps>) {
   return (
@@ -43,10 +43,10 @@ export function Footer({ isDirty, setOpen }: Readonly<FooterProps>) {
   );
 }
 
-interface InfoAndDeleteIconProps extends NodeViewProps {
+type InfoAndDeleteIconProps = {
   defaultValue: string | number | boolean;
   name: string;
-}
+} & NodeViewProps;
 
 export function InfoAndDeleteIcons({
   defaultValue,
@@ -61,7 +61,7 @@ export function InfoAndDeleteIcons({
     <>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Info className="text-muted hover:text-foreground hover:bg-muted h-6 w-6 cursor-pointer rounded-lg p-1" />
+          <Info className="size-6 cursor-pointer rounded-lg p-1 text-muted hover:bg-muted hover:text-foreground" />
         </TooltipTrigger>
         <TooltipContent>
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm">
@@ -70,7 +70,7 @@ export function InfoAndDeleteIcons({
               { label: 'Default value:', value: defaultValue },
             ].map(item => (
               <Fragment key={item.label}>
-                <dt className="text-muted-foreground font-medium">
+                <dt className="font-medium text-muted-foreground">
                   {item.label}
                 </dt>
                 <dd>{item.value}</dd>
@@ -91,7 +91,7 @@ export function InfoAndDeleteIcons({
                 })
                 .run();
             }}
-            className="hover:bg-muted h-6 w-6 cursor-pointer rounded-lg p-1 text-red-400"
+            className="size-6 cursor-pointer rounded-lg p-1 text-red-400 hover:bg-muted"
           />
         </TooltipTrigger>
         <TooltipContent>
@@ -105,7 +105,7 @@ export function InfoAndDeleteIcons({
 export function OptionsIcon() {
   return (
     <ResponsiveDialogTrigger asChild>
-      <Rows3 className="text-muted hover:bg-muted hover:text-foreground h-6 w-6 cursor-pointer rounded-lg p-1" />
+      <Rows3 className="size-6 cursor-pointer rounded-lg p-1 text-muted hover:bg-muted hover:text-foreground" />
     </ResponsiveDialogTrigger>
   );
 }
@@ -117,16 +117,17 @@ export function LabelInput({
 }: Readonly<
   NodeViewProps & { onKeyDown: (event: React.KeyboardEvent) => void }
 >) {
-  const { required, label, nameLocked, name } =
-    node.attrs as BaseFormNodeAttributes;
+  const { required, label, nameLocked, name }
+    = node.attrs as BaseFormNodeAttributes;
 
   return (
     <>
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
         onKeyDown={onKeyDown}
         contentEditable="true"
         suppressContentEditableWarning
-        onBlur={event => {
+        onBlur={(event) => {
           updateAttributes({
             label: event.currentTarget.textContent,
             name: nameLocked
@@ -139,23 +140,25 @@ export function LabelInput({
       >
         {label}
       </div>
-      {required ? (
-        <Tooltip>
-          <TooltipTrigger
-            asChild
-            onClick={() => {
-              updateAttributes({
-                required: !required,
-              });
-            }}
-          >
-            <Asterisk className="text-muted-foreground hover:bg-muted hover:text-foreground h-6 w-6 cursor-pointer rounded-lg p-1" />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Required</p>
-          </TooltipContent>
-        </Tooltip>
-      ) : null}
+      {required
+        ? (
+            <Tooltip>
+              <TooltipTrigger
+                asChild
+                onClick={() => {
+                  updateAttributes({
+                    required: !required,
+                  });
+                }}
+              >
+                <Asterisk className="size-6 cursor-pointer rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Required</p>
+              </TooltipContent>
+            </Tooltip>
+          )
+        : null}
     </>
   );
 }
@@ -163,7 +166,7 @@ export function LabelInput({
 export function PencilIcon() {
   return (
     <ResponsiveDialogTrigger asChild>
-      <Pencil className="text-muted hover:bg-muted hover:text-foreground h-6 w-6 cursor-pointer rounded-lg p-1" />
+      <Pencil className="size-6 cursor-pointer rounded-lg p-1 text-muted hover:bg-muted hover:text-foreground" />
     </ResponsiveDialogTrigger>
   );
 }

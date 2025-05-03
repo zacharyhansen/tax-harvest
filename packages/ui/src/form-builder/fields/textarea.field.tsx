@@ -1,6 +1,5 @@
 import type { BaseFieldProps } from '../form-builder.types';
 
-import { Textarea } from '@repo/ui/components/textarea';
 import {
   FormControl,
   FormDescription,
@@ -9,6 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@repo/ui/components/form';
+import { Textarea } from '@repo/ui/components/textarea';
 
 export default function TextareaField({
   name,

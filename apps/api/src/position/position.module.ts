@@ -1,7 +1,7 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common'
 
-import { PositionResolver } from "./position.resolver";
-import { PositionService } from "./position.service";
+import { PositionResolver } from './position.resolver'
+import { PositionService } from './position.service'
 
 @Module({
   providers: [PositionService, PositionResolver],

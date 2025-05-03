@@ -1,15 +1,15 @@
-import type { FastifyReply } from "fastify";
+import type { ConfigService } from '@nestjs/config'
 
-import { Body, Controller, Logger, Post, Res } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import type { FastifyReply } from 'fastify'
+import type { PlaidWebhook } from './plaid.dto'
 
-import { Public } from "../auth/decorators/public.decorator";
-import { type PlaidWebhook } from "./plaid.dto";
-import { PlaidService } from "./plaid.service";
+import type { PlaidService } from './plaid.service'
+import { Body, Controller, Logger, Post, Res } from '@nestjs/common'
+import { Public } from '../auth/decorators/public.decorator'
 
-@Controller("plaid")
+@Controller('plaid')
 export class PlaidController {
-  private readonly logger = new Logger(PlaidController.name);
+  private readonly logger = new Logger(PlaidController.name)
 
   constructor(
     private readonly plaidService: PlaidService,
@@ -37,34 +37,35 @@ export class PlaidController {
   //     });
   //     break;
   // }
-  @Post("webhook")
+  @Post('webhook')
   @Public()
   async handleWebhook(@Body() body: PlaidWebhook, @Res() res: FastifyReply) {
     try {
-      this.logger.log("Processing Plaid webhook:", body);
+      this.logger.log('Processing Plaid webhook:', body)
 
       switch (body.webhook_type) {
-        case "HOLDINGS": {
-          await this.plaidService.processWebhook(body);
-          this.logger.log("Successfully processed Plaid webhook:", body);
-          break;
+        case 'HOLDINGS': {
+          await this.plaidService.processWebhook(body)
+          this.logger.log('Successfully processed Plaid webhook:', body)
+          break
         }
         default: {
-          this.logger.warn(`Unhandled webhook type: ${body.webhook_type}`);
+          this.logger.warn(`Unhandled webhook type: ${body.webhook_type}`)
         }
       }
 
       return res.code(200).send({
-        message: "Webhook processed successfully",
+        message: 'Webhook processed successfully',
         success: true,
-      });
-    } catch (error) {
-      this.logger.error("Webhook processing error:", error);
+      })
+    }
+    catch (error) {
+      this.logger.error('Webhook processing error:', error)
       return res.code(400).send({
-        message: "Failed to process webhook",
+        message: 'Failed to process webhook',
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
+        error: error instanceof Error ? error.message : 'Unknown error',
+      })
     }
   }
 }

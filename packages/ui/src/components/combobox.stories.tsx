@@ -24,13 +24,13 @@ const meta = {
     placeholder: 'Select frameworks',
     onChange: () => {},
   },
-  render: args => {
+  render: (args) => {
     const [value, setValue] = useState<string | undefined>(args.value);
 
     return (
       <Combobox
         {...args}
-        onChange={value => {
+        onChange={(value) => {
           setValue(value);
         }}
         value={value}

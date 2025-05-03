@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const tiptapBaseVariants = cva(
-  'border-input focus-within:border-primary flex h-auto w-full flex-col rounded-lg border shadow-sm',
+  'flex h-auto w-full flex-col rounded-lg border border-input shadow-sm focus-within:border-primary',
   {
     defaultVariants: {
       variant: 'default',
@@ -13,5 +13,5 @@ export const tiptapBaseVariants = cva(
         max: 'min-h-72',
       },
     },
-  }
+  },
 );

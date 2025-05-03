@@ -1,23 +1,25 @@
-import { Injectable } from "@nestjs/common";
-import {
+import type {
   Harvest,
+  Prisma,
+} from '@prisma/client'
+import type { LotService } from '../lot/lot.service'
+import type { DirectedHarvestLot } from '../portfolio/portfolio.dto'
+import type { PrismaService } from '../prisma/prisma.service'
+
+import { Injectable } from '@nestjs/common'
+import {
   HarvestStep,
   HarvestType,
   OrderType,
-  Prisma,
-} from "@prisma/client";
-import Decimal from "decimal.js";
-
-import { LotService } from "../lot/lot.service";
-import { DirectedHarvestLot } from "../portfolio/portfolio.dto";
-import { PrismaService } from "../prisma/prisma.service";
+} from '@prisma/client'
+import Decimal from 'decimal.js'
 
 const harvestTypeLabel: Record<HarvestType, string> = {
-  [HarvestType.REDUCE_COST_BASIS]: "Raise Average Cost Basis",
-  [HarvestType.REDUCE_TAXES]: "Offset Realized Gains",
-  [HarvestType.SELL]: "Sell Stock",
-  [HarvestType.CAPTURE_GAINS_TAX_FREE]: "Capture Gains Tax Free",
-};
+  [HarvestType.REDUCE_COST_BASIS]: 'Raise Average Cost Basis',
+  [HarvestType.REDUCE_TAXES]: 'Offset Realized Gains',
+  [HarvestType.SELL]: 'Sell Stock',
+  [HarvestType.CAPTURE_GAINS_TAX_FREE]: 'Capture Gains Tax Free',
+}
 
 @Injectable()
 export class HarvestService {
@@ -34,37 +36,37 @@ export class HarvestService {
     portfolioId,
     select,
   }: {
-    harvestLots: DirectedHarvestLot[];
-    select: Prisma.HarvestSelect;
-    harvestType: HarvestType;
-    createdById: string;
-    portfolioId: string;
-    date?: Date;
+    harvestLots: DirectedHarvestLot[]
+    select: Prisma.HarvestSelect
+    harvestType: HarvestType
+    createdById: string
+    portfolioId: string
+    date?: Date
   }): Promise<Harvest> {
     const currentLotsWithReplacement = await this.lotService
       .lotCurrent({
         lotIds: harvestLots.map(lot => lot.lotId),
         portfolioId,
       })
-      .then(async resultLots => {
+      .then(async (resultLots) => {
         // generate the replacement transaction and add the selected quanty to our result records
         return Promise.all(
           resultLots.map(async (lot, harvestLotIndex) => {
-            const originalLot = harvestLots[harvestLotIndex];
-            const replacementAsset =
-              await this.prismaService.asset.findUniqueOrThrow({
+            const originalLot = harvestLots[harvestLotIndex]
+            const replacementAsset
+              = await this.prismaService.asset.findUniqueOrThrow({
                 where: {
-                  symbol: "AAPL",
+                  symbol: 'AAPL',
                 },
-              });
+              })
 
             const saleValue = new Decimal(lot.lastPrice ?? 0).times(
               originalLot.quantity,
-            );
+            )
 
-            const replacementHarvestTransactionItem: Prisma.HarvestTransactionItemCreateManyInput =
-              {
-                assetSymbol: "AAPL",
+            const replacementHarvestTransactionItem: Prisma.HarvestTransactionItemCreateManyInput
+              = {
+                assetSymbol: 'AAPL',
                 orderType: OrderType.BUY,
                 price: replacementAsset.lastPrice,
                 quantity:
@@ -72,48 +74,48 @@ export class HarvestService {
                     .div(replacementAsset.lastPrice)
                     .floor()
                     .toNumber() || 0,
-              };
+              }
 
             return {
               ...lot,
               counterTransaction: originalLot.counterTransaction,
               replacementHarvestTransactionItem,
               selectedQuantity: originalLot.quantity,
-            };
+            }
           }),
-        );
-      });
+        )
+      })
 
-    return this.prismaService.$transaction(async tx => {
+    return this.prismaService.$transaction(async (tx) => {
       // Create entry transaction items (sales based on selection)
 
       /**
        * The entry transcations that start the harvest
        */
-      const entryTransactionItems =
-        await tx.harvestTransactionItem.createManyAndReturn({
-          data: currentLotsWithReplacement.map(currentLot => {
+      const entryTransactionItems
+        = await tx.harvestTransactionItem.createManyAndReturn({
+          data: currentLotsWithReplacement.map((currentLot) => {
             return {
-              assetSymbol: currentLot.symbol ?? "",
+              assetSymbol: currentLot.symbol ?? '',
               lotId: currentLot.id,
               orderType: OrderType.SELL,
               price: currentLot.lastPrice ?? 0,
               quantity: currentLot.selectedQuantity,
-            };
+            }
           }),
-        });
+        })
 
       /**
        * The transactions that will replace the entry ones during thew wash window
        */
-      const replacementTransactionItems =
-        harvestType === HarvestType.SELL
+      const replacementTransactionItems
+        = harvestType === HarvestType.SELL
           ? []
           : await tx.harvestTransactionItem.createManyAndReturn({
-              data: currentLotsWithReplacement.map(currentLot => {
-                return currentLot.replacementHarvestTransactionItem;
-              }),
-            });
+            data: currentLotsWithReplacement.map((currentLot) => {
+              return currentLot.replacementHarvestTransactionItem
+            }),
+          })
 
       // Create/select the top level harvest with our transaction items attached
       return tx.harvest.create({
@@ -124,7 +126,7 @@ export class HarvestService {
                 new Decimal(curr.dollarPerSharePnL ?? 0).times(
                   curr.selectedQuantity,
                 ),
-              );
+              )
             }, new Decimal(0))
             .absoluteValue()
             .toString(),
@@ -141,7 +143,7 @@ export class HarvestService {
                     replacementTransactionItems[i]?.id,
                   revert: replacementTransactionItems.length > 0,
                   revertDate: this.getPostWashSaleDate(new Date()),
-                };
+                }
               }),
             },
           },
@@ -150,33 +152,34 @@ export class HarvestService {
           type: harvestType,
         },
         select,
-      });
-    });
+      })
+    })
   }
 
   private getPostWashSaleDate(startDate: Date, daysToAdd = 32) {
-    const date = new Date(startDate); // Start from the current date
-    date.setDate(date.getDate() + daysToAdd); // Add 32 days
+    const date = new Date(startDate) // Start from the current date
+    date.setDate(date.getDate() + daysToAdd) // Add 32 days
 
     // If the resulting date is Saturday (6), add 2 days to move to Monday
     // If it's Sunday (0), add 1 day to move to Monday
     if (date.getDay() === 6) {
       // Saturday
-      date.setDate(date.getDate() + 2);
-    } else if (date.getDay() === 0) {
+      date.setDate(date.getDate() + 2)
+    }
+    else if (date.getDay() === 0) {
       // Sunday
-      date.setDate(date.getDate() + 1);
+      date.setDate(date.getDate() + 1)
     }
 
-    return date;
+    return date
   }
 
   async finalizeHarvest({
     harvestId,
     select,
   }: {
-    harvestId: string;
-    select: Prisma.HarvestSelect;
+    harvestId: string
+    select: Prisma.HarvestSelect
   }) {
     const transactions = await this.prismaService.harvestTransaction.findMany({
       include: {
@@ -186,45 +189,45 @@ export class HarvestService {
       where: {
         harvestId,
       },
-    });
+    })
 
-    const revertTransactionItems: Prisma.HarvestTransactionItemCreateManyInput[] =
-      [];
+    const revertTransactionItems: Prisma.HarvestTransactionItemCreateManyInput[]
+      = []
 
     // Tracks which revertTransactionItem index is the one we want to save to either theharvest or replacment revert transactionItem
-    const indexMap: Record<string, { harvest?: number; replacement?: number }> =
-      {};
+    const indexMap: Record<string, { harvest?: number, replacement?: number }>
+      = {}
 
     // Build/Collect the opposite transactions required
     for (const transaction of transactions) {
       if (transaction.revert) {
-        indexMap[transaction.id] = { harvest: revertTransactionItems.length };
+        indexMap[transaction.id] = { harvest: revertTransactionItems.length }
         revertTransactionItems.push({
           assetSymbol: transaction.harvestTransactionItem.assetSymbol,
           orderType: OrderType.BUY,
           price: transaction.harvestTransactionItem.price,
           quantity: transaction.harvestTransactionItem.quantity,
-        });
+        })
         if (transaction.replacementTransactionItem) {
-          indexMap[transaction.id].replacement = revertTransactionItems.length;
+          indexMap[transaction.id].replacement = revertTransactionItems.length
           revertTransactionItems.push({
             assetSymbol: transaction.replacementTransactionItem.assetSymbol,
             orderType: OrderType.SELL,
             price: transaction.replacementTransactionItem.price,
             quantity: transaction.replacementTransactionItem.quantity,
-          });
+          })
         }
       }
     }
 
     // Insert them
-    return this.prismaService.$transaction(async tx => {
+    return this.prismaService.$transaction(async (tx) => {
       const createdItems = await tx.harvestTransactionItem.createManyAndReturn({
         data: revertTransactionItems,
-      });
+      })
 
       await Promise.all(
-        Object.keys(indexMap).map(transactionId => {
+        Object.keys(indexMap).map((transactionId) => {
           return tx.harvestTransaction.update({
             data: {
               revertHarvestTransactionItemId:
@@ -239,9 +242,9 @@ export class HarvestService {
             where: {
               id: transactionId,
             },
-          });
+          })
         }),
-      );
+      )
       return tx.harvest.update({
         data: {
           step: {
@@ -252,7 +255,7 @@ export class HarvestService {
         where: {
           id: harvestId,
         },
-      });
-    });
+      })
+    })
   }
 }

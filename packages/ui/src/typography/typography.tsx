@@ -9,7 +9,7 @@ export function TypographyH1({
     <h1
       className={cn(
         'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
-        className
+        className,
       )}
       {...props}
     >
@@ -27,7 +27,7 @@ export function TypographyH2({
     <h2
       className={cn(
         'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
-        className
+        className,
       )}
       {...props}
     >
@@ -45,7 +45,7 @@ export function TypographyH3({
     <h3
       className={cn(
         'scroll-m-20 text-2xl font-semibold tracking-tight',
-        className
+        className,
       )}
       {...props}
     >
@@ -63,7 +63,7 @@ export function TypographyH4({
     <h4
       className={cn(
         'scroll-m-20 text-xl font-semibold tracking-tight',
-        className
+        className,
       )}
       {...props}
     >
@@ -102,51 +102,51 @@ export function TypographyBlockquote({
   );
 }
 
-export const Tr = ({
+export function Tr({
   className,
   children,
   ...props
-}: React.ComponentProps<'tr'>) => {
+}: React.ComponentProps<'tr'>) {
   return (
     <tr className={cn('even:bg-muted m-0 border-t p-0', className)} {...props}>
       {children}
     </tr>
   );
-};
-export const Th = ({
+}
+export function Th({
   className,
   children,
   ...props
-}: React.ComponentProps<'th'>) => {
+}: React.ComponentProps<'th'>) {
   return (
     <th
       className={cn(
         'border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right',
-        className
+        className,
       )}
       {...props}
     >
       {children}
     </th>
   );
-};
-export const Td = ({
+}
+export function Td({
   className,
   children,
   ...props
-}: React.ComponentProps<'td'>) => {
+}: React.ComponentProps<'td'>) {
   return (
     <td
       className={cn(
         'border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right',
-        className
+        className,
       )}
       {...props}
     >
       {children}
     </td>
   );
-};
+}
 
 export function TypographyTable() {
   return (
@@ -193,15 +193,17 @@ export function TypographyTable() {
   );
 }
 
-export const TypographyListItem = ({
+export function TypographyListItem({
   className,
   children,
   ...props
-}: React.ComponentProps<'li'>) => (
-  <li className={cn('', className)} {...props}>
-    {children}
-  </li>
-);
+}: React.ComponentProps<'li'>) {
+  return (
+    <li className={cn('', className)} {...props}>
+      {children}
+    </li>
+  );
+}
 
 export function TypographyList({
   className,
@@ -224,7 +226,7 @@ export function TypographyInlineCode({
     <code
       className={cn(
         'bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
-        className
+        className,
       )}
       {...props}
     >

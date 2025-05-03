@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronsUpDown, Wallet2 } from 'lucide-react';
+import { Button } from '@repo/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,15 +17,15 @@ import {
   useSidebar,
 } from '@repo/ui/components/sidebar';
 import { toast } from '@repo/ui/components/toast-sonner';
-import { Button } from '@repo/ui/components/button';
-
-import { usePortfolio } from './providers/PortfolioProvider';
-import CreatePortfolioDialog from './CreatePortfolioDialog';
+import { ChevronsUpDown, Wallet2 } from 'lucide-react';
 
 import {
   usePortfoliosQuery,
   useSwitchPortfolioMutation,
 } from '~/generated/gql';
+import CreatePortfolioDialog from './CreatePortfolioDialog';
+
+import { usePortfolio } from './providers/PortfolioProvider';
 
 export function PortfolioSwitcher() {
   const { isMobile } = useSidebar();
@@ -44,9 +44,9 @@ export function PortfolioSwitcher() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mb-0 py-0"
+              className="mb-0 py-0 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <Wallet2 className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -64,7 +64,7 @@ export function PortfolioSwitcher() {
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-muted-foreground text-xs">
+            <DropdownMenuLabel className="text-xs text-muted-foreground">
               Portfolios
             </DropdownMenuLabel>
             {data?.portfolios.map((portfolio, index) => (
@@ -84,7 +84,10 @@ export function PortfolioSwitcher() {
                   <team.logo className="size-4 shrink-0" />
                 </div> */}
                 {portfolio.name}
-                <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+                <DropdownMenuShortcut>
+                  ⌘
+                  {index + 1}
+                </DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />

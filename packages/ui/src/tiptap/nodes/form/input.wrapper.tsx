@@ -1,26 +1,25 @@
-import { type NodeViewProps } from '@tiptap/core';
-import { NodeViewWrapper } from '@tiptap/react';
+import type { NodeViewProps } from '@tiptap/core';
 import type { ReactNode } from 'react';
-
-import { FormTextLabel } from './labels/form-text.label';
-import { FormNumberLabel } from './labels/form-number.label';
-import {
-  formCommandIcon,
-  formCommandLabel,
-  type BaseFormNodeAttributes,
-  FormNode,
-} from './types';
-import { FormComboboxLabel } from './labels/form-combobox.label';
+import type { BaseFormNodeAttributes } from './types';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@repo/ui/components/tooltip';
+import { NodeViewWrapper } from '@tiptap/react';
+import { FormComboboxLabel } from './labels/form-combobox.label';
+import { FormNumberLabel } from './labels/form-number.label';
+import { FormTextLabel } from './labels/form-text.label';
 
-export const InputWrapper = (
-  props: NodeViewProps & { children: ReactNode; type: FormNode }
-) => {
+import {
+
+  formCommandIcon,
+  formCommandLabel,
+  FormNode,
+} from './types';
+
+export function InputWrapper(props: NodeViewProps & { children: ReactNode; type: FormNode }) {
   const { node, type, children } = props;
   const { description } = node.attrs as BaseFormNodeAttributes;
   const Icon = formCommandIcon[node.type.name as FormNode];
@@ -31,13 +30,15 @@ export const InputWrapper = (
       {type === FormNode.Number ? <FormNumberLabel {...props} /> : null}
       {type === FormNode.Combobox ? <FormComboboxLabel {...props} /> : null}
       {children}
-      {description ? (
-        <p className="text-muted-foreground text-xs">{description}</p>
-      ) : null}
+      {description
+        ? (
+            <p className="text-xs text-muted-foreground">{description}</p>
+          )
+        : null}
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="absolute right-0 top-1/2 translate-x-full pl-4 opacity-0 group-hover:opacity-100">
-            <Icon size={24} className="bg-muted rounded-lg p-1" />
+            <Icon size={24} className="rounded-lg bg-muted p-1" />
           </div>
         </TooltipTrigger>
         <TooltipContent>
@@ -46,4 +47,4 @@ export const InputWrapper = (
       </Tooltip>
     </NodeViewWrapper>
   );
-};
+}

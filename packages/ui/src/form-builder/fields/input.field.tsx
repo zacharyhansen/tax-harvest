@@ -1,6 +1,6 @@
-import type { BaseFieldProps } from '../form-builder.types';
+import type { InputProps } from '@repo/ui/components/input';
 
-import { Input, type InputProps } from '@repo/ui/components/input';
+import type { BaseFieldProps } from '../form-builder.types';
 import {
   FormControl,
   FormDescription,
@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@repo/ui/components/form';
+import { Input } from '@repo/ui/components/input';
 
 export default function InputField({
   name,
@@ -24,6 +25,7 @@ export default function InputField({
           <FormItem>
             <FormLabel>{label}</FormLabel>
             <FormControl>
+              {/* @ts-expect-error - no idea what this ref is */}
               <Input {...props} {...field} />
             </FormControl>
             <FormDescription>{description}</FormDescription>

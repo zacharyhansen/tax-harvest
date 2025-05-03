@@ -7,11 +7,11 @@ export const ResetMarksOnEnter = Extension.create({
     return {
       Enter: ({ editor }) => {
         if (
-          editor.isActive('bold') ||
-          editor.isActive('italic') ||
-          editor.isActive('strike') ||
-          editor.isActive('underline') ||
-          editor.isActive('code')
+          editor.isActive('bold')
+          || editor.isActive('italic')
+          || editor.isActive('strike')
+          || editor.isActive('underline')
+          || editor.isActive('code')
         ) {
           editor.commands.splitBlock({ keepMarks: false });
 

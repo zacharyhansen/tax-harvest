@@ -1,31 +1,31 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
 export class StripeSession {
   @Field(() => String)
-  id: string;
+  id: string
 
   @Field(() => String, { nullable: true })
-  client_secret: string | null;
+  client_secret: string | null
 }
 
 @ObjectType()
 export class StripeProduct {
   @Field(() => String)
-  id: string;
+  id: string
 
   @Field(() => Boolean, { nullable: true })
-  active: boolean;
+  active: boolean
 
   @Field(() => String, { nullable: true })
-  description: string | null;
+  description: string | null
 
   @Field(() => [StripeMarketingFeature])
-  marketing_features: StripeMarketingFeature[];
+  marketing_features: StripeMarketingFeature[]
 }
 
 @ObjectType()
 export class StripeMarketingFeature {
   @Field(() => String, { nullable: true })
-  name?: string;
+  name?: string
 }

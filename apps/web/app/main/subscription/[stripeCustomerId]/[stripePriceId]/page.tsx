@@ -10,8 +10,6 @@ import { useCallback } from 'react';
 import { useStripeSessionLazyQuery } from '~/generated/gql';
 import { LoadingPage } from '~/modules/utility-components';
 
-export interface StripePriceIdPageProps {}
-
 export default function StripePriceIdPage({
   params: { stripeCustomerId, stripePriceId },
 }: {
@@ -27,7 +25,7 @@ export default function StripePriceIdPage({
         stripeCustomerId,
         stripePriceId,
       },
-    }).then(result => result.data?.stripeSession.client_secret || '');
+    }).then(result => result.data?.stripeSession.client_secret ?? '');
   }, [getSession, stripePriceId, stripeCustomerId]);
 
   if (!stripe) {

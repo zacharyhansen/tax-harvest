@@ -1,11 +1,9 @@
 import 'server-only';
 
-export interface SubscriptionProps {
+export type SubscriptionProps = {
   stripeCustomerId: string;
-}
+};
 
-export default async function Subscription({
-  stripeCustomerId,
-}: SubscriptionProps) {
+export default async function Subscription() {
   return <div>Subscription Component</div>;
 }

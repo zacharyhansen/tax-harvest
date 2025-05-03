@@ -9,7 +9,7 @@ export default function ThemeButton() {
     <Button
       variant="outline"
       size="icon"
-      className="h-8 w-8 rounded-full"
+      className="size-8 rounded-full"
       onClick={() => {
         if (theme === 'light') {
           setTheme('dark');
@@ -18,11 +18,13 @@ export default function ThemeButton() {
         }
       }}
     >
-      {theme === 'dark' ? (
-        <Moon className="h-3 w-3" />
-      ) : (
-        <Sun className="h-3 w-3" />
-      )}
+      {theme === 'dark'
+        ? (
+            <Moon className="size-3" />
+          )
+        : (
+            <Sun className="size-3" />
+          )}
     </Button>
   );
 }

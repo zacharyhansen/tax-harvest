@@ -1,19 +1,19 @@
-import { useState } from 'react';
+import type { FileItemFragment } from '~/generated/gql';
 import { toast } from '@repo/ui/components/toast-sonner';
 
-import { getErrorMessage } from '../utils/get-error-message';
+import { useState } from 'react';
 
-import type { FileItemFragment } from '~/generated/gql';
+import { useUser } from '~/app/main/user.provider';
 import {
   useCreateFilesMutation,
   useSignedUrlsForUploadLazyQuery,
 } from '~/generated/gql';
-import { useUser } from '~/app/main/user.provider';
+import { getErrorMessage } from '../utils/get-error-message';
 
-interface UseUploadFileOptions {
+type UseUploadFileOptions = {
   defaultUploadedFiles?: FileItemFragment[];
   accountId: string;
-}
+};
 
 export function useUploadFiles({
   accountId,
@@ -21,8 +21,8 @@ export function useUploadFiles({
 }: UseUploadFileOptions) {
   const { user } = useUser();
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadedFiles, setUploadedFiles] =
-    useState<FileItemFragment[]>(defaultUploadedFiles);
+  const [uploadedFiles, setUploadedFiles]
+    = useState<FileItemFragment[]>(defaultUploadedFiles);
 
   const [signedUrls] = useSignedUrlsForUploadLazyQuery();
   const [createFiles] = useCreateFilesMutation();
@@ -40,17 +40,18 @@ export function useUploadFiles({
       console.error({ fileInput });
 
       void signedUrls({
-        onCompleted: async results => {
+        onCompleted: async (results) => {
           // Upload files to GCP using signed urls
           await Promise.all(
             files.map((file, i) =>
               fetch(results.generateSignedUrlsForUpload.uploadUrls[i]!, {
                 body: file,
                 method: 'PUT',
-              })
-            )
-          ).catch(err => {
+              }),
+            ),
+          ).catch((err) => {
             console.error(err);
+            // eslint-disable-next-line prefer-promise-reject-errors
             reject(err as Error);
           });
 
@@ -60,11 +61,10 @@ export function useUploadFiles({
               console.error('setUploadedFiles');
 
               setUploadedFiles(prev =>
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-                prev ? [...prev, ...createFiles] : createFiles
+                prev ? [...prev, ...createFiles] : createFiles,
               );
             },
-            onError: err => {
+            onError: (err) => {
               console.error(err);
               reject(err);
             },
@@ -81,9 +81,10 @@ export function useUploadFiles({
           setIsUploading(false);
           resolve();
         },
-        onError: err => {
+        onError: (err) => {
           toast.error(getErrorMessage(err));
           setIsUploading(false);
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject(err as Error);
         },
         variables: {

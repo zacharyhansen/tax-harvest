@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
+import type { PrismaService } from '../prisma/prisma.service'
 
-import { PrismaService } from "../prisma/prisma.service";
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class PositionService {
@@ -11,8 +11,8 @@ export class PositionService {
     portfolioId,
     select,
   }: {
-    portfolioId: string;
-    select: Prisma.PositionSelect;
+    portfolioId: string
+    select: Prisma.PositionSelect
   }) {
     return this.prismaService.position.findMany({
       select,
@@ -23,6 +23,6 @@ export class PositionService {
           },
         },
       },
-    });
+    })
   }
 }

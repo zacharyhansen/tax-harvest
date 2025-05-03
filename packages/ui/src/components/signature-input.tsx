@@ -1,20 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Eraser } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from './button';
 
-interface SignatureInputProps {
+type SignatureInputProps = {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   onSignatureChange: (signature: string | null) => void;
-}
-
-const preventScroll = (event: TouchEvent) => {
-  event.preventDefault(); // Disable scroll
 };
 
-const disableTouchScroll = (canvas: HTMLCanvasElement) => {
+function preventScroll(event: TouchEvent) {
+  event.preventDefault(); // Disable scroll
+}
+
+function disableTouchScroll(canvas: HTMLCanvasElement) {
   canvas.addEventListener('touchstart', preventScroll, { passive: false });
   canvas.addEventListener('touchmove', preventScroll, { passive: false });
   canvas.addEventListener('touchend', preventScroll, { passive: false });
@@ -24,7 +24,7 @@ const disableTouchScroll = (canvas: HTMLCanvasElement) => {
     canvas.removeEventListener('touchmove', preventScroll);
     canvas.removeEventListener('touchend', preventScroll);
   };
-};
+}
 
 const SCALE = 10;
 
@@ -65,10 +65,11 @@ export function SignatureInput({
   const startDrawing = (
     event:
       | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>
+      | React.TouchEvent<HTMLCanvasElement>,
   ) => {
     event.preventDefault();
     setIsDrawing(true);
+    // eslint-disable-next-line ts/no-use-before-define
     draw(event);
   };
 
@@ -87,21 +88,23 @@ export function SignatureInput({
   const draw = (
     event:
       | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>
+      | React.TouchEvent<HTMLCanvasElement>,
   ) => {
     event.preventDefault();
-    if (!isDrawing) return;
+    if (!isDrawing) {
+      return;
+    }
 
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     if (canvas && context) {
       const rect = canvas.getBoundingClientRect();
-      const x =
-        ('touches' in event
+      const x
+        = ('touches' in event
           ? (event.touches[0]?.clientX ?? 0)
           : event.clientX) - rect.left;
-      const y =
-        ('touches' in event
+      const y
+        = ('touches' in event
           ? (event.touches[0]?.clientY ?? 0)
           : event.clientY) - rect.top;
 
@@ -155,7 +158,7 @@ export function SignatureInput({
         className="absolute bottom-1 left-1 z-10 rounded-full"
         onClick={clearSignature}
       >
-        <Eraser className="text-muted-foreground hover:text-primary h-4 w-4" />
+        <Eraser className="size-4 text-muted-foreground hover:text-primary" />
       </Button>
     </div>
   );

@@ -1,13 +1,14 @@
 'use client';
 
-import { createPortal } from 'react-dom';
-import * as React from 'react';
 import type {
   DndContextProps,
   DraggableSyntheticListeners,
   DropAnimation,
   UniqueIdentifier,
 } from '@dnd-kit/core';
+import type { SortableContextProps } from '@dnd-kit/sortable';
+import type { SlotProps } from '@radix-ui/react-slot';
+import type { ButtonProps } from './button';
 import {
   closestCenter,
   defaultDropAnimationSideEffects,
@@ -28,17 +29,19 @@ import {
   arrayMove,
   horizontalListSortingStrategy,
   SortableContext,
+
   useSortable,
   verticalListSortingStrategy,
-  type SortableContextProps,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Slot, type SlotProps } from '@radix-ui/react-slot';
+import { Slot } from '@radix-ui/react-slot';
+import * as React from 'react';
 
+import { createPortal } from 'react-dom';
 import { cn } from '../utils';
-import { composeRefs as composeReferences } from '../utils/compose-references';
 
-import { Button, type ButtonProps } from './button';
+import { composeRefs as composeReferences } from '../utils/compose-references';
+import { Button } from './button';
 
 const orientationConfig = {
   vertical: {
@@ -55,8 +58,7 @@ const orientationConfig = {
   },
 };
 
-interface SortableProps<TData extends { id: UniqueIdentifier }>
-  extends DndContextProps {
+type SortableProps<TData extends { id: UniqueIdentifier }> = {
   /**
    * An array of data items that the sortable component will render.
    * @example
@@ -123,7 +125,7 @@ interface SortableProps<TData extends { id: UniqueIdentifier }>
    * overlay={<Skeleton className="w-full h-8" />}
    */
   overlay?: React.ReactNode | null;
-}
+} & DndContextProps;
 
 function Sortable<TData extends { id: UniqueIdentifier }>({
   value,
@@ -141,7 +143,7 @@ function Sortable<TData extends { id: UniqueIdentifier }>({
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor),
-    useSensor(KeyboardSensor)
+    useSensor(KeyboardSensor),
   );
 
   const config = orientationConfig[orientation];
@@ -181,8 +183,9 @@ function Sortable<TData extends { id: UniqueIdentifier }>({
         </SortableContext>
         {overlay && typeof window !== 'undefined'
           ? createPortal(
+              // eslint-disable-next-line ts/no-use-before-define
               <SortableOverlay activeId={activeId}>{overlay}</SortableOverlay>,
-              document.body
+              document.body,
             )
           : null}
       </DndContext>
@@ -200,39 +203,39 @@ const dropAnimationOptions: DropAnimation = {
   }),
 };
 
-interface SortableOverlayProps
-  extends React.ComponentPropsWithRef<typeof DragOverlay> {
+type SortableOverlayProps = {
   activeId?: UniqueIdentifier | null;
-}
+} & React.ComponentPropsWithRef<typeof DragOverlay>;
 
-const SortableOverlay = React.forwardRef<HTMLDivElement, SortableOverlayProps>(
-  (
-    { activeId, dropAnimation = dropAnimationOptions, children, ...props },
-    ref
-  ) => {
-    return (
-      <DragOverlay dropAnimation={dropAnimation} {...props}>
-        {activeId ? (
-          <SortableItem
-            ref={ref}
-            value={activeId}
-            className="cursor-grabbing"
-            asChild
-          >
-            {children}
-          </SortableItem>
-        ) : null}
-      </DragOverlay>
-    );
-  }
-);
+const SortableOverlay = (
+  { ref, activeId, dropAnimation = dropAnimationOptions, children, ...props }: SortableOverlayProps & { ref?: React.RefObject<HTMLDivElement | null> },
+) => {
+  return (
+    <DragOverlay dropAnimation={dropAnimation} {...props}>
+      {activeId
+        ? (
+            // eslint-disable-next-line ts/no-use-before-define
+            <SortableItem
+              ref={ref}
+              value={activeId}
+              className="cursor-grabbing"
+              asChild
+            >
+              {children}
+              {/* eslint-disable-next-line ts/no-use-before-define */}
+            </SortableItem>
+          )
+        : null}
+    </DragOverlay>
+  );
+};
 SortableOverlay.displayName = 'SortableOverlay';
 
-interface SortableItemContextProps {
+type SortableItemContextProps = {
   attributes: React.HTMLAttributes<HTMLElement>;
   listeners: DraggableSyntheticListeners | undefined;
   isDragging?: boolean;
-}
+};
 
 const SortableItemContext = React.createContext<SortableItemContextProps>({
   attributes: {},
@@ -241,9 +244,8 @@ const SortableItemContext = React.createContext<SortableItemContextProps>({
 });
 
 function useSortableItem() {
-  const context = React.useContext(SortableItemContext);
+  const context = React.use(SortableItemContext);
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!context) {
     throw new Error('useSortableItem must be used within a SortableItem');
   }
@@ -251,7 +253,7 @@ function useSortableItem() {
   return context;
 }
 
-interface SortableItemProps extends SlotProps {
+type SortableItemProps = {
   /**
    * The unique identifier of the item.
    * @example "item-1"
@@ -272,80 +274,76 @@ interface SortableItemProps extends SlotProps {
    * @type boolean | undefined
    */
   asChild?: boolean;
-}
+} & SlotProps;
 
-const SortableItem = React.forwardRef<HTMLDivElement, SortableItemProps>(
-  ({ value, asTrigger, asChild, className, ...props }, ref) => {
-    const {
+const SortableItem = ({ ref, value, asTrigger, asChild, className, ...props }: SortableItemProps & { ref?: React.RefObject<HTMLDivElement | null> }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: value });
+
+  const context = React.useMemo<SortableItemContextProps>(
+    () => ({
       attributes,
       listeners,
-      setNodeRef,
-      transform,
-      transition,
       isDragging,
-    } = useSortable({ id: value });
+    }),
+    [attributes, listeners, isDragging],
+  );
+  const style: React.CSSProperties = {
+    opacity: isDragging ? 0.5 : 1,
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
 
-    const context = React.useMemo<SortableItemContextProps>(
-      () => ({
-        attributes,
-        listeners,
-        isDragging,
-      }),
-      [attributes, listeners, isDragging]
-    );
-    const style: React.CSSProperties = {
-      opacity: isDragging ? 0.5 : 1,
-      transform: CSS.Translate.toString(transform),
-      transition,
-    };
+  const Comp = asChild ? Slot : 'div';
 
-    const Comp = asChild ? Slot : 'div';
-
-    return (
-      <SortableItemContext.Provider value={context}>
-        <Comp
-          data-state={isDragging ? 'dragging' : undefined}
-          className={cn(
-            'data-[state=dragging]:cursor-grabbing',
-            { 'cursor-grab': !isDragging && asTrigger },
-            className
-          )}
-          ref={composeReferences(ref, setNodeRef as React.Ref<HTMLDivElement>)}
-          style={style}
-          {...(asTrigger ? attributes : {})}
-          {...(asTrigger ? listeners : {})}
-          {...props}
-        />
-      </SortableItemContext.Provider>
-    );
-  }
-);
+  return (
+    <SortableItemContext value={context}>
+      <Comp
+        data-state={isDragging ? 'dragging' : undefined}
+        className={cn(
+          'data-[state=dragging]:cursor-grabbing',
+          { 'cursor-grab': !isDragging && asTrigger },
+          className,
+        )}
+        ref={composeReferences(ref, setNodeRef as React.Ref<HTMLDivElement>)}
+        style={style}
+        {...(asTrigger ? attributes : {})}
+        {...(asTrigger ? listeners : {})}
+        {...props}
+      />
+    </SortableItemContext>
+  );
+};
 SortableItem.displayName = 'SortableItem';
 
-interface SortableDragHandleProps extends ButtonProps {
+type SortableDragHandleProps = {
   withHandle?: boolean;
-}
+} & ButtonProps;
 
-const SortableDragHandle = React.forwardRef<
-  HTMLButtonElement,
-  SortableDragHandleProps
->(({ className, ...props }, ref) => {
+const SortableDragHandle = ({ ref, className, ...props }: SortableDragHandleProps & { ref?: React.RefObject<HTMLButtonElement | null> }) => {
   const { attributes, listeners, isDragging } = useSortableItem();
 
   return (
     <Button
+      // @ts-expect-error - ref is not required
       ref={composeReferences(ref)}
       data-state={isDragging ? 'dragging' : undefined}
       className={cn(
         'cursor-grab data-[state=dragging]:cursor-grabbing',
-        className
+        className,
       )}
       {...attributes}
       {...listeners}
       {...props}
     />
   );
-});
+};
 
 SortableDragHandle.displayName = 'SortableDragHandle';
 

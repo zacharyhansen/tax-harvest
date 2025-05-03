@@ -1,3 +1,4 @@
+import type { NavGroup } from '@repo/ui/layouts/dashboard';
 import {
   Logs,
   Merge,
@@ -9,7 +10,6 @@ import {
   Wallet2,
   Waypoints,
 } from 'lucide-react';
-import { type NavGroup } from '@repo/ui/layouts/dashboard';
 
 import { TypedRoutes } from '~/lib/routes';
 

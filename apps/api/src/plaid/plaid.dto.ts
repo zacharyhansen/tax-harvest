@@ -1,47 +1,56 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql'
 
 @InputType()
 class PlaidInstitution {
   @Field(() => String)
-  name: string;
+  name: string
+
   @Field(() => String)
-  institution_id: string;
+  institution_id: string
 }
 
 @InputType()
 class PlaidAccount {
   @Field(() => String)
-  id: string;
+  id: string
+
   @Field(() => String)
-  name: string;
+  name: string
+
   @Field(() => String)
-  mask: string;
+  mask: string
+
   @Field(() => String)
-  type: string;
+  type: string
+
   @Field(() => String, { nullable: true })
-  subtype?: string;
+  subtype?: string
+
   @Field(() => String, { nullable: true })
-  verification_status?: string;
+  verification_status?: string
 }
 
 @InputType()
 export class PlaidLinkOnSuccessMetadata {
   @Field(() => PlaidInstitution, { nullable: true })
-  institution?: PlaidInstitution;
+  institution?: PlaidInstitution
+
   @Field(() => [PlaidAccount])
-  accounts: PlaidAccount[];
+  accounts: PlaidAccount[]
+
   @Field(() => String)
-  link_session_id: string;
+  link_session_id: string
+
   @Field(() => String, { nullable: true })
-  transfer_status?: string;
+  transfer_status?: string
 }
 
 export interface PlaidWebhook {
-  environment: "sandbox" | "production";
-  error: null;
-  item_id: string;
-  new_holdings: number;
-  updated_holdings: number;
-  webhook_code: string;
-  webhook_type: string;
+  environment: 'sandbox' | 'production'
+  error: null
+  item_id: string
+  new_holdings: number
+  updated_holdings: number
+  webhook_code: string
+  webhook_type: string
 }

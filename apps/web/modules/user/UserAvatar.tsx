@@ -4,11 +4,7 @@ import {
   AvatarImage,
 } from '@repo/ui/components/avatar';
 
-interface UserAvatarProps {
-  user?: object;
-}
-
-export default function UserAvatar({}: UserAvatarProps) {
+export default function UserAvatar() {
   const avatar = (
     <Avatar>
       <AvatarImage src={undefined} alt="avatar" />

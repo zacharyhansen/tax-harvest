@@ -1,1 +1,1 @@
-declare module "prisma-graphql-type-decimal";
+declare module 'prisma-graphql-type-decimal';

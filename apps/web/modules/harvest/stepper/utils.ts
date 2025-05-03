@@ -53,22 +53,22 @@ export const headerMap: Record<
   [HarvestStep.Complete]: {
     [HarvestType.ReduceTaxes]: {
       description:
-        "You have completed the Harvest. An overview of all harvests can be found in the left panel 'Harvests' tab.",
+        'You have completed the Harvest. An overview of all harvests can be found in the left panel \'Harvests\' tab.',
       title: 'Congratulations!',
     },
     [HarvestType.ReduceCostBasis]: {
       description:
-        "You have completed the Harvest. An overview of all harvests can be found in the left panel 'Harvests' tab.",
+        'You have completed the Harvest. An overview of all harvests can be found in the left panel \'Harvests\' tab.',
       title: 'Congratulations!',
     },
     [HarvestType.Sell]: {
       description:
-        "You have completed the Harvest. An overview of all harvests can be found in the left panel 'Harvests' tab.",
+        'You have completed the Harvest. An overview of all harvests can be found in the left panel \'Harvests\' tab.',
       title: 'Congratulations!',
     },
     [HarvestType.CaptureGainsTaxFree]: {
       description:
-        "You have completed the Harvest. An overview of all harvests can be found in the left panel 'Harvests' tab.",
+        'You have completed the Harvest. An overview of all harvests can be found in the left panel \'Harvests\' tab.',
       title: 'Congratulations!',
     },
   },

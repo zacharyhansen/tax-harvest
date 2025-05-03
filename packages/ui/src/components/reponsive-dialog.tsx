@@ -3,8 +3,8 @@
 
 import type * as React from 'react';
 
-import { cn } from '../utils';
 import { useIsMobile } from '../hooks/use-is-mobile';
+import { cn } from '../utils';
 
 import {
   Dialog,
@@ -27,35 +27,35 @@ import {
   DrawerTrigger,
 } from './drawer';
 
-interface BaseProps {
+type BaseProps = {
   children: React.ReactNode;
-}
+};
 
-export interface RootResponsiveDialogProps extends BaseProps {
+export type RootResponsiveDialogProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-}
+} & BaseProps;
 
-export interface ResponsiveDialogProps extends BaseProps {
+export type ResponsiveDialogProps = {
   className?: string;
   asChild?: true;
-}
+} & BaseProps;
 
-const ResponsiveDialog = ({
+function ResponsiveDialog({
   children,
   ...props
-}: RootResponsiveDialogProps) => {
+}: RootResponsiveDialogProps) {
   const isDesktop = !useIsMobile();
   const ResponsiveDialog = isDesktop ? Dialog : Drawer;
 
   return <ResponsiveDialog {...props}>{children}</ResponsiveDialog>;
-};
+}
 
-const ResponsiveDialogTrigger = ({
+function ResponsiveDialogTrigger({
   className,
   children,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps) {
   const isDesktop = !useIsMobile();
   const ResponsiveDialogTrigger = isDesktop ? DialogTrigger : DrawerTrigger;
 
@@ -64,13 +64,13 @@ const ResponsiveDialogTrigger = ({
       {children}
     </ResponsiveDialogTrigger>
   );
-};
+}
 
-const ResponsiveDialogClose = ({
+function ResponsiveDialogClose({
   className,
   children,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps) {
   const isDesktop = !useIsMobile();
   const ResponsiveDialogClose = isDesktop ? DialogClose : DrawerClose;
 
@@ -79,13 +79,13 @@ const ResponsiveDialogClose = ({
       {children}
     </ResponsiveDialogClose>
   );
-};
+}
 
-const ResponsiveDialogContent = ({
+function ResponsiveDialogContent({
   className,
   children,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps) {
   const isDesktop = !useIsMobile();
   const ResponsiveDialogContent = isDesktop ? DialogContent : DrawerContent;
 
@@ -97,13 +97,13 @@ const ResponsiveDialogContent = ({
       {children}
     </ResponsiveDialogContent>
   );
-};
+}
 
-const ResponsiveDialogDescription = ({
+function ResponsiveDialogDescription({
   className,
   children,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps) {
   const isDesktop = !useIsMobile();
   const ResponsiveDialogDescription = isDesktop
     ? DialogDescription
@@ -114,13 +114,13 @@ const ResponsiveDialogDescription = ({
       {children}
     </ResponsiveDialogDescription>
   );
-};
+}
 
-const ResponsiveDialogHeader = ({
+function ResponsiveDialogHeader({
   className,
   children,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps) {
   const isDesktop = !useIsMobile();
   const ResponsiveDialogHeader = isDesktop ? DialogHeader : DrawerHeader;
 
@@ -129,13 +129,13 @@ const ResponsiveDialogHeader = ({
       {children}
     </ResponsiveDialogHeader>
   );
-};
+}
 
-const ResponsiveDialogTitle = ({
+function ResponsiveDialogTitle({
   className,
   children,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps) {
   const isDesktop = !useIsMobile();
   const ResponsiveDialogTitle = isDesktop ? DialogTitle : DrawerTitle;
 
@@ -144,25 +144,25 @@ const ResponsiveDialogTitle = ({
       {children}
     </ResponsiveDialogTitle>
   );
-};
+}
 
-const ResponsiveDialogBody = ({
+function ResponsiveDialogBody({
   className,
   children,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps) {
   return (
     <div className={cn('overflow-auto px-4 md:px-1', className)} {...props}>
       {children}
     </div>
   );
-};
+}
 
-const ResponsiveDialogFooter = ({
+function ResponsiveDialogFooter({
   className,
   children,
   ...props
-}: ResponsiveDialogProps) => {
+}: ResponsiveDialogProps) {
   const isDesktop = !useIsMobile();
   const ResponsiveDialogFooter = isDesktop ? DialogFooter : DrawerFooter;
 
@@ -171,16 +171,16 @@ const ResponsiveDialogFooter = ({
       {children}
     </ResponsiveDialogFooter>
   );
-};
+}
 
 export {
   ResponsiveDialog,
-  ResponsiveDialogTrigger,
+  ResponsiveDialogBody,
   ResponsiveDialogClose,
   ResponsiveDialogContent,
   ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
-  ResponsiveDialogBody,
-  ResponsiveDialogFooter,
+  ResponsiveDialogTrigger,
 };

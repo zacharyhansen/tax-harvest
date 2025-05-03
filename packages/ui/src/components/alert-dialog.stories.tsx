@@ -30,7 +30,9 @@ const meta = {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel data-testid="cancel">Cancel</AlertDialogCancel>
-            <AlertDialogAction data-testid="Action">Continue</AlertDialogAction>
+            <AlertDialogAction data-testid="Action" variant="default">
+              Continue
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -39,13 +41,11 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-} satisfies Meta<{}>;
+} satisfies Meta<object>;
 
 export default meta;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-type Story = StoryObj<{}>;
+type Story = StoryObj<object>;
 
 export const AlertDialogDemo: Story = {
   args: {},

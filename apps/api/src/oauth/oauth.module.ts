@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'
 
-import { OauthService } from './oauth.service';
+import { OauthService } from './oauth.service'
 
 @Module({
   providers: [OauthService],

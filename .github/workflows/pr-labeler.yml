@@ -7,11 +7,12 @@ on:
 
 jobs:
   label-pr:
-    name: 'PR labeler 🏷️'
+    name: PR labeler 🏷️
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
+      issues: write
 
     steps:
       - name: Checkout repository 🛎️

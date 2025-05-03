@@ -1,69 +1,14 @@
 'use client';
 
-import { Badge } from '@repo/ui/components/badge';
 import type { ColumnDef } from '@tanstack/react-table';
-import { createColumnHelper } from '@tanstack/react-table';
+import type { LotItemFragment } from '~/generated/gql';
+import { Badge } from '@repo/ui/components/badge';
 import DataTable from '@repo/ui/components/dataTable/dataTable';
 
+import { createColumnHelper } from '@tanstack/react-table';
+import { usePortfolioLotsQuery } from '~/generated/gql';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { Format, isOlderThanOneYear } from '~/modules/utils';
-import { LoadingPage, ErrorPage } from '~/modules/utility-components';
-import { usePortfolioLotsQuery, type LotItemFragment } from '~/generated/gql';
-
-export default function LotsTable() {
-  const { data, error, loading } = usePortfolioLotsQuery();
-
-  if (loading) {
-    return <LoadingPage />;
-  }
-
-  if (error) {
-    return <ErrorPage message={error.message} />;
-  }
-
-  return (
-    <DataTable
-      columns={columnDef}
-      data={data?.lots ?? []}
-      noResultsAlert={'This portfolio has no positions.'}
-      loading={loading}
-      error={!!error}
-      initialState={{
-        expanded: true,
-        grouping: ['assetSymbol'],
-        pagination: {
-          pageIndex: 0,
-          pageSize: data?.lots.length ?? 0,
-        },
-        sorting: [{ id: 'acquiredDate', desc: false }],
-      }}
-      customAggregationFns={{
-        avgPricePaid: (_columnId, leafRows) => {
-          let totalQuantity = 0;
-          let totalPaid = 0;
-          leafRows.forEach(row => {
-            const qty = Number(row.original.remainingQty) || 0;
-            totalQuantity += qty;
-            totalPaid += (Number(row.original.price) || 0) * qty;
-          });
-          return Format.money(totalPaid / totalQuantity, 4);
-        },
-        totalGainPct: (_columnId, leafRows) => {
-          let totalGain = 0;
-          let totalPaid = 0;
-          leafRows.forEach(row => {
-            row.getValue;
-            totalGain += Number(row.getValue('totalGain')) || 0;
-            totalPaid += Number(row.getValue('costBasis')) || 0;
-          });
-          return new Intl.NumberFormat('en-US', {
-            maximumFractionDigits: 2,
-            style: 'percent',
-          }).format(totalGain / totalPaid);
-        },
-      }}
-    />
-  );
-}
 
 const columnHelper = createColumnHelper<LotItemFragment>();
 
@@ -100,9 +45,10 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
     footer: ({ table }) => {
       const total = table
         .getFilteredRowModel()
-        .rows.reduce(
+        .rows
+        .reduce(
           (sum, row) => sum + Number(row.getValue<string>('remainingQty') || 0),
-          0
+          0,
         )
         .toFixed(2);
       return <DataTable.FooterCell label="Total" value={total} />;
@@ -117,19 +63,20 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
     size: 120,
   }),
   columnHelper.accessor(
-    row => Number((row.remainingQty || 0) * (row.price || 0)),
+    row => Number(Number(row.remainingQty || 0) * Number(row.price || 0)),
     {
       aggregationFn: 'sumMoney',
       cell: props => <DataTable.MoneyCell {...props} colored={false} />,
       footer: ({ table }) => {
         const total = table
           .getFilteredRowModel()
-          .rows.reduce(
+          .rows
+          .reduce(
             (sum, row) =>
-              sum +
-              Number(row.getValue<string>('remainingQty') || 0) *
-                row.getValue<number>('price'),
-            0
+              sum
+              + Number(row.getValue<string>('remainingQty') || 0)
+              * row.getValue<number>('price'),
+            0,
           );
         return (
           <DataTable.FooterCell label="Total" value={Format.money(total)} />
@@ -138,12 +85,14 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
       header: 'Cost Basis',
       id: 'costBasis',
       size: 120,
-    }
+    },
   ),
 
   columnHelper.accessor(
     row =>
-      Number((row.remainingQty || 0) * (row.asset.lastPrice || 0)).toFixed(2),
+      Number(
+        Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0),
+      ).toFixed(2),
     {
       aggregationFn: 'sumMoney',
       cell: props => <DataTable.MoneyCell {...props} colored={false} />,
@@ -151,12 +100,13 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
       header: 'Total Value',
       id: 'value',
       size: 120,
-    }
+    },
   ),
   columnHelper.accessor(
-    row => {
-      const cost = (row.remainingQty || 0) * (row.price || 0);
-      const value = (row.remainingQty || 0) * (row.asset.lastPrice || 0);
+    (row) => {
+      const cost = Number(row.remainingQty || 0) * Number(row.price || 0);
+      const value
+        = Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0);
       return value - cost;
     },
     {
@@ -165,7 +115,7 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
       header: 'Total Gain',
       id: 'totalGain',
       size: 130,
-    }
+    },
   ),
   columnHelper.accessor('totalCostForGainPct', {
     aggregationFn: 'totalGainPct',
@@ -173,9 +123,9 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
       <DataTable.PercentCell
         {...props}
         value={
-          (Number(props.row.getValue('totalGain')) /
-            Number(props.row.getValue('costBasis'))) *
-          100
+          (Number(props.row.getValue('totalGain'))
+            / Number(props.row.getValue('costBasis')))
+          * 100
         }
       />
     ),
@@ -201,3 +151,58 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
     size: 310,
   }),
 ];
+
+export default function LotsTable() {
+  const { data, error, loading } = usePortfolioLotsQuery();
+
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  if (error) {
+    return <ErrorPage message={error.message} />;
+  }
+
+  return (
+    <DataTable
+      columns={columnDef}
+      data={data?.lots ?? []}
+      noResultsAlert="This portfolio has no positions."
+      loading={loading}
+      error={!!error}
+      initialState={{
+        expanded: true,
+        grouping: ['assetSymbol'],
+        pagination: {
+          pageIndex: 0,
+          pageSize: data?.lots.length ?? 0,
+        },
+        sorting: [{ id: 'acquiredDate', desc: false }],
+      }}
+      customAggregationFns={{
+        avgPricePaid: (_columnId, leafRows) => {
+          let totalQuantity = 0;
+          let totalPaid = 0;
+          leafRows.forEach((row) => {
+            const qty = Number(row.original.remainingQty) || 0;
+            totalQuantity += qty;
+            totalPaid += (Number(row.original.price) || 0) * qty;
+          });
+          return Format.money(totalPaid / totalQuantity, 4);
+        },
+        totalGainPct: (_columnId, leafRows) => {
+          let totalGain = 0;
+          let totalPaid = 0;
+          leafRows.forEach((row) => {
+            totalGain += Number(row.getValue('totalGain')) || 0;
+            totalPaid += Number(row.getValue('costBasis')) || 0;
+          });
+          return new Intl.NumberFormat('en-US', {
+            maximumFractionDigits: 2,
+            style: 'percent',
+          }).format(totalGain / totalPaid);
+        },
+      }}
+    />
+  );
+}

@@ -14,7 +14,7 @@ export const LoadingPage = ({
     <div
       className={cn(
         'flex h-full w-full items-center justify-center',
-        className
+        className,
       )}
     >
       <div className="flex items-center justify-center space-x-1 text-sm">

@@ -59,99 +59,103 @@ export default function HomePage() {
   }
 
   const recommendedHarvest = data?.portfolioSummary.harvestRecommendations.find(
-    rec => rec.recommended
+    rec => rec.recommended,
   );
 
   return (
     <PageWrapper className="mx-auto">
-      {recommendedHarvest ? (
-        <div className="mb-4 w-full">
-          <div className="relative overflow-hidden rounded-lg bg-gradient-to-r from-yellow-500 to-green-500">
-            {/* Patterned background */}
-            <div className="absolute inset-0 opacity-10">
-              <svg
-                className="h-full w-full"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 100 100"
-              >
-                <defs>
-                  <pattern
-                    id="dollarPattern"
-                    x="0"
-                    y="0"
-                    width="10%"
-                    height="10%"
-                    patternUnits="userSpaceOnUse"
+      {recommendedHarvest
+        ? (
+            <div className="mb-4 w-full">
+              <div className="relative overflow-hidden rounded-lg bg-gradient-to-r from-yellow-500 to-green-500">
+                {/* Patterned background */}
+                <div className="absolute inset-0 opacity-10">
+                  <svg
+                    className="size-full"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 100 100"
                   >
-                    <text
-                      x="50%"
-                      y="50%"
-                      dominantBaseline="middle"
-                      textAnchor="middle"
-                      fontSize="10"
-                      fill="currentColor"
-                      fontWeight="bold"
-                    >
-                      $
-                    </text>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#dollarPattern)" />
-              </svg>
-            </div>
-
-            <div className="relative px-4 py-5 sm:p-6">
-              <div className="flex flex-col items-center justify-between sm:flex-row">
-                <div className="text-background mb-4 text-center sm:mb-0 sm:text-left">
-                  <h2 className="text-xl font-bold sm:text-2xl">
-                    Ready to improve your portfolio?
-                  </h2>
-                  <p className="text-md mt-1">
-                    We recommend starting with a{' '}
-                    <Link
-                      className="group"
-                      href={TypedRoutes.lotSelection({
-                        type: recommendedHarvest.harvestType,
-                      })}
-                    >
-                      <span className="underline">
-                        {harvestTypeLabel[recommendedHarvest.harvestType]}
-                      </span>
-                    </Link>{' '}
-                    harvest.
-                  </p>
+                    <defs>
+                      <pattern
+                        id="dollarPattern"
+                        x="0"
+                        y="0"
+                        width="10%"
+                        height="10%"
+                        patternUnits="userSpaceOnUse"
+                      >
+                        <text
+                          x="50%"
+                          y="50%"
+                          dominantBaseline="middle"
+                          textAnchor="middle"
+                          fontSize="10"
+                          fill="currentColor"
+                          fontWeight="bold"
+                        >
+                          $
+                        </text>
+                      </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#dollarPattern)" />
+                  </svg>
                 </div>
-                <div className="flex-shrink-0">
-                  <Link className="group" href={TypedRoutes.harvestFlowRoot()}>
-                    <Button
-                      variant="link"
-                      className="text-background"
-                      iconRight={<Wheat className="h-4 w-4" />}
-                    >
-                      All Harvest Options
-                    </Button>
-                  </Link>
-                  <Link
-                    className="group"
-                    href={TypedRoutes.lotSelection({
-                      type: recommendedHarvest.harvestType,
-                    })}
-                  >
-                    <Button
-                      iconRight={
-                        <ArrowRight className="group-hover:translate-x-1" />
-                      }
-                      className="text-sm font-semibold"
-                    >
-                      {harvestTypeLabel[recommendedHarvest.harvestType]}
-                    </Button>
-                  </Link>
+
+                <div className="relative px-4 py-5 sm:p-6">
+                  <div className="flex flex-col items-center justify-between sm:flex-row">
+                    <div className="mb-4 text-center text-background sm:mb-0 sm:text-left">
+                      <h2 className="text-xl font-bold sm:text-2xl">
+                        Ready to improve your portfolio?
+                      </h2>
+                      <p className="mt-1">
+                        We recommend starting with a
+                        {' '}
+                        <Link
+                          className="group"
+                          href={TypedRoutes.lotSelection({
+                            type: recommendedHarvest.harvestType,
+                          })}
+                        >
+                          <span className="underline">
+                            {harvestTypeLabel[recommendedHarvest.harvestType]}
+                          </span>
+                        </Link>
+                        {' '}
+                        harvest.
+                      </p>
+                    </div>
+                    <div className="shrink-0">
+                      <Link className="group" href={TypedRoutes.harvestFlowRoot()}>
+                        <Button
+                          variant="link"
+                          className="text-background"
+                          iconRight={<Wheat className="size-4" />}
+                        >
+                          All Harvest Options
+                        </Button>
+                      </Link>
+                      <Link
+                        className="group"
+                        href={TypedRoutes.lotSelection({
+                          type: recommendedHarvest.harvestType,
+                        })}
+                      >
+                        <Button
+                          iconRight={
+                            <ArrowRight className="group-hover:translate-x-1" />
+                          }
+                          className="text-sm font-semibold"
+                        >
+                          {harvestTypeLabel[recommendedHarvest.harvestType]}
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      ) : null}
+          )
+        : null}
       <HarvestSummaryCards />
       <LotsTable />
     </PageWrapper>

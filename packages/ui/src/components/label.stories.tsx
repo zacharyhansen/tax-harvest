@@ -18,7 +18,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-//render componente
+// render componente
 export const LabelDefault: Story = {
   args: {},
 };

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 
-//meta
+// meta
 const meta = {
   title: 'Atoms/Avatar',
   render: () => (
@@ -15,8 +15,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-} satisfies Meta<{}>;
+} satisfies Meta<object>;
 
 export default meta;
 

@@ -14,11 +14,11 @@ enum Field {
   textarea = 'textarea',
 }
 
-interface FormBuilderSpec {
+export type FormBuilderSpec = {
   form: string;
-}
+};
 
-interface FieldSpec {
+type FieldSpec = {
   description?: string;
   disabled?: boolean;
   label: string;
@@ -28,14 +28,14 @@ interface FieldSpec {
   rowIndex: number;
   type: Field;
   value: string | Date | number | string[] | boolean;
-}
+};
 
-interface FormSpec {
+export type FormSpec = {
   fields: FieldSpec;
-}
+};
 
-export interface BaseFieldProps {
+export type BaseFieldProps = {
   name: string;
   description?: ReactNode;
   label: ReactNode;
-}
+};

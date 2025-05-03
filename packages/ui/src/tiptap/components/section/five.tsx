@@ -1,6 +1,9 @@
-import type * as React from 'react';
+import type { toggleVariants } from '@repo/ui/components/toggle.variants';
 import type { Editor } from '@tiptap/react';
 import type { VariantProps } from 'class-variance-authority';
+import type * as React from 'react';
+import type { FormatAction } from '../../types';
+
 import {
   CaretDownIcon,
   CodeIcon,
@@ -8,17 +11,14 @@ import {
   PlusIcon,
   QuoteIcon,
 } from '@radix-ui/react-icons';
-import type { toggleVariants } from '@repo/ui/components/toggle.variants';
-
-import type { FormatAction } from '../../types';
-import { LinkEditPopover } from '../link/link-edit-popover';
 import { ImageEditDialog } from '../image/image-edit-dialog';
+import { LinkEditPopover } from '../link/link-edit-popover';
 import { ToolbarSection } from '../toolbar-section';
 
 type InsertElementAction = 'codeBlock' | 'blockquote' | 'horizontalRule';
-interface InsertElement extends FormatAction {
+type InsertElement = {
   value: InsertElementAction;
-}
+} & FormatAction;
 
 const formatActions: InsertElement[] = [
   {
@@ -51,11 +51,11 @@ const formatActions: InsertElement[] = [
   },
 ];
 
-interface SectionFiveProps extends VariantProps<typeof toggleVariants> {
+type SectionFiveProps = {
   editor: Editor;
   activeActions?: InsertElementAction[];
   mainActionCount?: number;
-}
+} & VariantProps<typeof toggleVariants>;
 
 export const SectionFive: React.FC<SectionFiveProps> = ({
   editor,
@@ -73,12 +73,12 @@ export const SectionFive: React.FC<SectionFiveProps> = ({
         actions={formatActions}
         activeActions={activeActions}
         mainActionCount={mainActionCount}
-        dropdownIcon={
+        dropdownIcon={(
           <>
             <PlusIcon className="size-5" />
             <CaretDownIcon className="size-5" />
           </>
-        }
+        )}
         dropdownTooltip="Insert elements"
         size={size}
         variant={variant}

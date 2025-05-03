@@ -1,9 +1,9 @@
 'use client';
 
-import PortfolioPage from './[id]/page';
+import PageWrapper from '~/modules/layout/page-wrapper';
 
 import { usePortfolio } from '~/modules/portfolio';
-import PageWrapper from '~/modules/layout/page-wrapper';
+import PortfolioPage from './[id]/page';
 
 export default function PortfolioIndex() {
   const { portfolio } = usePortfolio();

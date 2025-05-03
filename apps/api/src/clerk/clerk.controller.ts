@@ -1,83 +1,86 @@
+import type {
+  RawBodyRequest,
+  Request,
+  Response,
+} from '@nestjs/common'
+import type { ConfigService } from '@nestjs/config'
+import type { UserService } from '../user/user.service'
+import type { ClerkWebHookEvent } from './clerk.dto'
+
 import {
   Controller,
   Headers,
   Logger,
   Post,
-  type RawBodyRequest,
+
   Req,
-  Request,
   Res,
-  Response,
-} from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { Webhook } from "svix";
+} from '@nestjs/common'
+import { Webhook } from 'svix'
+import { Public } from '../auth/decorators/public.decorator'
+import { isClerkUser } from './clerk.dto'
 
-import { Public } from "../auth/decorators/public.decorator";
-import { UserService } from "../user/user.service";
-import { ClerkWebHookEvent, isClerkUser } from "./clerk.dto";
-
-@Controller("clerk")
+@Controller('clerk')
 export class ClerkController {
-  private readonly logger = new Logger(ClerkController.name);
+  private readonly logger = new Logger(ClerkController.name)
 
   constructor(
     private readonly userService: UserService,
     private readonly configService: ConfigService,
   ) {}
 
-  @Post("webhook")
+  @Post('webhook')
   @Public()
   async handleWebhook(
-    @Headers("svix-id") svixId: string,
-    @Headers("svix-timestamp") svixTimestamp: string,
-    @Headers("svix-signature") svixSignature: string,
+    @Headers('svix-id') svixId: string,
+    @Headers('svix-timestamp') svixTimestamp: string,
+    @Headers('svix-signature') svixSignature: string,
     @Req() request: RawBodyRequest<Request>,
     @Res() res: Response,
   ) {
     try {
       // Verify webhook secret exists
       const webhookSecret = this.configService.get<string>(
-        "CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET",
-      );
+        'CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET',
+      )
       if (!webhookSecret) {
-        throw new Error("Missing WEBHOOK_SECRET in environment variables");
+        throw new Error('Missing WEBHOOK_SECRET in environment variables')
       }
 
       // Verify required headers
       if (!svixId || !svixTimestamp || !svixSignature) {
         // @ts-expect-error - This is a fastify response
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         return res.status(400).json({
-          message: "Missing required Svix headers",
+          message: 'Missing required Svix headers',
           success: false,
-        });
+        })
       }
 
       // Initialize webhook instance
-      const wh = new Webhook(webhookSecret);
+      const wh = new Webhook(webhookSecret)
 
       // Verify the webhook payload
-      const payload = request.rawBody?.toString("utf8");
+      const payload = request.rawBody?.toString('utf8')
 
       if (!payload) {
-        throw new Error("Missing webhook payload.");
+        throw new Error('Missing webhook payload.')
       }
 
       const evt = wh.verify(payload, {
-        "svix-id": svixId,
-        "svix-signature": svixSignature,
-        "svix-timestamp": svixTimestamp,
-      }) as ClerkWebHookEvent;
+        'svix-id': svixId,
+        'svix-signature': svixSignature,
+        'svix-timestamp': svixTimestamp,
+      }) as ClerkWebHookEvent
 
       if (isClerkUser(evt.data)) {
         // Handle different webhook events
         const email = evt.data.email_addresses.find(
           email => email.id === evt.data.primary_email_address_id,
-        )?.email_address;
+        )?.email_address
         const phoneNumber = evt.data.phone_numbers.find(
           num => num.id === evt.data.primary_phone_number_id,
-        )?.phone_number;
-        const name = `${evt.data.first_name} ${evt.data.last_name}`;
+        )?.phone_number
+        const name = `${evt.data.first_name} ${evt.data.last_name}`
 
         // Keep user creation to this single entry point (even tho it requires an extra request)
         await this.userService.asserUserExists(
@@ -89,16 +92,16 @@ export class ClerkController {
             phoneNumber,
             photo: evt.data.image_url,
           },
-        );
+        )
 
         switch (evt.type) {
-          case "user.created": {
+          case 'user.created': {
             // Dont need to do anything as the this.userService.asserUserExists handles this
-            this.logger.log(`Clerk user create event for ${evt.data.id}`);
-            break;
+            this.logger.log(`Clerk user create event for ${evt.data.id}`)
+            break
           }
-          case "user.updated": {
-            this.logger.log(`Clerk user update event for ${evt.data.id}`);
+          case 'user.updated': {
+            this.logger.log(`Clerk user update event for ${evt.data.id}`)
 
             // Handle user update
             await this.userService.updateUser({
@@ -112,25 +115,24 @@ export class ClerkController {
               where: {
                 id: evt.data.id,
               },
-            });
-            break;
+            })
+            break
           }
         }
         // @ts-expect-error - This is a fastify response
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         return res.status(200).json({
-          message: "Webhook processed successfully",
+          message: 'Webhook processed successfully',
           success: true,
-        });
+        })
       }
-    } catch (error) {
-      console.error("Webhook error:", error);
+    }
+    catch (error) {
+      console.error('Webhook error:', error)
       // @ts-expect-error - This is a fastify response
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       return res.status(400).json({
         message: error,
         success: false,
-      });
+      })
     }
   }
 }

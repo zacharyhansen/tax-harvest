@@ -1,30 +1,30 @@
-import * as React from 'react';
-import type { Editor } from '@tiptap/react';
 import type { Node } from '@tiptap/pm/model';
+import type { Editor } from '@tiptap/react';
+import * as React from 'react';
 
 import { isUrl } from '../../../utils';
 
-interface UseImageActionsProps {
+type UseImageActionsProps = {
   editor: Editor;
   node: Node;
   src: string;
   onViewClick: (value: boolean) => void;
-}
+};
 
-export interface ImageActionHandlers {
+export type ImageActionHandlers = {
   onView?: () => void;
   onDownload?: () => void;
   onCopy?: () => void;
   onCopyLink?: () => void;
   onRemoveImg?: () => void;
-}
+};
 
-export const useImageActions = ({
+export function useImageActions({
   editor,
   node,
   src,
   onViewClick,
-}: UseImageActionsProps) => {
+}: UseImageActionsProps) {
   const isLink = React.useMemo(() => isUrl(src), [src]);
 
   const onView = React.useCallback(() => {
@@ -49,9 +49,9 @@ export const useImageActions = ({
       const nodeAtSelection = tr.doc.nodeAt(selection.from);
 
       if (
-        nodeAtSelection &&
-        nodeAtSelection.type.name === 'image' &&
-        dispatch
+        nodeAtSelection
+        && nodeAtSelection.type.name === 'image'
+        && dispatch
       ) {
         tr.deleteSelection();
         return true;
@@ -61,4 +61,4 @@ export const useImageActions = ({
   }, [editor.commands]);
 
   return { isLink, onView, onDownload, onCopy, onCopyLink, onRemoveImg };
-};
+}

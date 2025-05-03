@@ -1,8 +1,9 @@
 'use client';
 
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import type { Row } from '@tanstack/react-table';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 
+import { Button } from '../button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,23 +16,23 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '../dropdown-menu';
-import { Button } from '../button';
 
-interface DataTableRowActionsProps<TData> {
+type DataTableRowActionsProps<TData> = {
   row: Row<TData>;
-}
+};
 
 export function DataTableRowActions<
   TData,
+// eslint-disable-next-line no-empty-pattern
 >({}: DataTableRowActionsProps<TData>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
+          className="flex size-8 p-0 data-[state=open]:bg-muted"
         >
-          <DotsHorizontalIcon className="h-4 w-4" />
+          <DotsHorizontalIcon className="size-4" />
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
@@ -43,7 +44,7 @@ export function DataTableRowActions<
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={'TODO label'}>
+            <DropdownMenuRadioGroup value="TODO label">
               {/* {labels.map((label) => (
                 <DropdownMenuRadioItem key={label.value} value={label.value}>
                   {label.label}

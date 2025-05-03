@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   ClipboardCopyIcon,
   DotsHorizontalIcon,
@@ -6,78 +5,74 @@ import {
   Link2Icon,
   SizeIcon,
 } from '@radix-ui/react-icons';
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@repo/ui/components/tooltip';
 import { Button } from '@repo/ui/components/button';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@repo/ui/components/tooltip';
 import { cn } from '@repo/ui/utils';
+import * as React from 'react';
 
-interface ImageActionsProps {
+type ImageActionsProps = {
   shouldMerge?: boolean;
   isLink?: boolean;
   onView?: () => void;
   onDownload?: () => void;
   onCopy?: () => void;
   onCopyLink?: () => void;
-}
+};
 
-interface ActionButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+type ActionButtonProps = {
   icon: React.ReactNode;
   tooltip: string;
-}
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const ActionWrapper = React.memo(
-  React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-    ({ children, className, ...props }, ref) => (
-      <div
-        ref={ref}
-        className={cn(
-          'absolute right-3 top-3 flex flex-row rounded px-0.5 opacity-0 group-hover/node-image:opacity-100',
-          'border-[0.5px] bg-[var(--mt-bg-secondary)] [backdrop-filter:saturate(1.8)_blur(20px)]',
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </div>
-    )
-  )
+  ({ ref, children, className, ...props }: React.HTMLAttributes<HTMLDivElement> & { ref?: React.RefObject<HTMLDivElement | null> }) => (
+    <div
+      ref={ref}
+      className={cn(
+        'absolute right-3 top-3 flex flex-row rounded px-0.5 opacity-0 group-hover/node-image:opacity-100',
+        'border-[0.5px] bg-[var(--mt-bg-secondary)] [backdrop-filter:saturate(1.8)_blur(20px)]',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  ),
 );
 
 ActionWrapper.displayName = 'ActionWrapper';
 
 export const ActionButton = React.memo(
-  React.forwardRef<HTMLButtonElement, ActionButtonProps>(
-    ({ icon, tooltip, className, ...props }, ref) => (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            ref={ref}
-            variant="ghost"
-            className={cn(
-              'text-muted-foreground hover:text-foreground relative flex h-7 w-7 flex-row rounded-none p-0',
-              'bg-transparent hover:bg-transparent',
-              className
-            )}
-            {...props}
-          >
-            {icon}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">{tooltip}</TooltipContent>
-      </Tooltip>
-    )
-  )
+  ({ ref, icon, tooltip, className, ...props }: ActionButtonProps & { ref?: React.RefObject<HTMLButtonElement | null> }) => (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          ref={ref}
+          variant="ghost"
+          className={cn(
+            'text-muted-foreground hover:text-foreground relative flex h-7 w-7 flex-row rounded-none p-0',
+            'bg-transparent hover:bg-transparent',
+            className,
+          )}
+          {...props}
+        >
+          {icon}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">{tooltip}</TooltipContent>
+    </Tooltip>
+  ),
 );
 
 ActionButton.displayName = 'ActionButton';
@@ -123,58 +118,60 @@ export const ImageActions: React.FC<ImageActionsProps> = React.memo(
         event.stopPropagation();
         action?.();
       },
-      []
+      [],
     );
 
     const filteredActions = React.useMemo(
       () => ActionItems.filter(item => isLink || !item.isLink),
-      [isLink]
+      [isLink],
     );
 
     return (
       <ActionWrapper className={cn({ 'opacity-100': isOpen })}>
-        {shouldMerge ? (
-          <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-            <DropdownMenuTrigger asChild>
-              <ActionButton
-                icon={<DotsHorizontalIcon className="size-4" />}
-                tooltip="Open menu"
-                onClick={event => {
-                  event.preventDefault();
-                }}
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end">
-              {filteredActions.map(({ key, icon, tooltip }) => (
-                <DropdownMenuItem
+        {shouldMerge
+          ? (
+              <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+                <DropdownMenuTrigger asChild>
+                  <ActionButton
+                    icon={<DotsHorizontalIcon className="size-4" />}
+                    tooltip="Open menu"
+                    onClick={(event) => {
+                      event.preventDefault();
+                    }}
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end">
+                  {filteredActions.map(({ key, icon, tooltip }) => (
+                    <DropdownMenuItem
+                      key={key}
+                      onClick={(event) => {
+                        handleAction(event, actions[key]);
+                      }}
+                    >
+                      <div className="flex flex-row items-center gap-2">
+                        {icon}
+                        <span>{tooltip}</span>
+                      </div>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )
+          : (
+              filteredActions.map(({ key, icon, tooltip }) => (
+                <ActionButton
                   key={key}
-                  onClick={event => {
+                  icon={icon}
+                  tooltip={tooltip}
+                  onClick={(event) => {
                     handleAction(event, actions[key]);
                   }}
-                >
-                  <div className="flex flex-row items-center gap-2">
-                    {icon}
-                    <span>{tooltip}</span>
-                  </div>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          filteredActions.map(({ key, icon, tooltip }) => (
-            <ActionButton
-              key={key}
-              icon={icon}
-              tooltip={tooltip}
-              onClick={event => {
-                handleAction(event, actions[key]);
-              }}
-            />
-          ))
-        )}
+                />
+              ))
+            )}
       </ActionWrapper>
     );
-  }
+  },
 );
 
 ImageActions.displayName = 'ImageActions';

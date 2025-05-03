@@ -4,9 +4,10 @@ export {};
 export type Roles = 'admin';
 
 declare global {
+  // eslint-disable-next-line ts/consistent-type-definitions
   interface CustomJwtSessionClaims {
     metadata: {
       role?: Roles;
     };
-  }
+  };
 }

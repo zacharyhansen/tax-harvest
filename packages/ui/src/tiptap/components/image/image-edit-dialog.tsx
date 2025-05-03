@@ -1,27 +1,27 @@
+import type { toggleVariants } from '@repo/ui/components/toggle.variants';
 import type { Editor } from '@tiptap/react';
 import type { VariantProps } from 'class-variance-authority';
-import { useState } from 'react';
 import { ImageIcon } from '@radix-ui/react-icons';
-import type { toggleVariants } from '@repo/ui/components/toggle.variants';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@repo/ui/components/dialog';
+
+import { useState } from 'react';
 
 import { ToolbarButton } from '../toolbar-button';
 
 import { ImageEditBlock } from './image-edit-block';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from '@repo/ui/components/dialog';
-
-interface ImageEditDialogProps extends VariantProps<typeof toggleVariants> {
+type ImageEditDialogProps = {
   editor: Editor;
-}
+} & VariantProps<typeof toggleVariants>;
 
-const ImageEditDialog = ({ editor, size, variant }: ImageEditDialogProps) => {
+function ImageEditDialog({ editor, size, variant }: ImageEditDialogProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -53,6 +53,6 @@ const ImageEditDialog = ({ editor, size, variant }: ImageEditDialogProps) => {
       </DialogContent>
     </Dialog>
   );
-};
+}
 
 export { ImageEditDialog };

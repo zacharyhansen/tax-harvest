@@ -1,14 +1,15 @@
-import { Node, mergeAttributes } from '@tiptap/core';
-import { ReactNodeViewRenderer } from '@tiptap/react';
+import type { TextNodeAttributes } from './types';
+import { Input } from '@repo/ui/components/input';
 
+import InputField from '@repo/ui/form-builder/fields/input.field';
+
+import { mergeAttributes, Node } from '@tiptap/core';
+import { ReactNodeViewRenderer } from '@tiptap/react';
 import { generateRandomFieldName } from '../../utils';
 
-import { FormNode, type TextNodeAttributes } from './types';
-import { InputWrapper } from './input.wrapper';
 import { useFormKeyDown } from './hooks/use-form-key-down';
-
-import { Input } from '@repo/ui/components/input';
-import InputField from '@repo/ui/form-builder/fields/input.field';
+import { InputWrapper } from './input.wrapper';
+import { FormNode } from './types';
 
 export const FormTextNode = Node.create<TextNodeAttributes>({
   name: FormNode.Text, // Unique name for your node
@@ -40,7 +41,7 @@ export const FormTextNode = Node.create<TextNodeAttributes>({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(props => {
+    return ReactNodeViewRenderer((props) => {
       const { node, updateAttributes } = props;
       const { placeholder } = node.attrs as TextNodeAttributes;
       const { handleKeyDown } = useFormKeyDown(props);
@@ -52,13 +53,13 @@ export const FormTextNode = Node.create<TextNodeAttributes>({
       return (
         <InputWrapper {...props} type={FormNode.Text}>
           <Input
-            placeholder={'Type placeholder text'}
-            onChange={event => {
+            placeholder="Type placeholder text"
+            onChange={(event) => {
               updateAttributes({ placeholder: event.target.value });
             }}
             onKeyDown={handleKeyDown}
             value={placeholder}
-            className="text-muted-foreground transition-all duration-200 placeholder:text-transparent focus:placeholder-gray-400 focus:outline-none"
+            className="text-muted-foreground transition-all duration-200 placeholder:text-transparent focus:outline-none focus:placeholder:text-gray-400"
           />
         </InputWrapper>
       );

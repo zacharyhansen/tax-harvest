@@ -1,3 +1,19 @@
+fragment HarvestLotOrderItem on HarvestLotOrder {
+  accountId
+  costBasis
+  gainTotal
+  id
+  lotId
+  pricePaid
+  quantity
+  taxGain
+  assetSymbol
+  dollarPerSharePnL
+  valueTotal
+  orderType
+  acquiredDate
+}
+
 query LotsCurrentForLotType($lotValueType: LotValueType!) {
   lotCurrent(lotValueType: $lotValueType) {
     ...LotCurrentItem

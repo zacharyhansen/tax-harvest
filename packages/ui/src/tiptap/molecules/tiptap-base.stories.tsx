@@ -35,21 +35,21 @@ export const Default: Story = {
 
 export const SlashCommandDefault: Story = {
   args: {
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     slashCommands: defaultCommands,
   },
 };
 
 export const Mini: Story = {
   args: {
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     variant: 'mini',
   },
 };
 
 export const Max: Story = {
   args: {
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     variant: 'max',
   },
 };
@@ -57,7 +57,7 @@ export const Max: Story = {
 export const NotEditable: Story = {
   args: {
     editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     editable: false,
     value: `
     <p>This is an example of how custom input nodes appear.</p>
@@ -69,7 +69,7 @@ export const NotEditable: Story = {
 export const InputBlocks: Story = {
   args: {
     editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     value: `
     <p>This is an example of how custom input nodes appear.</p>
     <input-block label="Your Name" placeholder="Enter your name" />
@@ -81,7 +81,7 @@ export const InputBlocks: Story = {
 export const InputBlocksRendered: Story = {
   args: {
     editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     editable: false,
     value: `
     <p>This is an example of how custom input nodes appear.</p>

@@ -1,6 +1,6 @@
-import type { BaseFieldProps } from '../form-builder.types';
+import type { SliderProps } from '@repo/ui/components/slider';
 
-import { Slider, type SliderProps } from '@repo/ui/components/slider';
+import type { BaseFieldProps } from '../form-builder.types';
 import {
   FormControl,
   FormDescription,
@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@repo/ui/components/form';
+import { Slider } from '@repo/ui/components/slider';
 
 export default function SliderField({
   name,
@@ -23,12 +24,15 @@ export default function SliderField({
         return (
           <FormItem>
             <FormLabel>
-              {label} - {field.value}
+              {label}
+              {' '}
+              -
+              {field.value}
             </FormLabel>
             <FormControl>
               <Slider
                 {...props}
-                onValueChange={vals => {
+                onValueChange={(vals) => {
                   field.onChange(vals[0]);
                 }}
                 defaultValue={[field.value]}

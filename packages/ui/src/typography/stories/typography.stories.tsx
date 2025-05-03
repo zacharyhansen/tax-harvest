@@ -1,20 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import {
+  TypographyBlockquote,
   TypographyH1,
   TypographyH2,
   TypographyH3,
   TypographyH4,
-  TypographyP,
-  TypographyLarge,
-  TypographySmall,
-  TypographyLead,
-  TypographyBlockquote,
   TypographyInlineCode,
+  TypographyLarge,
+  TypographyLead,
   TypographyList,
-  TypographyMuted,
-  TypographyTable,
   TypographyListItem,
+  TypographyMuted,
+  TypographyP,
+  TypographySmall,
+  TypographyTable,
 } from '../typography';
 
 const meta = {
@@ -38,19 +38,19 @@ export const H2: Story = {
     ...H1.args,
     children: 'The People of the Kingdom',
   },
-  render: args => {
+  render: (args) => {
     return <TypographyH2>{args.children}</TypographyH2>;
   },
 };
 export const H3: Story = {
   args: { ...H1.args, children: 'The Joke Tax' },
-  render: args => {
+  render: (args) => {
     return <TypographyH3>{args.children}</TypographyH3>;
   },
 };
 export const H4: Story = {
   args: { ...H1.args, children: 'People stopped telling jokes' },
-  render: args => {
+  render: (args) => {
     return <TypographyH4>{args.children}</TypographyH4>;
   },
 };
@@ -60,7 +60,7 @@ export const P: Story = {
     children:
       'The king, seeing how much happier his subjects were, realized the error of his ways and repealed the joke tax.',
   },
-  render: args => {
+  render: (args) => {
     return <TypographyP>{args.children}</TypographyP>;
   },
 };
@@ -70,7 +70,7 @@ export const Blockquote: Story = {
     children:
       '"After all," he said, "everyone enjoys a good joke, so it`s only fair that they should pay for the privilege."',
   },
-  render: args => {
+  render: (args) => {
     return <TypographyBlockquote>{args.children}</TypographyBlockquote>;
   },
 };
@@ -99,7 +99,7 @@ export const InlineCode: Story = {
     ...H1.args,
     children: '@radix-ui/react-alert-dialog',
   },
-  render: args => {
+  render: (args) => {
     return <TypographyInlineCode>{args.children}</TypographyInlineCode>;
   },
 };
@@ -109,7 +109,7 @@ export const Lead: Story = {
     children:
       ' A modal dialog that interrupts the user with important content and expects a response.',
   },
-  render: args => {
+  render: (args) => {
     return <TypographyLead>{args.children}</TypographyLead>;
   },
 };
@@ -118,7 +118,7 @@ export const Large: Story = {
     ...H1.args,
     children: 'Are you sure absolutely sure?',
   },
-  render: args => {
+  render: (args) => {
     return <TypographyLarge>{args.children}</TypographyLarge>;
   },
 };
@@ -127,7 +127,7 @@ export const Small: Story = {
     ...H1.args,
     children: 'Email address',
   },
-  render: args => {
+  render: (args) => {
     return <TypographySmall>{args.children}</TypographySmall>;
   },
 };
@@ -136,7 +136,7 @@ export const Muted: Story = {
     ...H1.args,
     children: 'Enter your email address.',
   },
-  render: args => {
+  render: (args) => {
     return <TypographyMuted>{args.children}</TypographyMuted>;
   },
 };
@@ -156,9 +156,10 @@ export const History: Story = {
         </TypographyH2>
         <TypographyP>
           The king thought long and hard, and finally came up with
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a
             href="#"
-            className="text-primary font-medium underline underline-offset-4"
+            className="font-medium text-primary underline underline-offset-4"
           >
             a brilliant plan
           </a>

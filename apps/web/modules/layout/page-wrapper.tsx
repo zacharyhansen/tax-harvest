@@ -5,18 +5,18 @@ import clsx from 'clsx';
 
 import { ErrorPage, LoadingPage } from '../utility-components';
 
-export interface PageWrapperProps {
+export type PageWrapperProps = {
   description?: ReactNode;
   children: ReactNode;
   title?: ReactNode;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-redundant-type-constituents
+  // eslint-disable-next-line ts/no-explicit-any
   error?: any | null;
   loading?: boolean;
   className?: string;
   cornerElement?: ReactNode;
   next?: ReactNode;
   prev?: ReactNode;
-}
+};
 
 export default function PageWrapper({
   children,
@@ -42,30 +42,38 @@ export default function PageWrapper({
   return (
     <div
       className={clsx(
-        'flex max-w-full flex-grow flex-col overflow-auto px-4 py-2',
-        className
+        'flex max-w-full grow flex-col overflow-auto px-4 py-2',
+        className,
       )}
     >
-      {(next ?? prev) ? (
-        <div className="flex pb-4">
-          {prev ? <div>{prev}</div> : null}
-          {next ? <div className="ml-auto">{next}</div> : null}
-        </div>
-      ) : null}
+      {(next ?? prev)
+        ? (
+            <div className="flex pb-4">
+              {prev ? <div>{prev}</div> : null}
+              {next ? <div className="ml-auto">{next}</div> : null}
+            </div>
+          )
+        : null}
       <div className="flex">
-        {(title ?? description) ? (
-          <div className={clsx('w-full py-2')}>
-            {title ? (
-              <h3 className="text-foreground flex items-center space-y-4 text-xl font-semibold">
-                {title}
-                {loading ? <LoadingPage /> : null}
-              </h3>
-            ) : null}
-            {description ? (
-              <div className="text-muted-foreground text-sm">{description}</div>
-            ) : null}
-          </div>
-        ) : null}
+        {(title ?? description)
+          ? (
+              <div className={clsx('w-full py-2')}>
+                {title
+                  ? (
+                      <h3 className="flex items-center space-y-4 text-xl font-semibold text-foreground">
+                        {title}
+                        {loading ? <LoadingPage /> : null}
+                      </h3>
+                    )
+                  : null}
+                {description
+                  ? (
+                      <div className="text-sm text-muted-foreground">{description}</div>
+                    )
+                  : null}
+              </div>
+            )
+          : null}
         {cornerElement ? <div className="ml-auto">{cornerElement}</div> : null}
       </div>
       {children}

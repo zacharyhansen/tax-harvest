@@ -14,7 +14,7 @@ export default function PercentCell<TData, TValue>({
     return null;
   }
 
-  const amount = (value ?? parseFloat(String(getValue()))) / 100;
+  const amount = (value ?? Number.parseFloat(String(getValue()))) / 100;
   const formatted = new Intl.NumberFormat('en-US', {
     maximumFractionDigits: 2,
     style: 'percent',

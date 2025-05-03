@@ -1,19 +1,19 @@
-import * as React from 'react';
 import {
   CopyIcon,
   ExternalLinkIcon,
   LinkBreak2Icon,
 } from '@radix-ui/react-icons';
+import { Separator } from '@repo/ui/components/separator';
+
+import * as React from 'react';
 
 import { ToolbarButton } from '../toolbar-button';
 
-import { Separator } from '@repo/ui/components/separator';
-
-interface LinkPopoverBlockProps {
+type LinkPopoverBlockProps = {
   url: string;
   onClear: () => void;
   onEdit: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
 export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
   url,
@@ -33,10 +33,9 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
             setCopyTitle('Copy');
           }, 1000);
         })
-        // eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
         .catch(console.error);
     },
-    [url]
+    [url],
   );
 
   const handleOpenLink = React.useCallback(() => {
@@ -44,7 +43,7 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
   }, [url]);
 
   return (
-    <div className="bg-background flex h-10 overflow-hidden rounded p-2 shadow-lg">
+    <div className="flex h-10 overflow-hidden rounded bg-background p-2 shadow-lg">
       <div className="inline-flex items-center gap-1">
         <ToolbarButton
           tooltip="Edit link"
@@ -69,8 +68,10 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
           tooltip={copyTitle}
           onClick={handleCopy}
           tooltipOptions={{
-            onPointerDownOutside: event => {
-              if (event.target === event.currentTarget) event.preventDefault();
+            onPointerDownOutside: (event) => {
+              if (event.target === event.currentTarget) {
+                event.preventDefault();
+              }
             },
           }}
         >

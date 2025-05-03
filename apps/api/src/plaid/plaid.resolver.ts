@@ -1,15 +1,15 @@
-import type { ClerkClaims } from "../auth/types";
+import type { Prisma } from '@prisma/client'
 
-import { Args, Info, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { Prisma } from "@prisma/client";
-import { type GraphQLResolveInfo } from "graphql";
+import type { GraphQLResolveInfo } from 'graphql'
+import type { ClerkClaims } from '../auth/types'
+import type { PrismaService } from '../prisma/prisma.service'
 
-import { ClerkContext } from "../auth/decorators/clerk-context.decorator";
-import { Account } from "../generated/graphql";
-import { PrismaService } from "../prisma/prisma.service";
-import { PrismaSelect } from "../utilities/prisma/prisma-select";
-import { PlaidLinkOnSuccessMetadata } from "./plaid.dto";
-import { PlaidService } from "./plaid.service";
+import type { PlaidService } from './plaid.service'
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
+import { Account } from '../generated/graphql'
+import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { PlaidLinkOnSuccessMetadata } from './plaid.dto'
 
 @Resolver()
 export class PlaidResolver {
@@ -19,8 +19,8 @@ export class PlaidResolver {
   ) {}
 
   @Query(() => String, {
-    description: "Get plaid link token for user",
-    name: "linkToken",
+    description: 'Get plaid link token for user',
+    name: 'linkToken',
   })
   async linkToken(
     @Info()
@@ -30,46 +30,46 @@ export class PlaidResolver {
   ) {
     const plaidResponse = await this.plaidService.linkToken({
       userId: currentUser.sub,
-    });
+    })
 
-    return plaidResponse.data.link_token;
+    return plaidResponse.data.link_token
   }
 
   @Mutation(() => [Account], {
     description:
-      "Set up plaid auth connection and create accounts from syncing plaid",
-    name: "setAccessTokenAndSyncAccounts",
+      'Set up plaid auth connection and create accounts from syncing plaid',
+    name: 'setAccessTokenAndSyncAccounts',
   })
   async setAccessTokenAndSyncAccounts(
     @Info()
     info: GraphQLResolveInfo,
     @ClerkContext()
     currentUser: ClerkClaims,
-    @Args("publicToken", {
+    @Args('publicToken', {
       nullable: false,
       type: () => String,
     })
     publicToken: string,
-    @Args("metaData", {
+    @Args('metaData', {
       nullable: false,
       type: () => PlaidLinkOnSuccessMetadata,
     })
     metaData: PlaidLinkOnSuccessMetadata,
   ) {
-    const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value
 
     const accounts = await this.plaidService.setAccessToken({
       metaData,
       portfolioId: currentUser.metadata.portfolioId,
       publicToken,
       userId: currentUser.sub,
-    });
+    })
 
     return this.prismaService.account.findMany({
       select,
       where: {
         id: { in: accounts.map(a => a.id) },
       },
-    });
+    })
   }
 }

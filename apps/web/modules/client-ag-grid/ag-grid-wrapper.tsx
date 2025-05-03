@@ -1,22 +1,21 @@
 'use client';
 
+import type { GridApi } from 'ag-grid-community';
+import type { AgGridReact } from 'ag-grid-react';
+import type { ReactElement, ReactNode } from 'react';
 import { Alert } from '@repo/ui/components/alert';
+import { Button } from '@repo/ui/components/button';
+import { Input } from '@repo/ui/components/input';
+import { cn } from '@repo/ui/utils';
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import clsx from 'clsx';
-import type { ReactNode, ReactElement } from 'react';
+import { useTheme } from 'next-themes';
 import {
   cloneElement,
-  isValidElement,
   useCallback,
   useRef,
   useState,
 } from 'react';
-import type { GridApi } from 'ag-grid-community';
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import { useTheme } from 'next-themes';
-import { cn } from '@repo/ui/utils';
-import { Input } from '@repo/ui/components/input';
-import { Button } from '@repo/ui/components/button';
-import type { AgGridReact } from 'ag-grid-react';
 
 import { LoadingIcon } from '../utility-components';
 
@@ -24,7 +23,7 @@ import { themeQuartzGridOptions } from './grid-options';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-export interface AgGridWrapperProps {
+export type AgGridWrapperProps = {
   height?: number;
   children: ReactElement;
   rightBar?: ReactNode;
@@ -34,8 +33,13 @@ export interface AgGridWrapperProps {
   className?: string;
   gridApi?: GridApi;
   quickFilterEnabled?: boolean;
-}
+};
 
+/**
+ * This component is a wrapper for the AgGridReact component.
+ * It provides a few extra features like a quick filter and a right bar.
+ * It must always be imported using dynamic import.
+ */
 export default function AgGridWrapper({
   children,
   height,
@@ -50,11 +54,8 @@ export default function AgGridWrapper({
   const gridRef = useRef<AgGridReact>(null);
   const theme = useTheme();
 
-  // Clone the AgGridReact child with the ref, with proper type checking
-  const childProps = isValidElement(children)
-    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (children as ReactElement<any>).props
-    : {};
+  // eslint-disable-next-line ts/no-explicit-any
+  const childProps = (children as ReactElement<any>).props;
 
   // Determine if we need to add the cursor-pointer class
   const hasOnRowClicked = !!childProps.onRowClicked;
@@ -65,16 +66,14 @@ export default function AgGridWrapper({
       : 'cursor-pointer'
     : existingRowClass;
 
-  const childWithRef = isValidElement(children)
-    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      cloneElement(children as ReactElement<any>, {
-        ref: gridRef,
-        ...themeQuartzGridOptions,
-        ...childProps,
-        // Apply the determined rowClass if needed
-        ...(hasOnRowClicked ? { rowClass } : {}),
-      })
-    : children;
+  // eslint-disable-next-line ts/no-explicit-any
+  const childWithRef = cloneElement(children as ReactElement<any>, {
+    ref: gridRef,
+    ...themeQuartzGridOptions,
+    ...childProps,
+    // Apply the determined rowClass if needed
+    ...(hasOnRowClicked ? { rowClass } : {}),
+  });
 
   const onFilterTextChanged = useCallback((value: string) => {
     setFilterText(value);
@@ -97,7 +96,7 @@ export default function AgGridWrapper({
   return (
     <div
       className={clsx({
-        'flex flex-grow flex-col': !height,
+        'flex grow flex-col': !height,
         className,
       })}
       data-ag-theme-mode={theme.theme}
@@ -108,12 +107,14 @@ export default function AgGridWrapper({
         })}
       >
         <div className="flex items-center space-x-2">
-          {title ? (
-            <div className="text-foreground flex items-center space-y-4 py-2">
-              {title}
-              {loading ? <LoadingIcon /> : null}
-            </div>
-          ) : null}
+          {title
+            ? (
+                <div className="flex items-center space-y-4 py-2 text-foreground">
+                  {title}
+                  {loading ? <LoadingIcon /> : null}
+                </div>
+              )
+            : null}
           {quickFilterEnabled && (
             <>
               <Input

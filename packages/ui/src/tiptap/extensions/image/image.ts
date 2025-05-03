@@ -1,40 +1,38 @@
 import type { ImageOptions } from '@tiptap/extension-image';
-import { Image as TiptapImage } from '@tiptap/extension-image';
-import type { Editor } from '@tiptap/react';
-import { ReactNodeViewRenderer } from '@tiptap/react';
-import { ReplaceStep } from '@tiptap/pm/transform';
 import type { Attrs } from '@tiptap/pm/model';
+import type { Editor } from '@tiptap/react';
+import type { FileError, FileValidationOptions } from '../../utils';
+import { Image as TiptapImage } from '@tiptap/extension-image';
+import { ReplaceStep } from '@tiptap/pm/transform';
 
+import { ReactNodeViewRenderer } from '@tiptap/react';
 import {
+
   filterFiles,
   randomId,
-  type FileError,
-  type FileValidationOptions,
 } from '../../utils';
 
 import { ImageViewBlock } from './components/image-view-block';
 
 type ImageAction = 'download' | 'copyImage' | 'copyLink';
 
-interface DownloadImageCommandProps {
+type DownloadImageCommandProps = {
   src: string;
   alt?: string;
-}
+};
 
-interface ImageActionProps extends DownloadImageCommandProps {
+type ImageActionProps = {
   action: ImageAction;
-}
+} & DownloadImageCommandProps;
 
 export type UploadReturnType =
   | string
   | {
-      id: string | number;
-      src: string;
-    };
+    id: string | number;
+    src: string;
+  };
 
-interface CustomImageOptions
-  extends ImageOptions,
-    Omit<FileValidationOptions, 'allowBase64'> {
+type CustomImageOptions = {
   uploadFn?: (file: File, editor: Editor) => Promise<UploadReturnType>;
   onImageRemoved?: (props: Attrs) => void;
   onActionSuccess?: (props: ImageActionProps) => void;
@@ -53,10 +51,10 @@ interface CustomImageOptions
   ) => Promise<void>;
   onValidationError?: (errors: FileError[]) => void;
   onToggle?: (editor: Editor, files: File[], pos: number) => void;
-}
+} & ImageOptions & Omit<FileValidationOptions, 'allowBase64'>;
 
 declare module '@tiptap/react' {
-  interface Commands<ReturnType> {
+  type Commands<ReturnType> = {
     setImages: {
       setImages: (
         attributes: { src: string | File; alt?: string; title?: string }[]
@@ -74,20 +72,16 @@ declare module '@tiptap/react' {
     toggleImage: {
       toggleImage: () => ReturnType;
     };
-  }
+  };
 }
 
-const handleError = (
-  error: unknown,
-  props: ImageActionProps,
-  errorHandler?: (error: Error, props: ImageActionProps) => void
-): void => {
-  const typedError =
-    error instanceof Error ? error : new Error('Unknown error');
+function handleError(error: unknown, props: ImageActionProps, errorHandler?: (error: Error, props: ImageActionProps) => void): void {
+  const typedError
+    = error instanceof Error ? error : new Error('Unknown error');
   errorHandler?.(typedError, props);
-};
+}
 
-const handleDataUrl = (source: string): { blob: Blob; extension: string } => {
+function handleDataUrl(source: string): { blob: Blob; extension: string } {
   const [header, base64Data] = source.split(',');
   const mimeType = header?.split(':')[1]?.split(';')[0];
   const extension = mimeType?.split('/')[1];
@@ -98,27 +92,25 @@ const handleDataUrl = (source: string): { blob: Blob; extension: string } => {
   }
   const blob = new Blob([byteArray], { type: mimeType });
   return { blob, extension: extension ?? '' };
-};
+}
 
-const handleImageUrl = async (
-  source: string
-): Promise<{ blob: Blob; extension: string }> => {
+async function handleImageUrl(source: string): Promise<{ blob: Blob; extension: string }> {
   const response = await fetch(source);
-  if (!response.ok) throw new Error('Failed to fetch image');
+  if (!response.ok) {
+    throw new Error('Failed to fetch image');
+  }
   const blob = await response.blob();
   const extension = blob.type.split(/\/|\+/)[1];
   return { blob, extension: extension ?? '' };
-};
+}
 
-const fetchImageBlob = async (
-  source: string
-): Promise<{ blob: Blob; extension: string }> => {
+async function fetchImageBlob(source: string): Promise<{ blob: Blob; extension: string }> {
   return source.startsWith('data:')
     ? handleDataUrl(source)
     : handleImageUrl(source);
-};
+}
 
-const saveImage = (blob: Blob, name: string, extension: string): void => {
+function saveImage(blob: Blob, name: string, extension: string): void {
   const imageURL = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = imageURL;
@@ -127,12 +119,9 @@ const saveImage = (blob: Blob, name: string, extension: string): void => {
   link.click();
   link.remove();
   URL.revokeObjectURL(imageURL);
-};
+}
 
-const downloadImage = async (
-  props: ImageActionProps,
-  options: CustomImageOptions
-): Promise<void> => {
+async function downloadImage(props: ImageActionProps, options: CustomImageOptions): Promise<void> {
   const { src, alt } = props;
   const potentialName = alt ?? 'image';
 
@@ -143,12 +132,9 @@ const downloadImage = async (
   } catch (error) {
     handleError(error, { ...props, action: 'download' }, options.onActionError);
   }
-};
+}
 
-const copyImage = async (
-  props: ImageActionProps,
-  options: CustomImageOptions
-): Promise<void> => {
+async function copyImage(props: ImageActionProps, options: CustomImageOptions): Promise<void> {
   const { src } = props;
   try {
     const response = await fetch(src);
@@ -159,15 +145,12 @@ const copyImage = async (
     handleError(
       error,
       { ...props, action: 'copyImage' },
-      options.onActionError
+      options.onActionError,
     );
   }
-};
+}
 
-const copyLink = async (
-  props: ImageActionProps,
-  options: CustomImageOptions
-): Promise<void> => {
+async function copyLink(props: ImageActionProps, options: CustomImageOptions): Promise<void> {
   const { src } = props;
   try {
     await navigator.clipboard.writeText(src);
@@ -175,15 +158,13 @@ const copyLink = async (
   } catch (error) {
     handleError(error, { ...props, action: 'copyLink' }, options.onActionError);
   }
-};
+}
 
 export const Image = TiptapImage.extend<CustomImageOptions>({
   atom: true,
 
   addOptions() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       ...this.parent?.(),
       allowedMimeTypes: [],
       maxFileSize: 0,
@@ -225,59 +206,58 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
     return {
       setImages:
         attributes =>
-        ({ commands }) => {
-          const [validImages, errors] = filterFiles(attributes, {
-            allowedMimeTypes: this.options.allowedMimeTypes,
-            maxFileSize: this.options.maxFileSize,
-            allowBase64: this.options.allowBase64,
-          });
+          ({ commands }) => {
+            const [validImages, errors] = filterFiles(attributes, {
+              allowedMimeTypes: this.options.allowedMimeTypes,
+              maxFileSize: this.options.maxFileSize,
+              allowBase64: this.options.allowBase64,
+            });
 
-          if (errors.length > 0 && this.options.onValidationError) {
-            this.options.onValidationError(errors);
-          }
+            if (errors.length > 0 && this.options.onValidationError) {
+              this.options.onValidationError(errors);
+            }
 
-          if (validImages.length > 0) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            return commands.insertContent(
-              validImages.map(image => {
-                if (image.src instanceof File) {
-                  const blobUrl = URL.createObjectURL(image.src);
-                  const id = randomId();
+            if (validImages.length > 0) {
+              return commands.insertContent(
+                validImages.map((image) => {
+                  if (image.src instanceof File) {
+                    const blobUrl = URL.createObjectURL(image.src);
+                    const id = randomId();
 
-                  return {
-                    type: this.type.name,
-                    attrs: {
-                      id,
-                      src: blobUrl,
-                      alt: image.alt,
-                      title: image.title,
-                      fileName: image.src.name,
-                    },
-                  };
-                } else {
-                  return {
-                    type: this.type.name,
-                    attrs: {
-                      id: randomId(),
-                      src: image.src,
-                      alt: image.alt,
-                      title: image.title,
-                      fileName: null,
-                    },
-                  };
-                }
-              })
-            );
-          }
+                    return {
+                      type: this.type.name,
+                      attrs: {
+                        id,
+                        src: blobUrl,
+                        alt: image.alt,
+                        title: image.title,
+                        fileName: image.src.name,
+                      },
+                    };
+                  } else {
+                    return {
+                      type: this.type.name,
+                      attrs: {
+                        id: randomId(),
+                        src: image.src,
+                        alt: image.alt,
+                        title: image.title,
+                        fileName: null,
+                      },
+                    };
+                  }
+                }),
+              );
+            }
 
-          return false;
-        },
+            return false;
+          },
 
       downloadImage: attributes => () => {
         const downloadFunction = this.options.downloadImage ?? downloadImage;
         void downloadFunction(
           { ...attributes, action: 'download' },
-          this.options
+          this.options,
         );
         return true;
       },
@@ -286,7 +266,7 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
         const copyImageFunction = this.options.copyImage ?? copyImage;
         void copyImageFunction(
           { ...attributes, action: 'copyImage' },
-          this.options
+          this.options,
         );
         return true;
       },
@@ -295,48 +275,52 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
         const copyLinkFunction = this.options.copyLink ?? copyLink;
         void copyLinkFunction(
           { ...attributes, action: 'copyLink' },
-          this.options
+          this.options,
         );
         return true;
       },
 
       toggleImage:
         () =>
-        ({ editor }) => {
-          const input = document.createElement('input');
-          input.type = 'file';
-          input.accept = this.options.allowedMimeTypes.join(',');
-          input.addEventListener('change', () => {
-            const files = input.files;
-            if (!files) return;
+          ({ editor }) => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = this.options.allowedMimeTypes.join(',');
+            input.addEventListener('change', () => {
+              const files = input.files;
+              if (!files) {
+                return;
+              }
 
-            const [validImages, errors] = filterFiles(Array.from(files), {
-              allowedMimeTypes: this.options.allowedMimeTypes,
-              maxFileSize: this.options.maxFileSize,
-              allowBase64: this.options.allowBase64,
+              const [validImages, errors] = filterFiles(Array.from(files), {
+                allowedMimeTypes: this.options.allowedMimeTypes,
+                maxFileSize: this.options.maxFileSize,
+                allowBase64: this.options.allowBase64,
+              });
+
+              if (errors.length > 0 && this.options.onValidationError) {
+                this.options.onValidationError(errors);
+                return false;
+              }
+
+              if (validImages.length === 0) {
+                return false;
+              }
+
+              if (this.options.onToggle) {
+                this.options.onToggle(
+                  editor,
+                  validImages,
+                  editor.state.selection.from,
+                );
+              }
+
+              return false;
             });
 
-            if (errors.length > 0 && this.options.onValidationError) {
-              this.options.onValidationError(errors);
-              return false;
-            }
-
-            if (validImages.length === 0) return false;
-
-            if (this.options.onToggle) {
-              this.options.onToggle(
-                editor,
-                validImages,
-                editor.state.selection.from
-              );
-            }
-
-            return false;
-          });
-
-          input.click();
-          return true;
-        },
+            input.click();
+            return true;
+          },
     };
   },
 

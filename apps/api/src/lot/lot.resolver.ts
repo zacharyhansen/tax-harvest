@@ -1,17 +1,17 @@
-import type { ClerkClaims } from "~/auth/types";
+import type { Prisma } from '@prisma/client'
 
-import { Args, Info, Query, Resolver } from "@nestjs/graphql";
-import { Prisma } from "@prisma/client";
-import { type GraphQLResolveInfo } from "graphql";
+import type { GraphQLResolveInfo } from 'graphql'
+import type { PrismaService } from '../prisma/prisma.service'
+import type { LotService } from './lot.service'
 
-import { taxAdvantadedSubTypes } from "~/plaid/plaid.utils";
+import type { ClerkClaims } from '~/auth/types'
 
-import { ClerkContext } from "../auth/decorators/clerk-context.decorator";
-import { Lot, LotWhereInput } from "../generated/graphql";
-import { PrismaService } from "../prisma/prisma.service";
-import { PrismaSelect } from "../utilities/prisma/prisma-select";
-import { LotCurrent, LotValueType } from "./lot.dto";
-import { LotService } from "./lot.service";
+import { Args, Info, Query, Resolver } from '@nestjs/graphql'
+import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
+import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
+import { Lot, LotWhereInput } from '../generated/graphql'
+import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { LotCurrent, LotValueType } from './lot.dto'
 
 @Resolver()
 export class LotResolver {
@@ -20,31 +20,31 @@ export class LotResolver {
     private readonly lotService: LotService,
   ) {}
 
-  @Query(() => [Lot], { name: "lots", nullable: false })
+  @Query(() => [Lot], { name: 'lots', nullable: false })
   lots(
     @ClerkContext()
     clerkContext: ClerkClaims,
     @Info()
     info: GraphQLResolveInfo,
-    @Args("where", {
+    @Args('where', {
       nullable: true,
       type: () => LotWhereInput,
     })
     where: Prisma.LotWhereInput,
-    @Args("includeTaxAdvantaged", {
+    @Args('includeTaxAdvantaged', {
       nullable: true,
       type: () => Boolean,
     })
     includeTaxAdvantaged: boolean,
   ) {
-    const { select } = new PrismaSelect<Prisma.LotSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.LotSelect>(info).value
     return this.prismaService.lot.findMany({
       orderBy: [
         {
-          assetSymbol: "asc",
+          assetSymbol: 'asc',
         },
         {
-          acquiredDate: "asc",
+          acquiredDate: 'asc',
         },
       ],
       select,
@@ -61,22 +61,22 @@ export class LotResolver {
               },
         },
       },
-    });
+    })
   }
 
   @Query(() => [LotCurrent], {
-    description: "Lot current view",
-    name: "lotCurrent",
+    description: 'Lot current view',
+    name: 'lotCurrent',
   })
   async lotCurrent(
     @ClerkContext()
     { metadata }: ClerkClaims,
-    @Args("lotValueType", {
+    @Args('lotValueType', {
       nullable: true,
       type: () => LotValueType,
     })
     lotValueType: LotValueType,
-    @Args("lotIds", {
+    @Args('lotIds', {
       nullable: true,
       type: () => [String],
     })
@@ -86,6 +86,6 @@ export class LotResolver {
       lotIds,
       lotValueType,
       portfolioId: metadata.portfolioId,
-    });
+    })
   }
 }

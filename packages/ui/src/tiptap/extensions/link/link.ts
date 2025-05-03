@@ -1,7 +1,7 @@
-import { mergeAttributes, getMarkRange } from '@tiptap/react';
-import TiptapLink from '@tiptap/extension-link';
 import type { EditorView } from '@tiptap/pm/view';
+import TiptapLink from '@tiptap/extension-link';
 import { Plugin, TextSelection } from '@tiptap/pm/state';
+import { getMarkRange, mergeAttributes } from '@tiptap/react';
 
 export const Link = TiptapLink.extend({
   /*
@@ -33,7 +33,6 @@ export const Link = TiptapLink.extend({
 
   addOptions() {
     return {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       ...this.parent?.(),
       openOnClick: false,
       HTMLAttributes: {
@@ -45,7 +44,6 @@ export const Link = TiptapLink.extend({
   addProseMirrorPlugins() {
     const { editor } = this;
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return [
       ...(this.parent?.() || []),
       new Plugin({
@@ -86,7 +84,7 @@ export const Link = TiptapLink.extend({
             const $start = doc.resolve(start);
             const $end = doc.resolve(end);
             const transaction = tr.setSelection(
-              new TextSelection($start, $end)
+              new TextSelection($start, $end),
             );
 
             view.dispatch(transaction);

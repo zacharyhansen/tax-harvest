@@ -1,33 +1,37 @@
-import type { ClerkClaims } from "~/auth/types";
+import type { Portfolio, PortfolioRole, Prisma } from '@prisma/client'
 
-import { Injectable, Logger } from "@nestjs/common";
-import { Portfolio, PortfolioRole, Prisma } from "@prisma/client";
-import Decimal from "decimal.js";
-import { sql } from "kysely";
+import type { AccountService } from '../account/account.service'
+import type { ClerkService } from '../clerk/clerk.service'
+import type { Database } from '../database/database'
+import type { HarvestService } from '../harvest/harvest.service'
 
-import { taxAdvantadedSubTypes } from "~/plaid/plaid.utils";
+import type { LotService } from '../lot/lot.service'
 
-import { AccountService } from "../account/account.service";
-import { ClerkService } from "../clerk/clerk.service";
-import { Database } from "../database/database";
-import { HarvestType } from "../generated/graphql";
-import { HarvestService } from "../harvest/harvest.service";
-import { LotService } from "../lot/lot.service";
-import { PrismaService } from "../prisma/prisma.service";
-import { UserService } from "../user/user.service";
-import {
+import type { PrismaService } from '../prisma/prisma.service'
+import type { UserService } from '../user/user.service'
+import type {
   DirectedHarvestLot,
   HarvestRecomendation,
   HarvestResult,
   PortfolioSummary,
   PortfolioSummaryRealized,
   PortfolioSummaryUnrealized,
+} from './portfolio.dto'
+import type { LotHarvestInput } from './portfolio.harvest'
+import type { ClerkClaims } from '~/auth/types'
+import { Injectable, Logger } from '@nestjs/common'
+import Decimal from 'decimal.js'
+import { sql } from 'kysely'
+import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
+import { HarvestType } from '../generated/graphql'
+import {
   SetUpStatus,
-} from "./portfolio.dto";
-import Harvest, { LotHarvestInput } from "./portfolio.harvest";
+} from './portfolio.dto'
+import Harvest from './portfolio.harvest'
+
 @Injectable()
 export class PortfolioService {
-  private readonly logger = new Logger(PortfolioService.name);
+  private readonly logger = new Logger(PortfolioService.name)
 
   constructor(
     private readonly db: Database,
@@ -45,22 +49,22 @@ export class PortfolioService {
       where: {
         usersOnPortfolios: {
           some: {
-            userId: userId,
+            userId,
           },
         },
       },
-    });
+    })
   }
 
   async switchPortfolio(clerkContext: ClerkClaims, portfolioId: string) {
-    const portfolio = await this.getPortfolioById(portfolioId);
+    const portfolio = await this.getPortfolioById(portfolioId)
 
     await this.clerkService.updatePublicMetaData(clerkContext.sub, {
       ...clerkContext.metadata,
       portfolioId: portfolio.id,
-    });
+    })
 
-    return portfolio;
+    return portfolio
   }
 
   /**
@@ -73,7 +77,7 @@ export class PortfolioService {
     select: Prisma.PortfolioSelect,
     portfolioId?: string,
   ) {
-    const user = await this.userService.asserUserExists(userId);
+    const user = await this.userService.asserUserExists(userId)
 
     return this.prismaService.portfolio
       .findFirstOrThrow({
@@ -87,7 +91,7 @@ export class PortfolioService {
           },
         },
       })
-      .catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId));
+      .catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId))
   }
 
   getPortfolioByPortfolioId(
@@ -102,19 +106,19 @@ export class PortfolioService {
         // Enforce user has access to the portfolio
         usersOnPortfolios: {
           some: {
-            userId: userId,
+            userId,
           },
         },
       },
-    });
+    })
   }
 
   getPortfolioById(portfolioId: string) {
     return this.db
-      .selectFrom("Portfolio")
+      .selectFrom('Portfolio')
       .selectAll()
-      .where("Portfolio.id", "=", portfolioId)
-      .executeTakeFirstOrThrow();
+      .where('Portfolio.id', '=', portfolioId)
+      .executeTakeFirstOrThrow()
   }
 
   getPortfolioByIdWithUserId(
@@ -132,7 +136,7 @@ export class PortfolioService {
           },
         },
       },
-    });
+    })
   }
 
   async createPortfolio(
@@ -150,14 +154,14 @@ export class PortfolioService {
           },
         },
       },
-    });
+    })
 
     await this.clerkService.updatePublicMetaData(clerkContext.sub, {
       ...clerkContext.metadata,
       portfolioId: portfolio.id,
-    });
+    })
 
-    return portfolio;
+    return portfolio
   }
 
   /**
@@ -184,9 +188,9 @@ export class PortfolioService {
           },
         },
       },
-    });
+    })
 
-    let authedPortfolio = portfolio;
+    let authedPortfolio = portfolio
     // If the user does not have at least 1 portfolio we create it and connect them to it as an admin
     if (!portfolio) {
       authedPortfolio = await this.prismaService.portfolio
@@ -196,29 +200,29 @@ export class PortfolioService {
             id: portfolioId,
             usersOnPortfolios: {
               create: {
-                role: "ADMIN",
-                userId: userId,
+                role: 'ADMIN',
+                userId,
               },
             },
           },
         })
         .catch(() => {
-          throw new Error("Unauthorized access to portfolio");
-        });
+          throw new Error('Unauthorized access to portfolio')
+        })
     }
 
     if (!authedPortfolio) {
-      throw new Error("Unauthorized access to portfolio");
+      throw new Error('Unauthorized access to portfolio')
     }
 
-    const clerkUser = await this.clerkService.user(userId);
+    const clerkUser = await this.clerkService.user(userId)
     // Set the portfolio on the clerk meta data so they are authed for it
     await this.clerkService.updatePublicMetaData(userId, {
       ...clerkUser.publicMetadata,
       portfolioId: authedPortfolio.id,
-    });
+    })
 
-    return authedPortfolio;
+    return authedPortfolio
   }
 
   async summary({ id }: { id: string }): Promise<PortfolioSummary> {
@@ -238,7 +242,7 @@ export class PortfolioService {
           id: true,
         },
       }),
-    ]);
+    ])
 
     return {
       ...this.calculateHarvest({
@@ -251,50 +255,53 @@ export class PortfolioService {
           : setupAccounts.length > 0
             ? SetUpStatus.ACCOUNT_SETUP_REQUIRED
             : SetUpStatus.COMPLETE,
-    };
+    }
   }
 
   calculateHarvest({
     realized,
     unrealized,
   }: {
-    realized: PortfolioSummaryRealized;
-    unrealized: PortfolioSummaryUnrealized;
-  }): Omit<PortfolioSummary, "setUpStatus"> {
-    let gainTotalUnrealized = new Decimal(unrealized.gainTotal);
-    let lossTotalUnrealized = new Decimal(unrealized.lossTotal);
-    const gainTotalRealized = new Decimal(realized.gainTotal);
+    realized: PortfolioSummaryRealized
+    unrealized: PortfolioSummaryUnrealized
+  }): Omit<PortfolioSummary, 'setUpStatus'> {
+    let gainTotalUnrealized = new Decimal(unrealized.gainTotal)
+    let lossTotalUnrealized = new Decimal(unrealized.lossTotal)
+    const gainTotalRealized = new Decimal(realized.gainTotal)
 
-    const realizedSign = Math.sign(gainTotalRealized.toNumber());
+    const realizedSign = Math.sign(gainTotalRealized.toNumber())
 
     const harvest = {
       realized: new Decimal(0),
       total: new Decimal(0),
       unrealized: new Decimal(0),
-    };
+    }
 
     // Figure out the realized amount and reset unrealized for that amount
     if (realizedSign === -1) {
       if (
-        gainTotalRealized.absoluteValue().toNumber() >
-        gainTotalUnrealized.absoluteValue().toNumber()
+        gainTotalRealized.absoluteValue().toNumber()
+        > gainTotalUnrealized.absoluteValue().toNumber()
       ) {
-        harvest.realized = gainTotalUnrealized;
-        gainTotalUnrealized = new Decimal(0);
-      } else {
-        harvest.realized = gainTotalRealized.times(-1);
-        gainTotalUnrealized = gainTotalUnrealized.plus(gainTotalRealized);
+        harvest.realized = gainTotalUnrealized
+        gainTotalUnrealized = new Decimal(0)
       }
-    } else if (realizedSign === 1) {
+      else {
+        harvest.realized = gainTotalRealized.times(-1)
+        gainTotalUnrealized = gainTotalUnrealized.plus(gainTotalRealized)
+      }
+    }
+    else if (realizedSign === 1) {
       if (
-        gainTotalRealized.absoluteValue().toNumber() >
-        lossTotalUnrealized.absoluteValue().toNumber()
+        gainTotalRealized.absoluteValue().toNumber()
+        > lossTotalUnrealized.absoluteValue().toNumber()
       ) {
-        harvest.realized = lossTotalUnrealized;
-        lossTotalUnrealized = new Decimal(0);
-      } else {
-        harvest.realized = gainTotalRealized.times(-1);
-        lossTotalUnrealized = lossTotalUnrealized.plus(gainTotalRealized);
+        harvest.realized = lossTotalUnrealized
+        lossTotalUnrealized = new Decimal(0)
+      }
+      else {
+        harvest.realized = gainTotalRealized.times(-1)
+        lossTotalUnrealized = lossTotalUnrealized.plus(gainTotalRealized)
       }
     }
 
@@ -302,11 +309,11 @@ export class PortfolioService {
       lossTotalUnrealized.absoluteValue(),
     )
       ? lossTotalUnrealized
-      : gainTotalUnrealized;
+      : gainTotalUnrealized
 
     harvest.total = harvest.realized
       .absoluteValue()
-      .add(harvest.unrealized.absoluteValue());
+      .add(harvest.unrealized.absoluteValue())
 
     const summary = {
       harvest: {
@@ -316,51 +323,51 @@ export class PortfolioService {
       },
       realized,
       unrealized,
-    };
+    }
 
     return {
       ...summary,
       harvestRecommendations: this.harvestRecommendations({
         portfolioSummary: summary,
       }),
-    };
+    }
   }
 
   async summaryUnrealized({
     id,
   }: {
-    id: string;
+    id: string
   }): Promise<PortfolioSummaryUnrealized> {
     const result = await this.db
-      .selectFrom("LotCurrent")
-      .innerJoin("Account", "Account.id", "LotCurrent.accountId")
+      .selectFrom('LotCurrent')
+      .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
       .select([
         sql<
           number | null
         >`SUM(CASE WHEN "LotCurrent"."gainTotal" < 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
-          "lossTotal",
+          'lossTotal',
         ),
         sql<
           number | null
         >`SUM(CASE WHEN "LotCurrent"."gainTotal" >= 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
-          "gainTotal",
+          'gainTotal',
         ),
-        sql<number>`COUNT(DISTINCT "Account"."id")`.as("accountCount"),
-        sql<number>`COUNT("LotCurrent"."id")`.as("lotCount"),
+        sql<number>`COUNT(DISTINCT "Account"."id")`.as('accountCount'),
+        sql<number>`COUNT("LotCurrent"."id")`.as('lotCount'),
       ])
-      .where("Account.portfolioId", "=", id)
-      .where("Account.subType", "not in", [...taxAdvantadedSubTypes])
-      .executeTakeFirst();
+      .where('Account.portfolioId', '=', id)
+      .where('Account.subType', 'not in', [...taxAdvantadedSubTypes])
+      .executeTakeFirst()
 
     if (result) {
-      const gainTotal = new Decimal(result.gainTotal ?? 0);
-      const lossTotal = new Decimal(result.lossTotal ?? 0);
+      const gainTotal = new Decimal(result.gainTotal ?? 0)
+      const lossTotal = new Decimal(result.lossTotal ?? 0)
       return {
         accountCount: Number(result.accountCount),
         gainTotal: gainTotal.toNumber(),
         lossTotal: lossTotal.toNumber(),
         positionCount: Number(result.lotCount),
-      };
+      }
     }
 
     return {
@@ -368,13 +375,13 @@ export class PortfolioService {
       gainTotal: 0,
       lossTotal: 0,
       positionCount: 0,
-    };
+    }
   }
 
   async summaryRealized({
     id,
   }: {
-    id: string;
+    id: string
   }): Promise<PortfolioSummaryRealized> {
     const pAndL = await this.prismaService.realizedPAndL.findMany({
       where: {
@@ -387,19 +394,19 @@ export class PortfolioService {
           equals: new Date().getFullYear(),
         },
       },
-    });
+    })
 
     const gainShortTerm = pAndL.reduce((acc, curr) => {
-      return (acc += Number(curr.shortTerm));
-    }, 0);
+      return (acc += Number(curr.shortTerm))
+    }, 0)
 
     const gainLongTerm = pAndL.reduce((acc, curr) => {
-      return (acc += Number(curr.longTerm));
-    }, 0);
+      return (acc += Number(curr.longTerm))
+    }, 0)
 
     const dividend = pAndL.reduce((acc, curr) => {
-      return (acc += Number(curr.dividend));
-    }, 0);
+      return (acc += Number(curr.dividend))
+    }, 0)
 
     return {
       accountCount: pAndL.length,
@@ -407,7 +414,7 @@ export class PortfolioService {
       gainLongTerm,
       gainShortTerm,
       gainTotal: gainLongTerm + gainShortTerm + dividend,
-    };
+    }
   }
 
   /**
@@ -418,7 +425,7 @@ export class PortfolioService {
   async harvest({
     portfolioId,
   }: {
-    portfolioId: string;
+    portfolioId: string
   }): Promise<HarvestResult> {
     const [portfolioSummary, lots, portfolio] = await Promise.all([
       this.summary({
@@ -430,7 +437,7 @@ export class PortfolioService {
           id: portfolioId,
         },
       }),
-    ]);
+    ])
 
     const harvest = new Harvest({
       lots: lots.map(
@@ -445,16 +452,16 @@ export class PortfolioService {
       portfolio,
       targetRealized: portfolioSummary.harvest.realized,
       targetUnrealized: portfolioSummary.harvest.unrealized,
-    });
+    })
 
-    harvest.process();
+    harvest.process()
 
     return {
       allOrders: harvest.allOrders,
       portfolioSummary,
       realizedOrders: harvest.realizedOrders,
       unrealizedOrders: harvest.unrealizedOrders,
-    };
+    }
   }
 
   async directedHarvest({
@@ -463,10 +470,10 @@ export class PortfolioService {
     targetRealized,
     targetUnrealized,
   }: {
-    portfolioId: string;
-    directedLots: DirectedHarvestLot[];
-    targetRealized: number;
-    targetUnrealized: number;
+    portfolioId: string
+    directedLots: DirectedHarvestLot[]
+    targetRealized: number
+    targetUnrealized: number
   }) {
     const [portfolio, lots] = await Promise.all([
       this.prismaService.portfolio.findUniqueOrThrow({
@@ -478,31 +485,31 @@ export class PortfolioService {
         lotIds: directedLots.map(lot => lot.lotId),
         portfolioId,
       }),
-    ]);
+    ])
 
     const harvest = new Harvest({
-      lots: lots.map(lot => {
-        const qty =
-          directedLots.find(dl => dl.lotId === lot.id)?.quantity ?? "0";
+      lots: lots.map((lot) => {
+        const qty
+          = directedLots.find(dl => dl.lotId === lot.id)?.quantity ?? '0'
         return {
           ...lot,
           accountId: lot.accountId,
           originalQty: qty,
           processQty: qty,
-        } as LotHarvestInput;
+        } as LotHarvestInput
       }),
       portfolio,
       targetRealized,
       targetUnrealized,
-    });
+    })
 
-    harvest.process();
+    harvest.process()
 
     return {
       allOrders: harvest.allOrders,
       realizedOrders: harvest.realizedOrders,
       unrealizedOrders: harvest.unrealizedOrders,
-    };
+    }
   }
 
   harvestRecommendations({
@@ -510,16 +517,16 @@ export class PortfolioService {
   }: {
     portfolioSummary: Omit<
       PortfolioSummary,
-      "setUpStatus" | "harvestRecommendations"
-    >;
+      'setUpStatus' | 'harvestRecommendations'
+    >
   }): HarvestRecomendation[] {
-    const result: HarvestRecomendation[] = [];
+    const result: HarvestRecomendation[] = []
 
     const recommendRealizedAction = new Decimal(
       portfolioSummary.harvest.realized,
     )
       .absoluteValue()
-      .greaterThan(50);
+      .greaterThan(50)
 
     if (portfolioSummary.harvest.realized < 0) {
       // If there is a significant realized harvest gain we want to reduce taxes
@@ -530,18 +537,20 @@ export class PortfolioService {
           amountUnrealized: 0,
           harvestType: HarvestType.REDUCE_TAXES,
           recommended: true,
-        });
-      } else {
-        const amount = Math.min(portfolioSummary.harvest.realized, 0);
+        })
+      }
+      else {
+        const amount = Math.min(portfolioSummary.harvest.realized, 0)
         result.push({
           amountRealized: amount,
           amountTotal: amount,
           amountUnrealized: 0,
           harvestType: HarvestType.REDUCE_TAXES,
           recommended: false,
-        });
+        })
       }
-    } else {
+    }
+    else {
       // If there is a significant realized harvest loss we want to capture gains
       if (recommendRealizedAction) {
         result.push({
@@ -550,16 +559,17 @@ export class PortfolioService {
           amountUnrealized: 0,
           harvestType: HarvestType.CAPTURE_GAINS_TAX_FREE,
           recommended: true,
-        });
-      } else {
-        const amount = Math.min(portfolioSummary.harvest.realized, 0);
+        })
+      }
+      else {
+        const amount = Math.min(portfolioSummary.harvest.realized, 0)
         result.push({
           amountRealized: amount,
           amountTotal: amount,
           amountUnrealized: 0,
           harvestType: HarvestType.CAPTURE_GAINS_TAX_FREE,
           recommended: false,
-        });
+        })
       }
     }
 
@@ -580,21 +590,21 @@ export class PortfolioService {
         harvestType: HarvestType.SELL,
         recommended: false,
       },
-    );
+    )
 
-    return result;
+    return result
   }
 
   public static RELEVANT_HARVEST_ACCOUNTS_WHERE({
     portfolioId,
   }: {
-    portfolioId: string;
+    portfolioId: string
   }): Prisma.AccountWhereInput {
     return {
       portfolioId,
       subType: {
         notIn: [...taxAdvantadedSubTypes],
       },
-    };
+    }
   }
 }

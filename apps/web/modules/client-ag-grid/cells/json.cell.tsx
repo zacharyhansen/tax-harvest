@@ -1,5 +1,7 @@
 'use client';
 
+import type { ICellRendererParams } from 'ag-grid-community';
+import ReactJsonView from '@microlink/react-json-view';
 import { Button } from '@repo/ui/components/button';
 import {
   Dialog,
@@ -8,14 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@repo/ui/components/dialog';
-import type { ICellRendererParams } from 'ag-grid-community';
-import ReactJsonView from '@microlink/react-json-view';
 import { useTheme } from 'next-themes';
 
-interface JsonCellProps extends ICellRendererParams {
+type JsonCellProps = {
   value: unknown;
   readOnly?: boolean;
-}
+} & ICellRendererParams;
 
 export default function JsonCell({ value }: Readonly<JsonCellProps>) {
   const theme = useTheme();
@@ -31,7 +31,7 @@ export default function JsonCell({ value }: Readonly<JsonCellProps>) {
         return `{Object: ${Object.keys(parsed).length} properties}`;
       }
       return String(value);
-    } catch (e) {
+    } catch {
       return String(value);
     }
   })();
@@ -41,7 +41,7 @@ export default function JsonCell({ value }: Readonly<JsonCellProps>) {
       <DialogTrigger asChild>
         <Button
           variant="link"
-          className="h-full w-full justify-start overflow-hidden text-ellipsis px-0 text-left font-mono text-xs"
+          className="size-full justify-start overflow-hidden text-ellipsis px-0 text-left font-mono text-xs"
         >
           {formattedValue}
         </Button>

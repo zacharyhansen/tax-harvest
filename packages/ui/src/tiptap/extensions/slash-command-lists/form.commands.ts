@@ -1,5 +1,5 @@
-import { createSuggestionsItems } from '@harshtalks/slash-tiptap';
 import type { Editor, Range } from '@tiptap/core';
+import { createSuggestionsItems } from '@harshtalks/slash-tiptap';
 
 import {
   formCommandIcon,
@@ -7,7 +7,7 @@ import {
   FormNode,
 } from '../../nodes/form/types';
 
-const selectLabel = ({ editor, range }: { editor: Editor; range: Range }) => {
+function selectLabel({ editor, range }: { editor: Editor; range: Range }) {
   // After inserting the content, we set the selection (cursor) inside the editable part of the node
   const node = editor.view.nodeDOM(range.from - 1);
   // @ts-expect-error this works so gonna come back to it
@@ -22,9 +22,9 @@ const selectLabel = ({ editor, range }: { editor: Editor; range: Range }) => {
     selection?.removeAllRanges();
     selection?.addRange(range);
   }
-};
+}
 
-const handleNodeInsert = ({
+function handleNodeInsert({
   editor,
   range,
   formNode,
@@ -32,7 +32,7 @@ const handleNodeInsert = ({
   editor: Editor;
   range: Range;
   formNode: FormNode;
-}) => {
+}) {
   editor
     .chain()
     .deleteRange(range)
@@ -43,7 +43,7 @@ const handleNodeInsert = ({
     ])
     .run();
   selectLabel({ editor, range });
-};
+}
 
 export const formCommands = createSuggestionsItems([
   {

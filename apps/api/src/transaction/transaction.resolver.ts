@@ -1,59 +1,59 @@
-import type { GraphQLResolveInfo } from "graphql";
-import type { ClerkClaims } from "~/auth/types";
+import type { Prisma } from '@prisma/client'
+import type { GraphQLResolveInfo } from 'graphql'
 
-import { Args, Info, Query, Resolver } from "@nestjs/graphql";
-import { Prisma } from "@prisma/client";
+import type { TransactionService } from './transaction.service'
+import type { ClerkClaims } from '~/auth/types'
 
-import { ClerkContext } from "~/auth/decorators/clerk-context.decorator";
+import { Args, Info, Query, Resolver } from '@nestjs/graphql'
 
-import { Transaction, TransactionWhereInput } from "../generated/graphql";
-import { PrismaSelect } from "../utilities/prisma/prisma-select";
-import { TransactionService } from "./transaction.service";
+import { ClerkContext } from '~/auth/decorators/clerk-context.decorator'
+import { Transaction, TransactionWhereInput } from '../generated/graphql'
+import { PrismaSelect } from '../utilities/prisma/prisma-select'
 
 @Resolver(() => Transaction)
 export class TransactionResolver {
   constructor(private readonly transactionService: TransactionService) {}
 
   @Query(() => Transaction, {
-    description: "Find a connected transaction by id",
-    name: "transaction",
+    description: 'Find a connected transaction by id',
+    name: 'transaction',
   })
   async transaction(
     @Info()
     info: GraphQLResolveInfo,
-    @Args("id", {
+    @Args('id', {
       type: () => String,
     })
     id: string,
   ): Promise<Transaction> {
-    const { select } = new PrismaSelect<Prisma.TransactionSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.TransactionSelect>(info).value
 
     return this.transactionService.getTransaction({
       select,
       where: {
-        id: id,
+        id,
       },
-    });
+    })
   }
 
   @Query(() => [Transaction], {
-    description: "Get transactions",
-    name: "transactions",
+    description: 'Get transactions',
+    name: 'transactions',
   })
   async transactions(
     @ClerkContext() { metadata }: ClerkClaims,
     @Info()
     info: GraphQLResolveInfo,
-    @Args("where", { nullable: true, type: () => TransactionWhereInput })
+    @Args('where', { nullable: true, type: () => TransactionWhereInput })
     where: TransactionWhereInput,
   ) {
-    const { select } = new PrismaSelect<Prisma.TransactionSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.TransactionSelect>(info).value
     return this.transactionService.getTransactionsWithPortfolioId(
       metadata.portfolioId,
       {
         select,
         where,
       },
-    );
+    )
   }
 }

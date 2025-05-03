@@ -1,14 +1,15 @@
-import { Node, mergeAttributes } from '@tiptap/core';
-import { ReactNodeViewRenderer } from '@tiptap/react';
+import type { ComboboxNodeAttributes } from './types';
+import { Input } from '@repo/ui/components/input';
 
+import ComboboxField from '@repo/ui/form-builder/fields/combobox.field';
+
+import { mergeAttributes, Node } from '@tiptap/core';
+import { ReactNodeViewRenderer } from '@tiptap/react';
 import { generateRandomFieldName } from '../../utils';
 
-import { FormNode, type ComboboxNodeAttributes } from './types';
-import { InputWrapper } from './input.wrapper';
 import { useFormKeyDown } from './hooks/use-form-key-down';
-
-import { Input } from '@repo/ui/components/input';
-import ComboboxField from '@repo/ui/form-builder/fields/combobox.field';
+import { InputWrapper } from './input.wrapper';
+import { FormNode } from './types';
 
 export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
   name: FormNode.Combobox, // Unique name for your node
@@ -26,7 +27,7 @@ export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
       nameLocked: { default: false },
       options: {
         default: [],
-        parseHTML: element => {
+        parseHTML: (element) => {
           const json = element.dataset.options;
           try {
             return json ? JSON.parse(json) : [];
@@ -35,7 +36,7 @@ export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
             return [];
           }
         },
-        renderHTML: attributes => {
+        renderHTML: (attributes) => {
           if (!attributes.options || !Array.isArray(attributes.options)) {
             return {};
           }
@@ -60,14 +61,12 @@ export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(props => {
+    return ReactNodeViewRenderer((props) => {
       const { node, updateAttributes, editor } = props;
       const { placeholder } = node.attrs as ComboboxNodeAttributes;
       const { handleKeyDown } = useFormKeyDown(props);
-      console.log({ node: props.editor.isEditable });
 
       if (!editor.isEditable) {
-        console.log('not ediotable');
         return (
           <ComboboxField {...(props.node.attrs as ComboboxNodeAttributes)} />
         );
@@ -76,13 +75,13 @@ export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
       return (
         <InputWrapper {...props} type={FormNode.Combobox}>
           <Input
-            placeholder={'Type placeholder text'}
-            onChange={event => {
+            placeholder="Type placeholder text"
+            onChange={(event) => {
               updateAttributes({ placeholder: event.target.value });
             }}
             onKeyDown={handleKeyDown}
             value={placeholder}
-            className="text-muted-foreground transition-all duration-200 placeholder:text-transparent focus:placeholder-gray-400 focus:outline-none"
+            className="text-muted-foreground transition-all duration-200 placeholder:text-transparent focus:outline-none focus:placeholder:text-gray-400"
           />
         </InputWrapper>
       );

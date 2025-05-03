@@ -1,8 +1,8 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common'
 
-import { LotModule } from "../lot/lot.module";
-import { HarvestResolver } from "./harvest.resolver";
-import { HarvestService } from "./harvest.service";
+import { LotModule } from '../lot/lot.module'
+import { HarvestResolver } from './harvest.resolver'
+import { HarvestService } from './harvest.service'
 
 @Module({
   exports: [HarvestService],

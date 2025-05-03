@@ -2,14 +2,21 @@
 
 import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
 import { useLotTransactionBatchesQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
-import { AgGridWrapper, dataTypeDefinitions } from '~/modules/client-ag-grid';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage } from '~/modules/utility-components';
+
+const AgGridWrapper = dynamic(
+  () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
+  {
+    ssr: false,
+  },
+);
 
 export default function PlaidHistoryPage() {
   const router = useRouter();
@@ -44,16 +51,15 @@ export default function PlaidHistoryPage() {
     <PageWrapper title="Plaid History -  Lot Sync Events">
       <AgGridWrapper>
         <AgGridReact
-          dataTypeDefinitions={dataTypeDefinitions}
           columnDefs={columnDefs}
           rowData={data?.lotTransactionBatches}
           rowSelection="single"
-          onRowClicked={row => {
+          onRowClicked={(row) => {
             if (row.data) {
               router.push(
                 TypedRoutes.lotTransactionBatch({
                   lotTransactionBatchId: row.data.id,
-                })
+                }),
               );
             }
           }}

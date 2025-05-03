@@ -1,10 +1,10 @@
 /**
  * Every input must implement this interface (these fields are used in form specifications)
  */
-export interface BaseInputProps {
+export type BaseInputProps = {
   disabled?: boolean;
   placeholder?: string;
-}
+};
 
 /**
  * Every input must implement this interface (these fields are used in form specifications)

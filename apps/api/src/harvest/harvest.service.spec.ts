@@ -1,14 +1,15 @@
-import { ConfigService } from "@nestjs/config";
-import { Test, TestingModule } from "@nestjs/testing";
+import type { TestingModule } from '@nestjs/testing'
+import { ConfigService } from '@nestjs/config'
+import { Test } from '@nestjs/testing'
 
-import { DatabaseModule } from "~/database/database.module";
-import { LotModule } from "~/lot/lot.module";
+import { DatabaseModule } from '~/database/database.module'
+import { LotModule } from '~/lot/lot.module'
 
-import { PrismaModule } from "../prisma/prisma.module";
-import { HarvestService } from "./harvest.service";
+import { PrismaModule } from '../prisma/prisma.module'
+import { HarvestService } from './harvest.service'
 
-describe("HarvestService", () => {
-  let service: HarvestService;
+describe('harvestService', () => {
+  let service: HarvestService
 
   beforeEach(async () => {
     const moduleHarvest: TestingModule = await Test.createTestingModule({
@@ -26,12 +27,12 @@ describe("HarvestService", () => {
           useValue: new Map(), // Mock ConfigService directly
         },
       ],
-    }).compile();
+    }).compile()
 
-    service = moduleHarvest.get<HarvestService>(HarvestService);
-  });
+    service = moduleHarvest.get<HarvestService>(HarvestService)
+  })
 
-  it("should be defined", () => {
-    expect(service).toBeDefined();
-  });
-});
+  it('should be defined', () => {
+    expect(service).toBeDefined()
+  })
+})

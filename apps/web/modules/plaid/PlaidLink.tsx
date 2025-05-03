@@ -1,18 +1,19 @@
+import type { ButtonProps } from '@repo/ui/components/button';
+import type { PlaidLinkOnSuccess, PlaidLinkOptions } from 'react-plaid-link';
+import { Alert } from '@repo/ui/components/alert';
+import { Button } from '@repo/ui/components/button';
+import { toast } from '@repo/ui/components/toast-sonner';
 import Image from 'next/image';
 import { useCallback } from 'react';
-import type { PlaidLinkOnSuccess, PlaidLinkOptions } from 'react-plaid-link';
 import { usePlaidLink } from 'react-plaid-link';
-import { Button, type ButtonProps } from '@repo/ui/components/button';
-import { toast } from '@repo/ui/components/toast-sonner';
-import { Alert } from '@repo/ui/components/alert';
-
-import plaidIcon from '../../public/icons/plaid.svg';
 
 import { usePlaidSetAccessTokenAndSyncAccountsMutation } from '~/generated/gql';
 
-interface PlaidLinkProps extends ButtonProps {
+import plaidIcon from '../../public/icons/plaid.svg';
+
+type PlaidLinkProps = {
   token: string;
-}
+} & ButtonProps;
 
 export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
   const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation();
@@ -48,10 +49,10 @@ export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
           error: 'Accounts failed to sync',
           loading: 'We are syncing your account and transaction data',
           success: 'Sync complete',
-        }
+        },
       );
     },
-    [mutate]
+    [mutate],
   );
 
   const config: PlaidLinkOptions = {

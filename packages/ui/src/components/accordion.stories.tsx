@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Meta, StoryObj } from '@storybook/react';
-import { userEvent, within, expect } from '@storybook/test';
+import { expect, userEvent, within } from '@storybook/test';
 
 import {
   Accordion,
@@ -11,7 +10,7 @@ import {
 
 const meta = {
   title: 'Atoms/Accordion',
-  render: args => (
+  render: _args => (
     <Accordion type="single" collapsible className="w-80">
       <AccordionItem value="item-1">
         <AccordionTrigger>Is it accessible?</AccordionTrigger>
@@ -38,8 +37,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-} satisfies Meta<{}>;
+} satisfies Meta<object>;
 
 export default meta;
 
@@ -51,7 +49,7 @@ export const AcorrdionDemo: Story = {
 
 export const AccordionWithOneItem: Story = {
   args: {},
-  render: args => (
+  render: _args => (
     <Accordion type="single" collapsible className="w-80">
       <AccordionItem value="item-1">
         <AccordionTrigger>Accordion</AccordionTrigger>
@@ -66,13 +64,14 @@ export const AccordionWithOneItem: Story = {
     const canvas = within(canvasElement);
 
     const elementButtonControl = await canvas.findByRole('button');
+
     await expect(elementButtonControl).toBeVisible();
 
     await step('simulation click accordion', async () => {
       await userEvent.click(elementButtonControl);
       const elementAccordionContent = await canvas.findByTestId('description');
+
       await expect(elementAccordionContent).toBeVisible();
     });
   },
 };
-/* eslint-enable @typescript-eslint/no-unused-vars */

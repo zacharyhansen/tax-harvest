@@ -2,8 +2,6 @@ import type { AgGridReactProps } from 'ag-grid-react';
 
 import { DateFormatter } from '../utils/DateFormatter';
 
-// import { inputTypeStringFormatter } from './cell-renderer-selector';
-
 export const dataTypeDefinitions = {
   text: {
     baseDataType: 'text',
@@ -36,7 +34,7 @@ export const dataTypeDefinitions = {
         ? new Intl.NumberFormat('en-US', {
             currency: 'USD',
             style: 'currency',
-          }).format(parseFloat(value.toString()))
+          }).format(Number.parseFloat(value.toString()))
         : '',
     columnTypes: ['edit'],
   },

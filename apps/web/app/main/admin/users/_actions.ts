@@ -17,7 +17,7 @@ export async function setRole(formData: FormData) {
       formData.get('id') as string,
       {
         publicMetadata: { role: formData.get('role') },
-      }
+      },
     );
     return { message: res.publicMetadata };
   } catch (err) {
@@ -33,7 +33,7 @@ export async function removeRole(formData: FormData) {
       formData.get('id') as string,
       {
         publicMetadata: { role: null },
-      }
+      },
     );
     return { message: res.publicMetadata };
   } catch (err) {

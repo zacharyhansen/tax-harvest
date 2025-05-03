@@ -1,7 +1,8 @@
 'use client';
 
-import { DollarSign } from 'lucide-react';
-import { FormProvider } from 'react-hook-form';
+import type { PortfolioDetailItemFragment } from '~/generated/gql';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/ui/components/button';
 import {
   Card,
   CardContent,
@@ -10,24 +11,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { Button } from '@repo/ui/components/button';
 import { Separator } from '@repo/ui/components/separator';
 import { toast } from '@repo/ui/components/toast-sonner';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
 import InputField from '@repo/ui/form-builder/fields/input.field';
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
+import { DollarSign } from 'lucide-react';
+import { FormProvider } from 'react-hook-form';
 
-import type { PortfolioDetailItemFragment } from '~/generated/gql';
+import { z } from 'zod';
 import {
   usePortfolioByIdQuery,
   useUpdatePortfolioMutation,
 } from '~/generated/gql';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { zodNumber } from '~/modules/utils/zod-utils';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PortfolioPageProps {}
 
 const formSchema = z.object({
   harvestCycleWeeks: zodNumber.pipe(z.coerce.number().gte(1)),
@@ -61,9 +58,6 @@ export default function PortfolioPage({ params }: { params: { id: string } }) {
 
 function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
   const [update, { loading }] = useUpdatePortfolioMutation({
-    onCompleted: result => {
-      form.reset({ ...result.updatePortfolio });
-    },
     onError: () => {
       toast.error('Unable to update Portfolio');
     },
@@ -72,15 +66,21 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
   const { form, handleSubmit } = useStandardForm<z.infer<typeof formSchema>>({
     defaultValues: {
       harvestCycleWeeks: portfolio.harvestCycleWeeks,
-      harvestShareDollarThreshold: portfolio.harvestShareDollarThreshold,
-      harvestTickerBucketDollarSizeLong:
+      harvestShareDollarThreshold: Number(
+        portfolio.harvestShareDollarThreshold,
+      ),
+      harvestTickerBucketDollarSizeLong: Number(
         portfolio.harvestTickerBucketDollarSizeLong,
-      harvestTickerBucketDollarSizeShort:
+      ),
+      harvestTickerBucketDollarSizeShort: Number(
         portfolio.harvestTickerBucketDollarSizeShort,
-      harvestTickerBucketLowerLimitLong:
+      ),
+      harvestTickerBucketLowerLimitLong: Number(
         portfolio.harvestTickerBucketLowerLimitLong,
-      harvestTickerBucketLowerLimitShort:
+      ),
+      harvestTickerBucketLowerLimitShort: Number(
         portfolio.harvestTickerBucketLowerLimitShort,
+      ),
       name: portfolio.name,
     },
     resolver: zodResolver(formSchema),
@@ -101,31 +101,53 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
                 set: harvestCycleWeeks,
               },
               harvestShareDollarThreshold: {
-                set: harvestShareDollarThreshold,
+                set: harvestShareDollarThreshold.toString(),
               },
               harvestTickerBucketDollarSizeLong: {
-                set: harvestTickerBucketDollarSizeLong,
+                set: harvestTickerBucketDollarSizeLong.toString(),
               },
               harvestTickerBucketDollarSizeShort: {
-                set: harvestTickerBucketDollarSizeShort,
+                set: harvestTickerBucketDollarSizeShort.toString(),
               },
               harvestTickerBucketLowerLimitLong: {
-                set: harvestTickerBucketLowerLimitLong,
+                set: harvestTickerBucketLowerLimitLong.toString(),
               },
               harvestTickerBucketLowerLimitShort: {
-                set: harvestTickerBucketLowerLimitShort,
+                set: harvestTickerBucketLowerLimitShort.toString(),
               },
               name: {
                 set: name,
               },
             },
           },
+        }).then(({ data: result }) => {
+          if (!result) {
+            return;
+          }
+          form.reset({
+            ...result.updatePortfolio,
+            harvestShareDollarThreshold: Number(
+              result.updatePortfolio.harvestShareDollarThreshold,
+            ),
+            harvestTickerBucketDollarSizeLong: Number(
+              result.updatePortfolio.harvestTickerBucketDollarSizeLong,
+            ),
+            harvestTickerBucketDollarSizeShort: Number(
+              result.updatePortfolio.harvestTickerBucketDollarSizeShort,
+            ),
+            harvestTickerBucketLowerLimitLong: Number(
+              result.updatePortfolio.harvestTickerBucketLowerLimitLong,
+            ),
+            harvestTickerBucketLowerLimitShort: Number(
+              result.updatePortfolio.harvestTickerBucketLowerLimitShort,
+            ),
+          });
         }),
         {
           error: 'Error',
           loading: 'Saving',
           success: 'Saved',
-        }
+        },
       );
     },
   });

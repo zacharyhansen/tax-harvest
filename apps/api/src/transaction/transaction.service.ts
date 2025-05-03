@@ -1,12 +1,12 @@
-import { Injectable, Logger } from "@nestjs/common";
+import type { Prisma } from '@prisma/client'
 
-import { Database } from "../database/database";
-import { Prisma } from "@prisma/client";
-import { PrismaService } from "../prisma/prisma.service";
+import type { Database } from '../database/database'
+import type { PrismaService } from '../prisma/prisma.service'
+import { Injectable, Logger } from '@nestjs/common'
 
 @Injectable()
 export class TransactionService {
-  private readonly logger = new Logger(TransactionService.name);
+  private readonly logger = new Logger(TransactionService.name)
   constructor(
     private readonly db: Database,
     private readonly prismaService: PrismaService,
@@ -19,7 +19,7 @@ export class TransactionService {
     return this.prismaService.transaction.findMany({
       ...args,
       orderBy: {
-        transactionDate: "desc",
+        transactionDate: 'desc',
       },
       where: {
         account: {
@@ -28,10 +28,10 @@ export class TransactionService {
           },
         },
       },
-    });
+    })
   }
 
   async getTransaction(args: Prisma.TransactionFindUniqueOrThrowArgs) {
-    return this.prismaService.transaction.findUniqueOrThrow(args);
+    return this.prismaService.transaction.findUniqueOrThrow(args)
   }
 }

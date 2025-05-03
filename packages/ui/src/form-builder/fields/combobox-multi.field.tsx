@@ -1,11 +1,11 @@
-import { useFormContext } from 'react-hook-form';
+import type { ComboboxMultiProps } from '@repo/ui/components/combobox-multi';
 
 import type { BaseFieldProps } from '../form-builder.types';
-
 import {
   ComboboxMulti,
-  type ComboboxMultiProps,
+
 } from '@repo/ui/components/combobox-multi';
+
 import {
   FormControl,
   FormDescription,
@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@repo/ui/components/form';
+import { useFormContext } from 'react-hook-form';
 
 /**
  * CONTROLLED

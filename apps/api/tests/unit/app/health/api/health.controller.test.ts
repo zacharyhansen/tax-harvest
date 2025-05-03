@@ -1,15 +1,15 @@
-import { HealthController } from "~/health/health.controller";
+import { HealthController } from '~/health/health.controller'
 
-describe("HealthController", () => {
-  let healthController: HealthController;
+describe('healthController', () => {
+  let healthController: HealthController
 
   beforeEach(() => {
-    healthController = new HealthController();
-  });
+    healthController = new HealthController()
+  })
 
-  describe("run", () => {
-    it("should return is healthy", () => {
-      expect(healthController.run()).toEqual({ status: "ok" });
-    });
-  });
-});
+  describe('run', () => {
+    it('should return is healthy', () => {
+      expect(healthController.run()).toEqual({ status: 'ok' })
+    })
+  })
+})

@@ -1,18 +1,14 @@
-/* eslint-disable no-console */
+import { execSync } from 'node:child_process'
 
-import { execSync } from "node:child_process";
-
-// eslint-disable-next-line @typescript-eslint/require-await
 async function main() {
-  console.log("🧩 Seeding...");
+  console.info('🧩 Seeding...')
 
-  execSync("tsx prisma/seed/seed.default.ts", { stdio: "inherit" });
+  execSync('tsx prisma/seed/seed.default.ts', { stdio: 'inherit' })
 
-  console.log("🚀 Completed!");
+  console.info('🚀 Completed!')
 }
 
-// eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
-main().catch(error => {
-  console.error("❌ Seed failed:", error);
-  process.exit(1);
-});
+main().catch((error) => {
+  console.error('❌ Seed failed:', error)
+  process.exit(1)
+})

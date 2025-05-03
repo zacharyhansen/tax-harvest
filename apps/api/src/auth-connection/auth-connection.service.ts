@@ -1,10 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { AuthSource } from "@prisma/client";
-import { AuthConnection, Prisma } from "@prisma/client";
+import type { AuthConnection, Prisma } from '@prisma/client'
+import type { EtradeService } from '../etrade/etrade.service'
 
-import { EtradeService } from "../etrade/etrade.service";
-import { PlaidService } from "../plaid/plaid.service";
-import { PrismaService } from "../prisma/prisma.service";
+import type { PlaidService } from '../plaid/plaid.service'
+import type { PrismaService } from '../prisma/prisma.service'
+import { Injectable } from '@nestjs/common'
+import { AuthSource } from '@prisma/client'
 
 @Injectable()
 export class AuthConnectionService {
@@ -20,22 +20,22 @@ export class AuthConnectionService {
     select,
     userId,
   }: {
-    id?: string;
-    authConnection?: AuthConnection;
-    userId: string;
-    select: Prisma.AuthConnectionSelect;
+    id?: string
+    authConnection?: AuthConnection
+    userId: string
+    select: Prisma.AuthConnectionSelect
   }): Promise<AuthConnection> {
     if (!id && !authConnection) {
-      throw new Error("You must provide an id or existing connection to sync");
+      throw new Error('You must provide an id or existing connection to sync')
     }
 
-    const connection =
-      authConnection ??
-      (await this.prismaService.authConnection.findUniqueOrThrow({
-        where: {
-          id,
-        },
-      }));
+    const connection
+      = authConnection
+        ?? (await this.prismaService.authConnection.findUniqueOrThrow({
+          where: {
+            id,
+          },
+        }))
 
     switch (connection.source) {
       case AuthSource.ETRADE_ACCESS: {
@@ -43,16 +43,16 @@ export class AuthConnectionService {
           authConnection: connection,
           select,
           userId,
-        });
+        })
       }
       case AuthSource.PLAID: {
         await this.plaidService.syncPlaidItem({
           plaidAuthConnection: connection,
-        });
-        return connection;
+        })
+        return connection
       }
       default: {
-        throw new Error(`Not implemented: ${connection.source}`);
+        throw new Error(`Not implemented: ${connection.source}`)
       }
     }
   }
@@ -62,19 +62,19 @@ export class AuthConnectionService {
     portfolioId,
     userId,
   }: {
-    portfolioId: string;
-    userId: string;
-    authSource: AuthSource;
+    portfolioId: string
+    userId: string
+    authSource: AuthSource
   }) {
     switch (authSource) {
       case AuthSource.ETRADE_REQUEST: {
         return this.etradeService.requestOauthConnection({
           portfolioId,
           userId,
-        });
+        })
       }
       default: {
-        throw new Error(`Not implemented: ${authSource}`);
+        throw new Error(`Not implemented: ${authSource}`)
       }
     }
   }
@@ -86,11 +86,11 @@ export class AuthConnectionService {
     userId,
     verifier,
   }: {
-    portfolioId: string;
-    userId: string;
-    authSource: AuthSource;
-    verifier: string;
-    select: Prisma.AuthConnectionSelect;
+    portfolioId: string
+    userId: string
+    authSource: AuthSource
+    verifier: string
+    select: Prisma.AuthConnectionSelect
   }) {
     switch (authSource) {
       case AuthSource.ETRADE_ACCESS: {
@@ -99,10 +99,10 @@ export class AuthConnectionService {
           select,
           userId,
           verifier,
-        });
+        })
       }
       default: {
-        throw new Error(`Not implemented: ${authSource}`);
+        throw new Error(`Not implemented: ${authSource}`)
       }
     }
   }
@@ -134,20 +134,20 @@ export class AuthConnectionService {
   requiresReAuth(source: AuthSource, authedAt: Date) {
     switch (source) {
       case AuthSource.ETRADE_ACCESS: {
-        const now = new Date();
+        const now = new Date()
         const twentyFourHoursAgo = new Date(
           now.getTime() - 24 * 60 * 60 * 1000,
-        );
-        return authedAt < twentyFourHoursAgo;
+        )
+        return authedAt < twentyFourHoursAgo
       }
       case AuthSource.PLAID: {
-        return true;
+        return true
       }
       case AuthSource.LOCAL: {
-        return false;
+        return false
       }
       default: {
-        throw new Error(`Not implemented: ${source}`);
+        throw new Error(`Not implemented: ${source}`)
       }
     }
   }

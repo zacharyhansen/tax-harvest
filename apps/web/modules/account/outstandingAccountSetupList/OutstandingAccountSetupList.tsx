@@ -7,9 +7,9 @@ import { CheckCircle, CircleCheckBig, CircleDashed } from 'lucide-react';
 import Link from 'next/link';
 
 import {
-  useUpdateAccountMutation,
   PortfolioSummaryDocument,
   useAccountSummariesQuery,
+  useUpdateAccountMutation,
 } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
@@ -39,98 +39,110 @@ export default function OutstandingAccountSetupList() {
 
   return (
     <div className="space-y-2">
-      {data?.accounts.map(account => {
-        const isComplete =
-          (account.uploadedPositions && account.setRealizedValues) ||
-          account.skipSetup;
+      {data?.accounts.map((account) => {
+        const isComplete
+          = (account.uploadedPositions && account.setRealizedValues)
+            || account.skipSetup;
         return (
           <div
             key={account.id}
             className={cn(
               'flex flex-col items-start justify-between rounded-lg border p-2 sm:flex-row sm:items-center',
-              isComplete && 'border-green-300 bg-green-50'
+              isComplete && 'border-green-300 bg-green-50',
             )}
           >
             <div className="flex flex-wrap space-x-2">
-              <p> {account.name}</p>
+              <p>
+                {' '}
+                {account.name}
+              </p>
               <Badge variant="secondary">{capitalCase(account.type)}</Badge>
-              {account.subType ? (
-                <Badge variant="secondary">
-                  {capitalCase(account.subType)}
-                </Badge>
-              ) : null}
+              {account.subType
+                ? (
+                    <Badge variant="secondary">
+                      {capitalCase(account.subType)}
+                    </Badge>
+                  )
+                : null}
             </div>
             <div className="flex flex-wrap items-center justify-end gap-2">
-              {isComplete ? (
-                <Badge variant="outline" className="bg-background p-2">
-                  Setup Complete{' '}
-                  <CircleCheckBig className="ml-2 h-4 w-4 text-green-600" />
-                </Badge>
-              ) : (
-                <>
-                  <Link href={TypedRoutes.account({ id: account.id })}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center"
-                      iconLeft={
-                        account.uploadedPositions ? (
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <CircleDashed className="h-3 w-3" />
-                        )
-                      }
-                    >
-                      Upload Positions
-                    </Button>
-                  </Link>
-                  <Link href={TypedRoutes.account({ id: account.id })}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex items-center"
-                      iconLeft={
-                        account.setRealizedValues ? (
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <CircleDashed className="h-3 w-3" />
-                        )
-                      }
-                    >
-                      Set YTD Values
-                    </Button>
-                  </Link>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="flex items-center"
-                    iconLeft={<CircleCheckBig className="h-3 w-3" />}
-                    onClick={() => {
-                      toast.promise(
-                        mutate({
-                          variables: {
-                            accountWhereUniqueInput: {
-                              id: account.id,
-                            },
-                            accountUpdateInput: {
-                              skipSetup: {
-                                set: true,
+              {isComplete
+                ? (
+                    <Badge variant="outline" className="bg-background p-2">
+                      Setup Complete
+                      {' '}
+                      <CircleCheckBig className="ml-2 size-4 text-green-600" />
+                    </Badge>
+                  )
+                : (
+                    <>
+                      <Link href={TypedRoutes.account({ id: account.id })}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center"
+                          iconLeft={
+                            account.uploadedPositions
+                              ? (
+                                  <CheckCircle className="size-4 text-green-500" />
+                                )
+                              : (
+                                  <CircleDashed className="size-3" />
+                                )
+                          }
+                        >
+                          Upload Positions
+                        </Button>
+                      </Link>
+                      <Link href={TypedRoutes.account({ id: account.id })}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center"
+                          iconLeft={
+                            account.setRealizedValues
+                              ? (
+                                  <CheckCircle className="size-4 text-green-500" />
+                                )
+                              : (
+                                  <CircleDashed className="size-3" />
+                                )
+                          }
+                        >
+                          Set YTD Values
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="flex items-center"
+                        iconLeft={<CircleCheckBig className="size-3" />}
+                        onClick={() => {
+                          toast.promise(
+                            mutate({
+                              variables: {
+                                accountWhereUniqueInput: {
+                                  id: account.id,
+                                },
+                                accountUpdateInput: {
+                                  skipSetup: {
+                                    set: true,
+                                  },
+                                },
                               },
+                            }),
+                            {
+                              loading: 'Skipping setup...',
+                              success: 'Setup skipped',
+                              error: 'Could not skip setup',
                             },
-                          },
-                        }),
-                        {
-                          loading: 'Skipping setup...',
-                          success: 'Setup skipped',
-                          error: 'Could not skip setup',
-                        }
-                      );
-                    }}
-                  >
-                    Skip setup
-                  </Button>
-                </>
-              )}
+                          );
+                        }}
+                      >
+                        Skip setup
+                      </Button>
+                    </>
+                  )}
             </div>
           </div>
         );

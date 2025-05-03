@@ -5,23 +5,23 @@ on:
   workflow_dispatch:
     inputs:
       version_type:
-        description: 'Version increment type (major/minor/patch)'
+        description: Version increment type (major/minor/patch)
         required: true
-        default: 'patch'
+        default: patch
         type: choice
         options:
           - patch
           - minor
           - major
       manual_version:
-        description: 'Manual version override (leave empty for automatic)'
+        description: Manual version override (leave empty for automatic)
         required: false
         type: string
 
 permissions:
-  contents: 'read'
-  id-token: 'write'
-  pull-requests: 'write'
+  contents: read
+  id-token: write
+  pull-requests: write
 
 env:
   PROJECT_ID: harvester-ai-428202
@@ -36,6 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       new_version: ${{ steps.version.outputs.new_version }}
+      previous_tag: ${{ steps.version.outputs.previous_tag }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,6 +47,7 @@ jobs:
         run: |
           latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           echo "Latest tag: $latest_tag"
+          echo "previous_tag=$latest_tag" >> $GITHUB_OUTPUT
 
           if [[ -n "${{ inputs.manual_version }}" ]]; then
             new_version="${{ inputs.manual_version }}"
@@ -53,7 +55,7 @@ jobs:
           else
             version=$(echo $latest_tag | sed 's/v//')
             IFS='.' read -ra version_parts <<< "$version"
-            
+
             case "${{ inputs.version_type }}" in
               major)
                 version_parts[0]=$((version_parts[0]+1))
@@ -68,7 +70,7 @@ jobs:
                 version_parts[2]=$((version_parts[2]+1))
                 ;;
             esac
-            
+
             new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
           fi
 
@@ -83,18 +85,18 @@ jobs:
 
       - name: Google Auth
         id: auth
-        uses: 'google-github-actions/auth@v2'
+        uses: google-github-actions/auth@v2
         with:
-          token_format: 'access_token'
+          token_format: access_token
           project_id: ${{ env.PROJECT_ID }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
 
       - name: Docker Auth
         id: docker-auth
-        uses: 'docker/login-action@v3'
+        uses: docker/login-action@v3
         with:
-          username: 'oauth2accesstoken'
+          username: oauth2accesstoken
           password: '${{ steps.auth.outputs.access_token }}'
           registry: '${{ env.AR_REPO_LOCATION }}-docker.pkg.dev'
 
@@ -164,7 +166,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           base: trunk
           branch: update-image-tags-v${{ needs.version.outputs.new_version }}
           delete-branch: true
@@ -186,9 +188,9 @@ jobs:
     needs: [version, build-and-push, update-helm-chart]
     runs-on: ubuntu-latest
     permissions:
-      contents: 'write'
-      id-token: 'write'
-      pull-requests: 'write'
+      contents: write
+      id-token: write
+      pull-requests: write
     steps:
       - name: Setup Git
         run: |
@@ -211,21 +213,62 @@ jobs:
           git checkout -b release-v${{ needs.version.outputs.new_version }}
           git push origin release-v${{ needs.version.outputs.new_version }}
 
+      - name: Generate Detailed Changelog
+        id: changelog
+        run: |
+          PREVIOUS_TAG="${{ needs.version.outputs.previous_tag }}"
+          NEW_VERSION="${{ needs.version.outputs.new_version }}"
+
+          echo "## What's Changed in v$NEW_VERSION" > CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          # Generate different sections based on conventional commits
+          echo "### 🚀 Features" >> CHANGELOG.md
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"* %s (%h)" --reverse | grep -i "^feat" >> CHANGELOG.md || echo "* No new features" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          echo "### 🐛 Bug Fixes" >> CHANGELOG.md
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"* %s (%h)" --reverse | grep -i "^fix" >> CHANGELOG.md || echo "* No bug fixes" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          echo "### 🧪 Tests and CI" >> CHANGELOG.md
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"* %s (%h)" --reverse | grep -i "^test\|^ci" >> CHANGELOG.md || echo "* No test/CI changes" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          echo "### 📚 Documentation" >> CHANGELOG.md
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"* %s (%h)" --reverse | grep -i "^docs" >> CHANGELOG.md || echo "* No documentation changes" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          echo "### 🧹 Chores and Refactoring" >> CHANGELOG.md
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"* %s (%h)" --reverse | grep -i "^chore\|^refactor" >> CHANGELOG.md || echo "* No chores or refactoring" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+
+          echo "### 📦 Other Changes" >> CHANGELOG.md
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"* %s (%h)" --reverse | grep -v -i "^feat\|^fix\|^test\|^ci\|^docs\|^chore\|^refactor" >> CHANGELOG.md || echo "* No other changes" >> CHANGELOG.md
+
+          # Save the changelog to outputs
+          CHANGELOG_CONTENT=$(cat CHANGELOG.md)
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG_CONTENT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ needs.version.outputs.new_version }}
           name: Release v${{ needs.version.outputs.new_version }}
           body: |
+            ${{ env.CHANGELOG }}
+
             ## Docker Images
             ```
-            ${{ env.AR_URL_PREFIX }}-api/harvester-api:${{ needs.version.outputs.new_version }}
-            ${{ env.AR_URL_PREFIX }}-web/harvester-web:${{ needs.version.outputs.new_version }}
-            ${{ env.AR_URL_PREFIX }}-api/harvester-studio:${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-api/harvester-api:v${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-web/harvester-web:v${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-api/harvester-studio:v${{ needs.version.outputs.new_version }}
             ```
 
-            ## Changes
-            ${{ inputs.description }}
+            ## Automated Release
+            This release was automatically generated by the CI/CD pipeline.
           draft: false
           prerelease: false
           generate_release_notes: true

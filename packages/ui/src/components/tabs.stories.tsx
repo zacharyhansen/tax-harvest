@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import type { TabsProps } from '@radix-ui/react-tabs';
+import type { Meta, StoryObj } from '@storybook/react';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
+import { Button } from './button';
 import {
   Card,
   CardContent,
@@ -10,9 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from './card';
-import { Label } from './label';
 import { Input } from './input';
-import { Button } from './button';
+import { Label } from './label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 
 const meta = {
   title: 'Atoms/Tabs',
@@ -20,7 +20,7 @@ const meta = {
     children: 'Shadcn',
   },
   tags: ['autodocs'],
-  component: args => (
+  component: _args => (
     <Tabs defaultValue="account" className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="account">Account</TabsTrigger>
@@ -83,7 +83,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-//render componente
+// render componente
 export const Default: Story = {
   args: {},
 };
