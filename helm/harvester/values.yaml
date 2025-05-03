@@ -116,40 +116,41 @@ harvester-api:
       value: 5000
     - name: ORIGIN
       value: 'http://34.49.198.140'
-harvester-studio:
-  fullnameOverride: harvester-studio
-  serviceAccountName: google-secret-service-account
-  namespace: harvester
-  labels:
-    app: backend
-  image:
-    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-studio
-    tag: v1.0.1
-  service:
-    port: 5555
-  nodeSelector:
-    iam.gke.io/gke-metadata-server-enabled: 'true'
-  cloudSqlProxy:
-    enabled: true
-    port: 5432
-  livenessProbe:
-    httpGet:
-      path: /
-      port: http
-  readinessProbe:
-    httpGet:
-      path: /
-      port: http
-  extraEnvVars:
-    - name: DATABASE_URL
-      valueFrom:
-        secretKeyRef:
-          name: database
-          key: DATABASE_URL
-    - name: NODE_ENV
-      value: production
-    - name: GOOGLE_PROJECT
-      value: harvester-ai-428202
+# harvester-studio:
+#   fullnameOverride: harvester-studio
+#   serviceAccountName: google-secret-service-account
+#   namespace: harvester
+#   labels:
+#     app: backend
+#   image:
+#     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-studio
+#     tag: v1.0.1
+#   service:
+#     port: 5555
+#   nodeSelector:
+#     iam.gke.io/gke-metadata-server-enabled: 'true'
+#   cloudSqlProxy:
+#     enabled: true
+#     port: 5432
+#   livenessProbe:
+#     httpGet:
+#       path: /
+#       port: http
+#   readinessProbe:
+#     httpGet:
+#       path: /
+#       port: http
+#   extraEnvVars:
+#     - name: DATABASE_URL
+#       valueFrom:
+#         secretKeyRef:
+#           name: database
+#           key: DATABASE_URL
+#     - name: NODE_ENV
+#       value: production
+#     - name: GOOGLE_PROJECT
+#       value: harvester-ai-428202
+
 # ingress-nginx:
 #   namespaceOverride: harvester
 #   controller:
