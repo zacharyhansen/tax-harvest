@@ -116,10 +116,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile.nodejs.microservice
+          file: apps/api/Dockerfile
           push: true
-          build-args: |
-            PROJECT=api
           tags: |
             ${{ env.AR_URL_PREFIX }}-api/harvester-api:v${{ needs.version.outputs.new_version }}
             ${{ env.AR_URL_PREFIX }}-api/harvester-api:latest

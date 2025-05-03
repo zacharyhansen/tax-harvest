@@ -37,5 +37,6 @@ FROM base AS runner
 WORKDIR /app
 COPY --from=sourcer /app/ .
 WORKDIR /app/apps/${PROJECT}
+RUN ls
 
 CMD ["node", "dist/main"]
