@@ -3,8 +3,9 @@ ARG NODE_VERSION=22.13.1
 FROM node:${NODE_VERSION}-alpine AS base
 
 FROM base AS builder
-RUN apk update
-RUN apk add --no-cache libc6-compat
+RUN apk update && apk add --no-cache libc6-compat
+RUN npm install -g pnpm@9.14.2  
+
 # Set working directory
 WORKDIR /app
 # Replace <your-major-version> with the major version installed in your repository. For example:

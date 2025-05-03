@@ -109,7 +109,7 @@ jobs:
           tags: |
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:v${{ needs.version.outputs.new_version }}
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
-          cache-from: type=registry,ref=user/app:latest
+          cache-from: type=registry,ref=${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
           cache-to: type=inline
 
       - name: Build and Push API Image
@@ -123,7 +123,7 @@ jobs:
           tags: |
             ${{ env.AR_URL_PREFIX }}-api/harvester-api:v${{ needs.version.outputs.new_version }}
             ${{ env.AR_URL_PREFIX }}-api/harvester-api:latest
-          cache-from: type=registry,ref=user/app:latest
+          cache-from: type=registry,ref=${{ env.AR_URL_PREFIX }}-api/harvester-api:latest
           cache-to: type=inline
 
       # - name: Build and Push Studio Image
