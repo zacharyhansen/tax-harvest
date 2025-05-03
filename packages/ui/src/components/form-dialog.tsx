@@ -1,24 +1,25 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
+import { useState } from 'react';
 
+import { Alert } from './alert';
+import { Button } from './button';
+import { Form } from './form';
 import {
   ResponsiveDialog,
-  ResponsiveDialogTrigger,
+  ResponsiveDialogBody,
   ResponsiveDialogClose,
   ResponsiveDialogContent,
   ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
-  ResponsiveDialogBody,
-  ResponsiveDialogFooter,
+  ResponsiveDialogTrigger,
 } from './reponsive-dialog';
-import { Form } from './form';
-import { Button } from './button';
-import { Alert } from './alert';
 
-interface FormDialogProps {
+type FormDialogProps = {
   children: ReactNode;
   trigger: ReactNode;
   title?: ReactNode;
@@ -27,7 +28,7 @@ interface FormDialogProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: UseFormReturn<any>;
   defaultOpen?: boolean;
-}
+};
 
 export default function FormDialog({
   children,
@@ -41,24 +42,28 @@ export default function FormDialog({
   const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
   const [error, setError] = useState<boolean>(false);
 
-  const disabled =
-    form.formState.isSubmitting ||
-    form.formState.isLoading ||
-    form.formState.isValidating;
+  const disabled
+    = form.formState.isSubmitting
+      || form.formState.isLoading
+      || form.formState.isValidating;
 
   return (
     <ResponsiveDialog open={isOpen} onOpenChange={setIsOpen}>
       <ResponsiveDialogTrigger asChild>{trigger}</ResponsiveDialogTrigger>
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
-          {title ? (
-            <ResponsiveDialogTitle>{title}</ResponsiveDialogTitle>
-          ) : null}
-          {description ? (
-            <ResponsiveDialogDescription>
-              {description}
-            </ResponsiveDialogDescription>
-          ) : null}
+          {title
+            ? (
+                <ResponsiveDialogTitle>{title}</ResponsiveDialogTitle>
+              )
+            : null}
+          {description
+            ? (
+                <ResponsiveDialogDescription>
+                  {description}
+                </ResponsiveDialogDescription>
+              )
+            : null}
         </ResponsiveDialogHeader>
 
         <Form {...form}>
@@ -82,9 +87,9 @@ export default function FormDialog({
             onClick={() => {
               void form
                 .trigger()
-                .then(passed => {
+                .then((passed) => {
                   if (passed) {
-                    return handleSubmit().then(result => {
+                    return handleSubmit().then((result) => {
                       console.log({ result });
                       setError(false);
                       setIsOpen(false);
@@ -100,11 +105,13 @@ export default function FormDialog({
             Submit
           </Button>
         </ResponsiveDialogFooter>
-        {error ? (
-          <Alert variant="destructive">
-            There was an error with the submission
-          </Alert>
-        ) : null}
+        {error
+          ? (
+              <Alert variant="destructive">
+                There was an error with the submission
+              </Alert>
+            )
+          : null}
       </ResponsiveDialogContent>
     </ResponsiveDialog>
   );

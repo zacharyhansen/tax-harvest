@@ -1,11 +1,12 @@
 'use client';
 
+import type { DayPickerProps } from 'react-day-picker';
 import { differenceInCalendarDays } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import * as React from 'react';
 import {
   DayPicker,
-  type DayPickerProps,
+
   labelNext,
   labelPrevious,
   useDayPicker,
@@ -44,7 +45,7 @@ function Calendar({
         from: currentYear - Math.floor(yearRange / 2 - 1),
         to: currentYear + Math.ceil(yearRange / 2),
       };
-    }, [yearRange])
+    }, [yearRange]),
   );
 
   const { endMonth, onNextClick, onPrevClick, startMonth } = props;
@@ -56,7 +57,7 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
       style={{
-        width: 248.8 * (columnsDisplayed ?? 1) + 'px',
+        width: `${248.8 * (columnsDisplayed ?? 1)}px`,
       }}
       classNames={{
         button_next: cn(
@@ -64,21 +65,21 @@ function Calendar({
             className:
               'absolute right-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
             variant: 'outline',
-          })
+          }),
         ),
         button_previous: cn(
           buttonVariants({
             className:
               'absolute left-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
             variant: 'outline',
-          })
+          }),
         ),
         caption: 'flex justify-center pt-1 relative items-center',
         caption_label: 'text-sm font-medium truncate',
         day: 'p-0 size-8 text-sm flex-1 flex items-center justify-center has-[button]:hover:!bg-accent rounded-lg has-[button]:hover:aria-selected:!bg-primary has-[button]:hover:text-accent-foreground has-[button]:hover:aria-selected:text-primary-foreground',
         day_button: cn(
           buttonVariants({ variant: 'ghost' }),
-          'size-8 p-0 font-normal transition-none hover:bg-transparent hover:text-inherit aria-selected:opacity-100'
+          'size-8 p-0 font-normal transition-none hover:bg-transparent hover:text-inherit aria-selected:opacity-100',
         ),
         disabled: 'text-muted-foreground opacity-50',
         hidden: 'invisible',
@@ -116,12 +117,12 @@ function Calendar({
           >
             {navView === 'days'
               ? children
-              : displayYears.from + ' - ' + displayYears.to}
+              : `${displayYears.from} - ${displayYears.to}`}
           </Button>
         ),
         Chevron: ({ orientation }) => {
           const Icon = orientation === 'left' ? ChevronLeft : ChevronRight;
-          return <Icon className="h-4 w-4" />;
+          return <Icon className="size-4" />;
         },
         MonthGrid: ({ children, className, ...props }) => {
           const { goToMonth } = useDayPicker();
@@ -136,16 +137,16 @@ function Calendar({
                   (_, index) => {
                     const isBefore = startMonth
                       ? differenceInCalendarDays(
-                          new Date(displayYears.from + index, 12, 31),
-                          startMonth
-                        ) < 0
+                        new Date(displayYears.from + index, 12, 31),
+                        startMonth,
+                      ) < 0
                       : false;
 
                     const isAfter = endMonth
                       ? differenceInCalendarDays(
-                          new Date(displayYears.from + index, 0, 0),
-                          endMonth
-                        ) > 0
+                        new Date(displayYears.from + index, 0, 0),
+                        endMonth,
+                      ) > 0
                       : false;
 
                     const isDisabled = isBefore || isAfter;
@@ -154,9 +155,9 @@ function Calendar({
                         key={index}
                         className={cn(
                           'text-foreground h-7 w-full text-sm font-normal',
-                          displayYears.from + index ===
-                            new Date().getFullYear() &&
-                            'bg-accent text-accent-foreground font-medium'
+                          displayYears.from + index
+                          === new Date().getFullYear()
+                          && 'bg-accent text-accent-foreground font-medium',
                         )}
                         variant="ghost"
                         onClick={() => {
@@ -164,8 +165,8 @@ function Calendar({
                           goToMonth(
                             new Date(
                               displayYears.from + index,
-                              new Date().getMonth()
-                            )
+                              new Date().getMonth(),
+                            ),
                           );
                         }}
                         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -174,7 +175,7 @@ function Calendar({
                         {displayYears.from + index}
                       </Button>
                     );
-                  }
+                  },
                 )}
               </div>
             );
@@ -192,16 +193,16 @@ function Calendar({
             if (navView === 'years') {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-return
               return (
-                (startMonth &&
-                  differenceInCalendarDays(
+                (startMonth
+                  && differenceInCalendarDays(
                     new Date(displayYears.from - 1, 0, 1),
-                    startMonth
-                  ) < 0) ??
-                (endMonth &&
-                  differenceInCalendarDays(
-                    new Date(displayYears.from - 1, 0, 1),
-                    endMonth
-                  ) > 0)
+                    startMonth,
+                  ) < 0)
+                  ?? (endMonth
+                    && differenceInCalendarDays(
+                      new Date(displayYears.from - 1, 0, 1),
+                      endMonth,
+                    ) > 0)
               );
             }
             return !previousMonth;
@@ -211,23 +212,25 @@ function Calendar({
             if (navView === 'years') {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-return
               return (
-                (startMonth &&
-                  differenceInCalendarDays(
+                (startMonth
+                  && differenceInCalendarDays(
                     new Date(displayYears.to + 1, 0, 1),
-                    startMonth
-                  ) < 0) ??
-                (endMonth &&
-                  differenceInCalendarDays(
-                    new Date(displayYears.to + 1, 0, 1),
-                    endMonth
-                  ) > 0)
+                    startMonth,
+                  ) < 0)
+                  ?? (endMonth
+                    && differenceInCalendarDays(
+                      new Date(displayYears.to + 1, 0, 1),
+                      endMonth,
+                    ) > 0)
               );
             }
             return !nextMonth;
           })();
 
           const handlePreviousClick = React.useCallback(() => {
-            if (!previousMonth) return;
+            if (!previousMonth) {
+              return;
+            }
             if (navView === 'years') {
               setDisplayYears(previous => ({
                 from: previous.from - (previous.to - previous.from + 1),
@@ -237,8 +240,8 @@ function Calendar({
                 new Date(
                   displayYears.from - (displayYears.to - displayYears.from),
                   0,
-                  1
-                )
+                  1,
+                ),
               );
               return;
             }
@@ -247,7 +250,9 @@ function Calendar({
           }, [previousMonth, goToMonth]);
 
           const handleNextClick = React.useCallback(() => {
-            if (!nextMonth) return;
+            if (!nextMonth) {
+              return;
+            }
             if (navView === 'years') {
               setDisplayYears(previous => ({
                 from: previous.from + (previous.to - previous.from + 1),
@@ -257,8 +262,8 @@ function Calendar({
                 new Date(
                   displayYears.from + (displayYears.to - displayYears.from),
                   0,
-                  1
-                )
+                  1,
+                ),
               );
               return;
             }
@@ -269,38 +274,38 @@ function Calendar({
             <nav className={cn('flex items-center', className)} {...props}>
               <Button
                 variant="outline"
-                className="absolute left-0 h-7 w-7 bg-transparent p-0 opacity-80 hover:opacity-100"
+                className="absolute left-0 size-7 bg-transparent p-0 opacity-80 hover:opacity-100"
                 type="button"
                 tabIndex={isPreviousDisabled ? undefined : -1}
                 disabled={isPreviousDisabled}
                 aria-label={
                   navView === 'years'
                     ? `Go to the previous ${
-                        displayYears.to - displayYears.from + 1
-                      } years`
+                      displayYears.to - displayYears.from + 1
+                    } years`
                     : labelPrevious(previousMonth)
                 }
                 onClick={handlePreviousClick}
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="size-4" />
               </Button>
 
               <Button
                 variant="outline"
-                className="absolute right-0 h-7 w-7 bg-transparent p-0 opacity-80 hover:opacity-100"
+                className="absolute right-0 size-7 bg-transparent p-0 opacity-80 hover:opacity-100"
                 type="button"
                 tabIndex={isNextDisabled ? undefined : -1}
                 disabled={isNextDisabled}
                 aria-label={
                   navView === 'years'
                     ? `Go to the next ${
-                        displayYears.to - displayYears.from + 1
-                      } years`
+                      displayYears.to - displayYears.from + 1
+                    } years`
                     : labelNext(nextMonth)
                 }
                 onClick={handleNextClick}
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="size-4" />
               </Button>
             </nav>
           );

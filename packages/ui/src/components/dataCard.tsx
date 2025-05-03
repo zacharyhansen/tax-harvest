@@ -3,14 +3,14 @@ import type { ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Skeleton } from './skeleton';
 
-export interface DataCardProps {
+export type DataCardProps = {
   data: ReactNode;
   title: ReactNode;
   icon?: ReactNode;
   description?: ReactNode;
   loading?: boolean;
   children?: ReactNode;
-}
+};
 
 export default function DataCard({
   children,
@@ -26,18 +26,22 @@ export default function DataCard({
         <CardTitle className="text-sm font-medium">
           {loading ? <Skeleton className="h-6 w-20" /> : title}
         </CardTitle>
-        {icon ? icon : null}
+        {icon || null}
       </CardHeader>
       <CardContent>
-        {loading ? (
-          <Skeleton className="h-8 w-full" />
-        ) : (
-          <div className="text-2xl font-bold">{data}</div>
-        )}
-        {description ? (
-          <p className="text-muted-foreground text-xs">{description}</p>
-        ) : null}
-        {children ? children : null}
+        {loading
+          ? (
+              <Skeleton className="h-8 w-full" />
+            )
+          : (
+              <div className="text-2xl font-bold">{data}</div>
+            )}
+        {description
+          ? (
+              <p className="text-xs text-muted-foreground">{description}</p>
+            )
+          : null}
+        {children || null}
       </CardContent>
     </Card>
   );

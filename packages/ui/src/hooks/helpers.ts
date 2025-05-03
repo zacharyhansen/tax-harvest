@@ -1,10 +1,10 @@
-interface KeyboardModifiers {
+type KeyboardModifiers = {
   alt: boolean;
   ctrl: boolean;
   meta: boolean;
   mod: boolean;
   shift: boolean;
-}
+};
 
 type Hotkey = KeyboardModifiers & {
   key?: string;
@@ -61,9 +61,9 @@ function isExactHotkey(hotkey: Hotkey, event: KeyboardEvent): boolean {
   }
 
   if (
-    key &&
-    (pressedKey.toLowerCase() === key.toLowerCase() ||
-      event.code.replace('Key', '').toLowerCase() === key.toLowerCase())
+    key
+    && (pressedKey.toLowerCase() === key.toLowerCase()
+      || event.code.replace('Key', '').toLowerCase() === key.toLowerCase())
   ) {
     return true;
   }
@@ -75,16 +75,16 @@ function getHotkeyMatcher(hotkey: string): CheckHotkeyMatch {
   return event => isExactHotkey(parseHotkey(hotkey), event);
 }
 
-interface HotkeyItemOptions {
+type HotkeyItemOptions = {
   preventDefault?: boolean;
-}
+};
 
 type HotkeyItem = [string, (event: KeyboardEvent) => void, HotkeyItemOptions?];
 
 function shouldFireEvent(
   event: KeyboardEvent,
   tagsToIgnore: string[],
-  triggerOnContentEditable = false
+  triggerOnContentEditable = false,
 ) {
   if (event.target instanceof HTMLElement) {
     if (triggerOnContentEditable) {
@@ -92,8 +92,8 @@ function shouldFireEvent(
     }
 
     return (
-      !event.target.isContentEditable &&
-      !tagsToIgnore.includes(event.target.tagName)
+      !event.target.isContentEditable
+      && !tagsToIgnore.includes(event.target.tagName)
     );
   }
 

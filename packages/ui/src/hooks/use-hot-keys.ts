@@ -1,11 +1,12 @@
-import * as React from 'react';
+import type { HotkeyItem } from './helpers';
 
-import { type HotkeyItem, getHotkeyMatcher, shouldFireEvent } from './helpers';
+import * as React from 'react';
+import { getHotkeyMatcher, shouldFireEvent } from './helpers';
 
 export function useHotkeys(
   hotkeys: HotkeyItem[],
   tagsToIgnore: string[] = ['INPUT', 'TEXTAREA', 'SELECT'],
-  triggerOnContentEditable = false
+  triggerOnContentEditable = false,
 ) {
   React.useEffect(() => {
     const keydownListener = (event: KeyboardEvent) => {
@@ -15,8 +16,8 @@ export function useHotkeys(
         options = { preventDefault: true },
       ] of hotkeys) {
         if (
-          getHotkeyMatcher(hotkey)(event) &&
-          shouldFireEvent(event, tagsToIgnore, triggerOnContentEditable)
+          getHotkeyMatcher(hotkey)(event)
+          && shouldFireEvent(event, tagsToIgnore, triggerOnContentEditable)
         ) {
           if (options.preventDefault) {
             event.preventDefault();

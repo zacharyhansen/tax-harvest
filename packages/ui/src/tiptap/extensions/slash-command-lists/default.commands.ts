@@ -1,5 +1,5 @@
 import { createSuggestionsItems } from '@harshtalks/slash-tiptap';
-import { ListOrdered, List, LetterText } from 'lucide-react';
+import { LetterText, List, ListOrdered } from 'lucide-react';
 
 export const defaultCommands = createSuggestionsItems([
   {

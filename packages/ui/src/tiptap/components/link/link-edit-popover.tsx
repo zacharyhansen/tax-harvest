@@ -1,24 +1,24 @@
-import * as React from 'react';
+import type { toggleVariants } from '@repo/ui/components/toggle.variants';
 import type { Editor } from '@tiptap/react';
 import type { VariantProps } from 'class-variance-authority';
 import { Link2Icon } from '@radix-ui/react-icons';
-import type { toggleVariants } from '@repo/ui/components/toggle.variants';
-
-import { ToolbarButton } from '../toolbar-button';
-
-import { LinkEditBlock } from './link-edit-block';
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@repo/ui/components/popover';
 
-interface LinkEditPopoverProps extends VariantProps<typeof toggleVariants> {
-  editor: Editor;
-}
+import * as React from 'react';
 
-const LinkEditPopover = ({ editor, size, variant }: LinkEditPopoverProps) => {
+import { ToolbarButton } from '../toolbar-button';
+
+import { LinkEditBlock } from './link-edit-block';
+
+type LinkEditPopoverProps = {
+  editor: Editor;
+} & VariantProps<typeof toggleVariants>;
+
+function LinkEditPopover({ editor, size, variant }: LinkEditPopoverProps) {
   const [open, setOpen] = React.useState(false);
 
   const { from, to } = editor.state.selection;
@@ -48,7 +48,7 @@ const LinkEditPopover = ({ editor, size, variant }: LinkEditPopoverProps) => {
 
       editor.commands.enter();
     },
-    [editor]
+    [editor],
   );
 
   return (
@@ -70,6 +70,6 @@ const LinkEditPopover = ({ editor, size, variant }: LinkEditPopoverProps) => {
       </PopoverContent>
     </Popover>
   );
-};
+}
 
 export { LinkEditPopover };

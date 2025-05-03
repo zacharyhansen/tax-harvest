@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-export const useTheme = () => {
+export function useTheme() {
   const [isDarkMode, setIsDarkMode] = React.useState(false);
 
   React.useEffect(() => {
     const darkModeMediaQuery = window.matchMedia(
-      '(prefers-color-scheme: dark)'
+      '(prefers-color-scheme: dark)',
     );
     setIsDarkMode(darkModeMediaQuery.matches);
 
@@ -22,6 +22,6 @@ export const useTheme = () => {
   }, []);
 
   return isDarkMode;
-};
+}
 
 export default useTheme;

@@ -28,7 +28,7 @@ const meta = {
     animation: 2,
     maxCount: 3,
   },
-  render: args => {
+  render: (args) => {
     const [value, setValue] = useState<string[]>(args.value);
 
     return <ComboboxMulti {...args} value={value} onChange={setValue} />;

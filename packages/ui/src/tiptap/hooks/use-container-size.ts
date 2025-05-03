@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const DEFAULT_RECT: DOMRect = {
   top: 0,
@@ -14,20 +14,22 @@ const DEFAULT_RECT: DOMRect = {
 
 export function useContainerSize(element: HTMLElement | null): DOMRect {
   const [size, setSize] = useState<DOMRect>(
-    () => element?.getBoundingClientRect() ?? DEFAULT_RECT
+    () => element?.getBoundingClientRect() ?? DEFAULT_RECT,
   );
 
   const handleResize = useCallback(() => {
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const newRect = element.getBoundingClientRect();
 
-    setSize(previousRect => {
+    setSize((previousRect) => {
       if (
-        Math.round(previousRect.width) === Math.round(newRect.width) &&
-        Math.round(previousRect.height) === Math.round(newRect.height) &&
-        Math.round(previousRect.x) === Math.round(newRect.x) &&
-        Math.round(previousRect.y) === Math.round(newRect.y)
+        Math.round(previousRect.width) === Math.round(newRect.width)
+        && Math.round(previousRect.height) === Math.round(newRect.height)
+        && Math.round(previousRect.x) === Math.round(newRect.x)
+        && Math.round(previousRect.y) === Math.round(newRect.y)
       ) {
         return previousRect;
       }
@@ -36,7 +38,9 @@ export function useContainerSize(element: HTMLElement | null): DOMRect {
   }, [element]);
 
   useEffect(() => {
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(element);

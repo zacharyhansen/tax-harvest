@@ -1,23 +1,23 @@
 'use client';
 
-import React, { type ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { ChevronRight, type LucideIcon } from 'lucide-react';
 import { cva } from 'class-variance-authority';
+import { ChevronRight } from 'lucide-react';
+import React from 'react';
 
 import { cn } from '../utils';
 
-import { Button } from './button';
-
 const treeVariants = cva(
-  'group hover:before:opacity-100 before:absolute before:rounded-lg before:left-0 px-2 before:w-full before:opacity-0 before:bg-accent/70 before:h-[2rem] before:-z-10'
+  'group px-2 before:absolute before:left-0 before:-z-10 before:h-8 before:w-full before:rounded-lg before:bg-accent/70 before:opacity-0 hover:before:opacity-100',
 );
 
 const selectedTreeVariants = cva(
-  'before:opacity-100 before:bg-accent/70 text-accent-foreground'
+  'text-accent-foreground before:bg-accent/70 before:opacity-100',
 );
 
-interface TreeDataItem {
+type TreeDataItem = {
   id: string;
   name: ReactNode;
   icon?: any;
@@ -26,13 +26,13 @@ interface TreeDataItem {
   children?: TreeDataItem[];
   actions?: React.ReactNode;
   onClick?: () => void;
-}
+};
 
-interface TreeItemAction {
+type TreeItemAction = {
   icon: LucideIcon;
   label?: string;
   onClick: (id: string) => void;
-}
+};
 
 type TreeViewProps = React.HTMLAttributes<HTMLDivElement> & {
   data: TreeDataItem[] | TreeDataItem;
@@ -46,82 +46,71 @@ type TreeViewProps = React.HTMLAttributes<HTMLDivElement> & {
   leafClassName?: string;
 };
 
-const TreeView = React.forwardRef<HTMLDivElement, TreeViewProps>(
-  (
-    {
-      data,
-      initialSelectedItemId,
-      onSelectChange,
-      expandAll,
-      defaultLeafIcon,
-      defaultNodeIcon,
-      className,
-      hideActionsTillHover = false,
-      ...props
-    },
-    ref
-  ) => {
-    const [selectedItemId, setSelectedItemId] = React.useState<
+const TreeView = (
+  { ref, data, initialSelectedItemId, onSelectChange, expandAll, defaultLeafIcon, defaultNodeIcon, className, hideActionsTillHover = false, ...props }: TreeViewProps & { ref?: React.RefObject<HTMLDivElement | null> },
+) => {
+  const [selectedItemId, setSelectedItemId] = React.useState<
       string | undefined
-    >(initialSelectedItemId);
+  >(initialSelectedItemId);
 
-    const handleSelectChange = React.useCallback(
-      (item: TreeDataItem | undefined) => {
-        setSelectedItemId(item?.id);
-        if (onSelectChange) {
-          onSelectChange(item);
-        }
-      },
-      [onSelectChange]
-    );
-
-    const expandedItemIds = React.useMemo(() => {
-      if (!initialSelectedItemId) {
-        return [] as string[];
+  const handleSelectChange = React.useCallback(
+    (item: TreeDataItem | undefined) => {
+      setSelectedItemId(item?.id);
+      if (onSelectChange) {
+        onSelectChange(item);
       }
+    },
+    [onSelectChange],
+  );
 
-      const ids: string[] = [];
+  const expandedItemIds = React.useMemo(() => {
+    if (!initialSelectedItemId) {
+      return [] as string[];
+    }
 
-      function walkTreeItems(
-        items: TreeDataItem[] | TreeDataItem,
-        targetId: string
-      ) {
-        if (Array.isArray(items)) {
-          for (const item of items) {
-            ids.push(item.id);
-            if (walkTreeItems(item, targetId) && !expandAll) {
-              return true;
-            }
-            if (!expandAll) ids.pop();
+    const ids: string[] = [];
+
+    function walkTreeItems(
+      items: TreeDataItem[] | TreeDataItem,
+      targetId: string,
+    ) {
+      if (Array.isArray(items)) {
+        for (const item of items) {
+          ids.push(item.id);
+          if (walkTreeItems(item, targetId) && !expandAll) {
+            return true;
           }
-        } else if (!expandAll && items.id === targetId) {
-          return true;
-        } else if (items.children) {
-          return walkTreeItems(items.children, targetId);
+          if (!expandAll) {
+            ids.pop();
+          }
         }
+      } else if (!expandAll && items.id === targetId) {
+        return true;
+      } else if (items.children) {
+        return walkTreeItems(items.children, targetId);
       }
+    }
 
-      walkTreeItems(data, initialSelectedItemId);
-      return ids;
-    }, [data, expandAll, initialSelectedItemId]);
+    walkTreeItems(data, initialSelectedItemId);
+    return ids;
+  }, [data, expandAll, initialSelectedItemId]);
 
-    return (
-      <div className={cn('relative overflow-hidden p-2', className)}>
-        <TreeItem
-          data={data}
-          ref={ref}
-          selectedItemId={selectedItemId}
-          handleSelectChange={handleSelectChange}
-          expandedItemIds={expandedItemIds}
-          defaultLeafIcon={defaultLeafIcon}
-          defaultNodeIcon={defaultNodeIcon}
-          hideActionsTillHover={hideActionsTillHover}
-          {...props}
-        />
-      </div>
-    );
-  }
-);
+  return (
+    <div className={cn('relative overflow-hidden p-2', className)}>
+      <TreeItem
+        data={data}
+        ref={ref}
+        selectedItemId={selectedItemId}
+        handleSelectChange={handleSelectChange}
+        expandedItemIds={expandedItemIds}
+        defaultLeafIcon={defaultLeafIcon}
+        defaultNodeIcon={defaultNodeIcon}
+        hideActionsTillHover={hideActionsTillHover}
+        {...props}
+      />
+    </div>
+  );
+};
 TreeView.displayName = 'TreeView';
 
 type TreeItemProps = TreeViewProps & {
@@ -135,59 +124,46 @@ type TreeItemProps = TreeViewProps & {
   hideActionsTillHover: boolean;
 };
 
-const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
-  (
-    {
-      className,
-      data,
-      selectedItemId,
-      handleSelectChange,
-      expandedItemIds,
-      defaultNodeIcon,
-      defaultLeafIcon,
-      hideActionsTillHover,
-      nodeClassName,
-      leafClassName,
-      ...props
-    },
-    ref
-  ) => {
-    if (!Array.isArray(data)) {
-      data = [data];
-    }
-    return (
-      <div ref={ref} role="tree" className={className} {...props}>
-        <ul>
-          {data.map(item => (
-            <li key={item.id}>
-              {item.children ? (
-                <TreeNode
-                  item={item}
-                  selectedItemId={selectedItemId}
-                  expandedItemIds={expandedItemIds}
-                  handleSelectChange={handleSelectChange}
-                  defaultNodeIcon={defaultNodeIcon}
-                  defaultLeafIcon={defaultLeafIcon}
-                  nodeClassName={nodeClassName}
-                  leafClassName={leafClassName}
-                />
-              ) : (
-                <TreeLeaf
-                  item={item}
-                  selectedItemId={selectedItemId}
-                  handleSelectChange={handleSelectChange}
-                  defaultLeafIcon={defaultLeafIcon}
-                  hideActionsTillHover={hideActionsTillHover}
-                  leafClassName={leafClassName}
-                />
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
+const TreeItem = (
+  { ref, className, data, selectedItemId, handleSelectChange, expandedItemIds, defaultNodeIcon, defaultLeafIcon, hideActionsTillHover, nodeClassName, leafClassName, ...props }: TreeItemProps & { ref?: React.RefObject<HTMLDivElement | null> },
+) => {
+  if (!Array.isArray(data)) {
+    data = [data];
   }
-);
+  return (
+    <div ref={ref} role="tree" className={className} {...props}>
+      <ul>
+        {data.map(item => (
+          <li key={item.id}>
+            {item.children
+              ? (
+                  <TreeNode
+                    item={item}
+                    selectedItemId={selectedItemId}
+                    expandedItemIds={expandedItemIds}
+                    handleSelectChange={handleSelectChange}
+                    defaultNodeIcon={defaultNodeIcon}
+                    defaultLeafIcon={defaultLeafIcon}
+                    nodeClassName={nodeClassName}
+                    leafClassName={leafClassName}
+                  />
+                )
+              : (
+                  <TreeLeaf
+                    item={item}
+                    selectedItemId={selectedItemId}
+                    handleSelectChange={handleSelectChange}
+                    defaultLeafIcon={defaultLeafIcon}
+                    hideActionsTillHover={hideActionsTillHover}
+                    leafClassName={leafClassName}
+                  />
+                )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 TreeItem.displayName = 'TreeItem';
 
 const TreeNode = ({
@@ -212,13 +188,13 @@ const TreeNode = ({
   leafClassName?: string;
 }) => {
   const [value, setValue] = React.useState(
-    expandedItemIds.includes(item.id) ? [item.id] : []
+    expandedItemIds.includes(item.id) ? [item.id] : [],
   );
   return (
     <AccordionPrimitive.Root
       type="multiple"
       value={value}
-      onValueChange={s => {
+      onValueChange={(s) => {
         setValue(s);
       }}
     >
@@ -226,7 +202,7 @@ const TreeNode = ({
         <AccordionTrigger
           className={cn(
             treeVariants(),
-            selectedItemId === item.id && selectedTreeVariants()
+            selectedItemId === item.id && selectedTreeVariants(),
           )}
           onClick={() => {
             handleSelectChange(item);
@@ -265,99 +241,78 @@ const TreeNode = ({
   );
 };
 
-const TreeLeaf = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
+const TreeLeaf = (
+  { ref, className, item, selectedItemId, handleSelectChange, defaultLeafIcon, hideActionsTillHover, leafClassName, ...props }: React.HTMLAttributes<HTMLDivElement> & {
     item: TreeDataItem;
     selectedItemId?: string;
     handleSelectChange: (item: TreeDataItem | undefined) => void;
     defaultLeafIcon?: any;
     hideActionsTillHover: boolean;
     leafClassName?: string;
-  }
->(
-  (
-    {
-      className,
-      item,
-      selectedItemId,
-      handleSelectChange,
-      defaultLeafIcon,
-      hideActionsTillHover,
-      leafClassName,
-      ...props
-    },
-    ref
-  ) => {
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'ml-5 flex cursor-pointer items-center py-2 text-left before:right-1',
-          treeVariants(),
-          className,
-          selectedItemId === item.id && selectedTreeVariants(),
-          leafClassName
-        )}
-        onClick={() => {
-          handleSelectChange(item);
-          item.onClick?.();
-        }}
-        {...props}
+  } & { ref?: React.RefObject<HTMLDivElement | null> },
+) => {
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        'ml-5 flex cursor-pointer items-center py-2 text-left before:right-1',
+        treeVariants(),
+        className,
+        selectedItemId === item.id && selectedTreeVariants(),
+        leafClassName,
+      )}
+      onClick={() => {
+        handleSelectChange(item);
+        item.onClick?.();
+      }}
+      {...props}
+    >
+      <TreeIcon
+        item={item}
+        isSelected={selectedItemId === item.id}
+        default={defaultLeafIcon}
+      />
+      <span className="grow truncate text-sm">{item.name}</span>
+      <TreeActions
+        isSelected={selectedItemId === item.id}
+        hideActionsTillHover={hideActionsTillHover}
       >
-        <TreeIcon
-          item={item}
-          isSelected={selectedItemId === item.id}
-          default={defaultLeafIcon}
-        />
-        <span className="flex-grow truncate text-sm">{item.name}</span>
-        <TreeActions
-          isSelected={selectedItemId === item.id}
-          hideActionsTillHover={hideActionsTillHover}
-        >
-          {item.actions}
-        </TreeActions>
-      </div>
-    );
-  }
-);
+        {item.actions}
+      </TreeActions>
+    </div>
+  );
+};
 TreeLeaf.displayName = 'TreeLeaf';
 
-const AccordionTrigger = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+const AccordionTrigger = ({ ref, className, children, ...props }: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & { ref?: React.RefObject<React.ElementRef<typeof AccordionPrimitive.Trigger> | null> }) => (
   <AccordionPrimitive.Header>
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
         'flex w-full flex-1 items-center py-2 transition-all first:[&[data-state=open]>svg]:rotate-90',
-        className
+        className,
       )}
       {...props}
     >
-      <ChevronRight className="text-accent-foreground/50 mr-1 h-4 w-4 shrink-0 transition-transform duration-200" />
+      <ChevronRight className="mr-1 size-4 shrink-0 text-accent-foreground/50 transition-transform duration-200" />
       {children}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
-));
+);
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
-const AccordionContent = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+const AccordionContent = ({ ref, className, children, ...props }: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> & { ref?: React.RefObject<React.ElementRef<typeof AccordionPrimitive.Content> | null> }) => (
   <AccordionPrimitive.Content
     ref={ref}
     className={cn(
       'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm transition-all',
-      className
+      className,
     )}
     {...props}
   >
     <div className="pb-1 pt-0">{children}</div>
   </AccordionPrimitive.Content>
-));
+);
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
 const TreeIcon = ({
@@ -379,7 +334,7 @@ const TreeIcon = ({
   } else if (item.icon) {
     Icon = item.icon;
   }
-  return Icon ? <Icon className="mr-2 h-4 w-4 shrink-0" /> : <></>;
+  return Icon ? <Icon className="mr-2 size-4 shrink-0" /> : <></>;
 };
 
 const TreeActions = ({
@@ -395,7 +350,7 @@ const TreeActions = ({
     <div
       className={cn(
         isSelected || !hideActionsTillHover ? 'block' : 'hidden',
-        'absolute right-3 group-hover:block'
+        'absolute right-3 group-hover:block',
       )}
     >
       {children}
@@ -403,4 +358,4 @@ const TreeActions = ({
   );
 };
 
-export { TreeView, type TreeDataItem, type TreeViewProps, type TreeItemAction };
+export { type TreeDataItem, type TreeItemAction, TreeView, type TreeViewProps };

@@ -1,13 +1,9 @@
-import * as React from 'react';
-import type { Editor } from '@tiptap/react';
-import type { Level } from '@tiptap/extension-heading';
-import type { VariantProps } from 'class-variance-authority';
-import { CaretDownIcon, LetterCaseCapitalizeIcon } from '@radix-ui/react-icons';
 import type { toggleVariants } from '@repo/ui/components/toggle.variants';
-
+import type { Level } from '@tiptap/extension-heading';
+import type { Editor } from '@tiptap/react';
+import type { VariantProps } from 'class-variance-authority';
 import type { FormatAction } from '../../types';
-import { ToolbarButton } from '../toolbar-button';
-import { ShortcutKey } from '../shortcut-key';
+import { CaretDownIcon, LetterCaseCapitalizeIcon } from '@radix-ui/react-icons';
 
 import {
   DropdownMenu,
@@ -16,16 +12,19 @@ import {
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
 import { cn } from '@repo/ui/utils';
+import * as React from 'react';
 
-interface TextStyle
-  extends Omit<
-    FormatAction,
-    'value' | 'icon' | 'action' | 'isActive' | 'canExecute'
-  > {
+import { ShortcutKey } from '../shortcut-key';
+import { ToolbarButton } from '../toolbar-button';
+
+type TextStyle = {
   element: keyof React.JSX.IntrinsicElements;
   level?: Level;
   className: string;
-}
+} & Omit<
+  FormatAction,
+    'value' | 'icon' | 'action' | 'isActive' | 'canExecute'
+>;
 
 const formatActions: TextStyle[] = [
   {
@@ -78,19 +77,19 @@ const formatActions: TextStyle[] = [
   },
 ];
 
-interface SectionOneProps extends VariantProps<typeof toggleVariants> {
+type SectionOneProps = {
   editor: Editor;
   activeLevels?: Level[];
-}
+} & VariantProps<typeof toggleVariants>;
 
 export const SectionOne: React.FC<SectionOneProps> = React.memo(
   ({ editor, activeLevels = [1, 2, 3, 4, 5, 6], size, variant }) => {
     const filteredActions = React.useMemo(
       () =>
         formatActions.filter(
-          action => !action.level || activeLevels.includes(action.level)
+          action => !action.level || activeLevels.includes(action.level),
         ),
-      [activeLevels]
+      [activeLevels],
     );
 
     const handleStyleChange = React.useCallback(
@@ -101,7 +100,7 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(
           editor.chain().focus().setParagraph().run();
         }
       },
-      [editor]
+      [editor],
     );
 
     const renderMenuItem = React.useCallback(
@@ -122,7 +121,7 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(
           <ShortcutKey keys={shortcuts} />
         </DropdownMenuItem>
       ),
-      [editor, handleStyleChange]
+      [editor, handleStyleChange],
     );
 
     return (
@@ -147,7 +146,7 @@ export const SectionOne: React.FC<SectionOneProps> = React.memo(
         </DropdownMenuContent>
       </DropdownMenu>
     );
-  }
+  },
 );
 
 SectionOne.displayName = 'SectionOne';

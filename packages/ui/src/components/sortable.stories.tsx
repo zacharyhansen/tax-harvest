@@ -1,20 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { useState } from 'react';
-
-import { Sortable, SortableDragHandle, SortableItem } from './sortable';
-
-import {
-  ResponsiveDialog,
-  ResponsiveDialogTrigger,
-  ResponsiveDialogClose,
-  ResponsiveDialogContent,
-  ResponsiveDialogBody,
-  ResponsiveDialogFooter,
-} from '@repo/ui/components/reponsive-dialog';
 import { Button } from '@repo/ui/components/button';
 import {
   Card,
@@ -29,14 +15,28 @@ import {
   FormField,
   FormItem,
 } from '@repo/ui/components/form';
+
 import { Input } from '@repo/ui/components/input';
+
+import {
+  ResponsiveDialog,
+  ResponsiveDialogBody,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogFooter,
+  ResponsiveDialogTrigger,
+} from '@repo/ui/components/reponsive-dialog';
+import { useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Sortable, SortableDragHandle, SortableItem } from './sortable';
 
 const schema = z.object({
   flipTricks: z.array(
     z.object({
       name: z.string(),
       spin: z.string(),
-    })
+    }),
   ),
 });
 
@@ -102,14 +102,14 @@ const SortableForm = () => {
               onMove={({ activeIndex, overIndex }) => {
                 move(activeIndex, overIndex);
               }}
-              overlay={
+              overlay={(
                 <div className="grid grid-cols-[0.5fr,1fr,auto,auto] items-center gap-2">
-                  <div className="bg-primary/10 h-8 w-full rounded-sm" />
-                  <div className="bg-primary/10 h-8 w-full rounded-sm" />
-                  <div className="bg-primary/10 size-8 shrink-0 rounded-sm" />
-                  <div className="bg-primary/10 size-8 shrink-0 rounded-sm" />
+                  <div className="h-8 w-full rounded-sm bg-primary/10" />
+                  <div className="h-8 w-full rounded-sm bg-primary/10" />
+                  <div className="size-8 shrink-0 rounded-sm bg-primary/10" />
+                  <div className="size-8 shrink-0 rounded-sm bg-primary/10" />
                 </div>
-              }
+              )}
             >
               <div className="flex w-full flex-col gap-2">
                 {fields.map((field, index) => (
@@ -157,7 +157,7 @@ const SortableForm = () => {
                         }}
                       >
                         <TrashIcon
-                          className="text-destructive size-4"
+                          className="size-4 text-destructive"
                           aria-hidden="true"
                         />
                         <span className="sr-only">Remove</span>

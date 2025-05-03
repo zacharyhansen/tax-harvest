@@ -1,14 +1,15 @@
-import { Node, mergeAttributes } from '@tiptap/core';
-import { ReactNodeViewRenderer } from '@tiptap/react';
-
-import { generateRandomFieldName } from '../../utils';
-import { FormNode, type NumberNodeAttributes } from '../form/types';
-
-import { InputWrapper } from './input.wrapper';
-import { useFormKeyDown } from './hooks/use-form-key-down';
-
+import type { NumberNodeAttributes } from '../form/types';
 import { Input } from '@repo/ui/components/input';
+
 import InputField from '@repo/ui/form-builder/fields/input.field';
+import { mergeAttributes, Node } from '@tiptap/core';
+
+import { ReactNodeViewRenderer } from '@tiptap/react';
+import { generateRandomFieldName } from '../../utils';
+import { FormNode } from '../form/types';
+
+import { useFormKeyDown } from './hooks/use-form-key-down';
+import { InputWrapper } from './input.wrapper';
 
 export const FormNumberNode = Node.create<NumberNodeAttributes>({
   name: FormNode.Number, // Unique name for your node
@@ -40,7 +41,7 @@ export const FormNumberNode = Node.create<NumberNodeAttributes>({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(props => {
+    return ReactNodeViewRenderer((props) => {
       const { node, updateAttributes } = props;
       const { placeholder } = node.attrs as NumberNodeAttributes;
       const { handleKeyDown } = useFormKeyDown(props);
@@ -57,13 +58,13 @@ export const FormNumberNode = Node.create<NumberNodeAttributes>({
       return (
         <InputWrapper {...props} type={FormNode.Number}>
           <Input
-            placeholder={'Type placeholder text'}
-            onChange={event => {
+            placeholder="Type placeholder text"
+            onChange={(event) => {
               updateAttributes({ placeholder: event.target.value });
             }}
             onKeyDown={handleKeyDown}
             value={placeholder}
-            className="text-muted-foreground transition-all duration-200 placeholder:text-transparent focus:placeholder-gray-400 focus:outline-none"
+            className="text-muted-foreground transition-all duration-200 placeholder:text-transparent focus:outline-none focus:placeholder:text-gray-400"
           />
         </InputWrapper>
       );

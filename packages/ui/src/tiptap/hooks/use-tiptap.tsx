@@ -1,41 +1,40 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import * as React from 'react';
-import type { Editor, Content, UseEditorOptions } from '@tiptap/react';
-import { StarterKit } from '@tiptap/starter-kit';
-import { useEditor } from '@tiptap/react';
-import { Typography } from '@tiptap/extension-typography';
-import { Placeholder } from '@tiptap/extension-placeholder';
-import { Underline } from '@tiptap/extension-underline';
-import { TextStyle } from '@tiptap/extension-text-style';
-import { toast } from 'sonner';
 import type { createSuggestionsItems } from '@harshtalks/slash-tiptap';
+import type { Content, Editor, UseEditorOptions } from '@tiptap/react';
 import { enableKeyboardNavigation, Slash } from '@harshtalks/slash-tiptap';
+import { cn } from '@repo/ui/utils';
+import { Placeholder } from '@tiptap/extension-placeholder';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Typography } from '@tiptap/extension-typography';
+import { Underline } from '@tiptap/extension-underline';
+import { useEditor } from '@tiptap/react';
+import { StarterKit } from '@tiptap/starter-kit';
+import * as React from 'react';
 
+import { toast } from 'sonner';
 import {
-  Link,
-  Image,
-  HorizontalRule,
   CodeBlockLowlight,
-  Selection,
   Color,
-  UnsetAllMarks,
-  ResetMarksOnEnter,
   FileHandler,
+  HorizontalRule,
+  Image,
+  Link,
+  ResetMarksOnEnter,
+  Selection,
+  UnsetAllMarks,
 } from '../extensions';
-import { fileToBase64, getOutput, randomId } from '../utils';
 import GlobalDragHandle from '../extensions/drag-handler';
-import { FormTextNode } from '../nodes/form/form-text.node';
-import { FormNumberNode } from '../nodes/form/form-number.node';
 import { FormCheckboxNode } from '../nodes/form/form-checkbox.node';
 import { FormComboboxNode } from '../nodes/form/form-combobox.node';
+import { FormNumberNode } from '../nodes/form/form-number.node';
+import { FormTextNode } from '../nodes/form/form-text.node';
+
+import { fileToBase64, getOutput, randomId } from '../utils';
 
 import { useThrottle } from './use-throttle';
 
-import { cn } from '@repo/ui/utils';
-
 export type SlashCommands = ReturnType<typeof createSuggestionsItems>;
 
-export interface UseTiptapEditorProps extends UseEditorOptions {
+export type UseTiptapEditorProps = {
   value?: Content;
   output?: 'html' | 'json' | 'text';
   placeholder?: string;
@@ -44,15 +43,15 @@ export interface UseTiptapEditorProps extends UseEditorOptions {
   onUpdate?: (content: Content) => void;
   onBlur?: (content: Content) => void;
   slashCommands?: SlashCommands;
-}
+} & UseEditorOptions;
 
-const createExtensions = ({
+function createExtensions({
   placeholder,
   slashCommands,
 }: {
   placeholder: string;
   slashCommands?: SlashCommands;
-}) => {
+}) {
   const extensions = [
     // Form Nodes
     FormTextNode,
@@ -102,11 +101,14 @@ const createExtensions = ({
       onToggle(
         editor: {
           commands: {
+            // eslint-disable-next-line ts/no-explicit-any
             insertContentAt: (argument0: any, argument1: any) => void;
           };
         },
+        // eslint-disable-next-line ts/no-explicit-any
         files: any[],
-        pos: any
+        // eslint-disable-next-line ts/no-explicit-any
+        pos: any,
       ) {
         editor.commands.insertContentAt(
           pos,
@@ -127,12 +129,13 @@ const createExtensions = ({
                 fileName: image.name,
               },
             };
-          })
+          }),
         );
       },
       onImageRemoved({ id, src }) {
-        console.log('Image removed', { id, src });
+        console.info('Image removed', { id, src });
       },
+      // eslint-disable-next-line ts/no-explicit-any
       onValidationError(errors: any) {
         for (const error of errors) {
           toast.error('Image validation error', {
@@ -152,6 +155,7 @@ const createExtensions = ({
           description: 'Image action success',
         });
       },
+      // eslint-disable-next-line ts/no-explicit-any
       onActionError(error: { message: any }, { action }: any) {
         const mapping = {
           copyImage: 'Copy Image',
@@ -170,7 +174,7 @@ const createExtensions = ({
       allowedMimeTypes: ['image/*'],
       maxFileSize: 5 * 1024 * 1024,
       onDrop: (editor, files, pos) => {
-        files.forEach(async file => {
+        files.forEach(async (file) => {
           const source = await fileToBase64(file);
           editor.commands.insertContentAt(pos, {
             type: 'image',
@@ -179,7 +183,7 @@ const createExtensions = ({
         });
       },
       onPaste: (editor, files) => {
-        files.forEach(async file => {
+        files.forEach(async (file) => {
           const source = await fileToBase64(file);
           editor.commands.insertContent({
             type: 'image',
@@ -187,7 +191,7 @@ const createExtensions = ({
           });
         });
       },
-      onValidationError: errors => {
+      onValidationError: (errors) => {
         for (const error of errors) {
           toast.error('Image validation error', {
             position: 'bottom-right',
@@ -230,14 +234,14 @@ const createExtensions = ({
         suggestion: {
           items: () => slashCommands,
         },
-      })
+      }),
     );
   }
 
   return extensions;
-};
+}
 
-export const useTiptapEditor = ({
+export function useTiptapEditor({
   value,
   output = 'html',
   placeholder = '',
@@ -247,17 +251,17 @@ export const useTiptapEditor = ({
   onBlur,
   slashCommands,
   ...props
-}: UseTiptapEditorProps) => {
+}: UseTiptapEditorProps) {
   const throttledSetValue = useThrottle(
     (value: Content) => onUpdate?.(value),
-    throttleDelay
+    throttleDelay,
   );
 
   const handleUpdate = React.useCallback(
     (editor: Editor) => {
       throttledSetValue(getOutput(editor, output));
     },
-    [output, throttledSetValue]
+    [output, throttledSetValue],
   );
 
   const handleCreate = React.useCallback(
@@ -266,12 +270,12 @@ export const useTiptapEditor = ({
         editor.commands.setContent(value);
       }
     },
-    [value]
+    [value],
   );
 
   const handleBlur = React.useCallback(
     (editor: Editor) => onBlur?.(getOutput(editor, output)),
-    [output, onBlur]
+    [output, onBlur],
   );
 
   const editor = useEditor({
@@ -299,7 +303,6 @@ export const useTiptapEditor = ({
     ...props,
   });
   return editor;
-};
+}
 
 export default useTiptapEditor;
-/* eslint-enable @typescript-eslint/no-explicit-any */

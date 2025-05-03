@@ -1,13 +1,14 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import type { NodeViewProps } from '@tiptap/core';
+import type { DefaultValues, FieldValues } from 'react-hook-form';
+import type { z, ZodType } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { snakeCase } from 'change-case';
 import { useEffect } from 'react';
-import { useForm, type DefaultValues, type FieldValues } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import type { z, ZodType } from 'zod';
 
-export const useFormLabel = <
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useFormLabel<
+  // eslint-disable-next-line ts/no-explicit-any
   FormSchema extends ZodType<any, any, any>,
   TFieldValues extends FieldValues & {
     name: string;
@@ -27,7 +28,7 @@ export const useFormLabel = <
   defaultValues:
     | DefaultValues<TFieldValues>
     | ((payload?: unknown) => Promise<TFieldValues>);
-} & NodeViewProps) => {
+} & NodeViewProps) {
   const nodeEndPos = getPos() + node.nodeSize;
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -84,4 +85,4 @@ export const useFormLabel = <
   };
 
   return { handleKeyDown, handleSubmit, form, handleOpen };
-};
+}

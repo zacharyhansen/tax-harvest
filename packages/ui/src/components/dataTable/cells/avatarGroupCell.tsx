@@ -1,6 +1,7 @@
 import type { CellContext } from '@tanstack/react-table';
 
-import { AvatarGroup, type UserObject } from '../../avatar-group';
+import type { UserObject } from '../../avatar-group';
+import { AvatarGroup } from '../../avatar-group';
 
 export default function AvatarGroupCell<TData, TValue extends UserObject>({
   getValue,
@@ -9,7 +10,7 @@ export default function AvatarGroupCell<TData, TValue extends UserObject>({
 
   return (
     <div className="ml-auto flex items-center space-x-2">
-      <div className="flex-shrink-0">
+      <div className="shrink-0">
         <AvatarGroup people={users} />
       </div>
     </div>

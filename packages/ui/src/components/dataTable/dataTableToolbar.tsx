@@ -10,24 +10,24 @@ import { DataTableFacetedFilter } from './dataTableFacetedFilter';
 import { DataTableGroupOptions } from './dataTableGroupOptions';
 import { DataTableViewOptions } from './dataTableViewOptions';
 
-interface DataTableToolbarProps<TData, TValue> {
+type DataTableToolbarProps<TData, TValue> = {
   table: Table<TData>;
   setGlobalFilter: (value: string) => void;
   filterColumns?: ColumnDef<TData, TValue>[];
-}
+};
 
 export function DataTableToolbar<TData, TValue>({
   setGlobalFilter,
   table,
 }: DataTableToolbarProps<TData, TValue>) {
-  const { columnFilters, columnVisibility, globalFilter, grouping } =
-    table.getState();
+  const { columnFilters, columnVisibility, globalFilter, grouping }
+    = table.getState();
 
-  const isModified =
-    globalFilter ||
-    grouping.length ||
-    columnFilters.length ||
-    Object.keys(columnVisibility).length;
+  const isModified
+    = globalFilter
+      || grouping.length
+      || columnFilters.length
+      || Object.keys(columnVisibility).length;
 
   return (
     <div className="flex items-center justify-between">
@@ -50,20 +50,22 @@ export function DataTableToolbar<TData, TValue>({
             />
           ))}
 
-        {isModified ? (
-          <Button
-            variant="link"
-            onClick={() => {
-              table.resetColumnFilters(true);
-              setGlobalFilter('');
-              table.resetGrouping(true);
-              table.resetColumnVisibility(true);
-            }}
-            className="text-primary"
-          >
-            Reset
-          </Button>
-        ) : null}
+        {isModified
+          ? (
+              <Button
+                variant="link"
+                onClick={() => {
+                  table.resetColumnFilters(true);
+                  setGlobalFilter('');
+                  table.resetGrouping(true);
+                  table.resetColumnVisibility(true);
+                }}
+                className="text-primary"
+              >
+                Reset
+              </Button>
+            )
+          : null}
       </div>
       <div className="flex space-x-2">
         <DataTableGroupOptions table={table} />

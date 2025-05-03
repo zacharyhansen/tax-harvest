@@ -1,19 +1,19 @@
-import * as React from 'react';
 import type { Editor } from '@tiptap/react';
+import type { ShouldShowProps } from '../../types';
 import { BubbleMenu } from '@tiptap/react';
 
-import type { ShouldShowProps } from '../../types';
+import * as React from 'react';
 import { LinkEditBlock } from '../link/link-edit-block';
 import { LinkPopoverBlock } from '../link/link-popover-block';
 
-interface LinkBubbleMenuProps {
+type LinkBubbleMenuProps = {
   editor: Editor;
-}
+};
 
-interface LinkAttributes {
+type LinkAttributes = {
   href: string;
   target: string;
-}
+};
 
 export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
   const [showEdit, setShowEdit] = React.useState(false);
@@ -45,7 +45,7 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
       }
       return false;
     },
-    [updateLinkState]
+    [updateLinkState],
   );
 
   const handleEdit = React.useCallback(() => {
@@ -76,7 +76,7 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
       setShowEdit(false);
       updateLinkState();
     },
-    [editor, updateLinkState]
+    [editor, updateLinkState],
   );
 
   const onUnsetLink = React.useCallback(() => {
@@ -96,21 +96,23 @@ export const LinkBubbleMenu: React.FC<LinkBubbleMenuProps> = ({ editor }) => {
         },
       }}
     >
-      {showEdit ? (
-        <LinkEditBlock
-          defaultUrl={linkAttributes.href}
-          defaultText={selectedText}
-          defaultIsNewTab={linkAttributes.target === '_blank'}
-          onSave={onSetLink}
-          className="bg-popover text-popover-foreground w-full min-w-80 rounded-lg border p-4 shadow-md outline-none"
-        />
-      ) : (
-        <LinkPopoverBlock
-          onClear={onUnsetLink}
-          url={linkAttributes.href}
-          onEdit={handleEdit}
-        />
-      )}
+      {showEdit
+        ? (
+            <LinkEditBlock
+              defaultUrl={linkAttributes.href}
+              defaultText={selectedText}
+              defaultIsNewTab={linkAttributes.target === '_blank'}
+              onSave={onSetLink}
+              className="w-full min-w-80 rounded-lg border bg-popover p-4 text-popover-foreground shadow-md outline-none"
+            />
+          )
+        : (
+            <LinkPopoverBlock
+              onClear={onUnsetLink}
+              url={linkAttributes.href}
+              onEdit={handleEdit}
+            />
+          )}
     </BubbleMenu>
   );
 };

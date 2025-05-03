@@ -22,7 +22,9 @@ function setReference<T>(ref: PossibleReference<T>, value: T) {
  */
 function composeReferences<T>(...references: PossibleReference<T>[]) {
   return (node: T) => {
-    for (const ref of references) setReference(ref, node);
+    for (const ref of references) {
+      setReference(ref, node);
+    }
   };
 }
 

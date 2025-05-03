@@ -1,6 +1,6 @@
 import type { NodeViewProps } from '@tiptap/core';
 
-export const useFormKeyDown = (props: NodeViewProps) => {
+export function useFormKeyDown(props: NodeViewProps) {
   const { node, getPos } = props;
   const nodeEndPos = getPos() + node.nodeSize;
 
@@ -20,4 +20,4 @@ export const useFormKeyDown = (props: NodeViewProps) => {
   };
 
   return { handleKeyDown };
-};
+}

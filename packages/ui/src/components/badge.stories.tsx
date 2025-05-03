@@ -26,7 +26,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-//colors
+// colors
 export const Default: Story = {
   args: {
     variant: 'default',

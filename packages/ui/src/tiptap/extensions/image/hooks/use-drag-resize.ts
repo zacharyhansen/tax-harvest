@@ -1,12 +1,12 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type ResizeDirection = 'left' | 'right';
-export interface ElementDimensions {
+export type ElementDimensions = {
   width: number;
   height: number;
-}
+};
 
-interface HookParams {
+type HookParams = {
   initialWidth?: number;
   initialHeight?: number;
   contentWidth?: number;
@@ -16,7 +16,7 @@ interface HookParams {
   minHeight: number;
   maxWidth: number;
   onDimensionsChange?: (dimensions: ElementDimensions) => void;
-}
+};
 
 export function useDragResize({
   initialWidth,
@@ -46,31 +46,31 @@ export function useDragResize({
         minWidth,
         Math.min(
           contentWidth ?? minWidth,
-          (gridInterval / 100) * maxAllowedWidth
-        )
+          (gridInterval / 100) * maxAllowedWidth,
+        ),
       );
       return Math.min(
         maxAllowedWidth,
-        Math.max(proposedWidth, effectiveMinWidth)
+        Math.max(proposedWidth, effectiveMinWidth),
       );
     },
-    [gridInterval, contentWidth, minWidth]
+    [gridInterval, contentWidth, minWidth],
   );
 
   const handlePointerMove = useCallback(
     (event: PointerEvent) => {
       event.preventDefault();
-      const movementDelta =
-        (resizeDirection === 'left'
+      const movementDelta
+        = (resizeDirection === 'left'
           ? resizeOrigin - event.pageX
           : event.pageX - resizeOrigin) * 2;
       const gridUnitWidth = (gridInterval / 100) * boundaryWidth;
       const proposedWidth = initialDimensions.width + movementDelta;
-      const alignedWidth =
-        Math.round(proposedWidth / gridUnitWidth) * gridUnitWidth;
+      const alignedWidth
+        = Math.round(proposedWidth / gridUnitWidth) * gridUnitWidth;
       const finalWidth = widthConstraint(alignedWidth, boundaryWidth);
-      const aspectRatio =
-        contentHeight && contentWidth ? contentHeight / contentWidth : 1;
+      const aspectRatio
+        = contentHeight && contentWidth ? contentHeight / contentWidth : 1;
 
       setDimensions({
         width: Math.max(finalWidth, minWidth),
@@ -78,7 +78,7 @@ export function useDragResize({
           contentWidth
             ? finalWidth * aspectRatio
             : (contentHeight ?? minHeight),
-          minHeight
+          minHeight,
         ),
       });
     },
@@ -93,7 +93,7 @@ export function useDragResize({
       initialDimensions.width,
       minWidth,
       minHeight,
-    ]
+    ],
   );
 
   const handlePointerUp = useCallback(
@@ -105,7 +105,7 @@ export function useDragResize({
       setResizeDirection(undefined);
       onDimensionsChange?.(dimensions);
     },
-    [onDimensionsChange, dimensions]
+    [onDimensionsChange, dimensions],
   );
 
   const handleKeydown = useCallback(
@@ -120,7 +120,7 @@ export function useDragResize({
         setResizeDirection(undefined);
       }
     },
-    [initialDimensions, minWidth, minHeight]
+    [initialDimensions, minWidth, minHeight],
   );
 
   const initiateResize = useCallback(
@@ -133,7 +133,7 @@ export function useDragResize({
         setInitialDimensions({
           width: Math.max(
             widthConstraint(dimensions.width, maxWidth),
-            minWidth
+            minWidth,
           ),
           height: Math.max(dimensions.height, minHeight),
         });
@@ -147,7 +147,7 @@ export function useDragResize({
       dimensions.height,
       minWidth,
       minHeight,
-    ]
+    ],
   );
 
   useEffect(() => {

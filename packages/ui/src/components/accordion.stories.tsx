@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Meta, StoryObj } from '@storybook/react';
-import { userEvent, within, expect } from '@storybook/test';
+import { expect, userEvent, within } from '@storybook/test';
 
 import {
   Accordion,
@@ -66,11 +66,13 @@ export const AccordionWithOneItem: Story = {
     const canvas = within(canvasElement);
 
     const elementButtonControl = await canvas.findByRole('button');
+
     await expect(elementButtonControl).toBeVisible();
 
     await step('simulation click accordion', async () => {
       await userEvent.click(elementButtonControl);
       const elementAccordionContent = await canvas.findByTestId('description');
+
       await expect(elementAccordionContent).toBeVisible();
     });
   },

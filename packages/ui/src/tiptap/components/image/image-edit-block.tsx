@@ -1,14 +1,14 @@
-import * as React from 'react';
 import type { Editor } from '@tiptap/react';
-
 import { Button } from '@repo/ui/components/button';
-import { Label } from '@repo/ui/components/label';
-import { Input } from '@repo/ui/components/input';
 
-interface ImageEditBlockProps {
+import { Input } from '@repo/ui/components/input';
+import { Label } from '@repo/ui/components/label';
+import * as React from 'react';
+
+type ImageEditBlockProps = {
   editor: Editor;
   close: () => void;
-}
+};
 
 export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({
   editor,
@@ -24,7 +24,9 @@ export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({
   const handleFile = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const files = event.target.files;
-      if (!files?.length) return;
+      if (!files?.length) {
+        return;
+      }
 
       const insertImages = () => {
         const contentBucket = [];
@@ -40,7 +42,7 @@ export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({
       insertImages();
       close();
     },
-    [editor, close]
+    [editor, close],
   );
 
   const handleSubmit = React.useCallback(
@@ -53,7 +55,7 @@ export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({
         close();
       }
     },
-    [editor, link, close]
+    [editor, link, close],
   );
 
   return (

@@ -1,19 +1,19 @@
 // see https://github.com/NiclasDev63/tiptap-extension-global-drag-handle/blob/master/src/index.ts
 
+import type { Node } from '@tiptap/pm/model';
+import type { EditorView } from '@tiptap/pm/view';
 import { Extension } from '@tiptap/core';
+import { Fragment, Slice } from '@tiptap/pm/model';
 import {
   NodeSelection,
   Plugin,
   PluginKey,
   TextSelection,
 } from '@tiptap/pm/state';
-import type { Node } from '@tiptap/pm/model';
-import { Fragment, Slice } from '@tiptap/pm/model';
-import type { EditorView } from '@tiptap/pm/view';
 // @ts-expect-error copying from https://github.com/NiclasDev63/tiptap-extension-global-drag-handle/blob/master/src/index.ts
 import { __serializeForClipboard } from '@tiptap/pm/view';
 
-export interface GlobalDragHandleOptions {
+export type GlobalDragHandleOptions = {
   /**
    * The width of the drag handle
    */
@@ -39,7 +39,7 @@ export interface GlobalDragHandleOptions {
    * Custom nodes to be included for drag handle
    */
   customNodes: string[];
-}
+};
 function absoluteRect(node: Element) {
   const data = node.getBoundingClientRect();
   const modal = node.closest('[role="dialog"]');
@@ -62,7 +62,7 @@ function absoluteRect(node: Element) {
 
 function nodeDOMAtCoords(
   coords: { x: number; y: number },
-  options: GlobalDragHandleOptions
+  options: GlobalDragHandleOptions,
 ) {
   const selectors = [
     'li',
@@ -81,14 +81,14 @@ function nodeDOMAtCoords(
     .elementsFromPoint(coords.x, coords.y)
     .find(
       (element: Element) =>
-        element.parentElement?.matches('.ProseMirror') ??
-        element.matches(selectors)
+        element.parentElement?.matches('.ProseMirror')
+        ?? element.matches(selectors),
     );
 }
 function nodePosAtDOM(
   node: Element,
   view: EditorView,
-  options: GlobalDragHandleOptions
+  options: GlobalDragHandleOptions,
 ) {
   const boundingRect = node.getBoundingClientRect();
 
@@ -100,31 +100,39 @@ function nodePosAtDOM(
 
 function calcNodePos(pos: number, view: EditorView) {
   const $pos = view.state.doc.resolve(pos);
-  if ($pos.depth > 1) return $pos.before($pos.depth);
+  if ($pos.depth > 1) {
+    return $pos.before($pos.depth);
+  }
   return pos;
 }
 
 export function DragHandlePlugin(
-  options: GlobalDragHandleOptions & { pluginKey: string }
+  options: GlobalDragHandleOptions & { pluginKey: string },
 ) {
   let listType = '';
   function handleDragStart(event: DragEvent, view: EditorView) {
     view.focus();
 
-    if (!event.dataTransfer) return;
+    if (!event.dataTransfer) {
+      return;
+    }
 
     const node = nodeDOMAtCoords(
       {
         x: event.clientX + 50 + options.dragHandleWidth,
         y: event.clientY,
       },
-      options
+      options,
     );
 
-    if (!(node instanceof Element)) return;
+    if (!(node instanceof Element)) {
+      return;
+    }
 
     let draggedNodePos = nodePosAtDOM(node, view, options);
-    if (draggedNodePos == null || draggedNodePos < 0) return;
+    if (draggedNodePos == null || draggedNodePos < 0) {
+      return;
+    }
     draggedNodePos = calcNodePos(draggedNodePos, view);
 
     const { from, to } = view.state.selection;
@@ -136,30 +144,31 @@ export function DragHandlePlugin(
     const nodePos = view.state.doc.resolve(fromSelectionPos);
 
     // Check if nodePos points to the top level node
-    if (nodePos.node().type.name === 'doc') differentNodeSelected = true;
-    else {
+    if (nodePos.node().type.name === 'doc') {
+      differentNodeSelected = true;
+    } else {
       const nodeSelection = NodeSelection.create(
         view.state.doc,
-        nodePos.before()
+        nodePos.before(),
       );
 
       // Check if the node where the drag event started is part of the current selection
       differentNodeSelected = !(
-        draggedNodePos + 1 >= nodeSelection.$from.pos &&
-        draggedNodePos <= nodeSelection.$to.pos
+        draggedNodePos + 1 >= nodeSelection.$from.pos
+        && draggedNodePos <= nodeSelection.$to.pos
       );
     }
     let selection = view.state.selection;
     if (
-      !differentNodeSelected &&
-      diff !== 0 &&
-      !(view.state.selection instanceof NodeSelection)
+      !differentNodeSelected
+      && diff !== 0
+      && !(view.state.selection instanceof NodeSelection)
     ) {
       const endSelection = NodeSelection.create(view.state.doc, to - 1);
       selection = TextSelection.create(
         view.state.doc,
         draggedNodePos,
-        endSelection.$to.pos
+        endSelection.$to.pos,
       );
     } else {
       selection = NodeSelection.create(view.state.doc, draggedNodePos);
@@ -167,8 +176,8 @@ export function DragHandlePlugin(
       // if inline node is selected, e.g mention -> go to the parent node to select the whole node
       // if table row is selected, go to the parent node to select the whole node
       if (
-        (selection as NodeSelection).node.type.isInline ||
-        (selection as NodeSelection).node.type.name === 'tableRow'
+        (selection as NodeSelection).node.type.isInline
+        || (selection as NodeSelection).node.type.name === 'tableRow'
       ) {
         const $pos = view.state.doc.resolve(selection.from);
         selection = NodeSelection.create(view.state.doc, $pos.before());
@@ -178,8 +187,8 @@ export function DragHandlePlugin(
 
     // If the selected node is a list item, we need to save the type of the wrapping list e.g. OL or UL
     if (
-      view.state.selection instanceof NodeSelection &&
-      view.state.selection.node.type.name === 'listItem'
+      view.state.selection instanceof NodeSelection
+      && view.state.selection.node.type.name === 'listItem'
     ) {
       listType = node.parentElement!.tagName;
     }
@@ -215,18 +224,20 @@ export function DragHandlePlugin(
     if (event.target instanceof Element) {
       // Check if the relatedTarget class is still inside the editor
       const relatedTarget = event.relatedTarget as HTMLElement;
-      const isInsideEditor =
-        relatedTarget.classList.contains('tiptap') ||
-        relatedTarget.classList.contains('drag-handle');
+      const isInsideEditor
+        = relatedTarget.classList.contains('tiptap')
+          || relatedTarget.classList.contains('drag-handle');
 
-      if (isInsideEditor) return;
+      if (isInsideEditor) {
+        return;
+      }
     }
     hideDragHandle();
   }
 
   return new Plugin({
     key: new PluginKey(options.pluginKey),
-    view: view => {
+    view: (view) => {
       const handleBySelector = options.dragHandleSelector
         ? document.querySelector<HTMLElement>(options.dragHandleSelector)
         : null;
@@ -247,8 +258,8 @@ export function DragHandlePlugin(
         if (event.clientY < options.scrollTreshold) {
           window.scrollTo({ top: scrollY - 30, behavior: 'smooth' });
         } else if (
-          window.innerHeight - event.clientY <
-          options.scrollTreshold
+          window.innerHeight - event.clientY
+          < options.scrollTreshold
         ) {
           window.scrollTo({ top: scrollY + 30, behavior: 'smooth' });
         }
@@ -263,7 +274,7 @@ export function DragHandlePlugin(
       }
       view.dom.parentElement?.addEventListener(
         'mouseout',
-        hideHandleOnEditorOut
+        hideHandleOnEditorOut,
       );
 
       return {
@@ -274,12 +285,12 @@ export function DragHandlePlugin(
           dragHandleElement?.removeEventListener('drag', onDragHandleDrag);
           dragHandleElement?.removeEventListener(
             'dragstart',
-            onDragHandleDragStart
+            onDragHandleDragStart,
           );
           dragHandleElement = null;
           view.dom.parentElement?.removeEventListener(
             'mouseout',
-            hideHandleOnEditorOut
+            hideHandleOnEditorOut,
           );
         },
       };
@@ -296,7 +307,7 @@ export function DragHandlePlugin(
               x: event.clientX + 50 + options.dragHandleWidth,
               y: event.clientY,
             },
-            options
+            options,
           );
 
           const notDragging = node?.closest('.not-draggable');
@@ -305,9 +316,9 @@ export function DragHandlePlugin(
             .join(', ');
 
           if (
-            !(node instanceof Element) ||
-            node.matches(excludedTagList) ||
-            notDragging
+            !(node instanceof Element)
+            || node.matches(excludedTagList)
+            || notDragging
           ) {
             hideDragHandle();
             return;
@@ -330,7 +341,9 @@ export function DragHandlePlugin(
           }
           rect.width = options.dragHandleWidth;
 
-          if (!dragHandleElement) return;
+          if (!dragHandleElement) {
+            return;
+          }
 
           dragHandleElement.style.left = `${rect.left - rect.width}px`;
           dragHandleElement.style.top = `${rect.top}px`;
@@ -343,7 +356,7 @@ export function DragHandlePlugin(
           hideDragHandle();
         },
         // dragging class is used for CSS
-        dragstart: view => {
+        dragstart: (view) => {
           view.dom.classList.add('dragging');
         },
         drop: (view, event) => {
@@ -355,34 +368,38 @@ export function DragHandlePlugin(
             top: event.clientY,
           });
 
-          if (!dropPos) return;
+          if (!dropPos) {
+            return;
+          }
 
           if (view.state.selection instanceof NodeSelection) {
             droppedNode = view.state.selection.node;
           }
-          if (!droppedNode) return;
+          if (!droppedNode) {
+            return;
+          }
 
           const resolvedPos = view.state.doc.resolve(dropPos.pos);
 
-          const isDroppedInsideList =
-            resolvedPos.parent.type.name === 'listItem';
+          const isDroppedInsideList
+            = resolvedPos.parent.type.name === 'listItem';
 
           // If the selected node is a list item and is not dropped inside a list, we need to wrap it inside <ol> tag otherwise ol list items will be transformed into ul list item when dropped
           if (
-            view.state.selection instanceof NodeSelection &&
-            view.state.selection.node.type.name === 'listItem' &&
-            !isDroppedInsideList &&
-            listType == 'OL'
+            view.state.selection instanceof NodeSelection
+            && view.state.selection.node.type.name === 'listItem'
+            && !isDroppedInsideList
+            && listType === 'OL'
           ) {
             const newList = view.state.schema.nodes.orderedList?.createAndFill(
               null,
-              droppedNode
+              droppedNode,
             );
             const slice = new Slice(Fragment.from(newList), 0, 0);
             view.dragging = { slice, move: event.ctrlKey };
           }
         },
-        dragend: view => {
+        dragend: (view) => {
           view.dom.classList.remove('dragging');
         },
       },

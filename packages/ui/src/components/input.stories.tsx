@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button } from './button';
 import type { InputProps } from './input';
+import { Button } from './button';
 import { Input } from './input';
 
 const meta = {
@@ -60,21 +60,21 @@ export const InputDisabled: Story = {
   args: {
     disabled: true,
   },
-  render: function (args) {
+  render(args) {
     return <Input type="email" placeholder="Email" {...args} />;
   },
 };
 
 export const InputWithLabel: Story = {
   args: {},
-  render: function (args) {
+  render(args) {
     return <Input type="email" {...args} label="Email" />;
   },
 };
 
 export const InputWithButton: Story = {
   args: {},
-  render: function () {
+  render() {
     return (
       <Input
         type="email"
@@ -87,7 +87,7 @@ export const InputWithButton: Story = {
 
 export const KitchenSink: Story = {
   args: {},
-  render: function () {
+  render() {
     return (
       <Input
         type="email"

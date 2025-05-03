@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button } from './button';
-
 import {
   ResponsiveDialog,
-  ResponsiveDialogTrigger,
+  ResponsiveDialogBody,
   ResponsiveDialogClose,
   ResponsiveDialogContent,
   ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
-  ResponsiveDialogBody,
-  ResponsiveDialogFooter,
+  ResponsiveDialogTrigger,
 } from '@repo/ui/components/reponsive-dialog';
+
+import { Button } from './button';
 
 const meta = {
   title: 'Atoms/Responsive Dialog',
@@ -36,7 +36,8 @@ const meta = {
           </ResponsiveDialogHeader>
           <ResponsiveDialogBody>
             This component is built using shadcn/ui&apos;s dialog and drawer
-            component, which is built on top of Vaul. Pulled from{' '}
+            component, which is built on top of Vaul. Pulled from
+            {' '}
             https://credenza.rdev.pro/
           </ResponsiveDialogBody>
           <ResponsiveDialogFooter>

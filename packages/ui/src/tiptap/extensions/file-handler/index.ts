@@ -1,7 +1,8 @@
-import { type Editor, Extension } from '@tiptap/react';
-import { Plugin, PluginKey } from '@tiptap/pm/state';
-
+import type { Editor } from '@tiptap/react';
 import type { FileError, FileValidationOptions } from '../../utils';
+
+import { Plugin, PluginKey } from '@tiptap/pm/state';
+import { Extension } from '@tiptap/react';
 import { filterFiles } from '../../utils';
 
 type FileHandlePluginOptions = {
@@ -12,7 +13,7 @@ type FileHandlePluginOptions = {
   onValidationError?: (errors: FileError[]) => void;
 } & FileValidationOptions;
 
-const FileHandlePlugin = (options: FileHandlePluginOptions) => {
+function FileHandlePlugin(options: FileHandlePluginOptions) {
   const {
     key,
     editor,
@@ -48,7 +49,7 @@ const FileHandlePlugin = (options: FileHandlePluginOptions) => {
             allowedMimeTypes,
             maxFileSize,
             allowBase64: options.allowBase64,
-          }
+          },
         );
 
         if (errors.length > 0 && onValidationError) {
@@ -76,7 +77,7 @@ const FileHandlePlugin = (options: FileHandlePluginOptions) => {
             allowedMimeTypes,
             maxFileSize,
             allowBase64: options.allowBase64,
-          }
+          },
         );
         const html = clipboardData.getData('text/html');
 
@@ -90,7 +91,7 @@ const FileHandlePlugin = (options: FileHandlePluginOptions) => {
       },
     },
   });
-};
+}
 
 export const FileHandler = Extension.create<
   Omit<FileHandlePluginOptions, 'key' | 'editor'>

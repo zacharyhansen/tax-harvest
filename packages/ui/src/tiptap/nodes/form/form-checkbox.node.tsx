@@ -1,12 +1,13 @@
-import { Node, mergeAttributes } from '@tiptap/core';
-import { ReactNodeViewRenderer, NodeViewWrapper } from '@tiptap/react';
+import type { BooleanNodeAttributes } from './types';
+import { CheckboxField } from '@repo/ui/components/checkbox';
 
+import { mergeAttributes, Node } from '@tiptap/core';
+
+import { NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react';
 import { generateRandomFieldName } from '../../utils';
 
-import { FormNode, type BooleanNodeAttributes } from './types';
 import { FormBooleanLabel } from './labels/form-boolean.label';
-
-import { CheckboxField } from '@repo/ui/components/checkbox';
+import { FormNode } from './types';
 
 // Define the FormTextNode extension
 export const FormCheckboxNode = Node.create<BooleanNodeAttributes>({
@@ -38,7 +39,7 @@ export const FormCheckboxNode = Node.create<BooleanNodeAttributes>({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(props => {
+    return ReactNodeViewRenderer((props) => {
       const { node, updateAttributes } = props;
       const { description, defaultValue } = node.attrs as BooleanNodeAttributes;
 
@@ -56,9 +57,11 @@ export const FormCheckboxNode = Node.create<BooleanNodeAttributes>({
           />
           <div className="flex flex-col space-y-1 leading-none">
             <FormBooleanLabel {...props} />
-            {description ? (
-              <p className="text-muted-foreground text-xs">{description}</p>
-            ) : null}
+            {description
+              ? (
+                  <p className="text-xs text-muted-foreground">{description}</p>
+                )
+              : null}
           </div>
         </NodeViewWrapper>
       );

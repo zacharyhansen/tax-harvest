@@ -1,9 +1,6 @@
-import type { BaseFieldProps } from '../form-builder.types';
+import type { PhoneInputProps } from '@repo/ui/components/phone-input';
 
-import {
-  PhoneInput,
-  type PhoneInputProps,
-} from '@repo/ui/components/phone-input';
+import type { BaseFieldProps } from '../form-builder.types';
 import {
   FormControl,
   FormDescription,
@@ -12,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@repo/ui/components/form';
+import { PhoneInput } from '@repo/ui/components/phone-input';
 
 export default function PhoneInputField({
   name,

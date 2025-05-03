@@ -57,7 +57,7 @@ export const Disabled: Story = {
     value: { from: undefined },
     disabled: true,
   },
-  render: args => {
+  render: (args) => {
     const [selectedDateRange, setSelectedDateRange] = useState(args.value);
 
     return (

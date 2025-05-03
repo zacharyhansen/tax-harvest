@@ -1,28 +1,28 @@
 'use client';
 
-import { Cat, Dog, Fish, Rabbit, Turtle } from 'lucide-react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { toast } from 'sonner';
-import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { Button } from '@repo/ui/components/button';
+import { Toaster } from '@repo/ui/components/sonner';
+import { TooltipProvider } from '@repo/ui/components/tooltip';
+import { Cat, Dog, Fish, Rabbit, Turtle } from 'lucide-react';
 
-import InputField from './fields/input.field';
+import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
 import CheckboxField from './fields/checkbox.field';
+import ComboboxMultiField from './fields/combobox-multi.field';
 import ComboboxField from './fields/combobox.field';
 import DatePickerField from './fields/date-picker.field';
 import DateRangePickerField from './fields/date-range-picker.field';
-import ComboboxMultiField from './fields/combobox-multi.field';
+import InputField from './fields/input.field';
 import PasswordInputField from './fields/password-input.field';
 import PhoneInputField from './fields/phone-input.field';
 import SliderField from './fields/slider.field';
+
 import SwitchField from './fields/switch.field';
 import TextareaField from './fields/textarea.field';
 import TiptapBasicField from './fields/tiptap-minimal-field';
-
-import { TooltipProvider } from '@repo/ui/components/tooltip';
-import { Toaster } from '@repo/ui/components/sonner';
-import { Button } from '@repo/ui/components/button';
 
 const formSchema = z.object({
   name_7152014886: z.boolean().default(true).optional(),
@@ -84,7 +84,7 @@ export const AllFields: Story = {
             <code className="text-white">
               {JSON.stringify(values, null, 2)}
             </code>
-          </pre>
+          </pre>,
         );
       } catch (error) {
         console.error('Form submission error', error);

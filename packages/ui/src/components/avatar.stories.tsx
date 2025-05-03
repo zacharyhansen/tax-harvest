@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 
-//meta
+// meta
 const meta = {
   title: 'Atoms/Avatar',
   render: () => (

@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import type { ComboboxAsyncOption } from './comboboxAsync';
 
-import { ComboboxAsync, type ComboboxAsyncOption } from './comboboxAsync';
+import { useState } from 'react';
+import { ComboboxAsync } from './comboboxAsync';
 
 const frameworksList = [
   { value: 'react', label: 'React' },
@@ -20,7 +21,7 @@ const meta = {
   tags: ['autodocs'],
   args: {
     fetcher: () => {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         setTimeout(() => {
           resolve(frameworksList);
         }, 3000);
@@ -36,7 +37,7 @@ const meta = {
       console.info('onChange', value);
     },
   },
-  render: args => {
+  render: (args) => {
     const [value, setValue] = useState<string>(args.value);
 
     return (

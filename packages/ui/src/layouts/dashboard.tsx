@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { NavMain, type NavItem } from './components/nav-main';
+import type { NavItem } from './components/nav-main';
 
 import { Separator } from '@repo/ui/components/separator';
 import {
@@ -13,12 +13,13 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from '@repo/ui/components/sidebar';
+import { NavMain } from './components/nav-main';
 
-export interface NavGroup {
+export type NavGroup = {
   title: string;
   items: NavItem[];
   roles?: string[];
-}
+};
 
 export function Dashboard({
   navGroups,
@@ -44,7 +45,7 @@ export function Dashboard({
         <SidebarContent>
           {navGroups
             .filter(group =>
-              group.roles ? group.roles.includes(userRole ?? '') : true
+              group.roles ? group.roles.includes(userRole ?? '') : true,
             )
             .map(group => (
               <NavMain

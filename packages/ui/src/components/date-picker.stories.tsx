@@ -10,7 +10,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  render: args => {
+  render: (args) => {
     const [value, setValue] = useState(new Date());
 
     return <DatePicker {...args} value={value} onChange={setValue} />;

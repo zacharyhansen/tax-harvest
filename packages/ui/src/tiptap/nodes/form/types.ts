@@ -1,21 +1,22 @@
+import type { ComboboxOption } from '@repo/ui/components/combobox';
+
+import type { LucideIcon } from 'lucide-react';
 import {
-  CaseSensitive,
   Binary,
-  SquareMousePointer,
-  Grid2X2,
-  Square,
   CalendarCheck,
   CalendarRange,
-  KeyRound,
-  Phone,
+  CaseSensitive,
   ChevronsLeftRightEllipsis,
-  ToggleLeft,
-  ScanText,
-  PencilRuler,
-  type LucideIcon,
-} from 'lucide-react';
+  Grid2X2,
+  KeyRound,
 
-import type { ComboboxOption } from '@repo/ui/components/combobox';
+  PencilRuler,
+  Phone,
+  ScanText,
+  Square,
+  SquareMousePointer,
+  ToggleLeft,
+} from 'lucide-react';
 
 export enum FormNode {
   Text = 'Text',
@@ -33,33 +34,33 @@ export enum FormNode {
   Slider = 'Slider',
 }
 
-export interface BaseFormNodeAttributes {
+export type BaseFormNodeAttributes = {
   name: string;
   label: string;
   description: string;
   required: boolean;
   nameLocked: boolean;
-}
+};
 
-export interface TextNodeAttributes extends BaseFormNodeAttributes {
+export type TextNodeAttributes = {
   defaultValue: string;
   placeholder: string;
-}
+} & BaseFormNodeAttributes;
 
-export interface NumberNodeAttributes extends BaseFormNodeAttributes {
+export type NumberNodeAttributes = {
   defaultValue: number;
   placeholder: string;
-}
+} & BaseFormNodeAttributes;
 
-export interface BooleanNodeAttributes extends BaseFormNodeAttributes {
+export type BooleanNodeAttributes = {
   defaultValue: boolean;
-}
+} & BaseFormNodeAttributes;
 
-export interface ComboboxNodeAttributes extends BaseFormNodeAttributes {
+export type ComboboxNodeAttributes = {
   options: ComboboxOption[];
   placeholder: string;
   defaultValue: string;
-}
+} & BaseFormNodeAttributes;
 
 export const formCommandIcon: Record<FormNode, LucideIcon> = {
   [FormNode.Text]: CaseSensitive,

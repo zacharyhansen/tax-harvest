@@ -1,10 +1,12 @@
-import type { Editor } from '@tiptap/core';
-import { Fragment, type Node } from '@tiptap/pm/model';
-
 import type { TiptapBaseProps } from '@repo/ui/tiptap/molecules/tiptap-base';
+import type { Editor } from '@tiptap/core';
+
+import type { Node } from '@tiptap/pm/model';
+import { Fragment } from '@tiptap/pm/model';
 
 export function isValidUrl(url: string) {
   try {
+    // eslint-disable-next-line no-new
     new URL(url);
     return true;
   } catch {
@@ -13,7 +15,9 @@ export function isValidUrl(url: string) {
 }
 
 export function getUrlFromString(string_: string) {
-  if (isValidUrl(string_)) return string_;
+  if (isValidUrl(string_)) {
+    return string_;
+  }
   try {
     if (string_.includes('.') && !string_.includes(' ')) {
       return new URL(`https://${string_}`).toString();
@@ -24,7 +28,7 @@ export function getUrlFromString(string_: string) {
 }
 
 // Get the text before a given position in markdown format
-export const getPreviousText = (editor: Editor, position: number) => {
+export function getPreviousText(editor: Editor, position: number) {
   const nodes: Node[] = [];
   // @ts-expect-error coming form the livbrary directly
   for (const [pos, node] of editor.state.doc.entries()) {
@@ -37,15 +41,15 @@ export const getPreviousText = (editor: Editor, position: number) => {
   const document_ = editor.state.doc.copy(fragment);
 
   return editor.storage.markdown.serializer.serialize(document_) as string;
-};
+}
 
 // Get all content from the editor in markdown format
-export const getAllContent = (editor: Editor) => {
+export function getAllContent(editor: Editor) {
   const fragment = editor.state.doc.content;
   const document_ = editor.state.doc.copy(fragment);
 
   return editor.storage.markdown.serializer.serialize(document_) as string;
-};
+}
 
 export function generateRandomFieldName(prefix = 'name', length = 10): string {
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -59,28 +63,29 @@ export function generateRandomFieldName(prefix = 'name', length = 10): string {
   return `${prefix}_${randomString}`;
 }
 
-interface ShortcutKeyResult {
+type ShortcutKeyResult = {
   symbol: string;
   readable: string;
-}
+};
 
-export interface FileError {
+export type FileError = {
   file: File | string;
   reason: 'type' | 'size' | 'invalidBase64' | 'base64NotAllowed';
-}
+};
 
-export interface FileValidationOptions {
+export type FileValidationOptions = {
   allowedMimeTypes: string[];
   maxFileSize?: number;
   allowBase64: boolean;
-}
+};
 
 type FileInput = File | { src: string | File; alt?: string; title?: string };
 
 export const isClient = (): boolean => typeof window !== 'undefined';
 export const isServer = (): boolean => !isClient();
-export const isMacOS = (): boolean =>
-  isClient() && window.navigator.platform === 'MacIntel';
+export function isMacOS(): boolean {
+  return isClient() && window.navigator.platform === 'MacIntel';
+}
 
 const shortcutKeyMap: Record<string, ShortcutKeyResult> = {
   mod: isMacOS()
@@ -92,16 +97,15 @@ const shortcutKeyMap: Record<string, ShortcutKeyResult> = {
   shift: { symbol: '⇧', readable: 'Shift' },
 };
 
-export const getShortcutKey = (key: string): ShortcutKeyResult =>
-  shortcutKeyMap[key.toLowerCase()] ?? { symbol: key, readable: key };
+export function getShortcutKey(key: string): ShortcutKeyResult {
+  return shortcutKeyMap[key.toLowerCase()] ?? { symbol: key, readable: key };
+}
 
-export const getShortcutKeys = (keys: string[]): ShortcutKeyResult[] =>
-  keys.map(element => getShortcutKey(element));
+export function getShortcutKeys(keys: string[]): ShortcutKeyResult[] {
+  return keys.map(element => getShortcutKey(element));
+}
 
-export const getOutput = (
-  editor: Editor,
-  format: TiptapBaseProps['output']
-): object | string => {
+export function getOutput(editor: Editor, format: TiptapBaseProps['output']): object | string {
   switch (format) {
     case 'json': {
       return editor.getJSON();
@@ -113,15 +117,14 @@ export const getOutput = (
       return editor.getText();
     }
   }
-};
+}
 
-export const isUrl = (
-  text: string,
-  options: { requireHostname: boolean; allowBase64?: boolean } = {
-    requireHostname: false,
+export function isUrl(text: string, options: { requireHostname: boolean; allowBase64?: boolean } = {
+  requireHostname: false,
+}): boolean {
+  if (text.includes('\n')) {
+    return false;
   }
-): boolean => {
-  if (text.includes('\n')) return false;
 
   try {
     const url = new URL(text);
@@ -132,26 +135,30 @@ export const isUrl = (
       ...(options.allowBase64 ? [] : ['data:']),
     ];
 
-    if (blockedProtocols.includes(url.protocol)) return false;
-    if (options.allowBase64 && url.protocol === 'data:')
+    if (blockedProtocols.includes(url.protocol)) {
+      return false;
+    }
+    if (options.allowBase64 && url.protocol === 'data:') {
       return /^data:image\/[a-z]+;base64,/.test(text);
-    if (url.hostname) return true;
+    }
+    if (url.hostname) {
+      return true;
+    }
 
     return (
-      url.protocol !== '' &&
-      (url.pathname.startsWith('//') || url.pathname.startsWith('http')) &&
-      !options.requireHostname
+      url.protocol !== ''
+      && (url.pathname.startsWith('//') || url.pathname.startsWith('http'))
+      && !options.requireHostname
     );
   } catch {
     return false;
   }
-};
+}
 
-export const sanitizeUrl = (
-  url: string | null | undefined,
-  options: { allowBase64?: boolean } = {}
-): string | undefined => {
-  if (!url) return undefined;
+export function sanitizeUrl(url: string | null | undefined, options: { allowBase64?: boolean } = {}): string | undefined {
+  if (!url) {
+    return undefined;
+  }
 
   if (options.allowBase64 && url.startsWith('data:image')) {
     return isUrl(url, { requireHostname: false, allowBase64: true })
@@ -162,12 +169,13 @@ export const sanitizeUrl = (
   return isUrl(url, {
     requireHostname: false,
     allowBase64: options.allowBase64,
+  // eslint-disable-next-line regexp/no-unused-capturing-group
   }) || /^(\/|#|mailto:|sms:|fax:|tel:)/.test(url)
     ? url
     : `https://${url}`;
-};
+}
 
-export const blobUrlToBase64 = async (blobUrl: string): Promise<string> => {
+export async function blobUrlToBase64(blobUrl: string): Promise<string> {
   const response = await fetch(blobUrl);
   const blob = await response.blob();
 
@@ -183,11 +191,11 @@ export const blobUrlToBase64 = async (blobUrl: string): Promise<string> => {
     reader.onerror = reject;
     reader.readAsDataURL(blob);
   });
-};
+}
 
 export const randomId = (): string => Math.random().toString(36).slice(2, 11);
 
-export const fileToBase64 = (file: File | Blob): Promise<string> => {
+export function fileToBase64(file: File | Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -200,49 +208,45 @@ export const fileToBase64 = (file: File | Blob): Promise<string> => {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
-};
+}
 
-const validateFileOrBase64 = <T extends FileInput>(
-  input: File | string,
-  options: FileValidationOptions,
-  originalFile: T,
-  validFiles: T[],
-  errors: FileError[]
-): void => {
+function validateFileOrBase64<T extends FileInput>(input: File | string, options: FileValidationOptions, originalFile: T, validFiles: T[], errors: FileError[]): void {
   const { isValidType, isValidSize } = checkTypeAndSize(input, options);
 
   if (isValidType && isValidSize) {
     validFiles.push(originalFile);
   } else {
-    if (!isValidType) errors.push({ file: input, reason: 'type' });
-    if (!isValidSize) errors.push({ file: input, reason: 'size' });
+    if (!isValidType) {
+      errors.push({ file: input, reason: 'type' });
+    }
+    if (!isValidSize) {
+      errors.push({ file: input, reason: 'size' });
+    }
   }
-};
+}
 
-const checkTypeAndSize = (
-  input: File | string,
-  { allowedMimeTypes, maxFileSize }: FileValidationOptions
-): { isValidType: boolean; isValidSize: boolean } => {
+function checkTypeAndSize(input: File | string, { allowedMimeTypes, maxFileSize }: FileValidationOptions): { isValidType: boolean; isValidSize: boolean } {
   const mimeType = input instanceof File ? input.type : base64MimeType(input);
-  const size =
-    input instanceof File ? input.size : atob(input.split(',')[1] ?? '').length;
+  const size
+    = input instanceof File ? input.size : atob(input.split(',')[1] ?? '').length;
 
-  const isValidType =
-    allowedMimeTypes.length === 0 ||
-    allowedMimeTypes.includes(mimeType) ||
-    allowedMimeTypes.includes(`${mimeType.split('/')[0]}/*`);
+  const isValidType
+    = allowedMimeTypes.length === 0
+      || allowedMimeTypes.includes(mimeType)
+      || allowedMimeTypes.includes(`${mimeType.split('/')[0]}/*`);
 
   const isValidSize = !maxFileSize || size <= maxFileSize;
 
   return { isValidType, isValidSize };
-};
+}
 
-const base64MimeType = (encoded: string): string => {
+function base64MimeType(encoded: string): string {
+  // eslint-disable-next-line regexp/no-super-linear-backtracking, regexp/optimal-quantifier-concatenation
   const result = /data:([\dA-Za-z]+\/[\d+.A-Za-z-]+).*,.*/.exec(encoded);
   return result && result.length > 1 ? (result[1] ?? 'unknown') : 'unknown';
-};
+}
 
-const isBase64 = (string_: string): boolean => {
+function isBase64(string_: string): boolean {
   if (string_.startsWith('data:')) {
     const matches = /^data:[^;]+;base64,(.+)$/.exec(string_);
     if (matches?.[1]) {
@@ -257,12 +261,9 @@ const isBase64 = (string_: string): boolean => {
   } catch {
     return false;
   }
-};
+}
 
-export const filterFiles = <T extends FileInput>(
-  files: T[],
-  options: FileValidationOptions
-): [T[], FileError[]] => {
+export function filterFiles<T extends FileInput>(files: T[], options: FileValidationOptions): [T[], FileError[]] {
   const validFiles: T[] = [];
   const errors: FileError[] = [];
 
@@ -289,4 +290,4 @@ export const filterFiles = <T extends FileInput>(
   }
 
   return [validFiles, errors];
-};
+}

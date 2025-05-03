@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Printer } from 'lucide-react';
+import type { TreeViewProps } from './tree-view';
 
-import { TreeView, type TreeViewProps } from './tree-view';
+import { Printer } from 'lucide-react';
 import { Button } from './button';
+import { TreeView } from './tree-view';
 
 const meta = {
   title: 'Molecules/Tree View',
@@ -16,7 +17,7 @@ const meta = {
         actions: (
           <Button
             size="icon"
-            className="h-6 w-6"
+            className="size-6"
             variant="ghost"
             onClick={() => {}}
           >

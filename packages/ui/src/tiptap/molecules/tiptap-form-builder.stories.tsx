@@ -1,27 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
-import { toast, Toaster } from 'sonner';
+import { Button } from '@repo/ui/components/button';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast, Toaster } from 'sonner';
+
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 import { formCommands } from '../extensions/slash-command-lists/form.commands';
 
 import { TiptapBase } from './tiptap-base';
-
-import { Button } from '@repo/ui/components/button';
 
 const meta = {
   title: 'TipTap/Molecules/Form Builder',
   args: {
     throttleDelay: 1000,
     output: 'html',
-    placeholder: "Type '/' to insert blocks",
+    placeholder: 'Type \'/\' to insert blocks',
     editable: true,
     editorClassName: 'my-12 mx-24',
-    onChange: content => {
-      console.log({ content });
+    onChange: (content) => {
+      console.info({ content });
     },
   },
   tags: ['autodocs'],
@@ -29,7 +29,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  render: args => {
+  render: (args) => {
     const [isEditable, setIsEditable] = useState(true);
     return (
       <TooltipProvider delayDuration={100}>
@@ -44,11 +44,13 @@ const meta = {
         >
           {isEditable ? 'Edit View' : 'Read Only View'}
         </Button>
-        {isEditable ? (
-          <TiptapBase {...args} />
-        ) : (
-          <TiptapBase {...args} editable={false} />
-        )}
+        {isEditable
+          ? (
+              <TiptapBase {...args} />
+            )
+          : (
+              <TiptapBase {...args} editable={false} />
+            )}
       </TooltipProvider>
     );
   },
@@ -68,7 +70,7 @@ export const Base: Story = {
 export const InputBlocks: Story = {
   args: {
     editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     value: `
    <form-text-node name="field_6ZBXjmzVfZ" label="Text Input Label" defaultvalue="" placeholder="Placeholder..." required="true" description=""></form-text-node><p class="text-node">Paragraph element</p>
   `,
@@ -80,7 +82,7 @@ const formSchema = z.object({});
 export const InputBlocksRendered: Story = {
   args: {
     editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     editable: false,
     value: `
     <form-combobox-node 
@@ -95,7 +97,7 @@ export const InputBlocksRendered: Story = {
     >
     </form-combobox-node>`,
   },
-  render: args => {
+  render: (args) => {
     const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {},
@@ -109,7 +111,7 @@ export const InputBlocksRendered: Story = {
             <code className="text-white">
               {JSON.stringify(values, null, 2)}
             </code>
-          </pre>
+          </pre>,
         );
       } catch (error) {
         console.error('Form submission error', error);
@@ -135,7 +137,7 @@ export const InputBlocksRendered: Story = {
 export const NotEditable: Story = {
   args: {
     editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: "Press '/' for commands.",
+    placeholder: 'Press \'/\' for commands.',
     editable: false,
     value: `
     <p>This is an example of how custom input nodes appear.</p>

@@ -1,12 +1,12 @@
-import { useFormContext } from 'react-hook-form';
+import type { DateRangePickerProps } from '@repo/ui/components/date-range-picker';
 import type { BaseInputPropsUnion } from '@repo/ui/components/input.types';
 
 import type { BaseFieldProps } from '../form-builder.types';
-
 import {
   DateRangePicker,
-  type DateRangePickerProps,
+
 } from '@repo/ui/components/date-range-picker';
+
 import {
   FormControl,
   FormDescription,
@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@repo/ui/components/form';
+import { useFormContext } from 'react-hook-form';
 
 /**
  * CONTROLLED

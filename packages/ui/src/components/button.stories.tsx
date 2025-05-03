@@ -32,7 +32,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-//color
+// color
 export const Default: Story = {
   args: {
     variant: 'default',
@@ -74,7 +74,7 @@ export const Outline: Story = {
   },
 };
 
-//size
+// size
 
 export const SizeDefault: Story = {
   args: {

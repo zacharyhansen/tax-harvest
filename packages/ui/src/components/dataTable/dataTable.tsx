@@ -1,7 +1,5 @@
 'use client';
 
-import { ChevronDownIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import { rankItem } from '@tanstack/match-sorter-utils';
 import type {
   AggregationFn,
   ColumnDef,
@@ -16,6 +14,10 @@ import type {
   Updater,
   VisibilityState,
 } from '@tanstack/react-table';
+import type { ReactNode } from 'react';
+import { ChevronDownIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+import { cn } from '@repo/ui/utils';
+import { rankItem } from '@tanstack/match-sorter-utils';
 import {
   flexRender,
   getCoreRowModel,
@@ -28,9 +30,11 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
-import type { ReactNode } from 'react';
-import React, { useCallback, useMemo } from 'react';
 import { CircleArrowDown, CircleArrowUp } from 'lucide-react';
+
+import React, { useCallback, useMemo } from 'react';
+import { Alert } from '../alert';
+import { Skeleton } from '../skeleton';
 
 import {
   Table,
@@ -41,9 +45,6 @@ import {
   TableHeader,
   TableRow,
 } from '../table';
-import { Alert } from '../alert';
-import { Skeleton } from '../skeleton';
-
 import AvatarGroupCell from './cells/avatarGroupCell';
 import BadgeCell from './cells/badgeCell';
 import DateCell from './cells/dateCell';
@@ -56,12 +57,11 @@ import UserCell from './cells/userCell';
 import { DataTableToolbar } from './dataTableToolbar';
 import { BasicHeader } from './headers/basicHeader';
 import DefaultHeader from './headers/defaultHeader';
+
 import { IndeterminateCheckbox } from './indeterminateCheckbox';
 
-import { cn } from '@repo/ui/utils';
-
 declare module '@tanstack/react-table' {
-  interface AggregationFns {
+  type AggregationFns = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sumDecimal: AggregationFn<any>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -70,16 +70,16 @@ declare module '@tanstack/react-table' {
     sumMoney: AggregationFn<any>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: AggregationFn<any>;
-  }
+  };
 }
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface TableMeta<TData extends RowData> {
+  type TableMeta<TData extends RowData> = {
     updateCell: (rowIndex: number, columnId: string, value: unknown) => void;
-  }
+  };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface ColumnMeta<TData extends RowData, TValue> {
+  type ColumnMeta<TData extends RowData, TValue> = {
     // TODO: This is super bare bones for now - create true filter interface for different types (date, string, etc.)
     filterDef?: {
       label: string;
@@ -92,10 +92,10 @@ declare module '@tanstack/react-table' {
     searchable?: boolean;
     groupable?: boolean;
     preventRowClick?: boolean;
-  }
+  };
 }
 
-interface DataTableProps<TData, TValue> {
+type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data?: TData[];
   noResultsAlert: ReactNode;
@@ -117,7 +117,7 @@ interface DataTableProps<TData, TValue> {
   header?: ReactNode;
   onUpdateCell?: (rowIndex: number, columnId: string, value: unknown) => void;
   className?: string;
-}
+};
 
 function DataTable<TData, TValue>({
   columns,
@@ -136,17 +136,17 @@ function DataTable<TData, TValue>({
   className,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility]
+    = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [sorting, setSorting] = React.useState<SortingState>(
-    initialState?.sorting ?? []
+    initialState?.sorting ?? [],
   );
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [grouping, setGrouping] = React.useState<GroupingState>(
-    initialState?.grouping ?? []
+    initialState?.grouping ?? [],
   );
 
   const searchableColumns = useMemo(
@@ -155,9 +155,9 @@ function DataTable<TData, TValue>({
         columns
           .filter(c => c.meta?.searchable)
           // @ts-expect-error Not sure why this is not found but its there
-          .map(c => (c.accessorKey as string).replaceAll('.', '_'))
+          .map(c => (c.accessorKey as string).replaceAll('.', '_')),
       ),
-    [columns]
+    [columns],
   );
 
   const fuzzyFilter: FilterFn<TData> = (row, columnId, value, addMeta) => {
@@ -186,7 +186,7 @@ function DataTable<TData, TValue>({
         const selectedRows = Object.keys(updatedRowSelection).reduce<TData[]>(
           (acc, key) => {
             if (updatedRowSelection[key]) {
-              const index = parseInt(key, 10);
+              const index = Number.parseInt(key, 10);
               const row = data[index];
               if (row) {
                 acc.push(row);
@@ -194,7 +194,7 @@ function DataTable<TData, TValue>({
             }
             return acc;
           },
-          []
+          [],
         );
 
         // Invoke parent row selection if it exists - parent can modify if needed
@@ -207,7 +207,7 @@ function DataTable<TData, TValue>({
         setRowSelection(updatedRowSelection);
       }
     },
-    [data, onRowSelectionChange, rowSelection, rowSelectionState]
+    [data, onRowSelectionChange, rowSelection, rowSelectionState],
   );
 
   const table = useReactTable({
@@ -216,7 +216,7 @@ function DataTable<TData, TValue>({
       avgDecimal: (columnId, leafRows) => {
         const total = leafRows.reduce(
           (sum, row) => sum + Number(row.getValue(columnId) || 0),
-          0
+          0,
         );
         return (total / leafRows.length).toFixed(2);
       },
@@ -242,7 +242,7 @@ function DataTable<TData, TValue>({
     },
     enableRowSelection,
     filterFns: {
-      fuzzy: fuzzyFilter, //define as a filter function that can be used in column definitions
+      fuzzy: fuzzyFilter, // define as a filter function that can be used in column definitions
     },
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
@@ -288,16 +288,16 @@ function DataTable<TData, TValue>({
     <div
       className={cn(
         'mx-auto flex min-h-96 w-fit max-w-full flex-grow flex-col space-y-2',
-        className
+        className,
       )}
     >
-      {header ? header : null}
+      {header || null}
       <DataTableToolbar table={table} setGlobalFilter={setGlobalFilter} />
       <Table className="block min-w-full">
-        <TableHeader className="bg-secondary sticky top-0">
+        <TableHeader className="sticky top-0 bg-secondary">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map(header => {
+              {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
                     key={header.id}
@@ -327,15 +327,15 @@ function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </span>
                     {{
                       asc: (
-                        <CircleArrowUp className="text-primary ml-2 inline h-4 w-4" />
+                        <CircleArrowUp className="ml-2 inline size-4 text-primary" />
                       ),
                       desc: (
-                        <CircleArrowDown className="text-primary ml-2 inline h-4 w-4" />
+                        <CircleArrowDown className="ml-2 inline size-4 text-primary" />
                       ),
                     }[header.column.getIsSorted() as string] ?? null}
                   </TableHead>
@@ -346,125 +346,140 @@ function DataTable<TData, TValue>({
         </TableHeader>
         <div className="w-full">
           <TableBody className="block w-fit overflow-y-auto">
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map(row => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map(cell =>
-                    !data.length && loading ? (
-                      <TableCell
-                        key={cell.id}
-                        className="bg-cyan-300"
-                        style={{
-                          maxWidth: cell.column.getSize(),
-                          minWidth: cell.column.getSize(),
-                          width: cell.column.getSize(),
-                        }}
-                      >
-                        <Skeleton className="h-8 w-full" />
-                      </TableCell>
-                    ) : (
-                      <TableCell
-                        key={cell.id}
-                        className={clsx({
-                          'bg-secondary': row.getIsGrouped(),
-                          'font-bold': cell.getIsAggregated(),
-                        })}
-                        style={{
-                          maxWidth: cell.column.getSize(),
-                          minWidth: cell.column.getSize(),
-                          width: cell.column.getSize(),
-                        }}
-                        onClick={
-                          onRowClick &&
-                          !cell.column.columnDef.meta?.preventRowClick
-                            ? () => onRowClick(row)
-                            : undefined
-                        }
-                      >
-                        {cell.getIsGrouped() ? (
-                          <button
-                            className="flex items-center space-x-2"
-                            onClick={row.getToggleExpandedHandler()}
-                          >
-                            {row.getIsExpanded() ? (
-                              <ChevronDownIcon className="h-4 w-4" />
-                            ) : (
-                              <ChevronRightIcon className="h-4 w-4" />
-                            )}
-                            <div className="flex flex-col items-start text-xs">
-                              <div className="font-bold">
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext()
-                                )}
-                              </div>
-                              <div className="text-secondary-foreground text-xs font-light">
-                                {row.subRows.length}{' '}
-                                {row.subRows.length === 1 ? 'row' : 'rows'}
-                              </div>
-                            </div>
-                          </button>
-                        ) : cell.getIsAggregated() ? (
-                          flexRender(
-                            cell.column.columnDef.aggregatedCell ??
-                              cell.column.columnDef.cell,
-                            cell.getContext()
-                          )
-                        ) : cell.getIsPlaceholder() ? null : (
-                          flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )
-                        )}
-                      </TableCell>
-                    )
-                  )}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  {noResultsAlert}
-                </TableCell>
-              </TableRow>
-            )}
+            {table.getRowModel().rows.length
+              ? (
+                  table.getRowModel().rows.map(row => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                    >
+                      {row.getVisibleCells().map(cell =>
+                        !data.length && loading
+                          ? (
+                              <TableCell
+                                key={cell.id}
+                                className="bg-cyan-300"
+                                style={{
+                                  maxWidth: cell.column.getSize(),
+                                  minWidth: cell.column.getSize(),
+                                  width: cell.column.getSize(),
+                                }}
+                              >
+                                <Skeleton className="h-8 w-full" />
+                              </TableCell>
+                            )
+                          : (
+                              <TableCell
+                                key={cell.id}
+                                className={clsx({
+                                  'bg-secondary': row.getIsGrouped(),
+                                  'font-bold': cell.getIsAggregated(),
+                                })}
+                                style={{
+                                  maxWidth: cell.column.getSize(),
+                                  minWidth: cell.column.getSize(),
+                                  width: cell.column.getSize(),
+                                }}
+                                onClick={
+                                  onRowClick
+                                  && !cell.column.columnDef.meta?.preventRowClick
+                                    ? () => onRowClick(row)
+                                    : undefined
+                                }
+                              >
+                                {cell.getIsGrouped()
+                                  ? (
+                                      <button
+                                        className="flex items-center space-x-2"
+                                        onClick={row.getToggleExpandedHandler()}
+                                      >
+                                        {row.getIsExpanded()
+                                          ? (
+                                              <ChevronDownIcon className="size-4" />
+                                            )
+                                          : (
+                                              <ChevronRightIcon className="size-4" />
+                                            )}
+                                        <div className="flex flex-col items-start text-xs">
+                                          <div className="font-bold">
+                                            {flexRender(
+                                              cell.column.columnDef.cell,
+                                              cell.getContext(),
+                                            )}
+                                          </div>
+                                          <div className="text-xs font-light text-secondary-foreground">
+                                            {row.subRows.length}
+                                            {' '}
+                                            {row.subRows.length === 1 ? 'row' : 'rows'}
+                                          </div>
+                                        </div>
+                                      </button>
+                                    )
+                                  : cell.getIsAggregated()
+                                    ? (
+                                        flexRender(
+                                          cell.column.columnDef.aggregatedCell
+                                          ?? cell.column.columnDef.cell,
+                                          cell.getContext(),
+                                        )
+                                      )
+                                    : cell.getIsPlaceholder()
+                                      ? null
+                                      : (
+                                          flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext(),
+                                          )
+                                        )}
+                              </TableCell>
+                            ),
+                      )}
+                    </TableRow>
+                  ))
+                )
+              : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      {noResultsAlert}
+                    </TableCell>
+                  </TableRow>
+                )}
           </TableBody>
         </div>
-        {hasFooter ? (
-          <TableFooter className="bg-secondary sticky bottom-0">
-            {table.getFooterGroups().map(footerGroup => (
-              <TableRow key={footerGroup.id}>
-                {footerGroup.headers.map(column => {
-                  return (
-                    <TableCell
-                      key={column.id}
-                      colSpan={column.colSpan}
-                      style={{
-                        maxWidth: column.getSize(),
-                        minWidth: column.getSize(),
-                        position: 'sticky',
-                        width: column.getSize(),
-                      }}
-                    >
-                      {column.isPlaceholder
-                        ? null
-                        : flexRender(
-                            column.column.columnDef.footer,
-                            column.getContext()
-                          )}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableFooter>
-        ) : null}
+        {hasFooter
+          ? (
+              <TableFooter className="sticky bottom-0 bg-secondary">
+                {table.getFooterGroups().map(footerGroup => (
+                  <TableRow key={footerGroup.id}>
+                    {footerGroup.headers.map((column) => {
+                      return (
+                        <TableCell
+                          key={column.id}
+                          colSpan={column.colSpan}
+                          style={{
+                            maxWidth: column.getSize(),
+                            minWidth: column.getSize(),
+                            position: 'sticky',
+                            width: column.getSize(),
+                          }}
+                        >
+                          {column.isPlaceholder
+                            ? null
+                            : flexRender(
+                                column.column.columnDef.footer,
+                                column.getContext(),
+                              )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableFooter>
+            )
+          : null}
       </Table>
       {/* <DataTablePagination table={table} /> */}
     </div>

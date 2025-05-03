@@ -3,8 +3,8 @@
 
 import type * as React from 'react';
 
-import { cn } from '../utils';
 import { useIsMobile } from '../hooks/use-is-mobile';
+import { cn } from '../utils';
 
 import {
   Dialog,
@@ -27,19 +27,19 @@ import {
   DrawerTrigger,
 } from './drawer';
 
-interface BaseProps {
+type BaseProps = {
   children: React.ReactNode;
-}
+};
 
-export interface RootResponsiveDialogProps extends BaseProps {
+export type RootResponsiveDialogProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-}
+} & BaseProps;
 
-export interface ResponsiveDialogProps extends BaseProps {
+export type ResponsiveDialogProps = {
   className?: string;
   asChild?: true;
-}
+} & BaseProps;
 
 const ResponsiveDialog = ({
   children,
@@ -175,12 +175,12 @@ const ResponsiveDialogFooter = ({
 
 export {
   ResponsiveDialog,
-  ResponsiveDialogTrigger,
+  ResponsiveDialogBody,
   ResponsiveDialogClose,
   ResponsiveDialogContent,
   ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
-  ResponsiveDialogBody,
-  ResponsiveDialogFooter,
+  ResponsiveDialogTrigger,
 };

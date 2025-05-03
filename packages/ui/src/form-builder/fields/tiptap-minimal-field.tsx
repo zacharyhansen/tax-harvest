@@ -1,9 +1,6 @@
-import type { BaseFieldProps } from '../form-builder.types';
+import type { TiptapBaseProps } from '@repo/ui/tiptap/molecules/tiptap-base';
 
-import {
-  TiptapBase,
-  type TiptapBaseProps,
-} from '@repo/ui/tiptap/molecules/tiptap-base';
+import type { BaseFieldProps } from '../form-builder.types';
 import {
   FormControl,
   FormDescription,
@@ -12,6 +9,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@repo/ui/components/form';
+import {
+  TiptapBase,
+
+} from '@repo/ui/tiptap/molecules/tiptap-base';
 
 export default function TiptapBasicField({
   name,

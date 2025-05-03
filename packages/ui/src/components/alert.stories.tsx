@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { VariantProps } from 'class-variance-authority';
-import { Terminal } from 'lucide-react';
-
 import type { alertVariants } from './alert.variants';
+
+import { Terminal } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from './alert';
 
 type TypeCustomAlertProps = {} & VariantProps<typeof alertVariants>;
@@ -14,7 +14,7 @@ const meta = {
   },
   render: ({ variant }) => (
     <Alert variant={variant}>
-      <Terminal className="h-4 w-4" />
+      <Terminal className="size-4" />
       <AlertTitle>Heads up!</AlertTitle>
       <AlertDescription>
         You can add components to your app using the cli.
@@ -37,14 +37,14 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-//Colors
+// Colors
 export const AlertDefaultDemo: Story = {
   args: {
     variant: 'default',
   },
   render: ({ variant }) => (
     <Alert variant={variant}>
-      <Terminal className="h-4 w-4" />
+      <Terminal className="size-4" />
       <AlertTitle>Heads up!</AlertTitle>
       <AlertDescription>
         You can add components to your app using the cli.
@@ -58,7 +58,7 @@ export const AlertDestructiveDemo: Story = {
   },
   render: ({ variant }) => (
     <Alert variant={variant}>
-      <Terminal className="h-4 w-4" />
+      <Terminal className="size-4" />
       <AlertTitle>Heads up!</AlertTitle>
       <AlertDescription>
         You can add components to your app using the cli.
@@ -67,11 +67,11 @@ export const AlertDestructiveDemo: Story = {
   ),
 };
 
-//examples
+// examples
 export const AlertNotTitle: Story = {
   render: ({ variant }) => (
     <Alert variant={variant}>
-      <Terminal className="h-4 w-4" />
+      <Terminal className="size-4" />
       <AlertDescription>
         You can add components to your app using the cli.
       </AlertDescription>
@@ -81,7 +81,7 @@ export const AlertNotTitle: Story = {
 export const AlertNotDescription: Story = {
   render: ({ variant }) => (
     <Alert variant={variant}>
-      <Terminal className="h-4 w-4" />
+      <Terminal className="size-4" />
       <AlertTitle>Heads up!</AlertTitle>
     </Alert>
   ),

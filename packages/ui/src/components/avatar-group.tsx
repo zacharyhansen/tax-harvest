@@ -2,24 +2,24 @@
 
 import { stringToTailwindColor } from '../utils';
 
+import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from './tooltip';
-import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 
-export interface UserObject {
+export type UserObject = {
   id: string;
   email?: string | null;
   name?: string | null;
   photo?: string | null;
-}
+};
 
-interface AvatarListProps {
+type AvatarListProps = {
   people: UserObject[];
-}
+};
 
 export const AvatarGroup = ({ people }: AvatarListProps) => {
   return (
@@ -28,7 +28,7 @@ export const AvatarGroup = ({ people }: AvatarListProps) => {
         <TooltipProvider key={user.id}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Avatar className="border-background border-2" key={user.id}>
+              <Avatar className="border-2 border-background" key={user.id}>
                 <AvatarImage src={user.photo ?? undefined} alt="avatar" />
                 <AvatarFallback className={stringToTailwindColor(user.id)}>
                   {user.name?.split(' ').map(name => name[0])}

@@ -3,7 +3,7 @@ export { default as DataTable } from './dataTable';
 export const sortDecimalValue = <T>(
   rowA: T,
   rowB: T,
-  columnId: keyof T
+  columnId: keyof T,
 ): number => {
   const statusA = Number(rowA[columnId] ?? 0);
   const statusB = Number(rowB[columnId] ?? 0);

@@ -1,23 +1,23 @@
-import type { Editor } from '@tiptap/react';
-import type { EditorView } from '@tiptap/pm/view';
 import type { EditorState } from '@tiptap/pm/state';
+import type { EditorView } from '@tiptap/pm/view';
+import type { Editor } from '@tiptap/react';
 
-export interface LinkProps {
+export type LinkProps = {
   url: string;
   text?: string;
   openInNewTab?: boolean;
-}
+};
 
-export interface ShouldShowProps {
+export type ShouldShowProps = {
   editor: Editor;
   view: EditorView;
   state: EditorState;
   oldState?: EditorState;
   from: number;
   to: number;
-}
+};
 
-export interface FormatAction {
+export type FormatAction = {
   label: string;
   icon?: React.ReactNode;
   action: (editor: Editor) => void;
@@ -25,4 +25,4 @@ export interface FormatAction {
   canExecute: (editor: Editor) => boolean;
   shortcuts: string[];
   value: string;
-}
+};

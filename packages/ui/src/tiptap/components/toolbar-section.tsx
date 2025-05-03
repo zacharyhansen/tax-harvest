@@ -1,14 +1,8 @@
-import * as React from 'react';
+import type { toggleVariants } from '@repo/ui/components/toggle.variants';
 import type { Editor } from '@tiptap/react';
 import type { VariantProps } from 'class-variance-authority';
-import { CaretDownIcon } from '@radix-ui/react-icons';
-import type { toggleVariants } from '@repo/ui/components/toggle.variants';
-
 import type { FormatAction } from '../types';
-import { getShortcutKey } from '../utils';
-
-import { ToolbarButton } from './toolbar-button';
-import { ShortcutKey } from './shortcut-key';
+import { CaretDownIcon } from '@radix-ui/react-icons';
 
 import {
   DropdownMenu,
@@ -18,7 +12,13 @@ import {
 } from '@repo/ui/components/dropdown-menu';
 import { cn } from '@repo/ui/utils';
 
-interface ToolbarSectionProps extends VariantProps<typeof toggleVariants> {
+import * as React from 'react';
+import { getShortcutKey } from '../utils';
+
+import { ShortcutKey } from './shortcut-key';
+import { ToolbarButton } from './toolbar-button';
+
+type ToolbarSectionProps = {
   editor: Editor;
   actions: FormatAction[];
   activeActions?: string[];
@@ -26,7 +26,7 @@ interface ToolbarSectionProps extends VariantProps<typeof toggleVariants> {
   dropdownIcon?: React.ReactNode;
   dropdownTooltip?: string;
   dropdownClassName?: string;
-}
+} & VariantProps<typeof toggleVariants>;
 
 export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
   editor,
@@ -44,7 +44,7 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
       .filter(action => activeActions.includes(action.value))
       .sort(
         (a, b) =>
-          activeActions.indexOf(a.value) - activeActions.indexOf(b.value)
+          activeActions.indexOf(a.value) - activeActions.indexOf(b.value),
       );
 
     return {
@@ -70,7 +70,7 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
         {action.icon}
       </ToolbarButton>
     ),
-    [editor, size, variant]
+    [editor, size, variant],
   );
 
   const renderDropdownMenuItem = React.useCallback(
@@ -90,12 +90,12 @@ export const ToolbarSection: React.FC<ToolbarSectionProps> = ({
         <ShortcutKey keys={action.shortcuts} />
       </DropdownMenuItem>
     ),
-    [editor]
+    [editor],
   );
 
   const isDropdownActive = React.useMemo(
     () => dropdownActions.some(action => action.isActive(editor)),
-    [dropdownActions, editor]
+    [dropdownActions, editor],
   );
 
   return (
