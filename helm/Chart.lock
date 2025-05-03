@@ -1,0 +1,9 @@
+dependencies:
+- name: api
+  repository: file://./charts/api
+  version: 0.1.0
+- name: web
+  repository: file://./charts/web
+  version: 0.1.0
+digest: sha256:50612480171b147dd6b42becb905988a71e669865b4c9b36a3325c6e76088820
+generated: "2025-05-03T16:26:48.853096-07:00"

@@ -1,3 +1,80 @@
+# Tax Harvester Helm Chart
+
+This Helm chart deploys the Tax Harvester application on a Kubernetes cluster.
+
+## Prerequisites
+
+- Kubernetes 1.19+
+- Helm 3.2.0+
+- ArgoCD installed in your cluster
+- GKE Workload Identity configured (for Cloud SQL access)
+
+## Installing the Chart
+
+To install the chart with ArgoCD, create an Application resource:
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tax-harvester
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-org/tax-harvester.git
+    targetRevision: HEAD
+    path: helm
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: harvester
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+```
+
+## Configuration
+
+The following table lists the configurable parameters of the Tax Harvester chart and their default values:
+
+| Parameter                        | Description                           | Default                              |
+|----------------------------------|---------------------------------------|--------------------------------------|
+| `global.namespace`               | Kubernetes namespace                   | `harvester`                          |
+| `global.domain`                  | Domain name for the application        | `harvester.example.com`              |
+| `global.ingress.enabled`         | Enable ingress                         | `true`                               |
+| `global.ingress.className`       | Ingress class name                     | `gce`                                |
+| `api.replicaCount`               | Number of API replicas                 | `1`                                  |
+| `api.image.repository`           | API image repository                   | `gcr.io/your-project/harvester-api`  |
+| `api.image.tag`                  | API image tag                          | `latest`                             |
+| `api.serviceAccountName`         | K8s service account for GCP identity   | `google-secret-service-account`      |
+| `api.cloudsql.enabled`           | Enable Cloud SQL Proxy sidecar         | `true`                               |
+| `api.cloudsql.instanceConnectionName` | GCP Cloud SQL instance name       | `project:region:instance`            |
+| `api.migrations.enabled`         | Enable database migrations             | `true`                               |
+| `web.replicaCount`               | Number of Web replicas                 | `1`                                  |
+| `web.image.repository`           | Web image repository                   | `gcr.io/your-project/harvester-web`  |
+| `web.image.tag`                  | Web image tag                          | `latest`                             |
+
+## Structure
+
+- `Chart.yaml`: Main chart definition
+- `values.yaml`: Default values for the chart
+- `charts/common/`: Common templates for all services
+- `charts/api/`: API service chart
+- `charts/web/`: Web frontend chart
+
+## Cloud SQL Integration
+
+The API deployment includes a Cloud SQL Auth Proxy sidecar container that securely connects to your Cloud SQL instance. This requires:
+
+1. GKE Workload Identity to be configured properly (see the GKE setup notes below)
+2. A Kubernetes service account named `google-secret-service-account` in the `harvester` namespace
+3. The service account must be bound to a GCP service account with Cloud SQL Client permissions
+
+The Cloud SQL Auth Proxy creates a Unix socket at `/cloudsql/<INSTANCE_CONNECTION_NAME>` which your application should use to connect to the database.
+
 # Helm Resourcecs
 
 [Customizing Chart Before Installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing)

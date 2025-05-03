@@ -1,0 +1,13 @@
+apiVersion: v2
+name: harvester
+description: Helm chart for Tax Harvester application
+type: application
+version: 0.1.0
+appVersion: 1.0.0
+dependencies:
+  - name: api
+    version: 0.1.0
+    repository: file://./charts/api
+  - name: web
+    version: 0.1.0
+    repository: file://./charts/web

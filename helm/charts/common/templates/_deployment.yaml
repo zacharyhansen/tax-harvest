@@ -1,0 +1,93 @@
+{{- define "common.deployment" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "common.fullname" . }}
+  namespace: {{ .Values.global.namespace | default "harvester" }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "common.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "common.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.serviceAccountName }}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.env.NODE_ENV | quote }}
+            {{- if .Values.env.extras }}
+            {{- range $key, $value := .Values.env.extras }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+        {{- if hasKey .Values "cloudsql" }}
+        {{- if .Values.cloudsql.enabled }}
+        # Cloud SQL Auth Proxy sidecar container
+        - name: cloud-sql-proxy
+          image: "{{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}"
+          imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy | default "IfNotPresent" }}
+          command:
+            - "/cloud-sql-proxy"
+            - "--unix-socket=/cloudsql"
+            - "{{ .Values.cloudsql.instanceConnectionName }}"
+          {{- if .Values.cloudsql.credentials }}
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/secrets/cloudsql/{{ .Values.cloudsql.credentials.key }}"
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: cloudsql
+              mountPath: /cloudsql
+          {{- else }}
+          volumeMounts:
+            - name: cloudsql
+              mountPath: /cloudsql
+          {{- end }}
+          securityContext:
+            runAsUser: 2  # non-root user
+            allowPrivilegeEscalation: false
+          resources:
+            {{- toYaml .Values.cloudsql.resources | nindent 12 }}
+        {{- end }}
+        {{- end }}
+      {{- if hasKey .Values "cloudsql" }}
+      {{- if .Values.cloudsql.enabled }}
+      volumes:
+        - name: cloudsql
+          emptyDir: {}
+        {{- if .Values.cloudsql.credentials }}
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: {{ .Values.cloudsql.credentials.secretName }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
+{{- end -}} 

@@ -1,0 +1,57 @@
+# Default values for the API service
+replicaCount: 1
+
+image:
+  repository: gcr.io/your-project/harvester-api
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  path: /api
+  pathType: Prefix
+
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+resources: {}
+
+# Service account for GCP workload identity
+serviceAccountName: google-secret-service-account
+
+# Cloud SQL Auth Proxy configuration
+cloudsql:
+  enabled: true
+  image:
+    repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
+    tag: 2.8.1
+    pullPolicy: IfNotPresent
+  # Your Cloud SQL instance connection name
+  instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+  # If using explicit credentials (key file) rather than workload identity
+  # credentials:
+  #   secretName: cloudsql-instance-credentials
+  #   key: credentials.json
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+env:
+  NODE_ENV: production
+  extras: {}
+
+migrations:
+  enabled: true
+  image:
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
+    tag: latest
+    containerCommand: [/bin/sh, -c]
+    containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']

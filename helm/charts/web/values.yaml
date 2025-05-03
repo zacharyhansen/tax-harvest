@@ -1,0 +1,29 @@
+# Default values for the Web frontend
+replicaCount: 1
+
+image:
+  repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+
+ingress:
+  path: /
+  pathType: Prefix
+
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+resources: {}
+
+env:
+  NODE_ENV: production
+  extras: {}
+
+# Cloud SQL configuration for the web service (disabled by default)
+cloudsql:
+  enabled: false

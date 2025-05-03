@@ -1,0 +1,87 @@
+# Global configuration
+global:
+  namespace: harvester
+  environment: production
+  domain: harvester.example.com
+  ingress:
+    enabled: true
+    className: gce
+    annotations:
+      kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
+      # Add any other GCP-specific annotations
+      kubernetes.io/ingress.allow-http: 'true'
+      networking.gke.io/managed-certificates: harvester-cert
+
+# API service configuration
+api:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: gcr.io/your-project/harvester-api
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  ingress:
+    path: /api
+    pathType: Prefix
+  # Service account for GCP workload identity
+  serviceAccountName: google-secret-service-account
+  # Cloud SQL Auth Proxy configuration
+  cloudsql:
+    enabled: true
+    image:
+      repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
+      tag: 2.8.1
+      pullPolicy: IfNotPresent
+    # Your Cloud SQL instance connection name
+    instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-db'
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+  env:
+    NODE_ENV: production
+  migrations:
+    enabled: true
+    image:
+      repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
+      tag: latest
+    command: [npm, run, migrate]
+
+# Web app configuration
+web:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: gcr.io/your-project/harvester-web
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+  resources:
+    limits:
+      cpu: 300m
+      memory: 384Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  ingress:
+    path: /
+    pathType: Prefix
+  env:
+    NODE_ENV: production

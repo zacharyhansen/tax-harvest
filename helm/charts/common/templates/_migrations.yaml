@@ -1,0 +1,98 @@
+{{- define "common.migrations" -}}
+{{- if .Values.migrations.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.fullname" . }}-migrations
+  namespace: {{ .Values.global.namespace | default "harvester" }}
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
+    app.kubernetes.io/component: migrations
+  annotations:
+    # This is what tells Helm to wait for the job to complete
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "common.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: migrations
+    spec:
+      {{- with .Values.serviceAccountName }}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      restartPolicy: OnFailure
+      containers:
+        - name: migrations
+          image: "{{ .Values.migrations.image.repository }}:{{ .Values.migrations.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.migrations.image.containerCommand }}
+          command: {{ .Values.migrations.image.containerCommand | toJson }}
+          args: {{ .Values.migrations.image.containerArgs | toJson }}
+          {{- else }}
+          command: {{ .Values.migrations.command | toJson }}
+          {{- end }}
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.env.NODE_ENV | quote }}
+            {{- if .Values.env.extras }}
+            {{- range $key, $value := .Values.env.extras }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          {{- if hasKey .Values "cloudsql" }}
+          {{- if .Values.cloudsql.enabled }}
+          volumeMounts:
+            - name: cloudsql
+              mountPath: /cloudsql
+          {{- end }}
+          {{- end }}
+        {{- if hasKey .Values "cloudsql" }}
+        {{- if .Values.cloudsql.enabled }}
+        # Cloud SQL Auth Proxy sidecar container for migrations
+        - name: cloud-sql-proxy
+          image: "{{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}"
+          imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy | default "IfNotPresent" }}
+          command:
+            - "/cloud-sql-proxy"
+            - "--unix-socket=/cloudsql"
+            - "{{ .Values.cloudsql.instanceConnectionName }}"
+          {{- if .Values.cloudsql.credentials }}
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/secrets/cloudsql/{{ .Values.cloudsql.credentials.key }}"
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: cloudsql
+              mountPath: /cloudsql
+          {{- else }}
+          volumeMounts:
+            - name: cloudsql
+              mountPath: /cloudsql
+          {{- end }}
+          securityContext:
+            runAsUser: 2  # non-root user
+            allowPrivilegeEscalation: false
+          resources:
+            {{- toYaml .Values.cloudsql.resources | nindent 12 }}
+        {{- end }}
+        {{- end }}
+      {{- if hasKey .Values "cloudsql" }}
+      {{- if .Values.cloudsql.enabled }}
+      volumes:
+        - name: cloudsql
+          emptyDir: {}
+        {{- if .Values.cloudsql.credentials }}
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: {{ .Values.cloudsql.credentials.secretName }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
+{{- end -}}
+{{- end -}} 
