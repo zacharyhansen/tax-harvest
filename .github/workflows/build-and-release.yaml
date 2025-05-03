@@ -91,6 +91,13 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+      - name: Docker Auth
+        id: docker-auth
+        uses: docker/login-action@v3
+        with:
+          username: oauth2accesstoken
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: '${{ env.AR_REPO_LOCATION }}-docker.pkg.dev'
 
   build-web:
     name: Build and Push Web Image
@@ -98,14 +105,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Docker Auth
-        id: docker-auth
-        uses: docker/login-action@v3
-        with:
-          username: oauth2accesstoken
-          password: '${{ needs.auth.outputs.access_token }}'
-          registry: '${{ env.AR_REPO_LOCATION }}-docker.pkg.dev'
 
       - name: Build and Push Web Image
         uses: docker/build-push-action@v5
@@ -125,14 +124,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Docker Auth
-        id: docker-auth
-        uses: docker/login-action@v3
-        with:
-          username: oauth2accesstoken
-          password: '${{ needs.auth.outputs.access_token }}'
-          registry: '${{ env.AR_REPO_LOCATION }}-docker.pkg.dev'
 
       - name: Build and Push API Image
         uses: docker/build-push-action@v5
