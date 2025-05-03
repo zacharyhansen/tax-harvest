@@ -6,3 +6,9 @@
 !/.swcrc
 !/nest-cli.json
 !/src
+**/PriceHourly.csv
+**/node_modules
+**/.next
+**/dist
+**/.turbo
+**/.env
