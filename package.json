@@ -1,5 +1,5 @@
 {
-  "name": "riska",
+  "name": "tax-harvest",
   "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@9.14.2",
@@ -51,6 +51,7 @@
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/types": "^19.5.0",
     "@eslint-react/eslint-plugin": "^1.48.5",
+    "@types/node": "^22.8.7",
     "@vitest/coverage-v8": "^3.1.2",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",

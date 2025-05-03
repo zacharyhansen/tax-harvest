@@ -4,34 +4,34 @@ metadata:
   name: gxlb-ingress
   namespace: harvester
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: "web-static-ip"
-    kubernetes.io/ingress.allow-http: "true"
+    kubernetes.io/ingress.global-static-ip-name: web-static-ip
+    kubernetes.io/ingress.allow-http: 'true'
 spec:
   rules:
-  - http:
-      paths:
-      - path: /*
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: harvester-web
-            port:
-              name: http
-      # - path: /*
-      #   pathType: ImplementationSpecific
-      #   backend:
-      #     service:
-      #       name: harvester-web
-      #       port:
-      #         name: http
-      #         # number: 3000
-      - path: /api/*
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: harvester-api
-            port:
-              name: http
+    - http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: harvester-web
+                port:
+                  name: http
+          # - path: /*
+          #   pathType: ImplementationSpecific
+          #   backend:
+          #     service:
+          #       name: harvester-web
+          #       port:
+          #         name: http
+          #         # number: 3000
+          - path: /api/*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: harvester-api
+                port:
+                  name: http
               # number: 5000
   # - http:
   #     paths:

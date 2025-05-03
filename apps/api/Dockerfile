@@ -1,60 +1,41 @@
-FROM node:22-alpine3.20 AS base
+ARG NODE_VERSION=22
 
-ENV DIR /app
-WORKDIR $DIR
-ARG NPM_TOKEN
+FROM node:${NODE_VERSION}-alpine AS base
+ARG PROJECT=api
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+ENV PNPM_STORE_PATH=/pnpm/store
+RUN apk update && apk add --no-cache libc6-compat
+RUN corepack enable
+RUN pnpm install turbo@2.5.2 --global 
 
-FROM base AS dev
+FROM base AS builder
+WORKDIR /app
+COPY . .
+RUN turbo prune ${PROJECT} --docker
 
-ENV NODE_ENV=development
-ENV CI=true
+# Add lockfile and package.json's of isolated subworkspace
+FROM base AS installer
+WORKDIR /app
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/out/full/turbo.json ./turbo.json
+COPY --from=builder /app/out/full/apps/${PROJECT}/prisma ./prisma
+COPY --from=builder /app/out/full/apps/${PROJECT}/scripts ./scripts
+RUN pnpm install --frozen-lockfile --store-dir=${PNPM_STORE_PATH} --ignore-scripts
 
-RUN npm install -g pnpm@9.14.2
-
-COPY package.json pnpm-lock.yaml ./
-
-RUN echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ".npmrc" && \
-    pnpm install --frozen-lockfile && \
-    rm -f .npmrc
-
-COPY tsconfig*.json .
-COPY .swcrc .
-COPY nest-cli.json .
-COPY src src
-
-EXPOSE $PORT
-CMD ["node", "--run", "dev"]
-
-FROM base AS build
-
-ENV CI=true
-
-RUN apk update && apk add --no-cache dumb-init=1.2.5-r3 && npm install -g pnpm@9.14.2
-
-COPY package.json pnpm-lock.yaml ./
-RUN echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ".npmrc" && \
-    pnpm install --frozen-lockfile && \
-    rm -f .npmrc
-
-COPY tsconfig*.json .
-COPY .swcrc .
-COPY nest-cli.json .
-COPY src src
-
-RUN node --run build && \
-    pnpm prune --prod
-
-FROM base AS production
-
+FROM base AS sourcer
+WORKDIR /app
+COPY --from=installer /app/ .
+COPY --from=builder /app/out/full/ .
+COPY .gitignore .gitignore
+RUN ls
 ENV NODE_ENV=production
-ENV USER=node
+RUN pnpm turbo run build
 
-COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
-COPY --from=build $DIR/package.json .
-COPY --from=build $DIR/pnpm-lock.yaml .
-COPY --from=build $DIR/node_modules node_modules
-COPY --from=build $DIR/dist dist
+FROM base AS runner
+WORKDIR /app
+COPY --from=sourcer /app/ .
+WORKDIR /app/apps/${PROJECT}
 
-USER $USER
-EXPOSE $PORT
-CMD ["dumb-init", "node", "dist/main.js"]
+CMD ["node", "dist/main"]

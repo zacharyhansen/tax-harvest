@@ -6,3 +6,6 @@
 !/.swcrc
 !/nest-cli.json
 !/src
+!/scripts
+!/prisma/migrations
+!/prisma/schema.prisma

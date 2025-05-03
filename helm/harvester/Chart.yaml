@@ -20,21 +20,21 @@ version: 0.1.14
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "1.1.1"
+appVersion: 1.1.1
 
 dependencies:
   - alias: harvester-web
     name: base-microservice
-    version: "0.1.12"
-    repository: "file://../base-microservice"
+    version: 0.1.12
+    repository: 'file://../base-microservice'
   - alias: harvester-api
     name: base-microservice
-    version: "0.1.12"
-    repository: "file://../base-microservice"
-  - alias: harvester-studio
-    name: base-microservice
-    version: "0.1.12"
-    repository: "file://../base-microservice"
+    version: 0.1.12
+    repository: 'file://../base-microservice'
+  # - alias: harvester-studio
+  #   name: base-microservice
+  #   version: 0.1.12
+  #   repository: 'file://../base-microservice'
   # - alias: ingress-nginx
   #   name: ingress-nginx
   #   version: "4.10.1"

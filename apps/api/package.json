@@ -2,7 +2,6 @@
   "name": "api",
   "type": "module",
   "version": "1.0.0",
-  "packageManager": "pnpm@9.14.2",
   "description": "Super cool API",
   "author": "Zachary Hansen",
   "license": "UNLICENSED",
@@ -43,7 +42,9 @@
     "sync": "node dist/command/post-migrate.js",
     "postmigrate": "pnpm codegen",
     "migrate:create": "prisma migrate dev --create-only --name",
-    "seed": "prisma db seed"
+    "seed": "prisma db seed",
+    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma"
+
   },
   "@snaplet/seed": {
     "config": "seed.client.ts"
