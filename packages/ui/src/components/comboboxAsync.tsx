@@ -103,7 +103,9 @@ export function ComboboxAsync<T>({
   const debouncedSearchTerm = useDebounce(searchTerm, preload ? 0 : 400);
   const [originalOptions, setOriginalOptions] = useState<T[]>([]);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
     setMounted(true);
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
     setSelectedValue(value);
   }, [value]);
 
@@ -112,6 +114,7 @@ export function ComboboxAsync<T>({
     if (value && options.length > 0) {
       const option = options.find(opt => getOptionValue(opt) === value);
       if (option) {
+        // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
         setSelectedOption(option);
       }
     }
@@ -164,12 +167,14 @@ export function ComboboxAsync<T>({
       void fetchOptions();
     } else if (preload) {
       if (debouncedSearchTerm) {
+        // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
         setOptions(
           originalOptions.filter(option =>
             filterFn ? filterFn(option, debouncedSearchTerm) : true,
           ),
         );
       } else {
+        // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
         setOptions(originalOptions);
       }
     }
