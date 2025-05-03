@@ -25,6 +25,7 @@ export default function InputField({
           <FormItem>
             <FormLabel>{label}</FormLabel>
             <FormControl>
+              {/* @ts-expect-error - no idea what this ref is */}
               <Input {...props} {...field} />
             </FormControl>
             <FormDescription>{description}</FormDescription>

@@ -107,12 +107,6 @@
     "@swc/core-linux-x64-gnu": "^1.7.42",
     "@swc/core-linux-x64-musl": "^1.7.42"
   },
-  "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.24.3",
-    "@swc/core-linux-arm64-musl": "^1.7.42",
-    "@swc/core-linux-x64-gnu": "^1.7.42",
-    "@swc/core-linux-x64-musl": "^1.7.42"
-  },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",

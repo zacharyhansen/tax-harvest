@@ -73,7 +73,7 @@ declare module '@tanstack/react-table' {
 
     // eslint-disable-next-line ts/no-explicit-any
     [key: string]: AggregationFn<any>;
-  };
+  }
 }
 
 declare module '@tanstack/react-table' {

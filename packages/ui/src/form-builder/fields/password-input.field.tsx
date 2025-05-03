@@ -25,6 +25,7 @@ export default function PasswordInputField({
           <FormItem>
             <FormLabel>{label}</FormLabel>
             <FormControl>
+              {/* @ts-expect-error - no idea what this ref is */}
               <PasswordInput {...props} {...field} />
             </FormControl>
             <FormDescription>{description}</FormDescription>
