@@ -126,19 +126,19 @@ jobs:
           cache-from: type=registry,ref=user/app:latest
           cache-to: type=inline
 
-      - name: Build and Push Studio Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile.prisma.microservice
-          push: true
-          build-args: |
-            PROJECT=harvester-api
-          tags: |
-            ${{ env.AR_URL_PREFIX }}-api/harvester-studio:v${{ needs.version.outputs.new_version }}
-            ${{ env.AR_URL_PREFIX }}-api/harvester-studio:latest
-          cache-from: type=registry,ref=user/app:latest
-          cache-to: type=inline
+      # - name: Build and Push Studio Image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: Dockerfile.prisma.microservice
+      #     push: true
+      #     build-args: |
+      #       PROJECT=harvester-api
+      #     tags: |
+      #       ${{ env.AR_URL_PREFIX }}-api/harvester-studio:v${{ needs.version.outputs.new_version }}
+      #       ${{ env.AR_URL_PREFIX }}-api/harvester-studio:latest
+      #     cache-from: type=registry,ref=user/app:latest
+      #     cache-to: type=inline
 
   update-helm-chart:
     name: Update Helm Chart

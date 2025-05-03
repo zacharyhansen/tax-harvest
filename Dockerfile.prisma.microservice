@@ -1,0 +1,43 @@
+ARG NODE_VERSION=22.13.1
+ARG NODE_ENV=production
+
+FROM node:${NODE_VERSION}-alpine AS builder
+RUN apk update
+ARG PROJECT
+# Set working directory
+WORKDIR /app
+RUN yarn global add turbo@^2.0.9
+COPY . .
+RUN turbo prune --scope=${PROJECT} --docker
+
+# Add lockfile and package.json's of isolated subworkspace
+FROM node:${NODE_VERSION}-alpine AS installer
+RUN apk update
+RUN apk add --no-cache python3 make g++
+ARG PROJECT
+WORKDIR /app
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/yarn.lock ./yarn.lock
+COPY --from=builder /app/out/full/turbo.json ./turbo.json
+COPY --from=builder /app/out/full/apps/${PROJECT}/prisma ./prisma
+COPY --from=builder /app/out/full/apps/${PROJECT}/scripts ./scripts
+RUN yarn install --frozen-lockfile
+RUN yarn prisma generate 
+
+FROM node:${NODE_VERSION}-alpine AS sourcer
+RUN apk update
+ARG PROJECT
+WORKDIR /app
+COPY --from=installer /app/ .
+COPY --from=builder /app/out/full/ .
+COPY .gitignore .gitignore
+ENV NODE_ENV=${NODE_ENV}
+RUN yarn turbo run build
+
+FROM node:${NODE_VERSION}-alpine as runner
+RUN apk update
+ARG PROJECT
+WORKDIR /app
+COPY --from=sourcer /app/ .
+WORKDIR /app/apps/${PROJECT}
+CMD ["npx", "prisma", "studio"]
