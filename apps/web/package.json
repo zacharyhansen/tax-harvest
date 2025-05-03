@@ -25,6 +25,8 @@
     "eslint-plugin-tailwindcss": "^3.18.0",
     "eslint-plugin-testing-library": "^6.3.0",
     "typescript": "5.4.2",
+    "vitest": "^3.1.2",
+    "vitest-mock-extended": "^3.1.0",
     "zod": "^3.24.3"
   },
   "dependencies": {
@@ -96,8 +98,6 @@
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "type-fest": "^4.33.0",
-    "vite-tsconfig-paths": "4.3.2",
-    "vitest": "^2.1.2",
-    "vitest-mock-extended": "^2.0.2"
+    "vite-tsconfig-paths": "4.3.2"
   }
 }

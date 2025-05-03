@@ -32,7 +32,7 @@
     "start": "turbo start",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
-    "lint:file": "eslint --ignore-path .gitignore",
+    "lint:file": "eslint",
     "typos": "chmod +x scripts/check_typos.sh && ./scripts/check_typos.sh",
     "test": "turbo test",
     "codegen": "turbo codegen",
@@ -64,7 +64,9 @@
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "turbo": "^2.1.2",
-    "typescript": "5.4.2"
+    "typescript": "5.4.2",
+    "vitest": "^3.1.2",
+    "vitest-mock-extended": "^3.1.0"
   },
   "workspaces": [
     "apps/*",
