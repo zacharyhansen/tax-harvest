@@ -119,7 +119,7 @@ jobs:
           file: Dockerfile.nodejs.microservice
           push: true
           build-args: |
-            PROJECT=harvester-api
+            PROJECT=api
           tags: |
             ${{ env.AR_URL_PREFIX }}-api/harvester-api:v${{ needs.version.outputs.new_version }}
             ${{ env.AR_URL_PREFIX }}-api/harvester-api:latest
