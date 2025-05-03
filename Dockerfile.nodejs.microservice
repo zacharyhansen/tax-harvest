@@ -6,7 +6,7 @@ RUN apk update
 ARG PROJECT
 # Set working directory
 WORKDIR /app
-RUN yarn global add turbo@^2.0.9
+RUN pnpm global add turbo@^2.0.9
 COPY . .
 RUN turbo prune --scope=${PROJECT} --docker
 
@@ -17,12 +17,12 @@ RUN apk add --no-cache python3 make g++
 ARG PROJECT
 WORKDIR /app
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/out/full/turbo.json ./turbo.json
 COPY --from=builder /app/out/full/apps/${PROJECT}/prisma ./prisma
 COPY --from=builder /app/out/full/apps/${PROJECT}/scripts ./scripts
-RUN yarn install --frozen-lockfile
-RUN yarn prisma generate 
+RUN pnpm install --frozen-lockfile
+RUN pnpm prisma generate 
 
 FROM node:${NODE_VERSION}-alpine AS sourcer
 RUN apk update
@@ -32,7 +32,7 @@ COPY --from=installer /app/ .
 COPY --from=builder /app/out/full/ .
 COPY .gitignore .gitignore
 ENV NODE_ENV=${NODE_ENV}
-RUN yarn turbo run build
+RUN pnpm turbo run build
 
 FROM node:${NODE_VERSION}-alpine as runner
 RUN apk update
