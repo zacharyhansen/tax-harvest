@@ -15,6 +15,7 @@ const NavigationMenu = ({ ref, className, children, ...props }: React.ComponentP
     {...props}
   >
     {children}
+    {/* eslint-disable-next-line ts/no-use-before-define */}
     <NavigationMenuViewport />
   </NavigationMenuPrimitive.Root>
 );

@@ -183,6 +183,7 @@ function Sortable<TData extends { id: UniqueIdentifier }>({
         </SortableContext>
         {overlay && typeof window !== 'undefined'
           ? createPortal(
+              // eslint-disable-next-line ts/no-use-before-define
               <SortableOverlay activeId={activeId}>{overlay}</SortableOverlay>,
               document.body,
             )
@@ -213,6 +214,7 @@ const SortableOverlay = (
     <DragOverlay dropAnimation={dropAnimation} {...props}>
       {activeId
         ? (
+            // eslint-disable-next-line ts/no-use-before-define
             <SortableItem
               ref={ref}
               value={activeId}
@@ -220,6 +222,7 @@ const SortableOverlay = (
               asChild
             >
               {children}
+              {/* eslint-disable-next-line ts/no-use-before-define */}
             </SortableItem>
           )
         : null}
@@ -243,7 +246,6 @@ const SortableItemContext = React.createContext<SortableItemContextProps>({
 function useSortableItem() {
   const context = React.use(SortableItemContext);
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!context) {
     throw new Error('useSortableItem must be used within a SortableItem');
   }
@@ -329,6 +331,7 @@ const SortableDragHandle = ({ ref, className, ...props }: SortableDragHandleProp
 
   return (
     <Button
+      // @ts-expect-error - ref is not required
       ref={composeReferences(ref)}
       data-state={isDragging ? 'dragging' : undefined}
       className={cn(

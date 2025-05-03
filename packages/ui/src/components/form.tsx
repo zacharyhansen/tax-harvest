@@ -22,27 +22,27 @@ const FormFieldContext = React.createContext<FormFieldContextValue>(
   {} as FormFieldContextValue,
 );
 
-const FormField = <
+function FormField<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   ...props
-}: ControllerProps<TFieldValues, TName>) => {
+}: ControllerProps<TFieldValues, TName>) {
   return (
     <FormFieldContext value={{ name: props.name }}>
       <Controller {...props} />
     </FormFieldContext>
   );
-};
+}
 
-const useFormField = () => {
+function useFormField() {
   const fieldContext = React.use(FormFieldContext);
+  // eslint-disable-next-line ts/no-use-before-define
   const itemContext = React.use(FormItemContext);
   const { getFieldState, formState } = useFormContext();
 
   const fieldState = getFieldState(fieldContext.name, formState);
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!fieldContext) {
     throw new Error('useFormField should be used within <FormField>');
   }
@@ -57,7 +57,7 @@ const useFormField = () => {
     formMessageId: `${id}-form-item-message`,
     ...fieldState,
   };
-};
+}
 
 type FormItemContextValue = {
   id: string;
@@ -172,7 +172,7 @@ type DatePickerError = {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line ts/no-explicit-any
 function isDatePickerError(error: any): error is DatePickerError {
   if (typeof error !== 'object' || error === null) {
     return false;

@@ -10,11 +10,11 @@ type SignatureInputProps = {
   onSignatureChange: (signature: string | null) => void;
 };
 
-const preventScroll = (event: TouchEvent) => {
+function preventScroll(event: TouchEvent) {
   event.preventDefault(); // Disable scroll
-};
+}
 
-const disableTouchScroll = (canvas: HTMLCanvasElement) => {
+function disableTouchScroll(canvas: HTMLCanvasElement) {
   canvas.addEventListener('touchstart', preventScroll, { passive: false });
   canvas.addEventListener('touchmove', preventScroll, { passive: false });
   canvas.addEventListener('touchend', preventScroll, { passive: false });
@@ -24,7 +24,7 @@ const disableTouchScroll = (canvas: HTMLCanvasElement) => {
     canvas.removeEventListener('touchmove', preventScroll);
     canvas.removeEventListener('touchend', preventScroll);
   };
-};
+}
 
 const SCALE = 10;
 
@@ -69,6 +69,7 @@ export function SignatureInput({
   ) => {
     event.preventDefault();
     setIsDrawing(true);
+    // eslint-disable-next-line ts/no-use-before-define
     draw(event);
   };
 

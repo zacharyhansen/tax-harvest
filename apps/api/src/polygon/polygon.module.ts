@@ -1,9 +1,10 @@
-import { Module } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { restClient } from "@polygon.io/client-js";
+import { Module } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { restClient } from '@polygon.io/client-js'
 
-import { PolygonResolver } from "./polygon.resolver";
-import { PolygonService } from "./polygon.service";
+import { PolygonResolver } from './polygon.resolver'
+import { PolygonService } from './polygon.service'
+
 @Module({
   exports: [PolygonService],
   imports: [],
@@ -12,9 +13,9 @@ import { PolygonService } from "./polygon.service";
     PolygonResolver,
     {
       inject: [ConfigService],
-      provide: "POLYGON_CLIENT",
+      provide: 'POLYGON_CLIENT',
       useFactory: (configService: ConfigService) =>
-        restClient(configService.get("POLYGON_API_KEY")),
+        restClient(configService.get('POLYGON_API_KEY')),
     },
   ],
 })

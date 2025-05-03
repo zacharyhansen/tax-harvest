@@ -1,8 +1,9 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common'
 
-import { PlaidController } from "./plaid.controller";
-import { PlaidResolver } from "./plaid.resolver";
-import { PlaidService } from "./plaid.service";
+import { PlaidController } from './plaid.controller'
+import { PlaidResolver } from './plaid.resolver'
+import { PlaidService } from './plaid.service'
+
 @Module({
   controllers: [PlaidController],
   exports: [PlaidService],

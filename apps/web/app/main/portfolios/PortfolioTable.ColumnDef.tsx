@@ -1,10 +1,10 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { createColumnHelper } from '@tanstack/react-table';
+import type { PortfolioTableItemFragment } from '~/generated/gql';
 import DataTable from '@repo/ui/components/dataTable/dataTable';
 
-import type { PortfolioTableItemFragment } from '~/generated/gql';
+import { createColumnHelper } from '@tanstack/react-table';
 
 const columnHelper = createColumnHelper<PortfolioTableItemFragment>();
 

@@ -1,12 +1,12 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { createColumnHelper } from '@tanstack/react-table';
-import { capitalCase } from 'change-case';
+import type { HarvestTableItemFragment } from '~/generated/gql';
 import { Badge } from '@repo/ui/components/badge';
 import DataTable from '@repo/ui/components/dataTable/dataTable';
+import { createColumnHelper } from '@tanstack/react-table';
 
-import type { HarvestTableItemFragment } from '~/generated/gql';
+import { capitalCase } from 'change-case';
 import { HarvestStep } from '~/generated/gql';
 
 const columnHelper = createColumnHelper<HarvestTableItemFragment>();

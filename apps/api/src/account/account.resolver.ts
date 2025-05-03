@@ -1,5 +1,12 @@
-import type { ClerkClaims } from "~/auth/types";
+import type { Prisma } from '@prisma/client'
 
+import type { GraphQLResolveInfo } from 'graphql'
+import type { AuthConnectionService } from '../auth-connection/auth-connection.service'
+import type { RealizedPandLService } from '../realized-p-and-l/realized-p-and-l.service'
+
+import type { AccountService } from './account.service'
+
+import type { ClerkClaims } from '~/auth/types'
 import {
   Args,
   Info,
@@ -8,13 +15,8 @@ import {
   Query,
   ResolveField,
   Resolver,
-} from "@nestjs/graphql";
-import { Prisma } from "@prisma/client";
-import { type GraphQLResolveInfo } from "graphql";
-
-import { ClerkContext } from "~/auth/decorators/clerk-context.decorator";
-
-import { AuthConnectionService } from "../auth-connection/auth-connection.service";
+} from '@nestjs/graphql'
+import { ClerkContext } from '~/auth/decorators/clerk-context.decorator'
 import {
   Account,
   AccountCreateInput,
@@ -22,10 +24,8 @@ import {
   AccountWhereInput,
   AccountWhereUniqueInput,
   RealizedPAndL,
-} from "../generated/graphql";
-import { RealizedPandLService } from "../realized-p-and-l/realized-p-and-l.service";
-import { PrismaSelect } from "../utilities/prisma/prisma-select";
-import { AccountService } from "./account.service";
+} from '../generated/graphql'
+import { PrismaSelect } from '../utilities/prisma/prisma-select'
 
 @Resolver(() => Account)
 export class AccountResolver {
@@ -56,71 +56,71 @@ export class AccountResolver {
   // }
 
   @Query(() => [Account], {
-    description: "Get accounts that need setup",
-    name: "setupAccounts",
+    description: 'Get accounts that need setup',
+    name: 'setupAccounts',
   })
   async setupAccounts(
     @ClerkContext() { metadata }: ClerkClaims,
     @Info() info: GraphQLResolveInfo,
   ) {
-    const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value
 
     return this.accountService.setupAccounts({
       id: metadata.portfolioId,
       select,
-    });
+    })
   }
 
   @Query(() => Account, {
-    description: "Find a connected account by id",
-    name: "account",
+    description: 'Find a connected account by id',
+    name: 'account',
   })
   async account(
     @Info()
     info: GraphQLResolveInfo,
-    @Args("id", {
+    @Args('id', {
       type: () => String,
     })
     id: string,
   ): Promise<Account> {
-    const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value
 
     return this.accountService.getAccount({
       select,
       where: {
-        id: id,
+        id,
       },
-    });
+    })
   }
 
   @Query(() => [Account], {
-    description: "Get accounts",
-    name: "accounts",
+    description: 'Get accounts',
+    name: 'accounts',
   })
   async accounts(
     @ClerkContext() { metadata }: ClerkClaims,
     @Info()
     info: GraphQLResolveInfo,
-    @Args("where", { nullable: true, type: () => AccountWhereInput })
+    @Args('where', { nullable: true, type: () => AccountWhereInput })
     where: AccountWhereInput,
   ) {
-    const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value
     return this.accountService.getAccountsWithPortfolioId(
       metadata.portfolioId,
       {
         select,
         where,
       },
-    );
+    )
   }
 
   @Mutation(() => Account, {
-    description: "Create a new connected account",
-    name: "createAccountForPortfolio",
+    description: 'Create a new connected account',
+    name: 'createAccountForPortfolio',
   })
   async createAccountForPortfolio(
     @ClerkContext() { metadata, sub }: ClerkClaims,
-    @Args("accountCreateInput", {
+    @Args('accountCreateInput', {
       type: () => AccountCreateInput,
     })
     accountCreateInput: Prisma.AccountCreateInput,
@@ -133,20 +133,20 @@ export class AccountResolver {
           id: metadata.portfolioId,
         },
       },
-    };
-    return this.accountService.createAccountForPortfolio(inputWithUser);
+    }
+    return this.accountService.createAccountForPortfolio(inputWithUser)
   }
 
   @Mutation(() => Account, {
-    description: "Update a connected account",
-    name: "updateAccount",
+    description: 'Update a connected account',
+    name: 'updateAccount',
   })
   async updateAccount(
-    @Args("accountUpdateInput", {
+    @Args('accountUpdateInput', {
       type: () => AccountUpdateInput,
     })
     accountUpdateInput: Prisma.AccountUpdateInput,
-    @Args("accountWhereUniqueInput", {
+    @Args('accountWhereUniqueInput', {
       type: () => AccountWhereUniqueInput,
     })
     accountWhereUniqueInput: Prisma.AccountWhereUniqueInput,
@@ -154,23 +154,23 @@ export class AccountResolver {
     return this.accountService.updateAccount(
       accountUpdateInput,
       accountWhereUniqueInput,
-    );
+    )
   }
 
-  @ResolveField(() => RealizedPAndL, { name: "_realizedProfitAndLoss" })
+  @ResolveField(() => RealizedPAndL, { name: '_realizedProfitAndLoss' })
   async _realizedProfitAndLoss(
     @Parent() account: Account,
     @Info()
     info: GraphQLResolveInfo,
-    @Args("year", { nullable: true, type: () => Number })
+    @Args('year', { nullable: true, type: () => Number })
     year?: number,
   ): Promise<RealizedPAndL> {
-    const { select } = new PrismaSelect<Prisma.RealizedPAndLSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.RealizedPAndLSelect>(info).value
 
     return this.realizedPAndLService._realizedProfitAndLoss({
       accountId: account.id,
       select,
       year: year ?? new Date().getFullYear(),
-    });
+    })
   }
 }

@@ -1,10 +1,11 @@
 'use client';
 
-import { type ReactNode, Children } from 'react';
-import clsx from 'clsx';
+import type { ReactNode } from 'react';
+import type { PageWrapperProps } from './page-wrapper';
 import { ScrollArea } from '@repo/ui/components/scroll-area';
 
-import type { PageWrapperProps } from './page-wrapper';
+import clsx from 'clsx';
+import { Children } from 'react';
 import PageWrapper from './page-wrapper';
 
 export default function PageWrapperWithNav({

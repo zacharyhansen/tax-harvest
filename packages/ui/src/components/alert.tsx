@@ -16,6 +16,7 @@ const Alert = ({ ref, className, variant, ...props }: React.HTMLAttributes<HTMLD
 Alert.displayName = 'Alert';
 
 const AlertTitle = ({ ref, className, ...props }: React.HTMLAttributes<HTMLHeadingElement> & { ref?: React.RefObject<HTMLParagraphElement | null> }) => (
+  // eslint-disable-next-line jsx-a11y/heading-has-content
   <h5
     ref={ref}
     className={cn('mb-1 font-medium leading-none tracking-tight', className)}

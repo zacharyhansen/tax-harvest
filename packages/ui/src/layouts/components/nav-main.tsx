@@ -15,8 +15,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@repo/ui/components/sidebar';
-
 import { AnimatePresence, motion } from 'framer-motion';
+
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Receipt } from 'lucide-react';
+import { Button } from '@repo/ui/components/button';
 // import { useState } from 'react';
 import {
   Card,
@@ -9,11 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { Button } from '@repo/ui/components/button';
 import { toast } from '@repo/ui/components/toast-sonner';
+import { Receipt } from 'lucide-react';
 
-import { PageWrapper } from '~/modules/layout';
 import { useUpdateAllAssetPricesMutation } from '~/generated/gql';
+import { PageWrapper } from '~/modules/layout';
 
 export default function ActionsPage() {
   // const [updateHourlyAssetPrices] = useUpdateHourlyAssetPricesMutation();
@@ -38,7 +38,7 @@ export default function ActionsPage() {
         <Card className="flex flex-col">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Receipt className="h-6 w-6" />
+              <Receipt className="size-6" />
               Refresh Prices
             </CardTitle>
             <CardDescription>

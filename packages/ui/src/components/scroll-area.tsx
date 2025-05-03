@@ -14,6 +14,7 @@ const ScrollArea = ({ ref, className, children, ...props }: React.ComponentProps
     <ScrollAreaPrimitive.Viewport className="size-full rounded-[inherit]">
       {children}
     </ScrollAreaPrimitive.Viewport>
+    {/* eslint-disable-next-line ts/no-use-before-define */}
     <ScrollBar />
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>

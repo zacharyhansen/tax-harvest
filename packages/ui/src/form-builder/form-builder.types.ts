@@ -14,7 +14,7 @@ enum Field {
   textarea = 'textarea',
 }
 
-type FormBuilderSpec = {
+export type FormBuilderSpec = {
   form: string;
 };
 
@@ -30,7 +30,7 @@ type FieldSpec = {
   value: string | Date | number | string[] | boolean;
 };
 
-type FormSpec = {
+export type FormSpec = {
   fields: FieldSpec;
 };
 

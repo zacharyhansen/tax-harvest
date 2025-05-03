@@ -1,24 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Stripe } from 'stripe';
+import type { ConfigService } from '@nestjs/config'
+import type { StripeProduct } from './types'
+import { Injectable } from '@nestjs/common'
 
-import { StripeProduct } from './types';
+import { Stripe } from 'stripe'
 
 @Injectable()
 export class StripeService {
-  private readonly stripe: Stripe;
+  private readonly stripe: Stripe
   constructor(private readonly configService: ConfigService) {
     this.stripe = new Stripe(
       this.configService.get('STRIPE_SECRET_KEY') as string,
-    );
+    )
   }
 
   async session({
     stripeCustomerId,
     stripePriceId,
   }: {
-    stripePriceId: string;
-    stripeCustomerId: string;
+    stripePriceId: string
+    stripeCustomerId: string
   }) {
     const { client_secret, id } = await this.stripe.checkout.sessions.create({
       automatic_tax: { enabled: true },
@@ -40,11 +40,11 @@ export class StripeService {
       payment_method_types: ['card'],
       return_url: `${this.configService.get('CLIENT_ORIGIN')}/dashboard/payment-confirmation?session_id={CHECKOUT_SESSION_ID}`,
       ui_mode: 'embedded',
-    });
+    })
     return {
       client_secret,
       id,
-    };
+    }
   }
   // async assertPaymentSessionComplete({ sessionId }: { sessionId: string }) {
   // const session = await this.stripe.checkout.sessions.retrieve(sessionId);
@@ -59,11 +59,11 @@ export class StripeService {
         active,
       })
       .then((result) => {
-        return result.data;
-      });
+        return result.data
+      })
   }
 
   createCustomer({ params }: { params: Stripe.CustomerCreateParams }) {
-    return this.stripe.customers.create(params);
+    return this.stripe.customers.create(params)
   }
 }

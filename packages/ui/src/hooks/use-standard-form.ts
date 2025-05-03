@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 
 export function useStandardForm<
   TFieldValues extends FieldValues = FieldValues,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  // eslint-disable-next-line ts/no-explicit-any
   TContext = any,
 >({
   handleSubmit,

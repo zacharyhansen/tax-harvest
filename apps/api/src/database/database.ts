@@ -1,5 +1,5 @@
-import type { DB } from "./db.d";
+import type { DB } from './db.d'
 
-import { Kysely } from "kysely";
+import { Kysely } from 'kysely'
 
 export class Database extends Kysely<DB> {}

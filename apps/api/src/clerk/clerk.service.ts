@@ -1,5 +1,5 @@
-import { clerkClient } from "@clerk/clerk-sdk-node";
-import { Injectable } from "@nestjs/common";
+import { clerkClient } from '@clerk/clerk-sdk-node'
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class ClerkService {
@@ -9,10 +9,10 @@ export class ClerkService {
   ) {
     return clerkClient.users.updateUser(clerkUserId, {
       publicMetadata,
-    });
+    })
   }
 
   user(id: string) {
-    return clerkClient.users.getUser(id);
+    return clerkClient.users.getUser(id)
   }
 }

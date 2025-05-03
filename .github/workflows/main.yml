@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    name: 'Build 🧱 '
+    name: Build 🧱
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
         run: pnpm run build
 
   lint:
-    name: 'Lint 🐱'
+    name: Lint 🐱
     needs: build
     runs-on: ubuntu-latest
 
@@ -43,7 +43,7 @@ jobs:
         run: pnpm run lint
 
   test:
-    name: 'Test 🧪'
+    name: Test 🧪
     needs: build
     runs-on: ubuntu-latest
 
@@ -58,7 +58,7 @@ jobs:
         run: pnpm run test
 
   build-and-release:
-    name: 'Build and Release 🚀'
+    name: Build and Release 🚀
     needs: [build, lint, test]
     # Only run this job on pushes to trunk, not on pull requests
     if: github.event_name == 'push' && github.ref == 'refs/heads/trunk'

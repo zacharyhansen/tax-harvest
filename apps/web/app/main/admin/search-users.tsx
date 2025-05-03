@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@repo/ui/components/button';
 import {
   Card,
   CardContent,
@@ -7,7 +8,6 @@ import {
   CardTitle,
 } from '@repo/ui/components/card';
 import { usePathname, useRouter } from 'next/navigation';
-import { Button } from '@repo/ui/components/button';
 
 export const SearchUsers = () => {
   const router = useRouter();
@@ -16,12 +16,12 @@ export const SearchUsers = () => {
   return (
     <div>
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           const form = e.currentTarget;
           const formData = new FormData(form);
           const queryTerm = formData.get('search') as string;
-          router.push(pathname + '?search=' + queryTerm);
+          router.push(`${pathname}?search=${queryTerm}`);
         }}
       >
         <Card>

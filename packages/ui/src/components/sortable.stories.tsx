@@ -42,7 +42,7 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
-const SortableForm = () => {
+function SortableForm() {
   const form = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -121,6 +121,7 @@ const SortableForm = () => {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
+                              {/* @ts-expect-error - ref is not required */}
                               <Input className="h-8" {...field} />
                             </FormControl>
                           </FormItem>
@@ -132,6 +133,7 @@ const SortableForm = () => {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
+                              {/* @ts-expect-error - ref is not required */}
                               <Input className="h-8" {...field} />
                             </FormControl>
                           </FormItem>
@@ -175,7 +177,7 @@ const SortableForm = () => {
       </CardContent>
     </Card>
   );
-};
+}
 
 const meta = {
   title: 'Atoms/Sortable',

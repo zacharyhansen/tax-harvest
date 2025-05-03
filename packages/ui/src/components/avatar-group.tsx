@@ -21,7 +21,7 @@ type AvatarListProps = {
   people: UserObject[];
 };
 
-export const AvatarGroup = ({ people }: AvatarListProps) => {
+export function AvatarGroup({ people }: AvatarListProps) {
   return (
     <div className="flex -space-x-3">
       {people.map(user => (
@@ -43,4 +43,4 @@ export const AvatarGroup = ({ people }: AvatarListProps) => {
       ))}
     </div>
   );
-};
+}

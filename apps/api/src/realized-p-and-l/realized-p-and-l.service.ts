@@ -1,11 +1,11 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { Prisma, RealizedPAndL } from "@prisma/client";
+import type { Prisma, RealizedPAndL } from '@prisma/client'
+import type { PrismaService } from '../prisma/prisma.service'
 
-import { PrismaService } from "../prisma/prisma.service";
+import { Injectable, Logger } from '@nestjs/common'
 
 @Injectable()
 export class RealizedPandLService {
-  private readonly logger = new Logger(RealizedPandLService.name);
+  private readonly logger = new Logger(RealizedPandLService.name)
   constructor(private readonly prismaService: PrismaService) {}
 
   /**
@@ -16,13 +16,13 @@ export class RealizedPandLService {
     select,
     year,
   }: {
-    accountId: string;
-    year: number;
-    select: Prisma.RealizedPAndLSelect;
+    accountId: string
+    year: number
+    select: Prisma.RealizedPAndLSelect
   }): Promise<RealizedPAndL> {
     try {
-      const realizedPAndL =
-        await this.prismaService.realizedPAndL.findUniqueOrThrow({
+      const realizedPAndL
+        = await this.prismaService.realizedPAndL.findUniqueOrThrow({
           select,
           where: {
             accountId_year: {
@@ -30,10 +30,11 @@ export class RealizedPandLService {
               year,
             },
           },
-        });
-      return realizedPAndL;
-    } catch {
-      return this.prismaService.$transaction(async trx => {
+        })
+      return realizedPAndL
+    }
+    catch {
+      return this.prismaService.$transaction(async (trx) => {
         await trx.account.update({
           data: {
             setRealizedValues: true,
@@ -41,7 +42,7 @@ export class RealizedPandLService {
           where: {
             id: accountId,
           },
-        });
+        })
 
         return trx.realizedPAndL.create({
           data: {
@@ -53,8 +54,8 @@ export class RealizedPandLService {
             year,
           },
           select,
-        });
-      });
+        })
+      })
     }
   }
 }

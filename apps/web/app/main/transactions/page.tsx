@@ -2,11 +2,11 @@
 
 import DataTable from '@repo/ui/components/dataTable/dataTable';
 
-import columns from './TransactionsTable.ColumnDef';
-
 import { useTransactionsQuery } from '~/generated/gql';
+
 import { PageWrapper } from '~/modules/layout';
-import { LoadingPage, ErrorPage } from '~/modules/utility-components';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import columns from './TransactionsTable.ColumnDef';
 
 export default function AccountIndex() {
   const { data, error, loading } = useTransactionsQuery();

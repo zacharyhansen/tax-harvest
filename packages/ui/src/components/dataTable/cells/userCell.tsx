@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '../../avatar';
 export default function UserCell<TData, TValue>({
   getValue,
 }: CellContext<TData, TValue>) {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const { email, name, photo } = getValue<UserObject>() || {};
 
   return (

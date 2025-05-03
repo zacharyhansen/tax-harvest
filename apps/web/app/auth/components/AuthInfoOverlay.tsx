@@ -1,4 +1,4 @@
-import { CircleDollarSign, Shield, BarChart2 } from 'lucide-react';
+import { BarChart2, CircleDollarSign, Shield } from 'lucide-react';
 
 export function AuthInfoOverlay() {
   return (
@@ -13,8 +13,8 @@ export function AuthInfoOverlay() {
 
       <div className="max-w-md space-y-6">
         <div className="flex items-start gap-4">
-          <div className="bg-primary rounded-full p-2">
-            <BarChart2 className="h-5 w-5 text-black" />
+          <div className="rounded-full bg-primary p-2">
+            <BarChart2 className="size-5 text-black" />
           </div>
           <div>
             <h3 className="mb-1 font-semibold">Smart Portfolio Analysis</h3>
@@ -26,8 +26,8 @@ export function AuthInfoOverlay() {
         </div>
 
         <div className="flex items-start gap-4">
-          <div className="bg-primary rounded-full p-2">
-            <Shield className="h-5 w-5 text-black" />
+          <div className="rounded-full bg-primary p-2">
+            <Shield className="size-5 text-black" />
           </div>
           <div>
             <h3 className="mb-1 font-semibold">Wash Sale Protection</h3>
@@ -39,8 +39,8 @@ export function AuthInfoOverlay() {
         </div>
 
         <div className="flex items-start gap-4">
-          <div className="bg-primary rounded-full p-2">
-            <CircleDollarSign className="h-5 w-5 text-black" />
+          <div className="rounded-full bg-primary p-2">
+            <CircleDollarSign className="size-5 text-black" />
           </div>
           <div>
             <h3 className="mb-1 font-semibold">Tax-Optimized Suggestions</h3>

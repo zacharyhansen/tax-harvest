@@ -1,44 +1,49 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import {
+import type { ConfigService } from '@nestjs/config'
+import type {
   Account,
-  AccountInstitution,
-  AccountProvider,
   AuthConnection,
-  AuthSource,
-  AuthType,
-  LogType,
   Lot,
-  OperationType,
   Prisma,
   Transaction,
   User,
-} from "@prisma/client";
-import { InputJsonValue } from "@prisma/client/runtime/library";
-import Decimal from "decimal.js";
-import {
+} from '@prisma/client'
+import type { InputJsonValue } from '@prisma/client/runtime/library'
+import type {
   AccountBase,
-  Configuration,
-  CountryCode,
   Holding,
   InvestmentsHoldingsGetResponse,
   InvestmentsTransactionsGetResponse,
+  Security,
+} from 'plaid'
+import type { PrismaService } from '../prisma/prisma.service'
+import type { LotChange, LotData } from './lot-application'
+import type { PlaidLinkOnSuccessMetadata, PlaidWebhook } from './plaid.dto'
+import { Injectable, Logger } from '@nestjs/common'
+
+import {
+  AccountInstitution,
+  AccountProvider,
+  AuthSource,
+  AuthType,
+  LogType,
+  OperationType,
+} from '@prisma/client'
+import Decimal from 'decimal.js'
+import {
+  Configuration,
+  CountryCode,
   PlaidApi,
   Products,
-  Security,
-} from "plaid";
+} from 'plaid'
+import { findLotChangeSets } from './lot-application'
+import { taxAdvantadedSubTypes } from './plaid.utils'
 
-import { PrismaService } from "../prisma/prisma.service";
-import { findLotChangeSets, LotChange, LotData } from "./lot-application";
-import { PlaidLinkOnSuccessMetadata, PlaidWebhook } from "./plaid.dto";
-import { taxAdvantadedSubTypes } from "./plaid.utils";
-
-const plaidTransactionsPerPage = 500;
+const plaidTransactionsPerPage = 500
 
 @Injectable()
 export class PlaidService {
-  private readonly logger = new Logger(PlaidService.name);
-  private readonly client: PlaidApi;
+  private readonly logger = new Logger(PlaidService.name)
+  private readonly client: PlaidApi
   constructor(
     private readonly configService: ConfigService,
     private readonly prismaService: PrismaService,
@@ -47,29 +52,27 @@ export class PlaidService {
       new Configuration({
         baseOptions: {
           headers: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            "PLAID-CLIENT-ID": this.configService.get("PLAID_CLIENT_ID"),
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            "PLAID-SECRET": this.configService.get("PLAID_SECRET_KEY"),
+            'PLAID-CLIENT-ID': this.configService.get('PLAID_CLIENT_ID'),
+            'PLAID-SECRET': this.configService.get('PLAID_SECRET_KEY'),
           },
         },
-        basePath: this.configService.get("PLAID_ENV"),
+        basePath: this.configService.get('PLAID_ENV'),
       }),
-    );
+    )
   }
 
   async linkToken({ userId }: { userId: string }) {
-    const user = await this.assertUserIsCreatedInPlaid({ userId });
+    const user = await this.assertUserIsCreatedInPlaid({ userId })
 
     const response = await this.client.linkTokenCreate({
-      client_id: this.configService.get("PLAID_CLIENT_ID"),
-      client_name: "TaxHarvest",
+      client_id: this.configService.get('PLAID_CLIENT_ID'),
+      client_name: 'TaxHarvest',
       country_codes: [CountryCode.Us],
       // enable_multi_item_link: true,
-      language: "en",
+      language: 'en',
       products: [Products.Investments],
       // redirect_uri: `${this.configService.get('CLIENT_ORIGIN')}${this.configService.get('CLIENT_HOME_PAGE_PATH')}`,
-      secret: this.configService.get("PLAID_SECRET_KEY"),
+      secret: this.configService.get('PLAID_SECRET_KEY'),
       user: {
         // This should correspond to a unique id for the current user.
         client_user_id: userId,
@@ -77,10 +80,10 @@ export class PlaidService {
         phone_number: user.phoneNumber ?? undefined,
       },
       // user_token: user.plaidUserToken!,
-      webhook: `${this.configService.get<string>("ORIGIN")}/plaid/webhook`,
-    });
+      webhook: `${this.configService.get<string>('ORIGIN')}/plaid/webhook`,
+    })
 
-    return response;
+    return response
   }
 
   /**
@@ -97,10 +100,10 @@ export class PlaidService {
     publicToken,
     userId,
   }: {
-    userId: string;
-    publicToken: string;
-    portfolioId: string;
-    metaData: PlaidLinkOnSuccessMetadata;
+    userId: string
+    publicToken: string
+    portfolioId: string
+    metaData: PlaidLinkOnSuccessMetadata
   }): Promise<Account[]> {
     const existingAccounts = await this.prismaService.account.findMany({
       include: {
@@ -125,14 +128,14 @@ export class PlaidService {
           },
         ],
       },
-    });
+    })
 
     const existingAuthConnections = new Map(
       existingAccounts.map(a => [a.authConnectionId, a.authConnection]),
-    );
+    )
 
-    const allExistingAccountsForAuthConnections =
-      await this.prismaService.account.findMany({
+    const allExistingAccountsForAuthConnections
+      = await this.prismaService.account.findMany({
         where: {
           authConnectionId: {
             in: [...existingAuthConnections.keys()],
@@ -141,30 +144,30 @@ export class PlaidService {
             equals: portfolioId,
           },
         },
-      });
+      })
 
     // Ensure the new connection has every existing account for the existing connections
     // this means we can delete the old one and use the new without account loss
     const noDanglingAccounts = allExistingAccountsForAuthConnections.every(
       existingAuthAccount =>
-        existingAccounts.find(a => a.id === existingAuthAccount.id) !==
-        undefined,
-    );
+        existingAccounts.find(a => a.id === existingAuthAccount.id)
+        !== undefined,
+    )
 
     if (!noDanglingAccounts) {
       throw new Error(
-        "New Plaid link coveres existing account links but not all.",
-      );
+        'New Plaid link coveres existing account links but not all.',
+      )
     }
 
     const response = await this.client.itemPublicTokenExchange({
       public_token: publicToken,
-    });
+    })
 
     // These values should be saved to a persistent database and
     // associated with the currently signed-in user
-    const accessToken = response.data.access_token;
-    const itemId = response.data.item_id;
+    const accessToken = response.data.access_token
+    const itemId = response.data.item_id
 
     const payload: Prisma.AuthConnectionCreateInput = {
       externalId: itemId,
@@ -181,7 +184,7 @@ export class PlaidService {
           id: userId,
         },
       },
-    };
+    }
 
     const plaidAuthConnection = await this.prismaService.authConnection.upsert({
       create: payload,
@@ -194,11 +197,11 @@ export class PlaidService {
           userId,
         },
       },
-    });
+    })
 
     // Transfer existing accounts to new link before sync and clean up old link
     if (existingAccounts.length > 0) {
-      await this.prismaService.$transaction(async trx => {
+      await this.prismaService.$transaction(async (trx) => {
         // Move accounts to new link to persist their data
         await trx.account.updateMany({
           data: {
@@ -209,24 +212,24 @@ export class PlaidService {
               in: existingAccounts.map(a => a.id),
             },
           },
-        });
+        })
         // Update accounts so that external id is set up correctly for upserts
-        let plaidAccounts = [...metaData.accounts];
+        let plaidAccounts = [...metaData.accounts]
         await Promise.all(
-          existingAccounts.map(account => {
+          existingAccounts.map((account) => {
             const plaidAccount = plaidAccounts.find(
               ma =>
-                ma.mask === account.plaidAccountMask &&
-                ma.name === account.name,
-            );
+                ma.mask === account.plaidAccountMask
+                && ma.name === account.name,
+            )
 
             if (!plaidAccount) {
               throw new Error(
                 `'Unable to locate plaid account for an existing account when it should exist - mask: ${account.plaidAccountMask}  name: ${account.name}`,
-              );
+              )
             }
             // remove for next selection in case of duplicates (should never happen but we will fail FK contraints if so)
-            plaidAccounts = plaidAccounts.filter(a => a.id !== plaidAccount.id);
+            plaidAccounts = plaidAccounts.filter(a => a.id !== plaidAccount.id)
 
             return trx.account.update({
               data: {
@@ -235,26 +238,25 @@ export class PlaidService {
               where: {
                 id: account.id,
               },
-            });
+            })
           }),
-        );
+        )
 
         // Delete the plaid connections in plaid
         await Promise.all(
           [...existingAuthConnections.values()].map(auth =>
             this.client
               .itemRemove({
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 access_token: auth.secret!,
-                client_id: this.configService.get("PLAID_CLIENT_ID"),
-                secret: this.configService.get("PLAID_SECRET_KEY"),
+                client_id: this.configService.get('PLAID_CLIENT_ID'),
+                secret: this.configService.get('PLAID_SECRET_KEY'),
               })
               .catch((error: unknown) => {
-                this.logger.error(error);
-                throw new Error(error as string);
+                this.logger.error(error)
+                throw new Error(error as string)
               }),
           ),
-        );
+        )
 
         // Delete our records of it
         await trx.authConnection.deleteMany({
@@ -263,49 +265,48 @@ export class PlaidService {
               in: [...existingAuthConnections.keys()],
             },
           },
-        });
-      });
+        })
+      })
     }
 
     return this.syncPlaidItem({
       plaidAuthConnection,
-    });
+    })
   }
 
   async syncPlaidItem({
     plaidAuthConnection,
   }: {
-    plaidAuthConnection: AuthConnection;
-    asReversableOperations?: boolean;
+    plaidAuthConnection: AuthConnection
+    asReversableOperations?: boolean
   }): Promise<Account[]> {
-    this.logger.log("Syncing Plaid item: ", plaidAuthConnection.id);
+    this.logger.log('Syncing Plaid item: ', plaidAuthConnection.id)
     if (plaidAuthConnection.type !== AuthType.PLAID_LINK) {
-      throw new Error("This is not a plaid auth connection");
+      throw new Error('This is not a plaid auth connection')
     }
     if (!plaidAuthConnection.secret) {
-      throw new Error("Missing access token.");
+      throw new Error('Missing access token.')
     }
 
     const plaidResponse = await this.client
       .investmentsHoldingsGet({
         access_token: plaidAuthConnection.secret,
-        client_id: this.configService.get("PLAID_CLIENT_ID"),
-        secret: this.configService.get("PLAID_SECRET_KEY"),
+        client_id: this.configService.get('PLAID_CLIENT_ID'),
+        secret: this.configService.get('PLAID_SECRET_KEY'),
       })
       .catch(async (error: unknown) => {
         await this.prismaService.log.create({
           data: {
             data: error as InputJsonValue,
-            description: "/investmentsHoldingsGet",
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            description: '/investmentsHoldingsGet',
             responseStatus: (error as { status: number }).status,
             source: AuthSource.PLAID,
             type: LogType.EXTERNAL_SYNC,
             portfolioId: plaidAuthConnection.portfolioId,
           },
-        });
-        throw new Error("Sync failed.");
-      });
+        })
+        throw new Error('Sync failed.')
+      })
 
     // Set up create of positions
     const [accounts] = await Promise.all([
@@ -319,14 +320,14 @@ export class PlaidService {
       this.prismaService.log.create({
         data: {
           data: plaidResponse.data as unknown as InputJsonValue,
-          description: "/investmentsHoldingsGet",
+          description: '/investmentsHoldingsGet',
           responseStatus: plaidResponse.status,
           source: AuthSource.PLAID,
           type: LogType.EXTERNAL_SYNC,
           portfolioId: plaidAuthConnection.portfolioId,
         },
       }),
-    ]);
+    ])
 
     // Remove all the positions we are syncing (cant know which have been deleted or not)
     // Then create them - return the created positions and the unapplied transactions
@@ -351,22 +352,22 @@ export class PlaidService {
       this.syncPlaidTransactions({
         plaidAuthConnection,
       }),
-    ]);
+    ])
 
     // Now we attempt to process the unapplied transactions based on initialLots and initialPositions
     await this.applyNewTransactions({
       authConnection: plaidAuthConnection,
-    });
+    })
 
-    return accounts;
+    return accounts
   }
 
   async applyNewTransactions({
     authConnection,
   }: {
-    authConnection: AuthConnection;
+    authConnection: AuthConnection
   }): Promise<void> {
-    this.logger.log("Applying new transactions");
+    this.logger.log('Applying new transactions')
     const [finalPositions, initialLots, transactions] = await Promise.all([
       this.prismaService.position.findMany({
         where: {
@@ -397,23 +398,23 @@ export class PlaidService {
         },
         // Important to order by transaction date descending since greedy FIFO assume newest first
         orderBy: {
-          transactionDate: "desc",
+          transactionDate: 'desc',
         },
       }),
-    ]);
+    ])
 
-    const intitialLotMap = new Map<string, Lot>();
+    const intitialLotMap = new Map<string, Lot>()
     for (const lot of initialLots) {
-      intitialLotMap.set(lot.id, lot);
+      intitialLotMap.set(lot.id, lot)
     }
 
-    const { lotTupleMap, newBuys, newSells, newTransactions } =
-      PlaidService.lotDataMapFromLotsAndTransactions({
+    const { lotTupleMap, newBuys, newSells, newTransactions }
+      = PlaidService.lotDataMapFromLotsAndTransactions({
         lots: initialLots,
         transactions,
-      });
+      })
 
-    let lotResults: LotChange[] = [];
+    let lotResults: LotChange[] = []
     try {
       await this.prismaService.log.create({
         data: {
@@ -425,31 +426,32 @@ export class PlaidService {
               finalPositions,
             }),
           ),
-          description: "Attempting trx merge with lotTupleMap",
+          description: 'Attempting trx merge with lotTupleMap',
           source: AuthSource.PLAID,
           type: LogType.PLAID_TRX_MERGE,
           portfolioId: authConnection.portfolioId,
         },
-      });
+      })
       lotResults = Array.from(lotTupleMap.entries()).flatMap(
         ([symbol, lotTuples]) => {
-          const position = finalPositions.find(p => p.assetSymbol === symbol);
+          const position = finalPositions.find(p => p.assetSymbol === symbol)
           const targetQuantity = position?.quantity
             ? position.quantity
-            : undefined;
+            : undefined
           const targetValue = position?.costTotal
             ? position.costTotal
-            : undefined;
+            : undefined
           return findLotChangeSets({
             lotsData: lotTuples,
             targetQuantity,
             targetValue,
             symbol,
-          }).lotChanges;
+          }).lotChanges
         },
-      );
-    } catch (error) {
-      console.error(error);
+      )
+    }
+    catch (error) {
+      console.error(error)
       await this.prismaService.log.create({
         data: {
           data: error as InputJsonValue,
@@ -458,11 +460,11 @@ export class PlaidService {
           type: LogType.PLAID_TRX_MERGE,
           portfolioId: authConnection.portfolioId,
         },
-      });
-      throw error;
+      })
+      throw error
     }
 
-    await this.prismaService.$transaction(async trx => {
+    await this.prismaService.$transaction(async (trx) => {
       const lotTransactionBatch = await trx.lotTransactionBatch.create({
         data: {
           authConnectionId: authConnection.id,
@@ -476,13 +478,13 @@ export class PlaidService {
           newBuys,
           newSells,
         },
-      });
+      })
 
       const lotUpsertResults: Prisma.LotCreateInput[] = lotResults.map(
-        assetResult => {
-          return assetResult.upsert;
+        (assetResult) => {
+          return assetResult.upsert
         },
-      );
+      )
 
       await Promise.all(
         lotUpsertResults.map(upsert =>
@@ -494,7 +496,7 @@ export class PlaidService {
             update: upsert,
           }),
         ),
-      );
+      )
 
       await Promise.all([
         // update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
@@ -522,7 +524,7 @@ export class PlaidService {
         trx.log.create({
           data: {
             data: JSON.parse(JSON.stringify({ lotResults })),
-            description: "Trx merge results",
+            description: 'Trx merge results',
             source: AuthSource.PLAID,
             type: LogType.PLAID_TRX_MERGE,
             portfolioId: authConnection.portfolioId,
@@ -534,21 +536,21 @@ export class PlaidService {
               lotTransactionBatchId: lotTransactionBatch.id,
               lotId: upsert.id,
               quantityChange: (
-                intitialLotMap.get(upsert.id ?? "")?.remainingQty ??
-                new Decimal(0)
+                intitialLotMap.get(upsert.id ?? '')?.remainingQty
+                ?? new Decimal(0)
               ).minus(upsert.remainingQty as Decimal),
-              accountId: upsert.account.connect?.id ?? "",
+              accountId: upsert.account.connect?.id ?? '',
               portfolioId: authConnection.portfolioId,
-              lotBefore: intitialLotMap.get(upsert.id ?? ""),
+              lotBefore: intitialLotMap.get(upsert.id ?? ''),
               lotAfter: JSON.parse(JSON.stringify(upsert)),
               operationType: lotResults[index].isNewBuy
                 ? OperationType.create
                 : OperationType.update,
-            };
+            }
           }),
         }),
-      ]);
-    });
+      ])
+    })
   }
 
   static lotDataMapFromLotsAndTransactions({
@@ -556,23 +558,23 @@ export class PlaidService {
     transactions,
     useTestLotId = false,
   }: {
-    lots: Lot[];
-    transactions: Transaction[];
-    useTestLotId?: boolean;
+    lots: Lot[]
+    transactions: Transaction[]
+    useTestLotId?: boolean
   }): {
-    lotTupleMap: Map<string, LotData[]>;
-    newBuys: Transaction[];
-    newSells: Transaction[];
-    newTransactions: Transaction[];
-  } {
-    const lotTupleMap = new Map<string, LotData[]>();
-    const newTransactions = transactions.filter(trx => !trx.appliedToLots);
+      lotTupleMap: Map<string, LotData[]>
+      newBuys: Transaction[]
+      newSells: Transaction[]
+      newTransactions: Transaction[]
+    } {
+    const lotTupleMap = new Map<string, LotData[]>()
+    const newTransactions = transactions.filter(trx => !trx.appliedToLots)
     const newBuys = newTransactions.filter(
-      t => t.type === "buy" && t.subtype === "buy",
-    );
+      t => t.type === 'buy' && t.subtype === 'buy',
+    )
     const newSells = newTransactions.filter(
-      t => t.type === "sell" && t.subtype === "sell",
-    );
+      t => t.type === 'sell' && t.subtype === 'sell',
+    )
 
     // Create map of tuple for each lot
     for (const lot of lots) {
@@ -584,8 +586,9 @@ export class PlaidService {
           accountId: lot.accountId,
           acquiredDate: lot.acquiredDate,
           isNewBuy: false,
-        });
-      } else {
+        })
+      }
+      else {
         lotTupleMap.set(lot.assetSymbol, [
           {
             quantity: new Decimal(lot.remainingQty.toString()),
@@ -595,21 +598,21 @@ export class PlaidService {
             acquiredDate: lot.acquiredDate,
             isNewBuy: false,
           },
-        ]);
+        ])
       }
     }
 
     // Add buy transactions with new uuid as lots
     for (const trx of newBuys) {
       if (
-        trx.assetSymbol &&
-        trx.type === "buy" &&
-        trx.subtype === "buy" &&
-        trx.quantity &&
-        trx.price
+        trx.assetSymbol
+        && trx.type === 'buy'
+        && trx.subtype === 'buy'
+        && trx.quantity
+        && trx.price
       ) {
         if (!trx.transactionDate) {
-          throw new Error("Transaction date is required for new buys");
+          throw new Error('Transaction date is required for new buys')
         }
         if (lotTupleMap.has(trx.assetSymbol)) {
           lotTupleMap.get(trx.assetSymbol)?.push({
@@ -617,24 +620,25 @@ export class PlaidService {
             price: new Decimal(trx.price),
             lotId: !useTestLotId
               ? (crypto.randomUUID() as string)
-              : "test lot id",
+              : 'test lot id',
             accountId: trx.accountId,
             acquiredDate: trx.transactionDate,
             isNewBuy: true,
-          });
-        } else {
+          })
+        }
+        else {
           lotTupleMap.set(trx.assetSymbol, [
             {
               quantity: new Decimal(trx.quantity),
               price: new Decimal(trx.price),
               lotId: !useTestLotId
                 ? (crypto.randomUUID() as string)
-                : "test lot id",
+                : 'test lot id',
               accountId: trx.accountId,
               acquiredDate: trx.transactionDate,
               isNewBuy: true,
             },
-          ]);
+          ])
         }
       }
     }
@@ -644,24 +648,24 @@ export class PlaidService {
       newBuys,
       newSells,
       newTransactions,
-    };
+    }
   }
 
   async assertUserIsCreatedInPlaid({
     userId,
   }: {
-    userId: string;
+    userId: string
   }): Promise<User> {
     const user = await this.prismaService.user.findUniqueOrThrow({
       where: {
         id: userId,
       },
-    });
+    })
 
     if (!user.plaidUserToken) {
       const plaidUser = await this.plaidCreateUser({
         userId: user.id,
-      });
+      })
       return this.prismaService.user.update({
         data: {
           plaidCustomerId: plaidUser.data.user_id,
@@ -670,38 +674,37 @@ export class PlaidService {
         where: {
           id: user.id,
         },
-      });
+      })
     }
-    return user;
+    return user
   }
 
   async plaidCreateUser({ userId }: { userId: string }) {
     return this.client
       .userCreate({
-        client_id: this.configService.get("PLAID_CLIENT_ID"),
+        client_id: this.configService.get('PLAID_CLIENT_ID'),
         client_user_id: userId,
-        secret: this.configService.get("PLAID_SECRET_KEY"),
+        secret: this.configService.get('PLAID_SECRET_KEY'),
       })
       .catch((error: unknown) => {
         this.logger.error({
-          "Plaid Error": (error as { response: { data: unknown } }).response
-            .data,
-        });
+          'Plaid Error': (error as { response: { data: unknown } }).response.data,
+        })
         // This errros when the user already exists - there doesnt seem to be an API for getting a userId...
         // so going to assume this never fails
         return {
           data: {
-            user_id: "NOT FOUND",
-            user_token: "NOT FOUND",
+            user_id: 'NOT FOUND',
+            user_token: 'NOT FOUND',
           },
-        };
-      });
+        }
+      })
   }
 
   async mostRecentTransaction({
     authConnectionId,
   }: {
-    authConnectionId: string;
+    authConnectionId: string
   }) {
     return this.prismaService.transaction.findFirst({
       where: {
@@ -712,21 +715,23 @@ export class PlaidService {
         },
       },
       orderBy: {
-        transactionDate: "desc",
+        transactionDate: 'desc',
       },
       select: {
         transactionDate: true,
       },
-    });
+    })
   }
 
   /**
    * Updates and records plaid transactions but DOES NOT affect lots
    *
    * @param startDate The earliest/earlier date (i.e. 2 years ago)
+   * @param endDate The latest/later date (i.e. today)
    * @param page The page number to fetch
    * @param plaidAuthConnection The plaid auth connection to use
    * @param applyToLots Whether to try and apply the transactions to lots (for those transactions for the account that have occured with date > account.lotSeededDate)
+   * @returns void
    */
   async syncPlaidTransactions({
     endDate,
@@ -734,43 +739,43 @@ export class PlaidService {
     plaidAuthConnection,
     startDate,
   }: {
-    plaidAuthConnection: AuthConnection;
-    startDate?: Date;
-    endDate?: Date; // the later date (i,e today)
-    page?: number;
+    plaidAuthConnection: AuthConnection
+    startDate?: Date
+    endDate?: Date // the later date (i,e today)
+    page?: number
   }): Promise<void> {
     if (!plaidAuthConnection.secret) {
-      throw new Error("Missing plaid access token for auth connection.");
+      throw new Error('Missing plaid access token for auth connection.')
     }
-    const end_date = endDate ?? new Date();
+    const end_date = endDate ?? new Date()
 
     // Only need to get from most recent transaction if we are not providing a start date
     const mostRecentTransaction = await this.mostRecentTransaction({
       authConnectionId: plaidAuthConnection.id,
-    });
+    })
 
     const plaidResponse = await this.client.investmentsTransactionsGet({
       access_token: plaidAuthConnection.secret,
-      client_id: this.configService.get("PLAID_CLIENT_ID"),
-      end_date: new Intl.DateTimeFormat("en-CA").format(end_date),
+      client_id: this.configService.get('PLAID_CLIENT_ID'),
+      end_date: new Intl.DateTimeFormat('en-CA').format(end_date),
       options: {
         count: plaidTransactionsPerPage,
         offset: (page - 1) * plaidTransactionsPerPage,
       },
-      secret: this.configService.get("PLAID_SECRET_KEY"),
+      secret: this.configService.get('PLAID_SECRET_KEY'),
       start_date: mostRecentTransaction?.transactionDate
-        ? new Intl.DateTimeFormat("en-CA").format(
+        ? new Intl.DateTimeFormat('en-CA').format(
             mostRecentTransaction.transactionDate,
           )
-        : new Intl.DateTimeFormat("en-CA").format(
+        : new Intl.DateTimeFormat('en-CA').format(
             startDate ?? new Date().setFullYear(end_date.getFullYear() - 2),
           ),
-    });
+    })
 
     this.logger.log(
-      "Plaid transactions length:",
+      'Plaid transactions length:',
       plaidResponse.data.investment_transactions.length,
-    );
+    )
 
     // Set up the upsert
     const [accounts] = await Promise.all([
@@ -784,66 +789,64 @@ export class PlaidService {
       this.prismaService.log.create({
         data: {
           data: plaidResponse.data as unknown as InputJsonValue,
-          description: "/investmentsTransactionsGet",
+          description: '/investmentsTransactionsGet',
           responseStatus: plaidResponse.status,
           source: AuthSource.PLAID,
           type: LogType.EXTERNAL_SYNC,
           portfolioId: plaidAuthConnection.portfolioId,
         },
       }),
-    ]);
+    ])
 
-    const lastTransOfPage = plaidResponse.data.investment_transactions.at(-1);
+    const lastTransOfPage = plaidResponse.data.investment_transactions.at(-1)
 
     // Only fetch more pages if the last transaction of the current page is not already in the DB
-    const currentTransactionsAreNew =
-      !(await this.prismaService.transaction.findUnique({
+    const currentTransactionsAreNew
+      = !(await this.prismaService.transaction.findUnique({
         where: {
           accountId_externalId: {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             accountId: accounts.find(
               a => a.externalId === lastTransOfPage?.account_id,
             )!.id,
-            externalId: lastTransOfPage?.investment_transaction_id ?? "",
+            externalId: lastTransOfPage?.investment_transaction_id ?? '',
           },
         },
-      }));
+      }))
 
     await Promise.all(
       PlaidService.convertPlaidTransactions({
         investmentsTransactionsGetResponse: plaidResponse.data,
         accounts,
-      }).map(input => {
+      }).map((input) => {
         return this.prismaService.transaction.upsert({
           create: input,
           update: input,
           where: {
             accountId_externalId: {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               accountId: accounts.find(
                 a =>
-                  a.externalId ===
-                  input.account.connect?.provider_externalId?.externalId,
+                  a.externalId
+                  === input.account.connect?.provider_externalId?.externalId,
               )!.id,
               externalId: input.externalId,
             },
           },
-        });
+        })
       }),
-    );
+    )
 
     // If these are new transactions and the page is full we need to fetch more pages
     if (
-      currentTransactionsAreNew &&
-      plaidResponse.data.investment_transactions.length >=
-        plaidTransactionsPerPage
+      currentTransactionsAreNew
+      && plaidResponse.data.investment_transactions.length
+      >= plaidTransactionsPerPage
     ) {
       await this.syncPlaidTransactions({
         endDate,
         page: page + 1,
         plaidAuthConnection,
         startDate,
-      });
+      })
     }
   }
 
@@ -852,52 +855,51 @@ export class PlaidService {
       PlaidService.convertPlaidAssets({
         securities: securities.filter(
           security =>
-            security.ticker_symbol ??
-            security.name ??
-            security.market_identifier_code,
+            security.ticker_symbol
+            ?? security.name
+            ?? security.market_identifier_code,
         ),
-      }).map(input => {
+      }).map((input) => {
         return this.prismaService.asset.upsert({
           create: input,
           update: input,
           where: {
             symbol: input.symbol,
           },
-        });
+        })
       }),
-    );
+    )
   }
 
   async assertPlaidAccountsExist({
     plaidAccounts,
     plaidAuthConnection,
   }: {
-    plaidAccounts: AccountBase[];
-    plaidAuthConnection: AuthConnection;
+    plaidAccounts: AccountBase[]
+    plaidAuthConnection: AuthConnection
   }) {
     return this.prismaService.$transaction(
       PlaidService.convertPlaidAccounts({
         plaidAccounts,
         plaidAuthConnection,
-      }).map(input => {
+      }).map((input) => {
         return this.prismaService.account.upsert({
           create: input,
           update: input,
           where: {
             provider_externalId: {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               externalId: input.externalId!,
               provider: AccountProvider.PLAID,
             },
           },
-        });
+        })
       }),
-    );
+    )
   }
 
   private async handleHoldingsUpdate(webhookData: PlaidWebhook): Promise<void> {
-    const authConnection =
-      await this.prismaService.authConnection.findUniqueOrThrow({
+    const authConnection
+      = await this.prismaService.authConnection.findUniqueOrThrow({
         where: { externalId: webhookData.item_id },
         include: {
           accounts: {
@@ -906,16 +908,16 @@ export class PlaidService {
             },
           },
         },
-      });
+      })
     switch (webhookData.webhook_code) {
-      case "DEFAULT_UPDATE": {
-        this.logger.log("Processing Plaid holdings DEFAULT_UPDATE");
+      case 'DEFAULT_UPDATE': {
+        this.logger.log('Processing Plaid holdings DEFAULT_UPDATE')
 
         await this.syncPlaidItem({
           plaidAuthConnection: authConnection,
-        });
+        })
 
-        break;
+        break
       }
       default: {
         await this.prismaService.log.create({
@@ -926,23 +928,23 @@ export class PlaidService {
             type: LogType.EXTERNAL_SYNC,
             portfolioId: authConnection.portfolioId,
           },
-        });
-        this.logger.warn(`Unhandled webhook code: ${webhookData.webhook_code}`);
+        })
+        this.logger.warn(`Unhandled webhook code: ${webhookData.webhook_code}`)
       }
     }
   }
 
   async processWebhook(webhookData: PlaidWebhook): Promise<void> {
     switch (webhookData.webhook_type) {
-      case "HOLDINGS": {
-        this.logger.log("Processing Plaid holdings update");
-        await this.handleHoldingsUpdate(webhookData);
-        break;
+      case 'HOLDINGS': {
+        this.logger.log('Processing Plaid holdings update')
+        await this.handleHoldingsUpdate(webhookData)
+        break
       }
       default: {
         this.logger.error(
           `Unhandled webhook type: ${webhookData.webhook_type}`,
-        );
+        )
       }
     }
   }
@@ -950,31 +952,31 @@ export class PlaidService {
   static convertPlaidAssets({
     securities,
   }: {
-    securities: Security[];
+    securities: Security[]
   }): Prisma.AssetCreateInput[] {
-    return securities.map(security => {
-      const symbol =
-        security.ticker_symbol ??
-        security.name ??
-        security.market_identifier_code;
+    return securities.map((security) => {
+      const symbol
+        = security.ticker_symbol
+          ?? security.name
+          ?? security.market_identifier_code
       // Only upsert minimum here - polygon should be source of other data
       const input: Prisma.AssetCreateInput = {
         plaid_security_id: security.security_id,
-        symbol: symbol ?? "",
+        symbol: symbol ?? '',
         type: security.type ?? undefined,
-      };
-      return input;
-    });
+      }
+      return input
+    })
   }
 
   static convertPlaidAccounts({
     plaidAccounts,
     plaidAuthConnection,
   }: {
-    plaidAccounts: AccountBase[];
-    plaidAuthConnection: AuthConnection;
+    plaidAccounts: AccountBase[]
+    plaidAuthConnection: AuthConnection
   }): Prisma.AccountCreateInput[] {
-    return plaidAccounts.map(plaidAccount => {
+    return plaidAccounts.map((plaidAccount) => {
       const upsertAccount: Prisma.AccountCreateInput = {
         accountValueTotal: plaidAccount.balances.current,
         authConnection: {
@@ -1000,37 +1002,37 @@ export class PlaidService {
           },
         },
         provider: AccountProvider.PLAID,
-        skipSetup: taxAdvantadedSubTypes.has(plaidAccount.subtype ?? ""),
+        skipSetup: taxAdvantadedSubTypes.has(plaidAccount.subtype ?? ''),
         subType: plaidAccount.subtype,
         type: plaidAccount.type,
-      };
-      return upsertAccount;
-    });
+      }
+      return upsertAccount
+    })
   }
 
   static convertPlaidTransactions({
     investmentsTransactionsGetResponse,
     accounts,
   }: {
-    investmentsTransactionsGetResponse: InvestmentsTransactionsGetResponse;
-    accounts: (Account | Prisma.AccountCreateInput)[];
+    investmentsTransactionsGetResponse: InvestmentsTransactionsGetResponse
+    accounts: (Account | Prisma.AccountCreateInput)[]
   }): Prisma.TransactionCreateInput[] {
-    const securityMap = new Map<string, string>();
+    const securityMap = new Map<string, string>()
     for (const security of investmentsTransactionsGetResponse.securities) {
       securityMap.set(
         security.security_id,
-        security.ticker_symbol ?? "UNKNOWN",
-      );
+        security.ticker_symbol ?? 'UNKNOWN',
+      )
     }
     return investmentsTransactionsGetResponse.investment_transactions.map(
-      transaction => {
+      (transaction) => {
         const account = accounts.find(
           a => a.externalId === transaction.account_id,
-        );
+        )
         if (!account) {
           throw new Error(
-            "convertPlaidTransactions: Could not find account from upsert.",
-          );
+            'convertPlaidTransactions: Could not find account from upsert.',
+          )
         }
 
         const input: Prisma.TransactionCreateInput = {
@@ -1045,14 +1047,14 @@ export class PlaidService {
           amount: transaction.amount,
           // Consider the transaction applied if its after the account was seeded
           appliedToLots: Boolean(
-            account.lotSeededDate &&
-              account.lotSeededDate >= new Date(transaction.date),
+            account.lotSeededDate
+            && account.lotSeededDate >= new Date(transaction.date),
           ),
           asset: {
             // these should already exist due to the assert
             connect: {
               symbol:
-                securityMap.get(transaction.security_id ?? "") ?? "UNKNOWN",
+                securityMap.get(transaction.security_id ?? '') ?? 'UNKNOWN',
             },
           },
           externalId: transaction.investment_transaction_id,
@@ -1065,61 +1067,60 @@ export class PlaidService {
           subtype: transaction.subtype,
           transactionDate: new Date(transaction.date),
           type: transaction.type,
-        };
+        }
 
-        return input;
+        return input
       },
-    );
+    )
   }
 
   static convertPlaidHoldings({
     holdingsResponse,
     accounts,
   }: {
-    holdingsResponse: InvestmentsHoldingsGetResponse;
-    accounts: Account[];
+    holdingsResponse: InvestmentsHoldingsGetResponse
+    accounts: Account[]
   }): Prisma.PositionCreateManyInput[] {
-    const securityMap = new Map<string, string>();
+    const securityMap = new Map<string, string>()
     for (const security of holdingsResponse.securities) {
       securityMap.set(
         security.security_id,
-        security.ticker_symbol ?? "UNKNOWN",
-      );
+        security.ticker_symbol ?? 'UNKNOWN',
+      )
     }
-    return holdingsResponse.holdings.map(holding => {
+    return holdingsResponse.holdings.map((holding) => {
       const account = accounts.find(
         account => account.externalId === holding.account_id,
-      );
+      )
 
       if (!account) {
         throw new Error(
-          "convertPlaidHoldings: Could not find account from upsert.",
-        );
+          'convertPlaidHoldings: Could not find account from upsert.',
+        )
       }
       return {
         accountId: account.id,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        assetSymbol: securityMap.get(holding.security_id) ?? "UNKNOWN",
+        assetSymbol: securityMap.get(holding.security_id) ?? 'UNKNOWN',
         costTotal: holding.cost_basis,
         marketValue: holding.institution_value,
         quantity: holding.quantity,
-      };
-    });
+      }
+    })
   }
 
   static holdingsTotals({
     holdings,
   }: {
-    holdings: Holding[];
-  }): Record<string, { costBasisTotal: Decimal; qtyTotal: Decimal }> {
+    holdings: Holding[]
+  }): Record<string, { costBasisTotal: Decimal, qtyTotal: Decimal }> {
     return holdings.reduce<
-      Record<string, { costBasisTotal: Decimal; qtyTotal: Decimal }>
+      Record<string, { costBasisTotal: Decimal, qtyTotal: Decimal }>
     >((acc, holding) => {
       acc[holding.security_id] = {
         costBasisTotal: new Decimal(holding.cost_basis ?? 0),
         qtyTotal: new Decimal(holding.quantity),
-      };
-      return acc;
-    }, {});
+      }
+      return acc
+    }, {})
   }
 }

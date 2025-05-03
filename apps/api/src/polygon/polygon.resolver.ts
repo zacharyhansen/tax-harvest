@@ -1,17 +1,18 @@
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import type { PolygonService } from './polygon.service'
 
-import { PolygonService, PolygonStockData } from "./polygon.service";
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { PolygonStockData } from './polygon.service'
 
 @Resolver(() => PolygonStockData)
 export class PolygonResolver {
   constructor(private readonly polygonService: PolygonService) {}
 
   @Query(() => [PolygonStockData], {
-    description: "Chart data for the past 3 months for a asset",
-    name: "chartThreeMonth",
+    description: 'Chart data for the past 3 months for a asset',
+    name: 'chartThreeMonth',
   })
   async chartThreeMonth(
-    @Args("asset", {
+    @Args('asset', {
       type: () => String,
     })
     asset: string,
@@ -20,28 +21,28 @@ export class PolygonResolver {
       .chartThreeMonth({
         asset,
       })
-      .then(result => (result.results ?? []) as PolygonStockData[]);
+      .then(result => (result.results ?? []) as PolygonStockData[])
   }
 
   @Mutation(() => String, {
-    description: "Update last price of every asset",
-    name: "updateAllAssetPrices",
+    description: 'Update last price of every asset',
+    name: 'updateAllAssetPrices',
   })
   async updateAllAssetPrices(): Promise<string> {
-    await this.polygonService.updateAllAssetPrices();
-    return "ok";
+    await this.polygonService.updateAllAssetPrices()
+    return 'ok'
   }
 
   @Mutation(() => String, {
-    description: "Pull hourly price data for all assets within the window.",
-    name: "updateHourlyAssetPrices",
+    description: 'Pull hourly price data for all assets within the window.',
+    name: 'updateHourlyAssetPrices',
   })
   async updateHourlyAssetPrices(
-    @Args("from", {
+    @Args('from', {
       type: () => Date,
     })
     from: Date,
-    @Args("to", {
+    @Args('to', {
       type: () => Date,
     })
     to: Date,
@@ -49,7 +50,7 @@ export class PolygonResolver {
     await this.polygonService.ingestHourly({
       from,
       to,
-    });
-    return "ok";
+    })
+    return 'ok'
   }
 }

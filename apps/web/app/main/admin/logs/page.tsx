@@ -10,11 +10,12 @@ import { useLogsQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage } from '~/modules/utility-components';
+
 const AgGridWrapper = dynamic(
   () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
   {
     ssr: false,
-  }
+  },
 );
 
 export default function LogsPage() {
@@ -59,7 +60,7 @@ export default function LogsPage() {
           columnDefs={columnDefs}
           rowData={data?.logs}
           rowSelection="single"
-          onRowClicked={row => {
+          onRowClicked={(row) => {
             if (row.data) {
               router.push(TypedRoutes.log({ logId: row.data.id }));
             }

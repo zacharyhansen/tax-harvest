@@ -1,27 +1,27 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "baseUrl": ".",
-    "module": "esnext",
     "target": "esnext",
-    "strictNullChecks": true,
-    "moduleResolution": "Bundler",
-    "esModuleInterop": true,
-    "strict": true,
-    "outDir": "dist",
-    "sourceMap": true,
-    "inlineSources": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "strictPropertyInitialization": false,
-    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "module": "esnext",
+    "moduleResolution": "Bundler",
     "paths": {
       "~/*": ["src/*"],
       "@/tests/*": ["tests/*"]
     },
-    "types": ["vitest/globals"]
+    "resolveJsonModule": true,
+    "types": ["vitest/globals"],
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "inlineSources": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": [
     "tests",

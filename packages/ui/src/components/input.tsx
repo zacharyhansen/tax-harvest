@@ -46,7 +46,7 @@ Input.displayName = 'Input';
 
 export { Input };
 
-const useDisableNumberInputScroll = () => {
+function useDisableNumberInputScroll() {
   // Use the useEffect hook to manage side effects
   React.useEffect(() => {
     // Define a function to prevent the default scroll behavior
@@ -69,4 +69,4 @@ const useDisableNumberInputScroll = () => {
       }
     };
   }, []); // The empty dependency array ensures that this effect runs once, like componentDidMount
-};
+}

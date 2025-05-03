@@ -1,28 +1,39 @@
 {
   "name": "riska",
-  "private": true,
   "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.14.2",
   "description": "Super cool risk app",
   "author": "Zachary Hansen",
   "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://github.com/zacharyhansen/riska/issues"
-  },
   "homepage": "https://github.com/zacharyhansen/riska#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zacharyhansen/riska.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zacharyhansen/riska/issues"
   },
   "keywords": [
     "typescript",
     "nestjs",
     "template"
   ],
+  "engines": {
+    "node": ">=22.x",
+    "pnpm": ">=9.x",
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm",
+    "bun": "please-use-pnpm"
+  },
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
     "start": "turbo start",
     "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "lint:file": "eslint --ignore-path .gitignore",
+    "typos": "chmod +x scripts/check_typos.sh && ./scripts/check_typos.sh",
     "test": "turbo test",
     "codegen": "turbo codegen",
     "ui": "pnpm --filter @repo/ui ui",
@@ -31,27 +42,29 @@
     "prepare": "husky",
     "commit": "cz"
   },
+  "dependencies": {
+    "zod": "^3.24.3"
+  },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.12.0",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/types": "^19.5.0",
+    "@eslint-react/eslint-plugin": "^1.48.5",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "8.57.1",
+    "eslint": "^9.24.0",
+    "eslint-plugin-jest-dom": "^5.5.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-playwright": "^2.2.0",
+    "eslint-plugin-tailwindcss": "^3.18.0",
+    "eslint-plugin-testing-library": "^6.3.0",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "turbo": "^2.1.2",
     "typescript": "5.4.2"
-  },
-  "packageManager": "pnpm@9.14.2",
-  "engines": {
-    "node": ">=22.x",
-    "pnpm": ">=9.x",
-    "npm": "please-use-pnpm",
-    "yarn": "please-use-pnpm",
-    "bun": "please-use-pnpm"
   },
   "workspaces": [
     "apps/*",

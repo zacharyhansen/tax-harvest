@@ -17,14 +17,13 @@ export type MediaProviderProps = {
 } & MediaContextProps;
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useMedia = (): MediaContextProps => {
+export function useMedia(): MediaContextProps {
   const context = use(MediaContext);
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!context) {
     throw new Error('useMedia must be used within a MediaProvider');
   }
   return context;
-};
+}
 
 export default function MediaProvider({
   children,

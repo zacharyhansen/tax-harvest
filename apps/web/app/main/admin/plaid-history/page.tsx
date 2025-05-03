@@ -2,9 +2,9 @@
 
 import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import dynamic from 'next/dynamic';
 
 import { useLotTransactionBatchesQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
@@ -15,7 +15,7 @@ const AgGridWrapper = dynamic(
   () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
   {
     ssr: false,
-  }
+  },
 );
 
 export default function PlaidHistoryPage() {
@@ -54,12 +54,12 @@ export default function PlaidHistoryPage() {
           columnDefs={columnDefs}
           rowData={data?.lotTransactionBatches}
           rowSelection="single"
-          onRowClicked={row => {
+          onRowClicked={(row) => {
             if (row.data) {
               router.push(
                 TypedRoutes.lotTransactionBatch({
                   lotTransactionBatchId: row.data.id,
-                })
+                }),
               );
             }
           }}

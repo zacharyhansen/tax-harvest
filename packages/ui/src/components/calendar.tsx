@@ -17,7 +17,6 @@ import { cn } from '../utils';
 import { Button } from './button';
 import { buttonVariants } from './button.variants';
 
-// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export type CalendarProps = DayPickerProps & {
   /**
    * In the year view, the number of years to display at once.
@@ -106,6 +105,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        // eslint-disable-next-line react/no-nested-component-definitions
         CaptionLabel: ({ children }) => (
           <Button
             className="h-7 w-full truncate text-sm font-medium"
@@ -120,10 +120,12 @@ function Calendar({
               : `${displayYears.from} - ${displayYears.to}`}
           </Button>
         ),
+        // eslint-disable-next-line react/no-nested-component-definitions
         Chevron: ({ orientation }) => {
           const Icon = orientation === 'left' ? ChevronLeft : ChevronRight;
           return <Icon className="size-4" />;
         },
+        // eslint-disable-next-line react/no-nested-component-definitions
         MonthGrid: ({ children, className, ...props }) => {
           const { goToMonth } = useDayPicker();
           if (navView === 'years') {
@@ -169,7 +171,6 @@ function Calendar({
                             ),
                           );
                         }}
-                        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                         disabled={navView === 'years' ? isDisabled : undefined}
                       >
                         {displayYears.from + index}
@@ -186,12 +187,12 @@ function Calendar({
             </table>
           );
         },
+        // eslint-disable-next-line react/no-nested-component-definitions
         Nav: ({ className, ...props }) => {
           const { goToMonth, nextMonth, previousMonth } = useDayPicker();
 
           const isPreviousDisabled = (() => {
             if (navView === 'years') {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
               return (
                 (startMonth
                   && differenceInCalendarDays(
@@ -210,7 +211,6 @@ function Calendar({
 
           const isNextDisabled = (() => {
             if (navView === 'years') {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-return
               return (
                 (startMonth
                   && differenceInCalendarDays(

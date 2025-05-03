@@ -1,24 +1,25 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { z } from 'zod';
-import { toast } from '@repo/ui/components/toast-sonner';
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormDialog from '@repo/ui/components/form-dialog';
+import { toast } from '@repo/ui/components/toast-sonner';
 import InputField from '@repo/ui/form-builder/fields/input.field';
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
+import { z } from 'zod';
 
-import { usePortfolio } from './providers/PortfolioProvider';
+import { useUser } from '~/app/main/user.provider';
 
 import { useCreatePortfolioMutation } from '~/generated/gql';
-import { useUser } from '~/app/main/user.provider';
+import { usePortfolio } from './providers/PortfolioProvider';
+
 const formSchema = z.object({
   name: z.string().min(1),
 });
 
-interface CreatePortfolioDialogProps {
+type CreatePortfolioDialogProps = {
   children: ReactNode;
-}
+};
 
 export default function CreatePortfolioDialog({
   children,
@@ -32,7 +33,7 @@ export default function CreatePortfolioDialog({
       name: '',
     },
     resolver: zodResolver(formSchema),
-    handleSubmit: values => {
+    handleSubmit: (values) => {
       toast.promise(
         createUserPortfolio({
           onCompleted: () => {
@@ -53,7 +54,7 @@ export default function CreatePortfolioDialog({
           error: 'Error',
           loading: 'Loading...',
           success: 'Create Portfolio',
-        }
+        },
       );
     },
   });

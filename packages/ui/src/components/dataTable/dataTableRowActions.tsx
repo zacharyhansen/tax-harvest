@@ -23,6 +23,7 @@ type DataTableRowActionsProps<TData> = {
 
 export function DataTableRowActions<
   TData,
+// eslint-disable-next-line no-empty-pattern
 >({}: DataTableRowActionsProps<TData>) {
   return (
     <DropdownMenu>

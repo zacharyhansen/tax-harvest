@@ -3,10 +3,10 @@
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 
-interface BreadcrumbItem {
+type BreadcrumbItem = {
   title: string;
   link: string;
-}
+};
 
 // This allows to add custom title as well
 const routeMapping: Record<string, BreadcrumbItem[]> = {

@@ -1,9 +1,12 @@
 export function parseDate<T extends string | Date | null | undefined>(
-  date: T
+  date: T,
 ): T extends null | undefined ? Date | null : Date {
   // We have to cast to any here since TypeScript has trouble figuring out that
   // the runtime code and the generics match up.
-  if (date == null) return null as any;
+  if (date == null) {
+    // eslint-disable-next-line ts/no-explicit-any
+    return null as any;
+  }
 
   return typeof date === 'string' && !date.includes('T')
     ? new Date(`${date}T00:00:00`)
@@ -18,23 +21,26 @@ const defaultFormatter = new Intl.DateTimeFormat(undefined, {
 
 export function formatDate(
   date: string | Date | null | undefined | number,
-  formatter = defaultFormatter
+  formatter = defaultFormatter,
 ) {
   return date == null
     ? null
     : formatter.format(
-        typeof date === 'number' ? new Date(date) : parseDate(date)
+        typeof date === 'number' ? new Date(date) : parseDate(date),
       );
 }
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
 export function formatISODate<T extends string | Date | null | undefined>(
-  date: T
+  date: T,
 ): T extends null | undefined ? string | null : string {
   // We have to cast to any here since TypeScript has trouble figuring out that
   // the runtime code and the generics match up.
-  if (date == null) return null as any;
+  if (date == null) {
+    // eslint-disable-next-line ts/no-explicit-any
+    return null as any;
+  }
 
   const d = parseDate(date);
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

@@ -1,42 +1,54 @@
-import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql'
 
-import { TaxGain } from "../portfolio/portfolio.dto";
+import { TaxGain } from '../portfolio/portfolio.dto'
 
 export enum LotValueType {
-  GAIN = "GAIN",
-  LOSS = "LOSS",
+  GAIN = 'GAIN',
+  LOSS = 'LOSS',
 }
 
 registerEnumType(LotValueType, {
-  name: "LotValueType",
-});
+  name: 'LotValueType',
+})
 
-@ObjectType({ description: "GQL object for the lot current database view" })
+@ObjectType({ description: 'GQL object for the lot current database view' })
 export class LotCurrent {
   @Field()
-  id: string;
+  id: string
+
   @Field()
-  accountId: string;
+  accountId: string
+
   @Field()
-  remainingQty: string;
+  remainingQty: string
+
   @Field(() => Date)
-  acquiredDate: Date;
+  acquiredDate: Date
+
   @Field()
-  price: string;
+  price: string
+
   @Field()
-  symbol: string;
+  symbol: string
+
   @Field()
-  lastPrice: string;
+  lastPrice: string
+
   @Field()
-  costBasis: string;
+  costBasis: string
+
   @Field()
-  value: string;
+  value: string
+
   @Field()
-  gainTotal: string;
+  gainTotal: string
+
   @Field()
-  gainTotalPct: string;
+  gainTotalPct: string
+
   @Field()
-  dollarPerSharePnL: string;
+  dollarPerSharePnL: string
+
   @Field(() => TaxGain)
-  taxGain: TaxGain;
+  taxGain: TaxGain
 }

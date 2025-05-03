@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
-import { z } from 'zod';
-import InputField from '@repo/ui/form-builder/fields/input.field';
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormDialog from '@repo/ui/components/form-dialog';
+import InputField from '@repo/ui/form-builder/fields/input.field';
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
+import { z } from 'zod';
 
 // import {
 //   AccountInstitution,
@@ -17,9 +16,9 @@ import FormDialog from '@repo/ui/components/form-dialog';
 
 // import { usePortfolio } from "../portfolio/providers/PortfolioProvider";
 
-interface CreateAccountDialogProps {
+type CreateAccountDialogProps = {
   children: ReactNode;
-}
+};
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -29,7 +28,7 @@ const formSchema = z.object({
 export default function CreateAccountDialog({
   children,
 }: CreateAccountDialogProps) {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   // const { portfolio } = usePortfolio();
   // const user = useCurrentUser();
   // const [createAccount] = useCreateAccountForPortfolioMutation();
@@ -39,7 +38,7 @@ export default function CreateAccountDialog({
       name: 'New Account',
     },
     resolver: zodResolver(formSchema),
-    handleSubmit: data => {
+    handleSubmit: (_data) => {
       // toast.promise(
       //   createAccount({
       //     refetchQueries: [AccountsDocument],
@@ -74,7 +73,6 @@ export default function CreateAccountDialog({
       //     success: "Account created",
       //   }
       // );
-      console.log(data);
     },
   });
   return (

@@ -25,7 +25,8 @@ type FormDialogProps = {
   title?: ReactNode;
   description?: ReactNode;
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  // eslint-disable-next-line ts/no-explicit-any
   form: UseFormReturn<any>;
   defaultOpen?: boolean;
 };
@@ -89,8 +90,7 @@ export default function FormDialog({
                 .trigger()
                 .then((passed) => {
                   if (passed) {
-                    return handleSubmit().then((result) => {
-                      console.log({ result });
+                    return handleSubmit().then(() => {
                       setError(false);
                       setIsOpen(false);
                     });

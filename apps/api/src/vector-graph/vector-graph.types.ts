@@ -1,4 +1,4 @@
-export type GraphTimeValue = {
-  date: string;
-  value: number;
-};
+export interface GraphTimeValue {
+  date: string
+  value: number
+}

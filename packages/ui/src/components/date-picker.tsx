@@ -65,6 +65,7 @@ export function DatePicker({
           }}
           // @ts-expect-error this is always going to be date for now
           selected={value}
+          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus
           {...props}
         />

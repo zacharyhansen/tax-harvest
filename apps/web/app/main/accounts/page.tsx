@@ -1,22 +1,22 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import type { ColDef } from 'ag-grid-community';
-import { useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 
+import { useAccountsQuery } from '~/generated/gql';
+import { TypedRoutes } from '~/lib/routes';
 import { NoAccounts } from '~/modules/account';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-import { TypedRoutes } from '~/lib/routes';
-import { useAccountsQuery } from '~/generated/gql';
 
 const AgGridWrapper = dynamic(
   () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
   {
     ssr: false,
-  }
+  },
 );
 
 export default function AccountPage() {
@@ -66,7 +66,7 @@ export default function AccountPage() {
         <AgGridReact
           columnDefs={columnDefs}
           rowData={data.accounts}
-          onRowClicked={row => {
+          onRowClicked={(row) => {
             if (row.data) {
               router.push(TypedRoutes.account({ id: row.data.id }));
             }

@@ -32,6 +32,7 @@ Omit<RPNInput.Props<typeof RPNInput.default>, 'onChange'> & {
   onChange?: (value: RPNInput.Value) => void;
 };
 
+// @ts-expect-error - ref is not required
 const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps>
   = ({ ref, className, onChange, defaultCountry = 'US', ...props }: PhoneInputProps & { ref?: React.RefObject<React.ElementRef<typeof RPNInput.default> | null> }) => {
     return (
@@ -40,6 +41,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps>
         className={cn('flex', className)}
         flagComponent={FlagComponent}
         countrySelectComponent={CountrySelect}
+        // eslint-disable-next-line ts/no-use-before-define
         inputComponent={InputComponent}
         defaultCountry={defaultCountry}
         smartCaret={false}
@@ -84,12 +86,12 @@ type CountrySelectProps = {
   options: CountrySelectOption[];
 };
 
-const CountrySelect = ({
+function CountrySelect({
   disabled,
   value,
   onChange,
   options,
-}: CountrySelectProps) => {
+}: CountrySelectProps) {
   const handleSelect = React.useCallback(
     (country: RPNInput.Country) => {
       onChange(country);
@@ -136,7 +138,6 @@ const CountrySelect = ({
                       key={option.value}
                     />
                     <span className="flex-1 text-sm">{option.label}</span>
-                    {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                     {option.value && (
                       <span className="text-sm text-foreground/50">
                         {`+${RPNInput.getCountryCallingCode(option.value)}`}
@@ -157,9 +158,9 @@ const CountrySelect = ({
       </PopoverContent>
     </Popover>
   );
-};
+}
 
-const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
+function FlagComponent({ country, countryName }: RPNInput.FlagProps) {
   const Flag = flags[country];
 
   return (
@@ -167,7 +168,7 @@ const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
       {Flag && <Flag title={countryName} />}
     </span>
   );
-};
+}
 FlagComponent.displayName = 'FlagComponent';
 
 export { PhoneInput };

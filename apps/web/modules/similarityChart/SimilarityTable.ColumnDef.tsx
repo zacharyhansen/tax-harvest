@@ -1,13 +1,13 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { createColumnHelper } from '@tanstack/react-table';
-import DataTable from '@repo/ui/components/dataTable/dataTable';
-import { Badge } from '@repo/ui/components/badge';
-
-import { isOlderThanOneYear, Format } from '../utils';
-
 import type { LotItemFragment } from '~/generated/gql';
+import { Badge } from '@repo/ui/components/badge';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
+
+import { createColumnHelper } from '@tanstack/react-table';
+
+import { Format, isOlderThanOneYear } from '../utils';
 
 const columnHelper = createColumnHelper<LotItemFragment>();
 
@@ -43,9 +43,10 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
     footer: ({ table }) => {
       const total = table
         .getFilteredRowModel()
-        .rows.reduce(
+        .rows
+        .reduce(
           (sum, row) => sum + Number(row.getValue<string>('remainingQty') || 0),
-          0
+          0,
         );
       return <DataTable.FooterCell label="Total" value={total} />;
     },
@@ -66,12 +67,13 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
       footer: ({ table }) => {
         const total = table
           .getFilteredRowModel()
-          .rows.reduce(
+          .rows
+          .reduce(
             (sum, row) =>
-              sum +
-              Number(row.getValue<string>('remainingQty') || 0) *
-                row.getValue<number>('price'),
-            0
+              sum
+              + Number(row.getValue<string>('remainingQty') || 0)
+              * row.getValue<number>('price'),
+            0,
           );
         return (
           <DataTable.FooterCell label="Total" value={Format.money(total)} />
@@ -80,13 +82,13 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
       header: 'Cost Basis',
       id: 'costBasis',
       size: 110,
-    }
+    },
   ),
 
   columnHelper.accessor(
     row =>
       Number(
-        Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0)
+        Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0),
       ).toFixed(2),
     {
       aggregationFn: 'sumMoney',
@@ -95,13 +97,13 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
       header: 'Value',
       id: 'value',
       size: 110,
-    }
+    },
   ),
   columnHelper.accessor(
-    row => {
+    (row) => {
       const cost = Number(row.remainingQty || 0) * Number(row.price || 0);
-      const value =
-        Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0);
+      const value
+        = Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0);
       return value - cost;
     },
     {
@@ -110,7 +112,7 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
       header: 'Total Gain',
       id: 'totalGain',
       size: 120,
-    }
+    },
   ),
   columnHelper.accessor('totalCostForGainPct', {
     aggregationFn: 'totalGainPct',
@@ -118,9 +120,9 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
       <DataTable.PercentCell
         {...props}
         value={
-          (Number(props.row.getValue('totalGain')) /
-            Number(props.row.getValue('costBasis'))) *
-          100
+          (Number(props.row.getValue('totalGain'))
+            / Number(props.row.getValue('costBasis')))
+          * 100
         }
       />
     ),

@@ -34,7 +34,7 @@ export const dataTypeDefinitions = {
         ? new Intl.NumberFormat('en-US', {
             currency: 'USD',
             style: 'currency',
-          }).format(parseFloat(value.toString()))
+          }).format(Number.parseFloat(value.toString()))
         : '',
     columnTypes: ['edit'],
   },

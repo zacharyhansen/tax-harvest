@@ -1,12 +1,12 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
+import type { Database } from '../database/database'
 
-import { Database } from "../database/database";
-import { PrismaService } from "../prisma/prisma.service";
+import type { PrismaService } from '../prisma/prisma.service'
+import { Injectable, Logger } from '@nestjs/common'
 
 @Injectable()
 export class AccountService {
-  private readonly logger = new Logger(AccountService.name);
+  private readonly logger = new Logger(AccountService.name)
   constructor(
     private readonly db: Database,
     private readonly prismaService: PrismaService,
@@ -19,7 +19,7 @@ export class AccountService {
     return this.prismaService.account.findMany({
       ...args,
       orderBy: {
-        name: "asc",
+        name: 'asc',
       },
       where: {
         AND: [
@@ -31,15 +31,15 @@ export class AccountService {
           args.where ?? {},
         ],
       },
-    });
+    })
   }
 
   async setupAccounts({
     id,
     select,
   }: {
-    id: string;
-    select: Prisma.AccountSelect;
+    id: string
+    select: Prisma.AccountSelect
   }) {
     return this.prismaService.account.findMany({
       where: {
@@ -61,15 +61,15 @@ export class AccountService {
         ],
       },
       select,
-    });
+    })
   }
 
   getAccount(args: Prisma.AccountFindUniqueOrThrowArgs) {
-    return this.prismaService.account.findUniqueOrThrow(args);
+    return this.prismaService.account.findUniqueOrThrow(args)
   }
 
   createAccountForPortfolio(accountInsertObject: Prisma.AccountCreateInput) {
-    return this.prismaService.account.create({ data: accountInsertObject });
+    return this.prismaService.account.create({ data: accountInsertObject })
   }
 
   updateAccount(
@@ -79,6 +79,6 @@ export class AccountService {
     return this.prismaService.account.update({
       data: accountUpdateInput,
       where: accountWhereUniqueInput,
-    });
+    })
   }
 }

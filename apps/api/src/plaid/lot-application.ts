@@ -1,35 +1,35 @@
-import { Prisma } from "@prisma/client";
-import Decimal from "decimal.js";
+import type { Prisma } from '@prisma/client'
+import Decimal from 'decimal.js'
 
-import { findAllMatchingSubsetsBottomUp } from "./lot-application.bottom-up";
-import { findGreedySubset } from "./lot-application.greedy";
+import { findAllMatchingSubsetsBottomUp } from './lot-application.bottom-up'
+import { findGreedySubset } from './lot-application.greedy'
 
 /**
  * A lot's quantity and average price.
  */
 export interface LotData {
-  quantity: Decimal;
-  price: Decimal;
-  lotId: string;
-  accountId: string;
-  acquiredDate: Date;
-  isNewBuy?: boolean;
+  quantity: Decimal
+  price: Decimal
+  lotId: string
+  accountId: string
+  acquiredDate: Date
+  isNewBuy?: boolean
 }
 
 export interface LotChange extends LotData {
-  quantityFinal: Decimal;
-  quantityChange: Decimal;
-  upsert: Prisma.LotCreateInput;
-  symbol: string;
+  quantityFinal: Decimal
+  quantityChange: Decimal
+  upsert: Prisma.LotCreateInput
+  symbol: string
 }
 
 interface FindSubsetHybridArgs {
-  lotsData: LotData[];
-  targetQuantity?: Decimal;
-  targetValue?: Decimal;
-  maxResults?: number;
-  time?: boolean;
-  symbol: string;
+  lotsData: LotData[]
+  targetQuantity?: Decimal
+  targetValue?: Decimal
+  maxResults?: number
+  time?: boolean
+  symbol: string
 }
 
 /**
@@ -56,20 +56,22 @@ export function findSubsetHybrid({
     targetQuantity,
     targetValue,
     time,
-  });
+  })
 
-  if (greedyResultFIFO) return [greedyResultFIFO];
+  if (greedyResultFIFO)
+    return [greedyResultFIFO]
 
   const greedyResultLIFO = findGreedySubset({
     tuples: [...tuples].reverse(),
     targetQuantity,
     targetValue,
     time,
-  });
+  })
 
-  if (greedyResultLIFO) return [greedyResultLIFO];
+  if (greedyResultLIFO)
+    return [greedyResultLIFO]
 
-  console.info("Greedy failed, trying bottom-up approach");
+  console.info('Greedy failed, trying bottom-up approach')
 
   const allResults = findAllMatchingSubsetsBottomUp({
     tuples,
@@ -77,7 +79,7 @@ export function findSubsetHybrid({
     targetValue,
     maxResults,
     time,
-  });
+  })
 
   // Deduplicate equivalent solutions
   if (allResults.length === 0) {
@@ -89,26 +91,25 @@ export function findSubsetHybrid({
         },
         null,
         2,
-      )} lots: ${tuples.map(t => JSON.stringify({ ...t, lotId: t.lotId }, null, 2)).join(", ")}`,
-    );
-    throw new Error("No results found");
-  } else {
-    return allResults;
+      )} lots: ${tuples.map(t => JSON.stringify({ ...t, lotId: t.lotId }, null, 2)).join(', ')}`,
+    )
+    throw new Error('No results found')
+  }
+  else {
+    return allResults
   }
 }
 
-export const findLotChangeSets = (
-  params: FindSubsetHybridArgs,
-): { lotChanges: LotChange[] } => {
-  const results = findSubsetHybrid(params);
+export function findLotChangeSets(params: FindSubsetHybridArgs): { lotChanges: LotChange[] } {
+  const results = findSubsetHybrid(params)
 
-  const lotChanges: LotChange[][] = [];
+  const lotChanges: LotChange[][] = []
 
   for (const result of results) {
-    const lotChangesForResult: LotChange[] = [];
+    const lotChangesForResult: LotChange[] = []
 
     for (const [index, resultLot] of result.entries()) {
-      const originalLot = params.lotsData[index];
+      const originalLot = params.lotsData[index]
       const lotChange: LotChange = {
         ...originalLot,
         quantityChange: originalLot.quantity.minus(resultLot.quantity),
@@ -130,30 +131,30 @@ export const findLotChangeSets = (
           price: resultLot.price,
           acquiredDate: resultLot.acquiredDate,
         },
-      };
+      }
 
-      lotChangesForResult.push(lotChange);
+      lotChangesForResult.push(lotChange)
     }
 
-    lotChanges.push(lotChangesForResult);
+    lotChanges.push(lotChangesForResult)
   }
 
   // Deduplicate the lot changes based on the signature of changes
-  const uniqueLotChangeSolutions = deduplicateEquivalentChangeSets(lotChanges);
+  const uniqueLotChangeSolutions = deduplicateEquivalentChangeSets(lotChanges)
 
   if (uniqueLotChangeSolutions.length > 1) {
-    const err = new Error("Multiple results found");
-    err.name = "MultipleResultsFound";
+    const err = new Error('Multiple results found')
+    err.name = 'MultipleResultsFound'
     // @ts-expect-error - This is a custom error
     err.data = {
       ...params,
       uniqueLotChanges: uniqueLotChangeSolutions,
-    };
-    throw err;
+    }
+    throw err
   }
 
-  return { lotChanges: uniqueLotChangeSolutions[0] };
-};
+  return { lotChanges: uniqueLotChangeSolutions[0] }
+}
 
 /**
  * Deduplicates changesets that are functionally equivalent (same total quantities sold for the same price/date)
@@ -163,34 +164,35 @@ export const findLotChangeSets = (
 function deduplicateEquivalentChangeSets(
   changeSets: LotChange[][],
 ): LotChange[][] {
-  if (changeSets.length <= 1) return changeSets;
+  if (changeSets.length <= 1)
+    return changeSets
 
-  const changeSetMap = new Map<string, LotChange[]>();
+  const changeSetMap = new Map<string, LotChange[]>()
 
   for (const changeSet of changeSets) {
     // Group changes by price and acquisition date
-    const priceAndDateGroups = new Map<string, Decimal>();
+    const priceAndDateGroups = new Map<string, Decimal>()
 
     for (const change of changeSet) {
-      const date = change.acquiredDate.toISOString();
-      const key = `${change.price.toString()}:${date}`;
+      const date = change.acquiredDate.toISOString()
+      const key = `${change.price.toString()}:${date}`
 
       // Sum up the quantityChange for each price/date combination
-      const currentSum = priceAndDateGroups.get(key) ?? new Decimal(0);
-      priceAndDateGroups.set(key, currentSum.plus(change.quantityChange));
+      const currentSum = priceAndDateGroups.get(key) ?? new Decimal(0)
+      priceAndDateGroups.set(key, currentSum.plus(change.quantityChange))
     }
 
     // Create a signature based on the aggregated changes per price/date
     const signature = Array.from(priceAndDateGroups.entries())
       .map(([key, totalChange]) => `${key}:${totalChange.toString()}`)
       .sort()
-      .join("|");
+      .join('|')
 
     // Only store the first change set with this signature
     if (!changeSetMap.has(signature)) {
-      changeSetMap.set(signature, changeSet);
+      changeSetMap.set(signature, changeSet)
     }
   }
 
-  return Array.from(changeSetMap.values());
+  return Array.from(changeSetMap.values())
 }

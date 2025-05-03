@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import {
   ApolloClient,
   ApolloLink,
@@ -7,7 +8,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { useAuth } from '@clerk/nextjs';
-import { type ReactNode, useMemo } from 'react';
+import { useMemo } from 'react';
 
 const httpLink = new HttpLink({
   credentials: 'include',

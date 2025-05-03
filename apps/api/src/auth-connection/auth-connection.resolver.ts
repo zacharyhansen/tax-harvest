@@ -1,5 +1,10 @@
-import type { GraphQLResolveInfo } from "graphql";
-import type { ClerkClaims } from "~/auth/types";
+import type { Prisma } from '@prisma/client'
+import type { GraphQLResolveInfo } from 'graphql'
+
+import type { AuthConnectionService } from './auth-connection.service'
+import type { ClerkClaims } from '~/auth/types'
+
+import type { PrismaService } from '~/prisma/prisma.service'
 
 import {
   Args,
@@ -11,20 +16,15 @@ import {
   Query,
   ResolveField,
   Resolver,
-} from "@nestjs/graphql";
-import { Prisma } from "@prisma/client";
-
-import { PrismaService } from "~/prisma/prisma.service";
-
-import { ClerkContext } from "../auth/decorators/clerk-context.decorator";
-import { AuthConnection, AuthSource } from "../generated/graphql";
-import { PrismaSelect } from "../utilities/prisma/prisma-select";
-import { AuthConnectionService } from "./auth-connection.service";
+} from '@nestjs/graphql'
+import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
+import { AuthConnection, AuthSource } from '../generated/graphql'
+import { PrismaSelect } from '../utilities/prisma/prisma-select'
 
 @ObjectType()
 export class AuthConnectionExt extends AuthConnection {
   @Field(() => Boolean)
-  _requiresReAuth: boolean;
+  _requiresReAuth: boolean
 }
 
 @Resolver(() => AuthConnectionExt)
@@ -34,17 +34,17 @@ export class AuthConnectionResolver {
     private readonly prismaService: PrismaService,
   ) {}
 
-  @Query(() => AuthConnectionExt, { name: "authConnection", nullable: false })
+  @Query(() => AuthConnectionExt, { name: 'authConnection', nullable: false })
   authConnection(
     @Info()
     info: GraphQLResolveInfo,
     @ClerkContext()
     currentUser: ClerkClaims,
-    @Args("id", { type: () => String })
+    @Args('id', { type: () => String })
     id: string,
   ) {
     const { select } = new PrismaSelect<Prisma.AuthConnectionSelect>(info)
-      .value;
+      .value
 
     return this.prismaService.authConnection.findUnique({
       select,
@@ -52,18 +52,18 @@ export class AuthConnectionResolver {
         id,
         userId: currentUser.sub,
       },
-    });
+    })
   }
 
   @Query(() => AuthConnectionExt)
   requestOauthConnection(
     @ClerkContext()
     currentUser: ClerkClaims,
-    @Args("portfolioId", {
+    @Args('portfolioId', {
       type: () => String,
     })
     portfolioId: string,
-    @Args("authSource", {
+    @Args('authSource', {
       type: () => AuthSource,
     })
     authSource: AuthSource,
@@ -72,7 +72,7 @@ export class AuthConnectionResolver {
       authSource,
       portfolioId,
       userId: currentUser.sub,
-    });
+    })
   }
 
   @Mutation(() => AuthConnectionExt)
@@ -81,21 +81,21 @@ export class AuthConnectionResolver {
     info: GraphQLResolveInfo,
     @ClerkContext()
     currentUser: ClerkClaims,
-    @Args("verifier", {
+    @Args('verifier', {
       type: () => String,
     })
     verifier: string,
-    @Args("portfolioId", {
+    @Args('portfolioId', {
       type: () => String,
     })
     portfolioId: string,
-    @Args("authSource", {
+    @Args('authSource', {
       type: () => AuthSource,
     })
     authSource: AuthSource,
   ) {
     const { select } = new PrismaSelect<Prisma.AuthConnectionSelect>(info)
-      .value;
+      .value
 
     return this.authConnectionService.resolveAccessOauth({
       authSource,
@@ -103,7 +103,7 @@ export class AuthConnectionResolver {
       select,
       userId: currentUser.sub,
       verifier,
-    });
+    })
   }
 
   @Mutation(() => AuthConnectionExt)
@@ -112,23 +112,23 @@ export class AuthConnectionResolver {
     info: GraphQLResolveInfo,
     @ClerkContext()
     currentUser: ClerkClaims,
-    @Args("id", { type: () => String })
+    @Args('id', { type: () => String })
     id: string,
   ) {
     const { select } = new PrismaSelect<Prisma.AuthConnectionSelect>(info)
-      .value;
+      .value
     return this.authConnectionService.syncAuthConnection({
       id,
       select,
       userId: currentUser.sub,
-    });
+    })
   }
 
   @ResolveField(() => Boolean, {
-    description: "Does the auth connection need to be refreshed",
-    name: "_requiresReAuth",
+    description: 'Does the auth connection need to be refreshed',
+    name: '_requiresReAuth',
   })
   _requiresReAuth(@Parent() { authedAt, source }: AuthConnection) {
-    return this.authConnectionService.requiresReAuth(source, authedAt);
+    return this.authConnectionService.requiresReAuth(source, authedAt)
   }
 }

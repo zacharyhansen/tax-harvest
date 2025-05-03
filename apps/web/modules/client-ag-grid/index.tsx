@@ -1,9 +1,9 @@
+export { default as JsonCell } from './cells/json.cell';
 export { default as LinkCell } from './cells/link.cell';
 export { default as NavLinkCell } from './cells/nav-link.cell';
 export { default as OptionsCell } from './cells/options.cell';
-export { default as JsonCell } from './cells/json.cell';
-export { dataTypeDefinitions } from './data-type-definitions';
 export { defaultColumnTypes } from './column-types';
+export { dataTypeDefinitions } from './data-type-definitions';
 export { themeBalhamGridOptions, themeQuartzGridOptions } from './grid-options';
 export enum FilterType {
   empty = 'empty',

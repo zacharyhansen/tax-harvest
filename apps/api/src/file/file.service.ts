@@ -1,10 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
+import type { CsvService } from '../csv/csv.service'
 
-import { CsvService } from "../csv/csv.service";
-import { GoogleStorageService } from "../google-storage/google-storage.service";
-import { LotService } from "../lot/lot.service";
-import { PrismaService } from "../prisma/prisma.service";
+import type { GoogleStorageService } from '../google-storage/google-storage.service'
+import type { LotService } from '../lot/lot.service'
+import type { PrismaService } from '../prisma/prisma.service'
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class FileService {
@@ -19,17 +19,17 @@ export class FileService {
     data,
     select,
   }: {
-    data: Prisma.FileCreateManyInput[];
-    select: Prisma.FileSelect;
+    data: Prisma.FileCreateManyInput[]
+    select: Prisma.FileSelect
   }) {
     const createdFiles = await this.prismaService.file.createManyAndReturn({
       data,
       select,
-    });
+    })
     for (const file of createdFiles) {
       const fileContent = await this.googleStorageService.getGCPFileAsString({
         gcpFileName: file.gcpFilename,
-      });
+      })
       await this.csvService
         .etradeCSVToLots({ content: fileContent })
         .then(({ records, lotSeededDate }) => {
@@ -38,7 +38,7 @@ export class FileService {
               records,
             }),
             lotSeededDate,
-          };
+          }
         })
         .then(({ lots, lotSeededDate }) => {
           return this.lotService.upsertLotsForAccount({
@@ -55,10 +55,10 @@ export class FileService {
             ),
             lotSeededDate,
             replace: true,
-          });
-        });
+          })
+        })
     }
 
-    return createdFiles;
+    return createdFiles
   }
 }

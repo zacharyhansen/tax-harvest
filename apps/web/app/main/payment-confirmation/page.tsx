@@ -14,8 +14,9 @@ export default function PaymentConfirmationPage() {
           {/* <Confetti className="absolute left-0 top-0 z-0 ml-20 size-full" /> */}
           Welcome to the Harvester community!
         </div>
-        <div className="text-accent-foreground z-10 text-center">
-          We look forward to building an optimized portfolio with you.{' '}
+        <div className="z-10 text-center text-accent-foreground">
+          We look forward to building an optimized portfolio with you.
+          {' '}
           <Link href={TypedRoutes.home()}>
             <Button iconRight={<ArrowRightIcon />}>Go Home</Button>
           </Link>

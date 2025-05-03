@@ -1,15 +1,15 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
+import type { ClerkService } from '../clerk/clerk.service'
 
-import { ClerkService } from "../clerk/clerk.service";
-import { Database } from "../database/database";
-import { PlaidService } from "../plaid/plaid.service";
-import { PrismaService } from "../prisma/prisma.service";
-import { StripeService } from "../stripe/stripe.service";
+import type { Database } from '../database/database'
+import type { PlaidService } from '../plaid/plaid.service'
+import type { PrismaService } from '../prisma/prisma.service'
+import type { StripeService } from '../stripe/stripe.service'
+import { Injectable, Logger } from '@nestjs/common'
 
 @Injectable()
 export class UserService {
-  private readonly logger = new Logger(UserService.name);
+  private readonly logger = new Logger(UserService.name)
   constructor(
     private readonly db: Database,
     private readonly prismaService: PrismaService,
@@ -19,19 +19,19 @@ export class UserService {
   ) {}
 
   async user(args: Prisma.UserFindUniqueOrThrowArgs) {
-    return this.prismaService.user.findUniqueOrThrow(args);
+    return this.prismaService.user.findUniqueOrThrow(args)
   }
 
   /**
    * Important method that serves as the creation / entry point for users added to our app
    * @param id Clerk User Id that we will use as primary key
    * @param select
-   * @returns
+   * @returns User
    */
   asserUserExists(
     id: string,
     select?: Prisma.UserSelect,
-    input?: Omit<Prisma.UserCreateInput, "stripeCustomerId">,
+    input?: Omit<Prisma.UserCreateInput, 'stripeCustomerId'>,
   ) {
     return this.prismaService.user
       .findUniqueOrThrow({
@@ -41,27 +41,27 @@ export class UserService {
         },
       })
       .catch(async () => {
-        const clerkUser = await this.clerkService.user(id);
+        const clerkUser = await this.clerkService.user(id)
         // Create user in stripe and plaid so we can add the ids
         const [stripeUser, plaidUser] = await Promise.all([
           this.stripeService.createCustomer({
             params: {
               email:
-                clerkUser.primaryEmailAddress?.emailAddress ??
-                input?.email ??
-                undefined,
+                clerkUser.primaryEmailAddress?.emailAddress
+                ?? input?.email
+                ?? undefined,
               metadata: {
                 clerk_id: clerkUser.id,
               },
               name: clerkUser.fullName ?? input?.name ?? undefined,
               phone:
-                clerkUser.primaryPhoneNumber?.phoneNumber ??
-                input?.phoneNumber ??
-                undefined,
+                clerkUser.primaryPhoneNumber?.phoneNumber
+                ?? input?.phoneNumber
+                ?? undefined,
             },
           }),
           this.plaidService.plaidCreateUser({ userId: clerkUser.id }),
-        ]);
+        ])
 
         return this.prismaService.user.create({
           data: {
@@ -72,8 +72,8 @@ export class UserService {
             stripeCustomerId: stripeUser.id,
           },
           select,
-        });
-      });
+        })
+      })
   }
 
   async upsertUserById(input: Prisma.UserCreateInput) {
@@ -83,36 +83,36 @@ export class UserService {
       where: {
         id: input.id,
       },
-    });
+    })
   }
 
   async updateUser(args: Prisma.UserUpdateArgs) {
-    return this.prismaService.user.update(args);
+    return this.prismaService.user.update(args)
   }
 
   async updateUserFavorites(args: Prisma.UserUpdateArgs) {
-    return this.prismaService.user.update(args);
+    return this.prismaService.user.update(args)
   }
 
   async findOneById(id: string) {
     return this.db
-      .selectFrom("User")
+      .selectFrom('User')
       .selectAll()
-      .where("id", "=", id)
-      .executeTakeFirstOrThrow();
+      .where('id', '=', id)
+      .executeTakeFirstOrThrow()
   }
 
   async findOneByEmail(email: string) {
     return this.db
-      .selectFrom("User")
+      .selectFrom('User')
       .selectAll()
-      .where("email", "=", email)
-      .executeTakeFirstOrThrow();
+      .where('email', '=', email)
+      .executeTakeFirstOrThrow()
   }
 
   async update(args: Prisma.UserUpdateArgs) {
     return this.prismaService.user.update({
       ...args,
-    });
+    })
   }
 }

@@ -20,8 +20,11 @@ const selectedTreeVariants = cva(
 type TreeDataItem = {
   id: string;
   name: ReactNode;
+  // eslint-disable-next-line ts/no-explicit-any
   icon?: any;
+  // eslint-disable-next-line ts/no-explicit-any
   selectedIcon?: any;
+  // eslint-disable-next-line ts/no-explicit-any
   openIcon?: any;
   children?: TreeDataItem[];
   actions?: React.ReactNode;
@@ -39,7 +42,9 @@ type TreeViewProps = React.HTMLAttributes<HTMLDivElement> & {
   initialSelectedItemId?: string;
   onSelectChange?: (item: TreeDataItem | undefined) => void;
   expandAll?: boolean;
+  // eslint-disable-next-line ts/no-explicit-any
   defaultNodeIcon?: any;
+  // eslint-disable-next-line ts/no-explicit-any
   defaultLeafIcon?: any;
   hideActionsTillHover?: boolean;
   nodeClassName?: string;
@@ -97,6 +102,7 @@ const TreeView = (
 
   return (
     <div className={cn('relative overflow-hidden p-2', className)}>
+      {/* eslint-disable-next-line ts/no-use-before-define */}
       <TreeItem
         data={data}
         ref={ref}
@@ -117,7 +123,9 @@ type TreeItemProps = TreeViewProps & {
   selectedItemId?: string;
   handleSelectChange: (item: TreeDataItem | undefined) => void;
   expandedItemIds: string[];
+  // eslint-disable-next-line ts/no-explicit-any
   defaultNodeIcon?: any;
+  // eslint-disable-next-line ts/no-explicit-any
   defaultLeafIcon?: any;
   nodeClassName?: string;
   leafClassName?: string;
@@ -149,6 +157,7 @@ const TreeItem = (
                   />
                 )
               : (
+            //  eslint-disable-next-line ts/no-use-before-define
                   <TreeLeaf
                     item={item}
                     selectedItemId={selectedItemId}
@@ -166,7 +175,7 @@ const TreeItem = (
 };
 TreeItem.displayName = 'TreeItem';
 
-const TreeNode = ({
+function TreeNode({
   item,
   handleSelectChange,
   expandedItemIds,
@@ -181,12 +190,14 @@ const TreeNode = ({
   handleSelectChange: (item: TreeDataItem | undefined) => void;
   expandedItemIds: string[];
   selectedItemId?: string;
+  // eslint-disable-next-line ts/no-explicit-any
   defaultNodeIcon?: any;
+  // eslint-disable-next-line ts/no-explicit-any
   defaultLeafIcon?: any;
   hideActionsTillHover?: boolean;
   nodeClassName?: string;
   leafClassName?: string;
-}) => {
+}) {
   const [value, setValue] = React.useState(
     expandedItemIds.includes(item.id) ? [item.id] : [],
   );
@@ -199,6 +210,7 @@ const TreeNode = ({
       }}
     >
       <AccordionPrimitive.Item value={item.id}>
+        {/* eslint-disable-next-line ts/no-use-before-define */}
         <AccordionTrigger
           className={cn(
             treeVariants(),
@@ -222,7 +234,9 @@ const TreeNode = ({
           >
             {item.actions}
           </TreeActions>
+          {/* eslint-disable-next-line ts/no-use-before-define */}
         </AccordionTrigger>
+        {/* eslint-disable-next-line ts/no-use-before-define */}
         <AccordionContent className="ml-4 border-l pl-1">
           <TreeItem
             data={item.children ? item.children : item}
@@ -235,23 +249,26 @@ const TreeNode = ({
             nodeClassName={nodeClassName}
             leafClassName={leafClassName}
           />
+          {/* eslint-disable-next-line ts/no-use-before-define */}
         </AccordionContent>
       </AccordionPrimitive.Item>
     </AccordionPrimitive.Root>
   );
-};
+}
 
 const TreeLeaf = (
   { ref, className, item, selectedItemId, handleSelectChange, defaultLeafIcon, hideActionsTillHover, leafClassName, ...props }: React.HTMLAttributes<HTMLDivElement> & {
     item: TreeDataItem;
     selectedItemId?: string;
     handleSelectChange: (item: TreeDataItem | undefined) => void;
+    // eslint-disable-next-line ts/no-explicit-any
     defaultLeafIcon?: any;
     hideActionsTillHover: boolean;
     leafClassName?: string;
   } & { ref?: React.RefObject<HTMLDivElement | null> },
 ) => {
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       ref={ref}
       className={cn(
@@ -315,7 +332,7 @@ const AccordionContent = ({ ref, className, children, ...props }: React.Componen
 );
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
-const TreeIcon = ({
+function TreeIcon({
   item,
   isOpen,
   isSelected,
@@ -324,8 +341,9 @@ const TreeIcon = ({
   item: TreeDataItem;
   isOpen?: boolean;
   isSelected?: boolean;
+  // eslint-disable-next-line ts/no-explicit-any
   default?: any;
-}) => {
+}) {
   let Icon = defaultIcon;
   if (isSelected && item.selectedIcon) {
     Icon = item.selectedIcon;
@@ -335,9 +353,9 @@ const TreeIcon = ({
     Icon = item.icon;
   }
   return Icon ? <Icon className="mr-2 size-4 shrink-0" /> : <></>;
-};
+}
 
-const TreeActions = ({
+function TreeActions({
   children,
   isSelected,
   hideActionsTillHover,
@@ -345,7 +363,7 @@ const TreeActions = ({
   children: React.ReactNode;
   isSelected: boolean;
   hideActionsTillHover: boolean;
-}) => {
+}) {
   return (
     <div
       className={cn(
@@ -356,6 +374,6 @@ const TreeActions = ({
       {children}
     </div>
   );
-};
+}
 
 export { type TreeDataItem, type TreeItemAction, TreeView, type TreeViewProps };

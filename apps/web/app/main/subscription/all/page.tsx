@@ -1,8 +1,7 @@
-import 'server-only';
-
 import { PricingOptions } from '~/modules/pricing';
 
-// eslint-disable-next-line @typescript-eslint/require-await
+import 'server-only';
+
 export default async function CheckoutForm() {
   return <PricingOptions />;
 }

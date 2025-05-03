@@ -1,18 +1,18 @@
-import type { GraphQLResolveInfo } from "graphql";
-import type { ClerkClaims } from "../auth/types";
+import type { Prisma } from '@prisma/client'
+import type { GraphQLResolveInfo } from 'graphql'
 
-import { Args, Info, Query, Resolver } from "@nestjs/graphql";
-import { Prisma } from "@prisma/client";
+import type { ClerkClaims } from '../auth/types'
+import type { LotTransactionBatchService } from './lot-transaction-batch.service'
 
-import { PrismaService } from "~/prisma/prisma.service";
+import type { PrismaService } from '~/prisma/prisma.service'
 
-import { ClerkContext } from "../auth/decorators/clerk-context.decorator";
+import { Args, Info, Query, Resolver } from '@nestjs/graphql'
+import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import {
   LotTransactionBatch,
   LotTransactionBatchOrderByRelationAggregateInput,
-} from "../generated/graphql";
-import { PrismaSelect } from "../utilities/prisma/prisma-select";
-import { LotTransactionBatchService } from "./lot-transaction-batch.service";
+} from '../generated/graphql'
+import { PrismaSelect } from '../utilities/prisma/prisma-select'
 
 @Resolver(() => LotTransactionBatch)
 export class LotTransactionBatchResolver {
@@ -27,26 +27,26 @@ export class LotTransactionBatchResolver {
     clerkContext: ClerkClaims,
     @Info()
     info: GraphQLResolveInfo,
-    @Args("orderBy", {
+    @Args('orderBy', {
       nullable: true,
       type: () => LotTransactionBatchOrderByRelationAggregateInput,
     })
     orderBy?: Prisma.LotTransactionBatchOrderByWithRelationInput,
   ) {
     const { select } = new PrismaSelect<Prisma.LotTransactionBatchSelect>(info)
-      .value;
+      .value
     return this.lotTransactionBatchService.lotTransactionBatches({
       select,
       where: {
         portfolioId: clerkContext.metadata.portfolioId,
       },
-      orderBy: orderBy ?? { createdAt: "desc" },
-    });
+      orderBy: orderBy ?? { createdAt: 'desc' },
+    })
   }
 
   @Query(() => LotTransactionBatch, { nullable: true })
   lotTransactionBatch(
-    @Args("lotTransactionBatchId", { type: () => String })
+    @Args('lotTransactionBatchId', { type: () => String })
     lotTransactionBatchId: string,
     @ClerkContext()
     clerkContext: ClerkClaims,
@@ -54,13 +54,13 @@ export class LotTransactionBatchResolver {
     info: GraphQLResolveInfo,
   ) {
     const { select } = new PrismaSelect<Prisma.LotTransactionBatchSelect>(info)
-      .value;
+      .value
     return this.prismaService.lotTransactionBatch.findUnique({
       where: {
         id: lotTransactionBatchId,
         portfolioId: clerkContext.metadata.portfolioId,
       },
       select,
-    });
+    })
   }
 }

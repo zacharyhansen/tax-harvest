@@ -43,14 +43,12 @@ const PasswordInput = ({ ref, className, ...props }: InputProps & { ref?: React.
       </Button>
       {/* hides browsers password toggles */}
       <style>
-        {`
-					.hide-password-toggle::-ms-reveal,
-					.hide-password-toggle::-ms-clear {
-						visibility: hidden;
-						pointer-events: none;
-						display: none;
-					}
-				`}
+        {` .hide-password-toggle::-ms-reveal, .hide-password-toggle::-ms-clear {
+visibility: hidden;
+pointer-events: none;
+display: none;
+}
+`}
       </style>
     </div>
   );

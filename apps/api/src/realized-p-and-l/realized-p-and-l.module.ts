@@ -1,7 +1,7 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common'
 
-import { RealizedPandLResolver } from "./realized-p-and-l.resolver";
-import { RealizedPandLService } from "./realized-p-and-l.service";
+import { RealizedPandLResolver } from './realized-p-and-l.resolver'
+import { RealizedPandLService } from './realized-p-and-l.service'
 
 @Module({
   exports: [RealizedPandLService],

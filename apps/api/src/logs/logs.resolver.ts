@@ -1,16 +1,16 @@
-import type { GraphQLResolveInfo } from "graphql";
-import type { ClerkClaims } from "../auth/types";
+import type { Prisma } from '@prisma/client'
+import type { GraphQLResolveInfo } from 'graphql'
 
-import { Args, Info, Int, Query, Resolver } from "@nestjs/graphql";
-import { Prisma } from "@prisma/client";
+import type { ClerkClaims } from '../auth/types'
+import type { LogsService } from './logs.service'
 
-import { PrismaService } from "~/prisma/prisma.service";
-import { PaginationProps } from "~/utilities/pagination";
+import type { PrismaService } from '~/prisma/prisma.service'
+import type { PaginationProps } from '~/utilities/pagination'
 
-import { ClerkContext } from "../auth/decorators/clerk-context.decorator";
-import { Log, LogOrderByRelationAggregateInput } from "../generated/graphql";
-import { PrismaSelect } from "../utilities/prisma/prisma-select";
-import { LogsService } from "./logs.service";
+import { Args, Info, Int, Query, Resolver } from '@nestjs/graphql'
+import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
+import { Log, LogOrderByRelationAggregateInput } from '../generated/graphql'
+import { PrismaSelect } from '../utilities/prisma/prisma-select'
 
 @Resolver(() => Log)
 export class LogsResolver {
@@ -25,15 +25,15 @@ export class LogsResolver {
     clerkContext: ClerkClaims,
     @Info()
     info: GraphQLResolveInfo,
-    @Args("pagination", { nullable: true })
+    @Args('pagination', { nullable: true })
     pagination?: PaginationProps,
-    @Args("orderBy", {
+    @Args('orderBy', {
       nullable: true,
       type: () => LogOrderByRelationAggregateInput,
     })
     orderBy?: Prisma.LogOrderByWithRelationInput,
   ) {
-    const { select } = new PrismaSelect<Prisma.LogSelect>(info).value;
+    const { select } = new PrismaSelect<Prisma.LogSelect>(info).value
     return this.logsService.logs({
       select,
       where: {
@@ -41,8 +41,8 @@ export class LogsResolver {
       },
       skip: pagination?.skip,
       take: pagination?.take,
-      orderBy: orderBy ?? { id: "desc" },
-    });
+      orderBy: orderBy ?? { id: 'desc' },
+    })
   }
 
   @Query(() => Int, { nullable: false })
@@ -54,17 +54,17 @@ export class LogsResolver {
       where: {
         portfolioId: clerkContext.metadata.portfolioId,
       },
-    });
+    })
   }
 
   @Query(() => Log, { nullable: true })
   log(
-    @Args("logId", { type: () => Int }) logId: number,
+    @Args('logId', { type: () => Int }) logId: number,
     @ClerkContext()
     clerkContext: ClerkClaims,
   ) {
     return this.prismaService.log.findUnique({
       where: { id: logId, portfolioId: clerkContext.metadata.portfolioId },
-    });
+    })
   }
 }

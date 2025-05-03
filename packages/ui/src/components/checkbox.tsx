@@ -41,7 +41,7 @@ const CheckboxField = ({ ref, label, description, ...props }: CheckboxFieldProps
         ? (
             <label
               htmlFor={props.id}
-              className="text-md cursor-pointer items-center font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className=" cursor-pointer items-center font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               {label}
             </label>

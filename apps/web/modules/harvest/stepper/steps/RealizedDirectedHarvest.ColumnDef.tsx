@@ -1,16 +1,16 @@
 'use client';
 
 import type { CellContext, ColumnDef } from '@tanstack/react-table';
-import { createColumnHelper } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
+import type { LotCurrentItemFragment } from '~/generated/gql';
 import { Badge } from '@repo/ui/components/badge';
 import DataTable, {
   sortDecimalValue,
 } from '@repo/ui/components/dataTable/dataTable';
+import { createColumnHelper } from '@tanstack/react-table';
 
-import { Format } from '~/modules/utils';
-import type { LotCurrentItemFragment } from '~/generated/gql';
+import { useEffect, useState } from 'react';
 import { TaxGain } from '~/generated/gql';
+import { Format } from '~/modules/utils';
 
 const columnHelper = createColumnHelper<
   LotCurrentItemFragment & { selectedQuantity: number }
@@ -50,10 +50,11 @@ const columns: ColumnDef<
     footer: ({ table }) => {
       const total = table
         .getFilteredRowModel()
-        .rows.reduce(
+        .rows
+        .reduce(
           (sum, row) =>
             sum + Number(row.getValue<string>('selectedQuantity') || 0),
-          0
+          0,
         );
       return <DataTable.FooterCell label="Total" value={total.toFixed(2)} />;
     },
@@ -70,9 +71,10 @@ const columns: ColumnDef<
     footer: ({ table }) => {
       const total = table
         .getFilteredRowModel()
-        .rows.reduce(
+        .rows
+        .reduce(
           (sum, row) => sum + Number(row.getValue<string>('remainingQty') || 0),
-          0
+          0,
         );
       return <DataTable.FooterCell label="Total" value={total.toFixed(2)} />;
     },
@@ -99,9 +101,10 @@ const columns: ColumnDef<
     footer: ({ table }) => {
       const total = table
         .getFilteredRowModel()
-        .rows.reduce(
+        .rows
+        .reduce(
           (sum, row) => sum + Number(row.getValue<string>('value') || 0),
-          0
+          0,
         );
       return <DataTable.FooterCell label="Total" value={Format.money(total)} />;
     },
@@ -115,9 +118,10 @@ const columns: ColumnDef<
     footer: ({ table }) => {
       const total = table
         .getFilteredRowModel()
-        .rows.reduce(
+        .rows
+        .reduce(
           (sum, row) => sum + Number(row.getValue<string>('costBasis') || 0),
-          0
+          0,
         );
       return <DataTable.FooterCell label="Total" value={Format.money(total)} />;
     },
@@ -130,9 +134,10 @@ const columns: ColumnDef<
     footer: ({ table }) => {
       const total = table
         .getFilteredRowModel()
-        .rows.reduce(
+        .rows
+        .reduce(
           (sum, row) => sum + Number(row.getValue<string>('gainTotal') || 0),
-          0
+          0,
         );
       return <DataTable.FooterCell label="Total" value={Format.money(total)} />;
     },
@@ -173,6 +178,7 @@ function SelectedQuantityCell<TData>({
 
   // If the initialValue is changed external, sync it up with our state
   useEffect(() => {
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
     setValue(initialValue);
   }, [initialValue]);
 
@@ -181,7 +187,7 @@ function SelectedQuantityCell<TData>({
       value={Number(value).toString()}
       type="number"
       className="w-full"
-      onChange={e => {
+      onChange={(e) => {
         setValue(Number(e.target.value));
       }}
       onBlur={onBlur}

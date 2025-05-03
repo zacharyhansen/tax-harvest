@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'
 
-import { CsvService } from './csv.service';
+import { CsvService } from './csv.service'
 
 @Module({
   exports: [CsvService],

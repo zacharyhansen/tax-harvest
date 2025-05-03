@@ -1,13 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client'
+import type { PrismaService } from '../prisma/prisma.service'
 
-import { PrismaService } from "../prisma/prisma.service";
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class LogsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   logs(args: Prisma.LogFindManyArgs) {
-    return this.prismaService.log.findMany(args);
+    return this.prismaService.log.findMany(args)
   }
 }

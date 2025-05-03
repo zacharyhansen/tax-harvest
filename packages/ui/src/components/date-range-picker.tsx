@@ -55,6 +55,7 @@ const months = [
   'December',
 ];
 
+// eslint-disable-next-line tailwindcss/no-contradicting-classname
 const multiSelectVariants = cva(
   'flex items-center justify-start whitespace-nowrap rounded-lg text-sm font-medium text-foreground ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50',
   {
@@ -201,56 +202,6 @@ export const DateRangePicker = (
       }
     }
   };
-
-  const handleYearChange = (newYear: number, part: string) => {
-    setSelectedRange(null);
-    if (part === 'from') {
-      if (years.includes(newYear)) {
-        const newMonth = monthFrom
-          ? // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          new Date(newYear, monthFrom ? monthFrom.getMonth() : 0, 1)
-          : new Date(newYear, 0, 1);
-        const from
-            = numberOfMonths === 2
-              ? startOfMonth(toDate(newMonth, { timeZone }))
-              : date.from
-                ? new Date(newYear, newMonth.getMonth(), date.from.getDate())
-                : newMonth;
-        const to
-            = numberOfMonths === 2
-              ? date.to
-                ? endOfDay(toDate(date.to, { timeZone }))
-                : endOfMonth(toDate(newMonth, { timeZone }))
-              : from;
-        if (from <= to) {
-          onDateSelect({ from, to });
-          setYearFrom(newYear);
-          setMonthFrom(newMonth);
-          setYearTo(date.to?.getFullYear());
-          setMonthTo(date.to);
-        }
-      }
-    } else if (years.includes(newYear)) {
-      const newMonth = monthTo
-        ? new Date(newYear, monthTo.getMonth(), 1)
-        : new Date(newYear, 0, 1);
-      const from = date.from
-        ? startOfDay(toDate(date.from, { timeZone }))
-        : startOfMonth(toDate(newMonth, { timeZone }));
-      const to
-          = numberOfMonths === 2
-            ? endOfMonth(toDate(newMonth, { timeZone }))
-            : from;
-      if (from <= to) {
-        onDateSelect({ from, to });
-        setYearTo(newYear);
-        setMonthTo(newMonth);
-        setYearFrom(date.from?.getFullYear());
-        setMonthFrom(date.from);
-      }
-    }
-  };
-
   const today = new Date();
 
   const years = Array.from(
@@ -292,6 +243,54 @@ export const DateRangePicker = (
 
   const formatWithTz = (date: Date, fmt: string) =>
     formatInTimeZone(date, timeZone, fmt);
+
+  const handleYearChange = (newYear: number, part: string) => {
+    setSelectedRange(null);
+    if (part === 'from') {
+      if (years.includes(newYear)) {
+        const newMonth = monthFrom
+          ? new Date(newYear, monthFrom ? monthFrom.getMonth() : 0, 1)
+          : new Date(newYear, 0, 1);
+        const from
+            = numberOfMonths === 2
+              ? startOfMonth(toDate(newMonth, { timeZone }))
+              : date.from
+                ? new Date(newYear, newMonth.getMonth(), date.from.getDate())
+                : newMonth;
+        const to
+            = numberOfMonths === 2
+              ? date.to
+                ? endOfDay(toDate(date.to, { timeZone }))
+                : endOfMonth(toDate(newMonth, { timeZone }))
+              : from;
+        if (from <= to) {
+          onDateSelect({ from, to });
+          setYearFrom(newYear);
+          setMonthFrom(newMonth);
+          setYearTo(date.to?.getFullYear());
+          setMonthTo(date.to);
+        }
+      }
+    } else if (years.includes(newYear)) {
+      const newMonth = monthTo
+        ? new Date(newYear, monthTo.getMonth(), 1)
+        : new Date(newYear, 0, 1);
+      const from = date.from
+        ? startOfDay(toDate(date.from, { timeZone }))
+        : startOfMonth(toDate(newMonth, { timeZone }));
+      const to
+          = numberOfMonths === 2
+            ? endOfMonth(toDate(newMonth, { timeZone }))
+            : from;
+      if (from <= to) {
+        onDateSelect({ from, to });
+        setYearTo(newYear);
+        setMonthTo(newMonth);
+        setYearFrom(date.from?.getFullYear());
+        setMonthFrom(date.from);
+      }
+    }
+  };
 
   return (
     <>

@@ -1,6 +1,6 @@
 import type { SortingFn } from '@tanstack/react-table';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line ts/no-explicit-any
 export const sortDecimalValue: SortingFn<any> = (rowA, rowB, columnId) => {
   const statusA = Number(rowA.original[columnId] ?? 0);
   const statusB = Number(rowB.original[columnId] ?? 0);

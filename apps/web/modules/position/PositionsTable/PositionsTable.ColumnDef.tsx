@@ -1,12 +1,12 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { createColumnHelper } from '@tanstack/react-table';
-import DataTable from '@repo/ui/components/dataTable/dataTable';
-import { Badge } from '@repo/ui/components/badge';
-
-import { isOlderThanOneYear, Format } from '~/modules/utils';
 import type { PositionItemFragment } from '~/generated/gql';
+import { Badge } from '@repo/ui/components/badge';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
+
+import { createColumnHelper } from '@tanstack/react-table';
+import { Format, isOlderThanOneYear } from '~/modules/utils';
 
 const columnHelper = createColumnHelper<PositionItemFragment>();
 
@@ -56,7 +56,7 @@ const columns: ColumnDef<PositionItemFragment, never>[] = [
   }),
   columnHelper.accessor('gainDay', {
     cell: DataTable.MoneyCell,
-    header: "Day's P/L",
+    header: 'Day\'s P/L',
   }),
   columnHelper.accessor('account', {
     cell: ({ getValue }) => {

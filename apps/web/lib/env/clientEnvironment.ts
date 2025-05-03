@@ -1,5 +1,3 @@
-// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair
-/* eslint-disable turbo/no-undeclared-env-vars */
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 

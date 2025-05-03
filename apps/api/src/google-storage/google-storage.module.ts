@@ -1,6 +1,6 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common'
 
-import { GoogleStorageService } from "./google-storage.service";
+import { GoogleStorageService } from './google-storage.service'
 
 @Module({
   exports: [GoogleStorageService],

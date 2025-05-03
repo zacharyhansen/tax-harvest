@@ -85,6 +85,7 @@ const columnDefs = [
 
 // In your component
 return (
+  // eslint-disable-next-line tailwindcss/no-custom-classname
   <div className="ag-theme-quartz" style={{ height: 500, width: '100%' }}>
     <AgGridReact
       {...themeQuartzGridOptions}

@@ -15,8 +15,7 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-} satisfies Meta<{}>;
+} satisfies Meta<object>;
 
 export default meta;
 

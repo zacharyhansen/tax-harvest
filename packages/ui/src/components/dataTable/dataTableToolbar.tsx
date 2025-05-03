@@ -35,7 +35,7 @@ export function DataTableToolbar<TData, TValue>({
         <DebouncedInput
           value={globalFilter}
           onChange={value => setGlobalFilter(String(value))}
-          className="font-lg border-block w-52 border p-2 shadow"
+          className="w-52 border p-2 shadow"
           placeholder="Search"
         />
         {table
@@ -88,6 +88,7 @@ function DebouncedInput({
   const [value, setValue] = React.useState(initialValue);
 
   React.useEffect(() => {
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
     setValue(initialValue);
   }, [initialValue]);
 

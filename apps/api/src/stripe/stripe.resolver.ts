@@ -1,36 +1,36 @@
-import { Args, Field, ObjectType, Query, Resolver } from "@nestjs/graphql";
+import type { StripeService } from './stripe.service'
 
-import { StripeService } from "./stripe.service";
-import { StripeProduct } from "./types";
+import { Args, Field, ObjectType, Query, Resolver } from '@nestjs/graphql'
+import { StripeProduct } from './types'
 
 @ObjectType()
 export class StripeSession {
   @Field(() => String)
-  id: string;
+  id: string
 
   @Field(() => String, { nullable: true })
-  client_secret: string | null;
+  client_secret: string | null
 }
 
 @Resolver()
 export class StripeResolver {
   constructor(private readonly stripeService: StripeService) {}
 
-  @Query(() => StripeSession, { name: "stripeSession", nullable: false })
+  @Query(() => StripeSession, { name: 'stripeSession', nullable: false })
   stripeSession(
-    @Args("stripePriceId", { type: () => String })
+    @Args('stripePriceId', { type: () => String })
     stripePriceId: string,
-    @Args("stripeCustomerId", { type: () => String })
+    @Args('stripeCustomerId', { type: () => String })
     stripeCustomerId: string,
   ): Promise<StripeSession> {
-    return this.stripeService.session({ stripeCustomerId, stripePriceId });
+    return this.stripeService.session({ stripeCustomerId, stripePriceId })
   }
 
-  @Query(() => [StripeProduct], { name: "products", nullable: false })
+  @Query(() => [StripeProduct], { name: 'products', nullable: false })
   products(
-    @Args("active", { nullable: true, type: () => String })
+    @Args('active', { nullable: true, type: () => String })
     active?: boolean,
   ): Promise<StripeProduct[]> {
-    return this.stripeService.products({ active });
+    return this.stripeService.products({ active })
   }
 }

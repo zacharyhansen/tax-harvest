@@ -1,23 +1,23 @@
-import { loadEnv } from "vite";
-import { InlineConfig } from "vitest";
+import type { InlineConfig } from 'vitest'
+import { loadEnv } from 'vite'
 
-export const createVitestTestConfig = (testingType: string): InlineConfig => {
+export function createVitestTestConfig(testingType: string): InlineConfig {
   return {
-    root: "./",
+    root: './',
     globals: true,
     isolate: false,
     passWithNoTests: true,
-    include: [`tests/${testingType}/**/*.test.ts`, "**/*.spec.ts"],
-    env: loadEnv("test", process.cwd(), ""),
+    include: [`tests/${testingType}/**/*.test.ts`, '**/*.spec.ts'],
+    env: loadEnv('test', process.cwd(), ''),
     coverage: {
-      provider: "istanbul",
-      reporter: ["text", "json", "html"],
+      provider: 'istanbul',
+      reporter: ['text', 'json', 'html'],
       reportsDirectory: `coverage/${testingType}`,
-      include: ["src/**/*.ts"],
-      exclude: ["src/main.ts"],
+      include: ['src/**/*.ts'],
+      exclude: ['src/main.ts'],
     },
     alias: {
-      "~": "/src",
+      '~': '/src',
     },
-  };
-};
+  }
+}

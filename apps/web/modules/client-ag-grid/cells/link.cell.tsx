@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { CircleArrowOutUpRight } from 'lucide-react';
 import { Button } from '@repo/ui/components/button';
+import { CircleArrowOutUpRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function LinkCell({ href }: Readonly<{ href: string }>) {
   return (

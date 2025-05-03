@@ -1,8 +1,7 @@
-import 'server-only';
-
 import { ArrowRightIcon, CheckCircledIcon } from '@radix-ui/react-icons';
-import Link from 'next/link';
-import Stripe from 'stripe';
+
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
 import {
   Card,
   CardContent,
@@ -11,15 +10,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { Badge } from '@repo/ui/components/badge';
-import { Button } from '@repo/ui/components/button';
-
+import Link from 'next/link';
+import Stripe from 'stripe';
 import Price from './Price';
+
+import 'server-only';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export default async function PricingOptions({
-  stripeCustomerId,
+  stripeCustomerId: _id,
 }: {
   stripeCustomerId?: string;
 }) {
@@ -30,9 +30,9 @@ export default async function PricingOptions({
     .then(p =>
       p.data.sort(
         (p1, p2) =>
-          (parseInt(p1.metadata.order ?? '0') || 0) -
-          (parseInt(p2.metadata.order ?? '0') || 0)
-      )
+          (Number.parseInt(p1.metadata.order ?? '0') || 0)
+          - (Number.parseInt(p2.metadata.order ?? '0') || 0),
+      ),
     );
 
   return (
@@ -48,19 +48,23 @@ export default async function PricingOptions({
             }
           >
             <CardHeader>
-              <CardTitle className="item-center flex justify-between">
-                <Badge variant={'secondary'} className="text-lg">
+              <CardTitle className="flex items-center justify-between">
+                <Badge variant="secondary" className="text-lg">
                   {product.name}
                 </Badge>
-                {product.metadata.popular ? (
-                  <Badge variant="outline" className="text-sm">
-                    Most Popular
-                  </Badge>
-                ) : null}
+                {product.metadata.popular
+                  ? (
+                      <Badge variant="outline" className="text-sm">
+                        Most Popular
+                      </Badge>
+                    )
+                  : null}
               </CardTitle>
-              {typeof product.default_price === 'string' ? (
-                <Price priceId={product.default_price} />
-              ) : null}
+              {typeof product.default_price === 'string'
+                ? (
+                    <Price priceId={product.default_price} />
+                  )
+                : null}
               <CardDescription>{product.description}</CardDescription>
             </CardHeader>
 

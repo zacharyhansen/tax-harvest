@@ -38,7 +38,7 @@ export type CommandBoxProps = {
   filter?: (value: string, search: string, keywords?: string[]) => number;
 };
 
-export const CommandBox = ({
+export function CommandBox({
   commandOptions,
   commandKey = 'P',
   label,
@@ -46,7 +46,7 @@ export const CommandBox = ({
   filter,
   defaultValue,
   onChange,
-}: CommandBoxProps) => {
+}: CommandBoxProps) {
   const [openPopover, setOpenPopover] = React.useState(false);
 
   const [selectedCommand, setSelectedCommand]
@@ -161,12 +161,12 @@ export const CommandBox = ({
       </PopoverContent>
     </Popover>
   );
-};
+}
 
-const Kbd = ({ commandKey }: { commandKey: string }) => {
+function Kbd({ commandKey }: { commandKey: string }) {
   return (
     <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
       {commandKey}
     </kbd>
   );
-};
+}

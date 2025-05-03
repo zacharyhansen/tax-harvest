@@ -61,25 +61,29 @@ import DefaultHeader from './headers/defaultHeader';
 import { IndeterminateCheckbox } from './indeterminateCheckbox';
 
 declare module '@tanstack/react-table' {
-  type AggregationFns = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/consistent-type-definitions
+  interface AggregationFns {
+    // eslint-disable-next-line ts/no-explicit-any
     sumDecimal: AggregationFn<any>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line ts/no-explicit-any
     avgDecimal: AggregationFn<any>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+    // eslint-disable-next-line ts/no-explicit-any
     sumMoney: AggregationFn<any>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+    // eslint-disable-next-line ts/no-explicit-any
     [key: string]: AggregationFn<any>;
   };
 }
 
 declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  type TableMeta<TData extends RowData> = {
+  // eslint-disable-next-line ts/consistent-type-definitions, unused-imports/no-unused-vars
+  interface TableMeta<TData extends RowData> {
     updateCell: (rowIndex: number, columnId: string, value: unknown) => void;
-  };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  type ColumnMeta<TData extends RowData, TValue> = {
+  }
+
+  // eslint-disable-next-line unused-imports/no-unused-vars, ts/consistent-type-definitions
+  interface ColumnMeta<TData extends RowData, TValue> {
     // TODO: This is super bare bones for now - create true filter interface for different types (date, string, etc.)
     filterDef?: {
       label: string;
@@ -92,7 +96,8 @@ declare module '@tanstack/react-table' {
     searchable?: boolean;
     groupable?: boolean;
     preventRowClick?: boolean;
-  };
+    aggregationFn?: AggregationFn<TData> | 'sumDecimal' | 'sumMoney';
+  }
 }
 
 type DataTableProps<TData, TValue> = {
@@ -154,7 +159,7 @@ function DataTable<TData, TValue>({
       new Set(
         columns
           .filter(c => c.meta?.searchable)
-          // @ts-expect-error Not sure why this is not found but its there
+          // @ts-expect-error this exists but not sure why
           .map(c => (c.accessorKey as string).replaceAll('.', '_')),
       ),
     [columns],
@@ -392,6 +397,7 @@ function DataTable<TData, TValue>({
                                       <button
                                         className="flex items-center space-x-2"
                                         onClick={row.getToggleExpandedHandler()}
+                                        type="button"
                                       >
                                         {row.getIsExpanded()
                                           ? (

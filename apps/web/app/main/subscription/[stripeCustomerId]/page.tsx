@@ -1,7 +1,6 @@
-import 'server-only';
+import { Badge } from '@repo/ui/components/badge';
 
-import { Check } from 'lucide-react';
-import Stripe from 'stripe';
+import { Button } from '@repo/ui/components/button';
 import {
   Card,
   CardContent,
@@ -10,11 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { Badge } from '@repo/ui/components/badge';
-import { Button } from '@repo/ui/components/button';
-
+import { Check } from 'lucide-react';
+import Stripe from 'stripe';
 import { PricingOptions } from '~/modules/pricing';
+
 import Price from '~/modules/pricing/Price';
+import 'server-only';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -41,7 +41,7 @@ export default async function CheckoutForm({
                 productId={item.price.product as string}
                 subscriptionId={sub.id}
               />
-            ))
+            )),
           )}
         </CardContent>
       </Card>
@@ -72,13 +72,15 @@ async function ActiveProduct({
       className="shadow-black/10 drop-shadow-xl dark:shadow-white/10"
     >
       <CardHeader>
-        <CardTitle className="item-center flex justify-between space-x-4">
+        <CardTitle className="flex items-center justify-between space-x-4">
           <Badge className="text-lg">{product.name}</Badge>
           <Button variant="outline">Cancel</Button>
         </CardTitle>
-        {typeof product.default_price === 'string' ? (
-          <Price priceId={product.default_price} />
-        ) : null}
+        {typeof product.default_price === 'string'
+          ? (
+              <Price priceId={product.default_price} />
+            )
+          : null}
         <CardDescription>{product.description}</CardDescription>
       </CardHeader>
 
@@ -88,7 +90,8 @@ async function ActiveProduct({
         <div className="mx-auto space-y-4">
           {product.marketing_features.map(feature => (
             <span key={feature.name} className="flex">
-              <Check className="text-green-500" />{' '}
+              <Check className="text-green-500" />
+              {' '}
               <h3 className="ml-2">{feature.name}</h3>
             </span>
           ))}
