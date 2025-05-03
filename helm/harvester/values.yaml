@@ -10,7 +10,7 @@ harvester-web:
     port: 3000
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: v2.0.0
+    tag: v1.0.1
   livenessProbe:
     httpGet:
       path: /api/health
@@ -52,7 +52,7 @@ harvester-api:
     app: backend
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v2.0.0
+    tag: v1.0.1
   service:
     port: 5000
   nodeSelector:
@@ -124,7 +124,7 @@ harvester-studio:
     app: backend
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-studio
-    tag: v2.0.0
+    tag: v1.0.1
   service:
     port: 5555
   nodeSelector:
