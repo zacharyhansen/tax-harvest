@@ -322,7 +322,7 @@ importers:
         version: 12.1.1(eslint@9.26.0(jiti@2.4.2))
       eslint-plugin-vitest:
         specifier: ^0.4.1
-        version: 0.4.1(@typescript-eslint/eslint-plugin@8.31.1(@typescript-eslint/parser@8.31.1(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2))(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2))(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2)(vitest@3.1.2(@types/debug@4.1.12)(@types/node@22.15.3)(happy-dom@15.11.7)(terser@5.39.0))
+        version: 0.4.1(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2)(vitest@3.1.2(@types/debug@4.1.12)(@types/node@22.15.3)(happy-dom@15.11.7)(terser@5.39.0))
       fs-extra:
         specifier: ^11.2.0
         version: 11.3.0
@@ -592,8 +592,8 @@ importers:
         specifier: 0.17.0
         version: 0.17.0(graphql@16.11.0)
       graphql-codegen-typescript-common:
-        specifier: 0.17.0
-        version: 0.17.0(graphql@16.11.0)
+        specifier: 0.18.2
+        version: 0.18.2(graphql@16.11.0)
       graphql-codegen-typescript-graphql-files-modules:
         specifier: 0.17.0
         version: 0.17.0
@@ -6472,7 +6472,7 @@ packages:
     resolution: {integrity: sha512-T0+barUSQRTUQASh8bx02dl+DhF54GtIDY13Y3m9oWTklKbb3Wv974meRpeZ3lp1JpLVECWWNHC4vaG2XHXouQ==}
 
   concat-map@0.0.1:
-    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
+    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
   concurrently@9.1.2:
     resolution: {integrity: sha512-H9MWcoPsYddwbOGM6difjVwVZHl63nwMEwDJG/L7VGtuaJhb12h2caPG2tVPWs7emuYix252iGfqOyrz1GczTQ==}
@@ -9550,6 +9550,7 @@ packages:
 
   lodash.omit@4.5.0:
     resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
+    deprecated: This package is deprecated. Use destructuring assignment syntax instead.
 
   lodash.snakecase@4.1.1:
     resolution: {integrity: sha512-QZ1d4xoBHYUeuouhEq3lk3Uq7ldgyFXGBhg04+oRLnIz8o9T65Eh+8YdroUwn846zchkA9yDsDl5CVVaV2nqYw==}
@@ -20621,7 +20622,7 @@ snapshots:
       tinyglobby: 0.2.13
       unrs-resolver: 1.7.2
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2))(eslint-import-resolver-typescript@3.10.1)(eslint@9.26.0(jiti@2.4.2))
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@7.18.0(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2))(eslint-import-resolver-typescript@3.10.1)(eslint@9.26.0(jiti@2.4.2))
       eslint-plugin-import-x: 4.11.0(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2)
     transitivePeerDependencies:
       - supports-color
@@ -21179,12 +21180,11 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-vitest@0.4.1(@typescript-eslint/eslint-plugin@8.31.1(@typescript-eslint/parser@8.31.1(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2))(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2))(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2)(vitest@3.1.2(@types/debug@4.1.12)(@types/node@22.15.3)(happy-dom@15.11.7)(terser@5.39.0)):
+  eslint-plugin-vitest@0.4.1(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2)(vitest@3.1.2(@types/debug@4.1.12)(@types/node@22.15.3)(happy-dom@15.11.7)(terser@5.39.0)):
     dependencies:
       '@typescript-eslint/utils': 7.18.0(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2)
       eslint: 9.26.0(jiti@2.4.2)
     optionalDependencies:
-      '@typescript-eslint/eslint-plugin': 8.31.1(@typescript-eslint/parser@8.31.1(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2))(eslint@9.26.0(jiti@2.4.2))(typescript@5.4.2)
       vitest: 3.1.2(@types/debug@4.1.12)(@types/node@22.15.3)(happy-dom@15.11.7)(terser@5.39.0)
     transitivePeerDependencies:
       - supports-color
@@ -22347,7 +22347,7 @@ snapshots:
   graphql-import@0.7.1(graphql@16.11.0):
     dependencies:
       graphql: 16.11.0
-      lodash: 4.17.21
+      lodash: 4.17.11
       resolve-from: 4.0.0
 
   graphql-parse-resolve-info@4.13.0(graphql@16.11.0):
