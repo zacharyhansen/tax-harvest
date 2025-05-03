@@ -1,0 +1,25 @@
+name: Google Cloud and Docker Authentication
+description: Authenticates with Google Cloud and Docker for artifact registry
+outputs:
+  access_token:
+    description: The Google access token
+    value: ${{ steps.auth.outputs.access_token }}
+runs:
+  using: composite
+  steps:
+    - name: Google Auth
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        token_format: access_token
+        project_id: ${{ env.PROJECT_ID }}
+        service_account: ${{ env.SERVICE_ACCOUNT }}
+        workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+    - name: Docker Auth
+      id: docker-auth
+      uses: docker/login-action@v3
+      with:
+        username: oauth2accesstoken
+        password: '${{ steps.auth.outputs.access_token }}'
+        registry: '${{ env.AR_REPO_LOCATION }}-docker.pkg.dev'
