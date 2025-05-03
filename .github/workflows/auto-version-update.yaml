@@ -1,0 +1,75 @@
+name: Auto Update Package Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to set in package.json (without v prefix)
+        required: true
+        type: string
+  workflow_run:
+    workflows: [Build and Release]
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-version:
+    name: Update Version in package.json
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Get Version from Build and Release
+        id: get_version
+        if: github.event_name == 'workflow_run'
+        run: |
+          # Get the latest tag
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          # Remove the 'v' prefix
+          VERSION=${LATEST_TAG#v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set Version from Input
+        id: set_version
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+
+      - name: Update Root package.json
+        run: |
+          VERSION="${{ steps.get_version.outputs.version || steps.set_version.outputs.version }}"
+          echo "Updating to version: $VERSION"
+
+          # Update version in root package.json
+          jq ".version = \"$VERSION\"" package.json > package.json.tmp
+          mv package.json.tmp package.json
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update version to ${{ steps.get_version.outputs.version || steps.set_version.outputs.version }}'
+          title: 'chore: update version to ${{ steps.get_version.outputs.version || steps.set_version.outputs.version }}'
+          body: |
+            This PR automatically updates the version in package.json to match the latest release.
+
+            Version: ${{ steps.get_version.outputs.version || steps.set_version.outputs.version }}
+          branch: update-version-${{ steps.get_version.outputs.version || steps.set_version.outputs.version }}
+          base: trunk
+          delete-branch: true
+          labels: |
+            automated-pr
+            version-update
