@@ -121,7 +121,7 @@ web:
   enabled: true
   replicaCount: 1
   image:
-    repository: gcr.io/your-project/harvester-web
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
     tag: latest
     pullPolicy: Always
   service:
