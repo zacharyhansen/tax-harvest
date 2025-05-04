@@ -4,14 +4,10 @@ metadata:
   name: harvester-ingress
   namespace: {{ .Values.global.namespace | default "harvester" }}
   labels:
-    app.kubernetes.io/name: harvester
+    app.kubernetes.io/name: {{ .Values.global.namespace | default "harvester" }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
-    # Use the managed certificate
-    networking.gke.io/managed-certificates: harvester-cert
-    kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
-    kubernetes.io/ingress.allow-http: 'true'
     {{- with .Values.global.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

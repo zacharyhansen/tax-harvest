@@ -165,6 +165,17 @@ jobs:
           git checkout -b release-v${{ needs.version.outputs.new_version }}
           git push origin release-v${{ needs.version.outputs.new_version }}
 
+      - name: Update Image Tags in Helm Values
+        run: |
+          # Update the values.yaml file with new version tags
+          yq eval '.api.image.tag = "v${{ needs.version.outputs.new_version }}" |
+                   .web.image.tag = "v${{ needs.version.outputs.new_version }}"' -i helm/values.yaml
+
+          # Commit and push changes to the release branch
+          git add helm/values.yaml
+          git commit -m "chore(automated): update image tags to v${{ needs.version.outputs.new_version }}"
+          git push origin release-v${{ needs.version.outputs.new_version }}
+
       - name: Generate Detailed Changelog
         id: changelog
         run: |
