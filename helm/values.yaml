@@ -107,6 +107,11 @@ api:
           secretKeyRef:
             name: database # Created by ExternalSecret
             key: DATABASE_URL
+    # Ensure Cloud SQL configuration is explicitly added for migrations
+    cloudsql:
+      enabled: true # This ensures the Cloud SQL sidecar is included
+      # Use the same instance connection name as the API
+      instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
 
 # Web app configuration
 web:

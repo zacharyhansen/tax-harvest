@@ -2,6 +2,7 @@
 
 # Variables
 PROJECT_ID="harvester-ai-428202"
+INSTANCE_CONNECTION_NAME="harvester-ai-428202:us-central1:harvester-dev"
 
 # Function to create or update a secret
 create_or_update_secret() {
@@ -18,8 +19,9 @@ create_or_update_secret() {
     fi
 }
 
-# Database URL - Replace with your actual database URL
-create_or_update_secret "DATABASE_URL" "postgresql://username:password@host:5432/database?schema=public"
+# Database URL with Cloud SQL socket format
+# For PostgreSQL: postgresql://username:password@/cloudsql/INSTANCE_CONNECTION_NAME/dbname?schema=public
+create_or_update_secret "DATABASE_URL" "postgresql://postgres:your-password@/cloudsql/$INSTANCE_CONNECTION_NAME/harvester?schema=public"
 
 # Clerk Secret Key - Replace with your actual Clerk Secret Key
 create_or_update_secret "CLERK_SECRET_KEY" "clerk_secret_key_value"

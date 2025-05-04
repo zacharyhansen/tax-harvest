@@ -98,3 +98,12 @@ migrations:
   #     secretKeyRef:
   #       name: api-tokens
   #       key: migration-token
+  # Cloud SQL configuration for migrations
+  cloudsql:
+    enabled: true
+    # Use the same instance connection name as defined in the parent chart
+    instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+    image:
+      repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
+      tag: latest
+      pullPolicy: IfNotPresent
