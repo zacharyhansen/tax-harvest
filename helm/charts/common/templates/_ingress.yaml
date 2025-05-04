@@ -7,10 +7,13 @@ metadata:
   namespace: {{ .Values.global.namespace | default "harvester" }}
   labels:
     {{- include "common.labels" . | nindent 4 }}
-  {{- with .Values.global.ingress.annotations }}
   annotations:
+    {{- if not .Values.global.ingress.annotations.networking\.gke\.io/managed-certificates }}
+    networking.gke.io/managed-certificates: harvester-cert
+    {{- end }}
+    {{- with .Values.global.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
   ingressClassName: {{ .Values.global.ingress.className }}
   rules:
