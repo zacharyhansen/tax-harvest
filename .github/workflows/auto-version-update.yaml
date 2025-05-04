@@ -63,7 +63,7 @@ jobs:
           yq eval ".harvester-web.image.tag = \"v${{ steps.get_version.outputs.version }}\" | .harvester-api.image.tag = \"v${{ steps.get_version.outputs.version }}\" | .harvester-studio.image.tag = \"v${{ steps.get_version.outputs.version }}\"" -i helm/values.yaml
 
           # Verify the file was updated
-          if ! grep -q "v${{ steps.get_version.outputs.version }}" helm/harvester/values.yaml; then
+          if ! grep -q "v${{ steps.get_version.outputs.version }}" helm/values.yaml; then
             echo "Failed to update values.yaml"
             exit 1
           fi
