@@ -37,15 +37,27 @@ spec:
           env:
             - name: NODE_ENV
               value: {{ .Values.env.NODE_ENV | quote }}
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: database
-                  key: DATABASE_URL
             {{- if .Values.env.extras }}
             {{- range $key, $value := .Values.env.extras }}
             - name: {{ $key }}
               value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.migrations.env }}
+            {{- if .Values.migrations.env.extras }}
+            {{- range $key, $value := .Values.migrations.env.extras }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.migrations.secretRefs }}
+            {{- range .Values.migrations.secretRefs }}
+            - name: {{ .name }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
             {{- end }}
             {{- end }}
           {{- if hasKey .Values "cloudsql" }}

@@ -5,5 +5,8 @@ dependencies:
 - name: web
   repository: file://./charts/web
   version: 0.1.0
-digest: sha256:50612480171b147dd6b42becb905988a71e669865b4c9b36a3325c6e76088820
-generated: "2025-05-03T16:26:48.853096-07:00"
+- name: secrets
+  repository: file://./charts/secrets
+  version: 0.1.0
+digest: sha256:3fd1c29a032903d644f67f9d08d75d594a1095a0d78a6865fb7dc1deb6e9a946
+generated: "2025-05-03T17:28:52.585185-07:00"

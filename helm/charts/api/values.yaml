@@ -79,3 +79,22 @@ migrations:
     tag: latest
     containerCommand: [/bin/sh, -c]
     containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
+  # Add migration-specific environment variables
+  env:
+    extras:
+    # Migration specific environment variables
+    # MIGRATION_STRATEGY: "up"
+    # DB_SCHEMA: "public"
+  # Add migration-specific secrets
+  secretRefs:
+  # Example: Reference secrets for migrations
+  # - name: DB_MIGRATION_PASSWORD
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: database-migration-creds
+  #       key: password
+  # - name: API_TOKEN
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: api-tokens
+  #       key: migration-token

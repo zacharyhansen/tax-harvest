@@ -61,25 +61,10 @@ api:
   env:
     NODE_ENV: production
     extras:
-      # Database configuration
       DB_HOST: '/cloudsql/harvester-ai-428202:us-central1:harvester-dev'
-      DB_NAME: harvester
-      DB_USER: postgres
-      # Add your secrets as environment variables
-      # DB_PASSWORD: "${DB_PASSWORD}"
-      # API_KEY: "${API_KEY}"
-      PORT: 3000
+      PORT: '3000'
       LOG_LEVEL: info
-      DATABASE_URL:
-        valueFrom:
-          secretKeyRef:
-            name: database
-            key: DATABASE_URL
-      CLERK_SECRET_KEY:
-        valueFrom:
-          secretKeyRef:
-          name: clerk
-          key: CLERK_SECRET_KEY
+      ORIGIN: 'https://{{ .Values.global.domain }}'
       PLAID_ENV: 'https://production.plaid.com'
       CLIENT_ORIGIN: 'http://dev.taxharvest.ai'
       CLIENT_HOME_PAGE_PATH: /main/home
@@ -89,7 +74,19 @@ api:
       GOOGLE_PROJECT: harvester-ai-428202
       SECRET_SOURCE: GSM
       GCS_LOTS_BUCKET_NAME: lot_upload
-      ORIGIN: 'https://{{ .Values.global.domain }}'
+
+    # Add a new section for secret references
+    secretRefs:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: database # Created by ExternalSecret
+            key: DATABASE_URL
+      - name: CLERK_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: clerk
+            key: CLERK_SECRET_KEY
   migrations:
     enabled: true
     image:
@@ -97,6 +94,19 @@ api:
       tag: latest
       containerCommand: [/bin/sh, -c]
       containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
+    # Migration-specific environment variables
+    env:
+      extras:
+        # Add migration-specific environment variables here
+        MIGRATION_MODE: apply
+        LOG_LEVEL: debug
+    # Migration-specific secrets
+    secretRefs:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: database # Created by ExternalSecret
+            key: DATABASE_URL
 
 # Web app configuration
 web:
@@ -158,3 +168,8 @@ web:
       NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /main/home
       NEXT_PUBLIC_STRIPE_PUBLIC_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
       NEXT_PUBLIC_CORE_SERVER_URL: 'https://{{ .Values.global.domain }}'
+
+# Secrets configuration with External Secrets Operator
+secrets:
+  enabled: true
+  # The rest of the configuration comes from the secrets chart's values.yaml

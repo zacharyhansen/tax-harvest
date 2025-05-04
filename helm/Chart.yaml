@@ -11,3 +11,7 @@ dependencies:
   - name: web
     version: 0.1.0
     repository: file://./charts/web
+  - name: secrets
+    version: 0.1.0
+    repository: 'file://./charts/secrets'
+    condition: secrets.enabled
