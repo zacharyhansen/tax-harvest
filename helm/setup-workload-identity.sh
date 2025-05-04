@@ -19,6 +19,11 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com" \
   --role="roles/secretmanager.secretAccessor"
 
+# Grant Cloud SQL Admin access to the Google Service Account
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$GSA_NAME@$PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/cloudsql.admin"
+
 # Create Kubernetes ServiceAccount (if not already created by Helm)
 kubectl create serviceaccount $KSA_NAME -n $K8S_NAMESPACE
 

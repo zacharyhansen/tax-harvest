@@ -1,0 +1,10 @@
+{{- if .Values.global.ingress.enabled -}}
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: harvester-cert
+  namespace: {{ .Values.global.namespace | default "harvester" }}
+spec:
+  domains:
+    - {{ .Values.global.domain }}
+{{- end -}} 
