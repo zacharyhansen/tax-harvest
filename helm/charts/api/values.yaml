@@ -12,13 +12,34 @@ service:
   targetPort: 3000
 
 ingress:
-  path: /api
+  path: /core
   pathType: Prefix
 
 # We usually recommend not to specify default resources and to leave this as a conscious
 # choice for the user. This also increases chances charts run on environments with little
 # resources, such as Minikube. If you do want to specify resources, uncomment the following
 resources: {}
+
+# Health check probes
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 15
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 3
+  successThreshold: 1
 
 # Service account for GCP workload identity
 serviceAccountName: google-secret-service-account
@@ -28,7 +49,6 @@ cloudsql:
   enabled: true
   image:
     repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
-    tag: 2.8.1
     pullPolicy: IfNotPresent
   # Your Cloud SQL instance connection name
   instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
@@ -36,17 +56,21 @@ cloudsql:
   # credentials:
   #   secretName: cloudsql-instance-credentials
   #   key: credentials.json
-  resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
+  resources: {}
 
 env:
   NODE_ENV: production
-  extras: {}
+  extras:
+  # Database configuration
+  # DB_HOST: '/cloudsql/harvester-ai-428202:us-central1:harvester-dev'
+  # DB_NAME: harvester
+  # DB_USER: postgres
+  # Add more environment variables as needed
+  # You can reference secrets like: ${SECRET_NAME}
+  # DB_PASSWORD: "${DB_PASSWORD}"
+  # API_KEY: "${API_KEY}"
+  # PORT: '3000'
+  # LOG_LEVEL: info
 
 migrations:
   enabled: true

@@ -20,9 +20,37 @@ ingress:
 # resources, such as Minikube. If you do want to specify resources, uncomment the following
 resources: {}
 
+# Health check probes for the web frontend
+livenessProbe:
+  httpGet:
+    path: /api/health # Next.js specific health endpoint
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  httpGet:
+    path: /api/health # Next.js specific health endpoint
+    port: http
+  initialDelaySeconds: 15
+  periodSeconds: 5
+  timeoutSeconds: 2
+  failureThreshold: 2
+  successThreshold: 1
+
 env:
   NODE_ENV: production
-  extras: {}
+  extras:
+    # Frontend configuration
+    NEXT_PUBLIC_API_URL: /core
+    # Add more environment variables as needed
+    # NEXT_PUBLIC_APP_URL: "https://harvester.example.com"
+    # NEXT_PUBLIC_ANALYTICS_ID: "UA-XXXXXXXXX-X"
+    PORT: '3000'
+    NEXT_PUBLIC_ENV: production
 
 # Cloud SQL configuration for the web service (disabled by default)
 cloudsql:

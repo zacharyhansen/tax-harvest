@@ -2,7 +2,7 @@
 global:
   namespace: harvester
   environment: production
-  domain: harvester.example.com
+  domain: dev.taxharvest.ai
   ingress:
     enabled: true
     className: gce
@@ -17,22 +17,35 @@ api:
   enabled: true
   replicaCount: 1
   image:
-    repository: gcr.io/your-project/harvester-api
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
     tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
     port: 80
     targetPort: 3000
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 200m
-      memory: 256Mi
+  resources: {}
+  # Health check probes
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 60
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
   ingress:
-    path: /api
+    path: /core
     pathType: Prefix
   # Service account for GCP workload identity
   serviceAccountName: google-secret-service-account
@@ -41,25 +54,49 @@ api:
     enabled: true
     image:
       repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
-      tag: 2.8.1
       pullPolicy: IfNotPresent
     # Your Cloud SQL instance connection name
-    instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-db'
-    resources:
-      limits:
-        cpu: 100m
-        memory: 128Mi
-      requests:
-        cpu: 50m
-        memory: 64Mi
+    instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+    resources: {}
   env:
     NODE_ENV: production
+    extras:
+      # Database configuration
+      DB_HOST: '/cloudsql/harvester-ai-428202:us-central1:harvester-dev'
+      DB_NAME: harvester
+      DB_USER: postgres
+      # Add your secrets as environment variables
+      # DB_PASSWORD: "${DB_PASSWORD}"
+      # API_KEY: "${API_KEY}"
+      PORT: 3000
+      LOG_LEVEL: info
+      DATABASE_URL:
+        valueFrom:
+          secretKeyRef:
+            name: database
+            key: DATABASE_URL
+      CLERK_SECRET_KEY:
+        valueFrom:
+          secretKeyRef:
+          name: clerk
+          key: CLERK_SECRET_KEY
+      PLAID_ENV: 'https://production.plaid.com'
+      CLIENT_ORIGIN: 'http://dev.taxharvest.ai'
+      CLIENT_HOME_PAGE_PATH: /main/home
+      CRON: true
+      ETRADE_OAUTH_AUTHORIZE_URL: 'https://us.etrade.com/e/t/etws/authorize'
+      ETRADE_HOSTNAME: api.etrade.com
+      GOOGLE_PROJECT: harvester-ai-428202
+      SECRET_SOURCE: GSM
+      GCS_LOTS_BUCKET_NAME: lot_upload
+      ORIGIN: 'https://{{ .Values.global.domain }}'
   migrations:
     enabled: true
     image:
       repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
       tag: latest
-    command: [npm, run, migrate]
+      containerCommand: [/bin/sh, -c]
+      containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
 
 # Web app configuration
 web:
@@ -73,15 +110,51 @@ web:
     type: ClusterIP
     port: 80
     targetPort: 3000
-  resources:
-    limits:
-      cpu: 300m
-      memory: 384Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
+  resources: {}
+  # Health check probes for the web frontend
+  livenessProbe:
+    httpGet:
+      path: /api/health # Next.js specific health endpoint
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+  readinessProbe:
+    httpGet:
+      path: /api/health # Next.js specific health endpoint
+      port: http
+    initialDelaySeconds: 15
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 2
+    successThreshold: 1
   ingress:
     path: /
     pathType: Prefix
   env:
     NODE_ENV: production
+    extras:
+      # Frontend configuration
+      # Add more environment variables as needed
+      # NEXT_PUBLIC_APP_URL: "https://harvester.example.com"
+      PORT: '3000'
+      NEXT_PUBLIC_ENV: production
+      CLERK_SECRET_KEY:
+        valueFrom:
+          secretKeyRef:
+          name: clerk
+          key: CLERK_SECRET_KEY
+      STRIPE_SECRET_KEY:
+        valueFrom:
+          secretKeyRef:
+            name: stripe
+            key: STRIPE_SECRET_KEY
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_aGVscGVkLWVtdS00NC5jbGVyay5hY2NvdW50cy5kZXYk
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/signin
+      NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/signup
+      NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /main/home
+      NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /main/home
+      NEXT_PUBLIC_STRIPE_PUBLIC_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
+      NEXT_PUBLIC_CORE_SERVER_URL: 'https://{{ .Values.global.domain }}'
