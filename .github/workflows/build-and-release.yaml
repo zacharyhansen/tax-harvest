@@ -137,7 +137,7 @@ jobs:
 
   create-tag:
     name: Tag and Release
-    needs: [version, build-web, build-api, update-helm-chart]
+    needs: [version, build-web, build-api]
     runs-on: ubuntu-latest
     permissions:
       contents: write
