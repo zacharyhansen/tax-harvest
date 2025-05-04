@@ -87,31 +87,31 @@ api:
           secretKeyRef:
             name: clerk
             key: CLERK_SECRET_KEY
-  migrations:
-    enabled: true
-    image:
-      repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-      tag: latest
-      containerCommand: [/bin/sh, -c]
-      containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
-    # Migration-specific environment variables
-    env:
-      extras:
-        # Add migration-specific environment variables here
-        MIGRATION_MODE: apply
-        LOG_LEVEL: debug
-    # Migration-specific secrets
-    secretRefs:
-      - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: database # Created by ExternalSecret
-            key: DATABASE_URL
-    # Ensure Cloud SQL configuration is explicitly added for migrations
-    cloudsql:
-      enabled: true # This ensures the Cloud SQL sidecar is included
-      # Use the same instance connection name as the API
-      instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+  # migrations:
+  #   enabled: true
+  #   image:
+  #     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
+  #     tag: latest
+  #     containerCommand: [/bin/sh, -c]
+  #     containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
+  #   # Migration-specific environment variables
+  #   env:
+  #     extras:
+  #       # Add migration-specific environment variables here
+  #       MIGRATION_MODE: apply
+  #       LOG_LEVEL: debug
+  #   # Migration-specific secrets
+  #   secretRefs:
+  #     - name: DATABASE_URL
+  #       valueFrom:
+  #         secretKeyRef:
+  #           name: database # Created by ExternalSecret
+  #           key: DATABASE_URL
+  #   # Ensure Cloud SQL configuration is explicitly added for migrations
+  #   cloudsql:
+  #     enabled: true # This ensures the Cloud SQL sidecar is included
+  #     # Use the same instance connection name as the API
+  #     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
 
 # Web app configuration
 web:
