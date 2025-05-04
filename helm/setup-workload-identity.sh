@@ -5,8 +5,8 @@ PROJECT_ID="harvester-ai-428202"
 GSA_NAME="harvester-secret-manager"
 K8S_NAMESPACE="harvester"
 KSA_NAME="google-secret-service-account"
-CLUSTER_NAME="harvester-cluster"
-REGION="us-central1"
+CLUSTER_NAME="harvester-dev"
+REGION="us-central1-b"
 
 # Create Google Service Account
 gcloud iam service-accounts create $GSA_NAME \

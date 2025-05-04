@@ -72,38 +72,38 @@ env:
   # PORT: '3000'
   # LOG_LEVEL: info
 
-# migrations:
-#   enabled: true
-#   image:
-#     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-#     tag: latest
-#     containerCommand: [/bin/sh, -c]
-#     containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
-#   # Add migration-specific environment variables
-#   env:
-#     extras:
-#     # Migration specific environment variables
-#     # MIGRATION_STRATEGY: "up"
-#     # DB_SCHEMA: "public"
-#   # Add migration-specific secrets
-#   secretRefs:
-#   # Example: Reference secrets for migrations
-#   # - name: DB_MIGRATION_PASSWORD
-#   #   valueFrom:
-#   #     secretKeyRef:
-#   #       name: database-migration-creds
-#   #       key: password
-#   # - name: API_TOKEN
-#   #   valueFrom:
-#   #     secretKeyRef:
-#   #       name: api-tokens
-#   #       key: migration-token
-#   # Cloud SQL configuration for migrations
-#   cloudsql:
-#     enabled: true
-#     # Use the same instance connection name as defined in the parent chart
-#     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
-#     image:
-#       repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
-#       tag: latest
-#       pullPolicy: IfNotPresent
+migrations:
+  enabled: false # Set to false to skip running migrations
+  image:
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
+    tag: latest
+    containerCommand: [/bin/sh, -c]
+    containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
+  # Add migration-specific environment variables
+  env:
+    extras:
+    # Migration specific environment variables
+    # MIGRATION_STRATEGY: "up"
+    # DB_SCHEMA: "public"
+  # Add migration-specific secrets
+  secretRefs:
+  # Example: Reference secrets for migrations
+  # - name: DB_MIGRATION_PASSWORD
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: database-migration-creds
+  #       key: password
+  # - name: API_TOKEN
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: api-tokens
+  #       key: migration-token
+  # Cloud SQL configuration for migrations
+  cloudsql:
+    enabled: true
+    # Use the same instance connection name as defined in the parent chart
+    instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+    image:
+      repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
+      tag: latest
+      pullPolicy: IfNotPresent
