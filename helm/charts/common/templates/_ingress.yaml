@@ -8,9 +8,8 @@ metadata:
   labels:
     {{- include "common.labels" . | nindent 4 }}
   annotations:
-    {{- if not .Values.global.ingress.annotations.networking\.gke\.io/managed-certificates }}
+    # Always add the managed certificate annotation
     networking.gke.io/managed-certificates: harvester-cert
-    {{- end }}
     {{- with .Values.global.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
