@@ -1,7 +1,7 @@
-import type { Prisma, RealizedPAndL } from '@prisma/client'
-import type { PrismaService } from '../prisma/prisma.service'
-
 import { Injectable, Logger } from '@nestjs/common'
+import { Prisma, RealizedPAndL } from '@prisma/client'
+
+import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
 export class RealizedPandLService {

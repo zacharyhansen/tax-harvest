@@ -1,11 +1,8 @@
-import type {
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify'
-import type { TestingModule } from '@nestjs/testing'
 import {
   FastifyAdapter,
+  NestFastifyApplication,
 } from '@nestjs/platform-fastify'
-import { Test } from '@nestjs/testing'
+import { Test, TestingModule } from '@nestjs/testing'
 import * as nock from 'nock'
 import request from 'supertest'
 

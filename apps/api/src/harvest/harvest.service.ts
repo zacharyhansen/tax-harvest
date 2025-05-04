@@ -1,18 +1,16 @@
-import type {
-  Harvest,
-  Prisma,
-} from '@prisma/client'
-import type { LotService } from '../lot/lot.service'
-import type { DirectedHarvestLot } from '../portfolio/portfolio.dto'
-import type { PrismaService } from '../prisma/prisma.service'
-
 import { Injectable } from '@nestjs/common'
 import {
+  Harvest,
   HarvestStep,
   HarvestType,
   OrderType,
+  Prisma,
 } from '@prisma/client'
 import Decimal from 'decimal.js'
+
+import { LotService } from '../lot/lot.service'
+import { DirectedHarvestLot } from '../portfolio/portfolio.dto'
+import { PrismaService } from '../prisma/prisma.service'
 
 const harvestTypeLabel: Record<HarvestType, string> = {
   [HarvestType.REDUCE_COST_BASIS]: 'Raise Average Cost Basis',

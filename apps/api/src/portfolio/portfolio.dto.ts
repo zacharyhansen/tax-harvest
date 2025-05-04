@@ -1,10 +1,10 @@
-import type { OrderType as PrismaOrderType } from '@prisma/client'
 import {
   Field,
   InputType,
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql'
+import { OrderType as PrismaOrderType } from '@prisma/client'
 
 import { HarvestType, OrderType } from '../generated/graphql'
 

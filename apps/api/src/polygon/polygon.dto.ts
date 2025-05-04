@@ -1,4 +1,4 @@
-import type { IAggsQuery } from '@polygon.io/client-js'
+import { IAggsQuery } from '@polygon.io/client-js'
 
 /**
  * c: cLose price

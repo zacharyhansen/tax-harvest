@@ -1,4 +1,4 @@
-import type { GraphQLRequestContext } from '@apollo/server'
+import { GraphQLRequestContext } from '@apollo/server'
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library'
 
 export const errorFormatPlugin = {

@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import Decimal from 'decimal.js'
 
 import { findAllMatchingSubsetsBottomUp } from './lot-application.bottom-up'

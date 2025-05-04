@@ -36,7 +36,7 @@
     "build:clean": "rimraf dist; exit 0",
     "codegen:snaplet": "npx @snaplet/seed sync",
     "codegen:kysely": "npx kysely-codegen --out-file ./src/database/db.d.ts",
-    "codegen": "pnpm codegen:kysely && pnpm codegen:snaplet",
+    "codegen": "npx prisma generate && pnpm codegen:kysely",
     "migrate": "prisma migrate dev",
     "migrate:reset": "prisma migrate reset",
     "sync": "node dist/command/post-migrate.js",
@@ -44,7 +44,6 @@
     "migrate:create": "prisma migrate dev --create-only --name",
     "seed": "prisma db seed",
     "prisma:generate": "prisma generate --schema=./prisma/schema.prisma"
-
   },
   "@snaplet/seed": {
     "config": "seed.client.ts"
@@ -71,11 +70,11 @@
     "@google-cloud/storage": "^7.14.0",
     "@nestjs/apollo": "^12.1.0",
     "@nestjs/cache-manager": "^3.0.0",
-    "@nestjs/common": "^11.0.7",
+    "@nestjs/common": "11.0.7",
     "@nestjs/config": "^3.3.0",
-    "@nestjs/core": "^11.0.7",
+    "@nestjs/core": "11.0.7",
     "@nestjs/graphql": "^12.1.0",
-    "@nestjs/platform-fastify": "^11.0.7",
+    "@nestjs/platform-fastify": "11.0.7",
     "@nestjs/schedule": "^4.1.1",
     "@nestjs/swagger": "^7.4.2",
     "@polygon.io/client-js": "^7.3.2",
@@ -99,7 +98,7 @@
     "prisma-graphql-type-decimal": "^3.0.1",
     "puppeteer": "^23.11.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1",
+    "rxjs": "^7.8.2",
     "stripe": "^16.2.0",
     "superjson": "^2.2.2",
     "svix": "^1.40.0"
@@ -115,9 +114,9 @@
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/types": "^19.5.0",
     "@faker-js/faker": "^9.0.0",
-    "@nestjs/cli": "^10.4.5",
+    "@nestjs/cli": "11.0.7",
     "@nestjs/schematics": "^10.2.3",
-    "@nestjs/testing": "^11.0.7",
+    "@nestjs/testing": "11.0.7",
     "@snaplet/copycat": "^5.1.0",
     "@snaplet/seed": "^0.98.0",
     "@swc/cli": "^0.4.0",

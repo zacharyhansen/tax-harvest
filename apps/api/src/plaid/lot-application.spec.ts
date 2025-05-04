@@ -1,11 +1,9 @@
-import type {
-  LotData,
-} from './lot-application'
-
 import Decimal from 'decimal.js'
+
 import {
   findLotChangeSets,
   findSubsetHybrid,
+  LotData,
 } from './lot-application'
 import { findAllMatchingSubsetsBottomUp } from './lot-application.bottom-up'
 import { findGreedySubset } from './lot-application.greedy'

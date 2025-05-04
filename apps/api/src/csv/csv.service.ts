@@ -1,10 +1,10 @@
-import type { Lot } from '@prisma/client'
-
-import type { Insertable } from 'kysely'
 import { readFileSync } from 'node:fs'
+
 import { Injectable, Logger } from '@nestjs/common'
+import { Lot } from '@prisma/client'
 import { parse } from 'csv-parse/sync'
 import Decimal from 'decimal.js'
+import { Insertable } from 'kysely'
 
 export interface EtradeCSVLotRecord {
   'Symbol': string

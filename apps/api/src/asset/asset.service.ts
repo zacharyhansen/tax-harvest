@@ -1,8 +1,8 @@
-import type { Prisma } from '@prisma/client'
-import type { Database } from '../database/database'
-
-import type { PrismaService } from '../prisma/prisma.service'
 import { Injectable, Logger } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
+
+import { Database } from '../database/database'
+import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
 export class AssetService {

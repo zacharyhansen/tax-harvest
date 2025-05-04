@@ -1,6 +1,6 @@
-import type { StripeService } from './stripe.service'
-
 import { Args, Field, ObjectType, Query, Resolver } from '@nestjs/graphql'
+
+import { StripeService } from './stripe.service'
 import { StripeProduct } from './types'
 
 @ObjectType()

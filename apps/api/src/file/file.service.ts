@@ -1,10 +1,10 @@
-import type { Prisma } from '@prisma/client'
-import type { CsvService } from '../csv/csv.service'
-
-import type { GoogleStorageService } from '../google-storage/google-storage.service'
-import type { LotService } from '../lot/lot.service'
-import type { PrismaService } from '../prisma/prisma.service'
 import { Injectable } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
+
+import { CsvService } from '../csv/csv.service'
+import { GoogleStorageService } from '../google-storage/google-storage.service'
+import { LotService } from '../lot/lot.service'
+import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
 export class FileService {

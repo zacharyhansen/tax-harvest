@@ -1,15 +1,13 @@
-import type {
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify'
+import { writeFileSync } from 'node:fs'
 import { Logger } from '@nestjs/common'
-import { NestFactory } from '@nestjs/core'
+import { ConfigService } from '@nestjs/config'
+import { NestFactory, PartialGraphHost } from '@nestjs/core'
 import {
   FastifyAdapter,
+  NestFastifyApplication,
 } from '@nestjs/platform-fastify'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-
 import { AppModule } from '~/app'
-import { EnvService } from '~/env/env.service'
 
 async function bootstrap() {
   const logger = new Logger('EntryPoint')
@@ -17,11 +15,15 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    {
+      snapshot: true,
+      abortOnError: false,
+    },
   )
   app.setGlobalPrefix('core')
 
-  const envService = app.get(EnvService)
-  const port = envService.get('PORT')
+  const configService = app.get(ConfigService)
+  const port = configService.get('PORT')
 
   app.enableCors({
     credentials: true,
@@ -43,7 +45,11 @@ async function bootstrap() {
   logger.log(`App is ready and listening on port ${port} 🚀`)
 }
 
-bootstrap().catch(handleError)
+bootstrap().catch((err) => {
+  console.error(err)
+  writeFileSync('./graph.json', PartialGraphHost.toString() ?? '')
+  process.exit(1)
+})
 
 function handleError(error: unknown) {
   console.error(error)

@@ -1,18 +1,15 @@
-import type { Prisma } from '@prisma/client'
 import type { GraphQLResolveInfo } from 'graphql'
-
 import type { ClerkClaims } from '../auth/types'
-import type { LotTransactionBatchService } from './lot-transaction-batch.service'
-
-import type { PrismaService } from '~/prisma/prisma.service'
-
 import { Args, Info, Query, Resolver } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
+import { PrismaService } from '~/prisma/prisma.service'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import {
   LotTransactionBatch,
   LotTransactionBatchOrderByRelationAggregateInput,
 } from '../generated/graphql'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { LotTransactionBatchService } from './lot-transaction-batch.service'
 
 @Resolver(() => LotTransactionBatch)
 export class LotTransactionBatchResolver {

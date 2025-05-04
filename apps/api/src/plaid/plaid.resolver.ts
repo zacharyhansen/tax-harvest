@@ -1,15 +1,13 @@
-import type { Prisma } from '@prisma/client'
-
 import type { GraphQLResolveInfo } from 'graphql'
 import type { ClerkClaims } from '../auth/types'
-import type { PrismaService } from '../prisma/prisma.service'
-
-import type { PlaidService } from './plaid.service'
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { Account } from '../generated/graphql'
+import { PrismaService } from '../prisma/prisma.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
 import { PlaidLinkOnSuccessMetadata } from './plaid.dto'
+import { PlaidService } from './plaid.service'
 
 @Resolver()
 export class PlaidResolver {

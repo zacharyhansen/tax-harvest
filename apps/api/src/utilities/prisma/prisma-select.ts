@@ -1,6 +1,6 @@
 /* eslint-disable ts/no-explicit-any */
 // Inspired by https://paljs.com/plugins/select/
-import type { GraphQLResolveInfo } from 'graphql'
+import { GraphQLResolveInfo } from 'graphql'
 
 import { parseResolveInfo } from 'graphql-parse-resolve-info'
 

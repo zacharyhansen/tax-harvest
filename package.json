@@ -27,6 +27,7 @@
     "bun": "please-use-pnpm"
   },
   "scripts": {
+    "clean:install": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && rm -f pnpm-lock.yaml && pnpm install",
     "build": "turbo build",
     "dev": "turbo dev",
     "start": "turbo start",

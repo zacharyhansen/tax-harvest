@@ -1,13 +1,11 @@
-import type { ConfigService } from '@nestjs/config'
 import type { IAggs, IGlobalOptions, IRestClient } from '@polygon.io/client-js'
-import type { Insertable, Updateable } from 'kysely'
-import type { Database } from '../database/database'
 import type { Asset } from '../database/db.d'
-import type { PolygonAggregateInput } from './polygon.dto'
-
 import { Inject, Injectable, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { Field, ObjectType } from '@nestjs/graphql'
-import { PolygonTimespan } from './polygon.dto'
+import { Insertable, Updateable } from 'kysely'
+import { Database } from '../database/database'
+import { PolygonAggregateInput, PolygonTimespan } from './polygon.dto'
 
 @ObjectType()
 export class PolygonStockData {

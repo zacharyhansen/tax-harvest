@@ -1,5 +1,4 @@
-import type { Cache } from '@nestjs/cache-manager'
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Inject, Injectable } from '@nestjs/common'
 
 @Injectable()

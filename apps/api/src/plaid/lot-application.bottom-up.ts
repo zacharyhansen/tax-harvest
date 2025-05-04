@@ -1,6 +1,6 @@
-import type { LotData } from './lot-application'
-
 import Decimal from 'decimal.js'
+
+import { LotData } from './lot-application'
 
 export function findAllMatchingSubsetsBottomUp({
   tuples,

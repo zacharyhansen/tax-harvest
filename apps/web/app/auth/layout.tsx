@@ -11,6 +11,7 @@ export default function AuthLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <MediaProvider>
+      <div>auth layout</div>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <div className="container grid h-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
           <div className="relative hidden h-full flex-col p-14 lg:flex">

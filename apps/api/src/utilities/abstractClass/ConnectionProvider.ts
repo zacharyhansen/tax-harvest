@@ -1,4 +1,4 @@
-import type { AuthConnection } from '@prisma/client'
+import { AuthConnection } from '@prisma/client'
 
 export default abstract class ConnectionProvider {
   abstract sync({

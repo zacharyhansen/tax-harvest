@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigService } from '@nestjs/config'
 import { PostgresDialect } from 'kysely'
 import pg from 'pg'
 
@@ -124,6 +124,5 @@ import { Database } from './database'
       },
     },
   ],
-  imports: [ConfigModule],
 })
 export class DatabaseModule {}

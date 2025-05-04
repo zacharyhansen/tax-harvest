@@ -1,11 +1,5 @@
-import type { Prisma } from '@prisma/client'
 import type { GraphQLResolveInfo } from 'graphql'
-
-import type { AuthConnectionService } from './auth-connection.service'
 import type { ClerkClaims } from '~/auth/types'
-
-import type { PrismaService } from '~/prisma/prisma.service'
-
 import {
   Args,
   Field,
@@ -17,9 +11,15 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql'
+
+import { Prisma } from '@prisma/client'
+
+import { PrismaService } from '~/prisma/prisma.service'
+
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { AuthConnection, AuthSource } from '../generated/graphql'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { AuthConnectionService } from './auth-connection.service'
 
 @ObjectType()
 export class AuthConnectionExt extends AuthConnection {

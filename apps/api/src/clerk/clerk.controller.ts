@@ -1,24 +1,19 @@
-import type {
-  RawBodyRequest,
-  Request,
-  Response,
-} from '@nestjs/common'
-import type { ConfigService } from '@nestjs/config'
-import type { UserService } from '../user/user.service'
-import type { ClerkWebHookEvent } from './clerk.dto'
-
+import type { RawBodyRequest } from '@nestjs/common'
 import {
   Controller,
   Headers,
   Logger,
   Post,
-
   Req,
   Res,
+  Response,
 } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { Webhook } from 'svix'
 import { Public } from '../auth/decorators/public.decorator'
-import { isClerkUser } from './clerk.dto'
+
+import { UserService } from '../user/user.service'
+import { ClerkWebHookEvent, isClerkUser } from './clerk.dto'
 
 @Controller('clerk')
 export class ClerkController {

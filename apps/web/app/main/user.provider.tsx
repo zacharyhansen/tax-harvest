@@ -38,7 +38,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }
 
   // @ts-expect-error typing issues
-  return <UserContext value={value}>{children}</UserContext>;
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
 // Custom hook to use the UserContext

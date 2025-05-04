@@ -1,8 +1,7 @@
-import type { TestingModule } from '@nestjs/testing'
 import { readFileSync } from 'node:fs'
-
 import { resolve } from 'node:path'
-import { Test } from '@nestjs/testing'
+
+import { Test, TestingModule } from '@nestjs/testing'
 
 import { CsvService } from './csv.service'
 import lotRecordsFromEtradePortfolioDownload from './test/lotRecordsFromEtradePortfolioDownload.json'

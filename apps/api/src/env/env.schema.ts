@@ -14,6 +14,7 @@ export const envSchema = z.object({
   POSTGREST_ORIGIN: z.string(),
   CLERK_SECRET_KEY: z.string(),
   PORT: z.string(),
+  STRIPE_SECRET_KEY: z.string(),
 })
 
 export type Env = z.infer<typeof envSchema>

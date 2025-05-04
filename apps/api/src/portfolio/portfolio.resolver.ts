@@ -1,17 +1,14 @@
-import type { Prisma } from '@prisma/client'
-
 import type { GraphQLResolveInfo } from 'graphql'
 import type { ClerkClaims } from '../auth/types'
-import type { PrismaService } from '../prisma/prisma.service'
-
-import type { PortfolioService } from './portfolio.service'
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import {
   Portfolio,
   PortfolioCreateInput,
   PortfolioUpdateInput,
 } from '../generated/graphql'
+import { PrismaService } from '../prisma/prisma.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
 import {
   DirectedHarvestLot,
@@ -20,6 +17,7 @@ import {
   PortfolioSummaryRealized,
   PortfolioSummaryUnrealized,
 } from './portfolio.dto'
+import { PortfolioService } from './portfolio.service'
 
 @Resolver(() => Portfolio)
 export class PortfolioResolver {

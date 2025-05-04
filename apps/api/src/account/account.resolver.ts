@@ -1,11 +1,4 @@
-import type { Prisma } from '@prisma/client'
-
 import type { GraphQLResolveInfo } from 'graphql'
-import type { AuthConnectionService } from '../auth-connection/auth-connection.service'
-import type { RealizedPandLService } from '../realized-p-and-l/realized-p-and-l.service'
-
-import type { AccountService } from './account.service'
-
 import type { ClerkClaims } from '~/auth/types'
 import {
   Args,
@@ -16,7 +9,12 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql'
+
+import { Prisma } from '@prisma/client'
+
 import { ClerkContext } from '~/auth/decorators/clerk-context.decorator'
+
+import { AuthConnectionService } from '../auth-connection/auth-connection.service'
 import {
   Account,
   AccountCreateInput,
@@ -25,7 +23,9 @@ import {
   AccountWhereUniqueInput,
   RealizedPAndL,
 } from '../generated/graphql'
+import { RealizedPandLService } from '../realized-p-and-l/realized-p-and-l.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { AccountService } from './account.service'
 
 @Resolver(() => Account)
 export class AccountResolver {

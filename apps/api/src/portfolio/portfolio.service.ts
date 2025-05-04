@@ -1,33 +1,30 @@
-import type { Portfolio, PortfolioRole, Prisma } from '@prisma/client'
+import { Injectable, Logger } from '@nestjs/common'
 
-import type { AccountService } from '../account/account.service'
-import type { ClerkService } from '../clerk/clerk.service'
-import type { Database } from '../database/database'
-import type { HarvestService } from '../harvest/harvest.service'
+import { Portfolio, PortfolioRole, Prisma } from '@prisma/client'
+import Decimal from 'decimal.js'
+import { sql } from 'kysely'
+import { ClerkClaims } from '~/auth/types'
 
-import type { LotService } from '../lot/lot.service'
+import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 
-import type { PrismaService } from '../prisma/prisma.service'
-import type { UserService } from '../user/user.service'
-import type {
+import { AccountService } from '../account/account.service'
+import { ClerkService } from '../clerk/clerk.service'
+import { Database } from '../database/database'
+import { HarvestType } from '../generated/graphql'
+import { HarvestService } from '../harvest/harvest.service'
+import { LotService } from '../lot/lot.service'
+import { PrismaService } from '../prisma/prisma.service'
+import { UserService } from '../user/user.service'
+import {
   DirectedHarvestLot,
   HarvestRecomendation,
   HarvestResult,
   PortfolioSummary,
   PortfolioSummaryRealized,
   PortfolioSummaryUnrealized,
-} from './portfolio.dto'
-import type { LotHarvestInput } from './portfolio.harvest'
-import type { ClerkClaims } from '~/auth/types'
-import { Injectable, Logger } from '@nestjs/common'
-import Decimal from 'decimal.js'
-import { sql } from 'kysely'
-import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
-import { HarvestType } from '../generated/graphql'
-import {
   SetUpStatus,
 } from './portfolio.dto'
-import Harvest from './portfolio.harvest'
+import Harvest, { LotHarvestInput } from './portfolio.harvest'
 
 @Injectable()
 export class PortfolioService {

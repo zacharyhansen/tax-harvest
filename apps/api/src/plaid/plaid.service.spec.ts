@@ -1,18 +1,16 @@
-import type { TestingModule } from '@nestjs/testing'
-import type { AccountBase, Security } from 'plaid'
-
-import type { LotChange } from './lot-application'
-
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { Test } from '@nestjs/testing'
+
+import { Test, TestingModule } from '@nestjs/testing'
+
 import { AuthSource, AuthType } from '@prisma/client'
-
 import Decimal from 'decimal.js'
-import { AppModule } from '~/app/app.module'
+import { AccountBase, Security } from 'plaid'
 
+import { AppModule } from '~/app/app.module'
 import { CsvService } from '~/csv/csv.service'
-import { findLotChangeSets } from './lot-application'
+
+import { findLotChangeSets, LotChange } from './lot-application'
 import { PlaidService } from './plaid.service'
 
 describe('plaidService', () => {

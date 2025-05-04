@@ -1,15 +1,15 @@
-import type { ConfigService } from '@nestjs/config'
-import type { StripeProduct } from './types'
 import { Injectable } from '@nestjs/common'
-
+import { ConfigService } from '@nestjs/config'
 import { Stripe } from 'stripe'
+
+import { StripeProduct } from './types'
 
 @Injectable()
 export class StripeService {
   private readonly stripe: Stripe
   constructor(private readonly configService: ConfigService) {
     this.stripe = new Stripe(
-      this.configService.get('STRIPE_SECRET_KEY') as string,
+      this.configService.get<string>('STRIPE_SECRET_KEY')!,
     )
   }
 

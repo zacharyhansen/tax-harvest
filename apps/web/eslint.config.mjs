@@ -46,6 +46,7 @@ export default antfu(
   },
   {
     rules: {
+      'react/no-context-provider': 'off', // breaks with current react/nextjs verisons
       'antfu/no-top-level-await': 'off', // Allow top-level await
       'style/brace-style': ['error', '1tbs'], // Use the default brace style
       'ts/consistent-type-definitions': ['error', 'type'], // Use `type` instead of `interface`

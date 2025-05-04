@@ -1,9 +1,8 @@
-import type { Prisma } from '@prisma/client'
 import type { GraphQLResolveInfo } from 'graphql'
-import type { PrismaService } from '../prisma/prisma.service'
-
 import { Args, Info, Mutation, Resolver } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
 import { RealizedPAndL, RealizedPAndLUpdateInput } from '../generated/graphql'
+import { PrismaService } from '../prisma/prisma.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
 
 @Resolver()

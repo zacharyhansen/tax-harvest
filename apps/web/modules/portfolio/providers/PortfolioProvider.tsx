@@ -40,12 +40,12 @@ export const PortfolioProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <PortfolioContext
+    <PortfolioContext.Provider
     // @ts-expect-error we throw an error if nots not defined
       value={ctx}
     >
       {children}
-    </PortfolioContext>
+    </PortfolioContext.Provider>
   );
 };
 

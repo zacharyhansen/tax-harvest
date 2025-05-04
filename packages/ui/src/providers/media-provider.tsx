@@ -36,6 +36,8 @@ export default function MediaProvider({
   );
 
   return (
-    <MediaContext value={value}>{children}</MediaContext>
+    <MediaContext.Provider value={value}>
+      {children}
+    </MediaContext.Provider>
   );
 }

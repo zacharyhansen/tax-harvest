@@ -1,12 +1,12 @@
-import type { Prisma } from '@prisma/client'
 import type { GraphQLResolveInfo } from 'graphql'
 import type { ClerkClaims } from '../auth/types'
-
-import type { UserService } from './user.service'
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
+
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { User, UserUpdateInput } from '../generated/graphql'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { UserService } from './user.service'
 
 @Resolver(() => User)
 export class UserResolver {

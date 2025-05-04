@@ -1,11 +1,8 @@
-import type { ConfigService } from '@nestjs/config'
-
 import type { FastifyReply } from 'fastify'
 import type { PlaidWebhook } from './plaid.dto'
-
-import type { PlaidService } from './plaid.service'
 import { Body, Controller, Logger, Post, Res } from '@nestjs/common'
 import { Public } from '../auth/decorators/public.decorator'
+import { PlaidService } from './plaid.service'
 
 @Controller('plaid')
 export class PlaidController {
@@ -13,7 +10,6 @@ export class PlaidController {
 
   constructor(
     private readonly plaidService: PlaidService,
-    private readonly configService: ConfigService,
   ) {}
   // switch (evt.type) {
   //   case 'user.created':

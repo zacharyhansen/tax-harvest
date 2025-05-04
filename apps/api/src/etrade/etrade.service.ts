@@ -1,29 +1,27 @@
-import type { ConfigService } from '@nestjs/config'
-import type {
+import { Injectable, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import {
   Account,
   AccountInstitution,
   AuthConnection,
+  AuthSource,
+  AuthType,
   OptionLevel,
   Prisma,
 } from '@prisma/client'
-import type { PrismaService } from '../prisma/prisma.service'
-import type ConnectionProvider from '../utilities/abstractClass/ConnectionProvider'
-import type {
+import { Decimal } from '@prisma/client/runtime/library'
+import { OAuth } from 'oauth'
+
+import { PrismaService } from '../prisma/prisma.service'
+import ConnectionProvider from '../utilities/abstractClass/ConnectionProvider'
+import { dateOrNull } from '../utilities/dateLoad'
+import {
   EtradeAccountListResponse,
   EtradeBalanceResponse,
   EtradePortfolioResponse,
   LotDetailResponse,
   TransactionListResponse,
 } from './types'
-import { Injectable, Logger } from '@nestjs/common'
-
-import {
-  AuthSource,
-  AuthType,
-} from '@prisma/client'
-import { Decimal } from '@prisma/client/runtime/library'
-import { OAuth } from 'oauth'
-import { dateOrNull } from '../utilities/dateLoad'
 
 interface UrlData {
   pageOrQuery?: Record<string, string>

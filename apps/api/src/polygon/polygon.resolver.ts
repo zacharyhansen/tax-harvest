@@ -1,7 +1,6 @@
-import type { PolygonService } from './polygon.service'
-
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { PolygonStockData } from './polygon.service'
+
+import { PolygonService, PolygonStockData } from './polygon.service'
 
 @Resolver(() => PolygonStockData)
 export class PolygonResolver {

@@ -1,10 +1,5 @@
-import type { Prisma } from '@prisma/client'
-
 import type { GraphQLResolveInfo } from 'graphql'
 import type { ClerkClaims } from '../auth/types'
-import type { GoogleStorageService } from '../google-storage/google-storage.service'
-
-import type { FileService } from './file.service'
 import {
   Args,
   Field,
@@ -14,10 +9,13 @@ import {
   Query,
   Resolver,
 } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { File, FileCreateManyInput } from '../generated/graphql'
 import { GCPUploadFile } from '../google-storage/google-storage.dto'
+import { GoogleStorageService } from '../google-storage/google-storage.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { FileService } from './file.service'
 
 @ObjectType()
 class SignedUrlsForUploadPayload {

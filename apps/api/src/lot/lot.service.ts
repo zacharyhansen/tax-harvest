@@ -1,12 +1,12 @@
-import type { Prisma } from '@prisma/client'
-import type { Selectable, SelectExpression } from 'kysely'
-import type { Database } from '../database/database'
-
-import type { DB, LotCurrent } from '../database/db.d'
-
-import type { PrismaService } from '../prisma/prisma.service'
 import { Injectable } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
+import { Selectable, SelectExpression } from 'kysely'
+
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
+
+import { Database } from '../database/database'
+import { DB, LotCurrent } from '../database/db.d'
+import { PrismaService } from '../prisma/prisma.service'
 import { LotValueType } from './lot.dto'
 
 @Injectable()

@@ -1,5 +1,5 @@
-import type { InlineConfig } from 'vitest'
 import { loadEnv } from 'vite'
+import { InlineConfig } from 'vitest'
 
 export function createVitestTestConfig(testingType: string): InlineConfig {
   return {

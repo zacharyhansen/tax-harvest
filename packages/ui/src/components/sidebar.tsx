@@ -119,7 +119,7 @@ const SidebarProvider = (
   );
 
   return (
-    <SidebarContext value={contextValue}>
+    <SidebarContext.Provider value={contextValue}>
       <TooltipProvider delayDuration={200}>
         <div
           style={
@@ -139,7 +139,7 @@ const SidebarProvider = (
           {children}
         </div>
       </TooltipProvider>
-    </SidebarContext>
+    </SidebarContext.Provider>
   );
 };
 SidebarProvider.displayName = 'SidebarProvider';

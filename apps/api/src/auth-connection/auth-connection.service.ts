@@ -1,10 +1,9 @@
-import type { AuthConnection, Prisma } from '@prisma/client'
-import type { EtradeService } from '../etrade/etrade.service'
-
-import type { PlaidService } from '../plaid/plaid.service'
-import type { PrismaService } from '../prisma/prisma.service'
 import { Injectable } from '@nestjs/common'
-import { AuthSource } from '@prisma/client'
+import { AuthConnection, AuthSource, Prisma } from '@prisma/client'
+
+import { EtradeService } from '../etrade/etrade.service'
+import { PlaidService } from '../plaid/plaid.service'
+import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
 export class AuthConnectionService {

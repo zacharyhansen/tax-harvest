@@ -1,11 +1,11 @@
-import type { Prisma } from '@prisma/client'
-import type { ClerkService } from '../clerk/clerk.service'
-
-import type { Database } from '../database/database'
-import type { PlaidService } from '../plaid/plaid.service'
-import type { PrismaService } from '../prisma/prisma.service'
-import type { StripeService } from '../stripe/stripe.service'
 import { Injectable, Logger } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
+
+import { ClerkService } from '../clerk/clerk.service'
+import { Database } from '../database/database'
+import { PlaidService } from '../plaid/plaid.service'
+import { PrismaService } from '../prisma/prisma.service'
+import { StripeService } from '../stripe/stripe.service'
 
 @Injectable()
 export class UserService {

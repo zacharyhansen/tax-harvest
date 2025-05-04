@@ -1,6 +1,5 @@
-import type { ExecutionContext } from '@nestjs/common'
 import { clerkClient } from '@clerk/clerk-sdk-node'
-import { createParamDecorator } from '@nestjs/common'
+import { createParamDecorator, ExecutionContext } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
 
 export const ClerkContext = createParamDecorator(

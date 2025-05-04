@@ -52,6 +52,7 @@ export default antfu(
   },
   {
     rules: {
+      'react/no-context-provider': 'off', // breaks with current react/nextjs verisons
       'no-html-link-for-pages': 'off',
       'no-console': ['error', { allow: ['info', 'warn', 'error', 'time', 'timeEnd'] }],
       'antfu/no-top-level-await': 'off', // Allow top-level await

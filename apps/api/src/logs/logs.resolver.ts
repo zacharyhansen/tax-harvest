@@ -1,16 +1,13 @@
-import type { Prisma } from '@prisma/client'
 import type { GraphQLResolveInfo } from 'graphql'
-
 import type { ClerkClaims } from '../auth/types'
-import type { LogsService } from './logs.service'
-
-import type { PrismaService } from '~/prisma/prisma.service'
-import type { PaginationProps } from '~/utilities/pagination'
-
 import { Args, Info, Int, Query, Resolver } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
+import { PrismaService } from '~/prisma/prisma.service'
+import { PaginationProps } from '~/utilities/pagination'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { Log, LogOrderByRelationAggregateInput } from '../generated/graphql'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { LogsService } from './logs.service'
 
 @Resolver(() => Log)
 export class LogsResolver {

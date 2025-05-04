@@ -1,12 +1,11 @@
-import type { QueryResult } from 'kysely'
-import type { Database } from '../database/database'
-import type { PrismaService } from '../prisma/prisma.service'
-import type { GraphTimeValue } from '../vector-graph/vector-graph.types'
-
 import { Injectable, Logger } from '@nestjs/common'
 import { VectorWindow } from '@prisma/client'
-import { sql } from 'kysely'
+import { QueryResult, sql } from 'kysely'
+
+import { Database } from '../database/database'
 import { PolygonService } from '../polygon/polygon.service'
+import { PrismaService } from '../prisma/prisma.service'
+import { GraphTimeValue } from '../vector-graph/vector-graph.types'
 
 interface PriceHourlyNeighborsQueryResult {
   id: string

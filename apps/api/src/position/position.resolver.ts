@@ -1,13 +1,11 @@
-import type { Prisma } from '@prisma/client'
 import type { GraphQLResolveInfo } from 'graphql'
-
 import type { ClerkClaims } from '../auth/types'
-import type { PositionService } from './position.service'
-
 import { Info, Query, Resolver } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { Position } from '../generated/graphql'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
+import { PositionService } from './position.service'
 
 @Resolver(() => Position)
 export class PositionResolver {

@@ -1,13 +1,11 @@
-import type {
-  CanActivate,
-  ExecutionContext,
-} from '@nestjs/common'
-import type { Reflector } from '@nestjs/core'
 import { clerkClient } from '@clerk/clerk-sdk-node'
 import {
+  CanActivate,
+  ExecutionContext,
   Injectable,
   Logger,
 } from '@nestjs/common'
+import { Reflector } from '@nestjs/core'
 import { GqlExecutionContext } from '@nestjs/graphql'
 
 @Injectable()

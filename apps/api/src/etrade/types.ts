@@ -1,4 +1,4 @@
-import type { AccountInstitution, AccountMode, AccountStatus } from '@prisma/client'
+import { AccountInstitution, AccountMode, AccountStatus } from '@prisma/client'
 
 export interface EtradeAccount {
   accountId: string

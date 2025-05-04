@@ -1,41 +1,35 @@
-import type { ConfigService } from '@nestjs/config'
-import type {
+import { Injectable, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import {
   Account,
+  AccountInstitution,
+  AccountProvider,
   AuthConnection,
+  AuthSource,
+  AuthType,
+  LogType,
   Lot,
+  OperationType,
   Prisma,
   Transaction,
   User,
 } from '@prisma/client'
-import type { InputJsonValue } from '@prisma/client/runtime/library'
-import type {
+import { InputJsonValue } from '@prisma/client/runtime/library'
+import Decimal from 'decimal.js'
+import {
   AccountBase,
+  Configuration,
+  CountryCode,
   Holding,
   InvestmentsHoldingsGetResponse,
   InvestmentsTransactionsGetResponse,
-  Security,
-} from 'plaid'
-import type { PrismaService } from '../prisma/prisma.service'
-import type { LotChange, LotData } from './lot-application'
-import type { PlaidLinkOnSuccessMetadata, PlaidWebhook } from './plaid.dto'
-import { Injectable, Logger } from '@nestjs/common'
-
-import {
-  AccountInstitution,
-  AccountProvider,
-  AuthSource,
-  AuthType,
-  LogType,
-  OperationType,
-} from '@prisma/client'
-import Decimal from 'decimal.js'
-import {
-  Configuration,
-  CountryCode,
   PlaidApi,
   Products,
+  Security,
 } from 'plaid'
-import { findLotChangeSets } from './lot-application'
+import { PrismaService } from '../prisma/prisma.service'
+import { findLotChangeSets, LotChange, LotData } from './lot-application'
+import { PlaidLinkOnSuccessMetadata, PlaidWebhook } from './plaid.dto'
 import { taxAdvantadedSubTypes } from './plaid.utils'
 
 const plaidTransactionsPerPage = 500

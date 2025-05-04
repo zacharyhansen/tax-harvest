@@ -7,7 +7,6 @@ import { PolygonService } from './polygon.service'
 
 @Module({
   exports: [PolygonService],
-  imports: [],
   providers: [
     PolygonService,
     PolygonResolver,

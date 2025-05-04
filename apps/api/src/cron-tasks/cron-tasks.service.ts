@@ -1,9 +1,9 @@
-import type { AssetService } from '../asset/asset.service'
-import type { PolygonService } from '../polygon/polygon.service'
-
-import type { PriceHourlyVectorService } from '../price-hourly-vector/price-hourly-vector.service'
 import { Injectable, Logger } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
+
+import { AssetService } from '../asset/asset.service'
+import { PolygonService } from '../polygon/polygon.service'
+import { PriceHourlyVectorService } from '../price-hourly-vector/price-hourly-vector.service'
 
 @Injectable()
 export class CronTasksService {

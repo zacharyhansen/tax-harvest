@@ -1,10 +1,10 @@
+import { Resolver } from '@nestjs/graphql'
+
 // import { Prisma } from "@prisma/client";
 // import { type GraphQLResolveInfo } from "graphql";
 // import { VectorGraph, VectorGraphWhereInput } from "../generated/graphql";
 // import { PrismaSelect } from "../utilities/prisma/prisma-select";
-import type { VectorGraphService } from './vector-graph.service'
-
-import { Resolver } from '@nestjs/graphql'
+import { VectorGraphService } from './vector-graph.service'
 // import { GraphTimeValue } from "./vector-graph.types";
 
 // @ObjectType()

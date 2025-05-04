@@ -29,9 +29,9 @@ function FormField<
   ...props
 }: ControllerProps<TFieldValues, TName>) {
   return (
-    <FormFieldContext value={{ name: props.name }}>
+    <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
-    </FormFieldContext>
+    </FormFieldContext.Provider>
   );
 }
 
@@ -71,9 +71,9 @@ const FormItem = ({ ref, className, ...props }: React.HTMLAttributes<HTMLDivElem
   const id = React.useId();
 
   return (
-    <FormItemContext value={{ id }}>
+    <FormItemContext.Provider value={{ id }}>
       <div ref={ref} className={cn('space-y-1', className)} {...props} />
-    </FormItemContext>
+    </FormItemContext.Provider>
   );
 };
 FormItem.displayName = 'FormItem';

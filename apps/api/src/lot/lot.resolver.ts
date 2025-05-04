@@ -1,17 +1,14 @@
-import type { Prisma } from '@prisma/client'
-
 import type { GraphQLResolveInfo } from 'graphql'
-import type { PrismaService } from '../prisma/prisma.service'
-import type { LotService } from './lot.service'
-
 import type { ClerkClaims } from '~/auth/types'
-
 import { Args, Info, Query, Resolver } from '@nestjs/graphql'
+import { Prisma } from '@prisma/client'
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { Lot, LotWhereInput } from '../generated/graphql'
+import { PrismaService } from '../prisma/prisma.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
 import { LotCurrent, LotValueType } from './lot.dto'
+import { LotService } from './lot.service'
 
 @Resolver()
 export class LotResolver {

@@ -9,9 +9,11 @@ export default antfu({
     'src/generated/',
     'src/database/db.d.ts',
   ],
-
-}, { rules: {
-  'node/prefer-global/process': ['error', 'always'],
-  'no-console': ['error', { allow: ['info', 'warn', 'error', 'time', 'timeEnd'] }],
-  'ts/no-explicit-any': 'error',
-} })
+}, {
+  rules: {
+    '@typescript-eslint/consistent-type-imports': 'off',
+    'node/prefer-global/process': ['error', 'always'],
+    'no-console': ['error', { allow: ['info', 'warn', 'error', 'time', 'timeEnd'] }],
+    'ts/no-explicit-any': 'error',
+  },
+})

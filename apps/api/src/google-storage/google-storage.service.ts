@@ -1,8 +1,8 @@
-import type { ConfigService } from '@nestjs/config'
-import type { GCPUploadFile } from './google-storage.dto'
 import { Storage } from '@google-cloud/storage'
-
 import { Injectable, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+
+import { GCPUploadFile } from './google-storage.dto'
 
 @Injectable()
 export class GoogleStorageService {
