@@ -1,1 +1,2 @@
-{{- include "common.ingress" . -}} 
+{{/* Individual ingress for web is disabled in favor of the global consolidated ingress */}}
+{{- /* This file is intentionally left empty */ -}} 

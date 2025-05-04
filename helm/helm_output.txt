@@ -1,0 +1,337 @@
+---
+# Source: harvester/charts/api/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-api
+  namespace: harvester
+  labels:
+    helm.sh/chart: api-0.1.0
+    app.kubernetes.io/name: api
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: harvester
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: api
+    app.kubernetes.io/instance: release-name
+---
+# Source: harvester/charts/web/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-web
+  namespace: harvester
+  labels:
+    helm.sh/chart: web-0.1.0
+    app.kubernetes.io/name: web
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: harvester
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/instance: release-name
+---
+# Source: harvester/charts/api/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-api
+  namespace: harvester
+  labels:
+    helm.sh/chart: api-0.1.0
+    app.kubernetes.io/name: api
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: harvester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: api
+      app.kubernetes.io/instance: release-name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: api
+        app.kubernetes.io/instance: release-name
+    spec:
+      serviceAccountName: google-secret-service-account
+      containers:
+        - name: api
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: CLIENT_HOME_PAGE_PATH
+              value: "/main/home"
+            - name: CLIENT_ORIGIN
+              value: "http://dev.taxharvest.ai"
+            - name: CRON
+              value: "true"
+            - name: DB_HOST
+              value: "/cloudsql/harvester-ai-428202:us-central1:harvester-dev"
+            - name: ETRADE_HOSTNAME
+              value: "api.etrade.com"
+            - name: ETRADE_OAUTH_AUTHORIZE_URL
+              value: "https://us.etrade.com/e/t/etws/authorize"
+            - name: GCS_LOTS_BUCKET_NAME
+              value: "lot_upload"
+            - name: GOOGLE_PROJECT
+              value: "harvester-ai-428202"
+            - name: LOG_LEVEL
+              value: "info"
+            - name: ORIGIN
+              value: "https://{{ .Values.global.domain }}"
+            - name: PLAID_ENV
+              value: "https://production.plaid.com"
+            - name: PORT
+              value: "3000"
+            - name: SECRET_SOURCE
+              value: "GCP"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database
+                  key: DATABASE_URL
+            - name: CLERK_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: clerk
+                  key: CLERK_SECRET_KEY
+          resources:
+            {}
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+        # Cloud SQL Auth Proxy sidecar container
+        - name: cloud-sql-proxy
+          image: "gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest"
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/cloud-sql-proxy"
+            - "--unix-socket=/cloudsql"
+            - "harvester-ai-428202:us-central1:harvester-dev"
+          volumeMounts:
+            - name: cloudsql
+              mountPath: /cloudsql
+          securityContext:
+            runAsUser: 2  # non-root user
+            allowPrivilegeEscalation: false
+          resources:
+            {}
+      volumes:
+        - name: cloudsql
+          emptyDir: {}
+---
+# Source: harvester/charts/web/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-web
+  namespace: harvester
+  labels:
+    helm.sh/chart: web-0.1.0
+    app.kubernetes.io/name: web
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: harvester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web
+      app.kubernetes.io/instance: release-name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web
+        app.kubernetes.io/instance: release-name
+    spec:
+      containers:
+        - name: web
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: CLERK_SECRET_KEY
+              value: "map[valueFrom:map[key:CLERK_SECRET_KEY name:clerk secretKeyRef:<nil>]]"
+            - name: NEXT_PUBLIC_API_URL
+              value: "/core"
+            - name: NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
+              value: "/main/home"
+            - name: NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
+              value: "/main/home"
+            - name: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+              value: "pk_test_aGVscGVkLWVtdS00NC5jbGVyay5hY2NvdW50cy5kZXYk"
+            - name: NEXT_PUBLIC_CLERK_SIGN_IN_URL
+              value: "/auth/signin"
+            - name: NEXT_PUBLIC_CLERK_SIGN_UP_URL
+              value: "/auth/signup"
+            - name: NEXT_PUBLIC_CORE_SERVER_URL
+              value: "https://{{ .Values.global.domain }}"
+            - name: NEXT_PUBLIC_ENV
+              value: "production"
+            - name: NEXT_PUBLIC_STRIPE_PUBLIC_KEY
+              value: "pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk"
+            - name: PORT
+              value: "3000"
+            - name: STRIPE_SECRET_KEY
+              value: "map[valueFrom:map[secretKeyRef:map[key:STRIPE_SECRET_KEY name:stripe]]]"
+          resources:
+            {}
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          readinessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 2
+---
+# Source: harvester/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: harvester-ingress
+  namespace: harvester
+  labels:
+    app.kubernetes.io/name: harvester
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    # Use the managed certificate
+    networking.gke.io/managed-certificates: harvester-cert
+    kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
+    kubernetes.io/ingress.allow-http: 'true'
+    kubernetes.io/ingress.allow-http: "true"
+    kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
+    networking.gke.io/managed-certificates: harvester-cert
+spec:
+  ingressClassName: gce
+  rules:
+    - host: dev.taxharvest.ai
+      http:
+        paths:
+          # API service path
+          - path: /core
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-api
+                port:
+                  number: 80
+          # Web frontend path
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: release-name-web
+                port:
+                  number: 80
+---
+# Source: harvester/charts/secrets/templates/secretstore.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: gcp-secret-store
+spec:
+  provider:
+    gcpsm:
+      projectID: harvester-ai-428202
+      auth:
+        workloadIdentity:
+          serviceAccountRef:
+            name: google-secret-service-account
+            namespace: harvester
+          clusterLocation: us-central1-b
+          clusterName: harvester-dev
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: database-external-secret
+  namespace: harvester
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: database
+    creationPolicy: Owner
+  data:
+    - secretKey: DATABASE_URL
+      remoteRef:
+        key: DATABASE_URL
+---
+# Source: harvester/templates/managed-certificate.yaml
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: harvester-cert
+  namespace: harvester
+  labels:
+    app.kubernetes.io/name: harvester
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    # This ensures the certificate is created before ingress
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+spec:
+  domains:
+    - dev.taxharvest.ai

@@ -1,0 +1,18 @@
+{{- if .Values.global.ingress.enabled -}}
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: harvester-cert
+  namespace: {{ .Values.global.namespace | default "harvester" }}
+  labels:
+    app.kubernetes.io/name: harvester
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    # This ensures the certificate is created before ingress
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+spec:
+  domains:
+    - {{ .Values.global.domain }}
+{{- end -}} 

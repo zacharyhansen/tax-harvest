@@ -195,3 +195,16 @@ Proxy the argodc server
 ```
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
+
+# Ingress Setup
+
+The chart uses a single consolidated Ingress resource with path-based routing:
+
+- `/core/*` - Routes to the API service
+- `/*` - Routes to the web frontend service
+
+This approach simplifies the ingress configuration and ensures that all traffic is properly routed based on URL paths.
+
+The managed certificate is configured with the domain specified in `global.domain` and is referenced by the ingress using the `networking.gke.io/managed-certificates` annotation.
+
+**Note:** When deploying, make sure your Google Cloud static IP (`harvester-static-ip`) is correctly set up and referenced in the values file.
