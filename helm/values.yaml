@@ -57,6 +57,7 @@ api:
     enabled: true
     image:
       repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
+      tag: latest
       pullPolicy: IfNotPresent
     # Your Cloud SQL instance connection name
     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
