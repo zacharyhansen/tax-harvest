@@ -76,7 +76,7 @@ api:
       ETRADE_OAUTH_AUTHORIZE_URL: 'https://us.etrade.com/e/t/etws/authorize'
       ETRADE_HOSTNAME: api.etrade.com
       GOOGLE_PROJECT: harvester-ai-428202
-      SECRET_SOURCE: GSM
+      SECRET_SOURCE: GCP
       GCS_LOTS_BUCKET_NAME: lot_upload
 
     # Add a new section for secret references
