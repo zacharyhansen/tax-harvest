@@ -8,11 +8,11 @@ global:
   clusterName: harvester-dev
   ingress:
     enabled: true
-    className: gce
     annotations:
       kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
       # Add any other GCP-specific annotations
       kubernetes.io/ingress.allow-http: 'true'
+      kubernetes.io/ingress.class: gce
       networking.gke.io/managed-certificates: harvester-cert
   # Added flag to indicate we're using the global consolidated ingress
   useGlobalIngress: true
