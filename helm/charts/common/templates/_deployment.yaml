@@ -80,19 +80,10 @@ spec:
           image: "{{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}"
           imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy | default "IfNotPresent" }}
           args:
-            # If connecting from a VPC-native GKE cluster, you can use the
-            # following flag to have the proxy connect over private IP
             - "--private-ip"
-            # - "--auto-iam-authn"
-            - "--port=5432"
+            - "--unix-socket=/cloudsql"
+            # - "--port=5432"
             - "harvester-ai-428202:us-central1:harvester-dev"
-          # command:
-          #   - "/cloud-sql-proxy"
-          #   - "--unix-socket=/cloudsql"
-          #   {{- if .Values.cloudsql.usePrivateIp }}
-          #   - "--private-ip"
-          #   {{- end }}
-          #   - "{{ .Values.cloudsql.instanceConnectionName }}"
           {{- if .Values.cloudsql.credentials }}
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
