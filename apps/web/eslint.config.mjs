@@ -46,6 +46,7 @@ export default antfu(
   },
   {
     rules: {
+      'no-console': ['error', { allow: ['info', 'warn', 'error', 'time', 'timeEnd'] }],
       'react/no-context-provider': 'off', // breaks with current react/nextjs verisons
       'antfu/no-top-level-await': 'off', // Allow top-level await
       'style/brace-style': ['error', '1tbs'], // Use the default brace style
