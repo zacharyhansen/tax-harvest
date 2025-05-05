@@ -1,4 +1,4 @@
-{{- if and .Values.global.ingress.enabled .Values.global.ingress.useManagedCertificates -}}
+{{- if .Values.global.ingress.enabled -}}
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
