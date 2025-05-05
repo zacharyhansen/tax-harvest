@@ -19,7 +19,8 @@ jobs:
         id: extract_version
         run: |
           # Extract version from branch name (update-version-X.Y.Z)
-          VERSION=${GITHUB_REF_NAME#update-version-}
+          VERSION=$(echo "${{ github.event.pull_request.head.ref }}" | sed 's/update-version-//')
+          echo "Version extracted: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
           # Get PR body for release notes
