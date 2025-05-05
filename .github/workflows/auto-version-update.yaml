@@ -60,7 +60,7 @@ jobs:
       - name: Update Helm Chart values.yaml
         run: |
           # Update the values.yaml file
-          yq eval ".harvester-web.image.tag = \"v${{ steps.get_version.outputs.version }}\" | .harvester-api.image.tag = \"v${{ steps.get_version.outputs.version }}\" | .harvester-studio.image.tag = \"v${{ steps.get_version.outputs.version }}\"" -i helm/values.yaml
+          yq eval ".web.image.tag = \"v${{ steps.get_version.outputs.version }}\" | .api.image.tag = \"v${{ steps.get_version.outputs.version }}\"" -i helm/values.yaml
 
           # Verify the file was updated
           if ! grep -q "v${{ steps.get_version.outputs.version }}" helm/values.yaml; then
