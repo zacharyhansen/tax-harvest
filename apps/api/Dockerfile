@@ -5,7 +5,7 @@ ARG PROJECT=api
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV PNPM_STORE_PATH=/pnpm/store
-RUN apk update && apk add --no-cache libc6-compat
+RUN apk update && apk add --no-cache libc6-compat && apk add --no-cache openssl
 RUN corepack enable
 RUN pnpm install turbo@2.5.2 --global 
 
