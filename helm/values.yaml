@@ -13,7 +13,7 @@ global:
       kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
       kubernetes.io/ingress.allow-http: 'true'
       kubernetes.io/ingress.class: gce
-      # networking.gke.io/managed-certificates: harvester-cert
+      networking.gke.io/managed-certificates: harvester-cert
   # Added flag to indicate we're using the global consolidated ingress
   useGlobalIngress: true
 # API service configuration
