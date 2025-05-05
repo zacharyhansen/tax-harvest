@@ -160,11 +160,6 @@ web:
       # NEXT_PUBLIC_APP_URL: "https://harvester.example.com"
       PORT: '3000'
       NEXT_PUBLIC_ENV: production
-      CLERK_SECRET_KEY:
-        valueFrom:
-          secretKeyRef:
-          name: clerk
-          key: CLERK_SECRET_KEY
       STRIPE_SECRET_KEY:
         valueFrom:
           secretKeyRef:
@@ -177,6 +172,13 @@ web:
       NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /main/home
       NEXT_PUBLIC_STRIPE_PUBLIC_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
       NEXT_PUBLIC_CORE_SERVER_URL: 'https://{{ .Values.global.domain }}'
+    # Add a new section for secret references to match the API structure
+    secretRefs:
+      - name: CLERK_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: clerk
+            key: CLERK_SECRET_KEY
 # Secrets configuration with External Secrets Operator
 # secrets:
 #   enabled: true

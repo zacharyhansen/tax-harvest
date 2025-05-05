@@ -10,7 +10,7 @@ export class HealthController {
   @HttpCode(200)
   @Public()
   run() {
-    this.logger.log('Health endpoint called!')
+    this.logger.log('im healthy baby')
     return { status: 'ok' }
   }
 }
