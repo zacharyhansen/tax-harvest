@@ -27,3 +27,28 @@ jobs:
           contributor_replace_regex: '-'
           contributor_replace_char: .
           fail_on_slack_error: 'true'
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "🚀 Version ${{ steps.extract_version.outputs.releaseVersion }} has been released!",
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Project:*\n<${{ steps.release.outputs.repoLink }}|${{ steps.release.outputs.repo}}>",
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Version:*\n<${{ steps.release.outputs.releaseLink }}|${{ steps.release.outputs.releaseVersion }}>",
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
