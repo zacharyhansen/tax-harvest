@@ -125,7 +125,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /health
+              path: core/health
               port: http
             initialDelaySeconds: 60
             periodSeconds: 15
@@ -134,7 +134,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /health
+              path: core/health
               port: http
             initialDelaySeconds: 20
             periodSeconds: 10
@@ -144,10 +144,10 @@ spec:
         - name: cloud-sql-proxy
           image: "gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest"
           imagePullPolicy: IfNotPresent
-          command:
-            - "/cloud-sql-proxy"
-            - "--unix-socket=/cloudsql"
+          args:
             - "--private-ip"
+            # - "--unix-socket=/cloudsql"
+            - "--port=5432"
             - "harvester-ai-428202:us-central1:harvester-dev"
           volumeMounts:
             - name: cloudsql

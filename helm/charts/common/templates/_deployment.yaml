@@ -81,9 +81,9 @@ spec:
           imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy | default "IfNotPresent" }}
           args:
             - "--private-ip"
-            - "--unix-socket=/cloudsql"
-            # - "--port=5432"
-            - "harvester-ai-428202:us-central1:harvester-dev"
+            # - "--unix-socket=/cloudsql"
+            - "--port={{ .Values.cloudsql.port | default "5432" }}"
+            - "{{ .Values.cloudsql.instanceConnectionName }}"
           {{- if .Values.cloudsql.credentials }}
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
