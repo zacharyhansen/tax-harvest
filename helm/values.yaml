@@ -66,7 +66,7 @@ api:
     NODE_ENV: production
     extras:
       DB_HOST: '/cloudsql/harvester-ai-428202:us-central1:harvester-dev'
-      PORT: '3000'
+      PORT: 8000
       LOG_LEVEL: info
       ORIGIN: 'https://{{ .Values.global.domain }}'
       PLAID_ENV: 'https://production.plaid.com'
