@@ -75,7 +75,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: api
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:latest"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.0.3"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -188,7 +188,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: web
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:latest"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.0.3"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -256,9 +256,8 @@ metadata:
     kubernetes.io/ingress.allow-http: "true"
     kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
-    networking.gke.io/managed-certificates: harvester-cert
 spec:
-  ingressClassName: gce
+  ingressClassName: 
   rules:
     - host: dev.taxharvest.ai
       http:

@@ -8,6 +8,7 @@ global:
   clusterName: harvester-dev
   ingress:
     enabled: true
+    useManagedCertificates: false
     annotations:
       kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
       kubernetes.io/ingress.allow-http: 'true'

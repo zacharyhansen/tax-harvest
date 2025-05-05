@@ -12,7 +12,7 @@ import { ClerkGuard } from '~/auth/guards/clerk.guard'
 import { CacheModule } from '~/cache/cache.module'
 import { ClerkModule } from '~/clerk/clerk.module'
 import { DatabaseModule } from '~/database/database.module'
-import { envSchema } from '~/env/env.schema'
+// import { envSchema } from '~/env/env.schema'
 import getConfigService from '~/env/gcp-secrets/get-config-service'
 import { EtradeModule } from '~/etrade/etrade.module'
 import { FileModule } from '~/file/file.module'
@@ -38,7 +38,7 @@ import { errorFormatPlugin } from '../plugins/error-format'
   imports: [
     ConfigModule.forRoot({
       load: [getConfigService],
-      validate: env => envSchema.parse(env),
+      // validate: env => envSchema.parse(env),
       isGlobal: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
