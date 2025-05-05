@@ -1,0 +1,29 @@
+name: Dev Deploy Notification
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [trunk]
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  release:
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Dev Deploy Notification
+        uses: thedaviddias/publish-release-info-action@v3.3.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          slack_webhook_urls: ${{ secrets.SLACK_WEBHOOK_URL }}
+          contributor_replace_regex: '-'
+          contributor_replace_char: .
+          fail_on_slack_error: 'true'
