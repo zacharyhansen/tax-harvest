@@ -1,0 +1,66 @@
+name: Release Notification
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [trunk]
+
+jobs:
+  send-slack-notification:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'update-version-')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract Version
+        id: extract_version
+        run: |
+          # Extract version from branch name (update-version-X.Y.Z)
+          VERSION=${GITHUB_REF_NAME#update-version-}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          # Get PR body for release notes
+          PR_BODY="${{ github.event.pull_request.body }}"
+          echo "pr_body<<EOF" >> $GITHUB_OUTPUT
+          echo "$PR_BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Send Slack Notification
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "🚀 Version ${{ steps.extract_version.outputs.version }} has been released!",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "🚀 Version ${{ steps.extract_version.outputs.version }} Released",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Release Notes:*\n${{ steps.extract_version.outputs.pr_body }}"
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "Pull Request: <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }}>"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
