@@ -20,7 +20,7 @@ global:
 # API service configuration
 api:
   enabled: true
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
     tag: latest
@@ -28,7 +28,7 @@ api:
   service:
     type: ClusterIP
     port: 80
-    targetPort: 3000
+    targetPort: 8000
   resources: {}
   # Health check probes
   livenessProbe:
@@ -154,6 +154,8 @@ web:
   ingress:
     path: /
     pathType: Prefix
+  # Service account for GCP workload identity
+  serviceAccountName: google-secret-service-account
   env:
     NODE_ENV: production
     extras:

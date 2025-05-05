@@ -9,6 +9,7 @@ metadata:
     {{- include "common.labels" . | nindent 4 }}
   annotations:
     # Always add the managed certificate annotation
+    kubernetes.io/ingress.class: "gce"  # Updated annotation
     networking.gke.io/managed-certificates: harvester-cert
     {{- with .Values.global.ingress.annotations }}
     {{- toYaml . | nindent 4 }}

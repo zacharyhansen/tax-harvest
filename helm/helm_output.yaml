@@ -61,7 +61,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harvester
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: api
@@ -79,7 +79,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 8000
               protocol: TCP
           env:
             - name: NODE_ENV
@@ -185,6 +185,7 @@ spec:
         app.kubernetes.io/name: web
         app.kubernetes.io/instance: release-name
     spec:
+      serviceAccountName: google-secret-service-account
       containers:
         - name: web
           image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:latest"

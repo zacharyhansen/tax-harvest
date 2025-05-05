@@ -1,0 +1,12 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: harvester-cert
+  namespace: harvester
+  labels:
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: harvester
+spec:
+  domains:
+    - dev.taxharvest.ai
