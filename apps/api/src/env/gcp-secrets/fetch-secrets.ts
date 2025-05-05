@@ -14,6 +14,10 @@ export async function fetchGCPSecrets() {
         const [response] = res
         return { [name]: response.payload?.data?.toString() }
       })
+      .catch((error) => {
+        console.error(`Error fetching secret ${name}:`, error)
+        return { [name]: undefined }
+      })
   }
 
   const secrets = await Promise.all([
