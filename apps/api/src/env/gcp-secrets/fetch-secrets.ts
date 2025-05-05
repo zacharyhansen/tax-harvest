@@ -34,7 +34,11 @@ export async function fetchGCPSecrets() {
     getSecret('PLAID_SECRET_KEY'),
     getSecret('PLAID_CLIENT_ID'),
     getSecret('CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET'),
-  ])
+  ]).catch((error) => {
+    console.error('Error fetching secrets in promise all:', error)
+    throw error
+  })
+
   return secrets.reduce(
     (current, accumulator) => ({ ...accumulator, ...current }),
     {},

@@ -9,6 +9,8 @@ export default async function getConfigService() {
     return {}
   }
 
+  console.info(`SECRET_SOURCE: ${config.get('SECRET_SOURCE')}`)
+  console.info('Fetching GCP secrets')
   const secrets = await fetchGCPSecrets()
 
   // TODO: validate secrets
