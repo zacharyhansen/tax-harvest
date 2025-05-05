@@ -165,7 +165,7 @@ web:
           secretKeyRef:
             name: stripe
             key: STRIPE_SECRET_KEY
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_live_Y2xlcmsuZGV2LnRheGhhcnZlc3QuYWkk
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_aGVscGVkLWVtdS04NC5jbGVyay5hY2NvdW50cy5kZXYk
       NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/signin
       NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/signup
       NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /main/home
