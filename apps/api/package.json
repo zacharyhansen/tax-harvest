@@ -129,7 +129,7 @@
     "adapter-pg": "link:@snaplet/seed/adapter-pg",
     "concurrently": "^9.0.1",
     "dotenv-cli": "^7.4.2",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
