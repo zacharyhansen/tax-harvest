@@ -12,8 +12,14 @@ import { useMemo } from 'react';
 
 const httpLink = new HttpLink({
   credentials: 'include',
-  uri: operation =>
-    `${process.env.NEXT_PUBLIC_CORE_SERVER_URL}/graphql?${operation.operationName}`,
+  uri: (operation) => {
+    console.info('operation', operation);
+    console.info(
+      'process.env.NEXT_PUBLIC_CORE_SERVER_URL',
+      process.env.NEXT_PUBLIC_CORE_SERVER_URL,
+    );
+    return `${process.env.NEXT_PUBLIC_CORE_SERVER_URL}/graphql?${operation.operationName}`;
+  },
 });
 
 const ApolloProviderWrapper = ({ children }: { children: ReactNode }) => {

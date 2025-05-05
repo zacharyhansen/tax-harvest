@@ -22,7 +22,6 @@ jobs:
       - name: Dev Deploy Notification
         uses: thedaviddias/publish-release-info-action@v3.3.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           slack_webhook_urls: ${{ secrets.SLACK_WEBHOOK_URL }}
           contributor_replace_regex: '-'
           contributor_replace_char: .
