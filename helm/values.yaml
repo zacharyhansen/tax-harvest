@@ -68,7 +68,7 @@ api:
       DB_HOST: '/cloudsql/harvester-ai-428202:us-central1:harvester-dev'
       PORT: 8000
       LOG_LEVEL: info
-      ORIGIN: 'https://{{ .Values.global.domain }}'
+      ORIGIN: 'https://dev.taxharvest.ai'
       PLAID_ENV: 'https://production.plaid.com'
       CLIENT_ORIGIN: 'http://dev.taxharvest.ai'
       CLIENT_HOME_PAGE_PATH: /main/home
@@ -171,7 +171,7 @@ web:
       NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /main/home
       NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /main/home
       NEXT_PUBLIC_STRIPE_PUBLIC_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
-      NEXT_PUBLIC_CORE_SERVER_URL: 'https://{{ .Values.global.domain }}'
+      NEXT_PUBLIC_CORE_SERVER_URL: 'https://dev.taxharvest.ai'
     # Add a new section for secret references to match the API structure
     secretRefs:
       - name: CLERK_SECRET_KEY
