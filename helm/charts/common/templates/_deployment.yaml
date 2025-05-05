@@ -82,6 +82,9 @@ spec:
           command:
             - "/cloud-sql-proxy"
             - "--unix-socket=/cloudsql"
+            {{- if .Values.cloudsql.usePrivateIp }}
+            - "--private-ip"
+            {{- end }}
             - "{{ .Values.cloudsql.instanceConnectionName }}"
           {{- if .Values.cloudsql.credentials }}
           env:

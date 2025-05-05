@@ -75,7 +75,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: api
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.0.3"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.0.6"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -147,6 +147,7 @@ spec:
           command:
             - "/cloud-sql-proxy"
             - "--unix-socket=/cloudsql"
+            - "--private-ip"
             - "harvester-ai-428202:us-central1:harvester-dev"
           volumeMounts:
             - name: cloudsql
@@ -188,7 +189,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: web
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.0.3"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.0.6"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -256,6 +257,7 @@ metadata:
     kubernetes.io/ingress.allow-http: "true"
     kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
+    networking.gke.io/managed-certificates: harvester-cert
 spec:
   ingressClassName: 
   rules:
