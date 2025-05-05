@@ -59,8 +59,8 @@ api:
       repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
       tag: latest
       pullPolicy: IfNotPresent
-    # Your Cloud SQL instance connection name
     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+    usePrivateIp: true
     resources: {}
   env:
     NODE_ENV: production
@@ -112,9 +112,9 @@ api:
             key: DATABASE_URL
     # Ensure Cloud SQL configuration is explicitly added for migrations
     cloudsql:
-      enabled: true # This ensures the Cloud SQL sidecar is included
-      # Use the same instance connection name as the API
+      enabled: true
       instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+      usePrivateIp: true
 # Web app configuration
 web:
   enabled: true
