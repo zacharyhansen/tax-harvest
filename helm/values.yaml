@@ -21,7 +21,7 @@ api:
   replicaCount: 2
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v1.0.6
+    tag: v1.1.0
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -121,7 +121,7 @@ web:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: v1.0.6
+    tag: v1.1.0
     pullPolicy: Always
   service:
     type: ClusterIP
