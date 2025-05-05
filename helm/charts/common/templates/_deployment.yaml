@@ -8,6 +8,7 @@ metadata:
     {{- include "common.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount | default 1 }}
+  revisionHistoryLimit: 2  # only keep last 2 old ReplicaSets
   selector:
     matchLabels:
       {{- include "common.selectorLabels" . | nindent 6 }}
