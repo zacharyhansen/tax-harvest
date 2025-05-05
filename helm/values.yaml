@@ -160,18 +160,13 @@ web:
       # NEXT_PUBLIC_APP_URL: "https://harvester.example.com"
       PORT: '3000'
       NEXT_PUBLIC_ENV: production
-      STRIPE_SECRET_KEY:
-        valueFrom:
-          secretKeyRef:
-            name: stripe
-            key: STRIPE_SECRET_KEY
       NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_aGVscGVkLWVtdS04NC5jbGVyay5hY2NvdW50cy5kZXYk
       NEXT_PUBLIC_CLERK_SIGN_IN_URL: /auth/signin
       NEXT_PUBLIC_CLERK_SIGN_UP_URL: /auth/signup
       NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /main/home
       NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /main/home
       NEXT_PUBLIC_STRIPE_PUBLIC_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
-      NEXT_PUBLIC_CORE_SERVER_URL: 'https://dev.taxharvest.ai'
+      NEXT_PUBLIC_CORE_SERVER_URL: 'https://dev.taxharvest.ai/core'
     # Add a new section for secret references to match the API structure
     secretRefs:
       - name: CLERK_SECRET_KEY
@@ -179,6 +174,11 @@ web:
           secretKeyRef:
             name: clerk
             key: CLERK_SECRET_KEY
+      - name: STRIPE_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: stripe
+            key: STRIPE_SECRET_KEY
 # Secrets configuration with External Secrets Operator
 # secrets:
 #   enabled: true
