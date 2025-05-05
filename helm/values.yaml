@@ -16,14 +16,13 @@ global:
       networking.gke.io/managed-certificates: harvester-cert
   # Added flag to indicate we're using the global consolidated ingress
   useGlobalIngress: true
-
 # API service configuration
 api:
   enabled: true
   replicaCount: 2
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v1.0.3
+    tag: v1.0.4
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -80,7 +79,6 @@ api:
       GOOGLE_PROJECT: harvester-ai-428202
       SECRET_SOURCE: GCP
       GCS_LOTS_BUCKET_NAME: lot_upload
-
     # Add a new section for secret references
     secretRefs:
       - name: DATABASE_URL
@@ -118,14 +116,13 @@ api:
       enabled: true # This ensures the Cloud SQL sidecar is included
       # Use the same instance connection name as the API
       instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
-
 # Web app configuration
 web:
   enabled: true
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: v1.0.3
+    tag: v1.0.4
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -181,7 +178,6 @@ web:
       NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /main/home
       NEXT_PUBLIC_STRIPE_PUBLIC_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
       NEXT_PUBLIC_CORE_SERVER_URL: 'https://{{ .Values.global.domain }}'
-
 # Secrets configuration with External Secrets Operator
 # secrets:
 #   enabled: true
