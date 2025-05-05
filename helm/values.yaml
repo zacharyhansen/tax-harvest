@@ -23,7 +23,7 @@ api:
   replicaCount: 2
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: latest
+    tag: v1.0.3
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -97,7 +97,7 @@ api:
     enabled: false # Set to false to skip running migrations
     image:
       repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-      tag: latest
+      tag: v1.0.3
       containerCommand: [/bin/sh, -c]
       containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
     # Migration-specific environment variables
@@ -125,7 +125,7 @@ web:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: latest
+    tag: v1.0.3
     pullPolicy: Always
   service:
     type: ClusterIP
