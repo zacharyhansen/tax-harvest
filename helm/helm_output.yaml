@@ -76,7 +76,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: api
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.1.5"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.0"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -188,7 +188,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: web
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.1.5"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.2.0"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -335,9 +335,10 @@ metadata:
   annotations:
     # This is what tells Helm to wait for the job to complete
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "-100"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
+  activeDeadlineSeconds: 300
   template:
     metadata:
       labels:
@@ -346,10 +347,11 @@ spec:
         app.kubernetes.io/component: migrations
     spec:
       serviceAccountName: google-secret-service-account
+      shareProcessNamespace: true
       restartPolicy: OnFailure
       containers:
         - name: migrations
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.1.5"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.0"
           imagePullPolicy: Always
           command: ["/bin/sh","-c"]
           args: ["chmod +x ./scripts/migrate.sh \u0026\u0026 ./scripts/migrate.sh"]

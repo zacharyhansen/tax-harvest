@@ -106,6 +106,11 @@ Get ArgoCD password
 
 ## Set up container access to google secret manager
 
+test chart
+```
+helm template . > helm_output.yaml --debug
+```
+
 [Allow GKE App to read secrets](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)
 
 Create cluster with workload node pool (does get added for existing pools)

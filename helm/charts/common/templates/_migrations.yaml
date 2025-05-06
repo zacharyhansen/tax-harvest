@@ -26,6 +26,7 @@ spec:
       {{- with .Values.serviceAccountName }}
       serviceAccountName: {{ . }}
       {{- end }}
+      shareProcessNamespace: true
       restartPolicy: OnFailure
       containers:
         - name: migrations
