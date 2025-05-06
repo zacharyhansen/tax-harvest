@@ -21,6 +21,9 @@ api:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
     tag: v1.1.5
     pullPolicy: Always
+  hookWeight: -10
+  annotations:
+    helm.sh/hook-weight: '-10'
   service:
     type: ClusterIP
     port: 80
@@ -94,6 +97,9 @@ web:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
     tag: v1.1.5
     pullPolicy: Always
+  hookWeight: 10
+  annotations:
+    helm.sh/hook-weight: '10'
   service:
     type: ClusterIP
     port: 80

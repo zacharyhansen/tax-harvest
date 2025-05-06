@@ -76,7 +76,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: api
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.1.4"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.1.5"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -188,7 +188,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: web
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.1.4"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.1.5"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -349,7 +349,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: migrations
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.1.4"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.1.5"
           imagePullPolicy: Always
           command: ["/bin/sh","-c"]
           args: ["chmod +x ./scripts/migrate.sh \u0026\u0026 ./scripts/migrate.sh"]
