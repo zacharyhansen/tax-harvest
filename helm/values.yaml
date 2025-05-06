@@ -84,16 +84,6 @@ api:
       tag: v1.0.3
       containerCommand: [/bin/sh, -c]
       containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
-    env:
-      extras:
-        GOOGLE_PROJECT: harvester-ai-428202
-        SECRET_SOURCE: GCP
-    secretRefs:
-      - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: database
-            key: DATABASE_URL
     cloudsql:
       enabled: true
       instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'

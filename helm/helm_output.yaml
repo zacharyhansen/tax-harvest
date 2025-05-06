@@ -91,8 +91,6 @@ spec:
               value: "http://dev.taxharvest.ai"
             - name: CRON
               value: "true"
-            - name: DB_HOST
-              value: "/cloudsql/harvester-ai-428202:us-central1:harvester-dev"
             - name: ETRADE_HOSTNAME
               value: "api.etrade.com"
             - name: ETRADE_OAUTH_AUTHORIZE_URL
@@ -101,8 +99,6 @@ spec:
               value: "lot_upload"
             - name: GOOGLE_PROJECT
               value: "harvester-ai-428202"
-            - name: LOG_LEVEL
-              value: "info"
             - name: ORIGIN
               value: "https://dev.taxharvest.ai"
             - name: PLAID_ENV
@@ -200,10 +196,6 @@ spec:
               protocol: TCP
           env:
             - name: NODE_ENV
-              value: "production"
-            - name: NEXT_PUBLIC_API_URL
-              value: "/core"
-            - name: NEXT_PUBLIC_ENV
               value: "production"
             - name: PORT
               value: "3000"
@@ -357,18 +349,11 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: migrations
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.0.3"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.1.4"
           imagePullPolicy: Always
           command: ["/bin/sh","-c"]
           args: ["chmod +x ./scripts/migrate.sh \u0026\u0026 ./scripts/migrate.sh"]
           env:
-            - name: NODE_ENV
-              value: "production"
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: database
-                  key: DATABASE_URL
             # Add Cloud SQL instance connection name as an environment variable
             - name: INSTANCE_CONNECTION_NAME
               value: "harvester-ai-428202:us-central1:harvester-dev"
@@ -378,8 +363,6 @@ spec:
               value: "http://dev.taxharvest.ai"
             - name: CRON
               value: "true"
-            - name: DB_HOST
-              value: "/cloudsql/harvester-ai-428202:us-central1:harvester-dev"
             - name: ETRADE_HOSTNAME
               value: "api.etrade.com"
             - name: ETRADE_OAUTH_AUTHORIZE_URL
@@ -388,8 +371,6 @@ spec:
               value: "lot_upload"
             - name: GOOGLE_PROJECT
               value: "harvester-ai-428202"
-            - name: LOG_LEVEL
-              value: "info"
             - name: ORIGIN
               value: "https://dev.taxharvest.ai"
             - name: PLAID_ENV
@@ -398,15 +379,16 @@ spec:
               value: "8000"
             - name: SECRET_SOURCE
               value: "GCP"
-            - name: LOG_LEVEL
-              value: "debug"
-            - name: MIGRATION_MODE
-              value: "apply"
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: database
                   key: DATABASE_URL
+            - name: CLERK_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: clerk
+                  key: CLERK_SECRET_KEY
           volumeMounts:
             - name: cloudsql
               mountPath: /cloudsql
