@@ -351,7 +351,6 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrations
-          restartPolicy: Never
           image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1"
           imagePullPolicy: Always
           command: ["/bin/sh","-c"]
@@ -399,7 +398,6 @@ spec:
         - name: cloud-sql-proxy
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
           imagePullPolicy: IfNotPresent
-          restartPolicy: Never
           args:
             - "--private-ip"
             # - "--unix-socket=/cloudsql"
