@@ -96,7 +96,7 @@ jobs:
         uses: ./.github/actions/auth
 
       - name: Build and Push Web Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: apps/web/Dockerfile
@@ -120,7 +120,7 @@ jobs:
         uses: ./.github/actions/auth
 
       - name: Build and Push API Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: apps/api/Dockerfile
@@ -132,7 +132,7 @@ jobs:
           cache-to: type=inline
 
   # - name: Build and Push Studio Image
-  #   uses: docker/build-push-action@v5
+  #   uses: docker/build-push-action@v6
   #   with:
   #     context: .
   #     file: Dockerfile.prisma.microservice
