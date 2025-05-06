@@ -14,14 +14,18 @@ COPY . .
 RUN turbo prune web --docker
 
 FROM base AS installer
-ARG DEPLOYMENT_ENV=development
+# this determines which env file is copied into the image
+ARG DEPLOYMENT_ENV=development 
+# always run in production mode
+ENV NODE_ENV=production 
 WORKDIR /app
 COPY --from=builder /app/out/json/ .
-RUN pnpm install --frozen-lockfile --ignore-scripts --store-dir=${PNPM_STORE_PATH}
+RUN pnpm install --frozen-lockfile --ignore-scripts --store-dir=${PNPM_STORE_PATH} --prod=false
 COPY --from=builder /app/out/full/ .
 # Set environment variable to disable linting/type checking for Docker builds
 ENV DOCKER_BUILD=true
-COPY ./apps/web/.env.deployment.${DEPLOYMENT_ENV} .env.production
+# Copy the DEPLOYMENT_ENV selected env into the image
+COPY ./apps/web/.env.deployment.${DEPLOYMENT_ENV} /app/apps/web/.env.production
 RUN pnpm turbo run build --filter=web...
 
 FROM base AS runner
