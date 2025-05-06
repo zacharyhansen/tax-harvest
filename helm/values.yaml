@@ -31,15 +31,15 @@ api:
   # Health check probes
   livenessProbe:
     httpGet:
-      path: core/health
+      path: /core/health
       port: http
-    initialDelaySeconds: 15
+    initialDelaySeconds: 30
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
   readinessProbe:
     httpGet:
-      path: core/health
+      path: /core/health
       port: http
     initialDelaySeconds: 15
     timeoutSeconds: 3

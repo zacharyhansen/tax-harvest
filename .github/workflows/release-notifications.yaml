@@ -19,14 +19,9 @@ jobs:
         id: extract_version
         run: |
           # Extract version from branch name (update-version-X.Y.Z)
-          VERSION=${GITHUB_REF_NAME#update-version-}
+          REF="${{ github.event.pull_request.head.ref }}"
+          VERSION=${REF#update-version-}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          
-          # Get PR body for release notes
-          PR_BODY="${{ github.event.pull_request.body }}"
-          echo "pr_body<<EOF" >> $GITHUB_OUTPUT
-          echo "$PR_BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send Slack Notification
         uses: slackapi/slack-github-action@v1.25.0
@@ -41,13 +36,6 @@ jobs:
                     "type": "plain_text",
                     "text": "🚀 Version ${{ steps.extract_version.outputs.version }} Released",
                     "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Release Notes:*\n${{ steps.extract_version.outputs.pr_body }}"
                   }
                 },
                 {
