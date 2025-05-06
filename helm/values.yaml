@@ -14,13 +14,12 @@ global:
       networking.gke.io/managed-certificates: harvester-cert
   # Added flag to indicate we're using the global consolidated ingress
   useGlobalIngress: true
-
 api:
   enabled: true
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v1.1.4
+    tag: v1.1.5
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -88,13 +87,12 @@ api:
       enabled: true
       instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
       resources: {}
-
 web:
   enabled: true
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: v1.1.4
+    tag: v1.1.5
     pullPolicy: Always
   service:
     type: ClusterIP
