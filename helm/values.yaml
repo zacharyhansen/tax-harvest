@@ -18,7 +18,7 @@ global:
 # API service configuration
 api:
   enabled: true
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
     tag: v1.1.1
@@ -33,8 +33,7 @@ api:
     httpGet:
       path: core/health
       port: http
-    initialDelaySeconds: 60
-    periodSeconds: 15
+    initialDelaySeconds: 15
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
@@ -42,8 +41,7 @@ api:
     httpGet:
       path: core/health
       port: http
-    initialDelaySeconds: 20
-    periodSeconds: 10
+    initialDelaySeconds: 15
     timeoutSeconds: 3
     failureThreshold: 3
     successThreshold: 1
