@@ -54,12 +54,7 @@ api:
   # Cloud SQL Auth Proxy configuration
   cloudsql:
     enabled: true
-    image:
-      repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
-      tag: latest
-      pullPolicy: IfNotPresent
     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
-    usePrivateIp: true
     resources: {}
   env:
     NODE_ENV: production
@@ -113,7 +108,7 @@ api:
     cloudsql:
       enabled: true
       instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
-      usePrivateIp: true
+      resources: {}
 # Web app configuration
 web:
   enabled: true
@@ -154,9 +149,8 @@ web:
   env:
     NODE_ENV: production
     extras:
-    # Frontend configuration - next public env's need to be added to the deployment env fiels so they are created at build time
-    # Add more environment variables as needed
-    # Add a new section for secret references to match the API structure
+      PORT: '3000'
+    # Frontend configuration
     secretRefs:
       - name: CLERK_SECRET_KEY
         valueFrom:

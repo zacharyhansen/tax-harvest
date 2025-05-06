@@ -47,31 +47,11 @@ serviceAccountName: google-secret-service-account
 # Cloud SQL Auth Proxy configuration
 cloudsql:
   enabled: true
-  image:
-    repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
-    tag: latest
-    pullPolicy: IfNotPresent
-  # Your Cloud SQL instance connection name
   instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
-  # If using explicit credentials (key file) rather than workload identity
-  # credentials:
-  #   secretName: cloudsql-instance-credentials
-  #   key: credentials.json
   resources: {}
 
 env:
   NODE_ENV: production
-  extras:
-  # Database configuration
-  # DB_HOST: '/cloudsql/harvester-ai-428202:us-central1:harvester-dev'
-  # DB_NAME: harvester
-  # DB_USER: postgres
-  # Add more environment variables as needed
-  # You can reference secrets like: ${SECRET_NAME}
-  # DB_PASSWORD: "${DB_PASSWORD}"
-  # API_KEY: "${API_KEY}"
-  # PORT: '3000'
-  # LOG_LEVEL: info
 
 migrations:
   enabled: false # Set to false to skip running migrations
@@ -80,31 +60,8 @@ migrations:
     tag: latest
     containerCommand: [/bin/sh, -c]
     containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
-  # Add migration-specific environment variables
-  env:
-    extras:
-    # Migration specific environment variables
-    # MIGRATION_STRATEGY: "up"
-    # DB_SCHEMA: "public"
-  # Add migration-specific secrets
-  secretRefs:
-  # Example: Reference secrets for migrations
-  # - name: DB_MIGRATION_PASSWORD
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: database-migration-creds
-  #       key: password
-  # - name: API_TOKEN
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: api-tokens
-  #       key: migration-token
-  # Cloud SQL configuration for migrations
+
   cloudsql:
     enabled: true
-    # Use the same instance connection name as defined in the parent chart
     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
-    image:
-      repository: gcr.io/cloud-sql-connectors/cloud-sql-proxy
-      tag: latest
-      pullPolicy: IfNotPresent
+    resources: {}

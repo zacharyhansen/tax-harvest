@@ -45,12 +45,7 @@ env:
   NODE_ENV: production
   extras:
     # Frontend configuration
-    NEXT_PUBLIC_API_URL: /core
-    # Add more environment variables as needed
-    # NEXT_PUBLIC_APP_URL: "https://harvester.example.com"
-    # NEXT_PUBLIC_ANALYTICS_ID: "UA-XXXXXXXXX-X"
     PORT: '3000'
-    NEXT_PUBLIC_ENV: production
 
 # Cloud SQL configuration for the web service (disabled by default)
 cloudsql:

@@ -78,28 +78,16 @@ spec:
         {{- if .Values.cloudsql.enabled }}
         # Cloud SQL Auth Proxy sidecar container
         - name: cloud-sql-proxy
-          image: "{{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}"
-          imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy | default "IfNotPresent" }}
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
+          imagePullPolicy: IfNotPresent
           args:
             - "--private-ip"
             # - "--unix-socket=/cloudsql"
             - "--port={{ .Values.cloudsql.port | default "5432" }}"
             - "{{ .Values.cloudsql.instanceConnectionName }}"
-          {{- if .Values.cloudsql.credentials }}
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: "/secrets/cloudsql/{{ .Values.cloudsql.credentials.key }}"
-          volumeMounts:
-            - name: cloudsql-instance-credentials
-              mountPath: /secrets/cloudsql
-              readOnly: true
-            - name: cloudsql
-              mountPath: /cloudsql
-          {{- else }}
           volumeMounts:
             - name: cloudsql
               mountPath: /cloudsql
-          {{- end }}
           securityContext:
             runAsUser: 2  # non-root user
             allowPrivilegeEscalation: false

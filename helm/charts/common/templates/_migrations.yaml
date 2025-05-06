@@ -77,72 +77,26 @@ spec:
               mountPath: /cloudsql
           {{- end }}
           {{- end }}
-          {{- if and (hasKey .Values.migrations "cloudsql") .Values.migrations.cloudsql.enabled }}
-          volumeMounts:
-            - name: cloudsql
-              mountPath: /cloudsql
-          {{- end }}
         {{- if hasKey .Values "cloudsql" }}
         {{- if .Values.cloudsql.enabled }}
-        # Cloud SQL Auth Proxy sidecar container for migrations
+        # Cloud SQL Auth Proxy sidecar container
         - name: cloud-sql-proxy
-          image: "{{ .Values.cloudsql.image.repository }}:{{ .Values.cloudsql.image.tag }}"
-          imagePullPolicy: {{ .Values.cloudsql.image.pullPolicy | default "IfNotPresent" }}
-          command:
-            - "/cloud-sql-proxy"
-            - "--unix-socket=/cloudsql"
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--private-ip"
+            # - "--unix-socket=/cloudsql"
+            - "--port={{ .Values.cloudsql.port | default "5432" }}"
             - "{{ .Values.cloudsql.instanceConnectionName }}"
-          {{- if .Values.cloudsql.credentials }}
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: "/secrets/cloudsql/{{ .Values.cloudsql.credentials.key }}"
-          volumeMounts:
-            - name: cloudsql-instance-credentials
-              mountPath: /secrets/cloudsql
-              readOnly: true
-            - name: cloudsql
-              mountPath: /cloudsql
-          {{- else }}
           volumeMounts:
             - name: cloudsql
               mountPath: /cloudsql
-          {{- end }}
           securityContext:
             runAsUser: 2  # non-root user
             allowPrivilegeEscalation: false
           resources:
             {{- toYaml .Values.cloudsql.resources | nindent 12 }}
         {{- end }}
-        {{- end }}
-        {{- if and (hasKey .Values.migrations "cloudsql") .Values.migrations.cloudsql.enabled }}
-        # Cloud SQL Auth Proxy sidecar container specifically for migrations
-        - name: cloud-sql-proxy
-          image: "{{ .Values.migrations.cloudsql.image.repository | default "gcr.io/cloud-sql-connectors/cloud-sql-proxy" }}:{{ .Values.migrations.cloudsql.image.tag | default "latest" }}"
-          imagePullPolicy: {{ .Values.migrations.cloudsql.image.pullPolicy | default "IfNotPresent" }}
-          command:
-            - "/cloud-sql-proxy"
-            - "--unix-socket=/cloudsql"
-            - "{{ .Values.migrations.cloudsql.instanceConnectionName }}"
-          {{- if .Values.migrations.cloudsql.credentials }}
-          env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: "/secrets/cloudsql/{{ .Values.migrations.cloudsql.credentials.key }}"
-          volumeMounts:
-            - name: cloudsql-instance-credentials
-              mountPath: /secrets/cloudsql
-              readOnly: true
-            - name: cloudsql
-              mountPath: /cloudsql
-          {{- else }}
-          volumeMounts:
-            - name: cloudsql
-              mountPath: /cloudsql
-          {{- end }}
-          securityContext:
-            runAsUser: 2  # non-root user
-            allowPrivilegeEscalation: false
-          resources:
-            {{- toYaml .Values.migrations.cloudsql.resources | default dict | nindent 12 }}
         {{- end }}
       {{- if or (and (hasKey .Values "cloudsql") .Values.cloudsql.enabled) (and (hasKey .Values.migrations "cloudsql") .Values.migrations.cloudsql.enabled) }}
       volumes:
