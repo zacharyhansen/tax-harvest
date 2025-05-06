@@ -9,7 +9,7 @@ metadata:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
     app.kubernetes.io/instance: release-name
-    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/version: 1.0.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harvester
 spec:
@@ -33,7 +33,7 @@ metadata:
     helm.sh/chart: web-0.1.0
     app.kubernetes.io/name: web
     app.kubernetes.io/instance: release-name
-    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/version: 1.0.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harvester
 spec:
@@ -57,12 +57,12 @@ metadata:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
     app.kubernetes.io/instance: release-name
-    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/version: 1.0.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harvester
 spec:
   replicas: 1
-  revisionHistoryLimit: 2  # only keep last 2 old ReplicaSets
+  revisionHistoryLimit: 2 # only keep last 2 old ReplicaSets
   selector:
     matchLabels:
       app.kubernetes.io/name: api
@@ -76,7 +76,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: api
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1"
+          image: 'us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1'
           imagePullPolicy: Always
           ports:
             - name: http
@@ -84,29 +84,29 @@ spec:
               protocol: TCP
           env:
             - name: NODE_ENV
-              value: "production"
+              value: production
             - name: CLIENT_HOME_PAGE_PATH
-              value: "/main/home"
+              value: /main/home
             - name: CLIENT_ORIGIN
-              value: "http://dev.taxharvest.ai"
+              value: 'http://dev.taxharvest.ai'
             - name: CRON
-              value: "true"
+              value: 'true'
             - name: ETRADE_HOSTNAME
-              value: "api.etrade.com"
+              value: api.etrade.com
             - name: ETRADE_OAUTH_AUTHORIZE_URL
-              value: "https://us.etrade.com/e/t/etws/authorize"
+              value: 'https://us.etrade.com/e/t/etws/authorize'
             - name: GCS_LOTS_BUCKET_NAME
-              value: "lot_upload"
+              value: lot_upload
             - name: GOOGLE_PROJECT
-              value: "harvester-ai-428202"
+              value: harvester-ai-428202
             - name: ORIGIN
-              value: "https://dev.taxharvest.ai"
+              value: 'https://dev.taxharvest.ai'
             - name: PLAID_ENV
-              value: "https://production.plaid.com"
+              value: 'https://production.plaid.com'
             - name: PORT
-              value: "8000"
+              value: '8000'
             - name: SECRET_SOURCE
-              value: "GCP"
+              value: GCP
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
@@ -143,15 +143,15 @@ spec:
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
           imagePullPolicy: IfNotPresent
           args:
-            - "--private-ip"
+            - --private-ip
             # - "--unix-socket=/cloudsql"
-            - "--port=5432"
-            - "harvester-ai-428202:us-central1:harvester-dev"
+            - --port=5432
+            - 'harvester-ai-428202:us-central1:harvester-dev'
           volumeMounts:
             - name: cloudsql
               mountPath: /cloudsql
           securityContext:
-            runAsUser: 2  # non-root user
+            runAsUser: 2 # non-root user
             allowPrivilegeEscalation: false
           resources:
             {}
@@ -169,12 +169,12 @@ metadata:
     helm.sh/chart: web-0.1.0
     app.kubernetes.io/name: web
     app.kubernetes.io/instance: release-name
-    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/version: 1.0.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harvester
 spec:
   replicas: 1
-  revisionHistoryLimit: 2  # only keep last 2 old ReplicaSets
+  revisionHistoryLimit: 2 # only keep last 2 old ReplicaSets
   selector:
     matchLabels:
       app.kubernetes.io/name: web
@@ -188,7 +188,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: web
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.2.1"
+          image: 'us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.2.1'
           imagePullPolicy: Always
           ports:
             - name: http
@@ -196,9 +196,9 @@ spec:
               protocol: TCP
           env:
             - name: NODE_ENV
-              value: "production"
+              value: production
             - name: PORT
-              value: "3000"
+              value: '3000'
             - name: CLERK_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -241,12 +241,12 @@ metadata:
     app.kubernetes.io/instance: release-name
     app.kubernetes.io/managed-by: Helm
   annotations:
-    kubernetes.io/ingress.allow-http: "true"
+    kubernetes.io/ingress.allow-http: 'true'
     kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
     networking.gke.io/managed-certificates: harvester-cert
 spec:
-  ingressClassName: 
+  ingressClassName:
   rules:
     - host: dev.taxharvest.ai
       http:
@@ -292,7 +292,7 @@ metadata:
   name: database-external-secret
   namespace: harvester
 spec:
-  refreshInterval: "15m"
+  refreshInterval: 15m
   secretStoreRef:
     name: gcp-secret-store
     kind: ClusterSecretStore
@@ -328,15 +328,15 @@ metadata:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
     app.kubernetes.io/instance: release-name
-    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/version: 1.0.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harvester
     app.kubernetes.io/component: migrations
   annotations:
     # This is what tells Helm to wait for the job to complete
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-100"
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: '-100'
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 spec:
   activeDeadlineSeconds: 300
   template:
@@ -351,36 +351,36 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrations
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1"
+          image: 'us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1'
           imagePullPolicy: Always
-          command: ["/bin/sh","-c"]
+          command: [/bin/sh, -c]
           args: ["set -e\necho \"Running database migration...\"\nif ! npx prisma migrate deploy; then\n  echo \"Migration failed\"\n  exit 1\nfi\necho \"Migration completed successfully\"\n\necho \"Gracefully terminating Cloud SQL Auth Proxy sidecar...\"\nif pgrep -f cloud-sql-proxy \u003e /dev/null; then\n  pkill -TERM -f cloud-sql-proxy\n  sleep 5\n  if pgrep -f cloud-sql-proxy \u003e /dev/null; then\n    echo \"Forcing termination of proxy...\"\n    if ! pkill -9 -f cloud-sql-proxy 2\u003e/dev/null; then\n      echo \"Warning: Failed to force kill the proxy. It may have already exited.\"\n    fi\n  fi\nfi\n\necho \"Migration job complete\"\nexit 0\n"]
           env:
             # Add Cloud SQL instance connection name as an environment variable
             - name: INSTANCE_CONNECTION_NAME
-              value: "harvester-ai-428202:us-central1:harvester-dev"
+              value: 'harvester-ai-428202:us-central1:harvester-dev'
             - name: CLIENT_HOME_PAGE_PATH
-              value: "/main/home"
+              value: /main/home
             - name: CLIENT_ORIGIN
-              value: "http://dev.taxharvest.ai"
+              value: 'http://dev.taxharvest.ai'
             - name: CRON
-              value: "true"
+              value: 'true'
             - name: ETRADE_HOSTNAME
-              value: "api.etrade.com"
+              value: api.etrade.com
             - name: ETRADE_OAUTH_AUTHORIZE_URL
-              value: "https://us.etrade.com/e/t/etws/authorize"
+              value: 'https://us.etrade.com/e/t/etws/authorize'
             - name: GCS_LOTS_BUCKET_NAME
-              value: "lot_upload"
+              value: lot_upload
             - name: GOOGLE_PROJECT
-              value: "harvester-ai-428202"
+              value: harvester-ai-428202
             - name: ORIGIN
-              value: "https://dev.taxharvest.ai"
+              value: 'https://dev.taxharvest.ai'
             - name: PLAID_ENV
-              value: "https://production.plaid.com"
+              value: 'https://production.plaid.com'
             - name: PORT
-              value: "8000"
+              value: '8000'
             - name: SECRET_SOURCE
-              value: "GCP"
+              value: GCP
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
@@ -399,18 +399,19 @@ spec:
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
           imagePullPolicy: IfNotPresent
           args:
-            - "--private-ip"
+            - --private-ip
             # - "--unix-socket=/cloudsql"
-            - "--port=5432"
-            - "harvester-ai-428202:us-central1:harvester-dev"
+            - --port=5432
+            - 'harvester-ai-428202:us-central1:harvester-dev'
           volumeMounts:
             - name: cloudsql
               mountPath: /cloudsql
           securityContext:
-            runAsUser: 2  # non-root user
+            runAsUser: 2 # non-root user
             allowPrivilegeEscalation: false
           resources:
             {}
+          terminationGracePeriodSeconds: 60 # Allow the proxy to shut down gracefully
       volumes:
         - name: cloudsql
           emptyDir: {}
