@@ -90,7 +90,7 @@ api:
             name: clerk
             key: CLERK_SECRET_KEY
   migrations:
-    enabled: false # Set to false to skip running migrations
+    enabled: true # Set to false to skip running migrations
     image:
       repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
       tag: v1.0.3

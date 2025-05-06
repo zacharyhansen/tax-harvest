@@ -22,6 +22,7 @@ async function bootstrap() {
   )
 
   // Set global prefix but exclude health endpoint cause kubernetes is breaking my balls
+  // think the GNEG only checks /health and i dont know how to change it
   app.setGlobalPrefix('core', {
     exclude: ['/health'],
   })
