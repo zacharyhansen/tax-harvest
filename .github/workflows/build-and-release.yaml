@@ -105,7 +105,7 @@ jobs:
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:v${{ needs.version.outputs.new_version }}
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
           build-args: |
-            DEPLOYMENT_ENV=${{ inputs.deployment_env }} # development, production
+            DEPLOYMENT_ENV=${{ inputs.deployment_env }}
           cache-from: type=registry,ref=${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
           cache-to: type=inline
 
