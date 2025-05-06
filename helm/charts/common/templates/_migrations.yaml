@@ -33,8 +33,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.migrations.image.containerCommand }}
-          command: {{ .Values.migrations.image.containerCommand | toJson }}
-          args: {{ .Values.migrations.image.containerArgs | toJson }}
+          command: {{ .Values.migrations.image.command | toJson }}
+          args: {{ .Values.migrations.image.args | toJson }}
           {{- else }}
           command: {{ .Values.migrations.command | toJson }}
           {{- end }}

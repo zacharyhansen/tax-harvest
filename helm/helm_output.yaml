@@ -354,7 +354,7 @@ spec:
           image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1"
           imagePullPolicy: Always
           command: ["/bin/sh","-c"]
-          args: ["chmod +x ./scripts/migrate.sh \u0026\u0026 ./scripts/migrate.sh"]
+          args: ["set -e\necho \"Running database migration...\"\nif ! npx prisma migrate deploy; then\n  echo \"Migration failed\"\n  exit 1\nfi\necho \"Migration completed successfully\"\n\necho \"Gracefully terminating Cloud SQL Auth Proxy sidecar...\"\nif pgrep -f cloud-sql-proxy \u003e /dev/null; then\n  pkill -TERM -f cloud-sql-proxy\n  sleep 5\n  if pgrep -f cloud-sql-proxy \u003e /dev/null; then\n    echo \"Forcing termination of proxy...\"\n    if ! pkill -9 -f cloud-sql-proxy 2\u003e/dev/null; then\n      echo \"Warning: Failed to force kill the proxy. It may have already exited.\"\n    fi\n  fi\nfi\n\necho \"Migration job complete\"\nexit 0\n"]
           env:
             # Add Cloud SQL instance connection name as an environment variable
             - name: INSTANCE_CONNECTION_NAME

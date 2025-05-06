@@ -85,31 +85,31 @@ api:
     image:
       repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
       tag: v1.0.3
-      containerCommand: [/bin/sh, -c]
-    containerArgs:
-      - |
-        set -e
-        echo "Running database migration..."
-        if ! npx prisma migrate deploy; then
-          echo "Migration failed"
-          exit 1
-        fi
-        echo "Migration completed successfully"
+      command: [/bin/sh, -c]
+      args:
+        - |
+          set -e
+          echo "Running database migration..."
+          if ! npx prisma migrate deploy; then
+            echo "Migration failed"
+            exit 1
+          fi
+          echo "Migration completed successfully"
 
-        echo "Gracefully terminating Cloud SQL Auth Proxy sidecar..."
-        if pgrep -f cloud-sql-proxy > /dev/null; then
-          pkill -TERM -f cloud-sql-proxy
-          sleep 5
+          echo "Gracefully terminating Cloud SQL Auth Proxy sidecar..."
           if pgrep -f cloud-sql-proxy > /dev/null; then
-            echo "Forcing termination of proxy..."
-            if ! pkill -9 -f cloud-sql-proxy 2>/dev/null; then
-              echo "Warning: Failed to force kill the proxy. It may have already exited."
+            pkill -TERM -f cloud-sql-proxy
+            sleep 5
+            if pgrep -f cloud-sql-proxy > /dev/null; then
+              echo "Forcing termination of proxy..."
+              if ! pkill -9 -f cloud-sql-proxy 2>/dev/null; then
+                echo "Warning: Failed to force kill the proxy. It may have already exited."
+              fi
             fi
           fi
-        fi
 
-        echo "Migration job complete"
-        exit 0
+          echo "Migration job complete"
+          exit 0
     cloudsql:
       restartPolicy: Never
       enabled: true
