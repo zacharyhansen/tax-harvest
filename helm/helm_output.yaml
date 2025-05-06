@@ -338,6 +338,7 @@ metadata:
     "helm.sh/hook-weight": "-100"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
+  ttlSecondsAfterFinished: 30
   activeDeadlineSeconds: 300
   template:
     metadata:
@@ -353,8 +354,8 @@ spec:
         - name: migrations
           image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1"
           imagePullPolicy: Always
-          command: ["npx","prisma","migrate","deploy"]
-          args: null
+          command: ["/bin/sh","-c"]
+          args: ["# Run the migration\nnpx prisma migrate deploy\n\n# After migration completes, terminate the proxy sidecar\nif [ $? -eq 0 ]; then\n  echo \"Migration completed successfully, terminating sidecar...\"\n  pkill -TERM cloud_sql_proxy || true\nfi\n"]
           env:
             # Add Cloud SQL instance connection name as an environment variable
             - name: INSTANCE_CONNECTION_NAME
@@ -413,6 +414,10 @@ spec:
           securityContext:
             runAsUser: 2  # non-root user
             allowPrivilegeEscalation: false
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 1"]
           resources:
             {}
       volumes:
