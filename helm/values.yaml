@@ -88,6 +88,7 @@ api:
       containerCommand: [/bin/sh, -c]
       containerArgs: ['chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh']
     cloudsql:
+      restartPolicy: Never
       enabled: true
       instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
       resources: {}

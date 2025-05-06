@@ -76,7 +76,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: api
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.0"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -188,7 +188,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: web
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.2.0"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v1.2.1"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -348,10 +348,11 @@ spec:
     spec:
       serviceAccountName: google-secret-service-account
       shareProcessNamespace: true
-      restartPolicy: OnFailure
+      restartPolicy: Never
       containers:
         - name: migrations
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.0"
+          restartPolicy: Never
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1"
           imagePullPolicy: Always
           command: ["/bin/sh","-c"]
           args: ["chmod +x ./scripts/migrate.sh \u0026\u0026 ./scripts/migrate.sh"]
@@ -398,6 +399,7 @@ spec:
         - name: cloud-sql-proxy
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
           imagePullPolicy: IfNotPresent
+          restartPolicy: Never
           args:
             - "--private-ip"
             # - "--unix-socket=/cloudsql"
