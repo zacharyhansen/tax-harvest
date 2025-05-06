@@ -76,13 +76,13 @@ spec:
                   key: {{ .valueFrom.secretKeyRef.key }}
             {{- end }}
             {{- end }}
-          {{- if hasKey .Values "cloudsql" }}
-          {{- if .Values.cloudsql.enabled }}
-          volumeMounts:
-            - name: cloudsql
-              mountPath: /cloudsql
-          {{- end }}
-          {{- end }}
+          # {{- if hasKey .Values "cloudsql" }}
+          # {{- if .Values.cloudsql.enabled }}
+          # volumeMounts:
+          #   - name: cloudsql
+          #     mountPath: /cloudsql
+          # {{- end }}
+          # {{- end }}
         {{- if hasKey .Values "cloudsql" }}
         {{- if .Values.cloudsql.enabled }}
         # Cloud SQL Auth Proxy sidecar container
@@ -94,9 +94,9 @@ spec:
             # - "--unix-socket=/cloudsql"
             - "--port={{ .Values.cloudsql.port | default "5432" }}"
             - "{{ .Values.cloudsql.instanceConnectionName }}"
-          volumeMounts:
-            - name: cloudsql
-              mountPath: /cloudsql
+          # volumeMounts:
+          #   - name: cloudsql
+          #     mountPath: /cloudsql
           securityContext:
             runAsUser: 2  # non-root user
             allowPrivilegeEscalation: false
