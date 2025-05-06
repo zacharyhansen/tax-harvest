@@ -90,6 +90,12 @@ spec:
             - "--private-ip"
             # - "--unix-socket=/cloudsql"
             - "--port={{ .Values.cloudsql.port | default "5432" }}"
+            # Enable the admin api server on port 9091
+            - "--admin-port=9091"
+            # Enable the /quitquitquit admin api endpoint
+            - "--quitquitquit"
+            # Tell the proxy to exit gracefully if it receives a SIGTERM
+            - "--exit-zero-on-sigterm"
             - "{{ .Values.cloudsql.instanceConnectionName }}"
           # volumeMounts:
           #   - name: cloudsql

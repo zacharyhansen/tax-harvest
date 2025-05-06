@@ -92,7 +92,7 @@ api:
         # After migration completes, terminate the proxy sidecar
         if [ $? -eq 0 ]; then
           echo "Migration completed successfully, terminating sidecar..."
-          pkill -TERM cloud-sql-proxy || true
+          curl http://localhost:9091/quitquitquit
         fi
     cloudsql:
       restartPolicy: Never
