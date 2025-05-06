@@ -10,7 +10,15 @@ export class HealthController {
   @HttpCode(200)
   @Public()
   run() {
-    this.logger.log('im healthy baby')
+    this.logger.log('health - im healthy baby')
+    return { status: 'ok' }
+  }
+
+  @Get('core')
+  @HttpCode(200)
+  @Public()
+  runCore() {
+    this.logger.log('core/health - im healthy baby')
     return { status: 'ok' }
   }
 }

@@ -20,7 +20,11 @@ async function bootstrap() {
       abortOnError: false,
     },
   )
-  app.setGlobalPrefix('core')
+
+  // Set global prefix but exclude health endpoint cause kubernetes is breaking my balls
+  app.setGlobalPrefix('core', {
+    exclude: ['/health'],
+  })
 
   const configService = app.get(ConfigService)
   const port = configService.get('PORT')
