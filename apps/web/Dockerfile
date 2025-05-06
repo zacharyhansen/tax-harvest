@@ -14,12 +14,14 @@ COPY . .
 RUN turbo prune web --docker
 
 FROM base AS installer
+ARG DEPLOYMENT_ENV=development
 WORKDIR /app
 COPY --from=builder /app/out/json/ .
 RUN pnpm install --frozen-lockfile --ignore-scripts --store-dir=${PNPM_STORE_PATH}
 COPY --from=builder /app/out/full/ .
 # Set environment variable to disable linting/type checking for Docker builds
 ENV DOCKER_BUILD=true
+COPY ./apps/web/.env.deployment.${DEPLOYMENT_ENV} .env.production
 RUN pnpm turbo run build --filter=web...
 
 FROM base AS runner
