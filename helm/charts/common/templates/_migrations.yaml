@@ -14,6 +14,9 @@ metadata:
     "helm.sh/hook-weight": "-100"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
+  {{- if .Values.migrations.activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ .Values.migrations.activeDeadlineSeconds }}
+  {{- end }}
   template:
     metadata:
       labels:

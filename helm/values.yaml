@@ -81,6 +81,7 @@ api:
             key: CLERK_SECRET_KEY
   migrations:
     enabled: true
+    activeDeadlineSeconds: 300 # Force job termination after 5 minutes
     image:
       repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
       tag: v1.0.3

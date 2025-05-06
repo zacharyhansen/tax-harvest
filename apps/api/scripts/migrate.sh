@@ -7,6 +7,8 @@ if ! npx prisma migrate deploy; then
   exit 1
 fi
 
-# Explicitly exit with success code to ensure Kubernetes job completes
 echo "Migration completed successfully"
+echo "Terminating Cloud SQL Auth Proxy sidecar..."
+pkill -f cloud-sql-proxy || true
+
 exit 0
