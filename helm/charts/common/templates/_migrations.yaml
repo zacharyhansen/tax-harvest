@@ -30,7 +30,6 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrations
-          restartPolicy: Never
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.migrations.image.containerCommand }}
@@ -90,7 +89,6 @@ spec:
         - name: cloud-sql-proxy
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
           imagePullPolicy: IfNotPresent
-          restartPolicy: Never
           args:
             - "--private-ip"
             # - "--unix-socket=/cloudsql"
