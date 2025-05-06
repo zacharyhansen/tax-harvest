@@ -104,6 +104,8 @@ jobs:
           tags: |
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:v${{ needs.version.outputs.new_version }}
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
+          build-args: |
+            DEPLOYMENT_ENV=${{ inputs.deployment_env }} # development, production
           cache-from: type=registry,ref=${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
           cache-to: type=inline
 
@@ -128,8 +130,6 @@ jobs:
             ${{ env.AR_URL_PREFIX }}-api/harvester-api:latest
           cache-from: type=registry,ref=${{ env.AR_URL_PREFIX }}-api/harvester-api:latest
           cache-to: type=inline
-          args: |
-            DEPLOYMENT_ENV=${{ inputs.deployment_env }} # development, production
 
   # - name: Build and Push Studio Image
   #   uses: docker/build-push-action@v5
