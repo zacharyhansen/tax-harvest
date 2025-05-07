@@ -1,9 +1,6 @@
 global:
   namespace: harvester-prod
   environment: production
-  domains:
-    - taxharvest.ai
-    - argocd.taxharvest.ai
   ingress:
     enabled: true
     className: gce
