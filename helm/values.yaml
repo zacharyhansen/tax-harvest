@@ -86,13 +86,28 @@ api:
     command: [/bin/sh, -c]
     args:
       - |
+        echo "Starting Prisma migration..."
+        # Wait briefly for the proxy to be ready
+        sleep 5
         # Run the migration
         npx prisma migrate deploy
 
         # After migration completes, terminate the proxy sidecar
         if [ $? -eq 0 ]; then
           echo "Migration completed successfully, terminating sidecar..."
-          curl http://localhost:9091/quitquitquit
+          # Use wget if available
+          if command -v wget > /dev/null; then
+            wget -q -O - http://localhost:9091/quitquitquit || echo "Using wget to terminate proxy"
+          # Use node fetch if wget not available
+          else
+            node -e "fetch('http://localhost:9091/quitquitquit').then(() => console.log('Proxy termination request sent')).catch(e => console.error('Failed to terminate proxy:', e))" || echo "Using Node.js to terminate proxy"
+          fi
+          echo "Termination signal sent to proxy, waiting for shutdown..."
+          sleep 3
+          echo "Job completed"
+        else
+          echo "Migration failed with status $?"
+          exit $?
         fi
     cloudsql:
       restartPolicy: Never
