@@ -10,7 +10,7 @@ global:
     className: gce
     annotations:
       kubernetes.io/ingress.global-static-ip-name: harvester-prod-static-ip
-      kubernetes.io/ingress.allow-http: 'true'
+      kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
       networking.gke.io/managed-certificates: harvester-prod-cert
     rules:
