@@ -10,6 +10,13 @@ global:
   domains:
     - dev.taxharvest.ai
     - argocd.dev.taxharvest.ai
+  certificates:
+    - name: harvester-cert
+      domains:
+        - dev.taxharvest.ai
+    - name: argocd-cert
+      domains:
+        - argocd.dev.taxharvest.ai
 
 # Service accounts configuration
 serviceAccounts:
@@ -160,7 +167,7 @@ argocd:
       kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
       kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
-      networking.gke.io/managed-certificates: argocd-dev-cert
+      networking.gke.io/managed-certificates: argocd-cert
     host: argocd.dev.taxharvest.ai
     path: /
     pathType: Prefix

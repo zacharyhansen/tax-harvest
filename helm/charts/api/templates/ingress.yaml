@@ -1,2 +1,0 @@
-{{/* Individual ingress for API is disabled in favor of the global consolidated ingress */}}
-{{- /* This file is intentionally left empty */ -}} 
