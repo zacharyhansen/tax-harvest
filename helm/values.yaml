@@ -7,6 +7,9 @@ global:
     enabled: true
     className: gce
   useGlobalIngress: true
+  domains:
+    - dev.taxharvest.ai
+    - argocd.dev.taxharvest.ai
 
 # Service accounts configuration
 serviceAccounts:
@@ -126,6 +129,7 @@ web:
 secrets:
   enabled: true
   serviceAccountName: google-secret-service-account
+  gcpServiceAccount: harvester-secret-manager
   externalSecrets:
     - name: database
       target: database
@@ -141,4 +145,26 @@ secrets:
       target: stripe
       data:
         - secretKey: STRIPE_SECRET_KEY
-          remoteKey: STRIPE_SECRET_KEY
+          remoteRef:
+            key: stripe-secret-key
+
+argocd:
+  enabled: true
+  server:
+    tls:
+      enabled: true
+      secretName: argocd-server-tls
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
+      kubernetes.io/ingress.allow-http: 'false'
+      kubernetes.io/ingress.class: gce
+      networking.gke.io/managed-certificates: argocd-dev-cert
+    host: argocd.dev.taxharvest.ai
+    path: /
+    pathType: Prefix
+    service:
+      name: argocd-server
+      port:
+        name: https
