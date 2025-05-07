@@ -2,10 +2,16 @@ global:
   projectID: harvester-ai-428202
   clusterLocation: us-central1-b
   clusterName: harvester-dev
+  namespace: harvester
   ingress:
     enabled: true
     className: gce
   useGlobalIngress: true
+
+# Service accounts configuration
+serviceAccounts:
+  - name: google-secret-service-account
+    gcpServiceAccount: harvester-secret-manager
 
 api:
   enabled: true
