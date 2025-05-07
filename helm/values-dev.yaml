@@ -1,7 +1,6 @@
 global:
   namespace: harvester-dev
   environment: development
-  domain: dev.taxharvest.ai
   domains:
     - dev.taxharvest.ai
     - argocd.dev.taxharvest.ai

@@ -1,7 +1,6 @@
 global:
   namespace: harvester-prod
   environment: production
-  domain: taxharvest.ai
   domains:
     - taxharvest.ai
     - argocd.taxharvest.ai
