@@ -8,10 +8,10 @@ global:
     className: gce
   useGlobalIngress: true
   certificates:
-    - name: harvester-cert
+    - name: harvester-dev-cert
       domains:
         - dev.taxharvest.ai
-    - name: argocd-cert
+    - name: argocd-dev-cert
       domains:
         - argocd.dev.taxharvest.ai
 

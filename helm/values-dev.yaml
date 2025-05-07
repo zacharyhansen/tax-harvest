@@ -7,7 +7,7 @@ global:
     annotations:
       networking.gke.io/managed-certificates: harvester-dev-cert
       kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
-      kubernetes.io/ingress.allow-http: 'true'
+      kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
     rules:
       - host: dev.taxharvest.ai

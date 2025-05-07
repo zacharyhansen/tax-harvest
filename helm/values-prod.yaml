@@ -5,12 +5,12 @@ global:
     enabled: true
     className: gce
     annotations:
-      kubernetes.io/ingress.global-static-ip-name: harvester-prod-static-ip
+      networking.gke.io/managed-certificates: harvester-prod-cert
+      kubernetes.io/ingress.global-static-ip-name: prod-taxharvest-static-ip
       kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
-      networking.gke.io/managed-certificates: harvester-prod-cert
     rules:
-      - host: taxharvest.ai
+      - host: app.taxharvest.ai
         paths:
           - path: /core
             pathType: Prefix
@@ -18,9 +18,21 @@ global:
           - path: /
             pathType: Prefix
             service: web
-      - host: argocd.taxharvest.ai
-        paths:
-          - path: /
-            pathType: Prefix
-            service: argocd-server
-            port: https
+
+argocd:
+  enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      networking.gke.io/managed-certificates: argocd-prod-cert
+      kubernetes.io/ingress.global-static-ip-name: prod-argo-taxharvest-static-ip
+      kubernetes.io/ingress.allow-http: 'true'
+      kubernetes.io/ingress.class: gce
+    host: argocd.taxharvest.ai
+    className: gce
+    path: /
+    pathType: Prefix
+    service:
+      name: argocd-server
+      port:
+        name: https
