@@ -126,3 +126,19 @@ web:
 secrets:
   enabled: true
   serviceAccountName: google-secret-service-account
+  externalSecrets:
+    - name: database
+      target: database
+      data:
+        - secretKey: DATABASE_URL
+          remoteKey: DATABASE_URL
+    - name: clerk
+      target: clerk
+      data:
+        - secretKey: CLERK_SECRET_KEY
+          remoteKey: CLERK_SECRET_KEY
+    - name: stripe
+      target: stripe
+      data:
+        - secretKey: STRIPE_SECRET_KEY
+          remoteKey: STRIPE_SECRET_KEY
