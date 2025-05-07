@@ -29,7 +29,6 @@ argocd:
       kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
     host: argocd.dev.taxharvest.ai
-    className: gce
     path: /
     pathType: Prefix
     service:
