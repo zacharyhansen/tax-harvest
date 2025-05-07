@@ -8,5 +8,8 @@ dependencies:
 - name: secrets
   repository: file://./charts/secrets
   version: 0.1.0
-digest: sha256:3fd1c29a032903d644f67f9d08d75d594a1095a0d78a6865fb7dc1deb6e9a946
-generated: "2025-05-03T17:28:52.585185-07:00"
+- name: argocd
+  repository: file://./charts/argocd
+  version: 0.1.0
+digest: sha256:83e625a305b395bb608507f96de1dbe637fabfacc5ff845f2900a07cd435a933
+generated: "2025-05-06T21:21:52.076825-07:00"

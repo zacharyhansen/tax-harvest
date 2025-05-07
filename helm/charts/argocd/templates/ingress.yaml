@@ -1,21 +1,21 @@
-{{- if and .Values.argocd.enabled .Values.argocd.ingress.enabled }}
+{{- if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-server-ingress
   namespace: argocd
   annotations:
-    {{- toYaml .Values.argocd.ingress.annotations | nindent 4 }}
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
   rules:
-  - host: {{ .Values.argocd.ingress.host }}
+  - host: {{ .Values.ingress.host }}
     http:
       paths:
-      - path: {{ .Values.argocd.ingress.path }}
-        pathType: {{ .Values.argocd.ingress.pathType }}
+      - path: {{ .Values.ingress.path }}
+        pathType: {{ .Values.ingress.pathType }}
         backend:
           service:
-            name: {{ .Values.argocd.ingress.service.name }}
+            name: {{ .Values.ingress.service.name }}
             port:
-              name: {{ .Values.argocd.ingress.service.port.name }}
+              name: {{ .Values.ingress.service.port.name }}
 {{- end }} 

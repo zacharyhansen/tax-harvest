@@ -15,3 +15,7 @@ dependencies:
     version: 0.1.0
     repository: 'file://./charts/secrets'
     condition: secrets.enabled
+  - name: argocd
+    version: 0.1.0
+    repository: file://./charts/argocd
+    condition: argocd.enabled
