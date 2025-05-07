@@ -1,7 +1,33 @@
+---
+# External Secrets Operator Application
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tax-harvester
+  name: external-secrets-operator
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: external-secrets
+    repoURL: https://charts.external-secrets.io
+    targetRevision: 0.9.12
+    helm:
+      releaseName: external-secrets
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: external-secrets
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+# Development Tax Harvester Application
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: development-taxharvester
   namespace: argocd
 spec:
   project: default
@@ -9,12 +35,42 @@ spec:
     repoURL: https://github.com/zacharyhansen/tax-harvest
     targetRevision: HEAD
     path: helm
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: harvester
+    namespace: harvester-dev
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+---
+# Production Tax Harvester Application
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: production-taxharvester
+#   namespace: argocd
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://github.com/zacharyhansen/tax-harvest
+#     targetRevision: HEAD
+#     path: helm
+#     helm:
+#       valueFiles:
+#         - values.yaml
+#         - values-prod.yaml
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: harvester-prod
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true

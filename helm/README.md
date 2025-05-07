@@ -9,31 +9,10 @@ This Helm chart deploys the Tax Harvester application on a Kubernetes cluster.
 - ArgoCD installed in your cluster
 - GKE Workload Identity configured (for Cloud SQL access)
 
-## Installing the Chart
+## Create the Apps
 
-To install the chart with ArgoCD, create an Application resource:
-
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: tax-harvester
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/your-org/tax-harvester.git
-    targetRevision: HEAD
-    path: helm
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: harvester
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+```
+kubectl apply -f helm/tax-harvester-argocd.yaml
 ```
 
 ## Configuration

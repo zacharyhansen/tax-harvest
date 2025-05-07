@@ -2,9 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: harvester-ingress
-  namespace: {{ .Values.global.namespace | default "harvester" }}
+  namespace: {{ .Values.global.namespace }}
   labels:
-    app.kubernetes.io/name: {{ .Values.global.namespace | default "harvester" }}
+    app.kubernetes.io/name: {{ .Values.global.namespace }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
@@ -14,22 +14,21 @@ metadata:
 spec:
   ingressClassName: {{ .Values.global.ingress.className }}
   rules:
-    - host: {{ .Values.global.domain }}
+    {{- range .Values.global.ingress.rules }}
+    - host: {{ .host }}
       http:
         paths:
-          # API service path
-          - path: /core
-            pathType: Prefix
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ .Release.Name }}-api
+                name: {{ if eq .service "argocd-server" }}{{ .service }}{{ else }}{{ $.Release.Name }}-{{ .service }}{{ end }}
                 port:
+                  {{- if .port }}
+                  name: {{ .port }}
+                  {{- else }}
                   number: 80
-          # Web frontend path
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Release.Name }}-web
-                port:
-                  number: 80 
+                  {{- end }}
+          {{- end }}
+    {{- end }} 

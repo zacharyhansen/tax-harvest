@@ -3,12 +3,18 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: harvester-cert
-  namespace: {{ .Values.global.namespace | default "harvester" }}
+  namespace: {{ .Values.global.namespace }}
   labels:
     app.kubernetes.io/name: harvester
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   domains:
+    {{- if .Values.global.domains }}
+    {{- range .Values.global.domains }}
+    - {{ . }}
+    {{- end }}
+    {{- else }}
     - {{ .Values.global.domain }}
+    {{- end }}
 {{- end -}} 

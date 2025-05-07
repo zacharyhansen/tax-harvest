@@ -1,19 +1,12 @@
 global:
-  namespace: harvester
-  environment: production
-  domain: dev.taxharvest.ai
   projectID: harvester-ai-428202
   clusterLocation: us-central1-b
   clusterName: harvester-dev
   ingress:
     enabled: true
-    annotations:
-      kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
-      kubernetes.io/ingress.allow-http: 'true'
-      kubernetes.io/ingress.class: gce
-      networking.gke.io/managed-certificates: harvester-cert
-  # Added flag to indicate we're using the global consolidated ingress
+    className: gce
   useGlobalIngress: true
+
 api:
   enabled: true
   replicaCount: 1
@@ -46,9 +39,6 @@ api:
     timeoutSeconds: 3
     failureThreshold: 3
     successThreshold: 1
-  ingress:
-    path: /core
-    pathType: Prefix
   serviceAccountName: google-secret-service-account
   cloudsql:
     enabled: true
@@ -58,11 +48,7 @@ api:
     NODE_ENV: production
     extras:
       PORT: 8000
-      ORIGIN: https://dev.taxharvest.ai
       PLAID_ENV: https://production.plaid.com
-      CLIENT_ORIGIN: http://dev.taxharvest.ai
-      CLIENT_HOME_PAGE_PATH: /main/home
-      CRON: true
       ETRADE_OAUTH_AUTHORIZE_URL: https://us.etrade.com/e/t/etws/authorize
       ETRADE_HOSTNAME: api.etrade.com
       GOOGLE_PROJECT: harvester-ai-428202
@@ -79,41 +65,7 @@ api:
           secretKeyRef:
             name: clerk
             key: CLERK_SECRET_KEY
-  migrations:
-    enabled: true
-    activeDeadlineSeconds: 300 # Force job termination after 5 minutes
-    tag: v1.0.3
-    command: [/bin/sh, -c]
-    args:
-      - |
-        echo "Starting Prisma migration..."
-        # Wait briefly for the proxy to be ready
-        sleep 5
-        # Run the migration
-        npx prisma migrate deploy
 
-        # After migration completes, terminate the proxy sidecar
-        if [ $? -eq 0 ]; then
-          echo "Migration completed successfully, terminating sidecar..."
-          # Use wget if available
-          if command -v wget > /dev/null; then
-            wget -q -O - http://localhost:9091/quitquitquit || echo "Using wget to terminate proxy"
-          # Use node fetch if wget not available
-          else
-            node -e "fetch('http://localhost:9091/quitquitquit').then(() => console.log('Proxy termination request sent')).catch(e => console.error('Failed to terminate proxy:', e))" || echo "Using Node.js to terminate proxy"
-          fi
-          echo "Termination signal sent to proxy, waiting for shutdown..."
-          sleep 3
-          echo "Job completed"
-        else
-          echo "Migration failed with status $?"
-          exit $?
-        fi
-    cloudsql:
-      restartPolicy: Never
-      enabled: true
-      instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
-      resources: {}
 web:
   enabled: true
   replicaCount: 1
@@ -147,9 +99,6 @@ web:
     timeoutSeconds: 2
     failureThreshold: 2
     successThreshold: 1
-  ingress:
-    path: /
-    pathType: Prefix
   serviceAccountName: google-secret-service-account
   env:
     NODE_ENV: production

@@ -20,8 +20,8 @@ create_or_update_secret() {
 }
 
 # Database URL with Cloud SQL socket format
-# For PostgreSQL: postgresql://username:password@/cloudsql/INSTANCE_CONNECTION_NAME/dbname?schema=public
-create_or_update_secret "DATABASE_URL" "postgresql://postgres:your-password@/cloudsql/$INSTANCE_CONNECTION_NAME/harvester?schema=public"
+# IMPORTANT: Replace 'your-actual-password' with your real database password
+create_or_update_secret "DATABASE_URL" "postgresql://postgres:your-actual-password@/cloudsql/$INSTANCE_CONNECTION_NAME/harvester?schema=public"
 
 # Clerk Secret Key - Replace with your actual Clerk Secret Key
 create_or_update_secret "CLERK_SECRET_KEY" "clerk_secret_key_value"

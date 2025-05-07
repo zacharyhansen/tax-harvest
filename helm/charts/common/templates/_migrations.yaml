@@ -4,7 +4,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "common.fullname" . }}-migrations
-  namespace: {{ .Values.global.namespace | default "harvester" }}
+  namespace: {{ .Values.global.namespace }}
   labels:
     {{- include "common.labels" . | nindent 4 }}
     app.kubernetes.io/component: migrations
