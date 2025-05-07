@@ -1,4 +1,17 @@
 ---
+# Source: harvester/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: google-secret-service-account
+  namespace: harvester
+  labels:
+    app.kubernetes.io/name: harvester
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    iam.gke.io/gcp-service-account: harvester-secret-manager@harvester-ai-428202.iam.gserviceaccount.com
+---
 # Source: harvester/charts/api/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -85,12 +98,6 @@ spec:
           env:
             - name: NODE_ENV
               value: "production"
-            - name: CLIENT_HOME_PAGE_PATH
-              value: "/main/home"
-            - name: CLIENT_ORIGIN
-              value: "http://dev.taxharvest.ai"
-            - name: CRON
-              value: "true"
             - name: ETRADE_HOSTNAME
               value: "api.etrade.com"
             - name: ETRADE_OAUTH_AUTHORIZE_URL
@@ -99,8 +106,6 @@ spec:
               value: "lot_upload"
             - name: GOOGLE_PROJECT
               value: "harvester-ai-428202"
-            - name: ORIGIN
-              value: "https://dev.taxharvest.ai"
             - name: PLAID_ENV
               value: "https://production.plaid.com"
             - name: PORT
@@ -125,7 +130,6 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: 30
-            intervalSeconds: 15
             periodSeconds: 15
             successThreshold: 1
             timeoutSeconds: 5
@@ -230,6 +234,30 @@ spec:
             successThreshold: 1
             timeoutSeconds: 2
 ---
+# Source: harvester/charts/argocd/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-ingress
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
+    networking.gke.io/managed-certificates: argocd-dev-cert
+spec:
+  rules:
+  - host: argocd.dev.taxharvest.ai
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: argocd-server
+            port:
+              name: https
+---
 # Source: harvester/templates/ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -241,32 +269,9 @@ metadata:
     app.kubernetes.io/instance: release-name
     app.kubernetes.io/managed-by: Helm
   annotations:
-    kubernetes.io/ingress.allow-http: "true"
-    kubernetes.io/ingress.class: gce
-    kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
-    networking.gke.io/managed-certificates: harvester-cert
 spec:
-  ingressClassName: 
+  ingressClassName: gce
   rules:
-    - host: dev.taxharvest.ai
-      http:
-        paths:
-          # API service path
-          - path: /core
-            pathType: Prefix
-            backend:
-              service:
-                name: release-name-api
-                port:
-                  number: 80
-          # Web frontend path
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: release-name-web
-                port:
-                  number: 80
 ---
 # Source: harvester/charts/secrets/templates/secretstore.yaml
 apiVersion: external-secrets.io/v1beta1
@@ -304,11 +309,49 @@ spec:
       remoteRef:
         key: DATABASE_URL
 ---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: clerk-external-secret
+  namespace: harvester
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: clerk
+    creationPolicy: Owner
+  data:
+    - secretKey: CLERK_SECRET_KEY
+      remoteRef:
+        key: CLERK_SECRET_KEY
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: stripe-external-secret
+  namespace: harvester
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: stripe
+    creationPolicy: Owner
+  data:
+    - secretKey: STRIPE_SECRET_KEY
+      remoteRef:
+        key: STRIPE_SECRET_KEY
+---
 # Source: harvester/templates/managed-certificate.yaml
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: harvester-cert
+  name: harvester-dev-cert
   namespace: harvester
   labels:
     app.kubernetes.io/name: harvester
@@ -318,114 +361,16 @@ spec:
   domains:
     - dev.taxharvest.ai
 ---
-# Source: harvester/charts/api/templates/migrations.yaml
-apiVersion: batch/v1
-kind: Job
+# Source: harvester/templates/managed-certificate.yaml
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
 metadata:
-  name: release-name-api-migrations
+  name: argocd-dev-cert
   namespace: harvester
   labels:
-    helm.sh/chart: api-0.1.0
-    app.kubernetes.io/name: api
+    app.kubernetes.io/name: harvester
     app.kubernetes.io/instance: release-name
-    app.kubernetes.io/version: "1.0.0"
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/part-of: harvester
-    app.kubernetes.io/component: migrations
-  annotations:
-    # This is what tells Helm to wait for the job to complete
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "-100"
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
-  ttlSecondsAfterFinished: 30
-  activeDeadlineSeconds: 300
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: api
-        app.kubernetes.io/instance: release-name
-        app.kubernetes.io/component: migrations
-    spec:
-      serviceAccountName: google-secret-service-account
-      shareProcessNamespace: true
-      restartPolicy: Never
-      containers:
-        - name: migrations
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v1.2.1"
-          imagePullPolicy: Always
-          command: ["/bin/sh","-c"]
-          args: ["echo \"Starting Prisma migration...\"\n# Wait briefly for the proxy to be ready\nsleep 5\n# Run the migration\nnpx prisma migrate deploy\n\n# After migration completes, terminate the proxy sidecar\nif [ $? -eq 0 ]; then\n  echo \"Migration completed successfully, terminating sidecar...\"\n  # Use wget if available\n  if command -v wget \u003e /dev/null; then\n    wget -q -O - http://localhost:9091/quitquitquit || echo \"Using wget to terminate proxy\"\n  # Use node fetch if wget not available\n  else\n    node -e \"fetch('http://localhost:9091/quitquitquit').then(() =\u003e console.log('Proxy termination request sent')).catch(e =\u003e console.error('Failed to terminate proxy:', e))\" || echo \"Using Node.js to terminate proxy\"\n  fi\n  echo \"Termination signal sent to proxy, waiting for shutdown...\"\n  sleep 3\n  echo \"Job completed\"\nelse\n  echo \"Migration failed with status $?\"\n  exit $?\nfi\n"]
-          env:
-            # Add Cloud SQL instance connection name as an environment variable
-            - name: INSTANCE_CONNECTION_NAME
-              value: "harvester-ai-428202:us-central1:harvester-dev"
-            - name: CLIENT_HOME_PAGE_PATH
-              value: "/main/home"
-            - name: CLIENT_ORIGIN
-              value: "http://dev.taxharvest.ai"
-            - name: CRON
-              value: "true"
-            - name: ETRADE_HOSTNAME
-              value: "api.etrade.com"
-            - name: ETRADE_OAUTH_AUTHORIZE_URL
-              value: "https://us.etrade.com/e/t/etws/authorize"
-            - name: GCS_LOTS_BUCKET_NAME
-              value: "lot_upload"
-            - name: GOOGLE_PROJECT
-              value: "harvester-ai-428202"
-            - name: ORIGIN
-              value: "https://dev.taxharvest.ai"
-            - name: PLAID_ENV
-              value: "https://production.plaid.com"
-            - name: PORT
-              value: "8000"
-            - name: SECRET_SOURCE
-              value: "GCP"
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: database
-                  key: DATABASE_URL
-            - name: CLERK_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: clerk
-                  key: CLERK_SECRET_KEY
-          #
-          #
-          # volumeMounts:
-          #   - name: cloudsql
-          #     mountPath: /cloudsql
-          #
-          #
-        # Cloud SQL Auth Proxy sidecar container
-        - name: cloud-sql-proxy
-          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
-          imagePullPolicy: IfNotPresent
-          args:
-            - "--private-ip"
-            # - "--unix-socket=/cloudsql"
-            - "--port=5432"
-            # Enable the admin api server on port 9091
-            - "--admin-port=9091"
-            # Enable the /quitquitquit admin api endpoint
-            - "--quitquitquit"
-            # Tell the proxy to exit gracefully if it receives a SIGTERM
-            - "--exit-zero-on-sigterm"
-            - "harvester-ai-428202:us-central1:harvester-dev"
-          # volumeMounts:
-          #   - name: cloudsql
-          #     mountPath: /cloudsql
-          securityContext:
-            runAsUser: 2  # non-root user
-            allowPrivilegeEscalation: false
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/bin/sh", "-c", "sleep 1"]
-          resources:
-            {}
-      volumes:
-        - name: cloudsql
-          emptyDir: {}
+  domains:
+    - argocd.dev.taxharvest.ai
