@@ -364,6 +364,7 @@ export class PortfolioService {
         gainTotal: gainTotal.toNumber(),
         lossTotal: lossTotal.toNumber(),
         positionCount: Number(result.lotCount),
+        total: gainTotal.plus(lossTotal).toNumber(),
       }
     }
 
@@ -372,6 +373,7 @@ export class PortfolioService {
       gainTotal: 0,
       lossTotal: 0,
       positionCount: 0,
+      total: 0,
     }
   }
 
@@ -483,6 +485,52 @@ export class PortfolioService {
         portfolioId,
       }),
     ])
+
+    const harvest = new Harvest({
+      lots: lots.map((lot) => {
+        const qty
+          = directedLots.find(dl => dl.lotId === lot.id)?.quantity ?? '0'
+        return {
+          ...lot,
+          accountId: lot.accountId,
+          originalQty: qty,
+          processQty: qty,
+        } as LotHarvestInput
+      }),
+      portfolio,
+      targetRealized,
+      targetUnrealized,
+    })
+
+    harvest.process()
+
+    return {
+      allOrders: harvest.allOrders,
+      realizedOrders: harvest.realizedOrders,
+      unrealizedOrders: harvest.unrealizedOrders,
+    }
+  }
+
+  async finiteHarvest({
+    directedLots,
+    portfolioId,
+  }: {
+    portfolioId: string
+    directedLots: DirectedHarvestLot[]
+  }) {
+    const [portfolio, lots] = await Promise.all([
+      this.prismaService.portfolio.findUniqueOrThrow({
+        where: {
+          id: portfolioId,
+        },
+      }),
+      this.lotService.lotCurrent({
+        lotIds: directedLots.map(lot => lot.lotId),
+        portfolioId,
+      }),
+    ])
+
+    const netPosition = (data?.portfolioSummary.realized.gainTotal ?? 0) + (data?.portfolioSummary.unrealized.gainTotal ?? 0) - (data?.portfolioSummary.unrealized.lossTotal ?? 0)
 
     const harvest = new Harvest({
       lots: lots.map((lot) => {

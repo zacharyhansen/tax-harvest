@@ -57,6 +57,9 @@ export class PortfolioSummaryUnrealized {
   accountCount: number
 
   @Field()
+  total: number
+
+  @Field()
   positionCount: number
 }
 

@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
+  // DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
 import {
@@ -41,7 +41,7 @@ export function PortfolioSwitcher() {
     <SidebarMenu className="h-full">
       <SidebarMenuItem className="mb-0 flex h-full flex-col justify-center">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger>
             <SidebarMenuButton
               size="lg"
               className="mb-0 py-0 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
@@ -67,9 +67,9 @@ export function PortfolioSwitcher() {
             <DropdownMenuLabel className="text-xs text-muted-foreground">
               Portfolios
             </DropdownMenuLabel>
-            {data?.portfolios.map((portfolio, index) => (
+            {data?.portfolios.map(portfolio => (
               <DropdownMenuItem
-                key={portfolio.name}
+                key={portfolio.id}
                 onClick={() => {
                   void switchPortfolio({
                     onCompleted: reload,
@@ -84,10 +84,10 @@ export function PortfolioSwitcher() {
                   <team.logo className="size-4 shrink-0" />
                 </div> */}
                 {portfolio.name}
-                <DropdownMenuShortcut>
+                {/* <DropdownMenuShortcut>
                   ⌘
                   {index + 1}
-                </DropdownMenuShortcut>
+                </DropdownMenuShortcut> */}
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />

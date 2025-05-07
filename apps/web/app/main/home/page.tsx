@@ -1,11 +1,10 @@
 'use client';
 
 import { Button } from '@repo/ui/components/button';
-import { ArrowRight, Wheat } from 'lucide-react';
+import { Scissors } from 'lucide-react';
 import Link from 'next/link';
 
 import {
-  HarvestType,
   SetUpStatus,
   usePortfolioSummaryQuery,
 } from '~/generated/gql';
@@ -15,14 +14,6 @@ import HarvestSummaryCards from '~/modules/harvest/HarvestSummaryCards';
 import { PageWrapper } from '~/modules/layout';
 import { LotsTable } from '~/modules/lot';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-
-// TODO: this is repeated in the backend too - combine somehow
-const harvestTypeLabel: Record<HarvestType, string> = {
-  [HarvestType.ReduceCostBasis]: 'Raise Average Cost Basis',
-  [HarvestType.ReduceTaxes]: 'Offset Realized Gains',
-  [HarvestType.Sell]: 'Sell Stock',
-  [HarvestType.CaptureGainsTaxFree]: 'Capture Gains Tax Free',
-};
 
 export default function HomePage() {
   const { data, loading, error } = usePortfolioSummaryQuery();
@@ -108,7 +99,7 @@ export default function HomePage() {
                         Ready to improve your portfolio?
                       </h2>
                       <p className="mt-1">
-                        We recommend starting with a
+                        Our
                         {' '}
                         <Link
                           className="group"
@@ -117,38 +108,23 @@ export default function HomePage() {
                           })}
                         >
                           <span className="underline">
-                            {harvestTypeLabel[recommendedHarvest.harvestType]}
+                            Tax Opportunities
                           </span>
                         </Link>
                         {' '}
-                        harvest.
+                        will direct you to the best tax-saving opportunities for your portfolio.
                       </p>
                     </div>
                     <div className="shrink-0">
                       <Link className="group" href={TypedRoutes.harvestFlowRoot()}>
                         <Button
-                          variant="link"
-                          className="text-background"
-                          iconRight={<Wheat className="size-4" />}
+                          variant="outline"
+                          iconRight={<Scissors className="size-4" />}
                         >
-                          All Harvest Options
+                          Tax Opportunities
                         </Button>
                       </Link>
-                      <Link
-                        className="group"
-                        href={TypedRoutes.lotSelection({
-                          type: recommendedHarvest.harvestType,
-                        })}
-                      >
-                        <Button
-                          iconRight={
-                            <ArrowRight className="group-hover:translate-x-1" />
-                          }
-                          className="text-sm font-semibold"
-                        >
-                          {harvestTypeLabel[recommendedHarvest.harvestType]}
-                        </Button>
-                      </Link>
+
                     </div>
                   </div>
                 </div>

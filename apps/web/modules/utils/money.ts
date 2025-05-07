@@ -10,4 +10,16 @@ export default class MoneyUtil {
     }
     return 'negative';
   }
+
+  static colored(
+    amount?: string | number | null,
+  ): string {
+    if (!amount) {
+      return 'text-gray-500';
+    }
+    if ((typeof amount === 'string' ? Number.parseFloat(amount) : amount) > 0) {
+      return 'text-green-600';
+    }
+    return 'text-red-600';
+  }
 }

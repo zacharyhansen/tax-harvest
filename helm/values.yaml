@@ -67,6 +67,7 @@ api:
       GOOGLE_PROJECT: harvester-ai-428202
       SECRET_SOURCE: GCP
       GCS_LOTS_BUCKET_NAME: lot_upload
+      NUETRAL_ACCOUNT_AMOUNT: 1000
     secretRefs:
       - name: DATABASE_URL
         valueFrom:

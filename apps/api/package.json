@@ -36,7 +36,7 @@
     "build:clean": "rimraf dist; exit 0",
     "codegen:snaplet": "npx @snaplet/seed sync",
     "codegen:kysely": "npx kysely-codegen --out-file ./src/database/db.d.ts",
-    "codegen": "npx prisma generate && pnpm codegen:kysely",
+    "codegen": "npx prisma generate && pnpm codegen:kysely && pnpm codegen:snaplet",
     "migrate": "prisma migrate dev",
     "migrate:reset": "prisma migrate reset",
     "sync": "node dist/command/post-migrate.js",

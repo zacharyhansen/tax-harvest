@@ -13,15 +13,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@repo/ui/components/tooltip';
+import { cn } from '@repo/ui/utils';
 import { BarChart3, Info } from 'lucide-react';
+
 import Link from 'next/link';
-
 import { useLotFilteredOpportunitiesQuery } from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
 
+import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-import { Format } from '~/modules/utils';
+import { Format, MoneyUtil } from '~/modules/utils';
 import { CostBasisPairCard } from './api-cost-basis-pair-card';
 
 /**
@@ -53,6 +54,8 @@ export default function TaxOpportunitiesPage() {
   // eslint-disable-next-line ts/no-explicit-any
   const pairs: any[] = [];
 
+  const netPosition = (data?.portfolioSummary.realized.gainTotal ?? 0) + (data?.portfolioSummary.unrealized.gainTotal ?? 0) - (data?.portfolioSummary.unrealized.lossTotal ?? 0);
+
   return (
     <PageWrapper className="flex-1">
       <div className="container mx-auto max-w-6xl px-4 py-8">
@@ -74,12 +77,12 @@ export default function TaxOpportunitiesPage() {
                 Net Realized Position
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
+            <CardContent className="p-2">
               <div className="flex items-center gap-2">
                 <span
-                  className={`text-2xl font-bold ${taxStatus.netRealizedPosition >= 0 ? 'text-green-500' : 'text-red-500'}`}
+                  className={cn('text-2xl font-bold', MoneyUtil.colored(netPosition))}
                 >
-                  {Format.money(taxStatus.netRealizedPosition)}
+                  {Format.money(netPosition)}
                 </span>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -121,9 +124,13 @@ export default function TaxOpportunitiesPage() {
               <div className="p-6">
                 <div className="flex flex-col">
                   <span className="text-sm text-muted-foreground">
-                    Realized Gains
+                    Net Position (Realized P & L)
                   </span>
-                  <span className="mt-1 text-3xl font-semibold text-green-500">
+                  <span
+                    className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
+                      data?.portfolioSummary.realized.gainTotal ?? 0,
+                    ))}
+                  >
                     {Format.money(
                       data?.portfolioSummary.realized.gainTotal ?? 0,
                     )}
@@ -134,12 +141,15 @@ export default function TaxOpportunitiesPage() {
               <div className="p-6">
                 <div className="flex flex-col">
                   <span className="text-sm text-muted-foreground">
-                    Unrealized Losses
+                    Unrealized Gain
                   </span>
-                  <span className="mt-1 text-3xl font-semibold text-red-500">
-                    -
+                  <span
+                    className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
+                      data?.portfolioSummary.unrealized.gainTotal ?? 0,
+                    ))}
+                  >
                     {Format.money(
-                      Math.abs(data?.portfolioSummary.unrealized.lossTotal ?? 0),
+                      (data?.portfolioSummary.unrealized.gainTotal ?? 0),
                     )}
                   </span>
                 </div>
@@ -148,13 +158,29 @@ export default function TaxOpportunitiesPage() {
               <div className="p-6">
                 <div className="flex flex-col">
                   <span className="text-sm text-muted-foreground">
+                    Unrealized Loss
+                  </span>
+                  <span
+                    className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
+                      data?.portfolioSummary.unrealized.lossTotal ?? 0,
+                    ))}
+                  >
+                    {Format.money(
+                      (data?.portfolioSummary.unrealized.lossTotal ?? 0),
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              {/* <div className="p-6">
+                <div className="flex flex-col">
+                  <span className="text-sm text-muted-foreground">
                     Net Position
                   </span>
                   <span
-                    className={`mt-1 text-3xl font-semibold ${taxStatus.netRealizedPosition >= 0 ? 'text-green-500' : 'text-red-500'}`}
+                    className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(netPosition))}
                   >
-                    {taxStatus.netRealizedPosition >= 0 ? '' : '-'}
-                    {Format.money(Math.abs(taxStatus.netRealizedPosition))}
+                    {Format.money(netPosition)}
                   </span>
                   <span className="mt-2 text-sm text-muted-foreground">
                     {taxStatus.isNeutralAccount
@@ -163,8 +189,8 @@ export default function TaxOpportunitiesPage() {
                         ? 'Harvest losses to offset realized gains'
                         : 'Capture gains to offset realized losses'}
                   </span>
-                </div>
-              </div>
+                </div> */}
+              {/* </div> */}
             </div>
           </div>
         </div>

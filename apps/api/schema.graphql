@@ -9116,6 +9116,7 @@ type PortfolioSummaryUnrealized {
   gainTotal: Float!
   lossTotal: Float!
   positionCount: Float!
+  total: Float!
 }
 
 input PortfolioUpdateInput {

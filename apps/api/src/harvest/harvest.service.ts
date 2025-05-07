@@ -12,13 +12,6 @@ import { LotService } from '../lot/lot.service'
 import { DirectedHarvestLot } from '../portfolio/portfolio.dto'
 import { PrismaService } from '../prisma/prisma.service'
 
-const harvestTypeLabel: Record<HarvestType, string> = {
-  [HarvestType.REDUCE_COST_BASIS]: 'Raise Average Cost Basis',
-  [HarvestType.REDUCE_TAXES]: 'Offset Realized Gains',
-  [HarvestType.SELL]: 'Sell Stock',
-  [HarvestType.CAPTURE_GAINS_TAX_FREE]: 'Capture Gains Tax Free',
-}
-
 @Injectable()
 export class HarvestService {
   constructor(
@@ -145,7 +138,7 @@ export class HarvestService {
               }),
             },
           },
-          label: `${new Date().toDateString()} ${harvestTypeLabel[harvestType]}`,
+          label: `TODO LABEL`,
           portfolioId,
           type: harvestType,
         },
