@@ -166,7 +166,7 @@ web:
           secretKeyRef:
             name: stripe
             key: STRIPE_SECRET_KEY
+
 # Secrets configuration with External Secrets Operator
-# secrets:
-#   enabled: true
-# The rest of the configuration comes from the secrets chart's values.yaml
+secrets:
+  enabled: true
