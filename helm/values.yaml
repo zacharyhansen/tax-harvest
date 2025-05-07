@@ -43,7 +43,7 @@ api:
     timeoutSeconds: 5
     failureThreshold: 3
     successThreshold: 1
-    intervalSeconds: 15
+    periodSeconds: 15
   readinessProbe:
     httpGet:
       path: /health
@@ -164,7 +164,7 @@ argocd:
       kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
       kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
-      networking.gke.io/managed-certificates: argocd-cert
+      networking.gke.io/managed-certificates: argocd-dev-cert
     host: argocd.dev.taxharvest.ai
     path: /
     pathType: Prefix
