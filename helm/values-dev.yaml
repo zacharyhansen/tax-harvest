@@ -24,11 +24,13 @@ api:
     extras:
       PLAID_ENV: https://production.plaid.com
       ETRADE_OAUTH_AUTHORIZE_URL: https://us.etrade.com/e/t/etws/authorize
+      ETRADE_OAUTH_TOKEN_URL: https://us.etrade.com/e/t/etws/token
       ETRADE_HOSTNAME: api.etrade.com
       GOOGLE_PROJECT: harvester-ai-428202
       GCS_LOTS_BUCKET_NAME: lot_upload
       CLIENT_ORIGIN: https://dev.taxharvest.ai
       ORIGIN: https://dev.taxharvest.ai/core
+      STRIPE_PUBLISHABLE_KEY: pk_test_51RMA1bCIs96aprc48ICF4qlFkUUWlsfSnZw4xPQ4D43J775q4DkS1PPLFNdEu7cLyWFh6S0gRgk7W9FlFqwjZs1C00aQKxFWQW
 
 argocd:
   enabled: true
