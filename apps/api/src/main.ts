@@ -15,10 +15,10 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
-    {
-      snapshot: true,
-      abortOnError: false,
-    },
+    // {
+    //   snapshot: true,
+    //   abortOnError: false,
+    // },
   )
 
   // Set global prefix but exclude health endpoint cause kubernetes is breaking my balls
@@ -55,10 +55,3 @@ bootstrap().catch((err) => {
   writeFileSync('./graph.json', PartialGraphHost.toString() ?? '')
   process.exit(1)
 })
-
-function handleError(error: unknown) {
-  console.error(error)
-  process.exit(1)
-}
-
-process.on('uncaughtException', handleError)
