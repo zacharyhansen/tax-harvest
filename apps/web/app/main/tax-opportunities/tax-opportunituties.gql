@@ -1,52 +1,31 @@
-fragment FiniteHarvestLotOrderItem on HarvestLotOrder {
-  accountId
-  costBasis
-  gainTotal
+fragment HarvestLotCurrentItem on LotCurrent {
   id
-  lotId
-  pricePaid
-  quantity
-  taxGain
-  assetSymbol
-  dollarPerSharePnL
-  valueTotal
-  orderType
+  accountId
+  remainingQty
   acquiredDate
+  price
+  symbol
+  lastPrice
+  costBasis
+  value
+  gainTotal
+  gainTotalPct
+  dollarPerSharePnL
+  taxGain
 }
-
-query LotFilteredOpportunities {
-  finiteHarvest {
-    allOrders {
-      id
-      ...FiniteHarvestLotOrderItem
-    }
-    portfolioSummary {
+query LotsCurrentForHarvest($lotValueType: LotValueType!) {
+  lotCurrent(lotValueType: $lotValueType) {
+    id
+    ...HarvestLotCurrentItem
+  }
+  portfolioSummary {
     realized {
-      accountCount
-      dividend
-      gainLongTerm
-      gainShortTerm
       gainTotal
     }
     unrealized {
       gainTotal
       lossTotal
-      accountCount
-      positionCount
-    }
-    harvest {
-      realized
-      unrealized
-      total
-    }
-    setUpStatus
-    harvestRecommendations {
-      harvestType
-      amountRealized
-          amountTotal
-        amountUnrealized
-        recommended
-      }
+      gainTotal
     }
   }
 }

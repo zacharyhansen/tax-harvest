@@ -17,7 +17,7 @@ import { cn } from '@repo/ui/utils';
 import { BarChart3, Info } from 'lucide-react';
 
 import Link from 'next/link';
-import { useLotFilteredOpportunitiesQuery } from '~/generated/gql';
+import { useFiniteHarvestQuery } from '~/generated/gql';
 
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
@@ -32,7 +32,7 @@ import { CostBasisPairCard } from './api-cost-basis-pair-card';
  * based on the account's realized gain/loss position.
  */
 export default function TaxOpportunitiesPage() {
-  const { data, error, loading } = useLotFilteredOpportunitiesQuery();
+  const { data, error, loading } = useFiniteHarvestQuery();
 
   // Display a loading spinner while data is being fetched
   if (loading) {
@@ -54,7 +54,7 @@ export default function TaxOpportunitiesPage() {
   // eslint-disable-next-line ts/no-explicit-any
   const pairs: any[] = [];
 
-  const netPosition = (data?.portfolioSummary.realized.gainTotal ?? 0) + (data?.portfolioSummary.unrealized.gainTotal ?? 0) - (data?.portfolioSummary.unrealized.lossTotal ?? 0);
+  const netPosition = data?.finiteHarvest.portfolioSummary.realized.gainTotal;
 
   return (
     <PageWrapper className="flex-1">
@@ -128,11 +128,11 @@ export default function TaxOpportunitiesPage() {
                   </span>
                   <span
                     className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
-                      data?.portfolioSummary.realized.gainTotal ?? 0,
+                      data?.finiteHarvest.portfolioSummary.realized.gainTotal ?? 0,
                     ))}
                   >
                     {Format.money(
-                      data?.portfolioSummary.realized.gainTotal ?? 0,
+                      data?.finiteHarvest.portfolioSummary.realized.gainTotal ?? 0,
                     )}
                   </span>
                 </div>
@@ -145,11 +145,11 @@ export default function TaxOpportunitiesPage() {
                   </span>
                   <span
                     className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
-                      data?.portfolioSummary.unrealized.gainTotal ?? 0,
+                      data?.finiteHarvest.portfolioSummary.unrealized.gainTotal ?? 0,
                     ))}
                   >
                     {Format.money(
-                      (data?.portfolioSummary.unrealized.gainTotal ?? 0),
+                      (data?.finiteHarvest.portfolioSummary.unrealized.gainTotal ?? 0),
                     )}
                   </span>
                 </div>
@@ -162,11 +162,11 @@ export default function TaxOpportunitiesPage() {
                   </span>
                   <span
                     className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
-                      data?.portfolioSummary.unrealized.lossTotal ?? 0,
+                      data?.finiteHarvest.portfolioSummary.unrealized.lossTotal ?? 0,
                     ))}
                   >
                     {Format.money(
-                      (data?.portfolioSummary.unrealized.lossTotal ?? 0),
+                      (data?.finiteHarvest.portfolioSummary.unrealized.lossTotal ?? 0),
                     )}
                   </span>
                 </div>

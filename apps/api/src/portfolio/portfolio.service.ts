@@ -244,7 +244,7 @@ export class PortfolioService {
     ])
 
     return {
-      ...this.calculateHarvest({
+      ...PortfolioService.calculateHarvest({
         realized,
         unrealized,
       }),
@@ -257,7 +257,7 @@ export class PortfolioService {
     }
   }
 
-  calculateHarvest({
+  static calculateHarvest({
     realized,
     unrealized,
   }: {
@@ -326,9 +326,6 @@ export class PortfolioService {
 
     return {
       ...summary,
-      harvestRecommendations: this.harvestRecommendations({
-        portfolioSummary: summary,
-      }),
     }
   }
 
@@ -532,9 +529,6 @@ export class PortfolioService {
       }),
     ])
 
-    const netPosition = summary.realized.gainTotal + summary.unrealized.gainTotal + summary.unrealized.lossTotal
-    console.log({ netPosition })
-
     const harvestType = Math.abs(summary.realized.gainTotal) <= Math.abs(this.configService.get('FINITE_HARVEST_THRESHOLD')!)
       ? HarvestType.REDUCE_COST_BASIS
       : summary.realized.gainTotal > 0 ? HarvestType.REDUCE_TAXES : HarvestType.CAPTURE_GAINS_TAX_FREE
@@ -564,7 +558,8 @@ export class PortfolioService {
           realizedOrders: harvestResult.realizedOrders,
           unrealizedOrders: harvestResult.unrealizedOrders,
         }
-      case HarvestType.REDUCE_TAXES || HarvestType.CAPTURE_GAINS_TAX_FREE: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
+      case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
+      case HarvestType.CAPTURE_GAINS_TAX_FREE: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
         harvestResult = new Harvest({
           lots: lots.map((lot) => {
             const qty = lots.find(l => l.id === lot.id)?.remainingQty ?? '0'
@@ -588,90 +583,6 @@ export class PortfolioService {
           unrealizedOrders: harvestResult.unrealizedOrders,
         }
     }
-    throw new Error('Invalid harvest type')
-  }
-
-  harvestRecommendations({
-    portfolioSummary,
-  }: {
-    portfolioSummary: Omit<
-      PortfolioSummary,
-      'setUpStatus' | 'harvestRecommendations'
-    >
-  }): HarvestRecomendation[] {
-    const result: HarvestRecomendation[] = []
-
-    const recommendRealizedAction = new Decimal(
-      portfolioSummary.harvest.realized,
-    )
-      .absoluteValue()
-      .greaterThan(50)
-
-    if (portfolioSummary.harvest.realized < 0) {
-      // If there is a significant realized harvest gain we want to reduce taxes
-      if (recommendRealizedAction) {
-        result.push({
-          amountRealized: portfolioSummary.harvest.realized,
-          amountTotal: portfolioSummary.harvest.realized,
-          amountUnrealized: 0,
-          harvestType: HarvestType.REDUCE_TAXES,
-          recommended: true,
-        })
-      }
-      else {
-        const amount = Math.min(portfolioSummary.harvest.realized, 0)
-        result.push({
-          amountRealized: amount,
-          amountTotal: amount,
-          amountUnrealized: 0,
-          harvestType: HarvestType.REDUCE_TAXES,
-          recommended: false,
-        })
-      }
-    }
-    else {
-      // If there is a significant realized harvest loss we want to capture gains
-      if (recommendRealizedAction) {
-        result.push({
-          amountRealized: portfolioSummary.harvest.realized,
-          amountTotal: portfolioSummary.harvest.realized,
-          amountUnrealized: 0,
-          harvestType: HarvestType.CAPTURE_GAINS_TAX_FREE,
-          recommended: true,
-        })
-      }
-      else {
-        const amount = Math.min(portfolioSummary.harvest.realized, 0)
-        result.push({
-          amountRealized: amount,
-          amountTotal: amount,
-          amountUnrealized: 0,
-          harvestType: HarvestType.CAPTURE_GAINS_TAX_FREE,
-          recommended: false,
-        })
-      }
-    }
-
-    // else if there some some amount to be harvested its to increase cost basis
-    result.push(
-      {
-        amountRealized: portfolioSummary.harvest.realized,
-        amountTotal: portfolioSummary.harvest.total,
-        amountUnrealized: portfolioSummary.harvest.unrealized,
-        harvestType: HarvestType.REDUCE_COST_BASIS,
-        recommended:
-          !recommendRealizedAction && portfolioSummary.harvest.total > 50,
-      },
-      {
-        amountRealized: 0,
-        amountTotal: 0,
-        amountUnrealized: 0,
-        harvestType: HarvestType.SELL,
-        recommended: false,
-      },
-    )
-
-    return result
   }
 
   public static RELEVANT_HARVEST_ACCOUNTS_WHERE({

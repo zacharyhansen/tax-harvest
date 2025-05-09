@@ -18,6 +18,7 @@ import HarvestRealizedOrders_3 from './test/harvest_3/realizedOrders.json'
 import HarvestUnrealizedOrders_3 from './test/harvest_3/unrealizedOrders.json'
 
 describe('portfolioService', () => {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   let service: PortfolioService
 
   beforeEach(async () => {
@@ -44,7 +45,7 @@ describe('portfolioService', () => {
     }
 
     expect(
-      service.calculateHarvest({
+      PortfolioService.calculateHarvest({
         realized,
         unrealized,
       }).harvest,
@@ -72,7 +73,7 @@ describe('portfolioService', () => {
     }
 
     expect(
-      service.calculateHarvest({
+      PortfolioService.calculateHarvest({
         realized,
         unrealized,
       }).harvest,
@@ -100,7 +101,7 @@ describe('portfolioService', () => {
     }
 
     expect(
-      service.calculateHarvest({
+      PortfolioService.calculateHarvest({
         realized,
         unrealized,
       }).harvest,
@@ -128,7 +129,7 @@ describe('portfolioService', () => {
     }
 
     expect(
-      service.calculateHarvest({
+      PortfolioService.calculateHarvest({
         realized,
         unrealized,
       }).harvest,
@@ -156,7 +157,7 @@ describe('portfolioService', () => {
     }
 
     expect(
-      service.calculateHarvest({
+      PortfolioService.calculateHarvest({
         realized,
         unrealized,
       }).harvest,

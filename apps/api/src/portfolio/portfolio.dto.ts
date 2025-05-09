@@ -6,7 +6,8 @@ import {
 } from '@nestjs/graphql'
 import { OrderType as PrismaOrderType } from '@prisma/client'
 
-import { HarvestType, OrderType } from '../generated/graphql'
+import { LotCurrent } from '~/lot/lot.dto'
+import { HarvestType, Lot, OrderType } from '../generated/graphql'
 
 export enum TaxGain {
   LONG = 'LONG',
@@ -193,6 +194,15 @@ export class HarvestResult {
 
   @Field(() => PortfolioSummary)
   portfolioSummary: PortfolioSummary
+}
+
+@ObjectType()
+export class FiniteHarvestResult {
+  @Field(() => PortfolioSummary)
+  summary: PortfolioSummary
+
+  @Field(() => [LotCurrent])
+  lotsCurrent: LotCurrent[]
 }
 
 @InputType()

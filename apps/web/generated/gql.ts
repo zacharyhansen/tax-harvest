@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -11,14 +10,14 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
-  DateTime: { input: any; output: any };
-  Decimal: { input: string; output: string };
-  JSON: { input: any; output: any };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+  Decimal: { input: string; output: string; }
+  JSON: { input: any; output: any; }
 };
 
 export type Account = {
@@ -94,6 +93,7 @@ export type Account = {
   updatedAt: Scalars['DateTime']['output'];
   uploadedPositions: Scalars['Boolean']['output'];
 };
+
 
 export type Account_RealizedProfitAndLossArgs = {
   year?: InputMaybe<Scalars['Float']['input']>;
@@ -918,7 +918,7 @@ export enum AccountInstitution {
   Sbasket = 'SBASKET',
   Stockplan = 'STOCKPLAN',
   Visa = 'VISA',
-  Wdbh = 'WDBH',
+  Wdbh = 'WDBH'
 }
 
 export type AccountListRelationFilter = {
@@ -1031,14 +1031,14 @@ export enum AccountMode {
   Checking = 'CHECKING',
   Ira = 'IRA',
   Margin = 'MARGIN',
-  Savings = 'SAVINGS',
+  Savings = 'SAVINGS'
 }
 
 /** The provider of the account */
 export enum AccountProvider {
   Etrade = 'ETRADE',
   Plaid = 'PLAID',
-  System = 'SYSTEM',
+  System = 'SYSTEM'
 }
 
 export type AccountProviderExternalIdCompoundUniqueInput = {
@@ -1105,7 +1105,7 @@ export type AccountScalarWhereInput = {
 
 export enum AccountStatus {
   Active = 'ACTIVE',
-  Closed = 'CLOSED',
+  Closed = 'CLOSED'
 }
 
 export type AccountSumAggregate = {
@@ -2032,7 +2032,7 @@ export enum AssetClass {
   Fx = 'fx',
   Indices = 'indices',
   Otc = 'otc',
-  Stocks = 'stocks',
+  Stocks = 'stocks'
 }
 
 export type AssetCount = {
@@ -2471,7 +2471,7 @@ export type AssetListRelationFilter = {
 
 export enum AssetLocale {
   Global = 'global',
-  Us = 'us',
+  Us = 'us'
 }
 
 export type AssetMaxAggregate = {
@@ -3849,12 +3849,12 @@ export enum AuthSource {
   EtradeAccess = 'ETRADE_ACCESS',
   EtradeRequest = 'ETRADE_REQUEST',
   Local = 'LOCAL',
-  Plaid = 'PLAID',
+  Plaid = 'PLAID'
 }
 
 export enum AuthType {
   Oauth_1 = 'OAUTH_1',
-  PlaidLink = 'PLAID_LINK',
+  PlaidLink = 'PLAID_LINK'
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -4288,7 +4288,7 @@ export type FileScalarWhereInput = {
 };
 
 export enum FileType {
-  EtradeLots = 'ETRADE_LOTS',
+  EtradeLots = 'ETRADE_LOTS'
 }
 
 export type FileUpdateManyMutationInput = {
@@ -4417,7 +4417,7 @@ export type GcpUploadFile = {
 };
 
 export enum Graph {
-  ReturnPctLine = 'RETURN_PCT_LINE',
+  ReturnPctLine = 'RETURN_PCT_LINE'
 }
 
 export type Harvest = {
@@ -4675,7 +4675,7 @@ export type HarvestScalarWhereInput = {
 export enum HarvestStep {
   Complete = 'COMPLETE',
   Configure = 'CONFIGURE',
-  Review = 'REVIEW',
+  Review = 'REVIEW'
 }
 
 export type HarvestSumAggregate = {
@@ -5783,7 +5783,7 @@ export enum HarvestType {
   CaptureGainsTaxFree = 'CAPTURE_GAINS_TAX_FREE',
   ReduceCostBasis = 'REDUCE_COST_BASIS',
   ReduceTaxes = 'REDUCE_TAXES',
-  Sell = 'SELL',
+  Sell = 'SELL'
 }
 
 export type HarvestUpdateInput = {
@@ -6161,7 +6161,7 @@ export enum LogType {
   Auth = 'AUTH',
   ExternalSync = 'EXTERNAL_SYNC',
   PlaidTrxMerge = 'PLAID_TRX_MERGE',
-  PlaidWebhook = 'PLAID_WEBHOOK',
+  PlaidWebhook = 'PLAID_WEBHOOK'
 }
 
 export type LogUpdateManyMutationInput = {
@@ -8227,7 +8227,7 @@ export type LotUpsertWithoutLotChangeLogInput = {
 
 export enum LotValueType {
   Gain = 'GAIN',
-  Loss = 'LOSS',
+  Loss = 'LOSS'
 }
 
 export type LotWhereInput = {
@@ -8360,87 +8360,106 @@ export type Mutation = {
   updateUserFavorites: User;
 };
 
+
 export type MutationAccessOauthConnectionArgs = {
   authSource: AuthSource;
   portfolioId: Scalars['String']['input'];
   verifier: Scalars['String']['input'];
 };
 
+
 export type MutationCreateAccountForPortfolioArgs = {
   accountCreateInput: AccountCreateInput;
 };
 
+
 export type MutationCreateFilesArgs = {
   data: Array<FileCreateManyInput>;
 };
+
 
 export type MutationCreateHarvestArgs = {
   directedHarvestLots: Array<DirectedHarvestLot>;
   harvestType: HarvestType;
 };
 
+
 export type MutationCreatePortfolioArgs = {
   portfolioInsertObject: PortfolioCreateInput;
 };
 
+
 export type MutationFinalizeHarvestArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationSetAccessTokenAndSyncAccountsArgs = {
   metaData: PlaidLinkOnSuccessMetadata;
   publicToken: Scalars['String']['input'];
 };
 
+
 export type MutationSwitchPortfolioArgs = {
   porfolioId: Scalars['String']['input'];
 };
 
+
 export type MutationSyncAuthConnectionArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type MutationUpdateAccountArgs = {
   accountUpdateInput: AccountUpdateInput;
   accountWhereUniqueInput: AccountWhereUniqueInput;
 };
 
+
 export type MutationUpdateHarvestArgs = {
   data?: InputMaybe<HarvestUpdateInput>;
   id?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationUpdateHarvestTransactionArgs = {
   data?: InputMaybe<HarvestTransactionUpdateInput>;
   id?: InputMaybe<Scalars['String']['input']>;
 };
 
+
 export type MutationUpdateHarvestTransactionItemArgs = {
   data?: InputMaybe<HarvestTransactionItemUpdateInput>;
   id?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type MutationUpdateHourlyAssetPricesArgs = {
   from: Scalars['DateTime']['input'];
   to: Scalars['DateTime']['input'];
 };
 
+
 export type MutationUpdatePortfolioArgs = {
   data: PortfolioUpdateInput;
 };
+
 
 export type MutationUpdateRealizedPAndLArgs = {
   id: Scalars['String']['input'];
   input: RealizedPAndLUpdateInput;
 };
 
+
 export type MutationUpdateUserArgs = {
   data: UserUpdateInput;
 };
 
+
 export type MutationUpdateUserByIdArgs = {
   updateUserInput: UserUpdateInput;
 };
+
 
 export type MutationUpdateUserFavoritesArgs = {
   data: UserUpdateInput;
@@ -8739,7 +8758,7 @@ export type NullableStringFieldUpdateOperationsInput = {
 export enum OperationType {
   Create = 'create',
   Delete = 'delete',
-  Update = 'update',
+  Update = 'update'
 }
 
 export enum OptionLevel {
@@ -8747,7 +8766,7 @@ export enum OptionLevel {
   Level_2 = 'LEVEL_2',
   Level_3 = 'LEVEL_3',
   Level_4 = 'LEVEL_4',
-  NoOptions = 'NO_OPTIONS',
+  NoOptions = 'NO_OPTIONS'
 }
 
 export enum OrderType {
@@ -8756,7 +8775,7 @@ export enum OrderType {
   BuyToOpen = 'BUY_TO_OPEN',
   Sell = 'SELL',
   SellToClose = 'SELL_TO_CLOSE',
-  SellToOpen = 'SELL_TO_OPEN',
+  SellToOpen = 'SELL_TO_OPEN'
 }
 
 export type PaginationProps = {
@@ -9132,7 +9151,7 @@ export type PortfolioRelationFilter = {
 
 export enum PortfolioRole {
   Admin = 'ADMIN',
-  Viewer = 'VIEWER',
+  Viewer = 'VIEWER'
 }
 
 export type PortfolioScalarWhereInput = {
@@ -9186,6 +9205,7 @@ export type PortfolioSummaryUnrealized = {
   gainTotal: Scalars['Float']['output'];
   lossTotal: Scalars['Float']['output'];
   positionCount: Scalars['Float']['output'];
+  total: Scalars['Float']['output'];
 };
 
 export type PortfolioUpdateInput = {
@@ -10629,6 +10649,8 @@ export type Query = {
   directedHarvest: HarvestResult;
   /** Find one user by email */
   findOneUserByEmail: User;
+  /** New harvest endpoint that returns all orders and summary */
+  finiteHarvest: HarvestResult;
   /** Get file upload url */
   generateSignedUrlsForUpload: SignedUrlsForUploadPayload;
   /** Get file download url */
@@ -10677,21 +10699,26 @@ export type Query = {
   userCurrent: User;
 };
 
+
 export type QueryAccountArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type QueryAccountsArgs = {
   where?: InputMaybe<AccountWhereInput>;
 };
 
+
 export type QueryAuthConnectionArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type QueryChartThreeMonthArgs = {
   asset: Scalars['String']['input'];
 };
+
 
 export type QueryDirectedHarvestArgs = {
   lots: Array<DirectedHarvestLot>;
@@ -10699,78 +10726,96 @@ export type QueryDirectedHarvestArgs = {
   targetUnrealized: Scalars['Float']['input'];
 };
 
+
 export type QueryFindOneUserByEmailArgs = {
   email: Scalars['String']['input'];
 };
+
 
 export type QueryGenerateSignedUrlsForUploadArgs = {
   files: Array<GcpUploadFile>;
 };
 
+
 export type QueryGenrerateSignedUrlsForDownloadArgs = {
   gcpFileNames: Array<Scalars['String']['input']>;
 };
+
 
 export type QueryGetUserPublicArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type QueryHarvestArgs = {
   id?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type QueryHarvestsArgs = {
   where?: InputMaybe<HarvestWhereInput>;
 };
 
+
 export type QueryLogArgs = {
   logId: Scalars['Int']['input'];
 };
+
 
 export type QueryLogsArgs = {
   orderBy?: InputMaybe<LogOrderByRelationAggregateInput>;
   pagination?: InputMaybe<PaginationProps>;
 };
 
+
 export type QueryLotCurrentArgs = {
   lotIds?: InputMaybe<Array<Scalars['String']['input']>>;
   lotValueType?: InputMaybe<LotValueType>;
 };
 
+
 export type QueryLotTransactionBatchArgs = {
   lotTransactionBatchId: Scalars['String']['input'];
 };
 
+
 export type QueryLotTransactionBatchesArgs = {
   orderBy?: InputMaybe<LotTransactionBatchOrderByRelationAggregateInput>;
 };
+
 
 export type QueryLotsArgs = {
   includeTaxAdvantaged?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<LotWhereInput>;
 };
 
+
 export type QueryPortfolioByIdArgs = {
   id: Scalars['String']['input'];
 };
 
+
 export type QueryProductsArgs = {
   active?: InputMaybe<Scalars['String']['input']>;
 };
+
 
 export type QueryRequestOauthConnectionArgs = {
   authSource: AuthSource;
   portfolioId: Scalars['String']['input'];
 };
 
+
 export type QueryStripeSessionArgs = {
   stripeCustomerId: Scalars['String']['input'];
   stripePriceId: Scalars['String']['input'];
 };
 
+
 export type QueryTransactionArgs = {
   id: Scalars['String']['input'];
 };
+
 
 export type QueryTransactionsArgs = {
   where?: InputMaybe<TransactionWhereInput>;
@@ -10778,7 +10823,7 @@ export type QueryTransactionsArgs = {
 
 export enum QueryMode {
   Default = 'default',
-  Insensitive = 'insensitive',
+  Insensitive = 'insensitive'
 }
 
 export type RealizedPAndL = {
@@ -11018,7 +11063,7 @@ export type RealizedPAndLWhereUniqueInput = {
 export enum SetUpStatus {
   AccountSetupRequired = 'ACCOUNT_SETUP_REQUIRED',
   Complete = 'COMPLETE',
-  NoAccounts = 'NO_ACCOUNTS',
+  NoAccounts = 'NO_ACCOUNTS'
 }
 
 export type SignedUrlsForDownloadPayload = {
@@ -11033,7 +11078,7 @@ export type SignedUrlsForUploadPayload = {
 
 export enum SortOrder {
   Asc = 'asc',
-  Desc = 'desc',
+  Desc = 'desc'
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -11091,7 +11136,7 @@ export type StripeSession = {
 
 export enum TaxGain {
   Long = 'LONG',
-  Short = 'SHORT',
+  Short = 'SHORT'
 }
 
 export type Transaction = {
@@ -12822,217 +12867,248 @@ export enum VectorWindow {
   Month_3 = 'MONTH_3',
   Month_6 = 'MONTH_6',
   Year_1 = 'YEAR_1',
-  Year_2 = 'YEAR_2',
+  Year_2 = 'YEAR_2'
 }
 
-export type AccountItemFragment = { __typename?: 'Account'; id: string; name?: string | null; type: string; portfolioId: string; provider: AccountProvider; externalId?: string | null; key?: string | null; description?: string | null; institution: AccountInstitution; mode?: AccountMode | null; status: AccountStatus; optionLevel?: OptionLevel | null; cashForOpenOrders?: string | null; balanceMoneyMarket?: string | null; cashAvailableForInvestment?: string | null; accountValueTotal?: string | null; marketValueTotal?: string | null; cashNet?: string | null; cashBalance?: string | null; balanceAccount?: string | null; createdAt: any; updatedAt: any; createdBy: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string }; _realizedProfitAndLoss: { __typename?: 'RealizedPAndL'; id: string; longTerm: string; shortTerm: string; dividend: string; year: number; deferredLoss: string } };
+export type AccountItemFragment = { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, description?: string | null, institution: AccountInstitution, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, marketValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string }, _realizedProfitAndLoss: { __typename?: 'RealizedPAndL', id: string, longTerm: string, shortTerm: string, dividend: string, year: number, deferredLoss: string } };
 
 export type AccountQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-export type AccountQuery = { __typename?: 'Query'; account: { __typename?: 'Account'; id: string; name?: string | null; type: string; portfolioId: string; provider: AccountProvider; externalId?: string | null; key?: string | null; description?: string | null; institution: AccountInstitution; mode?: AccountMode | null; status: AccountStatus; optionLevel?: OptionLevel | null; cashForOpenOrders?: string | null; balanceMoneyMarket?: string | null; cashAvailableForInvestment?: string | null; accountValueTotal?: string | null; marketValueTotal?: string | null; cashNet?: string | null; cashBalance?: string | null; balanceAccount?: string | null; createdAt: any; updatedAt: any; createdBy: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string }; _realizedProfitAndLoss: { __typename?: 'RealizedPAndL'; id: string; longTerm: string; shortTerm: string; dividend: string; year: number; deferredLoss: string } } };
+
+export type AccountQuery = { __typename?: 'Query', account: { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, description?: string | null, institution: AccountInstitution, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, marketValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string }, _realizedProfitAndLoss: { __typename?: 'RealizedPAndL', id: string, longTerm: string, shortTerm: string, dividend: string, year: number, deferredLoss: string } } };
 
 export type UpdateAccountMutationVariables = Exact<{
   accountUpdateInput: AccountUpdateInput;
   accountWhereUniqueInput: AccountWhereUniqueInput;
 }>;
 
-export type UpdateAccountMutation = { __typename?: 'Mutation'; updateAccount: { __typename?: 'Account'; id: string; name?: string | null; portfolioId: string; description?: string | null } };
+
+export type UpdateAccountMutation = { __typename?: 'Mutation', updateAccount: { __typename?: 'Account', id: string, name?: string | null, portfolioId: string, description?: string | null } };
 
 export type UpdateAccountRealizedPAndLMutationVariables = Exact<{
   id: Scalars['String']['input'];
   input: RealizedPAndLUpdateInput;
 }>;
 
-export type UpdateAccountRealizedPAndLMutation = { __typename?: 'Mutation'; updateRealizedPAndL: { __typename?: 'RealizedPAndL'; id: string; shortTerm: string; longTerm: string; deferredLoss: string; dividend: string } };
 
-export type AccountTableItemFragment = { __typename?: 'Account'; id: string; name?: string | null; type: string; portfolioId: string; provider: AccountProvider; externalId?: string | null; key?: string | null; institution: AccountInstitution; mode?: AccountMode | null; status: AccountStatus; optionLevel?: OptionLevel | null; cashForOpenOrders?: string | null; balanceMoneyMarket?: string | null; cashAvailableForInvestment?: string | null; accountValueTotal?: string | null; cashNet?: string | null; cashBalance?: string | null; balanceAccount?: string | null; createdAt: any; updatedAt: any; authConnectionId: string; createdBy: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string } };
+export type UpdateAccountRealizedPAndLMutation = { __typename?: 'Mutation', updateRealizedPAndL: { __typename?: 'RealizedPAndL', id: string, shortTerm: string, longTerm: string, deferredLoss: string, dividend: string } };
 
-export type AccountTableAuthConnectionFragment = { __typename?: 'AuthConnectionExt'; id: string; syncedAt?: any | null; authedAt: any; source: AuthSource; _requiresReAuth: boolean };
+export type AccountTableItemFragment = { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, institution: AccountInstitution, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnectionId: string, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
+
+export type AccountTableAuthConnectionFragment = { __typename?: 'AuthConnectionExt', id: string, syncedAt?: any | null, authedAt: any, source: AuthSource, _requiresReAuth: boolean };
 
 export type AccountsQueryVariables = Exact<{
   where?: InputMaybe<AccountWhereInput>;
 }>;
 
-export type AccountsQuery = { __typename?: 'Query'; accounts: Array<{ __typename?: 'Account'; id: string; name?: string | null; type: string; portfolioId: string; provider: AccountProvider; externalId?: string | null; key?: string | null; institution: AccountInstitution; mode?: AccountMode | null; status: AccountStatus; optionLevel?: OptionLevel | null; cashForOpenOrders?: string | null; balanceMoneyMarket?: string | null; cashAvailableForInvestment?: string | null; accountValueTotal?: string | null; cashNet?: string | null; cashBalance?: string | null; balanceAccount?: string | null; createdAt: any; updatedAt: any; authConnectionId: string; positions?: Array<{ __typename?: 'Position'; gainTotal?: string | null }> | null; createdBy: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string } }> };
+
+export type AccountsQuery = { __typename?: 'Query', accounts: Array<{ __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, institution: AccountInstitution, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnectionId: string, positions?: Array<{ __typename?: 'Position', gainTotal?: string | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
 
 export type CreateAccountForPortfolioMutationVariables = Exact<{
   accountCreateInput: AccountCreateInput;
 }>;
 
-export type CreateAccountForPortfolioMutation = { __typename?: 'Mutation'; createAccountForPortfolio: { __typename?: 'Account'; id: string; name?: string | null; type: string; portfolioId: string; provider: AccountProvider; externalId?: string | null; key?: string | null; institution: AccountInstitution; mode?: AccountMode | null; status: AccountStatus; optionLevel?: OptionLevel | null; cashForOpenOrders?: string | null; balanceMoneyMarket?: string | null; cashAvailableForInvestment?: string | null; accountValueTotal?: string | null; cashNet?: string | null; cashBalance?: string | null; balanceAccount?: string | null; createdAt: any; updatedAt: any; authConnectionId: string; createdBy: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string } } };
+
+export type CreateAccountForPortfolioMutation = { __typename?: 'Mutation', createAccountForPortfolio: { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, institution: AccountInstitution, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnectionId: string, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } } };
 
 export type SyncAccountMutationVariables = Exact<{
   authConnectionId: Scalars['String']['input'];
 }>;
 
-export type SyncAccountMutation = { __typename?: 'Mutation'; syncAuthConnection: { __typename?: 'AuthConnectionExt'; id: string } };
 
-export type UpdateAllAssetPricesMutationVariables = Exact<{ [key: string]: never }>;
+export type SyncAccountMutation = { __typename?: 'Mutation', syncAuthConnection: { __typename?: 'AuthConnectionExt', id: string } };
 
-export type UpdateAllAssetPricesMutation = { __typename?: 'Mutation'; updateAllAssetPrices: string };
+export type UpdateAllAssetPricesMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type LogFragment = { __typename?: 'Log'; id: string; createdAt: any; description?: string | null; responseStatus?: number | null; source?: AuthSource | null; type: LogType };
+
+export type UpdateAllAssetPricesMutation = { __typename?: 'Mutation', updateAllAssetPrices: string };
+
+export type LogFragment = { __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType };
 
 export type LogsQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationProps>;
 }>;
 
-export type LogsQuery = { __typename?: 'Query'; logsCount: number; logs: Array<{ __typename?: 'Log'; id: string; createdAt: any; description?: string | null; responseStatus?: number | null; source?: AuthSource | null; type: LogType }> };
 
-export type LogDetailsFragment = { __typename?: 'Log'; id: string; createdAt: any; description?: string | null; responseStatus?: number | null; source?: AuthSource | null; type: LogType; data: any };
+export type LogsQuery = { __typename?: 'Query', logsCount: number, logs: Array<{ __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType }> };
+
+export type LogDetailsFragment = { __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType, data: any };
 
 export type LogQueryVariables = Exact<{
   logId: Scalars['Int']['input'];
 }>;
 
-export type LogQuery = { __typename?: 'Query'; log?: { __typename?: 'Log'; id: string; createdAt: any; description?: string | null; responseStatus?: number | null; source?: AuthSource | null; type: LogType; data: any } | null };
 
-export type LotTransactionBatchFragment = { __typename?: 'LotTransactionBatch'; id: string; createdAt: any; updatedAt: any; authConnectionId: string };
+export type LogQuery = { __typename?: 'Query', log?: { __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType, data: any } | null };
 
-export type LotTransactionBatchesQueryVariables = Exact<{ [key: string]: never }>;
+export type LotTransactionBatchFragment = { __typename?: 'LotTransactionBatch', id: string, createdAt: any, updatedAt: any, authConnectionId: string };
 
-export type LotTransactionBatchesQuery = { __typename?: 'Query'; lotTransactionBatches: Array<{ __typename?: 'LotTransactionBatch'; id: string; createdAt: any; updatedAt: any; authConnectionId: string }> };
+export type LotTransactionBatchesQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type LotTransactionBatchDetailsFragment = { __typename?: 'LotTransactionBatch'; id: string; createdAt: any; updatedAt: any; authConnectionId: string; positionsBefore?: any | null; positionsAfter?: any | null; holdingsPayload?: any | null; lotTupleMap?: any | null; initialLots?: any | null; newTransactions?: any | null; newBuys?: any | null; newSells?: any | null; lotChangeLog?: Array<{ __typename?: 'LotChangeLog'; id: string; createdAt: any; lotId?: string | null; accountId: string; portfolioId: string; lotBefore?: any | null; lotAfter?: any | null; operationType: OperationType; source?: string | null; processed: boolean; quantityChange?: string | null; lotTransactionBatchId: string; lot?: { __typename?: 'Lot'; id: string; remainingQty: string; price: string; acquiredDate: any; assetSymbol: string; account: { __typename?: 'Account'; id: string; name?: string | null } } | null }> | null };
+
+export type LotTransactionBatchesQuery = { __typename?: 'Query', lotTransactionBatches: Array<{ __typename?: 'LotTransactionBatch', id: string, createdAt: any, updatedAt: any, authConnectionId: string }> };
+
+export type LotTransactionBatchDetailsFragment = { __typename?: 'LotTransactionBatch', id: string, createdAt: any, updatedAt: any, authConnectionId: string, positionsBefore?: any | null, positionsAfter?: any | null, holdingsPayload?: any | null, lotTupleMap?: any | null, initialLots?: any | null, newTransactions?: any | null, newBuys?: any | null, newSells?: any | null, lotChangeLog?: Array<{ __typename?: 'LotChangeLog', id: string, createdAt: any, lotId?: string | null, accountId: string, portfolioId: string, lotBefore?: any | null, lotAfter?: any | null, operationType: OperationType, source?: string | null, processed: boolean, quantityChange?: string | null, lotTransactionBatchId: string, lot?: { __typename?: 'Lot', id: string, remainingQty: string, price: string, acquiredDate: any, assetSymbol: string, account: { __typename?: 'Account', id: string, name?: string | null } } | null }> | null };
 
 export type LotTransactionBatchQueryVariables = Exact<{
   lotTransactionBatchId: Scalars['String']['input'];
 }>;
 
-export type LotTransactionBatchQuery = { __typename?: 'Query'; lotTransactionBatch?: { __typename?: 'LotTransactionBatch'; id: string; createdAt: any; updatedAt: any; authConnectionId: string; positionsBefore?: any | null; positionsAfter?: any | null; holdingsPayload?: any | null; lotTupleMap?: any | null; initialLots?: any | null; newTransactions?: any | null; newBuys?: any | null; newSells?: any | null; lotChangeLog?: Array<{ __typename?: 'LotChangeLog'; id: string; createdAt: any; lotId?: string | null; accountId: string; portfolioId: string; lotBefore?: any | null; lotAfter?: any | null; operationType: OperationType; source?: string | null; processed: boolean; quantityChange?: string | null; lotTransactionBatchId: string; lot?: { __typename?: 'Lot'; id: string; remainingQty: string; price: string; acquiredDate: any; assetSymbol: string; account: { __typename?: 'Account'; id: string; name?: string | null } } | null }> | null } | null };
 
-export type HarvestTableItemFragment = { __typename?: 'Harvest'; id: string; date: any; type: HarvestType; step: HarvestStep; createdAt: any; amount: string; label: string; createdBy: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string } };
+export type LotTransactionBatchQuery = { __typename?: 'Query', lotTransactionBatch?: { __typename?: 'LotTransactionBatch', id: string, createdAt: any, updatedAt: any, authConnectionId: string, positionsBefore?: any | null, positionsAfter?: any | null, holdingsPayload?: any | null, lotTupleMap?: any | null, initialLots?: any | null, newTransactions?: any | null, newBuys?: any | null, newSells?: any | null, lotChangeLog?: Array<{ __typename?: 'LotChangeLog', id: string, createdAt: any, lotId?: string | null, accountId: string, portfolioId: string, lotBefore?: any | null, lotAfter?: any | null, operationType: OperationType, source?: string | null, processed: boolean, quantityChange?: string | null, lotTransactionBatchId: string, lot?: { __typename?: 'Lot', id: string, remainingQty: string, price: string, acquiredDate: any, assetSymbol: string, account: { __typename?: 'Account', id: string, name?: string | null } } | null }> | null } | null };
+
+export type HarvestTableItemFragment = { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
 
 export type HarvestsQueryVariables = Exact<{
   where?: InputMaybe<HarvestWhereInput>;
 }>;
 
-export type HarvestsQuery = { __typename?: 'Query'; harvests: Array<{ __typename?: 'Harvest'; id: string; date: any; type: HarvestType; step: HarvestStep; createdAt: any; amount: string; label: string; createdBy: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string } }> };
 
-export type LotCurrentItemFragment = { __typename?: 'LotCurrent'; id: string; accountId: string; remainingQty: string; acquiredDate: any; price: string; symbol: string; lastPrice: string; costBasis: string; value: string; gainTotal: string; gainTotalPct: string; dollarPerSharePnL: string; taxGain: TaxGain };
+export type HarvestsQuery = { __typename?: 'Query', harvests: Array<{ __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
 
-export type AccountSummaryFragment = { __typename?: 'Account'; id: string; uploadedPositions: boolean; setRealizedValues: boolean; name?: string | null; type: string; subType?: string | null; accountValueTotal?: string | null; skipSetup: boolean };
+export type AccountSummaryFragment = { __typename?: 'Account', id: string, uploadedPositions: boolean, setRealizedValues: boolean, name?: string | null, type: string, subType?: string | null, accountValueTotal?: string | null, skipSetup: boolean };
 
-export type PortfolioSummaryQueryVariables = Exact<{ [key: string]: never }>;
+export type PortfolioSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type PortfolioSummaryQuery = { __typename?: 'Query'; portfolioSummary: { __typename?: 'PortfolioSummary'; setUpStatus: SetUpStatus; realized: { __typename?: 'PortfolioSummaryRealized'; accountCount: number; dividend: number; gainLongTerm: number; gainShortTerm: number; gainTotal: number }; unrealized: { __typename?: 'PortfolioSummaryUnrealized'; gainTotal: number; lossTotal: number; accountCount: number; positionCount: number }; harvest: { __typename?: 'HarvestPotential'; realized: number; unrealized: number; total: number }; harvestRecommendations: Array<{ __typename?: 'HarvestRecomendation'; harvestType: HarvestType; amountRealized: number; amountTotal: number; amountUnrealized: number; recommended: boolean }> } };
 
-export type AccountSummariesQueryVariables = Exact<{ [key: string]: never }>;
+export type PortfolioSummaryQuery = { __typename?: 'Query', portfolioSummary: { __typename?: 'PortfolioSummary', setUpStatus: SetUpStatus, realized: { __typename?: 'PortfolioSummaryRealized', accountCount: number, dividend: number, gainLongTerm: number, gainShortTerm: number, gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, accountCount: number, positionCount: number }, harvest: { __typename?: 'HarvestPotential', realized: number, unrealized: number, total: number }, harvestRecommendations: Array<{ __typename?: 'HarvestRecomendation', harvestType: HarvestType, amountRealized: number, amountTotal: number, amountUnrealized: number, recommended: boolean }> } };
 
-export type AccountSummariesQuery = { __typename?: 'Query'; accounts: Array<{ __typename?: 'Account'; id: string; uploadedPositions: boolean; setRealizedValues: boolean; name?: string | null; type: string; subType?: string | null; accountValueTotal?: string | null; skipSetup: boolean }> };
+export type AccountSummariesQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type AccountRealizedPlQueryVariables = Exact<{ [key: string]: never }>;
 
-export type AccountRealizedPlQuery = { __typename?: 'Query'; accounts: Array<{ __typename?: 'Account'; id: string; name?: string | null; realizedPAndL?: Array<{ __typename?: 'RealizedPAndL'; id: string; year: number; shortTerm: string; longTerm: string; dividend: string; deferredLoss: string; updatedAt: any }> | null }> };
+export type AccountSummariesQuery = { __typename?: 'Query', accounts: Array<{ __typename?: 'Account', id: string, uploadedPositions: boolean, setRealizedValues: boolean, name?: string | null, type: string, subType?: string | null, accountValueTotal?: string | null, skipSetup: boolean }> };
 
-export type PortfolioTableItemFragment = { __typename?: 'Portfolio'; createdById?: string | null; id: string; name: string; createdAt: any; createdBy?: { __typename?: 'User'; name?: string | null; id: string; photo?: string | null; email?: string | null } | null; accounts?: Array<{ __typename?: 'Account'; id: string; status: AccountStatus; name?: string | null; institution: AccountInstitution }> | null; usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios'; role: PortfolioRole; user: { __typename?: 'User'; name?: string | null; id: string; photo?: string | null; email?: string | null } }> | null };
+export type AccountRealizedPlQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type PortfolioTableQueryVariables = Exact<{ [key: string]: never }>;
 
-export type PortfolioTableQuery = { __typename?: 'Query'; portfolios: Array<{ __typename?: 'Portfolio'; createdById?: string | null; id: string; name: string; createdAt: any; createdBy?: { __typename?: 'User'; name?: string | null; id: string; photo?: string | null; email?: string | null } | null; accounts?: Array<{ __typename?: 'Account'; id: string; status: AccountStatus; name?: string | null; institution: AccountInstitution }> | null; usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios'; role: PortfolioRole; user: { __typename?: 'User'; name?: string | null; id: string; photo?: string | null; email?: string | null } }> | null }> };
+export type AccountRealizedPlQuery = { __typename?: 'Query', accounts: Array<{ __typename?: 'Account', id: string, name?: string | null, realizedPAndL?: Array<{ __typename?: 'RealizedPAndL', id: string, year: number, shortTerm: string, longTerm: string, dividend: string, deferredLoss: string, updatedAt: any }> | null }> };
+
+export type PortfolioTableItemFragment = { __typename?: 'Portfolio', createdById?: string | null, id: string, name: string, createdAt: any, createdBy?: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } | null, accounts?: Array<{ __typename?: 'Account', id: string, status: AccountStatus, name?: string | null, institution: AccountInstitution }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } }> | null };
+
+export type PortfolioTableQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PortfolioTableQuery = { __typename?: 'Query', portfolios: Array<{ __typename?: 'Portfolio', createdById?: string | null, id: string, name: string, createdAt: any, createdBy?: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } | null, accounts?: Array<{ __typename?: 'Account', id: string, status: AccountStatus, name?: string | null, institution: AccountInstitution }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } }> | null }> };
 
 export type UpdatePortfolioMutationVariables = Exact<{
   data: PortfolioUpdateInput;
 }>;
 
-export type UpdatePortfolioMutation = { __typename?: 'Mutation'; updatePortfolio: { __typename?: 'Portfolio'; harvestShareDollarThreshold: string; harvestTickerBucketDollarSizeLong: string; harvestTickerBucketDollarSizeShort: string; harvestTickerBucketLowerLimitLong: string; harvestTickerBucketLowerLimitShort: string; id: string; name: string; harvestCycleWeeks: number; createdAt: any; createdById?: string | null; accounts?: Array<{ __typename?: 'Account'; name?: string | null; id: string }> | null; usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios'; role: PortfolioRole; user: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null } }> | null } };
+
+export type UpdatePortfolioMutation = { __typename?: 'Mutation', updatePortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type PortfolioByIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-export type PortfolioByIdQuery = { __typename?: 'Query'; portfolioById: { __typename?: 'Portfolio'; harvestShareDollarThreshold: string; harvestTickerBucketDollarSizeLong: string; harvestTickerBucketDollarSizeShort: string; harvestTickerBucketLowerLimitLong: string; harvestTickerBucketLowerLimitShort: string; id: string; name: string; harvestCycleWeeks: number; createdAt: any; createdById?: string | null; accounts?: Array<{ __typename?: 'Account'; name?: string | null; id: string }> | null; usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios'; role: PortfolioRole; user: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null } }> | null } };
+
+export type PortfolioByIdQuery = { __typename?: 'Query', portfolioById: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type StripeSessionQueryVariables = Exact<{
   stripePriceId: Scalars['String']['input'];
   stripeCustomerId: Scalars['String']['input'];
 }>;
 
-export type StripeSessionQuery = { __typename?: 'Query'; stripeSession: { __typename?: 'StripeSession'; id: string; client_secret?: string | null } };
 
-export type LotOpportunityItemFragment = { __typename?: 'Lot'; id: string; acquiredDate: any; costTotal?: string | null; price: string; remainingQty: string; assetSymbol: string; totalCostForGainPct?: string | null; asset: { __typename?: 'Asset'; symbol: string; lastPrice: string }; account: { __typename?: 'Account'; id: string; externalId?: string | null; name?: string | null; type: string } };
+export type StripeSessionQuery = { __typename?: 'Query', stripeSession: { __typename?: 'StripeSession', id: string, client_secret?: string | null } };
 
-export type LotFilteredOpportunitiesQueryVariables = Exact<{
-  where?: InputMaybe<LotWhereInput>;
+export type HarvestLotCurrentItemFragment = { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain };
+
+export type LotsCurrentForHarvestQueryVariables = Exact<{
+  lotValueType: LotValueType;
 }>;
 
-export type LotFilteredOpportunitiesQuery = { __typename?: 'Query'; lots: Array<{ __typename?: 'Lot'; id: string; acquiredDate: any; costTotal?: string | null; price: string; remainingQty: string; assetSymbol: string; totalCostForGainPct?: string | null; asset: { __typename?: 'Asset'; symbol: string; lastPrice: string }; account: { __typename?: 'Account'; id: string; externalId?: string | null; name?: string | null; type: string } }>; portfolioSummary: { __typename?: 'PortfolioSummary'; setUpStatus: SetUpStatus; realized: { __typename?: 'PortfolioSummaryRealized'; accountCount: number; dividend: number; gainLongTerm: number; gainShortTerm: number; gainTotal: number }; unrealized: { __typename?: 'PortfolioSummaryUnrealized'; gainTotal: number; lossTotal: number; accountCount: number; positionCount: number }; harvest: { __typename?: 'HarvestPotential'; realized: number; unrealized: number; total: number }; harvestRecommendations: Array<{ __typename?: 'HarvestRecomendation'; harvestType: HarvestType; amountRealized: number; amountTotal: number; amountUnrealized: number; recommended: boolean }> } };
 
-export type AccountTransactionItemFragment = { __typename?: 'Account'; id: string; name?: string | null; authConnection: { __typename?: 'AuthConnection'; source: AuthSource } };
+export type LotsCurrentForHarvestQuery = { __typename?: 'Query', lotCurrent: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }>, portfolioSummary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } };
 
-export type TransactionTableItemFragment = { __typename?: 'Transaction'; id: string; quantity?: string | null; type?: string | null; description?: string | null; assetSymbol: string; settlementDate?: any | null; securityType?: string | null; displaySymbol?: string | null; amount?: string | null; externalId: string; fee?: string | null; memo?: string | null; price?: string | null; subtype?: string | null; transactionDate?: any | null; account: { __typename?: 'Account'; id: string; name?: string | null; authConnection: { __typename?: 'AuthConnection'; source: AuthSource } } };
+export type AccountTransactionItemFragment = { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', source: AuthSource } };
+
+export type TransactionTableItemFragment = { __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, account: { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', source: AuthSource } } };
 
 export type TransactionsQueryVariables = Exact<{
   where?: InputMaybe<TransactionWhereInput>;
 }>;
 
-export type TransactionsQuery = { __typename?: 'Query'; transactions: Array<{ __typename?: 'Transaction'; id: string; quantity?: string | null; type?: string | null; description?: string | null; assetSymbol: string; settlementDate?: any | null; securityType?: string | null; displaySymbol?: string | null; amount?: string | null; externalId: string; fee?: string | null; memo?: string | null; price?: string | null; subtype?: string | null; transactionDate?: any | null; account: { __typename?: 'Account'; id: string; name?: string | null; authConnection: { __typename?: 'AuthConnection'; source: AuthSource } } }> };
 
-export type UserItemFragment = { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string };
+export type TransactionsQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, account: { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', source: AuthSource } } }> };
 
-export type UserQueryVariables = Exact<{ [key: string]: never }>;
+export type UserItemFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string };
 
-export type UserQuery = { __typename?: 'Query'; userCurrent: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null; stripeCustomerId: string } };
+export type UserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserQuery = { __typename?: 'Query', userCurrent: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
 
 export type VerificationEtradeQueryVariables = Exact<{
   portfolioId: Scalars['String']['input'];
 }>;
 
-export type VerificationEtradeQuery = { __typename?: 'Query'; requestOauthConnection: { __typename?: 'AuthConnectionExt'; verificationUrl?: string | null } };
+
+export type VerificationEtradeQuery = { __typename?: 'Query', requestOauthConnection: { __typename?: 'AuthConnectionExt', verificationUrl?: string | null } };
 
 export type OauthEtradeMutationVariables = Exact<{
   verifier: Scalars['String']['input'];
   portfolioId: Scalars['String']['input'];
 }>;
 
-export type OauthEtradeMutation = { __typename?: 'Mutation'; accessOauthConnection: { __typename?: 'AuthConnectionExt'; id: string } };
 
-export type PlaidLinkTokenQueryVariables = Exact<{ [key: string]: never }>;
+export type OauthEtradeMutation = { __typename?: 'Mutation', accessOauthConnection: { __typename?: 'AuthConnectionExt', id: string } };
 
-export type PlaidLinkTokenQuery = { __typename?: 'Query'; linkToken: string };
+export type PlaidLinkTokenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PlaidLinkTokenQuery = { __typename?: 'Query', linkToken: string };
 
 export type PlaidSetAccessTokenAndSyncAccountsMutationVariables = Exact<{
   publicToken: Scalars['String']['input'];
   metaData: PlaidLinkOnSuccessMetadata;
 }>;
 
-export type PlaidSetAccessTokenAndSyncAccountsMutation = { __typename?: 'Mutation'; setAccessTokenAndSyncAccounts: Array<{ __typename?: 'Account'; id: string }> };
+
+export type PlaidSetAccessTokenAndSyncAccountsMutation = { __typename?: 'Mutation', setAccessTokenAndSyncAccounts: Array<{ __typename?: 'Account', id: string }> };
 
 export type PlaidSyncMutationVariables = Exact<{
   authConnectionId: Scalars['String']['input'];
 }>;
 
-export type PlaidSyncMutation = { __typename?: 'Mutation'; syncAuthConnection: { __typename?: 'AuthConnectionExt'; id: string } };
+
+export type PlaidSyncMutation = { __typename?: 'Mutation', syncAuthConnection: { __typename?: 'AuthConnectionExt', id: string } };
 
 export type SignedUrlsForUploadQueryVariables = Exact<{
   files: Array<GcpUploadFile> | GcpUploadFile;
 }>;
 
-export type SignedUrlsForUploadQuery = { __typename?: 'Query'; generateSignedUrlsForUpload: { __typename?: 'SignedUrlsForUploadPayload'; uploadUrls: Array<string> } };
+
+export type SignedUrlsForUploadQuery = { __typename?: 'Query', generateSignedUrlsForUpload: { __typename?: 'SignedUrlsForUploadPayload', uploadUrls: Array<string> } };
 
 export type SignedUrlsForDownloadQueryVariables = Exact<{
   gcpFileNames: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
-export type SignedUrlsForDownloadQuery = { __typename?: 'Query'; genrerateSignedUrlsForDownload: { __typename?: 'SignedUrlsForDownloadPayload'; downloadUrls: Array<string> } };
 
-export type FileItemFragment = { __typename?: 'File'; id: string; accountId: string; displayName: string; gcpFilename: string; type: string };
+export type SignedUrlsForDownloadQuery = { __typename?: 'Query', genrerateSignedUrlsForDownload: { __typename?: 'SignedUrlsForDownloadPayload', downloadUrls: Array<string> } };
+
+export type FileItemFragment = { __typename?: 'File', id: string, accountId: string, displayName: string, gcpFilename: string, type: string };
 
 export type CreateFilesMutationVariables = Exact<{
   data: Array<FileCreateManyInput> | FileCreateManyInput;
 }>;
 
-export type CreateFilesMutation = { __typename?: 'Mutation'; createFiles: Array<{ __typename?: 'File'; id: string; accountId: string; displayName: string; gcpFilename: string; type: string }> };
 
-export type HarvestLotOrderItemFragment = { __typename?: 'HarvestLotOrder'; accountId: string; costBasis: string; gainTotal: string; id: string; lotId: string; pricePaid: string; quantity: string; taxGain: TaxGain; assetSymbol: string; dollarPerSharePnL: string; valueTotal: string; orderType: OrderType; acquiredDate: any };
+export type CreateFilesMutation = { __typename?: 'Mutation', createFiles: Array<{ __typename?: 'File', id: string, accountId: string, displayName: string, gcpFilename: string, type: string }> };
+
+export type HarvestLotOrderItemFragment = { __typename?: 'HarvestLotOrder', accountId: string, costBasis: string, gainTotal: string, id: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any };
+
+export type LotCurrentItemFragment = { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain };
 
 export type LotsCurrentForLotTypeQueryVariables = Exact<{
   lotValueType: LotValueType;
 }>;
 
-export type LotsCurrentForLotTypeQuery = { __typename?: 'Query'; lotCurrent: Array<{ __typename?: 'LotCurrent'; id: string; accountId: string; remainingQty: string; acquiredDate: any; price: string; symbol: string; lastPrice: string; costBasis: string; value: string; gainTotal: string; gainTotalPct: string; dollarPerSharePnL: string; taxGain: TaxGain }> };
+
+export type LotsCurrentForLotTypeQuery = { __typename?: 'Query', lotCurrent: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }> };
 
 export type DirectedHarvestQueryVariables = Exact<{
   targetRealized: Scalars['Float']['input'];
@@ -13040,98 +13116,112 @@ export type DirectedHarvestQueryVariables = Exact<{
   lots: Array<DirectedHarvestLot> | DirectedHarvestLot;
 }>;
 
-export type DirectedHarvestQuery = { __typename?: 'Query'; directedHarvest: { __typename?: 'HarvestResult'; realizedOrders: Array<{ __typename?: 'HarvestLotOrder'; accountId: string; costBasis: string; gainTotal: string; id: string; lotId: string; pricePaid: string; quantity: string; taxGain: TaxGain; assetSymbol: string; dollarPerSharePnL: string; valueTotal: string; orderType: OrderType; acquiredDate: any }>; unrealizedOrders: Array<{ __typename?: 'HarvestLotOrder'; accountId: string; costBasis: string; gainTotal: string; id: string; lotId: string; pricePaid: string; quantity: string; taxGain: TaxGain; assetSymbol: string; dollarPerSharePnL: string; valueTotal: string; orderType: OrderType; acquiredDate: any }>; allOrders: Array<{ __typename?: 'HarvestLotOrder'; accountId: string; costBasis: string; gainTotal: string; id: string; lotId: string; pricePaid: string; quantity: string; taxGain: TaxGain; assetSymbol: string; dollarPerSharePnL: string; valueTotal: string; orderType: OrderType; acquiredDate: any }> } };
 
-export type HarvestTransactionItemRecordFragment = { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } };
+export type DirectedHarvestQuery = { __typename?: 'Query', directedHarvest: { __typename?: 'HarvestResult', realizedOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any }>, unrealizedOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any }>, allOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any }> } };
 
-export type HarvestTransactionRecordFragment = { __typename?: 'HarvestTransaction'; id: string; revert: boolean; notify: boolean; revertDate: any; counterTransaction: boolean; harvestTransactionItem: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } }; replacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null };
+export type HarvestTransactionItemRecordFragment = { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } };
 
-export type HarvestItemFragment = { __typename?: 'Harvest'; id: string; date: any; step: HarvestStep; amount: string; type: HarvestType; label: string; harvestTransactions?: Array<{ __typename?: 'HarvestTransaction'; id: string; revert: boolean; notify: boolean; revertDate: any; counterTransaction: boolean; harvestTransactionItem: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } }; replacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null }> | null };
+export type HarvestTransactionRecordFragment = { __typename?: 'HarvestTransaction', id: string, revert: boolean, notify: boolean, revertDate: any, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null };
+
+export type HarvestItemFragment = { __typename?: 'Harvest', id: string, date: any, step: HarvestStep, amount: string, type: HarvestType, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, notify: boolean, revertDate: any, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null }> | null };
 
 export type CreateHarvestMutationVariables = Exact<{
   directedHarvestLots: Array<DirectedHarvestLot> | DirectedHarvestLot;
   harvestType: HarvestType;
 }>;
 
-export type CreateHarvestMutation = { __typename?: 'Mutation'; createHarvest: { __typename?: 'Harvest'; id: string; date: any; step: HarvestStep; amount: string; type: HarvestType; label: string; harvestTransactions?: Array<{ __typename?: 'HarvestTransaction'; id: string; revert: boolean; notify: boolean; revertDate: any; counterTransaction: boolean; harvestTransactionItem: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } }; replacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null }> | null } };
+
+export type CreateHarvestMutation = { __typename?: 'Mutation', createHarvest: { __typename?: 'Harvest', id: string, date: any, step: HarvestStep, amount: string, type: HarvestType, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, notify: boolean, revertDate: any, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null }> | null } };
 
 export type UpdateHarvestMutationVariables = Exact<{
   id: Scalars['String']['input'];
   data: HarvestUpdateInput;
 }>;
 
-export type UpdateHarvestMutation = { __typename?: 'Mutation'; updateHarvest: { __typename?: 'Harvest'; id: string; date: any; step: HarvestStep; amount: string; type: HarvestType; label: string; harvestTransactions?: Array<{ __typename?: 'HarvestTransaction'; id: string; revert: boolean; notify: boolean; revertDate: any; counterTransaction: boolean; harvestTransactionItem: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } }; replacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null }> | null } };
+
+export type UpdateHarvestMutation = { __typename?: 'Mutation', updateHarvest: { __typename?: 'Harvest', id: string, date: any, step: HarvestStep, amount: string, type: HarvestType, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, notify: boolean, revertDate: any, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null }> | null } };
 
 export type UpdateHarvestTransactionMutationVariables = Exact<{
   id: Scalars['String']['input'];
   data: HarvestTransactionUpdateInput;
 }>;
 
-export type UpdateHarvestTransactionMutation = { __typename?: 'Mutation'; updateHarvestTransaction: { __typename?: 'HarvestTransaction'; id: string; revert: boolean; notify: boolean; revertDate: any; counterTransaction: boolean; harvestTransactionItem: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } }; replacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null } };
+
+export type UpdateHarvestTransactionMutation = { __typename?: 'Mutation', updateHarvestTransaction: { __typename?: 'HarvestTransaction', id: string, revert: boolean, notify: boolean, revertDate: any, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null } };
 
 export type UpdateHarvestTransactionItemMutationVariables = Exact<{
   id: Scalars['String']['input'];
   data: HarvestTransactionItemUpdateInput;
 }>;
 
-export type UpdateHarvestTransactionItemMutation = { __typename?: 'Mutation'; updateHarvestTransactionItem: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } };
+
+export type UpdateHarvestTransactionItemMutation = { __typename?: 'Mutation', updateHarvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } };
 
 export type HarvestQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-export type HarvestQuery = { __typename?: 'Query'; harvest: { __typename?: 'Harvest'; id: string; date: any; step: HarvestStep; amount: string; type: HarvestType; label: string; harvestTransactions?: Array<{ __typename?: 'HarvestTransaction'; id: string; revert: boolean; notify: boolean; revertDate: any; counterTransaction: boolean; harvestTransactionItem: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } }; replacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null }> | null } };
+
+export type HarvestQuery = { __typename?: 'Query', harvest: { __typename?: 'Harvest', id: string, date: any, step: HarvestStep, amount: string, type: HarvestType, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, notify: boolean, revertDate: any, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null }> | null } };
 
 export type FinalizeHarvestMutationVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
-export type FinalizeHarvestMutation = { __typename?: 'Mutation'; finalizeHarvest: { __typename?: 'Harvest'; id: string; date: any; step: HarvestStep; amount: string; type: HarvestType; label: string; harvestTransactions?: Array<{ __typename?: 'HarvestTransaction'; id: string; revert: boolean; notify: boolean; revertDate: any; counterTransaction: boolean; harvestTransactionItem: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } }; replacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null; revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem'; id: string; quantity: string; completedDate?: any | null; orderType: OrderType; lotSold?: { __typename?: 'Lot'; id: string; acquiredDate: any } | null; asset: { __typename?: 'Asset'; lastPrice: string; symbol: string } } | null }> | null } };
 
-export type LotItemFragment = { __typename?: 'Lot'; id: string; acquiredDate: any; costTotal?: string | null; price: string; remainingQty: string; assetSymbol: string; totalCostForGainPct?: string | null; asset: { __typename?: 'Asset'; symbol: string; lastPrice: string }; account: { __typename?: 'Account'; id: string; externalId?: string | null; name?: string | null; type: string } };
+export type FinalizeHarvestMutation = { __typename?: 'Mutation', finalizeHarvest: { __typename?: 'Harvest', id: string, date: any, step: HarvestStep, amount: string, type: HarvestType, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, notify: boolean, revertDate: any, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null }> | null } };
+
+export type LotItemFragment = { __typename?: 'Lot', id: string, acquiredDate: any, costTotal?: string | null, price: string, remainingQty: string, assetSymbol: string, totalCostForGainPct?: string | null, asset: { __typename?: 'Asset', symbol: string, lastPrice: string }, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } };
 
 export type PortfolioLotsQueryVariables = Exact<{
   where?: InputMaybe<LotWhereInput>;
   includeTaxAdvantaged?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
-export type PortfolioLotsQuery = { __typename?: 'Query'; lots: Array<{ __typename?: 'Lot'; id: string; acquiredDate: any; costTotal?: string | null; price: string; remainingQty: string; assetSymbol: string; totalCostForGainPct?: string | null; asset: { __typename?: 'Asset'; symbol: string; lastPrice: string }; account: { __typename?: 'Account'; id: string; externalId?: string | null; name?: string | null; type: string } }> };
 
-export type PortfolioItemFragment = { __typename?: 'Portfolio'; id: string; name: string; harvestCycleWeeks: number; createdAt: any; createdById?: string | null };
+export type PortfolioLotsQuery = { __typename?: 'Query', lots: Array<{ __typename?: 'Lot', id: string, acquiredDate: any, costTotal?: string | null, price: string, remainingQty: string, assetSymbol: string, totalCostForGainPct?: string | null, asset: { __typename?: 'Asset', symbol: string, lastPrice: string }, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } }> };
 
-export type PortfolioDetailItemFragment = { __typename?: 'Portfolio'; harvestShareDollarThreshold: string; harvestTickerBucketDollarSizeLong: string; harvestTickerBucketDollarSizeShort: string; harvestTickerBucketLowerLimitLong: string; harvestTickerBucketLowerLimitShort: string; id: string; name: string; harvestCycleWeeks: number; createdAt: any; createdById?: string | null; accounts?: Array<{ __typename?: 'Account'; name?: string | null; id: string }> | null; usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios'; role: PortfolioRole; user: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null } }> | null };
+export type PortfolioItemFragment = { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null };
 
-export type PortfoliosQueryVariables = Exact<{ [key: string]: never }>;
+export type PortfolioDetailItemFragment = { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null };
 
-export type PortfoliosQuery = { __typename?: 'Query'; portfolios: Array<{ __typename?: 'Portfolio'; id: string; name: string; harvestCycleWeeks: number; createdAt: any; createdById?: string | null }> };
+export type PortfoliosQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PortfoliosQuery = { __typename?: 'Query', portfolios: Array<{ __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null }> };
 
 export type CreatePortfolioMutationVariables = Exact<{
   portfolioInsertObject: PortfolioCreateInput;
 }>;
 
-export type CreatePortfolioMutation = { __typename?: 'Mutation'; createPortfolio: { __typename?: 'Portfolio'; harvestShareDollarThreshold: string; harvestTickerBucketDollarSizeLong: string; harvestTickerBucketDollarSizeShort: string; harvestTickerBucketLowerLimitLong: string; harvestTickerBucketLowerLimitShort: string; id: string; name: string; harvestCycleWeeks: number; createdAt: any; createdById?: string | null; accounts?: Array<{ __typename?: 'Account'; name?: string | null; id: string }> | null; usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios'; role: PortfolioRole; user: { __typename?: 'User'; id: string; name?: string | null; email?: string | null; photo?: string | null } }> | null } };
 
-export type PortfolioAuthedQueryVariables = Exact<{ [key: string]: never }>;
+export type CreatePortfolioMutation = { __typename?: 'Mutation', createPortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
-export type PortfolioAuthedQuery = { __typename?: 'Query'; portfolioAuthed: { __typename?: 'Portfolio'; id: string; name: string; harvestCycleWeeks: number; createdAt: any; createdById?: string | null } };
+export type PortfolioAuthedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PortfolioAuthedQuery = { __typename?: 'Query', portfolioAuthed: { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null } };
 
 export type SwitchPortfolioMutationVariables = Exact<{
   porfolioId: Scalars['String']['input'];
 }>;
 
-export type SwitchPortfolioMutation = { __typename?: 'Mutation'; switchPortfolio: { __typename?: 'Portfolio'; id: string; name: string; harvestCycleWeeks: number; createdAt: any; createdById?: string | null } };
 
-export type PositionItemFragment = { __typename?: 'Position'; change?: string | null; changePCT?: string | null; commissionDay?: string | null; commissionTotal?: string | null; costPerShare?: string | null; costTotal?: string | null; dateAcquired?: any | null; dateExpiration?: any | null; externalId?: string | null; feesDay?: string | null; feesOther?: string | null; gainDay?: string | null; gainTotal?: string | null; gainTotalPCT?: string | null; id: string; marketValue?: string | null; pricePaid?: string | null; quantity: string; quoteStatus?: string | null; assetSymbol: string; type?: string | null; account: { __typename?: 'Account'; id: string; externalId?: string | null; name?: string | null; type: string } };
+export type SwitchPortfolioMutation = { __typename?: 'Mutation', switchPortfolio: { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null } };
 
-export type PortfolioPositionsQueryVariables = Exact<{ [key: string]: never }>;
+export type PositionItemFragment = { __typename?: 'Position', change?: string | null, changePCT?: string | null, commissionDay?: string | null, commissionTotal?: string | null, costPerShare?: string | null, costTotal?: string | null, dateAcquired?: any | null, dateExpiration?: any | null, externalId?: string | null, feesDay?: string | null, feesOther?: string | null, gainDay?: string | null, gainTotal?: string | null, gainTotalPCT?: string | null, id: string, marketValue?: string | null, pricePaid?: string | null, quantity: string, quoteStatus?: string | null, assetSymbol: string, type?: string | null, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } };
 
-export type PortfolioPositionsQuery = { __typename?: 'Query'; portfolioPositions: Array<{ __typename?: 'Position'; change?: string | null; changePCT?: string | null; commissionDay?: string | null; commissionTotal?: string | null; costPerShare?: string | null; costTotal?: string | null; dateAcquired?: any | null; dateExpiration?: any | null; externalId?: string | null; feesDay?: string | null; feesOther?: string | null; gainDay?: string | null; gainTotal?: string | null; gainTotalPCT?: string | null; id: string; marketValue?: string | null; pricePaid?: string | null; quantity: string; quoteStatus?: string | null; assetSymbol: string; type?: string | null; account: { __typename?: 'Account'; id: string; externalId?: string | null; name?: string | null; type: string } }> };
+export type PortfolioPositionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PortfolioPositionsQuery = { __typename?: 'Query', portfolioPositions: Array<{ __typename?: 'Position', change?: string | null, changePCT?: string | null, commissionDay?: string | null, commissionTotal?: string | null, costPerShare?: string | null, costTotal?: string | null, dateAcquired?: any | null, dateExpiration?: any | null, externalId?: string | null, feesDay?: string | null, feesOther?: string | null, gainDay?: string | null, gainTotal?: string | null, gainTotalPCT?: string | null, id: string, marketValue?: string | null, pricePaid?: string | null, quantity: string, quoteStatus?: string | null, assetSymbol: string, type?: string | null, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } }> };
 
 export type Chart3MonthQueryVariables = Exact<{
   asset: Scalars['String']['input'];
 }>;
 
-export type Chart3MonthQuery = { __typename?: 'Query'; chartThreeMonth: Array<{ __typename?: 'PolygonStockData'; c?: number | null; t?: number | null; o?: number | null; h?: number | null; l?: number | null; vw?: number | null; v?: number | null; n?: number | null }> };
+
+export type Chart3MonthQuery = { __typename?: 'Query', chartThreeMonth: Array<{ __typename?: 'PolygonStockData', c?: number | null, t?: number | null, o?: number | null, h?: number | null, l?: number | null, vw?: number | null, v?: number | null, n?: number | null }> };
 
 export const UserItemFragmentDoc = gql`
     fragment UserItem on User {
@@ -13302,23 +13392,6 @@ export const HarvestTableItemFragmentDoc = gql`
   }
 }
     ${UserItemFragmentDoc}`;
-export const LotCurrentItemFragmentDoc = gql`
-    fragment LotCurrentItem on LotCurrent {
-  id
-  accountId
-  remainingQty
-  acquiredDate
-  price
-  symbol
-  lastPrice
-  costBasis
-  value
-  gainTotal
-  gainTotalPct
-  dollarPerSharePnL
-  taxGain
-}
-    `;
 export const AccountSummaryFragmentDoc = gql`
     fragment AccountSummary on Account {
   id
@@ -13360,25 +13433,21 @@ export const PortfolioTableItemFragmentDoc = gql`
   }
 }
     `;
-export const LotOpportunityItemFragmentDoc = gql`
-    fragment LotOpportunityItem on Lot {
+export const HarvestLotCurrentItemFragmentDoc = gql`
+    fragment HarvestLotCurrentItem on LotCurrent {
   id
-  acquiredDate
-  costTotal
-  price
+  accountId
   remainingQty
-  assetSymbol
-  totalCostForGainPct
-  asset {
-    symbol
-    lastPrice
-  }
-  account {
-    id
-    externalId
-    name
-    type
-  }
+  acquiredDate
+  price
+  symbol
+  lastPrice
+  costBasis
+  value
+  gainTotal
+  gainTotalPct
+  dollarPerSharePnL
+  taxGain
 }
     `;
 export const AccountTransactionItemFragmentDoc = gql`
@@ -13441,6 +13510,23 @@ export const HarvestLotOrderItemFragmentDoc = gql`
   acquiredDate
 }
     `;
+export const LotCurrentItemFragmentDoc = gql`
+    fragment LotCurrentItem on LotCurrent {
+  id
+  accountId
+  remainingQty
+  acquiredDate
+  price
+  symbol
+  lastPrice
+  costBasis
+  value
+  gainTotal
+  gainTotalPct
+  dollarPerSharePnL
+  taxGain
+}
+    `;
 export const HarvestTransactionItemRecordFragmentDoc = gql`
     fragment HarvestTransactionItemRecord on HarvestTransactionItem {
   id
@@ -13465,15 +13551,19 @@ export const HarvestTransactionRecordFragmentDoc = gql`
   revertDate
   counterTransaction
   harvestTransactionItem {
+    id
     ...HarvestTransactionItemRecord
   }
   replacementTransactionItem {
+    id
     ...HarvestTransactionItemRecord
   }
   revertHarvestTransactionItem {
+    id
     ...HarvestTransactionItemRecord
   }
   revertReplacementTransactionItem {
+    id
     ...HarvestTransactionItemRecord
   }
 }
@@ -13487,6 +13577,7 @@ export const HarvestItemFragmentDoc = gql`
   type
   label
   harvestTransactions {
+    id
     ...HarvestTransactionRecord
   }
 }
@@ -13599,18 +13690,18 @@ export const AccountDocument = gql`
  *   },
  * });
  */
-export function useAccountQuery(baseOptions: Apollo.QueryHookOptions<AccountQuery, AccountQueryVariables> & ({ variables: AccountQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options);
-}
+export function useAccountQuery(baseOptions: Apollo.QueryHookOptions<AccountQuery, AccountQueryVariables> & ({ variables: AccountQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options);
+      }
 export function useAccountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountQuery, AccountQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options);
+        }
 export function useAccountSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccountQuery, AccountQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options);
+        }
 export type AccountQueryHookResult = ReturnType<typeof useAccountQuery>;
 export type AccountLazyQueryHookResult = ReturnType<typeof useAccountLazyQuery>;
 export type AccountSuspenseQueryHookResult = ReturnType<typeof useAccountSuspenseQuery>;
@@ -13649,9 +13740,9 @@ export type UpdateAccountMutationFn = Apollo.MutationFunction<UpdateAccountMutat
  * });
  */
 export function useUpdateAccountMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAccountMutation, UpdateAccountMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateAccountMutation, UpdateAccountMutationVariables>(UpdateAccountDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAccountMutation, UpdateAccountMutationVariables>(UpdateAccountDocument, options);
+      }
 export type UpdateAccountMutationHookResult = ReturnType<typeof useUpdateAccountMutation>;
 export type UpdateAccountMutationResult = Apollo.MutationResult<UpdateAccountMutation>;
 export type UpdateAccountMutationOptions = Apollo.BaseMutationOptions<UpdateAccountMutation, UpdateAccountMutationVariables>;
@@ -13687,9 +13778,9 @@ export type UpdateAccountRealizedPAndLMutationFn = Apollo.MutationFunction<Updat
  * });
  */
 export function useUpdateAccountRealizedPAndLMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAccountRealizedPAndLMutation, UpdateAccountRealizedPAndLMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateAccountRealizedPAndLMutation, UpdateAccountRealizedPAndLMutationVariables>(UpdateAccountRealizedPAndLDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAccountRealizedPAndLMutation, UpdateAccountRealizedPAndLMutationVariables>(UpdateAccountRealizedPAndLDocument, options);
+      }
 export type UpdateAccountRealizedPAndLMutationHookResult = ReturnType<typeof useUpdateAccountRealizedPAndLMutation>;
 export type UpdateAccountRealizedPAndLMutationResult = Apollo.MutationResult<UpdateAccountRealizedPAndLMutation>;
 export type UpdateAccountRealizedPAndLMutationOptions = Apollo.BaseMutationOptions<UpdateAccountRealizedPAndLMutation, UpdateAccountRealizedPAndLMutationVariables>;
@@ -13721,17 +13812,17 @@ export const AccountsDocument = gql`
  * });
  */
 export function useAccountsQuery(baseOptions?: Apollo.QueryHookOptions<AccountsQuery, AccountsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AccountsQuery, AccountsQueryVariables>(AccountsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountsQuery, AccountsQueryVariables>(AccountsDocument, options);
+      }
 export function useAccountsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountsQuery, AccountsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AccountsQuery, AccountsQueryVariables>(AccountsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountsQuery, AccountsQueryVariables>(AccountsDocument, options);
+        }
 export function useAccountsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccountsQuery, AccountsQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<AccountsQuery, AccountsQueryVariables>(AccountsDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccountsQuery, AccountsQueryVariables>(AccountsDocument, options);
+        }
 export type AccountsQueryHookResult = ReturnType<typeof useAccountsQuery>;
 export type AccountsLazyQueryHookResult = ReturnType<typeof useAccountsLazyQuery>;
 export type AccountsSuspenseQueryHookResult = ReturnType<typeof useAccountsSuspenseQuery>;
@@ -13763,9 +13854,9 @@ export type CreateAccountForPortfolioMutationFn = Apollo.MutationFunction<Create
  * });
  */
 export function useCreateAccountForPortfolioMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccountForPortfolioMutation, CreateAccountForPortfolioMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateAccountForPortfolioMutation, CreateAccountForPortfolioMutationVariables>(CreateAccountForPortfolioDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAccountForPortfolioMutation, CreateAccountForPortfolioMutationVariables>(CreateAccountForPortfolioDocument, options);
+      }
 export type CreateAccountForPortfolioMutationHookResult = ReturnType<typeof useCreateAccountForPortfolioMutation>;
 export type CreateAccountForPortfolioMutationResult = Apollo.MutationResult<CreateAccountForPortfolioMutation>;
 export type CreateAccountForPortfolioMutationOptions = Apollo.BaseMutationOptions<CreateAccountForPortfolioMutation, CreateAccountForPortfolioMutationVariables>;
@@ -13796,9 +13887,9 @@ export type SyncAccountMutationFn = Apollo.MutationFunction<SyncAccountMutation,
  * });
  */
 export function useSyncAccountMutation(baseOptions?: Apollo.MutationHookOptions<SyncAccountMutation, SyncAccountMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<SyncAccountMutation, SyncAccountMutationVariables>(SyncAccountDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SyncAccountMutation, SyncAccountMutationVariables>(SyncAccountDocument, options);
+      }
 export type SyncAccountMutationHookResult = ReturnType<typeof useSyncAccountMutation>;
 export type SyncAccountMutationResult = Apollo.MutationResult<SyncAccountMutation>;
 export type SyncAccountMutationOptions = Apollo.BaseMutationOptions<SyncAccountMutation, SyncAccountMutationVariables>;
@@ -13826,9 +13917,9 @@ export type UpdateAllAssetPricesMutationFn = Apollo.MutationFunction<UpdateAllAs
  * });
  */
 export function useUpdateAllAssetPricesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAllAssetPricesMutation, UpdateAllAssetPricesMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateAllAssetPricesMutation, UpdateAllAssetPricesMutationVariables>(UpdateAllAssetPricesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAllAssetPricesMutation, UpdateAllAssetPricesMutationVariables>(UpdateAllAssetPricesDocument, options);
+      }
 export type UpdateAllAssetPricesMutationHookResult = ReturnType<typeof useUpdateAllAssetPricesMutation>;
 export type UpdateAllAssetPricesMutationResult = Apollo.MutationResult<UpdateAllAssetPricesMutation>;
 export type UpdateAllAssetPricesMutationOptions = Apollo.BaseMutationOptions<UpdateAllAssetPricesMutation, UpdateAllAssetPricesMutationVariables>;
@@ -13858,17 +13949,17 @@ export const LogsDocument = gql`
  * });
  */
 export function useLogsQuery(baseOptions?: Apollo.QueryHookOptions<LogsQuery, LogsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
+      }
 export function useLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogsQuery, LogsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
+        }
 export function useLogsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LogsQuery, LogsQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
+        }
 export type LogsQueryHookResult = ReturnType<typeof useLogsQuery>;
 export type LogsLazyQueryHookResult = ReturnType<typeof useLogsLazyQuery>;
 export type LogsSuspenseQueryHookResult = ReturnType<typeof useLogsSuspenseQuery>;
@@ -13897,18 +13988,18 @@ export const LogDocument = gql`
  *   },
  * });
  */
-export function useLogQuery(baseOptions: Apollo.QueryHookOptions<LogQuery, LogQueryVariables> & ({ variables: LogQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<LogQuery, LogQueryVariables>(LogDocument, options);
-}
+export function useLogQuery(baseOptions: Apollo.QueryHookOptions<LogQuery, LogQueryVariables> & ({ variables: LogQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LogQuery, LogQueryVariables>(LogDocument, options);
+      }
 export function useLogLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogQuery, LogQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<LogQuery, LogQueryVariables>(LogDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LogQuery, LogQueryVariables>(LogDocument, options);
+        }
 export function useLogSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LogQuery, LogQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LogQuery, LogQueryVariables>(LogDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LogQuery, LogQueryVariables>(LogDocument, options);
+        }
 export type LogQueryHookResult = ReturnType<typeof useLogQuery>;
 export type LogLazyQueryHookResult = ReturnType<typeof useLogLazyQuery>;
 export type LogSuspenseQueryHookResult = ReturnType<typeof useLogSuspenseQuery>;
@@ -13937,17 +14028,17 @@ export const LotTransactionBatchesDocument = gql`
  * });
  */
 export function useLotTransactionBatchesQuery(baseOptions?: Apollo.QueryHookOptions<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>(LotTransactionBatchesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>(LotTransactionBatchesDocument, options);
+      }
 export function useLotTransactionBatchesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>(LotTransactionBatchesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>(LotTransactionBatchesDocument, options);
+        }
 export function useLotTransactionBatchesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>(LotTransactionBatchesDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LotTransactionBatchesQuery, LotTransactionBatchesQueryVariables>(LotTransactionBatchesDocument, options);
+        }
 export type LotTransactionBatchesQueryHookResult = ReturnType<typeof useLotTransactionBatchesQuery>;
 export type LotTransactionBatchesLazyQueryHookResult = ReturnType<typeof useLotTransactionBatchesLazyQuery>;
 export type LotTransactionBatchesSuspenseQueryHookResult = ReturnType<typeof useLotTransactionBatchesSuspenseQuery>;
@@ -13976,18 +14067,18 @@ export const LotTransactionBatchDocument = gql`
  *   },
  * });
  */
-export function useLotTransactionBatchQuery(baseOptions: Apollo.QueryHookOptions<LotTransactionBatchQuery, LotTransactionBatchQueryVariables> & ({ variables: LotTransactionBatchQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>(LotTransactionBatchDocument, options);
-}
+export function useLotTransactionBatchQuery(baseOptions: Apollo.QueryHookOptions<LotTransactionBatchQuery, LotTransactionBatchQueryVariables> & ({ variables: LotTransactionBatchQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>(LotTransactionBatchDocument, options);
+      }
 export function useLotTransactionBatchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>(LotTransactionBatchDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>(LotTransactionBatchDocument, options);
+        }
 export function useLotTransactionBatchSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>(LotTransactionBatchDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LotTransactionBatchQuery, LotTransactionBatchQueryVariables>(LotTransactionBatchDocument, options);
+        }
 export type LotTransactionBatchQueryHookResult = ReturnType<typeof useLotTransactionBatchQuery>;
 export type LotTransactionBatchLazyQueryHookResult = ReturnType<typeof useLotTransactionBatchLazyQuery>;
 export type LotTransactionBatchSuspenseQueryHookResult = ReturnType<typeof useLotTransactionBatchSuspenseQuery>;
@@ -14017,17 +14108,17 @@ export const HarvestsDocument = gql`
  * });
  */
 export function useHarvestsQuery(baseOptions?: Apollo.QueryHookOptions<HarvestsQuery, HarvestsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<HarvestsQuery, HarvestsQueryVariables>(HarvestsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HarvestsQuery, HarvestsQueryVariables>(HarvestsDocument, options);
+      }
 export function useHarvestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HarvestsQuery, HarvestsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<HarvestsQuery, HarvestsQueryVariables>(HarvestsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HarvestsQuery, HarvestsQueryVariables>(HarvestsDocument, options);
+        }
 export function useHarvestsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<HarvestsQuery, HarvestsQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<HarvestsQuery, HarvestsQueryVariables>(HarvestsDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<HarvestsQuery, HarvestsQueryVariables>(HarvestsDocument, options);
+        }
 export type HarvestsQueryHookResult = ReturnType<typeof useHarvestsQuery>;
 export type HarvestsLazyQueryHookResult = ReturnType<typeof useHarvestsLazyQuery>;
 export type HarvestsSuspenseQueryHookResult = ReturnType<typeof useHarvestsSuspenseQuery>;
@@ -14081,17 +14172,17 @@ export const PortfolioSummaryDocument = gql`
  * });
  */
 export function usePortfolioSummaryQuery(baseOptions?: Apollo.QueryHookOptions<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>(PortfolioSummaryDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>(PortfolioSummaryDocument, options);
+      }
 export function usePortfolioSummaryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>(PortfolioSummaryDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>(PortfolioSummaryDocument, options);
+        }
 export function usePortfolioSummarySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>(PortfolioSummaryDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PortfolioSummaryQuery, PortfolioSummaryQueryVariables>(PortfolioSummaryDocument, options);
+        }
 export type PortfolioSummaryQueryHookResult = ReturnType<typeof usePortfolioSummaryQuery>;
 export type PortfolioSummaryLazyQueryHookResult = ReturnType<typeof usePortfolioSummaryLazyQuery>;
 export type PortfolioSummarySuspenseQueryHookResult = ReturnType<typeof usePortfolioSummarySuspenseQuery>;
@@ -14099,6 +14190,7 @@ export type PortfolioSummaryQueryResult = Apollo.QueryResult<PortfolioSummaryQue
 export const AccountSummariesDocument = gql`
     query AccountSummaries {
   accounts {
+    id
     ...AccountSummary
   }
 }
@@ -14120,17 +14212,17 @@ export const AccountSummariesDocument = gql`
  * });
  */
 export function useAccountSummariesQuery(baseOptions?: Apollo.QueryHookOptions<AccountSummariesQuery, AccountSummariesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AccountSummariesQuery, AccountSummariesQueryVariables>(AccountSummariesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountSummariesQuery, AccountSummariesQueryVariables>(AccountSummariesDocument, options);
+      }
 export function useAccountSummariesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountSummariesQuery, AccountSummariesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AccountSummariesQuery, AccountSummariesQueryVariables>(AccountSummariesDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountSummariesQuery, AccountSummariesQueryVariables>(AccountSummariesDocument, options);
+        }
 export function useAccountSummariesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccountSummariesQuery, AccountSummariesQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<AccountSummariesQuery, AccountSummariesQueryVariables>(AccountSummariesDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccountSummariesQuery, AccountSummariesQueryVariables>(AccountSummariesDocument, options);
+        }
 export type AccountSummariesQueryHookResult = ReturnType<typeof useAccountSummariesQuery>;
 export type AccountSummariesLazyQueryHookResult = ReturnType<typeof useAccountSummariesLazyQuery>;
 export type AccountSummariesSuspenseQueryHookResult = ReturnType<typeof useAccountSummariesSuspenseQuery>;
@@ -14169,17 +14261,17 @@ export const AccountRealizedPlDocument = gql`
  * });
  */
 export function useAccountRealizedPlQuery(baseOptions?: Apollo.QueryHookOptions<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>(AccountRealizedPlDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>(AccountRealizedPlDocument, options);
+      }
 export function useAccountRealizedPlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>(AccountRealizedPlDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>(AccountRealizedPlDocument, options);
+        }
 export function useAccountRealizedPlSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>(AccountRealizedPlDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>(AccountRealizedPlDocument, options);
+        }
 export type AccountRealizedPlQueryHookResult = ReturnType<typeof useAccountRealizedPlQuery>;
 export type AccountRealizedPlLazyQueryHookResult = ReturnType<typeof useAccountRealizedPlLazyQuery>;
 export type AccountRealizedPlSuspenseQueryHookResult = ReturnType<typeof useAccountRealizedPlSuspenseQuery>;
@@ -14208,17 +14300,17 @@ export const PortfolioTableDocument = gql`
  * });
  */
 export function usePortfolioTableQuery(baseOptions?: Apollo.QueryHookOptions<PortfolioTableQuery, PortfolioTableQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PortfolioTableQuery, PortfolioTableQueryVariables>(PortfolioTableDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfolioTableQuery, PortfolioTableQueryVariables>(PortfolioTableDocument, options);
+      }
 export function usePortfolioTableLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioTableQuery, PortfolioTableQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PortfolioTableQuery, PortfolioTableQueryVariables>(PortfolioTableDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfolioTableQuery, PortfolioTableQueryVariables>(PortfolioTableDocument, options);
+        }
 export function usePortfolioTableSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioTableQuery, PortfolioTableQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<PortfolioTableQuery, PortfolioTableQueryVariables>(PortfolioTableDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PortfolioTableQuery, PortfolioTableQueryVariables>(PortfolioTableDocument, options);
+        }
 export type PortfolioTableQueryHookResult = ReturnType<typeof usePortfolioTableQuery>;
 export type PortfolioTableLazyQueryHookResult = ReturnType<typeof usePortfolioTableLazyQuery>;
 export type PortfolioTableSuspenseQueryHookResult = ReturnType<typeof usePortfolioTableSuspenseQuery>;
@@ -14250,9 +14342,9 @@ export type UpdatePortfolioMutationFn = Apollo.MutationFunction<UpdatePortfolioM
  * });
  */
 export function useUpdatePortfolioMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePortfolioMutation, UpdatePortfolioMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdatePortfolioMutation, UpdatePortfolioMutationVariables>(UpdatePortfolioDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePortfolioMutation, UpdatePortfolioMutationVariables>(UpdatePortfolioDocument, options);
+      }
 export type UpdatePortfolioMutationHookResult = ReturnType<typeof useUpdatePortfolioMutation>;
 export type UpdatePortfolioMutationResult = Apollo.MutationResult<UpdatePortfolioMutation>;
 export type UpdatePortfolioMutationOptions = Apollo.BaseMutationOptions<UpdatePortfolioMutation, UpdatePortfolioMutationVariables>;
@@ -14280,18 +14372,18 @@ export const PortfolioByIdDocument = gql`
  *   },
  * });
  */
-export function usePortfolioByIdQuery(baseOptions: Apollo.QueryHookOptions<PortfolioByIdQuery, PortfolioByIdQueryVariables> & ({ variables: PortfolioByIdQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
-}
+export function usePortfolioByIdQuery(baseOptions: Apollo.QueryHookOptions<PortfolioByIdQuery, PortfolioByIdQueryVariables> & ({ variables: PortfolioByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
+      }
 export function usePortfolioByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioByIdQuery, PortfolioByIdQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
+        }
 export function usePortfolioByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioByIdQuery, PortfolioByIdQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
+        }
 export type PortfolioByIdQueryHookResult = ReturnType<typeof usePortfolioByIdQuery>;
 export type PortfolioByIdLazyQueryHookResult = ReturnType<typeof usePortfolioByIdLazyQuery>;
 export type PortfolioByIdSuspenseQueryHookResult = ReturnType<typeof usePortfolioByIdSuspenseQuery>;
@@ -14325,90 +14417,73 @@ export const StripeSessionDocument = gql`
  *   },
  * });
  */
-export function useStripeSessionQuery(baseOptions: Apollo.QueryHookOptions<StripeSessionQuery, StripeSessionQueryVariables> & ({ variables: StripeSessionQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<StripeSessionQuery, StripeSessionQueryVariables>(StripeSessionDocument, options);
-}
+export function useStripeSessionQuery(baseOptions: Apollo.QueryHookOptions<StripeSessionQuery, StripeSessionQueryVariables> & ({ variables: StripeSessionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StripeSessionQuery, StripeSessionQueryVariables>(StripeSessionDocument, options);
+      }
 export function useStripeSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StripeSessionQuery, StripeSessionQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<StripeSessionQuery, StripeSessionQueryVariables>(StripeSessionDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StripeSessionQuery, StripeSessionQueryVariables>(StripeSessionDocument, options);
+        }
 export function useStripeSessionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<StripeSessionQuery, StripeSessionQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<StripeSessionQuery, StripeSessionQueryVariables>(StripeSessionDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<StripeSessionQuery, StripeSessionQueryVariables>(StripeSessionDocument, options);
+        }
 export type StripeSessionQueryHookResult = ReturnType<typeof useStripeSessionQuery>;
 export type StripeSessionLazyQueryHookResult = ReturnType<typeof useStripeSessionLazyQuery>;
 export type StripeSessionSuspenseQueryHookResult = ReturnType<typeof useStripeSessionSuspenseQuery>;
 export type StripeSessionQueryResult = Apollo.QueryResult<StripeSessionQuery, StripeSessionQueryVariables>;
-export const LotFilteredOpportunitiesDocument = gql`
-    query LotFilteredOpportunities($where: LotWhereInput) {
-  lots(where: $where) {
-    ...LotOpportunityItem
+export const LotsCurrentForHarvestDocument = gql`
+    query LotsCurrentForHarvest($lotValueType: LotValueType!) {
+  lotCurrent(lotValueType: $lotValueType) {
+    id
+    ...HarvestLotCurrentItem
   }
   portfolioSummary {
     realized {
-      accountCount
-      dividend
-      gainLongTerm
-      gainShortTerm
       gainTotal
     }
     unrealized {
       gainTotal
       lossTotal
-      accountCount
-      positionCount
-    }
-    harvest {
-      realized
-      unrealized
-      total
-    }
-    setUpStatus
-    harvestRecommendations {
-      harvestType
-      amountRealized
-      amountTotal
-      amountUnrealized
-      recommended
+      gainTotal
     }
   }
 }
-    ${LotOpportunityItemFragmentDoc}`;
+    ${HarvestLotCurrentItemFragmentDoc}`;
 
 /**
- * __useLotFilteredOpportunitiesQuery__
+ * __useLotsCurrentForHarvestQuery__
  *
- * To run a query within a React component, call `useLotFilteredOpportunitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useLotFilteredOpportunitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useLotsCurrentForHarvestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLotsCurrentForHarvestQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLotFilteredOpportunitiesQuery({
+ * const { data, loading, error } = useLotsCurrentForHarvestQuery({
  *   variables: {
- *      where: // value for 'where'
+ *      lotValueType: // value for 'lotValueType'
  *   },
  * });
  */
-export function useLotFilteredOpportunitiesQuery(baseOptions?: Apollo.QueryHookOptions<LotFilteredOpportunitiesQuery, LotFilteredOpportunitiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<LotFilteredOpportunitiesQuery, LotFilteredOpportunitiesQueryVariables>(LotFilteredOpportunitiesDocument, options);
-}
-export function useLotFilteredOpportunitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LotFilteredOpportunitiesQuery, LotFilteredOpportunitiesQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<LotFilteredOpportunitiesQuery, LotFilteredOpportunitiesQueryVariables>(LotFilteredOpportunitiesDocument, options);
-}
-export function useLotFilteredOpportunitiesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LotFilteredOpportunitiesQuery, LotFilteredOpportunitiesQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LotFilteredOpportunitiesQuery, LotFilteredOpportunitiesQueryVariables>(LotFilteredOpportunitiesDocument, options);
-}
-export type LotFilteredOpportunitiesQueryHookResult = ReturnType<typeof useLotFilteredOpportunitiesQuery>;
-export type LotFilteredOpportunitiesLazyQueryHookResult = ReturnType<typeof useLotFilteredOpportunitiesLazyQuery>;
-export type LotFilteredOpportunitiesSuspenseQueryHookResult = ReturnType<typeof useLotFilteredOpportunitiesSuspenseQuery>;
-export type LotFilteredOpportunitiesQueryResult = Apollo.QueryResult<LotFilteredOpportunitiesQuery, LotFilteredOpportunitiesQueryVariables>;
+export function useLotsCurrentForHarvestQuery(baseOptions: Apollo.QueryHookOptions<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables> & ({ variables: LotsCurrentForHarvestQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>(LotsCurrentForHarvestDocument, options);
+      }
+export function useLotsCurrentForHarvestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>(LotsCurrentForHarvestDocument, options);
+        }
+export function useLotsCurrentForHarvestSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>(LotsCurrentForHarvestDocument, options);
+        }
+export type LotsCurrentForHarvestQueryHookResult = ReturnType<typeof useLotsCurrentForHarvestQuery>;
+export type LotsCurrentForHarvestLazyQueryHookResult = ReturnType<typeof useLotsCurrentForHarvestLazyQuery>;
+export type LotsCurrentForHarvestSuspenseQueryHookResult = ReturnType<typeof useLotsCurrentForHarvestSuspenseQuery>;
+export type LotsCurrentForHarvestQueryResult = Apollo.QueryResult<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>;
 export const TransactionsDocument = gql`
     query Transactions($where: TransactionWhereInput) {
   transactions(where: $where) {
@@ -14434,17 +14509,17 @@ export const TransactionsDocument = gql`
  * });
  */
 export function useTransactionsQuery(baseOptions?: Apollo.QueryHookOptions<TransactionsQuery, TransactionsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, options);
+      }
 export function useTransactionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TransactionsQuery, TransactionsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, options);
+        }
 export function useTransactionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<TransactionsQuery, TransactionsQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, options);
+        }
 export type TransactionsQueryHookResult = ReturnType<typeof useTransactionsQuery>;
 export type TransactionsLazyQueryHookResult = ReturnType<typeof useTransactionsLazyQuery>;
 export type TransactionsSuspenseQueryHookResult = ReturnType<typeof useTransactionsSuspenseQuery>;
@@ -14473,17 +14548,17 @@ export const UserDocument = gql`
  * });
  */
 export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
 export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
 export function useUserSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserQuery, UserQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserSuspenseQueryHookResult = ReturnType<typeof useUserSuspenseQuery>;
@@ -14512,18 +14587,18 @@ export const VerificationEtradeDocument = gql`
  *   },
  * });
  */
-export function useVerificationEtradeQuery(baseOptions: Apollo.QueryHookOptions<VerificationEtradeQuery, VerificationEtradeQueryVariables> & ({ variables: VerificationEtradeQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<VerificationEtradeQuery, VerificationEtradeQueryVariables>(VerificationEtradeDocument, options);
-}
+export function useVerificationEtradeQuery(baseOptions: Apollo.QueryHookOptions<VerificationEtradeQuery, VerificationEtradeQueryVariables> & ({ variables: VerificationEtradeQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<VerificationEtradeQuery, VerificationEtradeQueryVariables>(VerificationEtradeDocument, options);
+      }
 export function useVerificationEtradeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VerificationEtradeQuery, VerificationEtradeQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<VerificationEtradeQuery, VerificationEtradeQueryVariables>(VerificationEtradeDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<VerificationEtradeQuery, VerificationEtradeQueryVariables>(VerificationEtradeDocument, options);
+        }
 export function useVerificationEtradeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<VerificationEtradeQuery, VerificationEtradeQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<VerificationEtradeQuery, VerificationEtradeQueryVariables>(VerificationEtradeDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<VerificationEtradeQuery, VerificationEtradeQueryVariables>(VerificationEtradeDocument, options);
+        }
 export type VerificationEtradeQueryHookResult = ReturnType<typeof useVerificationEtradeQuery>;
 export type VerificationEtradeLazyQueryHookResult = ReturnType<typeof useVerificationEtradeLazyQuery>;
 export type VerificationEtradeSuspenseQueryHookResult = ReturnType<typeof useVerificationEtradeSuspenseQuery>;
@@ -14560,9 +14635,9 @@ export type OauthEtradeMutationFn = Apollo.MutationFunction<OauthEtradeMutation,
  * });
  */
 export function useOauthEtradeMutation(baseOptions?: Apollo.MutationHookOptions<OauthEtradeMutation, OauthEtradeMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<OauthEtradeMutation, OauthEtradeMutationVariables>(OauthEtradeDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<OauthEtradeMutation, OauthEtradeMutationVariables>(OauthEtradeDocument, options);
+      }
 export type OauthEtradeMutationHookResult = ReturnType<typeof useOauthEtradeMutation>;
 export type OauthEtradeMutationResult = Apollo.MutationResult<OauthEtradeMutation>;
 export type OauthEtradeMutationOptions = Apollo.BaseMutationOptions<OauthEtradeMutation, OauthEtradeMutationVariables>;
@@ -14588,17 +14663,17 @@ export const PlaidLinkTokenDocument = gql`
  * });
  */
 export function usePlaidLinkTokenQuery(baseOptions?: Apollo.QueryHookOptions<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>(PlaidLinkTokenDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>(PlaidLinkTokenDocument, options);
+      }
 export function usePlaidLinkTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>(PlaidLinkTokenDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>(PlaidLinkTokenDocument, options);
+        }
 export function usePlaidLinkTokenSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>(PlaidLinkTokenDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>(PlaidLinkTokenDocument, options);
+        }
 export type PlaidLinkTokenQueryHookResult = ReturnType<typeof usePlaidLinkTokenQuery>;
 export type PlaidLinkTokenLazyQueryHookResult = ReturnType<typeof usePlaidLinkTokenLazyQuery>;
 export type PlaidLinkTokenSuspenseQueryHookResult = ReturnType<typeof usePlaidLinkTokenSuspenseQuery>;
@@ -14631,9 +14706,9 @@ export type PlaidSetAccessTokenAndSyncAccountsMutationFn = Apollo.MutationFuncti
  * });
  */
 export function usePlaidSetAccessTokenAndSyncAccountsMutation(baseOptions?: Apollo.MutationHookOptions<PlaidSetAccessTokenAndSyncAccountsMutation, PlaidSetAccessTokenAndSyncAccountsMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<PlaidSetAccessTokenAndSyncAccountsMutation, PlaidSetAccessTokenAndSyncAccountsMutationVariables>(PlaidSetAccessTokenAndSyncAccountsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PlaidSetAccessTokenAndSyncAccountsMutation, PlaidSetAccessTokenAndSyncAccountsMutationVariables>(PlaidSetAccessTokenAndSyncAccountsDocument, options);
+      }
 export type PlaidSetAccessTokenAndSyncAccountsMutationHookResult = ReturnType<typeof usePlaidSetAccessTokenAndSyncAccountsMutation>;
 export type PlaidSetAccessTokenAndSyncAccountsMutationResult = Apollo.MutationResult<PlaidSetAccessTokenAndSyncAccountsMutation>;
 export type PlaidSetAccessTokenAndSyncAccountsMutationOptions = Apollo.BaseMutationOptions<PlaidSetAccessTokenAndSyncAccountsMutation, PlaidSetAccessTokenAndSyncAccountsMutationVariables>;
@@ -14664,9 +14739,9 @@ export type PlaidSyncMutationFn = Apollo.MutationFunction<PlaidSyncMutation, Pla
  * });
  */
 export function usePlaidSyncMutation(baseOptions?: Apollo.MutationHookOptions<PlaidSyncMutation, PlaidSyncMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<PlaidSyncMutation, PlaidSyncMutationVariables>(PlaidSyncDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PlaidSyncMutation, PlaidSyncMutationVariables>(PlaidSyncDocument, options);
+      }
 export type PlaidSyncMutationHookResult = ReturnType<typeof usePlaidSyncMutation>;
 export type PlaidSyncMutationResult = Apollo.MutationResult<PlaidSyncMutation>;
 export type PlaidSyncMutationOptions = Apollo.BaseMutationOptions<PlaidSyncMutation, PlaidSyncMutationVariables>;
@@ -14694,18 +14769,18 @@ export const SignedUrlsForUploadDocument = gql`
  *   },
  * });
  */
-export function useSignedUrlsForUploadQuery(baseOptions: Apollo.QueryHookOptions<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables> & ({ variables: SignedUrlsForUploadQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables>(SignedUrlsForUploadDocument, options);
-}
+export function useSignedUrlsForUploadQuery(baseOptions: Apollo.QueryHookOptions<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables> & ({ variables: SignedUrlsForUploadQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables>(SignedUrlsForUploadDocument, options);
+      }
 export function useSignedUrlsForUploadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables>(SignedUrlsForUploadDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables>(SignedUrlsForUploadDocument, options);
+        }
 export function useSignedUrlsForUploadSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables>(SignedUrlsForUploadDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SignedUrlsForUploadQuery, SignedUrlsForUploadQueryVariables>(SignedUrlsForUploadDocument, options);
+        }
 export type SignedUrlsForUploadQueryHookResult = ReturnType<typeof useSignedUrlsForUploadQuery>;
 export type SignedUrlsForUploadLazyQueryHookResult = ReturnType<typeof useSignedUrlsForUploadLazyQuery>;
 export type SignedUrlsForUploadSuspenseQueryHookResult = ReturnType<typeof useSignedUrlsForUploadSuspenseQuery>;
@@ -14734,18 +14809,18 @@ export const SignedUrlsForDownloadDocument = gql`
  *   },
  * });
  */
-export function useSignedUrlsForDownloadQuery(baseOptions: Apollo.QueryHookOptions<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables> & ({ variables: SignedUrlsForDownloadQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables>(SignedUrlsForDownloadDocument, options);
-}
+export function useSignedUrlsForDownloadQuery(baseOptions: Apollo.QueryHookOptions<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables> & ({ variables: SignedUrlsForDownloadQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables>(SignedUrlsForDownloadDocument, options);
+      }
 export function useSignedUrlsForDownloadLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables>(SignedUrlsForDownloadDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables>(SignedUrlsForDownloadDocument, options);
+        }
 export function useSignedUrlsForDownloadSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables>(SignedUrlsForDownloadDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SignedUrlsForDownloadQuery, SignedUrlsForDownloadQueryVariables>(SignedUrlsForDownloadDocument, options);
+        }
 export type SignedUrlsForDownloadQueryHookResult = ReturnType<typeof useSignedUrlsForDownloadQuery>;
 export type SignedUrlsForDownloadLazyQueryHookResult = ReturnType<typeof useSignedUrlsForDownloadLazyQuery>;
 export type SignedUrlsForDownloadSuspenseQueryHookResult = ReturnType<typeof useSignedUrlsForDownloadSuspenseQuery>;
@@ -14777,15 +14852,16 @@ export type CreateFilesMutationFn = Apollo.MutationFunction<CreateFilesMutation,
  * });
  */
 export function useCreateFilesMutation(baseOptions?: Apollo.MutationHookOptions<CreateFilesMutation, CreateFilesMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateFilesMutation, CreateFilesMutationVariables>(CreateFilesDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFilesMutation, CreateFilesMutationVariables>(CreateFilesDocument, options);
+      }
 export type CreateFilesMutationHookResult = ReturnType<typeof useCreateFilesMutation>;
 export type CreateFilesMutationResult = Apollo.MutationResult<CreateFilesMutation>;
 export type CreateFilesMutationOptions = Apollo.BaseMutationOptions<CreateFilesMutation, CreateFilesMutationVariables>;
 export const LotsCurrentForLotTypeDocument = gql`
     query LotsCurrentForLotType($lotValueType: LotValueType!) {
   lotCurrent(lotValueType: $lotValueType) {
+    id
     ...LotCurrentItem
   }
 }
@@ -14807,18 +14883,18 @@ export const LotsCurrentForLotTypeDocument = gql`
  *   },
  * });
  */
-export function useLotsCurrentForLotTypeQuery(baseOptions: Apollo.QueryHookOptions<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables> & ({ variables: LotsCurrentForLotTypeQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables>(LotsCurrentForLotTypeDocument, options);
-}
+export function useLotsCurrentForLotTypeQuery(baseOptions: Apollo.QueryHookOptions<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables> & ({ variables: LotsCurrentForLotTypeQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables>(LotsCurrentForLotTypeDocument, options);
+      }
 export function useLotsCurrentForLotTypeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables>(LotsCurrentForLotTypeDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables>(LotsCurrentForLotTypeDocument, options);
+        }
 export function useLotsCurrentForLotTypeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables>(LotsCurrentForLotTypeDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LotsCurrentForLotTypeQuery, LotsCurrentForLotTypeQueryVariables>(LotsCurrentForLotTypeDocument, options);
+        }
 export type LotsCurrentForLotTypeQueryHookResult = ReturnType<typeof useLotsCurrentForLotTypeQuery>;
 export type LotsCurrentForLotTypeLazyQueryHookResult = ReturnType<typeof useLotsCurrentForLotTypeLazyQuery>;
 export type LotsCurrentForLotTypeSuspenseQueryHookResult = ReturnType<typeof useLotsCurrentForLotTypeSuspenseQuery>;
@@ -14831,12 +14907,15 @@ export const DirectedHarvestDocument = gql`
     targetUnrealized: $targetUnrealized
   ) {
     realizedOrders {
+      id
       ...HarvestLotOrderItem
     }
     unrealizedOrders {
+      id
       ...HarvestLotOrderItem
     }
     allOrders {
+      id
       ...HarvestLotOrderItem
     }
   }
@@ -14861,18 +14940,18 @@ export const DirectedHarvestDocument = gql`
  *   },
  * });
  */
-export function useDirectedHarvestQuery(baseOptions: Apollo.QueryHookOptions<DirectedHarvestQuery, DirectedHarvestQueryVariables> & ({ variables: DirectedHarvestQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<DirectedHarvestQuery, DirectedHarvestQueryVariables>(DirectedHarvestDocument, options);
-}
+export function useDirectedHarvestQuery(baseOptions: Apollo.QueryHookOptions<DirectedHarvestQuery, DirectedHarvestQueryVariables> & ({ variables: DirectedHarvestQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DirectedHarvestQuery, DirectedHarvestQueryVariables>(DirectedHarvestDocument, options);
+      }
 export function useDirectedHarvestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DirectedHarvestQuery, DirectedHarvestQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<DirectedHarvestQuery, DirectedHarvestQueryVariables>(DirectedHarvestDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DirectedHarvestQuery, DirectedHarvestQueryVariables>(DirectedHarvestDocument, options);
+        }
 export function useDirectedHarvestSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<DirectedHarvestQuery, DirectedHarvestQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<DirectedHarvestQuery, DirectedHarvestQueryVariables>(DirectedHarvestDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DirectedHarvestQuery, DirectedHarvestQueryVariables>(DirectedHarvestDocument, options);
+        }
 export type DirectedHarvestQueryHookResult = ReturnType<typeof useDirectedHarvestQuery>;
 export type DirectedHarvestLazyQueryHookResult = ReturnType<typeof useDirectedHarvestLazyQuery>;
 export type DirectedHarvestSuspenseQueryHookResult = ReturnType<typeof useDirectedHarvestSuspenseQuery>;
@@ -14883,6 +14962,7 @@ export const CreateHarvestDocument = gql`
     directedHarvestLots: $directedHarvestLots
     harvestType: $harvestType
   ) {
+    id
     ...HarvestItem
   }
 }
@@ -14908,15 +14988,16 @@ export type CreateHarvestMutationFn = Apollo.MutationFunction<CreateHarvestMutat
  * });
  */
 export function useCreateHarvestMutation(baseOptions?: Apollo.MutationHookOptions<CreateHarvestMutation, CreateHarvestMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateHarvestMutation, CreateHarvestMutationVariables>(CreateHarvestDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateHarvestMutation, CreateHarvestMutationVariables>(CreateHarvestDocument, options);
+      }
 export type CreateHarvestMutationHookResult = ReturnType<typeof useCreateHarvestMutation>;
 export type CreateHarvestMutationResult = Apollo.MutationResult<CreateHarvestMutation>;
 export type CreateHarvestMutationOptions = Apollo.BaseMutationOptions<CreateHarvestMutation, CreateHarvestMutationVariables>;
 export const UpdateHarvestDocument = gql`
     mutation UpdateHarvest($id: String!, $data: HarvestUpdateInput!) {
   updateHarvest(id: $id, data: $data) {
+    id
     ...HarvestItem
   }
 }
@@ -14942,15 +15023,16 @@ export type UpdateHarvestMutationFn = Apollo.MutationFunction<UpdateHarvestMutat
  * });
  */
 export function useUpdateHarvestMutation(baseOptions?: Apollo.MutationHookOptions<UpdateHarvestMutation, UpdateHarvestMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateHarvestMutation, UpdateHarvestMutationVariables>(UpdateHarvestDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateHarvestMutation, UpdateHarvestMutationVariables>(UpdateHarvestDocument, options);
+      }
 export type UpdateHarvestMutationHookResult = ReturnType<typeof useUpdateHarvestMutation>;
 export type UpdateHarvestMutationResult = Apollo.MutationResult<UpdateHarvestMutation>;
 export type UpdateHarvestMutationOptions = Apollo.BaseMutationOptions<UpdateHarvestMutation, UpdateHarvestMutationVariables>;
 export const UpdateHarvestTransactionDocument = gql`
-    mutation updateHarvestTransaction($id: String!, $data: HarvestTransactionUpdateInput!) {
+    mutation UpdateHarvestTransaction($id: String!, $data: HarvestTransactionUpdateInput!) {
   updateHarvestTransaction(id: $id, data: $data) {
+    id
     ...HarvestTransactionRecord
   }
 }
@@ -14976,15 +15058,16 @@ export type UpdateHarvestTransactionMutationFn = Apollo.MutationFunction<UpdateH
  * });
  */
 export function useUpdateHarvestTransactionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateHarvestTransactionMutation, UpdateHarvestTransactionMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateHarvestTransactionMutation, UpdateHarvestTransactionMutationVariables>(UpdateHarvestTransactionDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateHarvestTransactionMutation, UpdateHarvestTransactionMutationVariables>(UpdateHarvestTransactionDocument, options);
+      }
 export type UpdateHarvestTransactionMutationHookResult = ReturnType<typeof useUpdateHarvestTransactionMutation>;
 export type UpdateHarvestTransactionMutationResult = Apollo.MutationResult<UpdateHarvestTransactionMutation>;
 export type UpdateHarvestTransactionMutationOptions = Apollo.BaseMutationOptions<UpdateHarvestTransactionMutation, UpdateHarvestTransactionMutationVariables>;
 export const UpdateHarvestTransactionItemDocument = gql`
-    mutation updateHarvestTransactionItem($id: String!, $data: HarvestTransactionItemUpdateInput!) {
+    mutation UpdateHarvestTransactionItem($id: String!, $data: HarvestTransactionItemUpdateInput!) {
   updateHarvestTransactionItem(id: $id, data: $data) {
+    id
     ...HarvestTransactionItemRecord
   }
 }
@@ -15010,15 +15093,16 @@ export type UpdateHarvestTransactionItemMutationFn = Apollo.MutationFunction<Upd
  * });
  */
 export function useUpdateHarvestTransactionItemMutation(baseOptions?: Apollo.MutationHookOptions<UpdateHarvestTransactionItemMutation, UpdateHarvestTransactionItemMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateHarvestTransactionItemMutation, UpdateHarvestTransactionItemMutationVariables>(UpdateHarvestTransactionItemDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateHarvestTransactionItemMutation, UpdateHarvestTransactionItemMutationVariables>(UpdateHarvestTransactionItemDocument, options);
+      }
 export type UpdateHarvestTransactionItemMutationHookResult = ReturnType<typeof useUpdateHarvestTransactionItemMutation>;
 export type UpdateHarvestTransactionItemMutationResult = Apollo.MutationResult<UpdateHarvestTransactionItemMutation>;
 export type UpdateHarvestTransactionItemMutationOptions = Apollo.BaseMutationOptions<UpdateHarvestTransactionItemMutation, UpdateHarvestTransactionItemMutationVariables>;
 export const HarvestDocument = gql`
     query Harvest($id: String!) {
   harvest(id: $id) {
+    id
     ...HarvestItem
   }
 }
@@ -15040,18 +15124,18 @@ export const HarvestDocument = gql`
  *   },
  * });
  */
-export function useHarvestQuery(baseOptions: Apollo.QueryHookOptions<HarvestQuery, HarvestQueryVariables> & ({ variables: HarvestQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<HarvestQuery, HarvestQueryVariables>(HarvestDocument, options);
-}
+export function useHarvestQuery(baseOptions: Apollo.QueryHookOptions<HarvestQuery, HarvestQueryVariables> & ({ variables: HarvestQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HarvestQuery, HarvestQueryVariables>(HarvestDocument, options);
+      }
 export function useHarvestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HarvestQuery, HarvestQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<HarvestQuery, HarvestQueryVariables>(HarvestDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HarvestQuery, HarvestQueryVariables>(HarvestDocument, options);
+        }
 export function useHarvestSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<HarvestQuery, HarvestQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<HarvestQuery, HarvestQueryVariables>(HarvestDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<HarvestQuery, HarvestQueryVariables>(HarvestDocument, options);
+        }
 export type HarvestQueryHookResult = ReturnType<typeof useHarvestQuery>;
 export type HarvestLazyQueryHookResult = ReturnType<typeof useHarvestLazyQuery>;
 export type HarvestSuspenseQueryHookResult = ReturnType<typeof useHarvestSuspenseQuery>;
@@ -15059,6 +15143,7 @@ export type HarvestQueryResult = Apollo.QueryResult<HarvestQuery, HarvestQueryVa
 export const FinalizeHarvestDocument = gql`
     mutation FinalizeHarvest($id: String!) {
   finalizeHarvest(id: $id) {
+    id
     ...HarvestItem
   }
 }
@@ -15083,9 +15168,9 @@ export type FinalizeHarvestMutationFn = Apollo.MutationFunction<FinalizeHarvestM
  * });
  */
 export function useFinalizeHarvestMutation(baseOptions?: Apollo.MutationHookOptions<FinalizeHarvestMutation, FinalizeHarvestMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<FinalizeHarvestMutation, FinalizeHarvestMutationVariables>(FinalizeHarvestDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FinalizeHarvestMutation, FinalizeHarvestMutationVariables>(FinalizeHarvestDocument, options);
+      }
 export type FinalizeHarvestMutationHookResult = ReturnType<typeof useFinalizeHarvestMutation>;
 export type FinalizeHarvestMutationResult = Apollo.MutationResult<FinalizeHarvestMutation>;
 export type FinalizeHarvestMutationOptions = Apollo.BaseMutationOptions<FinalizeHarvestMutation, FinalizeHarvestMutationVariables>;
@@ -15115,17 +15200,17 @@ export const PortfolioLotsDocument = gql`
  * });
  */
 export function usePortfolioLotsQuery(baseOptions?: Apollo.QueryHookOptions<PortfolioLotsQuery, PortfolioLotsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PortfolioLotsQuery, PortfolioLotsQueryVariables>(PortfolioLotsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfolioLotsQuery, PortfolioLotsQueryVariables>(PortfolioLotsDocument, options);
+      }
 export function usePortfolioLotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioLotsQuery, PortfolioLotsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PortfolioLotsQuery, PortfolioLotsQueryVariables>(PortfolioLotsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfolioLotsQuery, PortfolioLotsQueryVariables>(PortfolioLotsDocument, options);
+        }
 export function usePortfolioLotsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioLotsQuery, PortfolioLotsQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<PortfolioLotsQuery, PortfolioLotsQueryVariables>(PortfolioLotsDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PortfolioLotsQuery, PortfolioLotsQueryVariables>(PortfolioLotsDocument, options);
+        }
 export type PortfolioLotsQueryHookResult = ReturnType<typeof usePortfolioLotsQuery>;
 export type PortfolioLotsLazyQueryHookResult = ReturnType<typeof usePortfolioLotsLazyQuery>;
 export type PortfolioLotsSuspenseQueryHookResult = ReturnType<typeof usePortfolioLotsSuspenseQuery>;
@@ -15154,17 +15239,17 @@ export const PortfoliosDocument = gql`
  * });
  */
 export function usePortfoliosQuery(baseOptions?: Apollo.QueryHookOptions<PortfoliosQuery, PortfoliosQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
+      }
 export function usePortfoliosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfoliosQuery, PortfoliosQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
+        }
 export function usePortfoliosSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfoliosQuery, PortfoliosQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PortfoliosQuery, PortfoliosQueryVariables>(PortfoliosDocument, options);
+        }
 export type PortfoliosQueryHookResult = ReturnType<typeof usePortfoliosQuery>;
 export type PortfoliosLazyQueryHookResult = ReturnType<typeof usePortfoliosLazyQuery>;
 export type PortfoliosSuspenseQueryHookResult = ReturnType<typeof usePortfoliosSuspenseQuery>;
@@ -15196,9 +15281,9 @@ export type CreatePortfolioMutationFn = Apollo.MutationFunction<CreatePortfolioM
  * });
  */
 export function useCreatePortfolioMutation(baseOptions?: Apollo.MutationHookOptions<CreatePortfolioMutation, CreatePortfolioMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreatePortfolioMutation, CreatePortfolioMutationVariables>(CreatePortfolioDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePortfolioMutation, CreatePortfolioMutationVariables>(CreatePortfolioDocument, options);
+      }
 export type CreatePortfolioMutationHookResult = ReturnType<typeof useCreatePortfolioMutation>;
 export type CreatePortfolioMutationResult = Apollo.MutationResult<CreatePortfolioMutation>;
 export type CreatePortfolioMutationOptions = Apollo.BaseMutationOptions<CreatePortfolioMutation, CreatePortfolioMutationVariables>;
@@ -15226,17 +15311,17 @@ export const PortfolioAuthedDocument = gql`
  * });
  */
 export function usePortfolioAuthedQuery(baseOptions?: Apollo.QueryHookOptions<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>(PortfolioAuthedDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>(PortfolioAuthedDocument, options);
+      }
 export function usePortfolioAuthedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>(PortfolioAuthedDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>(PortfolioAuthedDocument, options);
+        }
 export function usePortfolioAuthedSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>(PortfolioAuthedDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>(PortfolioAuthedDocument, options);
+        }
 export type PortfolioAuthedQueryHookResult = ReturnType<typeof usePortfolioAuthedQuery>;
 export type PortfolioAuthedLazyQueryHookResult = ReturnType<typeof usePortfolioAuthedLazyQuery>;
 export type PortfolioAuthedSuspenseQueryHookResult = ReturnType<typeof usePortfolioAuthedSuspenseQuery>;
@@ -15268,9 +15353,9 @@ export type SwitchPortfolioMutationFn = Apollo.MutationFunction<SwitchPortfolioM
  * });
  */
 export function useSwitchPortfolioMutation(baseOptions?: Apollo.MutationHookOptions<SwitchPortfolioMutation, SwitchPortfolioMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<SwitchPortfolioMutation, SwitchPortfolioMutationVariables>(SwitchPortfolioDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SwitchPortfolioMutation, SwitchPortfolioMutationVariables>(SwitchPortfolioDocument, options);
+      }
 export type SwitchPortfolioMutationHookResult = ReturnType<typeof useSwitchPortfolioMutation>;
 export type SwitchPortfolioMutationResult = Apollo.MutationResult<SwitchPortfolioMutation>;
 export type SwitchPortfolioMutationOptions = Apollo.BaseMutationOptions<SwitchPortfolioMutation, SwitchPortfolioMutationVariables>;
@@ -15298,17 +15383,17 @@ export const PortfolioPositionsDocument = gql`
  * });
  */
 export function usePortfolioPositionsQuery(baseOptions?: Apollo.QueryHookOptions<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>(PortfolioPositionsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>(PortfolioPositionsDocument, options);
+      }
 export function usePortfolioPositionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>(PortfolioPositionsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>(PortfolioPositionsDocument, options);
+        }
 export function usePortfolioPositionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>(PortfolioPositionsDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PortfolioPositionsQuery, PortfolioPositionsQueryVariables>(PortfolioPositionsDocument, options);
+        }
 export type PortfolioPositionsQueryHookResult = ReturnType<typeof usePortfolioPositionsQuery>;
 export type PortfolioPositionsLazyQueryHookResult = ReturnType<typeof usePortfolioPositionsLazyQuery>;
 export type PortfolioPositionsSuspenseQueryHookResult = ReturnType<typeof usePortfolioPositionsSuspenseQuery>;
@@ -15344,18 +15429,18 @@ export const Chart3MonthDocument = gql`
  *   },
  * });
  */
-export function useChart3MonthQuery(baseOptions: Apollo.QueryHookOptions<Chart3MonthQuery, Chart3MonthQueryVariables> & ({ variables: Chart3MonthQueryVariables; skip?: boolean } | { skip: boolean })) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<Chart3MonthQuery, Chart3MonthQueryVariables>(Chart3MonthDocument, options);
-}
+export function useChart3MonthQuery(baseOptions: Apollo.QueryHookOptions<Chart3MonthQuery, Chart3MonthQueryVariables> & ({ variables: Chart3MonthQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Chart3MonthQuery, Chart3MonthQueryVariables>(Chart3MonthDocument, options);
+      }
 export function useChart3MonthLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Chart3MonthQuery, Chart3MonthQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<Chart3MonthQuery, Chart3MonthQueryVariables>(Chart3MonthDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Chart3MonthQuery, Chart3MonthQueryVariables>(Chart3MonthDocument, options);
+        }
 export function useChart3MonthSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Chart3MonthQuery, Chart3MonthQueryVariables>) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<Chart3MonthQuery, Chart3MonthQueryVariables>(Chart3MonthDocument, options);
-}
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Chart3MonthQuery, Chart3MonthQueryVariables>(Chart3MonthDocument, options);
+        }
 export type Chart3MonthQueryHookResult = ReturnType<typeof useChart3MonthQuery>;
 export type Chart3MonthLazyQueryHookResult = ReturnType<typeof useChart3MonthLazyQuery>;
 export type Chart3MonthSuspenseQueryHookResult = ReturnType<typeof useChart3MonthSuspenseQuery>;

@@ -25,7 +25,7 @@ const config: CodegenConfig = {
     },
   },
   ignoreNoDocuments: true,
-  schema: 'http://localhost:5000/core/graphql',
+  schema: `${process.env.url || 'http://localhost:8000/core'}/graphql`,
 };
 
 export default config;
