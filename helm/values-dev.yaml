@@ -39,7 +39,7 @@ argocd:
       kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
       kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
-    host: argocd.dev.taxharvest.ai
+    host: argocd-dev.taxharvest.ai
     path: /
     pathType: Prefix
     service:

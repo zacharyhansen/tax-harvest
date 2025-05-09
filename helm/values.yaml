@@ -254,7 +254,7 @@ argocd:
       kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
       networking.gke.io/managed-certificates: argocd-dev-cert
-    host: argocd.dev.taxharvest.ai
+    host: argocd-dev.taxharvest.ai
     path: /
     pathType: Prefix
     service:
