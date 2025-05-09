@@ -28,6 +28,7 @@ api:
       GOOGLE_PROJECT: harvester-ai-428202
       GCS_LOTS_BUCKET_NAME: lot_upload
       CLIENT_ORIGIN: https://dev.taxharvest.ai
+      ORIGIN: https://dev.taxharvest.ai/core
 
 argocd:
   enabled: true

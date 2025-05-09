@@ -60,6 +60,7 @@ api:
     extras:
       PORT: 8000
       NUETRAL_ACCOUNT_AMOUNT: 1000
+      CLIENT_HOME_PAGE_PATH: /main/home
     secretRefs:
       - name: DATABASE_URL
         valueFrom:

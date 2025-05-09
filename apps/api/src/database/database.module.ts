@@ -46,40 +46,6 @@ import { Database } from './database'
         })
       },
     },
-    // {
-    //   inject: [ConfigService],
-    //   provide: 'PoolReadOnly',
-    //   useFactory: async (configService: ConfigService) => {
-    //     console.info({
-    //       SECRET_SOURCE: configService.get<string>('SECRET_SOURCE'),
-    //     })
-
-    //     if (
-    //       configService.get('SECRET_SOURCE') === 'LOCAL'
-    //       || !configService.get('SECRET_SOURCE')
-    //     ) {
-    //       return new pg.Pool({
-    //         database: process.env.DATABASE_NAME,
-    //         host: process.env.DATABASE_HOST,
-    //         password: process.env.DATABASE_PASSWORD,
-    //         port: Number.parseInt(
-    //           process.env.DATABASE_PORT?.toString() ?? '5432',
-    //         ),
-    //         user: process.env.DATABASE_USER,
-    //       })
-    //     }
-
-    //     const secrets = await fetchGCPSecrets()
-
-    //     return new pg.Pool({
-    //       database: secrets.DATABASE_NAME,
-    //       host: secrets.DATABASE_HOST,
-    //       password: secrets.DATABASE_PASSWORD,
-    //       port: Number.parseInt(secrets.DATABASE_PORT?.toString() ?? '5432'),
-    //       user: secrets.DATABASE_USER,
-    //     })
-    //   },
-    // },
   ],
   imports: [
     ConfigModule,
