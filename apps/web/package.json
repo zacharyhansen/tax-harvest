@@ -87,7 +87,7 @@
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "type-fest": "^4.33.0",
-    "vite-tsconfig-paths": "4.3.2"
+    "vite-tsconfig-paths": "5.1.4"
   },
   "pnpm": {
     "overrides": {
