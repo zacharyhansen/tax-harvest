@@ -349,112 +349,110 @@ function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <div className="w-full">
-          <TableBody className="block w-fit overflow-y-auto">
-            {table.getRowModel().rows.length
-              ? (
-                  table.getRowModel().rows.map(row => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map(cell =>
-                        !data.length && loading
-                          ? (
-                              <TableCell
-                                key={cell.id}
-                                className="bg-cyan-300"
-                                style={{
-                                  maxWidth: cell.column.getSize(),
-                                  minWidth: cell.column.getSize(),
-                                  width: cell.column.getSize(),
-                                }}
-                              >
-                                <Skeleton className="h-8 w-full" />
-                              </TableCell>
-                            )
-                          : (
-                              <TableCell
-                                key={cell.id}
-                                className={clsx({
-                                  'bg-secondary': row.getIsGrouped(),
-                                  'font-bold': cell.getIsAggregated(),
-                                })}
-                                style={{
-                                  maxWidth: cell.column.getSize(),
-                                  minWidth: cell.column.getSize(),
-                                  width: cell.column.getSize(),
-                                }}
-                                onClick={
-                                  onRowClick
-                                  && !cell.column.columnDef.meta?.preventRowClick
-                                    ? () => onRowClick(row)
-                                    : undefined
-                                }
-                              >
-                                {cell.getIsGrouped()
-                                  ? (
-                                      <button
-                                        className="flex items-center space-x-2"
-                                        onClick={row.getToggleExpandedHandler()}
-                                        type="button"
-                                      >
-                                        {row.getIsExpanded()
-                                          ? (
-                                              <ChevronDownIcon className="size-4" />
-                                            )
-                                          : (
-                                              <ChevronRightIcon className="size-4" />
-                                            )}
-                                        <div className="flex flex-col items-start text-xs">
-                                          <div className="font-bold">
-                                            {flexRender(
-                                              cell.column.columnDef.cell,
-                                              cell.getContext(),
-                                            )}
-                                          </div>
-                                          <div className="text-xs font-light text-secondary-foreground">
-                                            {row.subRows.length}
-                                            {' '}
-                                            {row.subRows.length === 1 ? 'row' : 'rows'}
-                                          </div>
-                                        </div>
-                                      </button>
-                                    )
-                                  : cell.getIsAggregated()
-                                    ? (
-                                        flexRender(
-                                          cell.column.columnDef.aggregatedCell
-                                          ?? cell.column.columnDef.cell,
-                                          cell.getContext(),
-                                        )
-                                      )
-                                    : cell.getIsPlaceholder()
-                                      ? null
-                                      : (
-                                          flexRender(
+        <TableBody className="block min-w-fit overflow-y-auto">
+          {table.getRowModel().rows.length
+            ? (
+                table.getRowModel().rows.map(row => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                  >
+                    {row.getVisibleCells().map(cell =>
+                      !data.length && loading
+                        ? (
+                            <TableCell
+                              key={cell.id}
+                              className="bg-cyan-300"
+                              style={{
+                                maxWidth: cell.column.getSize(),
+                                minWidth: cell.column.getSize(),
+                                width: cell.column.getSize(),
+                              }}
+                            >
+                              <Skeleton className="h-8 w-full" />
+                            </TableCell>
+                          )
+                        : (
+                            <TableCell
+                              key={cell.id}
+                              className={clsx({
+                                'bg-secondary': row.getIsGrouped(),
+                                'font-bold': cell.getIsAggregated(),
+                              })}
+                              style={{
+                                maxWidth: cell.column.getSize(),
+                                minWidth: cell.column.getSize(),
+                                width: cell.column.getSize(),
+                              }}
+                              onClick={
+                                onRowClick
+                                && !cell.column.columnDef.meta?.preventRowClick
+                                  ? () => onRowClick(row)
+                                  : undefined
+                              }
+                            >
+                              {cell.getIsGrouped()
+                                ? (
+                                    <button
+                                      className="flex items-center space-x-2"
+                                      onClick={row.getToggleExpandedHandler()}
+                                      type="button"
+                                    >
+                                      {row.getIsExpanded()
+                                        ? (
+                                            <ChevronDownIcon className="size-4" />
+                                          )
+                                        : (
+                                            <ChevronRightIcon className="size-4" />
+                                          )}
+                                      <div className="flex flex-col items-start text-xs">
+                                        <div className="font-bold">
+                                          {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext(),
-                                          )
-                                        )}
-                              </TableCell>
-                            ),
-                      )}
-                    </TableRow>
-                  ))
-                )
-              : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      {noResultsAlert}
-                    </TableCell>
+                                          )}
+                                        </div>
+                                        <div className="text-xs font-light text-secondary-foreground">
+                                          {row.subRows.length}
+                                          {' '}
+                                          {row.subRows.length === 1 ? 'row' : 'rows'}
+                                        </div>
+                                      </div>
+                                    </button>
+                                  )
+                                : cell.getIsAggregated()
+                                  ? (
+                                      flexRender(
+                                        cell.column.columnDef.aggregatedCell
+                                        ?? cell.column.columnDef.cell,
+                                        cell.getContext(),
+                                      )
+                                    )
+                                  : cell.getIsPlaceholder()
+                                    ? null
+                                    : (
+                                        flexRender(
+                                          cell.column.columnDef.cell,
+                                          cell.getContext(),
+                                        )
+                                      )}
+                            </TableCell>
+                          ),
+                    )}
                   </TableRow>
-                )}
-          </TableBody>
-        </div>
+                ))
+              )
+            : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    {noResultsAlert}
+                  </TableCell>
+                </TableRow>
+              )}
+        </TableBody>
         {hasFooter
           ? (
               <TableFooter className="sticky bottom-0 bg-secondary">

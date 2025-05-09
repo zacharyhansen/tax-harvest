@@ -23,7 +23,7 @@ export default function DataCard({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">
+        <CardTitle className="mr-2 text-sm font-medium">
           {loading ? <Skeleton className="h-6 w-20" /> : title}
         </CardTitle>
         {icon || null}

@@ -18,11 +18,17 @@ import 'server-only';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export default async function CheckoutForm({
-  params: { stripeCustomerId },
-}: {
-  params: { stripeCustomerId: string };
-}) {
+export default async function CheckoutForm(
+  props: {
+    params: Promise<{ stripeCustomerId: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    stripeCustomerId
+  } = params;
+
   const { data } = await stripe.subscriptions.list({
     customer: stripeCustomerId,
   });

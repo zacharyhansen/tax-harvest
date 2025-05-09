@@ -11,7 +11,7 @@ import {
 import { AgGridReact } from 'ag-grid-react';
 import { useTheme } from 'next-themes';
 import dynamic from 'next/dynamic';
-import { useMemo } from 'react';
+import { use, useMemo } from 'react';
 
 import { useLotTransactionBatchQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
@@ -25,11 +25,12 @@ const AgGridWrapper = dynamic(
   },
 );
 
-export default function LotTransactionBatchPage({
-  params,
-}: {
-  params: typeof TypedRoutes.lotTransactionBatch.params;
-}) {
+export default function LotTransactionBatchPage(
+  props: {
+    params: Promise<typeof TypedRoutes.lotTransactionBatch.params>;
+  },
+) {
+  const params = use(props.params);
   const theme = useTheme();
   const safeParams = TypedRoutes.lotTransactionBatch.parse(params);
 

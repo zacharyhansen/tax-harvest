@@ -8,14 +8,6 @@ jiti('./lib/env/clientEnvironment');
 const nextConfig = {
   output: 'standalone',
   transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core'],
-  // experimental: {
-  // swcPlugins: [
-  //   [
-  //     '@graphql-codegen/client-preset-swc-plugin',
-  //     { artifactDirectory: './generated/gql', gqlTagName: 'graphql' },
-  //   ],
-  // ],
-  // },
   // Conditionally disable linting and type checking for Docker builds
   ...(process.env.DOCKER_BUILD === 'true' && {
     // Disable the built-in linting during build
