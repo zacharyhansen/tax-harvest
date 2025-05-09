@@ -315,6 +315,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
     networking.gke.io/managed-certificates: argocd-dev-cert
 spec:
+  ingressClassName: gce
   rules:
   - host: argocd-dev.taxharvest.ai
     http:
@@ -362,23 +363,6 @@ spec:
                 name: release-name-web
                 port:
                   number: 80
----
-# Source: harvester/charts/secrets/templates/secretstore.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ClusterSecretStore
-metadata:
-  name: gcp-secret-store
-spec:
-  provider:
-    gcpsm:
-      projectID: harvester-ai-428202
-      auth:
-        workloadIdentity:
-          serviceAccountRef:
-            name: google-secret-service-account
-            namespace: harvester-dev
-          clusterLocation: us-central1-b
-          clusterName: harvester-dev
 ---
 # Source: harvester/charts/secrets/templates/external-secrets.yaml
 apiVersion: external-secrets.io/v1beta1
@@ -719,3 +703,23 @@ spec:
       volumes:
         - name: cloudsql
           emptyDir: {}
+---
+# Source: harvester/charts/secrets/templates/secretstore.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: gcp-secret-store
+  annotations:
+    "helm.sh/hook": "pre-install,pre-upgrade"
+    "helm.sh/hook-weight": "-10"
+spec:
+  provider:
+    gcpsm:
+      projectID: harvester-ai-428202
+      auth:
+        workloadIdentity:
+          serviceAccountRef:
+            name: google-secret-service-account
+            namespace: harvester-dev
+          clusterLocation: us-central1-b
+          clusterName: harvester-dev

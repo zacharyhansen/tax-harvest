@@ -214,7 +214,7 @@ web:
           secretKeyRef:
             name: stripe
             key: STRIPE_SECRET_KEY
-# Secrets configuration with External Secrets Operator
+# Secrets configuration
 secrets:
   enabled: true
   config:
