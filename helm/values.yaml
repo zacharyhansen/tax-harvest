@@ -14,18 +14,16 @@ global:
     - name: argocd-dev-cert
       domains:
         - argocd.dev.taxharvest.ai
-
 # Service accounts configuration
 serviceAccounts:
   - name: google-secret-service-account
     gcpServiceAccount: harvester-secret-manager
-
 api:
   enabled: true
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v1.2.1
+    tag: v1.2.2
     pullPolicy: Always
   hookWeight: -10
   annotations:
@@ -79,13 +77,12 @@ api:
           secretKeyRef:
             name: clerk
             key: CLERK_SECRET_KEY
-
 web:
   enabled: true
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: v1.2.1
+    tag: v1.2.2
     pullPolicy: Always
   hookWeight: 10
   annotations:
@@ -129,7 +126,6 @@ web:
           secretKeyRef:
             name: stripe
             key: STRIPE_SECRET_KEY
-
 # Secrets configuration with External Secrets Operator
 secrets:
   enabled: true
@@ -152,7 +148,6 @@ secrets:
         - secretKey: STRIPE_SECRET_KEY
           remoteRef:
             key: stripe-secret-key
-
 argocd:
   enabled: true
   server:
