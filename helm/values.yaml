@@ -217,8 +217,8 @@ web:
 # Secrets configuration with External Secrets Operator
 secrets:
   enabled: true
-  serviceAccountName: google-secret-service-account
-  refreshInterval: 1h
+  config:
+    serviceAccountName: google-secret-service-account
   externalSecrets:
     - name: database
       target: database
