@@ -11,22 +11,22 @@ import {
 } from '@repo/ui/components/card';
 import { Check } from 'lucide-react';
 import Stripe from 'stripe';
-import { PricingOptions } from '~/modules/pricing';
+import { serverEnvironment } from '~/lib/env/serverEnvironment';
 
+import { PricingOptions } from '~/modules/pricing';
 import Price from '~/modules/pricing/Price';
 import 'server-only';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export default async function CheckoutForm(
   props: {
     params: Promise<{ stripeCustomerId: string }>;
-  }
+  },
 ) {
+  const stripe = new Stripe(serverEnvironment.STRIPE_SECRET_KEY);
   const params = await props.params;
 
   const {
-    stripeCustomerId
+    stripeCustomerId,
   } = params;
 
   const { data } = await stripe.subscriptions.list({

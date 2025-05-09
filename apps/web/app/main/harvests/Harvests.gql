@@ -7,12 +7,14 @@ fragment HarvestTableItem on Harvest {
   amount
   label
   createdBy {
+    id
     ...UserItem
   }
 }
 
 query Harvests($where: HarvestWhereInput) {
   harvests(where: $where) {
+    id
     ...HarvestTableItem
   }
 }

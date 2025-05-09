@@ -12,7 +12,7 @@ export const clientEnvironment = createEnv({
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: z.string(),
   },
-  runtimeEnv: {
+  experimental__runtimeEnv: {
     NEXT_PUBLIC_CORE_SERVER_URL: process.env.NEXT_PUBLIC_CORE_SERVER_URL,
     NEXT_PUBLIC_TAX_PERCENTAGE: process.env.NEXT_PUBLIC_TAX_PERCENTAGE,
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,

@@ -1,6 +1,6 @@
 import { ArrowRightIcon, CheckCircledIcon } from '@radix-ui/react-icons';
-
 import { Badge } from '@repo/ui/components/badge';
+
 import { Button } from '@repo/ui/components/button';
 import {
   Card,
@@ -12,17 +12,16 @@ import {
 } from '@repo/ui/components/card';
 import Link from 'next/link';
 import Stripe from 'stripe';
+import { serverEnvironment } from '~/lib/env/serverEnvironment';
 import Price from './Price';
-
 import 'server-only';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export default async function PricingOptions({
   stripeCustomerId: _id,
 }: {
   stripeCustomerId?: string;
 }) {
+  const stripe = new Stripe(serverEnvironment.STRIPE_SECRET_KEY);
   const products = await stripe.products
     .list({
       active: true,

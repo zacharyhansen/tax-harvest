@@ -1,4 +1,4 @@
-fragment lotTransactionBatch on LotTransactionBatch {
+fragment LotTransactionBatch on LotTransactionBatch {
   id
   createdAt
   updatedAt
@@ -7,11 +7,12 @@ fragment lotTransactionBatch on LotTransactionBatch {
 
 query LotTransactionBatches {
   lotTransactionBatches {
-    ...lotTransactionBatch
+    id
+    ...LotTransactionBatch
   }
 }
 
-fragment lotTransactionBatchDetails on LotTransactionBatch {
+fragment LotTransactionBatchDetails on LotTransactionBatch {
   id
   createdAt
   updatedAt
@@ -53,6 +54,7 @@ fragment lotTransactionBatchDetails on LotTransactionBatch {
 
 query LotTransactionBatch($lotTransactionBatchId: String!) {
   lotTransactionBatch(lotTransactionBatchId: $lotTransactionBatchId) {
-    ...lotTransactionBatchDetails
+    id
+    ...LotTransactionBatchDetails
   }
 }

@@ -1,13 +1,13 @@
 import Stripe from 'stripe';
+import { serverEnvironment } from '~/lib/env/serverEnvironment';
 
 import 'server-only';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 type PriceProps = {
   priceId: string;
 };
 export default async function Price({ priceId }: PriceProps) {
+  const stripe = new Stripe(serverEnvironment.STRIPE_SECRET_KEY);
   const price = await stripe.prices.retrieve(priceId);
 
   return (

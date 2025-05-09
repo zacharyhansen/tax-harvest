@@ -1,4 +1,4 @@
-fragment log on Log {
+fragment Log on Log {
   id
   createdAt
   description
@@ -9,12 +9,13 @@ fragment log on Log {
 
 query Logs($pagination: PaginationProps) {
   logs(pagination: $pagination) {
-    ...log
+    id
+    ...Log
   }
   logsCount
 }
 
-fragment logDetails on Log {
+fragment LogDetails on Log {
   id
   createdAt
   description
@@ -26,6 +27,7 @@ fragment logDetails on Log {
 
 query Log($logId: Int!) {
   log(logId: $logId) {
-    ...logDetails
+    id
+    ...LogDetails
   }
 }

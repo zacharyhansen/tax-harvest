@@ -8,7 +8,6 @@ fragment AccountItem on Account {
   key
   description
   institution
-  type
   mode
   status
   optionLevel
@@ -23,6 +22,7 @@ fragment AccountItem on Account {
   createdAt
   updatedAt
   createdBy {
+    id
     ...UserItem
   }
   _realizedProfitAndLoss {
@@ -37,6 +37,7 @@ fragment AccountItem on Account {
 
 query Account($id: String!) {
   account(id: $id) {
+    id
     ...AccountItem
   }
 }

@@ -25,7 +25,13 @@ export default function NotFoundPage() {
             Go back
           </Button>
 
-          <button className="text-sm font-semibold text-accent-foreground">
+          <button
+            className="text-sm font-semibold text-accent-foreground"
+            type="button"
+            onClick={() => {
+              window.open('https://support.repo.com', '_blank');
+            }}
+          >
             Contact support
             {' '}
             <span aria-hidden="true">&rarr;</span>

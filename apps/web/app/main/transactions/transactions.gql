@@ -2,6 +2,7 @@ fragment AccountTransactionItem on Account {
   id
   name
   authConnection {
+    id
     source
   }
 }
@@ -21,18 +22,17 @@ fragment TransactionTableItem on Transaction {
   fee
   memo
   price
-  quantity
   subtype
-  type
   transactionDate
-  assetSymbol
   account {
+    id
     ...AccountTransactionItem
   }
 }
 
 query Transactions($where: TransactionWhereInput) {
   transactions(where: $where) {
+    id
     ...TransactionTableItem
   }
 }

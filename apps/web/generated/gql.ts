@@ -12921,14 +12921,12 @@ export type UpdateAccountRealizedPAndLMutation = { __typename?: 'Mutation', upda
 
 export type AccountTableItemFragment = { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, institution: AccountInstitution, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnectionId: string, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
 
-export type AccountTableAuthConnectionFragment = { __typename?: 'AuthConnectionExt', id: string, syncedAt?: any | null, authedAt: any, source: AuthSource, _requiresReAuth: boolean };
-
 export type AccountsQueryVariables = Exact<{
   where?: InputMaybe<AccountWhereInput>;
 }>;
 
 
-export type AccountsQuery = { __typename?: 'Query', accounts: Array<{ __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, institution: AccountInstitution, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnectionId: string, positions?: Array<{ __typename?: 'Position', gainTotal?: string | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
+export type AccountsQuery = { __typename?: 'Query', accounts: Array<{ __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, institution: AccountInstitution, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnectionId: string, positions?: Array<{ __typename?: 'Position', id: string, gainTotal?: string | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
 
 export type CreateAccountForPortfolioMutationVariables = Exact<{
   accountCreateInput: AccountCreateInput;
@@ -13045,16 +13043,16 @@ export type FiniteHarvestQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FiniteHarvestQuery = { __typename?: 'Query', finiteHarvest: { __typename?: 'FiniteHarvestResult', harvestType: HarvestType, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } }, lotsCurrent: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }> } };
 
-export type AccountTransactionItemFragment = { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', source: AuthSource } };
+export type AccountTransactionItemFragment = { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', id: string, source: AuthSource } };
 
-export type TransactionTableItemFragment = { __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, account: { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', source: AuthSource } } };
+export type TransactionTableItemFragment = { __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, account: { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', id: string, source: AuthSource } } };
 
 export type TransactionsQueryVariables = Exact<{
   where?: InputMaybe<TransactionWhereInput>;
 }>;
 
 
-export type TransactionsQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, account: { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', source: AuthSource } } }> };
+export type TransactionsQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, account: { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', id: string, source: AuthSource } } }> };
 
 export type UserItemFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string };
 
@@ -13265,7 +13263,6 @@ export const AccountItemFragmentDoc = gql`
   key
   description
   institution
-  type
   mode
   status
   optionLevel
@@ -13280,6 +13277,7 @@ export const AccountItemFragmentDoc = gql`
   createdAt
   updatedAt
   createdBy {
+    id
     ...UserItem
   }
   _realizedProfitAndLoss {
@@ -13302,7 +13300,6 @@ export const AccountTableItemFragmentDoc = gql`
   externalId
   key
   institution
-  type
   mode
   status
   optionLevel
@@ -13316,22 +13313,14 @@ export const AccountTableItemFragmentDoc = gql`
   createdAt
   updatedAt
   createdBy {
+    id
     ...UserItem
   }
   authConnectionId
 }
     ${UserItemFragmentDoc}`;
-export const AccountTableAuthConnectionFragmentDoc = gql`
-    fragment AccountTableAuthConnection on AuthConnectionExt {
-  id
-  syncedAt
-  authedAt
-  source
-  _requiresReAuth
-}
-    `;
 export const LogFragmentDoc = gql`
-    fragment log on Log {
+    fragment Log on Log {
   id
   createdAt
   description
@@ -13341,7 +13330,7 @@ export const LogFragmentDoc = gql`
 }
     `;
 export const LogDetailsFragmentDoc = gql`
-    fragment logDetails on Log {
+    fragment LogDetails on Log {
   id
   createdAt
   description
@@ -13352,7 +13341,7 @@ export const LogDetailsFragmentDoc = gql`
 }
     `;
 export const LotTransactionBatchFragmentDoc = gql`
-    fragment lotTransactionBatch on LotTransactionBatch {
+    fragment LotTransactionBatch on LotTransactionBatch {
   id
   createdAt
   updatedAt
@@ -13360,7 +13349,7 @@ export const LotTransactionBatchFragmentDoc = gql`
 }
     `;
 export const LotTransactionBatchDetailsFragmentDoc = gql`
-    fragment lotTransactionBatchDetails on LotTransactionBatch {
+    fragment LotTransactionBatchDetails on LotTransactionBatch {
   id
   createdAt
   updatedAt
@@ -13410,6 +13399,7 @@ export const HarvestTableItemFragmentDoc = gql`
   amount
   label
   createdBy {
+    id
     ...UserItem
   }
 }
@@ -13477,6 +13467,7 @@ export const AccountTransactionItemFragmentDoc = gql`
   id
   name
   authConnection {
+    id
     source
   }
 }
@@ -13496,12 +13487,10 @@ export const TransactionTableItemFragmentDoc = gql`
   fee
   memo
   price
-  quantity
   subtype
-  type
   transactionDate
-  assetSymbol
   account {
+    id
     ...AccountTransactionItem
   }
 }
@@ -13692,6 +13681,7 @@ export const PositionItemFragmentDoc = gql`
 export const AccountDocument = gql`
     query Account($id: String!) {
   account(id: $id) {
+    id
     ...AccountItem
   }
 }
@@ -13810,8 +13800,10 @@ export type UpdateAccountRealizedPAndLMutationOptions = Apollo.BaseMutationOptio
 export const AccountsDocument = gql`
     query Accounts($where: AccountWhereInput) {
   accounts(where: $where) {
+    id
     ...AccountTableItem
     positions {
+      id
       gainTotal
     }
   }
@@ -13853,6 +13845,7 @@ export type AccountsQueryResult = Apollo.QueryResult<AccountsQuery, AccountsQuer
 export const CreateAccountForPortfolioDocument = gql`
     mutation CreateAccountForPortfolio($accountCreateInput: AccountCreateInput!) {
   createAccountForPortfolio(accountCreateInput: $accountCreateInput) {
+    id
     ...AccountTableItem
   }
 }
@@ -13949,7 +13942,8 @@ export type UpdateAllAssetPricesMutationOptions = Apollo.BaseMutationOptions<Upd
 export const LogsDocument = gql`
     query Logs($pagination: PaginationProps) {
   logs(pagination: $pagination) {
-    ...log
+    id
+    ...Log
   }
   logsCount
 }
@@ -13990,7 +13984,8 @@ export type LogsQueryResult = Apollo.QueryResult<LogsQuery, LogsQueryVariables>;
 export const LogDocument = gql`
     query Log($logId: Int!) {
   log(logId: $logId) {
-    ...logDetails
+    id
+    ...LogDetails
   }
 }
     ${LogDetailsFragmentDoc}`;
@@ -14030,7 +14025,8 @@ export type LogQueryResult = Apollo.QueryResult<LogQuery, LogQueryVariables>;
 export const LotTransactionBatchesDocument = gql`
     query LotTransactionBatches {
   lotTransactionBatches {
-    ...lotTransactionBatch
+    id
+    ...LotTransactionBatch
   }
 }
     ${LotTransactionBatchFragmentDoc}`;
@@ -14069,7 +14065,8 @@ export type LotTransactionBatchesQueryResult = Apollo.QueryResult<LotTransaction
 export const LotTransactionBatchDocument = gql`
     query LotTransactionBatch($lotTransactionBatchId: String!) {
   lotTransactionBatch(lotTransactionBatchId: $lotTransactionBatchId) {
-    ...lotTransactionBatchDetails
+    id
+    ...LotTransactionBatchDetails
   }
 }
     ${LotTransactionBatchDetailsFragmentDoc}`;
@@ -14109,6 +14106,7 @@ export type LotTransactionBatchQueryResult = Apollo.QueryResult<LotTransactionBa
 export const HarvestsDocument = gql`
     query Harvests($where: HarvestWhereInput) {
   harvests(where: $where) {
+    id
     ...HarvestTableItem
   }
 }
@@ -14505,6 +14503,7 @@ export type FiniteHarvestQueryResult = Apollo.QueryResult<FiniteHarvestQuery, Fi
 export const TransactionsDocument = gql`
     query Transactions($where: TransactionWhereInput) {
   transactions(where: $where) {
+    id
     ...TransactionTableItem
   }
 }
