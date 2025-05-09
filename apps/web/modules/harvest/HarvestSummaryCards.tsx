@@ -1,4 +1,3 @@
-import { ShuffleIcon } from '@radix-ui/react-icons';
 import { Badge } from '@repo/ui/components/badge';
 import DataCard from '@repo/ui/components/dataCard';
 import { cn } from '@repo/ui/utils';
@@ -35,9 +34,6 @@ export default function HarvestSummaryCards() {
         icon={<Wheat className="text-primary" />}
         description="The total dollar amount that can be harvested across accounts in this portfolio."
       />
-      <div className="flex items-center px-4">
-        <ShuffleIcon className="rotate-180" height={20} width={20} />
-      </div>
       <DataCard
         loading={loading}
         data={(

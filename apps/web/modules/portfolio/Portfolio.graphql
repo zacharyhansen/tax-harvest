@@ -13,6 +13,7 @@ fragment PortfolioDetailItem on Portfolio {
   harvestTickerBucketDollarSizeShort
   harvestTickerBucketLowerLimitLong
   harvestTickerBucketLowerLimitShort
+  minimumLotPAndL
   accounts {
     name
     id
@@ -34,7 +35,7 @@ query Portfolios {
   }
 }
 
-mutation createPortfolio($portfolioInsertObject: PortfolioCreateInput!) {
+mutation CreatePortfolio($portfolioInsertObject: PortfolioCreateInput!) {
   createPortfolio(portfolioInsertObject: $portfolioInsertObject) {
     ...PortfolioDetailItem
   }

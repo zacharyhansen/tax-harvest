@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
+import { Decimal } from 'decimal.js'
+
 import { SelectExpression } from 'kysely'
 
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
-
 import { Database } from '../database/database'
 import { DB } from '../database/db.d'
 import { PrismaService } from '../prisma/prisma.service'
@@ -76,10 +77,15 @@ export class LotService {
     lotIds,
     lotValueType,
     portfolioId,
+    /**
+     * The minimum total P&L for the lot as an absolute value - should be used in conjuction with lotValueType
+     */
+    minTotalPAndL,
   }: {
     portfolioId: string
     lotIds?: string[]
     lotValueType?: LotValueType
+    minTotalPAndL?: Decimal
   }): Promise<LotCurrent[]> {
     let query = this.db
       .selectFrom('LotCurrent')
@@ -98,10 +104,17 @@ export class LotService {
 
     if (lotValueType === LotValueType.GAIN) {
       query = query.where('LotCurrent.gainTotal', '>', '0')
+      if (minTotalPAndL) {
+        query = query.where('LotCurrent.gainTotal', '>=', minTotalPAndL.abs().toString())
+      }
     }
     else if (lotValueType === LotValueType.LOSS) {
       query = query.where('LotCurrent.gainTotal', '<', '0')
+      if (minTotalPAndL) {
+        query = query.where('LotCurrent.gainTotal', '<=', minTotalPAndL.abs().neg().toString())
+      }
     }
+
     return query.orderBy('dollarPerSharePnL', 'desc').execute() as Promise<LotCurrent[]>
   }
 

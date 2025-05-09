@@ -8846,6 +8846,8 @@ export type Portfolio = {
   harvestTickerBucketLowerLimitShort: Scalars['Decimal']['output'];
   harvests?: Maybe<Array<Harvest>>;
   id: Scalars['ID']['output'];
+  /** Minimum p and l for a lot to be considered harvestable */
+  minimumLotPAndL: Scalars['Decimal']['output'];
   name: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   usersOnPortfolios?: Maybe<Array<UsersOnPortfolios>>;
@@ -8859,6 +8861,7 @@ export type PortfolioAvgAggregate = {
   harvestTickerBucketDollarSizeShort?: Maybe<Scalars['Decimal']['output']>;
   harvestTickerBucketLowerLimitLong?: Maybe<Scalars['Decimal']['output']>;
   harvestTickerBucketLowerLimitShort?: Maybe<Scalars['Decimal']['output']>;
+  minimumLotPAndL?: Maybe<Scalars['Decimal']['output']>;
 };
 
 export type PortfolioCount = {
@@ -8883,6 +8886,7 @@ export type PortfolioCountAggregate = {
   harvestTickerBucketLowerLimitLong: Scalars['Int']['output'];
   harvestTickerBucketLowerLimitShort: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
+  minimumLotPAndL: Scalars['Int']['output'];
   name: Scalars['Int']['output'];
   updatedAt: Scalars['Int']['output'];
 };
@@ -8902,6 +8906,7 @@ export type PortfolioCreateInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
   harvests?: InputMaybe<HarvestCreateNestedManyWithoutPortfolioInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
@@ -8916,6 +8921,7 @@ export type PortfolioCreateManyCreatedByInput = {
   harvestTickerBucketLowerLimitLong?: InputMaybe<Scalars['Decimal']['input']>;
   harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
@@ -9006,6 +9012,7 @@ export type PortfolioCreateWithoutAccountsInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
   harvests?: InputMaybe<HarvestCreateNestedManyWithoutPortfolioInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
@@ -9025,6 +9032,7 @@ export type PortfolioCreateWithoutAuthConnectionsInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
   harvests?: InputMaybe<HarvestCreateNestedManyWithoutPortfolioInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
@@ -9044,6 +9052,7 @@ export type PortfolioCreateWithoutCreatedByInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
   harvests?: InputMaybe<HarvestCreateNestedManyWithoutPortfolioInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
@@ -9063,6 +9072,7 @@ export type PortfolioCreateWithoutHarvestsInput = {
   harvestTickerBucketLowerLimitLong?: InputMaybe<Scalars['Decimal']['input']>;
   harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
@@ -9082,6 +9092,7 @@ export type PortfolioCreateWithoutLotTransactionBatchInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
   harvests?: InputMaybe<HarvestCreateNestedManyWithoutPortfolioInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
@@ -9102,6 +9113,7 @@ export type PortfolioCreateWithoutUsersOnPortfoliosInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
   harvests?: InputMaybe<HarvestCreateNestedManyWithoutPortfolioInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
@@ -9123,6 +9135,7 @@ export type PortfolioMaxAggregate = {
   harvestTickerBucketLowerLimitLong?: Maybe<Scalars['Decimal']['output']>;
   harvestTickerBucketLowerLimitShort?: Maybe<Scalars['Decimal']['output']>;
   id?: Maybe<Scalars['String']['output']>;
+  minimumLotPAndL?: Maybe<Scalars['Decimal']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
@@ -9138,6 +9151,7 @@ export type PortfolioMinAggregate = {
   harvestTickerBucketLowerLimitLong?: Maybe<Scalars['Decimal']['output']>;
   harvestTickerBucketLowerLimitShort?: Maybe<Scalars['Decimal']['output']>;
   id?: Maybe<Scalars['String']['output']>;
+  minimumLotPAndL?: Maybe<Scalars['Decimal']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
@@ -9165,6 +9179,7 @@ export type PortfolioScalarWhereInput = {
   harvestTickerBucketLowerLimitLong?: InputMaybe<DecimalFilter>;
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFilter>;
   id?: InputMaybe<UuidFilter>;
+  minimumLotPAndL?: InputMaybe<DecimalFilter>;
   name?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
@@ -9177,6 +9192,7 @@ export type PortfolioSumAggregate = {
   harvestTickerBucketDollarSizeShort?: Maybe<Scalars['Decimal']['output']>;
   harvestTickerBucketLowerLimitLong?: Maybe<Scalars['Decimal']['output']>;
   harvestTickerBucketLowerLimitShort?: Maybe<Scalars['Decimal']['output']>;
+  minimumLotPAndL?: Maybe<Scalars['Decimal']['output']>;
 };
 
 export type PortfolioSummary = {
@@ -9220,6 +9236,7 @@ export type PortfolioUpdateInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   harvests?: InputMaybe<HarvestUpdateManyWithoutPortfolioNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
@@ -9234,6 +9251,7 @@ export type PortfolioUpdateManyMutationInput = {
   harvestTickerBucketLowerLimitLong?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -9341,6 +9359,7 @@ export type PortfolioUpdateWithoutAccountsInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   harvests?: InputMaybe<HarvestUpdateManyWithoutPortfolioNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
@@ -9360,6 +9379,7 @@ export type PortfolioUpdateWithoutAuthConnectionsInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   harvests?: InputMaybe<HarvestUpdateManyWithoutPortfolioNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
@@ -9379,6 +9399,7 @@ export type PortfolioUpdateWithoutCreatedByInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   harvests?: InputMaybe<HarvestUpdateManyWithoutPortfolioNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
@@ -9398,6 +9419,7 @@ export type PortfolioUpdateWithoutHarvestsInput = {
   harvestTickerBucketLowerLimitLong?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
@@ -9417,6 +9439,7 @@ export type PortfolioUpdateWithoutLotTransactionBatchInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   harvests?: InputMaybe<HarvestUpdateManyWithoutPortfolioNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
@@ -9437,6 +9460,7 @@ export type PortfolioUpdateWithoutUsersOnPortfoliosInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   harvests?: InputMaybe<HarvestUpdateManyWithoutPortfolioNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -9496,6 +9520,7 @@ export type PortfolioWhereInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFilter>;
   harvests?: InputMaybe<HarvestListRelationFilter>;
   id?: InputMaybe<UuidFilter>;
+  minimumLotPAndL?: InputMaybe<DecimalFilter>;
   name?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosListRelationFilter>;
@@ -9520,6 +9545,7 @@ export type PortfolioWhereUniqueInput = {
   harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFilter>;
   harvests?: InputMaybe<HarvestListRelationFilter>;
   id?: InputMaybe<Scalars['String']['input']>;
+  minimumLotPAndL?: InputMaybe<DecimalFilter>;
   name?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   usersOnPortfolios?: InputMaybe<UsersOnPortfoliosListRelationFilter>;
@@ -10768,6 +10794,7 @@ export type QueryLogsArgs = {
 export type QueryLotCurrentArgs = {
   lotIds?: InputMaybe<Array<Scalars['String']['input']>>;
   lotValueType?: InputMaybe<LotValueType>;
+  minTotalPAndL?: InputMaybe<Scalars['Float']['input']>;
 };
 
 
@@ -12994,14 +13021,14 @@ export type UpdatePortfolioMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePortfolioMutation = { __typename?: 'Mutation', updatePortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
+export type UpdatePortfolioMutation = { __typename?: 'Mutation', updatePortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type PortfolioByIdQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type PortfolioByIdQuery = { __typename?: 'Query', portfolioById: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
+export type PortfolioByIdQuery = { __typename?: 'Query', portfolioById: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type StripeSessionQueryVariables = Exact<{
   stripePriceId: Scalars['String']['input'];
@@ -13178,7 +13205,7 @@ export type PortfolioLotsQuery = { __typename?: 'Query', lots: Array<{ __typenam
 
 export type PortfolioItemFragment = { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null };
 
-export type PortfolioDetailItemFragment = { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null };
+export type PortfolioDetailItemFragment = { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null };
 
 export type PortfoliosQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -13190,7 +13217,7 @@ export type CreatePortfolioMutationVariables = Exact<{
 }>;
 
 
-export type CreatePortfolioMutation = { __typename?: 'Mutation', createPortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
+export type CreatePortfolioMutation = { __typename?: 'Mutation', createPortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type PortfolioAuthedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -13615,6 +13642,7 @@ export const PortfolioDetailItemFragmentDoc = gql`
   harvestTickerBucketDollarSizeShort
   harvestTickerBucketLowerLimitLong
   harvestTickerBucketLowerLimitShort
+  minimumLotPAndL
   accounts {
     name
     id
@@ -14434,6 +14462,7 @@ export const FiniteHarvestDocument = gql`
       }
     }
     lotsCurrent {
+      id
       ...FiniteHarvestLotItem
     }
     harvestType
@@ -15243,7 +15272,7 @@ export type PortfoliosLazyQueryHookResult = ReturnType<typeof usePortfoliosLazyQ
 export type PortfoliosSuspenseQueryHookResult = ReturnType<typeof usePortfoliosSuspenseQuery>;
 export type PortfoliosQueryResult = Apollo.QueryResult<PortfoliosQuery, PortfoliosQueryVariables>;
 export const CreatePortfolioDocument = gql`
-    mutation createPortfolio($portfolioInsertObject: PortfolioCreateInput!) {
+    mutation CreatePortfolio($portfolioInsertObject: PortfolioCreateInput!) {
   createPortfolio(portfolioInsertObject: $portfolioInsertObject) {
     ...PortfolioDetailItem
   }

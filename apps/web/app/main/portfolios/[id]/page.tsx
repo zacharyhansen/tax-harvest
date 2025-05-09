@@ -34,6 +34,7 @@ const formSchema = z.object({
   harvestTickerBucketLowerLimitLong: zodNumber.pipe(z.coerce.number().gte(0)),
   harvestTickerBucketLowerLimitShort: zodNumber.pipe(z.coerce.number().gte(0)),
   name: z.string().min(3),
+  minimumLotPAndL: zodNumber.pipe(z.coerce.number().gte(0)),
 });
 
 export default function PortfolioPage({ params }: { params: { id: string } }) {
@@ -65,6 +66,7 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
 
   const { form, handleSubmit } = useStandardForm<z.infer<typeof formSchema>>({
     defaultValues: {
+      minimumLotPAndL: Number(portfolio.minimumLotPAndL),
       harvestCycleWeeks: portfolio.harvestCycleWeeks,
       harvestShareDollarThreshold: Number(
         portfolio.harvestShareDollarThreshold,
@@ -91,12 +93,16 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
       harvestTickerBucketDollarSizeShort,
       harvestTickerBucketLowerLimitLong,
       harvestTickerBucketLowerLimitShort,
+      minimumLotPAndL,
       name,
     }) => {
       toast.promise(
         update({
           variables: {
             data: {
+              minimumLotPAndL: {
+                set: minimumLotPAndL.toString(),
+              },
               harvestCycleWeeks: {
                 set: harvestCycleWeeks,
               },
@@ -141,6 +147,7 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
             harvestTickerBucketLowerLimitShort: Number(
               result.updatePortfolio.harvestTickerBucketLowerLimitShort,
             ),
+            minimumLotPAndL: Number(result.updatePortfolio.minimumLotPAndL),
           });
         }),
         {
@@ -169,6 +176,13 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
             {/* Miscellaneous Inputs */}
             <div className="space-y-4">
               <InputField name="name" label="Portfolio Name" />
+              <InputField
+                name="minimumLotPAndL"
+                startIcon={DollarSign}
+                label="Minimum Lot P/L"
+                type="number"
+                description="The minimum dollar amount profit or loss per share for a single share to be considered for harvest."
+              />
               <InputField
                 name="harvestCycleWeeks"
                 label="Harvest Cycle - Number of Weeks"

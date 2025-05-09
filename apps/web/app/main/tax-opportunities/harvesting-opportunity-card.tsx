@@ -1,60 +1,61 @@
 import type { FiniteHarvestLotItemFragment } from '~/generated/gql';
 import { Button } from '@repo/ui/components/button';
-import { Decimal } from 'decimal.js';
+import { cn } from '@repo/ui/utils';
 
+import { Decimal } from 'decimal.js';
 import { Check } from 'lucide-react';
-import { Format } from '~/modules/utils';
+import { HarvestType } from '~/generated/gql';
+import { clientEnvironment } from '~/lib/env/clientEnvironment';
+import { Format, MoneyUtil } from '~/modules/utils';
 
 type HarvestingOpportunityCardProps = {
   lot: FiniteHarvestLotItemFragment;
+  harvestType: HarvestType;
+  netPosition: number;
 };
 
 export function HarvestingOpportunityCard({
   lot,
+  harvestType,
+  netPosition,
 }: HarvestingOpportunityCardProps) {
   // Determine if this is a gain position by comparing current value to cost basis
   const costBasis = new Decimal(lot.costBasis ?? 0);
   const currentValue = new Decimal(lot.lastPrice ?? 0).mul(
     lot.remainingQty ?? 0,
   );
-  const isGain = currentValue.gt(costBasis);
-
-  // Calculate the unrealized gain/loss
-  const unrealizedGainLoss = costBasis.minus(currentValue).abs();
-  const symbol = lot.symbol;
   const purchaseDate = lot.acquiredDate
     ? new Date(lot.acquiredDate).toLocaleDateString()
     : 'Unknown';
-  const quantity = lot.remainingQty || 0;
-
-  // Calculate tax savings (assume 25% rate for gains if not provided by backend)
-  let potentialTaxSavings = unrealizedGainLoss.mul(0.3);
-  // If we're showing a gain position but tax savings is 0, let's calculate an estimated tax savings
-  if (isGain && potentialTaxSavings.lte(0)) {
-    // Assume 25% tax rate for capital gains
-    potentialTaxSavings = unrealizedGainLoss.mul(0.3);
-  }
+  const quantity = new Decimal(lot.remainingQty);
+  const sellQuantity = Math.min(new Decimal(netPosition).abs().div(lot.dollarPerSharePnL).abs().toNumber(), quantity.toNumber());
+  const taxSavings = new Decimal(lot.gainTotal).mul(clientEnvironment.NEXT_PUBLIC_TAX_PERCENTAGE);
+  const colorClass = MoneyUtil.colored(taxSavings.toNumber());
 
   return (
-    <div className="mb-6 overflow-hidden rounded-lg border bg-muted shadow-md">
+    <div className="mb-2 overflow-hidden rounded-lg border bg-muted shadow-md">
       {/* Header row */}
       <div className="flex items-center justify-between bg-muted px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="flex size-8 items-center justify-center rounded-full bg-muted-foreground font-bold uppercase text-background">
-            {symbol.substring(0, 2)}
+          <div className="flex h-8 items-center justify-center rounded-lg bg-muted-foreground px-2 font-bold uppercase text-background">
+            {lot.symbol}
           </div>
           <div>
-            <h3 className="font-semibold">{symbol}</h3>
+            <h3 className="font-semibold">{lot.symbol}</h3>
             <div className="flex items-center text-xs">
-              {/* {lot.opportunityType === 'loss' ? (
-                <span className="text-muted-foreground">Harvest Loss</span>
-              ) : lot.opportunityType === 'gain' ? (
-                <span className="text-muted-foreground">Offset Gains</span>
-              ) : (
-                <span className="text-muted-foreground">
-                  {isGain ? 'Offset Gains' : 'Harvest Loss'}
-                </span>
-              )} */}
+              {harvestType === HarvestType.ReduceTaxes
+                ? (
+                    <span className="text-muted-foreground">Harvest Loss</span>
+                  )
+                : harvestType === HarvestType.CaptureGainsTaxFree
+                  ? (
+                      <span className="text-muted-foreground">Offset Gains</span>
+                    )
+                  : (
+                      <span className="text-muted-foreground">
+                        {harvestType === HarvestType.ReduceCostBasis ? 'Harvest Loss' : 'Offset Gains'}
+                      </span>
+                    )}
             </div>
           </div>
         </div>
@@ -63,7 +64,7 @@ export function HarvestingOpportunityCard({
           <Button>
             <Check className="mr-2 size-4" />
             {' '}
-            Add Reminder
+            Add to Harvests
           </Button>
         </div>
       </div>
@@ -75,7 +76,9 @@ export function HarvestingOpportunityCard({
           <div>
             <div className="text-sm text-muted-foreground">Quantity</div>
             <div className="text-base">
-              {Format.roundShares(quantity)}
+              {Format.roundShares(sellQuantity) === Format.roundShares(quantity)
+                ? Format.roundShares(sellQuantity)
+                : `${Format.roundShares(sellQuantity)} / ${Format.roundShares(quantity)}`}
               {' '}
               shares
             </div>
@@ -105,21 +108,19 @@ export function HarvestingOpportunityCard({
         <div className="mt-4 flex w-full flex-col justify-end md:mt-0 md:w-auto md:flex-row md:gap-8">
           <div className="mb-2 md:mb-0">
             <div className="text-sm text-[#AAAAAA]">
-              {isGain ? 'Potential Gain' : 'Potential Loss'}
+              {harvestType === HarvestType.ReduceTaxes ? 'Potential Loss' : 'Potential Gain'}
             </div>
             <div
-              className={`text-base ${isGain ? 'text-green-500' : 'text-red-500'}`}
+              className={cn('text-base', colorClass)}
             >
-              {isGain
-                ? Format.money(unrealizedGainLoss.toString())
-                : `-${Format.money(unrealizedGainLoss.toString())}`}
+              {Format.money(lot.gainTotal)}
             </div>
           </div>
 
           <div>
             <div className="text-sm text-[#AAAAAA]">Tax Savings</div>
             <div className="text-base text-green-500">
-              {Format.money(potentialTaxSavings.toString())}
+              {Format.money(taxSavings.abs().toString())}
             </div>
           </div>
         </div>

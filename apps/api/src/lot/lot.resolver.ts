@@ -78,11 +78,17 @@ export class LotResolver {
       type: () => [String],
     })
     lotIds: string[],
+    @Args('minTotalPAndL', {
+      nullable: true,
+      type: () => Number,
+    })
+    minTotalPAndL?: number,
   ) {
     return this.lotService.lotCurrent({
       lotIds,
       lotValueType,
       portfolioId: metadata.portfolioId,
+      minTotalPAndL,
     })
   }
 }

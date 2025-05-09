@@ -17,7 +17,7 @@ import { cn } from '@repo/ui/utils';
 import { ArrowUpCircle, BarChart3, Info, TrendingDown } from 'lucide-react';
 
 import Link from 'next/link';
-import { useFiniteHarvestQuery } from '~/generated/gql';
+import { HarvestType, useFiniteHarvestQuery } from '~/generated/gql';
 
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
@@ -35,23 +35,14 @@ import { HarvestingOpportunityCard } from './harvesting-opportunity-card';
 export default function TaxOpportunitiesPage() {
   const { data, error, loading } = useFiniteHarvestQuery();
 
-  // Display a loading spinner while data is being fetched
-  if (loading) {
-    return <LoadingPage />;
-  }
-
-  // Display an error message if data fetching failed
   if (error) {
     return <ErrorPage />;
   }
 
-  // Get the filtered data from the API
-  const taxStatus = {
-    netRealizedPosition: 0,
-    isNeutralAccount: false,
-  };
+  if (loading || !data) {
+    return <LoadingPage />;
+  }
 
-  const opportunities = [];
   // eslint-disable-next-line ts/no-explicit-any
   const pairs: any[] = [];
 
@@ -87,9 +78,9 @@ export default function TaxOpportunitiesPage() {
                 </span>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
-                {taxStatus.isNeutralAccount
+                {data?.finiteHarvest.harvestType === HarvestType.ReduceCostBasis
                   ? 'Balanced position: Look for cost basis management opportunities'
-                  : taxStatus.netRealizedPosition > 0
+                  : data?.finiteHarvest.harvestType === HarvestType.ReduceTaxes
                     ? 'Net realized gain: Consider harvesting losses'
                     : 'Net realized loss: Consider harvesting gains'}
               </p>
@@ -199,7 +190,7 @@ export default function TaxOpportunitiesPage() {
         {/* Main Content Area */}
         <div className="space-y-8">
           {/* For neutral accounts, show cost basis pairs */}
-          {taxStatus.isNeutralAccount && pairs.length > 0 && (
+          {pairs.length > 0 && (
             <div className="space-y-6">
               {/* Cost basis reset strategy header removed as requested */}
 
@@ -234,13 +225,12 @@ export default function TaxOpportunitiesPage() {
             </div>
           )}
 
-          {/* For accounts with net realized positions, show individual opportunities */}
           { data?.finiteHarvest?.lotsCurrent?.length
             ? (
                 <div className="space-y-6">
                   <div className="flex flex-col space-y-2">
                     <div className="flex items-center space-x-2">
-                      {taxStatus.netRealizedPosition > 0
+                      {data.finiteHarvest.summary.realized.gainTotal > 0
                         ? (
                             <TrendingDown className="size-5 text-red-500" />
                           )
@@ -248,13 +238,13 @@ export default function TaxOpportunitiesPage() {
                             <ArrowUpCircle className="size-5 text-green-500" />
                           )}
                       <h2 className="text-lg font-semibold">
-                        {taxStatus.netRealizedPosition > 0
+                        {data.finiteHarvest.summary.realized.gainTotal > 0
                           ? 'Loss Harvesting Opportunities'
                           : 'Gain Harvesting Opportunities'}
                       </h2>
                     </div>
                     <p className="text-muted-foreground">
-                      {taxStatus.netRealizedPosition > 0
+                      {data.finiteHarvest.summary.realized.gainTotal > 0
                         ? 'Harvest these losses to offset your realized gains and reduce your tax liability'
                         : 'Harvest these gains to offset your realized losses and optimize your tax position'}
                     </p>
@@ -262,7 +252,12 @@ export default function TaxOpportunitiesPage() {
 
                   <div className="mt-8 grid grid-cols-1 gap-8">
                     {data?.finiteHarvest?.lotsCurrent?.map(lot => (
-                      <HarvestingOpportunityCard key={lot.id} lot={lot} />
+                      <HarvestingOpportunityCard
+                        key={lot.id}
+                        lot={lot}
+                        harvestType={data.finiteHarvest.harvestType}
+                        netPosition={data.finiteHarvest.summary.realized.gainTotal}
+                      />
                     ))}
                   </div>
                 </div>
@@ -270,21 +265,8 @@ export default function TaxOpportunitiesPage() {
             : null}
 
           {/* No opportunities message */}
-          {opportunities.length === 0 && pairs.length === 0 && (
+          {!data?.finiteHarvest?.lotsCurrent?.length && (
             <div className="space-y-6">
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center space-x-2">
-                  <Info className="size-5 text-primary" />
-                  <h2 className="text-lg font-semibold">
-                    No Tax Harvesting Opportunities
-                  </h2>
-                </div>
-                <p className="text-muted-foreground">
-                  We couldn&apos;t find any suitable tax harvesting
-                  opportunities for your portfolio at this time
-                </p>
-              </div>
-
               <div className="overflow-hidden rounded-xl border-0">
                 <div className="flex flex-col items-center justify-center p-10">
                   <div className="mb-4 rounded-full p-3">

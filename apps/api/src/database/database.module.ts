@@ -34,11 +34,11 @@ import { Database } from './database'
                 })
               }
               else {
-                // console.info("Query executed :", {
+                // console.info('Query executed :', {
                 //   milliseconds: event.queryDurationMillis,
                 //   sql: event.query.sql,
                 //   params: event.query.parameters,
-                // });
+                // })
               }
             },
             dialect: new PostgresDialect({

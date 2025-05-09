@@ -8766,6 +8766,9 @@ type Portfolio {
   harvestTickerBucketLowerLimitShort: Decimal!
   harvests: [Harvest!]
   id: ID!
+
+  """Minimum p and l for a lot to be considered harvestable"""
+  minimumLotPAndL: Decimal!
   name: String!
   updatedAt: DateTime!
   usersOnPortfolios: [UsersOnPortfolios!]
@@ -8778,6 +8781,7 @@ type PortfolioAvgAggregate {
   harvestTickerBucketDollarSizeShort: Decimal
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
+  minimumLotPAndL: Decimal
 }
 
 type PortfolioCount {
@@ -8800,6 +8804,7 @@ type PortfolioCountAggregate {
   harvestTickerBucketLowerLimitLong: Int!
   harvestTickerBucketLowerLimitShort: Int!
   id: Int!
+  minimumLotPAndL: Int!
   name: Int!
   updatedAt: Int!
 }
@@ -8819,6 +8824,7 @@ input PortfolioCreateInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
@@ -8833,6 +8839,7 @@ input PortfolioCreateManyCreatedByInput {
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
 }
@@ -8923,6 +8930,7 @@ input PortfolioCreateWithoutAccountsInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
@@ -8942,6 +8950,7 @@ input PortfolioCreateWithoutAuthConnectionsInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
@@ -8961,6 +8970,7 @@ input PortfolioCreateWithoutCreatedByInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
@@ -8980,6 +8990,7 @@ input PortfolioCreateWithoutHarvestsInput {
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
@@ -8999,6 +9010,7 @@ input PortfolioCreateWithoutLotTransactionBatchInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
@@ -9019,6 +9031,7 @@ input PortfolioCreateWithoutUsersOnPortfoliosInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
 }
@@ -9039,6 +9052,7 @@ type PortfolioMaxAggregate {
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
 }
@@ -9053,6 +9067,7 @@ type PortfolioMinAggregate {
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
   id: String
+  minimumLotPAndL: Decimal
   name: String
   updatedAt: DateTime
 }
@@ -9080,6 +9095,7 @@ input PortfolioScalarWhereInput {
   harvestTickerBucketLowerLimitLong: DecimalFilter
   harvestTickerBucketLowerLimitShort: DecimalFilter
   id: UuidFilter
+  minimumLotPAndL: DecimalFilter
   name: StringFilter
   updatedAt: DateTimeFilter
 }
@@ -9091,6 +9107,7 @@ type PortfolioSumAggregate {
   harvestTickerBucketDollarSizeShort: Decimal
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
+  minimumLotPAndL: Decimal
 }
 
 type PortfolioSummary {
@@ -9131,6 +9148,7 @@ input PortfolioUpdateInput {
   harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
   harvests: HarvestUpdateManyWithoutPortfolioNestedInput
   id: StringFieldUpdateOperationsInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
@@ -9145,6 +9163,7 @@ input PortfolioUpdateManyMutationInput {
   harvestTickerBucketLowerLimitLong: DecimalFieldUpdateOperationsInput
   harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
@@ -9252,6 +9271,7 @@ input PortfolioUpdateWithoutAccountsInput {
   harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
   harvests: HarvestUpdateManyWithoutPortfolioNestedInput
   id: StringFieldUpdateOperationsInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
@@ -9271,6 +9291,7 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
   harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
   harvests: HarvestUpdateManyWithoutPortfolioNestedInput
   id: StringFieldUpdateOperationsInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
@@ -9290,6 +9311,7 @@ input PortfolioUpdateWithoutCreatedByInput {
   harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
   harvests: HarvestUpdateManyWithoutPortfolioNestedInput
   id: StringFieldUpdateOperationsInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
@@ -9309,6 +9331,7 @@ input PortfolioUpdateWithoutHarvestsInput {
   harvestTickerBucketLowerLimitLong: DecimalFieldUpdateOperationsInput
   harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
@@ -9328,6 +9351,7 @@ input PortfolioUpdateWithoutLotTransactionBatchInput {
   harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
   harvests: HarvestUpdateManyWithoutPortfolioNestedInput
   id: StringFieldUpdateOperationsInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
@@ -9348,6 +9372,7 @@ input PortfolioUpdateWithoutUsersOnPortfoliosInput {
   harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
   harvests: HarvestUpdateManyWithoutPortfolioNestedInput
   id: StringFieldUpdateOperationsInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
@@ -9407,6 +9432,7 @@ input PortfolioWhereInput {
   harvestTickerBucketLowerLimitShort: DecimalFilter
   harvests: HarvestListRelationFilter
   id: UuidFilter
+  minimumLotPAndL: DecimalFilter
   name: StringFilter
   updatedAt: DateTimeFilter
   usersOnPortfolios: UsersOnPortfoliosListRelationFilter
@@ -9431,6 +9457,7 @@ input PortfolioWhereUniqueInput {
   harvestTickerBucketLowerLimitShort: DecimalFilter
   harvests: HarvestListRelationFilter
   id: String
+  minimumLotPAndL: DecimalFilter
   name: StringFilter
   updatedAt: DateTimeFilter
   usersOnPortfolios: UsersOnPortfoliosListRelationFilter
@@ -10581,7 +10608,7 @@ type Query {
   logsCount: Int!
 
   """Lot current view"""
-  lotCurrent(lotIds: [String!], lotValueType: LotValueType): [LotCurrent!]!
+  lotCurrent(lotIds: [String!], lotValueType: LotValueType, minTotalPAndL: Float): [LotCurrent!]!
   lotTransactionBatch(lotTransactionBatchId: String!): LotTransactionBatch
   lotTransactionBatches(orderBy: LotTransactionBatchOrderByRelationAggregateInput): [LotTransactionBatch!]!
   lots(includeTaxAdvantaged: Boolean, where: LotWhereInput): [Lot!]!

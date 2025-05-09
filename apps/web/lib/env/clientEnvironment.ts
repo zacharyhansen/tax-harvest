@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const clientEnvironment = createEnv({
   client: {
     NEXT_PUBLIC_CORE_SERVER_URL: z.string(),
-    NEXT_PUBLIC_TAX_PERCENTAGE: z.coerce.number().default(30),
+    NEXT_PUBLIC_TAX_PERCENTAGE: z.coerce.number().default(30).transform(val => val / 100),
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string(),
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string(),
     NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string(),

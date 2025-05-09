@@ -60,6 +60,8 @@ model Portfolio {
   /// How often should we harvest for the portfolio
   harvestCycleWeeks Int      @default(4)
 
+  /// Minimum p and l for a lot to be considered harvestable
+  minimumLotPAndL                Decimal @default(100) @db.Decimal(14, 2)
   // Harvest Fields
   /// How much $ amount does a single share need to exceed to be a valid harvest share (i.e. shares with a p/l lower we shouldnt even care about)
   harvestShareDollarThreshold        Decimal @default(".01") @db.Decimal(14, 2)

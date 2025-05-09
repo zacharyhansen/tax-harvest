@@ -26,6 +26,7 @@ query FiniteHarvest {
       }
     }
     lotsCurrent {
+      id
       ...FiniteHarvestLotItem
     }
     harvestType

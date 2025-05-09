@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { AccountInstitution, PrismaClient } from '@prisma/client'
 
-import { copycat, faker } from '@snaplet/copycat'
+import { copycat } from '@snaplet/copycat'
 import { createSeedClient } from '@snaplet/seed'
 
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
@@ -37,7 +37,7 @@ async function main() {
   await seed.$resetDatabase()
   await runSqlFile('prisma/seed/insert-assets.sql')
 
-  const { User, Portfolio } = await seed.User(x => [{
+  const { User, Portfolio } = await seed.User(() => [{
     email: 'zach@seed.com',
     id: mainUserId,
     name: '(seed) Zachary Hansen',
@@ -110,7 +110,7 @@ async function main() {
               Lot: () => exampleLots,
               skipSetup: true,
               RealizedPAndL: () => [{
-                shortTerm: '-10000',
+                shortTerm: '-3000',
                 year: new Date().getFullYear(),
               }],
             },

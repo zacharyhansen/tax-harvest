@@ -314,6 +314,7 @@ export enum PortfolioScalarFieldEnum {
     createdById = "createdById",
     name = "name",
     harvestCycleWeeks = "harvestCycleWeeks",
+    minimumLotPAndL = "minimumLotPAndL",
     harvestShareDollarThreshold = "harvestShareDollarThreshold",
     harvestTickerBucketDollarSizeLong = "harvestTickerBucketDollarSizeLong",
     harvestTickerBucketLowerLimitLong = "harvestTickerBucketLowerLimitLong",
@@ -39833,6 +39834,8 @@ export class PortfolioAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     harvestCycleWeeks?: true;
     @Field(() => Boolean, {nullable:true})
+    minimumLotPAndL?: true;
+    @Field(() => Boolean, {nullable:true})
     harvestShareDollarThreshold?: true;
     @Field(() => Boolean, {nullable:true})
     harvestTickerBucketDollarSizeLong?: true;
@@ -39849,6 +39852,8 @@ export class PortfolioAvgAggregate {
     @Field(() => Float, {nullable:true})
     harvestCycleWeeks?: number;
     @Field(() => GraphQLDecimal, {nullable:true})
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     harvestTickerBucketDollarSizeLong?: Decimal;
@@ -39864,6 +39869,8 @@ export class PortfolioAvgAggregate {
 export class PortfolioAvgOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     harvestCycleWeeks?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    minimumLotPAndL?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestShareDollarThreshold?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
@@ -39890,6 +39897,8 @@ export class PortfolioCountAggregateInput {
     name?: true;
     @Field(() => Boolean, {nullable:true})
     harvestCycleWeeks?: true;
+    @Field(() => Boolean, {nullable:true})
+    minimumLotPAndL?: true;
     @Field(() => Boolean, {nullable:true})
     harvestShareDollarThreshold?: true;
     @Field(() => Boolean, {nullable:true})
@@ -39919,6 +39928,8 @@ export class PortfolioCountAggregate {
     @Field(() => Int, {nullable:false})
     harvestCycleWeeks!: number;
     @Field(() => Int, {nullable:false})
+    minimumLotPAndL!: number;
+    @Field(() => Int, {nullable:false})
     harvestShareDollarThreshold!: number;
     @Field(() => Int, {nullable:false})
     harvestTickerBucketDollarSizeLong!: number;
@@ -39946,6 +39957,8 @@ export class PortfolioCountOrderByAggregateInput {
     name?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestCycleWeeks?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    minimumLotPAndL?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestShareDollarThreshold?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
@@ -39998,6 +40011,10 @@ export class PortfolioCreateManyCreatedByInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -40031,6 +40048,10 @@ export class PortfolioCreateManyInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -40232,6 +40253,10 @@ export class PortfolioCreateWithoutAccountsInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -40281,6 +40306,10 @@ export class PortfolioCreateWithoutAuthConnectionsInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -40336,6 +40365,10 @@ export class PortfolioCreateWithoutCreatedByInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -40385,6 +40418,10 @@ export class PortfolioCreateWithoutHarvestsInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -40440,6 +40477,10 @@ export class PortfolioCreateWithoutLogInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -40489,6 +40530,10 @@ export class PortfolioCreateWithoutLotTransactionBatchInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -40544,6 +40589,10 @@ export class PortfolioCreateWithoutUsersOnPortfoliosInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -40593,6 +40642,10 @@ export class PortfolioCreateInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -40685,6 +40738,8 @@ export class PortfolioGroupBy {
     @Field(() => Int, {nullable:false})
     harvestCycleWeeks!: number;
     @Field(() => GraphQLDecimal, {nullable:false})
+    minimumLotPAndL!: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:false})
     harvestShareDollarThreshold!: Decimal;
     @Field(() => GraphQLDecimal, {nullable:false})
     harvestTickerBucketDollarSizeLong!: Decimal;
@@ -40734,6 +40789,8 @@ export class PortfolioMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     harvestCycleWeeks?: true;
     @Field(() => Boolean, {nullable:true})
+    minimumLotPAndL?: true;
+    @Field(() => Boolean, {nullable:true})
     harvestShareDollarThreshold?: true;
     @Field(() => Boolean, {nullable:true})
     harvestTickerBucketDollarSizeLong?: true;
@@ -40759,6 +40816,8 @@ export class PortfolioMaxAggregate {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
@@ -40786,6 +40845,8 @@ export class PortfolioMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     harvestCycleWeeks?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
+    minimumLotPAndL?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
     harvestShareDollarThreshold?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestTickerBucketDollarSizeLong?: keyof typeof SortOrder;
@@ -40811,6 +40872,8 @@ export class PortfolioMinAggregateInput {
     name?: true;
     @Field(() => Boolean, {nullable:true})
     harvestCycleWeeks?: true;
+    @Field(() => Boolean, {nullable:true})
+    minimumLotPAndL?: true;
     @Field(() => Boolean, {nullable:true})
     harvestShareDollarThreshold?: true;
     @Field(() => Boolean, {nullable:true})
@@ -40838,6 +40901,8 @@ export class PortfolioMinAggregate {
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
     @Field(() => GraphQLDecimal, {nullable:true})
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     harvestTickerBucketDollarSizeLong?: Decimal;
@@ -40863,6 +40928,8 @@ export class PortfolioMinOrderByAggregateInput {
     name?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestCycleWeeks?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    minimumLotPAndL?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestShareDollarThreshold?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
@@ -40895,6 +40962,8 @@ export class PortfolioOrderByWithAggregationInput {
     name?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestCycleWeeks?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    minimumLotPAndL?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestShareDollarThreshold?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
@@ -40936,6 +41005,8 @@ export class PortfolioOrderByWithRelationInput {
     name?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestCycleWeeks?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    minimumLotPAndL?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestShareDollarThreshold?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
@@ -41004,6 +41075,9 @@ export class PortfolioScalarWhereWithAggregatesInput {
     harvestCycleWeeks?: InstanceType<typeof IntWithAggregatesFilter>;
     @Field(() => DecimalWithAggregatesFilter, {nullable:true})
     @Type(() => DecimalWithAggregatesFilter)
+    minimumLotPAndL?: InstanceType<typeof DecimalWithAggregatesFilter>;
+    @Field(() => DecimalWithAggregatesFilter, {nullable:true})
+    @Type(() => DecimalWithAggregatesFilter)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalWithAggregatesFilter>;
     @Field(() => DecimalWithAggregatesFilter, {nullable:true})
     @Type(() => DecimalWithAggregatesFilter)
@@ -41044,6 +41118,9 @@ export class PortfolioScalarWhereInput {
     harvestCycleWeeks?: InstanceType<typeof IntFilter>;
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
+    minimumLotPAndL?: InstanceType<typeof DecimalFilter>;
+    @Field(() => DecimalFilter, {nullable:true})
+    @Type(() => DecimalFilter)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFilter>;
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
@@ -41064,6 +41141,8 @@ export class PortfolioSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     harvestCycleWeeks?: true;
     @Field(() => Boolean, {nullable:true})
+    minimumLotPAndL?: true;
+    @Field(() => Boolean, {nullable:true})
     harvestShareDollarThreshold?: true;
     @Field(() => Boolean, {nullable:true})
     harvestTickerBucketDollarSizeLong?: true;
@@ -41080,6 +41159,8 @@ export class PortfolioSumAggregate {
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
     @Field(() => GraphQLDecimal, {nullable:true})
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     harvestTickerBucketDollarSizeLong?: Decimal;
@@ -41095,6 +41176,8 @@ export class PortfolioSumAggregate {
 export class PortfolioSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     harvestCycleWeeks?: keyof typeof SortOrder;
+    @Field(() => SortOrder, {nullable:true})
+    minimumLotPAndL?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
     harvestShareDollarThreshold?: keyof typeof SortOrder;
     @Field(() => SortOrder, {nullable:true})
@@ -41137,6 +41220,10 @@ export class PortfolioUncheckedCreateWithoutAccountsInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -41191,6 +41278,10 @@ export class PortfolioUncheckedCreateWithoutAuthConnectionsInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -41237,6 +41328,10 @@ export class PortfolioUncheckedCreateWithoutCreatedByInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -41294,6 +41389,10 @@ export class PortfolioUncheckedCreateWithoutHarvestsInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -41342,6 +41441,10 @@ export class PortfolioUncheckedCreateWithoutLogInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -41396,6 +41499,10 @@ export class PortfolioUncheckedCreateWithoutLotTransactionBatchInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -41447,6 +41554,10 @@ export class PortfolioUncheckedCreateWithoutUsersOnPortfoliosInput {
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
     harvestShareDollarThreshold?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
@@ -41495,6 +41606,10 @@ export class PortfolioUncheckedCreateInput {
     name?: string;
     @Field(() => Int, {nullable:true})
     harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
     @Field(() => GraphQLDecimal, {nullable:true})
     @Type(() => Object)
     @Transform(transformToDecimal)
@@ -41586,6 +41701,9 @@ export class PortfolioUncheckedUpdateManyWithoutCreatedByInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -41617,6 +41735,9 @@ export class PortfolioUncheckedUpdateManyInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -41646,6 +41767,9 @@ export class PortfolioUncheckedUpdateWithoutAccountsInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -41694,6 +41818,9 @@ export class PortfolioUncheckedUpdateWithoutAuthConnectionsInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -41736,6 +41863,9 @@ export class PortfolioUncheckedUpdateWithoutCreatedByInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -41787,6 +41917,9 @@ export class PortfolioUncheckedUpdateWithoutHarvestsInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -41831,6 +41964,9 @@ export class PortfolioUncheckedUpdateWithoutLogInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -41879,6 +42015,9 @@ export class PortfolioUncheckedUpdateWithoutLotTransactionBatchInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -41923,6 +42062,9 @@ export class PortfolioUncheckedUpdateWithoutUsersOnPortfoliosInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -41971,6 +42113,9 @@ export class PortfolioUncheckedUpdateInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -42016,6 +42161,9 @@ export class PortfolioUpdateManyMutationInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -42278,6 +42426,9 @@ export class PortfolioUpdateWithoutAccountsInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -42323,6 +42474,9 @@ export class PortfolioUpdateWithoutAuthConnectionsInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -42372,6 +42526,9 @@ export class PortfolioUpdateWithoutCreatedByInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -42417,6 +42574,9 @@ export class PortfolioUpdateWithoutHarvestsInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -42466,6 +42626,9 @@ export class PortfolioUpdateWithoutLogInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -42511,6 +42674,9 @@ export class PortfolioUpdateWithoutLotTransactionBatchInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -42560,6 +42726,9 @@ export class PortfolioUpdateWithoutUsersOnPortfoliosInput {
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
@@ -42605,6 +42774,9 @@ export class PortfolioUpdateInput {
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
@@ -42759,6 +42931,9 @@ export class PortfolioWhereUniqueInput {
     harvestCycleWeeks?: InstanceType<typeof IntFilter>;
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
+    minimumLotPAndL?: InstanceType<typeof DecimalFilter>;
+    @Field(() => DecimalFilter, {nullable:true})
+    @Type(() => DecimalFilter)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFilter>;
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
@@ -42820,6 +42995,9 @@ export class PortfolioWhereInput {
     harvestCycleWeeks?: InstanceType<typeof IntFilter>;
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
+    minimumLotPAndL?: InstanceType<typeof DecimalFilter>;
+    @Field(() => DecimalFilter, {nullable:true})
+    @Type(() => DecimalFilter)
     harvestShareDollarThreshold?: InstanceType<typeof DecimalFilter>;
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
@@ -42873,6 +43051,11 @@ export class Portfolio {
      */
     @Field(() => Int, {nullable:false,defaultValue:4,description:'How often should we harvest for the portfolio'})
     harvestCycleWeeks!: number;
+    /**
+     * Minimum p and l for a lot to be considered harvestable
+     */
+    @Field(() => GraphQLDecimal, {nullable:false,defaultValue:100,description:'Minimum p and l for a lot to be considered harvestable'})
+    minimumLotPAndL!: Decimal;
     /**
      * How much $ amount does a single share need to exceed to be a valid harvest share (i.e. shares with a p/l lower we shouldnt even care about)
      */

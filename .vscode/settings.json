@@ -93,7 +93,8 @@
     "less",
     "scss",
     "pcss",
-    "postcss"
+    "postcss",
+    "prisma"
   ],
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"

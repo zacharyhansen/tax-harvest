@@ -516,12 +516,19 @@ export class PortfolioService {
   }: {
     portfolioId: string
   }): Promise<FiniteHarvestResult> {
-    const [summary, lots, portfolio] = await Promise.all([
+    const portfolio = await this.prismaService.portfolio.findUniqueOrThrow({
+      where: {
+        id: portfolioId,
+      },
+    })
+
+    const [summary, lots] = await Promise.all([
       this.summary({
         id: portfolioId,
       }),
       this.lotService.lotCurrent({
         portfolioId,
+        minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
       }),
       this.prismaService.portfolio.findUniqueOrThrow({
         where: {
@@ -563,6 +570,7 @@ export class PortfolioService {
         const directedLots = await this.lotService.lotCurrent({
           portfolioId,
           lotValueType: HarvestType.REDUCE_TAXES === harvestType ? LotValueType.LOSS : LotValueType.GAIN,
+          minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
         })
 
         return {

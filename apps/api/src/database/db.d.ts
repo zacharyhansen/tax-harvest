@@ -316,6 +316,7 @@ export interface Portfolio {
   harvestTickerBucketLowerLimitLong: Generated<Numeric>;
   harvestTickerBucketLowerLimitShort: Generated<Numeric>;
   id: Generated<string>;
+  minimumLotPAndL: Generated<Numeric>;
   name: Generated<string>;
   updatedAt: Generated<Timestamp>;
 }

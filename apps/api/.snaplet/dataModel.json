@@ -4112,6 +4112,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Portfolio.minimumLotPAndL",
+          "name": "minimumLotPAndL",
+          "columnName": "minimumLotPAndL",
+          "type": "numeric",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "User",
           "type": "User",
           "isRequired": false,
