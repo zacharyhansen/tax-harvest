@@ -3,8 +3,8 @@ import { z } from 'zod';
 
 export const serverEnvironment = createEnv({
   server: {
-    STRIPE_SECRET_KEY: z.string().optional(),
-    CLERK_SECRET_KEY: z.string().optional(),
+    STRIPE_SECRET_KEY: z.string(),
+    CLERK_SECRET_KEY: z.string(),
   },
   experimental__runtimeEnv: process.env,
 });
