@@ -18,13 +18,12 @@ global:
 serviceAccounts:
   - name: google-secret-service-account
     gcpServiceAccount: harvester-secret-manager
-
 api:
   enabled: true
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v1.2.2
+    tag: v2.0.0
     pullPolicy: Always
   hookWeight: -10
   annotations:
@@ -131,7 +130,6 @@ api:
           secretKeyRef:
             name: stripe
             key: STRIPE_SECRET_KEY
-
   migrations:
     enabled: true
     activeDeadlineSeconds: 300 # Force job termination after 5 minutes
@@ -166,13 +164,12 @@ api:
       enabled: true
       instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
       resources: {}
-
 web:
   enabled: true
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: v1.2.2
+    tag: v2.0.0
     pullPolicy: Always
   hookWeight: 10
   annotations:
@@ -216,7 +213,6 @@ web:
           secretKeyRef:
             name: stripe
             key: STRIPE_SECRET_KEY
-
 # Secrets configuration with External Secrets Operator
 secrets:
   enabled: true
@@ -239,7 +235,6 @@ secrets:
         - secretKey: STRIPE_SECRET_KEY
           remoteRef:
             key: stripe-secret-key
-
 argocd:
   enabled: true
   server:
