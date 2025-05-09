@@ -56,6 +56,7 @@ api:
     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
     resources: {}
   env:
+    NODE_ENV: production
     extras:
       PORT: 8000
       NUETRAL_ACCOUNT_AMOUNT: 1000
