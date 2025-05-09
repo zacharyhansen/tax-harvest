@@ -2,6 +2,7 @@ import type { GraphQLResolveInfo } from 'graphql'
 import type { ClerkClaims } from '~/auth/types'
 import { Args, Info, Query, Resolver } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
+import { Decimal } from '@prisma/client/runtime/library'
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { Lot, LotWhereInput } from '../generated/graphql'
@@ -88,7 +89,7 @@ export class LotResolver {
       lotIds,
       lotValueType,
       portfolioId: metadata.portfolioId,
-      minTotalPAndL,
+      minTotalPAndL: minTotalPAndL ? new Decimal(minTotalPAndL) : undefined,
     })
   }
 }
