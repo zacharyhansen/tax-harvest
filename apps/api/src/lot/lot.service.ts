@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
-import { Selectable, SelectExpression } from 'kysely'
+import { SelectExpression } from 'kysely'
 
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 
 import { Database } from '../database/database'
-import { DB, LotCurrent } from '../database/db.d'
+import { DB } from '../database/db.d'
 import { PrismaService } from '../prisma/prisma.service'
-import { LotValueType } from './lot.dto'
+import { LotCurrent, LotValueType } from './lot.dto'
 
 @Injectable()
 export class LotService {
@@ -80,7 +80,7 @@ export class LotService {
     portfolioId: string
     lotIds?: string[]
     lotValueType?: LotValueType
-  }): Promise<Selectable<LotCurrent>[]> {
+  }): Promise<LotCurrent[]> {
     let query = this.db
       .selectFrom('LotCurrent')
       .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
@@ -102,7 +102,7 @@ export class LotService {
     else if (lotValueType === LotValueType.LOSS) {
       query = query.where('LotCurrent.gainTotal', '<', '0')
     }
-    return query.orderBy('dollarPerSharePnL', 'desc').execute()
+    return query.orderBy('dollarPerSharePnL', 'desc').execute() as Promise<LotCurrent[]>
   }
 
   private static lotCurrentFields: SelectExpression<

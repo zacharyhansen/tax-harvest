@@ -1,4 +1,4 @@
-import type { LotOpportunityItemFragment } from '~/generated/gql';
+import type { FiniteHarvestLotItemFragment } from '~/generated/gql';
 import { Button } from '@repo/ui/components/button';
 import { Decimal } from 'decimal.js';
 
@@ -6,22 +6,22 @@ import { Check } from 'lucide-react';
 import { Format } from '~/modules/utils';
 
 type HarvestingOpportunityCardProps = {
-  lot: LotOpportunityItemFragment;
+  lot: FiniteHarvestLotItemFragment;
 };
 
 export function HarvestingOpportunityCard({
   lot,
 }: HarvestingOpportunityCardProps) {
   // Determine if this is a gain position by comparing current value to cost basis
-  const costBasis = new Decimal(lot.costTotal ?? 0);
-  const currentValue = new Decimal(lot.asset.lastPrice ?? 0).mul(
+  const costBasis = new Decimal(lot.costBasis ?? 0);
+  const currentValue = new Decimal(lot.lastPrice ?? 0).mul(
     lot.remainingQty ?? 0,
   );
   const isGain = currentValue.gt(costBasis);
 
   // Calculate the unrealized gain/loss
   const unrealizedGainLoss = costBasis.minus(currentValue).abs();
-  const symbol = lot.asset.symbol;
+  const symbol = lot.symbol;
   const purchaseDate = lot.acquiredDate
     ? new Date(lot.acquiredDate).toLocaleDateString()
     : 'Unknown';
@@ -75,7 +75,7 @@ export function HarvestingOpportunityCard({
           <div>
             <div className="text-sm text-muted-foreground">Quantity</div>
             <div className="text-base">
-              {quantity.toString()}
+              {Format.roundShares(quantity)}
               {' '}
               shares
             </div>

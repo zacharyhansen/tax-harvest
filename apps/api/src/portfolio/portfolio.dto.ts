@@ -7,7 +7,7 @@ import {
 import { OrderType as PrismaOrderType } from '@prisma/client'
 
 import { LotCurrent } from '~/lot/lot.dto'
-import { HarvestType, Lot, OrderType } from '../generated/graphql'
+import { HarvestType, OrderType } from '../generated/graphql'
 
 export enum TaxGain {
   LONG = 'LONG',
@@ -27,24 +27,6 @@ registerEnumType(TaxGain, {
 registerEnumType(SetUpStatus, {
   name: 'SetUpStatus',
 })
-
-@ObjectType()
-export class HarvestRecomendation {
-  @Field(() => HarvestType)
-  harvestType: HarvestType
-
-  @Field(() => Number)
-  amountRealized: number
-
-  @Field(() => Number)
-  amountUnrealized: number
-
-  @Field(() => Number)
-  amountTotal: number
-
-  @Field(() => Boolean)
-  recommended: boolean
-}
 
 @ObjectType()
 export class PortfolioSummaryUnrealized {
@@ -113,9 +95,6 @@ export class PortfolioSummary {
 
   @Field(() => SetUpStatus)
   setUpStatus: SetUpStatus
-
-  @Field(() => [HarvestRecomendation])
-  harvestRecommendations: HarvestRecomendation[]
 }
 
 @ObjectType()
@@ -203,6 +182,9 @@ export class FiniteHarvestResult {
 
   @Field(() => [LotCurrent])
   lotsCurrent: LotCurrent[]
+
+  @Field(() => HarvestType)
+  harvestType: HarvestType
 }
 
 @InputType()

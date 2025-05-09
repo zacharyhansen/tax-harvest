@@ -4411,6 +4411,13 @@ export type FileWhereUniqueInput = {
   uploadedBy?: InputMaybe<StringFilter>;
 };
 
+export type FiniteHarvestResult = {
+  __typename?: 'FiniteHarvestResult';
+  harvestType: HarvestType;
+  lotsCurrent: Array<LotCurrent>;
+  summary: PortfolioSummary;
+};
+
 export type GcpUploadFile = {
   fileName: Scalars['String']['input'];
   type: Scalars['String']['input'];
@@ -4632,15 +4639,6 @@ export type HarvestPotential = {
   total: Scalars['Float']['output'];
   /** The unrealized gain or loss that can be harvested */
   unrealized: Scalars['Float']['output'];
-};
-
-export type HarvestRecomendation = {
-  __typename?: 'HarvestRecomendation';
-  amountRealized: Scalars['Float']['output'];
-  amountTotal: Scalars['Float']['output'];
-  amountUnrealized: Scalars['Float']['output'];
-  harvestType: HarvestType;
-  recommended: Scalars['Boolean']['output'];
 };
 
 export type HarvestRelationFilter = {
@@ -9184,7 +9182,6 @@ export type PortfolioSumAggregate = {
 export type PortfolioSummary = {
   __typename?: 'PortfolioSummary';
   harvest: HarvestPotential;
-  harvestRecommendations: Array<HarvestRecomendation>;
   realized: PortfolioSummaryRealized;
   setUpStatus: SetUpStatus;
   unrealized: PortfolioSummaryUnrealized;
@@ -10650,7 +10647,7 @@ export type Query = {
   /** Find one user by email */
   findOneUserByEmail: User;
   /** New harvest endpoint that returns all orders and summary */
-  finiteHarvest: HarvestResult;
+  finiteHarvest: FiniteHarvestResult;
   /** Get file upload url */
   generateSignedUrlsForUpload: SignedUrlsForUploadPayload;
   /** Get file download url */
@@ -12973,7 +12970,7 @@ export type AccountSummaryFragment = { __typename?: 'Account', id: string, uploa
 export type PortfolioSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PortfolioSummaryQuery = { __typename?: 'Query', portfolioSummary: { __typename?: 'PortfolioSummary', setUpStatus: SetUpStatus, realized: { __typename?: 'PortfolioSummaryRealized', accountCount: number, dividend: number, gainLongTerm: number, gainShortTerm: number, gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, accountCount: number, positionCount: number }, harvest: { __typename?: 'HarvestPotential', realized: number, unrealized: number, total: number }, harvestRecommendations: Array<{ __typename?: 'HarvestRecomendation', harvestType: HarvestType, amountRealized: number, amountTotal: number, amountUnrealized: number, recommended: boolean }> } };
+export type PortfolioSummaryQuery = { __typename?: 'Query', portfolioSummary: { __typename?: 'PortfolioSummary', setUpStatus: SetUpStatus, realized: { __typename?: 'PortfolioSummaryRealized', accountCount: number, dividend: number, gainLongTerm: number, gainShortTerm: number, gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, accountCount: number, positionCount: number }, harvest: { __typename?: 'HarvestPotential', realized: number, unrealized: number, total: number } } };
 
 export type AccountSummariesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -13014,14 +13011,12 @@ export type StripeSessionQueryVariables = Exact<{
 
 export type StripeSessionQuery = { __typename?: 'Query', stripeSession: { __typename?: 'StripeSession', id: string, client_secret?: string | null } };
 
-export type HarvestLotCurrentItemFragment = { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain };
+export type FiniteHarvestLotItemFragment = { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain };
 
-export type LotsCurrentForHarvestQueryVariables = Exact<{
-  lotValueType: LotValueType;
-}>;
+export type FiniteHarvestQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LotsCurrentForHarvestQuery = { __typename?: 'Query', lotCurrent: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }>, portfolioSummary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } };
+export type FiniteHarvestQuery = { __typename?: 'Query', finiteHarvest: { __typename?: 'FiniteHarvestResult', harvestType: HarvestType, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } }, lotsCurrent: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }> } };
 
 export type AccountTransactionItemFragment = { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', source: AuthSource } };
 
@@ -13433,8 +13428,8 @@ export const PortfolioTableItemFragmentDoc = gql`
   }
 }
     `;
-export const HarvestLotCurrentItemFragmentDoc = gql`
-    fragment HarvestLotCurrentItem on LotCurrent {
+export const FiniteHarvestLotItemFragmentDoc = gql`
+    fragment FiniteHarvestLotItem on LotCurrent {
   id
   accountId
   remainingQty
@@ -14145,13 +14140,6 @@ export const PortfolioSummaryDocument = gql`
       total
     }
     setUpStatus
-    harvestRecommendations {
-      harvestType
-      amountRealized
-      amountTotal
-      amountUnrealized
-      recommended
-    }
   }
 }
     `;
@@ -14433,57 +14421,57 @@ export type StripeSessionQueryHookResult = ReturnType<typeof useStripeSessionQue
 export type StripeSessionLazyQueryHookResult = ReturnType<typeof useStripeSessionLazyQuery>;
 export type StripeSessionSuspenseQueryHookResult = ReturnType<typeof useStripeSessionSuspenseQuery>;
 export type StripeSessionQueryResult = Apollo.QueryResult<StripeSessionQuery, StripeSessionQueryVariables>;
-export const LotsCurrentForHarvestDocument = gql`
-    query LotsCurrentForHarvest($lotValueType: LotValueType!) {
-  lotCurrent(lotValueType: $lotValueType) {
-    id
-    ...HarvestLotCurrentItem
-  }
-  portfolioSummary {
-    realized {
-      gainTotal
+export const FiniteHarvestDocument = gql`
+    query FiniteHarvest {
+  finiteHarvest {
+    summary {
+      realized {
+        gainTotal
+      }
+      unrealized {
+        gainTotal
+        lossTotal
+      }
     }
-    unrealized {
-      gainTotal
-      lossTotal
-      gainTotal
+    lotsCurrent {
+      ...FiniteHarvestLotItem
     }
+    harvestType
   }
 }
-    ${HarvestLotCurrentItemFragmentDoc}`;
+    ${FiniteHarvestLotItemFragmentDoc}`;
 
 /**
- * __useLotsCurrentForHarvestQuery__
+ * __useFiniteHarvestQuery__
  *
- * To run a query within a React component, call `useLotsCurrentForHarvestQuery` and pass it any options that fit your needs.
- * When your component renders, `useLotsCurrentForHarvestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFiniteHarvestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFiniteHarvestQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useLotsCurrentForHarvestQuery({
+ * const { data, loading, error } = useFiniteHarvestQuery({
  *   variables: {
- *      lotValueType: // value for 'lotValueType'
  *   },
  * });
  */
-export function useLotsCurrentForHarvestQuery(baseOptions: Apollo.QueryHookOptions<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables> & ({ variables: LotsCurrentForHarvestQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useFiniteHarvestQuery(baseOptions?: Apollo.QueryHookOptions<FiniteHarvestQuery, FiniteHarvestQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>(LotsCurrentForHarvestDocument, options);
+        return Apollo.useQuery<FiniteHarvestQuery, FiniteHarvestQueryVariables>(FiniteHarvestDocument, options);
       }
-export function useLotsCurrentForHarvestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>) {
+export function useFiniteHarvestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FiniteHarvestQuery, FiniteHarvestQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>(LotsCurrentForHarvestDocument, options);
+          return Apollo.useLazyQuery<FiniteHarvestQuery, FiniteHarvestQueryVariables>(FiniteHarvestDocument, options);
         }
-export function useLotsCurrentForHarvestSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>) {
+export function useFiniteHarvestSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FiniteHarvestQuery, FiniteHarvestQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>(LotsCurrentForHarvestDocument, options);
+          return Apollo.useSuspenseQuery<FiniteHarvestQuery, FiniteHarvestQueryVariables>(FiniteHarvestDocument, options);
         }
-export type LotsCurrentForHarvestQueryHookResult = ReturnType<typeof useLotsCurrentForHarvestQuery>;
-export type LotsCurrentForHarvestLazyQueryHookResult = ReturnType<typeof useLotsCurrentForHarvestLazyQuery>;
-export type LotsCurrentForHarvestSuspenseQueryHookResult = ReturnType<typeof useLotsCurrentForHarvestSuspenseQuery>;
-export type LotsCurrentForHarvestQueryResult = Apollo.QueryResult<LotsCurrentForHarvestQuery, LotsCurrentForHarvestQueryVariables>;
+export type FiniteHarvestQueryHookResult = ReturnType<typeof useFiniteHarvestQuery>;
+export type FiniteHarvestLazyQueryHookResult = ReturnType<typeof useFiniteHarvestLazyQuery>;
+export type FiniteHarvestSuspenseQueryHookResult = ReturnType<typeof useFiniteHarvestSuspenseQuery>;
+export type FiniteHarvestQueryResult = Apollo.QueryResult<FiniteHarvestQuery, FiniteHarvestQueryVariables>;
 export const TransactionsDocument = gql`
     query Transactions($where: TransactionWhereInput) {
   transactions(where: $where) {

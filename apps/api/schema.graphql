@@ -4420,6 +4420,12 @@ input FileWhereUniqueInput {
   uploadedBy: StringFilter
 }
 
+type FiniteHarvestResult {
+  harvestType: HarvestType!
+  lotsCurrent: [LotCurrent!]!
+  summary: PortfolioSummary!
+}
+
 input GCPUploadFile {
   fileName: String!
   type: String!
@@ -4636,14 +4642,6 @@ type HarvestPotential {
 
   """The unrealized gain or loss that can be harvested"""
   unrealized: Float!
-}
-
-type HarvestRecomendation {
-  amountRealized: Float!
-  amountTotal: Float!
-  amountUnrealized: Float!
-  harvestType: HarvestType!
-  recommended: Boolean!
 }
 
 input HarvestRelationFilter {
@@ -9097,7 +9095,6 @@ type PortfolioSumAggregate {
 
 type PortfolioSummary {
   harvest: HarvestPotential!
-  harvestRecommendations: [HarvestRecomendation!]!
   realized: PortfolioSummaryRealized!
   setUpStatus: SetUpStatus!
   unrealized: PortfolioSummaryUnrealized!
@@ -10557,7 +10554,7 @@ type Query {
   findOneUserByEmail(email: String!): User!
 
   """New harvest endpoint that returns all orders and summary"""
-  finiteHarvest: HarvestResult!
+  finiteHarvest: FiniteHarvestResult!
 
   """Get file upload url"""
   generateSignedUrlsForUpload(files: [GCPUploadFile!]!): SignedUrlsForUploadPayload!

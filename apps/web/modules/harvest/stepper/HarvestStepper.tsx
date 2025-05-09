@@ -28,7 +28,7 @@ import {
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
 import { LoadingPage } from '~/modules/utility-components';
-import { Format, MoneyUtil } from '~/modules/utils';
+import { MoneyUtil } from '~/modules/utils';
 
 import BuyBack from './steps/buy-back';
 import Complete from './steps/Complete';
@@ -225,11 +225,6 @@ export default function HarvestStepper({
   const isChangingStep
     = creatingHarvest || updatingHarvest || finalizingHarvest;
 
-  const recommendedHarvestAmounts
-    = data?.portfolioSummary.harvestRecommendations.find(
-      rec => rec.harvestType === harvestType,
-    );
-
   return (
     <PageWrapper
       title={headerMap[step][harvestType].title}
@@ -255,9 +250,9 @@ export default function HarvestStepper({
                     <p className="inline text-sm font-bold text-muted-foreground">
                       /
                       {' '}
-                      {Format.money(
+                      {/* {Format.money(
                         Math.abs(recommendedHarvestAmounts?.amountTotal ?? 0),
-                      )}
+                      )} */}
                     </p>
                   )}
             </div>
@@ -301,9 +296,9 @@ export default function HarvestStepper({
               harvestType={harvestType}
               selectedHarvest={selectedHarvest}
               selectedCounter={selectedCounter}
-              targetRealized={recommendedHarvestAmounts?.amountRealized ?? 0}
-              targetTotal={recommendedHarvestAmounts?.amountTotal ?? 0}
-              targetUnrealized={recommendedHarvestAmounts?.amountUnrealized ?? 0}
+              targetRealized={harvestTarget ?? 0}
+              targetTotal={harvestTarget ?? 0}
+              targetUnrealized={harvestTarget ?? 0}
             />
           )
         : step === HarvestStep.Configure

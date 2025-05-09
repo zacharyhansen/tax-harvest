@@ -3,9 +3,31 @@ import { z } from 'zod';
 
 export const clientEnvironment = createEnv({
   client: {
-    NEXT_PUBLIC_CORE_SERVER_URL: z.string().url(),
+    NEXT_PUBLIC_CORE_SERVER_URL: z.string(),
+    NEXT_PUBLIC_TAX_PERCENTAGE: z.coerce.number().default(30),
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string(),
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string(),
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string(),
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z.string(),
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_STRIPE_PUBLIC_KEY: z.string(),
+  },
+  server: {
+    STRIPE_SECRET_KEY: z.string(),
+    CLERK_SECRET_KEY: z.string(),
   },
   runtimeEnv: {
+    // server
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    // client
     NEXT_PUBLIC_CORE_SERVER_URL: process.env.NEXT_PUBLIC_CORE_SERVER_URL,
+    NEXT_PUBLIC_TAX_PERCENTAGE: process.env.NEXT_PUBLIC_TAX_PERCENTAGE,
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
   },
 });

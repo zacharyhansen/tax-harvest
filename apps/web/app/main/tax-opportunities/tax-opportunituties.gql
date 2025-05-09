@@ -1,4 +1,4 @@
-fragment HarvestLotCurrentItem on LotCurrent {
+fragment FiniteHarvestLotItem on LotCurrent {
   id
   accountId
   remainingQty
@@ -13,19 +13,21 @@ fragment HarvestLotCurrentItem on LotCurrent {
   dollarPerSharePnL
   taxGain
 }
-query LotsCurrentForHarvest($lotValueType: LotValueType!) {
-  lotCurrent(lotValueType: $lotValueType) {
-    id
-    ...HarvestLotCurrentItem
-  }
-  portfolioSummary {
-    realized {
-      gainTotal
+
+query FiniteHarvest {
+  finiteHarvest {
+    summary {
+      realized {
+        gainTotal
+      }
+      unrealized {
+        gainTotal
+        lossTotal
+      }
     }
-    unrealized {
-      gainTotal
-      lossTotal
-      gainTotal
+    lotsCurrent {
+      ...FiniteHarvestLotItem
     }
+    harvestType
   }
 }

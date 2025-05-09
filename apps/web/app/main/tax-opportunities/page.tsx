@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from '@repo/ui/components/tooltip';
 import { cn } from '@repo/ui/utils';
-import { BarChart3, Info } from 'lucide-react';
+import { ArrowUpCircle, BarChart3, Info, TrendingDown } from 'lucide-react';
 
 import Link from 'next/link';
 import { useFiniteHarvestQuery } from '~/generated/gql';
@@ -24,6 +24,7 @@ import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { Format, MoneyUtil } from '~/modules/utils';
 import { CostBasisPairCard } from './api-cost-basis-pair-card';
+import { HarvestingOpportunityCard } from './harvesting-opportunity-card';
 
 /**
  * Tax Harvesting Page - New server-driven version
@@ -54,7 +55,7 @@ export default function TaxOpportunitiesPage() {
   // eslint-disable-next-line ts/no-explicit-any
   const pairs: any[] = [];
 
-  const netPosition = data?.finiteHarvest.portfolioSummary.realized.gainTotal;
+  const netPosition = data?.finiteHarvest.summary.realized.gainTotal;
 
   return (
     <PageWrapper className="flex-1">
@@ -128,11 +129,11 @@ export default function TaxOpportunitiesPage() {
                   </span>
                   <span
                     className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
-                      data?.finiteHarvest.portfolioSummary.realized.gainTotal ?? 0,
+                      data?.finiteHarvest.summary.realized.gainTotal ?? 0,
                     ))}
                   >
                     {Format.money(
-                      data?.finiteHarvest.portfolioSummary.realized.gainTotal ?? 0,
+                      data?.finiteHarvest.summary.realized.gainTotal ?? 0,
                     )}
                   </span>
                 </div>
@@ -145,11 +146,11 @@ export default function TaxOpportunitiesPage() {
                   </span>
                   <span
                     className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
-                      data?.finiteHarvest.portfolioSummary.unrealized.gainTotal ?? 0,
+                      data?.finiteHarvest.summary.unrealized.gainTotal ?? 0,
                     ))}
                   >
                     {Format.money(
-                      (data?.finiteHarvest.portfolioSummary.unrealized.gainTotal ?? 0),
+                      (data?.finiteHarvest.summary.unrealized.gainTotal ?? 0),
                     )}
                   </span>
                 </div>
@@ -162,11 +163,11 @@ export default function TaxOpportunitiesPage() {
                   </span>
                   <span
                     className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(
-                      data?.finiteHarvest.portfolioSummary.unrealized.lossTotal ?? 0,
+                      data?.finiteHarvest.summary.unrealized.lossTotal ?? 0,
                     ))}
                   >
                     {Format.money(
-                      (data?.finiteHarvest.portfolioSummary.unrealized.lossTotal ?? 0),
+                      (data?.finiteHarvest.summary.unrealized.lossTotal ?? 0),
                     )}
                   </span>
                 </div>
@@ -234,35 +235,39 @@ export default function TaxOpportunitiesPage() {
           )}
 
           {/* For accounts with net realized positions, show individual opportunities */}
-          {/* {!taxStatus.isNeutralAccount && data?.lots.length > 0 && (
-            <div className="space-y-6">
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center space-x-2">
-                  {taxStatus.netRealizedPosition > 0 ? (
-                    <TrendingDown className="h-5 w-5 text-red-500" />
-                  ) : (
-                    <ArrowUpCircle className="h-5 w-5 text-green-500" />
-                  )}
-                  <h2 className="text-lg font-semibold">
-                    {taxStatus.netRealizedPosition > 0
-                      ? 'Loss Harvesting Opportunities'
-                      : 'Gain Harvesting Opportunities'}
-                  </h2>
-                </div>
-                <p className="text-muted-foreground">
-                  {taxStatus.netRealizedPosition > 0
-                    ? 'Harvest these losses to offset your realized gains and reduce your tax liability'
-                    : 'Harvest these gains to offset your realized losses and optimize your tax position'}
-                </p>
-              </div>
+          { data?.finiteHarvest?.lotsCurrent?.length
+            ? (
+                <div className="space-y-6">
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex items-center space-x-2">
+                      {taxStatus.netRealizedPosition > 0
+                        ? (
+                            <TrendingDown className="size-5 text-red-500" />
+                          )
+                        : (
+                            <ArrowUpCircle className="size-5 text-green-500" />
+                          )}
+                      <h2 className="text-lg font-semibold">
+                        {taxStatus.netRealizedPosition > 0
+                          ? 'Loss Harvesting Opportunities'
+                          : 'Gain Harvesting Opportunities'}
+                      </h2>
+                    </div>
+                    <p className="text-muted-foreground">
+                      {taxStatus.netRealizedPosition > 0
+                        ? 'Harvest these losses to offset your realized gains and reduce your tax liability'
+                        : 'Harvest these gains to offset your realized losses and optimize your tax position'}
+                    </p>
+                  </div>
 
-              <div className="mt-8 grid grid-cols-1 gap-8">
-                {data?.lots.map(lot => (
-                  <HarvestingOpportunityCard key={lot.id} lot={lot} />
-                ))}
-              </div>
-            </div>
-          )} */}
+                  <div className="mt-8 grid grid-cols-1 gap-8">
+                    {data?.finiteHarvest?.lotsCurrent?.map(lot => (
+                      <HarvestingOpportunityCard key={lot.id} lot={lot} />
+                    ))}
+                  </div>
+                </div>
+              )
+            : null}
 
           {/* No opportunities message */}
           {opportunities.length === 0 && pairs.length === 0 && (

@@ -7,6 +7,7 @@ import { sql } from 'kysely'
 
 import { ClerkClaims } from '~/auth/types'
 
+import { LotValueType } from '~/lot/lot.dto'
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 import { AccountService } from '../account/account.service'
 import { ClerkService } from '../clerk/clerk.service'
@@ -18,7 +19,7 @@ import { PrismaService } from '../prisma/prisma.service'
 import { UserService } from '../user/user.service'
 import {
   DirectedHarvestLot,
-  HarvestRecomendation,
+  FiniteHarvestResult,
   HarvestResult,
   PortfolioSummary,
   PortfolioSummaryRealized,
@@ -514,7 +515,7 @@ export class PortfolioService {
     portfolioId,
   }: {
     portfolioId: string
-  }): Promise<HarvestResult> {
+  }): Promise<FiniteHarvestResult> {
     const [summary, lots, portfolio] = await Promise.all([
       this.summary({
         id: portfolioId,
@@ -553,35 +554,23 @@ export class PortfolioService {
 
         harvestResult.process()
         return {
-          allOrders: harvestResult.allOrders,
-          portfolioSummary: summary,
-          realizedOrders: harvestResult.realizedOrders,
-          unrealizedOrders: harvestResult.unrealizedOrders,
+          summary,
+          lotsCurrent: [],
+          harvestType,
         }
       case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
-      case HarvestType.CAPTURE_GAINS_TAX_FREE: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
-        harvestResult = new Harvest({
-          lots: lots.map((lot) => {
-            const qty = lots.find(l => l.id === lot.id)?.remainingQty ?? '0'
-            return {
-              ...lot,
-              accountId: lot.accountId,
-              originalQty: qty,
-              processQty: qty,
-            } as LotHarvestInput
-          }).filter(l => l.processQty !== '0'),
-          portfolio,
-          targetRealized: summary.realized.gainTotal,
-          targetUnrealized: 0,
+      case HarvestType.CAPTURE_GAINS_TAX_FREE: { // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
+        const directedLots = await this.lotService.lotCurrent({
+          portfolioId,
+          lotValueType: HarvestType.REDUCE_TAXES === harvestType ? LotValueType.LOSS : LotValueType.GAIN,
         })
 
-        harvestResult.process()
         return {
-          allOrders: harvestResult.allOrders,
-          portfolioSummary: summary,
-          realizedOrders: harvestResult.realizedOrders,
-          unrealizedOrders: harvestResult.unrealizedOrders,
+          summary,
+          lotsCurrent: directedLots,
+          harvestType,
         }
+      }
     }
   }
 

@@ -12,6 +12,7 @@ import { PrismaService } from '../prisma/prisma.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
 import {
   DirectedHarvestLot,
+  FiniteHarvestResult,
   HarvestResult,
   PortfolioSummary,
   PortfolioSummaryRealized,
@@ -26,14 +27,14 @@ export class PortfolioResolver {
     private readonly prismaService: PrismaService,
   ) {}
 
-  @Query(() => HarvestResult, {
+  @Query(() => FiniteHarvestResult, {
     description: 'New harvest endpoint that returns all orders and summary',
     name: 'finiteHarvest',
   })
   async finiteHarvest(
     @ClerkContext()
     { metadata }: ClerkClaims,
-  ): Promise<HarvestResult> {
+  ): Promise<FiniteHarvestResult> {
     return this.portfolioService.finiteHarvest({
       portfolioId: metadata.portfolioId,
     })

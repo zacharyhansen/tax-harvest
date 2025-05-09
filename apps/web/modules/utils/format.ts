@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js';
+
 export default class Format {
   static money(amount?: string | number | null, toFixed = 2) {
     if (amount === null || amount === undefined) {
@@ -47,5 +49,15 @@ export default class Format {
     const visiblePart = numberStr.slice(-4); // Get the last 4 characters
     const hiddenPart = '•'.repeat(numberStr.length - canView); // Replace the rest with black dots
     return hiddenPart + visiblePart;
+  }
+
+  static roundShares(shares: string | number | null | Decimal, decimals = 0) {
+    if (!shares) {
+      return '-';
+    }
+    if (shares instanceof Decimal) {
+      return shares.toFixed(decimals);
+    }
+    return Number(shares).toFixed(decimals);
   }
 }

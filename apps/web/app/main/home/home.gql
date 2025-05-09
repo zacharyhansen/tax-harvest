@@ -30,13 +30,6 @@ query PortfolioSummary {
       total
     }
     setUpStatus
-    harvestRecommendations {
-      harvestType
-      amountRealized
-      amountTotal
-      amountUnrealized
-      recommended
-    }
   }
 }
 
