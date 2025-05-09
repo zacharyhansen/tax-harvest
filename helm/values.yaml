@@ -13,7 +13,7 @@ global:
         - dev.taxharvest.ai
     - name: argocd-dev-cert
       domains:
-        - argocd.dev.taxharvest.ai
+        - argocd-dev.taxharvest.ai
 # Service accounts configuration
 serviceAccounts:
   - name: google-secret-service-account
