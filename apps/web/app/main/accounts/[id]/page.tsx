@@ -1,6 +1,7 @@
 'use client';
 
 import type { AccountItemFragment } from '~/generated/gql';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@repo/ui/components/button';
 import {
@@ -15,6 +16,7 @@ import { toast } from '@repo/ui/components/toast-sonner';
 import InputField from '@repo/ui/form-builder/fields/input.field';
 import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
 import { DollarSign } from 'lucide-react';
+import { use } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import { z } from 'zod';
@@ -29,7 +31,8 @@ import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { zodNumber } from '~/modules/utils/zod-utils';
 
-export default function AccountPage({ params }: { params: { id: string } }) {
+export default function AccountPage(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const { id } = params;
   const { data, error, loading } = useAccountQuery({
     variables: { id },

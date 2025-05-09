@@ -5,16 +5,23 @@ import {
   EmbeddedCheckoutProvider,
   useStripe,
 } from '@stripe/react-stripe-js';
-import { useCallback } from 'react';
+import { use, useCallback } from 'react';
 
 import { useStripeSessionLazyQuery } from '~/generated/gql';
 import { LoadingPage } from '~/modules/utility-components';
 
-export default function StripePriceIdPage({
-  params: { stripeCustomerId, stripePriceId },
-}: {
-  params: { stripePriceId: string; stripeCustomerId: string };
-}) {
+export default function StripePriceIdPage(
+  props: {
+    params: Promise<{ stripePriceId: string; stripeCustomerId: string }>;
+  },
+) {
+  const params = use(props.params);
+
+  const {
+    stripeCustomerId,
+    stripePriceId,
+  } = params;
+
   const stripe = useStripe();
 
   const [getSession] = useStripeSessionLazyQuery();

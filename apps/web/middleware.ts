@@ -3,9 +3,9 @@ import { NextResponse } from 'next/server';
 
 const isAdminRoute = createRouteMatcher(['(.*)/admin(.*)']);
 
-export default clerkMiddleware((auth, req) => {
+export default clerkMiddleware(async (auth, req) => {
   // Protect all routes starting with `/admin`
-  if (isAdminRoute(req) && auth().sessionClaims?.metadata.role !== 'admin') {
+  if (isAdminRoute(req) && (await auth()).sessionClaims?.metadata.role !== 'admin') {
     const url = new URL('/', req.url);
     return NextResponse.redirect(url);
   }

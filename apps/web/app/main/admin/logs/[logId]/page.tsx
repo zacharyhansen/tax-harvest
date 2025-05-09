@@ -1,18 +1,20 @@
 'use client';
-
 import ReactJsonView from '@microlink/react-json-view';
+
 import { useTheme } from 'next-themes';
+import { use } from 'react';
 
 import { useLogQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 
-export default function LogPage({
-  params,
-}: {
-  params: typeof TypedRoutes.log.params;
-}) {
+export default function LogPage(
+  props: {
+    params: Promise<typeof TypedRoutes.log.params>;
+  },
+) {
+  const params = use(props.params);
   const theme = useTheme();
   const safeParams = TypedRoutes.log.parse(params);
 

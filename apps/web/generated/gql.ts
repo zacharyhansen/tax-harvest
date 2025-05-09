@@ -13014,7 +13014,7 @@ export type PortfolioTableItemFragment = { __typename?: 'Portfolio', createdById
 export type PortfolioTableQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PortfolioTableQuery = { __typename?: 'Query', portfolios: Array<{ __typename?: 'Portfolio', createdById?: string | null, id: string, name: string, createdAt: any, createdBy?: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } | null, accounts?: Array<{ __typename?: 'Account', id: string, status: AccountStatus, name?: string | null, institution: AccountInstitution }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } }> | null }> };
+export type PortfolioTableQuery = { __typename?: 'Query', portfolios: Array<{ __typename?: 'Portfolio', id: string, createdById?: string | null, name: string, createdAt: any, createdBy?: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } | null, accounts?: Array<{ __typename?: 'Account', id: string, status: AccountStatus, name?: string | null, institution: AccountInstitution }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } }> | null }> };
 
 export type UpdatePortfolioMutationVariables = Exact<{
   data: PortfolioUpdateInput;
@@ -14295,6 +14295,7 @@ export type AccountRealizedPlQueryResult = Apollo.QueryResult<AccountRealizedPlQ
 export const PortfolioTableDocument = gql`
     query PortfolioTable {
   portfolios {
+    id
     ...PortfolioTableItem
   }
 }
