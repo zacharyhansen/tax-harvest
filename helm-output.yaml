@@ -315,7 +315,6 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
     networking.gke.io/managed-certificates: argocd-dev-cert
 spec:
-  ingressClassName: gce
   rules:
   - host: argocd-dev.taxharvest.ai
     http:
@@ -364,6 +363,23 @@ spec:
                 port:
                   number: 80
 ---
+# Source: harvester/charts/secrets/templates/secretstore.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: gcp-secret-store
+spec:
+  provider:
+    gcpsm:
+      projectID: harvester-ai-428202
+      auth:
+        workloadIdentity:
+          serviceAccountRef:
+            name: 
+            namespace: harvester-dev
+          clusterLocation: us-central1-b
+          clusterName: harvester-dev
+---
 # Source: harvester/charts/secrets/templates/external-secrets.yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -371,7 +387,7 @@ metadata:
   name: database-external-secret
   namespace: harvester-dev
 spec:
-  refreshInterval: "1h"
+  refreshInterval: "15m"
   secretStoreRef:
     name: gcp-secret-store
     kind: ClusterSecretStore
@@ -405,7 +421,7 @@ metadata:
   name: clerk-external-secret
   namespace: harvester-dev
 spec:
-  refreshInterval: "1h"
+  refreshInterval: "15m"
   secretStoreRef:
     name: gcp-secret-store
     kind: ClusterSecretStore
@@ -427,7 +443,7 @@ metadata:
   name: stripe-external-secret
   namespace: harvester-dev
 spec:
-  refreshInterval: "1h"
+  refreshInterval: "15m"
   secretStoreRef:
     name: gcp-secret-store
     kind: ClusterSecretStore
@@ -446,7 +462,7 @@ metadata:
   name: etrade-external-secret
   namespace: harvester-dev
 spec:
-  refreshInterval: "1h"
+  refreshInterval: "15m"
   secretStoreRef:
     name: gcp-secret-store
     kind: ClusterSecretStore
@@ -468,7 +484,7 @@ metadata:
   name: polygon-external-secret
   namespace: harvester-dev
 spec:
-  refreshInterval: "1h"
+  refreshInterval: "15m"
   secretStoreRef:
     name: gcp-secret-store
     kind: ClusterSecretStore
@@ -487,7 +503,7 @@ metadata:
   name: plaid-external-secret
   namespace: harvester-dev
 spec:
-  refreshInterval: "1h"
+  refreshInterval: "15m"
   secretStoreRef:
     name: gcp-secret-store
     kind: ClusterSecretStore
@@ -703,23 +719,3 @@ spec:
       volumes:
         - name: cloudsql
           emptyDir: {}
----
-# Source: harvester/charts/secrets/templates/secretstore.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ClusterSecretStore
-metadata:
-  name: gcp-secret-store
-  annotations:
-    "helm.sh/hook": "pre-install,pre-upgrade"
-    "helm.sh/hook-weight": "-10"
-spec:
-  provider:
-    gcpsm:
-      projectID: harvester-ai-428202
-      auth:
-        workloadIdentity:
-          serviceAccountRef:
-            name: google-secret-service-account
-            namespace: harvester-dev
-          clusterLocation: us-central1-b
-          clusterName: harvester-dev

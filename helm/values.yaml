@@ -217,8 +217,7 @@ web:
 # Secrets configuration
 secrets:
   enabled: true
-  config:
-    serviceAccountName: google-secret-service-account
+  serviceAccountName: google-secret-service-account
   externalSecrets:
     - name: database
       target: database
