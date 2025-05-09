@@ -29,6 +29,7 @@
     "dev": "nest start --watch --debug=0.0.0.0:9229",
     "test": "concurrently 'pnpm test:unit' 'pnpm test:e2e'",
     "test:unit": "vitest run --coverage --config vitest.config.unit.ts",
+    "test:unit:watch": "vitest --watch --config vitest.config.unit.ts",
     "test:e2e": "vitest run --coverage --config ./vitest.config.e2e.ts",
     "test:performance": "k6 run tests/performance/contexts/users/get-users.mjs",
     "lint": "eslint",

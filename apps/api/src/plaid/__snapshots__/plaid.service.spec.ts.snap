@@ -1657,3 +1657,1661 @@ exports[`PlaidService > Lot application for 2025-04-15 > should process transact
   ],
 ]
 `;
+
+exports[`plaidService > lot application for 2025-04-15 > should process transactions and find matching lot combinations 1`] = `
+[
+  [
+    "AMD",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-AMD-0",
+          "price": "165.51",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "AMD",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "AMD",
+              },
+            },
+            "id": "l-AMD-0",
+            "price": "165.51",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-AMD-1",
+          "price": "159.42",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "AMD",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "AMD",
+              },
+            },
+            "id": "l-AMD-1",
+            "price": "159.42",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "AZN",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-AZN-2",
+          "price": "78.99",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "AZN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "AZN",
+              },
+            },
+            "id": "l-AZN-2",
+            "price": "78.99",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-AZN-3",
+          "price": "78.43",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "AZN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "AZN",
+              },
+            },
+            "id": "l-AZN-3",
+            "price": "78.43",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-AZN-4",
+          "price": "79.09",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "AZN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "AZN",
+              },
+            },
+            "id": "l-AZN-4",
+            "price": "79.09",
+            "remainingQty": "2",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "DASH",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-DASH-5",
+          "price": "113.61",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "DASH",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "DASH",
+              },
+            },
+            "id": "l-DASH-5",
+            "price": "113.61",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-DASH-6",
+          "price": "111.68",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "DASH",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "DASH",
+              },
+            },
+            "id": "l-DASH-6",
+            "price": "111.68",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "INTC",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-INTC-7",
+          "price": "30.84",
+          "quantity": "1",
+          "quantityChange": "-2",
+          "quantityFinal": "3",
+          "symbol": "INTC",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "INTC",
+              },
+            },
+            "id": "l-INTC-9",
+            "price": "30.51",
+            "remainingQty": "3",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "JBL",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-JBL-10",
+          "price": "116.08",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "JBL",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "JBL",
+              },
+            },
+            "id": "l-JBL-10",
+            "price": "116.08",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-JBL-11",
+          "price": "111.42",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "JBL",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "JBL",
+              },
+            },
+            "id": "l-JBL-11",
+            "price": "111.42",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "KDP",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-KDP-12",
+          "price": "34.12",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "KDP",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "KDP",
+              },
+            },
+            "id": "l-KDP-12",
+            "price": "34.12",
+            "remainingQty": "2",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-KDP-13",
+          "price": "34.16",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "KDP",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "KDP",
+              },
+            },
+            "id": "l-KDP-13",
+            "price": "34.16",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-KDP-14",
+          "price": "34.43",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "KDP",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "KDP",
+              },
+            },
+            "id": "l-KDP-14",
+            "price": "34.43",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "KO",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-KO-15",
+          "price": "62.575",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "KO",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "KO",
+              },
+            },
+            "id": "l-KO-15",
+            "price": "62.575",
+            "remainingQty": "2",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "MMM",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-MMM-16",
+          "price": "99.14",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "MMM",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "MMM",
+              },
+            },
+            "id": "l-MMM-16",
+            "price": "99.14",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "MNST",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-MNST-17",
+          "price": "53.07",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "MNST",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "MNST",
+              },
+            },
+            "id": "l-MNST-17",
+            "price": "53.07",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-MNST-18",
+          "price": "48.66",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "MNST",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "MNST",
+              },
+            },
+            "id": "l-MNST-18",
+            "price": "48.66",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "NKE",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-NKE-19",
+          "price": "92",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "NKE",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "NKE",
+              },
+            },
+            "id": "l-NKE-19",
+            "price": "92",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-28T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-NKE-20",
+          "price": "76.01",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "NKE",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-28T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "NKE",
+              },
+            },
+            "id": "l-NKE-20",
+            "price": "76.01",
+            "remainingQty": "2",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "OKLO",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OKLO-21",
+          "price": "7.55",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "OKLO",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OKLO",
+              },
+            },
+            "id": "l-OKLO-21",
+            "price": "7.55",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OKLO-22",
+          "price": "7.5967",
+          "quantity": "3",
+          "quantityChange": "0",
+          "quantityFinal": "3",
+          "symbol": "OKLO",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OKLO",
+              },
+            },
+            "id": "l-OKLO-22",
+            "price": "7.5967",
+            "remainingQty": "3",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OKLO-23",
+          "price": "10.08",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "OKLO",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OKLO",
+              },
+            },
+            "id": "l-OKLO-23",
+            "price": "10.08",
+            "remainingQty": "2",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-24T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OKLO-24",
+          "price": "9.62",
+          "quantity": "3",
+          "quantityChange": "0",
+          "quantityFinal": "3",
+          "symbol": "OKLO",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-24T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OKLO",
+              },
+            },
+            "id": "l-OKLO-24",
+            "price": "9.62",
+            "remainingQty": "3",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OKLO-25",
+          "price": "9.4",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "OKLO",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OKLO",
+              },
+            },
+            "id": "l-OKLO-25",
+            "price": "9.4",
+            "remainingQty": "2",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "ON",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-ON-26",
+          "price": "74.38",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "ON",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "ON",
+              },
+            },
+            "id": "l-ON-26",
+            "price": "74.38",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-ON-27",
+          "price": "69.23",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "ON",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "ON",
+              },
+            },
+            "id": "l-ON-27",
+            "price": "69.23",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-ON-28",
+          "price": "67.93",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "ON",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "ON",
+              },
+            },
+            "id": "l-ON-28",
+            "price": "67.93",
+            "remainingQty": "2",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "OPEN",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OPEN-29",
+          "price": "2.156",
+          "quantity": "5",
+          "quantityChange": "0",
+          "quantityFinal": "5",
+          "symbol": "OPEN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OPEN",
+              },
+            },
+            "id": "l-OPEN-29",
+            "price": "2.156",
+            "remainingQty": "5",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OPEN-30",
+          "price": "1.95",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "OPEN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OPEN",
+              },
+            },
+            "id": "l-OPEN-30",
+            "price": "1.95",
+            "remainingQty": "2",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OPEN-31",
+          "price": "1.87",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "OPEN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OPEN",
+              },
+            },
+            "id": "l-OPEN-31",
+            "price": "1.87",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-24T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OPEN-32",
+          "price": "1.836",
+          "quantity": "5",
+          "quantityChange": "0",
+          "quantityFinal": "5",
+          "symbol": "OPEN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-24T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OPEN",
+              },
+            },
+            "id": "l-OPEN-32",
+            "price": "1.836",
+            "remainingQty": "5",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-OPEN-33",
+          "price": "1.75",
+          "quantity": "4",
+          "quantityChange": "0",
+          "quantityFinal": "4",
+          "symbol": "OPEN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OPEN",
+              },
+            },
+            "id": "l-OPEN-33",
+            "price": "1.75",
+            "remainingQty": "4",
+          },
+        },
+        {
+          "accountId": undefined,
+          "acquiredDate": 2025-04-15T00:00:00.000Z,
+          "isNewBuy": true,
+          "lotId": "test lot id",
+          "price": "0.9515",
+          "quantity": "5",
+          "quantityChange": "0",
+          "quantityFinal": "5",
+          "symbol": "OPEN",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": undefined,
+              },
+            },
+            "acquiredDate": 2025-04-15T00:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "OPEN",
+              },
+            },
+            "id": "test lot id",
+            "price": "0.9515",
+            "remainingQty": "5",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "PLTR",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-PLTR-34",
+          "price": "20.87",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "PLTR",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "PLTR",
+              },
+            },
+            "id": "l-PLTR-34",
+            "price": "20.87",
+            "remainingQty": "2",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-PLTR-35",
+          "price": "20.82",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "PLTR",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "PLTR",
+              },
+            },
+            "id": "l-PLTR-35",
+            "price": "20.82",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-PLTR-36",
+          "price": "26.44",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "PLTR",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "PLTR",
+              },
+            },
+            "id": "l-PLTR-36",
+            "price": "26.44",
+            "remainingQty": "2",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-PLTR-37",
+          "price": "24.46",
+          "quantity": "3",
+          "quantityChange": "0",
+          "quantityFinal": "3",
+          "symbol": "PLTR",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "PLTR",
+              },
+            },
+            "id": "l-PLTR-37",
+            "price": "24.46",
+            "remainingQty": "3",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "QYLD",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-QYLD-38",
+          "price": "17.58",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "QYLD",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "QYLD",
+              },
+            },
+            "id": "l-QYLD-38",
+            "price": "17.58",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "SHOP",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-SHOP-39",
+          "price": "58.53",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "SHOP",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "SHOP",
+              },
+            },
+            "id": "l-SHOP-39",
+            "price": "58.53",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-SHOP-40",
+          "price": "64.53",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "SHOP",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "SHOP",
+              },
+            },
+            "id": "l-SHOP-40",
+            "price": "64.53",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-SHOP-41",
+          "price": "64.66",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "SHOP",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "SHOP",
+              },
+            },
+            "id": "l-SHOP-41",
+            "price": "64.66",
+            "remainingQty": "2",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "SIRI",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-24T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-SIRI-42",
+          "price": "27",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "SIRI",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-24T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "SIRI",
+              },
+            },
+            "id": "l-SIRI-42",
+            "price": "27",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "SOFI",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-SOFI-43",
+          "price": "6.96",
+          "quantity": "3",
+          "quantityChange": "0",
+          "quantityFinal": "3",
+          "symbol": "SOFI",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "SOFI",
+              },
+            },
+            "id": "l-SOFI-43",
+            "price": "6.96",
+            "remainingQty": "3",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-SOFI-44",
+          "price": "6.41",
+          "quantity": "4",
+          "quantityChange": "0",
+          "quantityFinal": "4",
+          "symbol": "SOFI",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "SOFI",
+              },
+            },
+            "id": "l-SOFI-44",
+            "price": "6.41",
+            "remainingQty": "4",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-24T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-SOFI-45",
+          "price": "6.4465",
+          "quantity": "3",
+          "quantityChange": "0",
+          "quantityFinal": "3",
+          "symbol": "SOFI",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-24T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "SOFI",
+              },
+            },
+            "id": "l-SOFI-45",
+            "price": "6.4465",
+            "remainingQty": "3",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "T",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-T-46",
+          "price": "17.39",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "T",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "T",
+              },
+            },
+            "id": "l-T-46",
+            "price": "17.39",
+            "remainingQty": "2",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-T-47",
+          "price": "18.66",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "T",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "T",
+              },
+            },
+            "id": "l-T-47",
+            "price": "18.66",
+            "remainingQty": "2",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "UA",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-UA-48",
+          "price": "6.606",
+          "quantity": "5",
+          "quantityChange": "0",
+          "quantityFinal": "5",
+          "symbol": "UA",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "UA",
+              },
+            },
+            "id": "l-UA-48",
+            "price": "6.606",
+            "remainingQty": "5",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "UI",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-UI-49",
+          "price": "150.2",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "UI",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "UI",
+              },
+            },
+            "id": "l-UI-49",
+            "price": "150.2",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "VZ",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-VZ-50",
+          "price": "39.63",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "VZ",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "VZ",
+              },
+            },
+            "id": "l-VZ-50",
+            "price": "39.63",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "WBD",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-WBD-51",
+          "price": "8.035",
+          "quantity": "2",
+          "quantityChange": "0",
+          "quantityFinal": "2",
+          "symbol": "WBD",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "WBD",
+              },
+            },
+            "id": "l-WBD-51",
+            "price": "8.035",
+            "remainingQty": "2",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-WBD-52",
+          "price": "6.99",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "WBD",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "WBD",
+              },
+            },
+            "id": "l-WBD-52",
+            "price": "6.99",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-26T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-WBD-53",
+          "price": "7.19",
+          "quantity": "3",
+          "quantityChange": "0",
+          "quantityFinal": "3",
+          "symbol": "WBD",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-26T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "WBD",
+              },
+            },
+            "id": "l-WBD-53",
+            "price": "7.19",
+            "remainingQty": "3",
+          },
+        },
+      ],
+    },
+  ],
+  [
+    "XYZ",
+    {
+      "lotChanges": [
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-05-23T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-XYZ-54",
+          "price": "67.72",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "XYZ",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-05-23T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "XYZ",
+              },
+            },
+            "id": "l-XYZ-54",
+            "price": "67.72",
+            "remainingQty": "1",
+          },
+        },
+        {
+          "accountId": "test-account",
+          "acquiredDate": 2024-06-20T07:00:00.000Z,
+          "isNewBuy": false,
+          "lotId": "l-XYZ-55",
+          "price": "61.27",
+          "quantity": "1",
+          "quantityChange": "0",
+          "quantityFinal": "1",
+          "symbol": "XYZ",
+          "upsert": {
+            "account": {
+              "connect": {
+                "id": "test-account",
+              },
+            },
+            "acquiredDate": 2024-06-20T07:00:00.000Z,
+            "asset": {
+              "connect": {
+                "symbol": "XYZ",
+              },
+            },
+            "id": "l-XYZ-55",
+            "price": "61.27",
+            "remainingQty": "1",
+          },
+        },
+      ],
+    },
+  ],
+]
+`;

@@ -1,28 +1,26 @@
-fragment LotOpportunityItem on Lot {
+fragment FiniteHarvestLotOrderItem on HarvestLotOrder {
+  accountId
+  costBasis
+  gainTotal
   id
-  acquiredDate
-  costTotal
-  price
-  remainingQty
+  lotId
+  pricePaid
+  quantity
+  taxGain
   assetSymbol
-  totalCostForGainPct
-  asset {
-    symbol
-    lastPrice
-  }
-  account {
-    id
-    externalId
-    name
-    type
-  }
+  dollarPerSharePnL
+  valueTotal
+  orderType
+  acquiredDate
 }
 
-query LotFilteredOpportunities($where: LotWhereInput) {
-  lots(where: $where) {
-    ...LotOpportunityItem
-  }
-  portfolioSummary {
+query LotFilteredOpportunities {
+  finiteHarvest {
+    allOrders {
+      id
+      ...FiniteHarvestLotOrderItem
+    }
+    portfolioSummary {
     realized {
       accountCount
       dividend
@@ -45,9 +43,10 @@ query LotFilteredOpportunities($where: LotWhereInput) {
     harvestRecommendations {
       harvestType
       amountRealized
-      amountTotal
-      amountUnrealized
-      recommended
+          amountTotal
+        amountUnrealized
+        recommended
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config'
-
+import { envSchema } from '../env.schema'
 import { fetchGCPSecrets } from './fetch-secrets'
 
 export default async function getConfigService() {
@@ -12,7 +12,5 @@ export default async function getConfigService() {
   console.info(`SECRET_SOURCE: ${config.get('SECRET_SOURCE')}`)
   console.info('Fetching GCP secrets')
   const secrets = await fetchGCPSecrets()
-
-  // TODO: validate secrets
-  return { ...secrets }
+  return { ...envSchema.parse(secrets) }
 }

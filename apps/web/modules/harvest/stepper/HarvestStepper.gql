@@ -14,8 +14,25 @@ fragment HarvestLotOrderItem on HarvestLotOrder {
   acquiredDate
 }
 
+fragment LotCurrentItem on LotCurrent {
+  id
+  accountId
+  remainingQty
+  acquiredDate
+  price
+  symbol
+  lastPrice
+  costBasis
+  value
+  gainTotal
+  gainTotalPct
+  dollarPerSharePnL
+  taxGain
+}
+
 query LotsCurrentForLotType($lotValueType: LotValueType!) {
   lotCurrent(lotValueType: $lotValueType) {
+    id
     ...LotCurrentItem
   }
 }
@@ -31,12 +48,15 @@ query DirectedHarvest(
     targetUnrealized: $targetUnrealized
   ) {
     realizedOrders {
+      id
       ...HarvestLotOrderItem
     }
     unrealizedOrders {
+      id
       ...HarvestLotOrderItem
     }
     allOrders {
+      id
       ...HarvestLotOrderItem
     }
   }
@@ -63,15 +83,19 @@ fragment HarvestTransactionRecord on HarvestTransaction {
   revertDate
   counterTransaction
   harvestTransactionItem {
+    id
     ...HarvestTransactionItemRecord
   }
   replacementTransactionItem {
+    id
     ...HarvestTransactionItemRecord
   }
   revertHarvestTransactionItem {
+    id
     ...HarvestTransactionItemRecord
   }
   revertReplacementTransactionItem {
+    id
     ...HarvestTransactionItemRecord
   }
 }
@@ -84,6 +108,7 @@ fragment HarvestItem on Harvest {
   type
   label
   harvestTransactions {
+    id
     ...HarvestTransactionRecord
   }
 }
@@ -96,42 +121,48 @@ mutation CreateHarvest(
     directedHarvestLots: $directedHarvestLots
     harvestType: $harvestType
   ) {
+    id
     ...HarvestItem
   }
 }
 
 mutation UpdateHarvest($id: String!, $data: HarvestUpdateInput!) {
   updateHarvest(id: $id, data: $data) {
+    id
     ...HarvestItem
   }
 }
 
-mutation updateHarvestTransaction(
+mutation UpdateHarvestTransaction(
   $id: String!
   $data: HarvestTransactionUpdateInput!
 ) {
   updateHarvestTransaction(id: $id, data: $data) {
+    id
     ...HarvestTransactionRecord
   }
 }
 
-mutation updateHarvestTransactionItem(
+mutation UpdateHarvestTransactionItem(
   $id: String!
   $data: HarvestTransactionItemUpdateInput!
 ) {
   updateHarvestTransactionItem(id: $id, data: $data) {
+    id
     ...HarvestTransactionItemRecord
   }
 }
 
 query Harvest($id: String!) {
   harvest(id: $id) {
+    id
     ...HarvestItem
   }
 }
 
 mutation FinalizeHarvest($id: String!) {
   finalizeHarvest(id: $id) {
+    id
     ...HarvestItem
   }
 }

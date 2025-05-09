@@ -1,4 +1,5 @@
 import antfu from '@antfu/eslint-config';
+import graphqlPlugin from '@graphql-eslint/eslint-plugin';
 import nextPlugin from '@next/eslint-plugin-next';
 import jestDom from 'eslint-plugin-jest-dom';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
@@ -10,7 +11,7 @@ export default antfu(
   {
     react: true,
     typescript: true,
-
+    graphql: true,
     lessOpinionated: true,
     isInEditor: false,
 
@@ -26,6 +27,21 @@ export default antfu(
   },
   ...tailwind.configs['flat/recommended'],
   jsxA11y.flatConfigs.recommended,
+  {
+  // Setup GraphQL Parser
+    files: ['**/*.{graphql,gql}'],
+    languageOptions: {
+      parser: graphqlPlugin.parser,
+    },
+    plugins: {
+      '@graphql-eslint': graphqlPlugin,
+    },
+  },
+  {
+  // Setup recommended config for operations files
+    files: ['**/*.{graphql,gql}'],
+    rules: graphqlPlugin.configs['flat/operations-recommended'].rules,
+  },
   {
     plugins: {
       '@next/next': nextPlugin,

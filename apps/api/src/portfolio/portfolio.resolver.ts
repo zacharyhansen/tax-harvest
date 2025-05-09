@@ -26,6 +26,19 @@ export class PortfolioResolver {
     private readonly prismaService: PrismaService,
   ) {}
 
+  @Query(() => HarvestResult, {
+    description: 'New harvest endpoint that returns all orders and summary',
+    name: 'finiteHarvest',
+  })
+  async finiteHarvest(
+    @ClerkContext()
+    { metadata }: ClerkClaims,
+  ): Promise<HarvestResult> {
+    return this.portfolioService.finiteHarvest({
+      portfolioId: metadata.portfolioId,
+    })
+  }
+
   @Query(() => PortfolioSummary, {
     description: 'Summary summary',
     name: 'portfolioSummary',

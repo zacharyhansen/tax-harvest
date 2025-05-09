@@ -10556,6 +10556,9 @@ type Query {
   """Find one user by email"""
   findOneUserByEmail(email: String!): User!
 
+  """New harvest endpoint that returns all orders and summary"""
+  finiteHarvest: HarvestResult!
+
   """Get file upload url"""
   generateSignedUrlsForUpload(files: [GCPUploadFile!]!): SignedUrlsForUploadPayload!
 

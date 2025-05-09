@@ -1,12 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common'
 
+import { ConfigService } from '@nestjs/config'
 import { Portfolio, PortfolioRole, Prisma } from '@prisma/client'
 import Decimal from 'decimal.js'
 import { sql } from 'kysely'
+
 import { ClerkClaims } from '~/auth/types'
 
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
-
 import { AccountService } from '../account/account.service'
 import { ClerkService } from '../clerk/clerk.service'
 import { Database } from '../database/database'
@@ -38,6 +39,7 @@ export class PortfolioService {
     private readonly lotService: LotService,
     private readonly harvestService: HarvestService,
     private readonly accountService: AccountService,
+    private readonly configService: ConfigService,
   ) {}
 
   getPortfoliosByUserId(userId: string, args: Prisma.PortfolioFindManyArgs) {
@@ -512,49 +514,81 @@ export class PortfolioService {
   }
 
   async finiteHarvest({
-    directedLots,
     portfolioId,
   }: {
     portfolioId: string
-    directedLots: DirectedHarvestLot[]
-  }) {
-    const [portfolio, lots] = await Promise.all([
+  }): Promise<HarvestResult> {
+    const [summary, lots, portfolio] = await Promise.all([
+      this.summary({
+        id: portfolioId,
+      }),
+      this.lotService.lotCurrent({
+        portfolioId,
+      }),
       this.prismaService.portfolio.findUniqueOrThrow({
         where: {
           id: portfolioId,
         },
       }),
-      this.lotService.lotCurrent({
-        lotIds: directedLots.map(lot => lot.lotId),
-        portfolioId,
-      }),
     ])
 
-    const netPosition = (data?.portfolioSummary.realized.gainTotal ?? 0) + (data?.portfolioSummary.unrealized.gainTotal ?? 0) - (data?.portfolioSummary.unrealized.lossTotal ?? 0)
+    const netPosition = summary.realized.gainTotal + summary.unrealized.gainTotal + summary.unrealized.lossTotal
+    console.log({ netPosition })
 
-    const harvest = new Harvest({
-      lots: lots.map((lot) => {
-        const qty
-          = directedLots.find(dl => dl.lotId === lot.id)?.quantity ?? '0'
+    const harvestType = Math.abs(summary.realized.gainTotal) <= Math.abs(this.configService.get('FINITE_HARVEST_THRESHOLD')!)
+      ? HarvestType.REDUCE_COST_BASIS
+      : summary.realized.gainTotal > 0 ? HarvestType.REDUCE_TAXES : HarvestType.CAPTURE_GAINS_TAX_FREE
+
+    let harvestResult: Harvest | null = null
+    switch (harvestType) {
+      case HarvestType.REDUCE_COST_BASIS: // Netrual realized gain or loss so we want to match lots (unrelaized) by gain and loss to offset each other
+        harvestResult = new Harvest({
+          lots: lots.map((lot) => {
+            const qty = lots.find(l => l.id === lot.id)?.remainingQty ?? '0'
+            return {
+              ...lot,
+              accountId: lot.accountId,
+              originalQty: qty,
+              processQty: qty,
+            } as LotHarvestInput
+          }),
+          portfolio,
+          targetRealized: 0,
+          targetUnrealized: summary.unrealized.gainTotal,
+        })
+
+        harvestResult.process()
         return {
-          ...lot,
-          accountId: lot.accountId,
-          originalQty: qty,
-          processQty: qty,
-        } as LotHarvestInput
-      }),
-      portfolio,
-      targetRealized,
-      targetUnrealized,
-    })
+          allOrders: harvestResult.allOrders,
+          portfolioSummary: summary,
+          realizedOrders: harvestResult.realizedOrders,
+          unrealizedOrders: harvestResult.unrealizedOrders,
+        }
+      case HarvestType.REDUCE_TAXES || HarvestType.CAPTURE_GAINS_TAX_FREE: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
+        harvestResult = new Harvest({
+          lots: lots.map((lot) => {
+            const qty = lots.find(l => l.id === lot.id)?.remainingQty ?? '0'
+            return {
+              ...lot,
+              accountId: lot.accountId,
+              originalQty: qty,
+              processQty: qty,
+            } as LotHarvestInput
+          }).filter(l => l.processQty !== '0'),
+          portfolio,
+          targetRealized: summary.realized.gainTotal,
+          targetUnrealized: 0,
+        })
 
-    harvest.process()
-
-    return {
-      allOrders: harvest.allOrders,
-      realizedOrders: harvest.realizedOrders,
-      unrealizedOrders: harvest.unrealizedOrders,
+        harvestResult.process()
+        return {
+          allOrders: harvestResult.allOrders,
+          portfolioSummary: summary,
+          realizedOrders: harvestResult.realizedOrders,
+          unrealizedOrders: harvestResult.unrealizedOrders,
+        }
     }
+    throw new Error('Invalid harvest type')
   }
 
   harvestRecommendations({

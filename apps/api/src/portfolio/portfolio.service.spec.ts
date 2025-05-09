@@ -40,6 +40,7 @@ describe('portfolioService', () => {
       gainTotal: 84_048,
       lossTotal: -2850,
       positionCount: 1,
+      total: 81198,
     }
 
     expect(
@@ -67,6 +68,7 @@ describe('portfolioService', () => {
       gainTotal: 10_000,
       lossTotal: -2000,
       positionCount: 1,
+      total: 8000,
     }
 
     expect(
@@ -94,6 +96,7 @@ describe('portfolioService', () => {
       gainTotal: 200,
       lossTotal: -2000,
       positionCount: 1,
+      total: -1800,
     }
 
     expect(
@@ -121,6 +124,7 @@ describe('portfolioService', () => {
       gainTotal: 500,
       lossTotal: -10_000,
       positionCount: 1,
+      total: -9500,
     }
 
     expect(
@@ -148,6 +152,7 @@ describe('portfolioService', () => {
       gainTotal: 168_097,
       lossTotal: -5701,
       positionCount: 258,
+      total: 162396,
     }
 
     expect(

@@ -15,6 +15,7 @@ export const envSchema = z.object({
   CLERK_SECRET_KEY: z.string(),
   PORT: z.string(),
   STRIPE_SECRET_KEY: z.string(),
+  NUETRAL_ACCOUNT_AMOUNT: z.coerce.number(),
 })
 
 export type Env = z.infer<typeof envSchema>
