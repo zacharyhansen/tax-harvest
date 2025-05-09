@@ -18,6 +18,7 @@ global:
 serviceAccounts:
   - name: google-secret-service-account
     gcpServiceAccount: harvester-secret-manager
+
 api:
   enabled: true
   replicaCount: 1
@@ -56,15 +57,8 @@ api:
     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
     resources: {}
   env:
-    NODE_ENV: production
     extras:
       PORT: 8000
-      PLAID_ENV: https://production.plaid.com
-      ETRADE_OAUTH_AUTHORIZE_URL: https://us.etrade.com/e/t/etws/authorize
-      ETRADE_HOSTNAME: api.etrade.com
-      GOOGLE_PROJECT: harvester-ai-428202
-      SECRET_SOURCE: GCP
-      GCS_LOTS_BUCKET_NAME: lot_upload
       NUETRAL_ACCOUNT_AMOUNT: 1000
     secretRefs:
       - name: DATABASE_URL
@@ -72,11 +66,72 @@ api:
           secretKeyRef:
             name: database
             key: DATABASE_URL
+      - name: DATABASE_NAME
+        valueFrom:
+          secretKeyRef:
+            name: database
+            key: DATABASE_NAME
+      - name: DATABASE_HOST
+        valueFrom:
+          secretKeyRef:
+            name: database
+            key: DATABASE_HOST
+      - name: DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: database
+            key: DATABASE_PASSWORD
+      - name: DATABASE_PORT
+        valueFrom:
+          secretKeyRef:
+            name: database
+            key: DATABASE_PORT
+      - name: DATABASE_USER
+        valueFrom:
+          secretKeyRef:
+            name: database
+            key: DATABASE_USER
       - name: CLERK_SECRET_KEY
         valueFrom:
           secretKeyRef:
             name: clerk
             key: CLERK_SECRET_KEY
+      - name: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: clerk
+            key: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+      - name: ETRADE_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: etrade
+            key: ETRADE_API_KEY
+      - name: ETRADE_API_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: etrade
+            key: ETRADE_API_SECRET
+      - name: POLYGON_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: polygon
+            key: POLYGON_API_KEY
+      - name: PLAID_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: plaid
+            key: PLAID_SECRET_KEY
+      - name: PLAID_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: plaid
+            key: PLAID_CLIENT_ID
+      - name: STRIPE_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: stripe
+            key: STRIPE_SECRET_KEY
+
   migrations:
     enabled: true
     activeDeadlineSeconds: 300 # Force job termination after 5 minutes
@@ -161,6 +216,7 @@ web:
           secretKeyRef:
             name: stripe
             key: STRIPE_SECRET_KEY
+
 # Secrets configuration with External Secrets Operator
 secrets:
   enabled: true
@@ -183,6 +239,7 @@ secrets:
         - secretKey: STRIPE_SECRET_KEY
           remoteRef:
             key: stripe-secret-key
+
 argocd:
   enabled: true
   server:
