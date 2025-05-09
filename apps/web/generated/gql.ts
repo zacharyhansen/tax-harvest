@@ -14544,6 +14544,7 @@ export type TransactionsQueryResult = Apollo.QueryResult<TransactionsQuery, Tran
 export const UserDocument = gql`
     query User {
   userCurrent {
+    id
     ...UserItem
   }
 }

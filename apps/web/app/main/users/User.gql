@@ -8,6 +8,7 @@ fragment UserItem on User {
 
 query User {
   userCurrent {
+    id
     ...UserItem
   }
 }
