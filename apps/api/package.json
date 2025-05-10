@@ -76,7 +76,7 @@
     "@nestjs/core": "11.0.7",
     "@nestjs/graphql": "^12.1.0",
     "@nestjs/platform-fastify": "11.0.7",
-    "@nestjs/schedule": "^4.1.1",
+    "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^7.4.2",
     "@polygon.io/client-js": "^7.3.2",
     "@prisma/client": "5.20.0",
