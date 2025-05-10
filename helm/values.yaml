@@ -23,7 +23,7 @@ api:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v3.0.0
+    tag: v3.0.1
     pullPolicy: Always
   hookWeight: -10
   annotations:
@@ -171,7 +171,7 @@ web:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: v3.0.0
+    tag: v3.0.1
     pullPolicy: Always
   hookWeight: 10
   annotations:
