@@ -65,6 +65,7 @@ The Cloud SQL Auth Proxy creates a Unix socket at `/cloudsql/<INSTANCE_CONNECTIO
 See [Github](https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx#configuration)
 
 # GKE Set Up Notes
+./cloud-sql-proxy harvester-ai-428202:us-central1:harvester-dev --port 5435
 
 `gcloud container clusters get-credentials "harvester-dev" --zone us-central1-b`
 
