@@ -110,7 +110,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: api
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v3.0.1"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v3.0.2"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -230,7 +230,6 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: 15
-            periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 3
         # Cloud SQL Auth Proxy sidecar container
@@ -283,7 +282,7 @@ spec:
       serviceAccountName: google-secret-service-account
       containers:
         - name: web
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v3.0.1"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web:v3.0.2"
           imagePullPolicy: Always
           ports:
             - name: http
@@ -386,6 +385,161 @@ spec:
                 port:
                   number: 80
 ---
+# Source: harvester/charts/secrets/templates/secretstore.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: gcp-secret-store
+spec:
+  provider:
+    gcpsm:
+      projectID: harvester-ai-428202
+      auth:
+        workloadIdentity:
+          serviceAccountRef:
+            name: google-secret-service-account
+            namespace: harvester-dev
+          clusterLocation: us-central1-b
+          clusterName: harvester-dev
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: database-external-secret
+  namespace: harvester-dev
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: database
+    creationPolicy: Owner
+  data:
+    - secretKey: DATABASE_URL
+      remoteRef:
+        key: DATABASE_URL
+    - secretKey: DATABASE_NAME
+      remoteRef:
+        key: DATABASE_NAME
+    - secretKey: DATABASE_HOST
+      remoteRef:
+        key: DATABASE_HOST
+    - secretKey: DATABASE_PORT
+      remoteRef:
+        key: DATABASE_PORT
+    - secretKey: DATABASE_USER
+      remoteRef:
+        key: DATABASE_USER
+    - secretKey: DATABASE_PASSWORD
+      remoteRef:
+        key: DATABASE_PASSWORD
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: clerk-external-secret
+  namespace: harvester-dev
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: clerk
+    creationPolicy: Owner
+  data:
+    - secretKey: CLERK_SECRET_KEY
+      remoteRef:
+        key: CLERK_SECRET_KEY
+    - secretKey: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+      remoteRef:
+        key: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: stripe-external-secret
+  namespace: harvester-dev
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: stripe
+    creationPolicy: Owner
+  data:
+    - secretKey: STRIPE_SECRET_KEY
+      remoteRef:
+        key: STRIPE_SECRET_KEY
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: etrade-external-secret
+  namespace: harvester-dev
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: etrade
+    creationPolicy: Owner
+  data:
+    - secretKey: ETRADE_API_KEY
+      remoteRef:
+        key: ETRADE_API_KEY
+    - secretKey: ETRADE_API_SECRET
+      remoteRef:
+        key: ETRADE_API_SECRET
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: polygon-external-secret
+  namespace: harvester-dev
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: polygon
+    creationPolicy: Owner
+  data:
+    - secretKey: POLYGON_API_KEY
+      remoteRef:
+        key: POLYGON_API_KEY
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: plaid-external-secret
+  namespace: harvester-dev
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: plaid
+    creationPolicy: Owner
+  data:
+    - secretKey: PLAID_SECRET_KEY
+      remoteRef:
+        key: PLAID_SECRET_KEY
+    - secretKey: PLAID_CLIENT_ID
+      remoteRef:
+        key: PLAID_CLIENT_ID
+---
 # Source: harvester/templates/managed-certificate.yaml
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
@@ -447,7 +601,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrations
-          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v3.0.1"
+          image: "us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api:v3.0.2"
           imagePullPolicy: Always
           command: ["/bin/sh","-c"]
           args: ["echo \"Starting Prisma migration...\"\n# Wait briefly for the proxy to be ready\nsleep 5\n# Run the migration\nnpx prisma migrate deploy\n\n# After migration completes, terminate the proxy sidecar\nif [ $? -eq 0 ]; then\n  echo \"Migration completed successfully, terminating sidecar...\"\n  # Use wget if available\n  if command -v wget \u003e /dev/null; then\n    wget -q -O - http://localhost:9091/quitquitquit || echo \"Using wget to terminate proxy\"\n  # Use node fetch if wget not available\n  else\n    node -e \"fetch('http://localhost:9091/quitquitquit').then(() =\u003e console.log('Proxy termination request sent')).catch(e =\u003e console.error('Failed to terminate proxy:', e))\" || echo \"Using Node.js to terminate proxy\"\n  fi\n  echo \"Termination signal sent to proxy, waiting for shutdown...\"\n  sleep 3\n  echo \"Job completed\"\nelse\n  echo \"Migration failed with status $?\"\n  exit $?\nfi\n"]
@@ -586,181 +740,3 @@ spec:
       volumes:
         - name: cloudsql
           emptyDir: {}
----
-# Source: harvester/charts/secrets/templates/secretstore.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ClusterSecretStore
-metadata:
-  name: gcp-secret-store
-  labels:
-    app.kubernetes.io/component: secretstore
-  annotations:
-    helm.sh/hook: "pre-install,pre-upgrade"
-    helm.sh/hook-weight: "-100"
-spec:
-  provider:
-    gcpsm:
-      projectID: harvester-ai-428202
-      auth:
-        workloadIdentity:
-          serviceAccountRef:
-            name: google-secret-service-account
-            namespace: harvester-dev
-          clusterLocation: us-central1-b
-          clusterName: harvester-dev
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: database-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store
-    kind: ClusterSecretStore
-  target:
-    name: database
-    creationPolicy: Owner
-  data:
-    - secretKey: DATABASE_URL
-      remoteRef:
-        key: DATABASE_URL
-    - secretKey: DATABASE_NAME
-      remoteRef:
-        key: DATABASE_NAME
-    - secretKey: DATABASE_HOST
-      remoteRef:
-        key: DATABASE_HOST
-    - secretKey: DATABASE_PORT
-      remoteRef:
-        key: DATABASE_PORT
-    - secretKey: DATABASE_USER
-      remoteRef:
-        key: DATABASE_USER
-    - secretKey: DATABASE_PASSWORD
-      remoteRef:
-        key: DATABASE_PASSWORD
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: clerk-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store
-    kind: ClusterSecretStore
-  target:
-    name: clerk
-    creationPolicy: Owner
-  data:
-    - secretKey: CLERK_SECRET_KEY
-      remoteRef:
-        key: CLERK_SECRET_KEY
-    - secretKey: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
-      remoteRef:
-        key: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: stripe-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store
-    kind: ClusterSecretStore
-  target:
-    name: stripe
-    creationPolicy: Owner
-  data:
-    - secretKey: STRIPE_SECRET_KEY
-      remoteRef:
-        key: STRIPE_SECRET_KEY
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: etrade-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store
-    kind: ClusterSecretStore
-  target:
-    name: etrade
-    creationPolicy: Owner
-  data:
-    - secretKey: ETRADE_API_KEY
-      remoteRef:
-        key: ETRADE_API_KEY
-    - secretKey: ETRADE_API_SECRET
-      remoteRef:
-        key: ETRADE_API_SECRET
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: polygon-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store
-    kind: ClusterSecretStore
-  target:
-    name: polygon
-    creationPolicy: Owner
-  data:
-    - secretKey: POLYGON_API_KEY
-      remoteRef:
-        key: POLYGON_API_KEY
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: plaid-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store
-    kind: ClusterSecretStore
-  target:
-    name: plaid
-    creationPolicy: Owner
-  data:
-    - secretKey: PLAID_SECRET_KEY
-      remoteRef:
-        key: PLAID_SECRET_KEY
-    - secretKey: PLAID_CLIENT_ID
-      remoteRef:
-        key: PLAID_CLIENT_ID
