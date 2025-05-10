@@ -7,7 +7,6 @@ import { Button } from '@repo/ui/components/button'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -164,102 +163,102 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
 
   return (
     <FormProvider {...form}>
-      <Card className="mx-auto w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle className="mx-auto py-4 text-2xl">
-            {portfolio.name}
-          </CardTitle>
-          <CardTitle>Settings</CardTitle>
-          <CardDescription>
-            Manage your portfolio settings and preferences.
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handleSubmit} noValidate={true}>
-          <CardContent className="space-y-8">
-            {/* Miscellaneous Inputs */}
-            <div className="space-y-4">
-              <InputField name="name" label="Portfolio Name" />
-              <InputField
-                name="minimumLotPAndL"
-                startIcon={DollarSign}
-                label="Minimum Lot P/L"
-                type="number"
-                description="The minimum dollar amount profit or loss per share for a single share to be considered for harvest."
-              />
-              <InputField
-                name="harvestCycleWeeks"
-                label="Harvest Cycle - Number of Weeks"
-                type="number"
-              />
-              <InputField
-                name="harvestShareDollarThreshold"
-                startIcon={DollarSign}
-                label="Per Share Minimum"
-                type="number"
-                description="The minimum dollar amount profit or loss per share for a single share to be considered for harvest."
-              />
-            </div>
-
-            <Separator />
-
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">
-                Short Term Capital Settings
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Portfolio Settings</h1>
+          <p className="text-muted-foreground">Manage your portfolio settings and preferences.</p>
+        </div>
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle>Attributes</CardTitle>
+          </CardHeader>
+          <form onSubmit={handleSubmit} noValidate={true}>
+            <CardContent className="space-y-8">
+              {/* Miscellaneous Inputs */}
+              <div className="space-y-4">
+                <InputField name="name" label="Portfolio Name" />
                 <InputField
+                  name="minimumLotPAndL"
                   startIcon={DollarSign}
-                  name="harvestTickerBucketDollarSizeShort"
-                  label="Asset Bucket Size"
+                  label="Minimum Lot P/L"
                   type="number"
-                  description="The max dollar amount harvested for a single asset before trying the next."
+                  description="The minimum dollar amount profit or loss per share for a single share to be considered for harvest."
                 />
                 <InputField
-                  startIcon={DollarSign}
-                  name="harvestTickerBucketLowerLimitShort"
-                  label="Asset Dollar Minimum"
+                  name="harvestCycleWeeks"
+                  label="Harvest Cycle - Number of Weeks"
                   type="number"
-                  description="The minimum dollar total profit or loss required for an asset to be considered for the harvest."
+                />
+                <InputField
+                  name="harvestShareDollarThreshold"
+                  startIcon={DollarSign}
+                  label="Per Share Minimum"
+                  type="number"
+                  description="The minimum dollar amount profit or loss per share for a single share to be considered for harvest."
                 />
               </div>
-            </div>
 
-            <Separator />
+              <Separator />
 
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">
-                Long Term Capital Settings
-              </h3>
-              <div className="grid grid-cols-2 gap-4">
-                <InputField
-                  startIcon={DollarSign}
-                  name="harvestTickerBucketDollarSizeLong"
-                  label="Asset Bucket Size"
-                  type="number"
-                  description="The max dollar amount harvested for a single asset before trying the next."
-                />
-                <InputField
-                  startIcon={DollarSign}
-                  name="harvestTickerBucketLowerLimitLong"
-                  label="Asset Dollar Minimum"
-                  type="number"
-                  description="The minimum dollar total profit or loss required for an asset to be considered for the harvest."
-                />
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">
+                  Short Term Capital Settings
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <InputField
+                    startIcon={DollarSign}
+                    name="harvestTickerBucketDollarSizeShort"
+                    label="Asset Bucket Size"
+                    type="number"
+                    description="The max dollar amount harvested for a single asset before trying the next."
+                  />
+                  <InputField
+                    startIcon={DollarSign}
+                    name="harvestTickerBucketLowerLimitShort"
+                    label="Asset Dollar Minimum"
+                    type="number"
+                    description="The minimum dollar total profit or loss required for an asset to be considered for the harvest."
+                  />
+                </div>
               </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button
-              type="submit"
-              className="ml-auto w-full"
-              disabled={!form.formState.isDirty}
-              loading={loading}
-            >
-              Save
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">
+                  Long Term Capital Settings
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <InputField
+                    startIcon={DollarSign}
+                    name="harvestTickerBucketDollarSizeLong"
+                    label="Asset Bucket Size"
+                    type="number"
+                    description="The max dollar amount harvested for a single asset before trying the next."
+                  />
+                  <InputField
+                    startIcon={DollarSign}
+                    name="harvestTickerBucketLowerLimitLong"
+                    label="Asset Dollar Minimum"
+                    type="number"
+                    description="The minimum dollar total profit or loss required for an asset to be considered for the harvest."
+                  />
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button
+                type="submit"
+                className="ml-auto w-full"
+                disabled={!form.formState.isDirty}
+                loading={loading}
+              >
+                Save
+              </Button>
+            </CardFooter>
+          </form>
+        </Card>
+      </div>
     </FormProvider>
   )
 }

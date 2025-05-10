@@ -43,8 +43,8 @@ export const NavTree: NavGroup[] = [
         icon: Waypoints,
       },
       {
-        title: 'Portfolio Settings',
-        url: TypedRoutes.portfolios(),
+        title: 'Settings',
+        url: TypedRoutes.settings(),
         icon: Settings,
       },
     ],
