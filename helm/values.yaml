@@ -9,9 +9,11 @@ global:
   useGlobalIngress: true
   certificates:
     - name: harvester-dev-cert
+      namespace: harvester-dev
       domains:
         - dev.taxharvest.ai
     - name: argocd-dev-cert
+      namespace: argocd
       domains:
         - argocd-dev.taxharvest.ai
 # Service accounts configuration

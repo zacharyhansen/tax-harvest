@@ -97,7 +97,7 @@ spec:
               protocol: TCP
           env:
             - name: NODE_ENV
-              value: 
+              value: "production"
             - name: CLIENT_HOME_PAGE_PATH
               value: "/main/home"
             - name: CLIENT_ORIGIN
@@ -315,7 +315,6 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
     networking.gke.io/managed-certificates: argocd-dev-cert
 spec:
-  ingressClassName: gce
   rules:
   - host: argocd-dev.taxharvest.ai
     http:
@@ -383,14 +382,14 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: argocd-dev-cert
-  namespace: harvester-dev
+  namespace: argocd
   labels:
     app.kubernetes.io/name: harvester
     app.kubernetes.io/instance: release-name
     app.kubernetes.io/managed-by: Helm
 spec:
   domains:
-    - argocd.dev.taxharvest.ai
+    - argocd-dev.taxharvest.ai
 ---
 # Source: harvester/charts/api/templates/migrations.yaml
 apiVersion: batch/v1

@@ -5,7 +5,7 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: {{ .name }}
-  namespace: {{ $.Values.global.namespace }}
+  namespace: {{ .namespace | default $.Values.global.namespace }}
   labels:
     app.kubernetes.io/name: harvester
     app.kubernetes.io/instance: {{ $.Release.Name }}
