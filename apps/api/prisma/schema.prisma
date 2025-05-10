@@ -51,6 +51,14 @@ enum PlaidLinkStatus {
   SYNCED
 }
 
+enum HarvestNotificationFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  NEVER
+}
+
 model Portfolio {
   id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt         DateTime @default(now())
@@ -73,6 +81,8 @@ model Portfolio {
   harvestTickerBucketDollarSizeShort Decimal @default(1000) @db.Decimal(14, 2)
   /// How much is a valid bucket (otherwise a ticker is considered 'slop')
   harvestTickerBucketLowerLimitShort Decimal @default(".01") @db.Decimal(14, 2)
+  // notification settings
+  notificationFrequency HarvestNotificationFrequency @default(WEEKLY)
 
   accounts            Account[]
   usersOnPortfolios   UsersOnPortfolios[]

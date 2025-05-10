@@ -1,6 +1,4 @@
 import type { ReactNode } from 'react'
-import { cn } from '@repo/ui/utils'
-
 import LoadingIcon from './loading-icon'
 
 export function LoadingPage({
@@ -12,10 +10,9 @@ export function LoadingPage({
 }) {
   return (
     <div
-      className={cn(
-        'flex h-full w-full items-center justify-center',
-        className,
-      )}
+      className={
+        `flex size-full items-center justify-center ${className}`
+      }
     >
       <div className="flex items-center justify-center space-x-1 text-sm">
         <LoadingIcon />

@@ -4055,6 +4055,17 @@ input EnumGraphFilter {
   notIn: [Graph!]
 }
 
+input EnumHarvestNotificationFrequencyFieldUpdateOperationsInput {
+  set: HarvestNotificationFrequency
+}
+
+input EnumHarvestNotificationFrequencyFilter {
+  equals: HarvestNotificationFrequency
+  in: [HarvestNotificationFrequency!]
+  not: NestedEnumHarvestNotificationFrequencyFilter
+  notIn: [HarvestNotificationFrequency!]
+}
+
 input EnumHarvestStepFieldUpdateOperationsInput {
   set: HarvestStep
 }
@@ -4632,6 +4643,14 @@ type HarvestMinAggregate {
   step: HarvestStep
   type: HarvestType
   updatedAt: DateTime
+}
+
+enum HarvestNotificationFrequency {
+  DAILY
+  MONTHLY
+  NEVER
+  QUARTERLY
+  WEEKLY
 }
 
 type HarvestPotential {
@@ -8493,6 +8512,13 @@ input NestedEnumGraphFilter {
   notIn: [Graph!]
 }
 
+input NestedEnumHarvestNotificationFrequencyFilter {
+  equals: HarvestNotificationFrequency
+  in: [HarvestNotificationFrequency!]
+  not: NestedEnumHarvestNotificationFrequencyFilter
+  notIn: [HarvestNotificationFrequency!]
+}
+
 input NestedEnumHarvestStepFilter {
   equals: HarvestStep
   in: [HarvestStep!]
@@ -8771,6 +8797,7 @@ type Portfolio {
   """Minimum p and l for a lot to be considered harvestable"""
   minimumLotPAndL: Decimal!
   name: String!
+  notificationFrequency: HarvestNotificationFrequency!
   updatedAt: DateTime!
   usersOnPortfolios: [UsersOnPortfolios!]
 }
@@ -8807,6 +8834,7 @@ type PortfolioCountAggregate {
   id: Int!
   minimumLotPAndL: Int!
   name: Int!
+  notificationFrequency: Int!
   updatedAt: Int!
 }
 
@@ -8827,6 +8855,7 @@ input PortfolioCreateInput {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
@@ -8842,6 +8871,7 @@ input PortfolioCreateManyCreatedByInput {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
 }
 
@@ -8933,6 +8963,7 @@ input PortfolioCreateWithoutAccountsInput {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
@@ -8953,6 +8984,7 @@ input PortfolioCreateWithoutAuthConnectionsInput {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
@@ -8973,6 +9005,7 @@ input PortfolioCreateWithoutCreatedByInput {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
@@ -8993,6 +9026,7 @@ input PortfolioCreateWithoutHarvestsInput {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
@@ -9013,6 +9047,7 @@ input PortfolioCreateWithoutLotTransactionBatchInput {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
@@ -9034,6 +9069,7 @@ input PortfolioCreateWithoutUsersOnPortfoliosInput {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
 }
 
@@ -9055,6 +9091,7 @@ type PortfolioMaxAggregate {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
 }
 
@@ -9070,6 +9107,7 @@ type PortfolioMinAggregate {
   id: String
   minimumLotPAndL: Decimal
   name: String
+  notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
 }
 
@@ -9098,6 +9136,7 @@ input PortfolioScalarWhereInput {
   id: UuidFilter
   minimumLotPAndL: DecimalFilter
   name: StringFilter
+  notificationFrequency: EnumHarvestNotificationFrequencyFilter
   updatedAt: DateTimeFilter
 }
 
@@ -9151,6 +9190,7 @@ input PortfolioUpdateInput {
   id: StringFieldUpdateOperationsInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
@@ -9166,6 +9206,7 @@ input PortfolioUpdateManyMutationInput {
   id: StringFieldUpdateOperationsInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -9274,6 +9315,7 @@ input PortfolioUpdateWithoutAccountsInput {
   id: StringFieldUpdateOperationsInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
@@ -9294,6 +9336,7 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
   id: StringFieldUpdateOperationsInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
@@ -9314,6 +9357,7 @@ input PortfolioUpdateWithoutCreatedByInput {
   id: StringFieldUpdateOperationsInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
@@ -9334,6 +9378,7 @@ input PortfolioUpdateWithoutHarvestsInput {
   id: StringFieldUpdateOperationsInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
@@ -9354,6 +9399,7 @@ input PortfolioUpdateWithoutLotTransactionBatchInput {
   id: StringFieldUpdateOperationsInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
@@ -9375,6 +9421,7 @@ input PortfolioUpdateWithoutUsersOnPortfoliosInput {
   id: StringFieldUpdateOperationsInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -9435,6 +9482,7 @@ input PortfolioWhereInput {
   id: UuidFilter
   minimumLotPAndL: DecimalFilter
   name: StringFilter
+  notificationFrequency: EnumHarvestNotificationFrequencyFilter
   updatedAt: DateTimeFilter
   usersOnPortfolios: UsersOnPortfoliosListRelationFilter
 }
@@ -9460,6 +9508,7 @@ input PortfolioWhereUniqueInput {
   id: String
   minimumLotPAndL: DecimalFilter
   name: StringFilter
+  notificationFrequency: EnumHarvestNotificationFrequencyFilter
   updatedAt: DateTimeFilter
   usersOnPortfolios: UsersOnPortfoliosListRelationFilter
 }

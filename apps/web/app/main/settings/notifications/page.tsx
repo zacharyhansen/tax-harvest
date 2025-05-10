@@ -9,7 +9,7 @@ export default function NotificationsSettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Notification Settings</h1>
-        <p className="text-muted-foreground">Manage how and when you receive notifications.</p>
+        <p className="text-muted-foreground">Manage how and when you receive notifications for this portfolio.</p>
       </div>
       <Card>
         <CardHeader>
@@ -19,70 +19,43 @@ export default function NotificationsSettingsPage() {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label htmlFor="marketing">Marketing emails</Label>
-              <p className="text-sm text-muted-foreground">Receive emails about new features and updates</p>
-            </div>
-            <Switch id="marketing" />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="security">Security alerts</Label>
-              <p className="text-sm text-muted-foreground">Receive emails for suspicious login attempts</p>
-            </div>
-            <Switch id="security" defaultChecked />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="account">Account updates</Label>
-              <p className="text-sm text-muted-foreground">Receive emails about your account activity</p>
+              <Label htmlFor="account">End of year tax opportunities</Label>
+              <p className="text-sm text-muted-foreground">Receive emails about tax opportunities at the end of the year</p>
             </div>
             <Switch id="account" defaultChecked />
+
+          </div>
+          <div className="space-y-3">
+            <div className="space-y-0.5">
+              <Label>Opportunity Frequency</Label>
+              <p className="text-sm text-muted-foreground">How often would you like to receive tax opportunity notifications?</p>
+            </div>
+            <RadioGroup defaultValue="weekly">
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="daily" id="daily" />
+                <Label htmlFor="daily">Daily</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="weekly" id="weekly" />
+                <Label htmlFor="weekly">Weekly</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="monthly" id="monthly" />
+                <Label htmlFor="monthly">Monthly</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="quarterly" id="quarterly" />
+                <Label htmlFor="quarterly">Quarterly</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="never" id="never" />
+                <Label htmlFor="never">Never</Label>
+              </div>
+            </RadioGroup>
           </div>
         </CardContent>
         <CardFooter>
           <Button>Save Email Preferences</Button>
-        </CardFooter>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Push Notifications</CardTitle>
-          <CardDescription>Configure how you receive push notifications.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-3">
-            <Label>Notification Frequency</Label>
-            <RadioGroup defaultValue="all">
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="all" id="all" />
-                <Label htmlFor="all">All notifications</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="important" id="important" />
-                <Label htmlFor="important">Important only</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="none" id="none" />
-                <Label htmlFor="none">None</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="browser">Browser notifications</Label>
-              <p className="text-sm text-muted-foreground">Receive notifications in your browser</p>
-            </div>
-            <Switch id="browser" defaultChecked />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="mobile">Mobile notifications</Label>
-              <p className="text-sm text-muted-foreground">Receive notifications on your mobile device</p>
-            </div>
-            <Switch id="mobile" defaultChecked />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button>Save Push Notification Settings</Button>
         </CardFooter>
       </Card>
     </div>

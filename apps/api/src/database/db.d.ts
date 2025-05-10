@@ -5,18 +5,17 @@
 
 import type { ColumnType } from "kysely";
 
-export type ArrayType<T> =
-  ArrayTypeImpl<T> extends (infer U)[] ? U[] : ArrayTypeImpl<T>;
+export type ArrayType<T> = ArrayTypeImpl<T> extends (infer U)[]
+  ? U[]
+  : ArrayTypeImpl<T>;
 
-export type ArrayTypeImpl<T> =
-  T extends ColumnType<infer S, infer I, infer U>
-    ? ColumnType<S[], I[], U[]>
-    : T[];
+export type ArrayTypeImpl<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S[], I[], U[]>
+  : T[];
 
-export type Generated<T> =
-  T extends ColumnType<infer S, infer I, infer U>
-    ? ColumnType<S, I | undefined, U>
-    : ColumnType<T, T | undefined, T>;
+export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
 
 export type Json = JsonValue;
 
@@ -74,30 +73,7 @@ export interface Account {
   fundsWithheldFromPurchasingPower: Numeric | null;
   fundsWithheldFromWithdrawal: Numeric | null;
   id: Generated<string>;
-  institution:
-    | "AUTO"
-    | "AUTOLOAN"
-    | "BETA"
-    | "BROKERAGE"
-    | "CC_BALANCETRANSFER"
-    | "EXTERNAL"
-    | "FUTURES"
-    | "GANIS"
-    | "GENPACT"
-    | "GENPACT_LEAD"
-    | "GLOBALTRADING"
-    | "HEIL"
-    | "HELOC"
-    | "LENDING"
-    | "LOYALTY"
-    | "MORTGAGE"
-    | "NONUS"
-    | "ONTRACK"
-    | "RJO"
-    | "SBASKET"
-    | "STOCKPLAN"
-    | "VISA"
-    | "WDBH";
+  institution: "AUTO" | "AUTOLOAN" | "BETA" | "BROKERAGE" | "CC_BALANCETRANSFER" | "EXTERNAL" | "FUTURES" | "GANIS" | "GENPACT" | "GENPACT_LEAD" | "GLOBALTRADING" | "HEIL" | "HELOC" | "LENDING" | "LOYALTY" | "MORTGAGE" | "NONUS" | "ONTRACK" | "RJO" | "SBASKET" | "STOCKPLAN" | "VISA" | "WDBH";
   key: string | null;
   liveURL: string | null;
   liveURLCreated: Timestamp | null;
@@ -108,13 +84,7 @@ export interface Account {
   marketValueTotal: Numeric | null;
   mode: "CASH" | "CD" | "CHECKING" | "IRA" | "MARGIN" | "SAVINGS" | null;
   name: string | null;
-  optionLevel:
-    | "LEVEL_1"
-    | "LEVEL_2"
-    | "LEVEL_3"
-    | "LEVEL_4"
-    | "NO_OPTIONS"
-    | null;
+  optionLevel: "LEVEL_1" | "LEVEL_2" | "LEVEL_3" | "LEVEL_4" | "NO_OPTIONS" | null;
   plaidAccountMask: string | null;
   portfolioId: string;
   provider: Generated<"ETRADE" | "PLAID" | "SYSTEM">;
@@ -130,9 +100,7 @@ export interface Account {
 
 export interface Asset {
   active: Generated<boolean>;
-  assetClass: Generated<
-    "cryto" | "fx" | "indices" | "otc" | "stocks" | "UNKNOWN"
-  >;
+  assetClass: Generated<"cryto" | "fx" | "indices" | "otc" | "stocks" | "UNKNOWN">;
   assetTypeCode: string | null;
   cik: string | null;
   compositeFigi: string | null;
@@ -213,11 +181,7 @@ export interface Harvest {
   label: string;
   portfolioId: string;
   step: Generated<"COMPLETE" | "CONFIGURE" | "REVIEW">;
-  type:
-    | "CAPTURE_GAINS_TAX_FREE"
-    | "REDUCE_COST_BASIS"
-    | "REDUCE_TAXES"
-    | "SELL";
+  type: "CAPTURE_GAINS_TAX_FREE" | "REDUCE_COST_BASIS" | "REDUCE_TAXES" | "SELL";
   updatedAt: Generated<Timestamp>;
 }
 
@@ -242,13 +206,7 @@ export interface HarvestTransactionItem {
   createdAt: Generated<Timestamp>;
   id: Generated<string>;
   lotId: string | null;
-  orderType:
-    | "BUY"
-    | "BUY_TO_CLOSE"
-    | "BUY_TO_OPEN"
-    | "SELL"
-    | "SELL_TO_CLOSE"
-    | "SELL_TO_OPEN";
+  orderType: "BUY" | "BUY_TO_CLOSE" | "BUY_TO_OPEN" | "SELL" | "SELL_TO_CLOSE" | "SELL_TO_OPEN";
   price: Numeric;
   quantity: Numeric;
   updatedAt: Generated<Timestamp>;
@@ -360,6 +318,7 @@ export interface Portfolio {
   id: Generated<string>;
   minimumLotPAndL: Generated<Numeric>;
   name: Generated<string>;
+  notificationFrequency: Generated<"DAILY" | "MONTHLY" | "NEVER" | "QUARTERLY" | "WEEKLY">;
   updatedAt: Generated<Timestamp>;
 }
 

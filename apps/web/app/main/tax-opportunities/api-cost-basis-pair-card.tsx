@@ -30,7 +30,7 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
           shares={Number(harvestItem.sourceLot.remainingQty)}
           totalShares={Number(harvestItem.sourceLot.remainingQty)}
           aquiredDate={new Date(harvestItem.sourceLot.acquiredDate)}
-          costBasisPerShare={Number(harvestItem.sourceLot.costBasis)}
+          costBasisPerShare={Number(harvestItem.sourceLot.price)}
           currentPricePerShare={Number(harvestItem.sourceLot.lastPrice)}
         />
 

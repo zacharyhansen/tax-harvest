@@ -2,7 +2,7 @@
 
 import { Button } from '@repo/ui/components/button'
 import { cn } from '@repo/ui/utils'
-import { Bell, CreditCard, User } from 'lucide-react'
+import { Bell, CreditCard, Wallet2 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { TypedRoutes } from '~/lib/routes'
@@ -17,19 +17,19 @@ export function Sidebar() {
       exact: true,
     },
     {
-      href: TypedRoutes.settingsPayment(),
-      label: 'Payment',
-      icon: CreditCard,
-    },
-    {
       href: TypedRoutes.settingsPortfolio(),
       label: 'Portfolio',
-      icon: User,
+      icon: Wallet2,
     },
     {
       href: TypedRoutes.settingsNotifications(),
       label: 'Notifications',
       icon: Bell,
+    },
+    {
+      href: TypedRoutes.settingsPayment(),
+      label: 'Payment',
+      icon: CreditCard,
     },
   ]
 
