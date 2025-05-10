@@ -1,14 +1,14 @@
-'use client';
+'use client'
 
-import { Button } from '@repo/ui/components/button';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Button } from '@repo/ui/components/button'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
-import { TypedRoutes } from '~/lib/routes';
+import { TypedRoutes } from '~/lib/routes'
 
 export default function NotFoundPage() {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <main className="grid min-h-full place-items-center px-6 py-24 text-card-foreground sm:py-32 lg:px-8">
@@ -29,7 +29,7 @@ export default function NotFoundPage() {
             className="text-sm font-semibold text-accent-foreground"
             type="button"
             onClick={() => {
-              window.open('https://support.repo.com', '_blank');
+              window.open('https://support.repo.com', '_blank')
             }}
           >
             Contact support
@@ -48,5 +48,5 @@ export default function NotFoundPage() {
         </Link>
       </div>
     </main>
-  );
+  )
 }

@@ -1,7 +1,7 @@
-import type { ComboboxProps } from '@repo/ui/components/combobox';
+import type { ComboboxProps } from "@repo/ui/components/combobox";
 
-import type { BaseFieldProps } from '../form-builder.types';
-import { Combobox } from '@repo/ui/components/combobox';
+import type { BaseFieldProps } from "../form-builder.types";
+import { Combobox } from "@repo/ui/components/combobox";
 
 import {
   FormControl,
@@ -10,8 +10,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@repo/ui/components/form';
-import { useFormContext } from 'react-hook-form';
+} from "@repo/ui/components/form";
+import { useFormContext } from "react-hook-form";
 
 /**
  * CONTROLLED
@@ -22,7 +22,7 @@ export default function ComboboxField({
   description,
   ...props
 }: Readonly<
-  BaseFieldProps & Pick<ComboboxProps, 'options' | 'placeholder' | 'filter'>
+  BaseFieldProps & Pick<ComboboxProps, "options" | "placeholder" | "filter">
 >) {
   const form = useFormContext();
 

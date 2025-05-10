@@ -1,7 +1,7 @@
-import { Wheat } from 'lucide-react';
-import Link from 'next/link';
+import { Wheat } from 'lucide-react'
+import Link from 'next/link'
 
-import { PlaidConnectButton } from '../plaid';
+import { PlaidConnectButton } from '../plaid'
 
 export default function NoAccounts() {
   return (
@@ -27,5 +27,5 @@ export default function NoAccounts() {
         </div>
       </div>
     </>
-  );
+  )
 }

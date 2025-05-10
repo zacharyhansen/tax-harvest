@@ -1,23 +1,31 @@
-import type { LucideIcon } from 'lucide-react';
-import type { BaseInputProps } from './input.types';
+import type { LucideIcon } from "lucide-react";
+import type { BaseInputProps } from "./input.types";
 
-import { cn } from '@repo/ui/utils';
-import * as React from 'react';
-import { inputVariants } from './input.variants';
+import { cn } from "@repo/ui/utils";
+import * as React from "react";
+import { inputVariants } from "./input.variants";
 
-import { Label } from './label';
+import { Label } from "./label";
 
 export type InputProps = {
   label?: React.ReactNode;
   actionElement?: React.ReactNode;
-  variant?: 'default' | 'ghost';
+  variant?: "default" | "ghost";
   startIcon?: LucideIcon;
   endIcon?: LucideIcon;
-} & BaseInputProps & React.InputHTMLAttributes<HTMLInputElement>;
+} & BaseInputProps &
+  React.InputHTMLAttributes<HTMLInputElement>;
 
-const Input = (
-  { ref, className, type, label, actionElement, startIcon, variant = 'default', ...props }: InputProps & { ref?: React.RefObject<HTMLInputElement | null> },
-) => {
+const Input = ({
+  ref,
+  className,
+  type,
+  label,
+  actionElement,
+  startIcon,
+  variant = "default",
+  ...props
+}: InputProps & { ref?: React.RefObject<HTMLInputElement | null> }) => {
   useDisableNumberInputScroll();
   const StartIcon = startIcon;
   // const EndIcon = endIcon;
@@ -42,7 +50,7 @@ const Input = (
     </div>
   );
 };
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export { Input };
 
@@ -59,13 +67,13 @@ function useDisableNumberInputScroll() {
 
     // Attach the handleWheel function as an event listener to each number input
     for (const input of numberInputs) {
-      input.addEventListener('wheel', handleWheel, { passive: false });
+      input.addEventListener("wheel", handleWheel, { passive: false });
     }
 
     // Clean up by removing the event listeners when the component unmounts
     return () => {
       for (const input of numberInputs) {
-        input.removeEventListener('wheel', handleWheel);
+        input.removeEventListener("wheel", handleWheel);
       }
     };
   }, []); // The empty dependency array ensures that this effect runs once, like componentDidMount

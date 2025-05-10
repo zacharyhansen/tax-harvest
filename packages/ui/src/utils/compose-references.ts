@@ -1,6 +1,6 @@
 // @see https://github.com/radix-ui/primitives/blob/main/packages/react/compose-refs/src/composeRefs.tsx
 
-import * as React from 'react';
+import * as React from "react";
 
 type PossibleReference<T> = React.Ref<T> | undefined;
 
@@ -9,7 +9,7 @@ type PossibleReference<T> = React.Ref<T> | undefined;
  * This utility takes care of different types of refs: callback refs and RefObject(s)
  */
 function setReference<T>(ref: PossibleReference<T>, value: T) {
-  if (typeof ref === 'function') {
+  if (typeof ref === "function") {
     ref(value);
   } else if (ref !== null && ref !== undefined) {
     (ref as React.MutableRefObject<T>).current = value;

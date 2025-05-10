@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { useState } from "react";
 
-import { DatePicker } from './date-picker';
+import { DatePicker } from "./date-picker";
 
 const meta = {
-  title: 'Atoms/Date Picker',
+  title: "Atoms/Date Picker",
   component: DatePicker,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   render: (args) => {
     const [value, setValue] = useState(new Date());

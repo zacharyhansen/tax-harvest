@@ -1,13 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { writeFileSync } from 'node:fs'
 
+import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Portfolio, PortfolioRole, Prisma } from '@prisma/client'
 import Decimal from 'decimal.js'
+
 import { sql } from 'kysely'
 
 import { ClerkClaims } from '~/auth/types'
-
-import { LotValueType } from '~/lot/lot.dto'
+import { LotCurrent, LotValueType } from '~/lot/lot.dto'
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 import { AccountService } from '../account/account.service'
 import { ClerkService } from '../clerk/clerk.service'
@@ -20,6 +21,7 @@ import { UserService } from '../user/user.service'
 import {
   DirectedHarvestLot,
   FiniteHarvestResult,
+  HarvestLotOrder,
   HarvestResult,
   PortfolioSummary,
   PortfolioSummaryRealized,
@@ -537,39 +539,95 @@ export class PortfolioService {
       }),
     ])
 
-    const harvestType = Math.abs(summary.realized.gainTotal) <= Math.abs(this.configService.get('FINITE_HARVEST_THRESHOLD')!)
-      ? HarvestType.REDUCE_COST_BASIS
-      : summary.realized.gainTotal > 0 ? HarvestType.REDUCE_TAXES : HarvestType.CAPTURE_GAINS_TAX_FREE
+    const harvestType
+      = Math.abs(summary.realized.gainTotal)
+        <= Math.abs(this.configService.get('NUETRAL_HARVEST_THRESHOLD')!)
+        ? HarvestType.REDUCE_COST_BASIS
+        : summary.realized.gainTotal > 0
+          ? HarvestType.REDUCE_TAXES
+          : HarvestType.CAPTURE_GAINS_TAX_FREE
 
-    let harvestResult: Harvest | null = null
     switch (harvestType) {
-      case HarvestType.REDUCE_COST_BASIS: // Netrual realized gain or loss so we want to match lots (unrelaized) by gain and loss to offset each other
-        harvestResult = new Harvest({
-          lots: lots.map((lot) => {
-            const qty = lots.find(l => l.id === lot.id)?.remainingQty ?? '0'
+      case HarvestType.REDUCE_COST_BASIS: {
+        // Netrual realized gain or loss so we want to match lots (unrelaized) by gain and loss to offset each other
+        const sourceLots: LotCurrent[] = []
+        const matchingLots: LotCurrent[] = []
+
+        // Organize the lots depending on the unrealized gain and loss
+        for (const lot of lots) {
+          if (summary.unrealized.gainTotal > summary.unrealized.lossTotal) {
+            // more gain than loss so losers are the source
+            if (lot.remainingQty > '0') {
+              if (Number(lot.gainTotal) < 0) {
+                sourceLots.push(lot)
+              }
+              else {
+                matchingLots.push(lot)
+              }
+            }
+          }
+          else {
+            // more loss than gain so winners are the source
+            if (lot.remainingQty > '0') {
+              if (Number(lot.gainTotal) > 0) {
+                sourceLots.push(lot)
+              }
+              else {
+                matchingLots.push(lot)
+              }
+            }
+          }
+        }
+        writeFileSync('sourceLots.json', JSON.stringify(sourceLots, null, 2))
+        writeFileSync(
+          'matchingLots.json',
+          JSON.stringify(matchingLots, null, 2),
+        )
+
+        const unrealizedHarvestMatchResults: {
+          sourceLot: LotCurrent
+          matchedLotOrders: HarvestLotOrder[]
+        }[] = []
+
+        const harvest = new Harvest({
+          lots: matchingLots.map((lot) => {
             return {
               ...lot,
-              accountId: lot.accountId,
-              originalQty: qty,
-              processQty: qty,
-            } as LotHarvestInput
+              originalQty: lot.remainingQty,
+              processQty: lot.remainingQty,
+            } satisfies LotHarvestInput
           }),
           portfolio,
           targetRealized: 0,
-          targetUnrealized: summary.unrealized.gainTotal,
+          targetUnrealized: 0,
         })
 
-        harvestResult.process()
-        return {
-          summary,
-          lotsCurrent: [],
-          harvestType,
+        for (const sourceLot of sourceLots) {
+          harvest.targetUnrealized = new Decimal(sourceLot.gainTotal).mul(-1)
+          harvest.process()
+          unrealizedHarvestMatchResults.push({
+            sourceLot,
+            matchedLotOrders: harvest.allOrders,
+          })
         }
+
+        // write results to file
+
+        return {
+          harvestType,
+          unrealizedHarvestMatchResults,
+          summary,
+        }
+      }
       case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
-      case HarvestType.CAPTURE_GAINS_TAX_FREE: { // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
+      case HarvestType.CAPTURE_GAINS_TAX_FREE: {
+        // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
         const directedLots = await this.lotService.lotCurrent({
           portfolioId,
-          lotValueType: HarvestType.REDUCE_TAXES === harvestType ? LotValueType.LOSS : LotValueType.GAIN,
+          lotValueType:
+            HarvestType.REDUCE_TAXES === harvestType
+              ? LotValueType.LOSS
+              : LotValueType.GAIN,
           minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
         })
 

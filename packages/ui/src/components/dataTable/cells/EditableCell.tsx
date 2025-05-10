@@ -1,7 +1,7 @@
-import type { CellContext } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
+import type { CellContext } from "@tanstack/react-table";
+import { useEffect, useState } from "react";
 
-import { Input } from '../../input';
+import { Input } from "../../input";
 
 export default function EditableCell<TData, TValue>({
   column: { id },
@@ -34,7 +34,7 @@ export default function EditableCell<TData, TValue>({
   return (
     <Input
       value={value as string}
-      onChange={e => setValue(e.target.value as TValue)}
+      onChange={(e) => setValue(e.target.value as TValue)}
       onBlur={onBlur}
       type="number"
     />

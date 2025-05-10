@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from "react";
 
-type ResizeDirection = 'left' | 'right';
+type ResizeDirection = "left" | "right";
 export type ElementDimensions = {
   width: number;
   height: number;
@@ -60,17 +60,17 @@ export function useDragResize({
   const handlePointerMove = useCallback(
     (event: PointerEvent) => {
       event.preventDefault();
-      const movementDelta
-        = (resizeDirection === 'left'
+      const movementDelta =
+        (resizeDirection === "left"
           ? resizeOrigin - event.pageX
           : event.pageX - resizeOrigin) * 2;
       const gridUnitWidth = (gridInterval / 100) * boundaryWidth;
       const proposedWidth = initialDimensions.width + movementDelta;
-      const alignedWidth
-        = Math.round(proposedWidth / gridUnitWidth) * gridUnitWidth;
+      const alignedWidth =
+        Math.round(proposedWidth / gridUnitWidth) * gridUnitWidth;
       const finalWidth = widthConstraint(alignedWidth, boundaryWidth);
-      const aspectRatio
-        = contentHeight && contentWidth ? contentHeight / contentWidth : 1;
+      const aspectRatio =
+        contentHeight && contentWidth ? contentHeight / contentWidth : 1;
 
       setDimensions({
         width: Math.max(finalWidth, minWidth),
@@ -110,7 +110,7 @@ export function useDragResize({
 
   const handleKeydown = useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         event.preventDefault();
         event.stopPropagation();
         setDimensions({
@@ -152,14 +152,14 @@ export function useDragResize({
 
   useEffect(() => {
     if (resizeDirection) {
-      document.addEventListener('keydown', handleKeydown);
-      document.addEventListener('pointermove', handlePointerMove);
-      document.addEventListener('pointerup', handlePointerUp);
+      document.addEventListener("keydown", handleKeydown);
+      document.addEventListener("pointermove", handlePointerMove);
+      document.addEventListener("pointerup", handlePointerUp);
 
       return () => {
-        document.removeEventListener('keydown', handleKeydown);
-        document.removeEventListener('pointermove', handlePointerMove);
-        document.removeEventListener('pointerup', handlePointerUp);
+        document.removeEventListener("keydown", handleKeydown);
+        document.removeEventListener("pointermove", handlePointerMove);
+        document.removeEventListener("pointerup", handlePointerUp);
       };
     }
   }, [resizeDirection, handleKeydown, handlePointerMove, handlePointerUp]);

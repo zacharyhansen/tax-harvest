@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import type { ComboboxAsyncOption } from './comboboxAsync';
+import type { Meta, StoryObj } from "@storybook/react";
+import type { ComboboxAsyncOption } from "./comboboxAsync";
 
-import { useState } from 'react';
-import { ComboboxAsync } from './comboboxAsync';
+import { useState } from "react";
+import { ComboboxAsync } from "./comboboxAsync";
 
 const frameworksList = [
-  { value: 'react', label: 'React' },
-  { value: 'angular', label: 'Angular' },
-  { value: 'vue', label: 'Vue' },
-  { value: 'svelte', label: 'Svelte' },
-  { value: 'ember', label: 'Ember' },
+  { value: "react", label: "React" },
+  { value: "angular", label: "Angular" },
+  { value: "vue", label: "Vue" },
+  { value: "svelte", label: "Svelte" },
+  { value: "ember", label: "Ember" },
 ];
 
 const meta = {
-  title: 'Atoms/Combobox Async',
+  title: "Atoms/Combobox Async",
   component: ComboboxAsync,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   args: {
     fetcher: () => {
       return new Promise((resolve) => {
@@ -27,14 +27,14 @@ const meta = {
         }, 3000);
       });
     },
-    placeholder: 'Select frameworks',
+    placeholder: "Select frameworks",
     renderOption: (item: ComboboxAsyncOption) => <div>{item.label}</div>,
     getOptionValue: (item: ComboboxAsyncOption) => item.value,
     getDisplayValue: (item: ComboboxAsyncOption) => item.label,
-    value: '',
-    label: 'Select frameworks',
+    value: "",
+    label: "Select frameworks",
     onChange: (value: string) => {
-      console.info('onChange', value);
+      console.info("onChange", value);
     },
   },
   render: (args) => {

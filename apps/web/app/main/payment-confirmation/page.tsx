@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import { ArrowRightIcon } from '@radix-ui/react-icons';
-import { Button } from '@repo/ui/components/button';
-import Link from 'next/link';
+import { ArrowRightIcon } from '@radix-ui/react-icons'
+import { Button } from '@repo/ui/components/button'
+import Link from 'next/link'
 
-import { TypedRoutes } from '~/lib/routes';
+import { TypedRoutes } from '~/lib/routes'
 
 export default function PaymentConfirmationPage() {
   return (
@@ -23,5 +23,5 @@ export default function PaymentConfirmationPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-import { FileUploader } from '@repo/ui/components/file-uploader';
+import { FileUploader } from '@repo/ui/components/file-uploader'
 
-import { useUploadFiles } from './useUploadFiles';
+import { useUploadFiles } from './useUploadFiles'
 
 type EtradeCSVUploadProps = {
-  accountId: string;
-};
+  accountId: string
+}
 
 export default function EtradeCSVUpload({ accountId }: EtradeCSVUploadProps) {
   const { isUploading, onUpload } = useUploadFiles({
     accountId,
     defaultUploadedFiles: [],
-  });
+  })
 
   return (
     <FileUploader
@@ -23,5 +23,5 @@ export default function EtradeCSVUpload({ accountId }: EtradeCSVUploadProps) {
         'text/csv': [],
       }}
     />
-  );
+  )
 }

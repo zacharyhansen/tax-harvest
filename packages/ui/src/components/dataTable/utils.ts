@@ -1,4 +1,4 @@
-import type { SortingFn } from '@tanstack/react-table';
+import type { SortingFn } from "@tanstack/react-table";
 
 // eslint-disable-next-line ts/no-explicit-any
 export const sortDecimalValue: SortingFn<any> = (rowA, rowB, columnId) => {

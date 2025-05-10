@@ -1,33 +1,30 @@
-'use client';
+'use client'
 
-import { Button } from '@repo/ui/components/button';
-import { Scissors } from 'lucide-react';
-import Link from 'next/link';
+import { Button } from '@repo/ui/components/button'
+import { Scissors } from 'lucide-react'
+import Link from 'next/link'
 
-import {
-  SetUpStatus,
-  usePortfolioSummaryQuery,
-} from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { NoAccounts, OutstandingAccountSetupList } from '~/modules/account';
-import HarvestSummaryCards from '~/modules/harvest/HarvestSummaryCards';
-import { PageWrapper } from '~/modules/layout';
-import { LotsTable } from '~/modules/lot';
-import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { SetUpStatus, usePortfolioSummaryQuery } from '~/generated/gql'
+import { TypedRoutes } from '~/lib/routes'
+import { NoAccounts, OutstandingAccountSetupList } from '~/modules/account'
+import HarvestSummaryCards from '~/modules/harvest/HarvestSummaryCards'
+import { PageWrapper } from '~/modules/layout'
+import { LotsTable } from '~/modules/lot'
+import { ErrorPage, LoadingPage } from '~/modules/utility-components'
 
 export default function HomePage() {
-  const { data, loading, error } = usePortfolioSummaryQuery();
+  const { data, loading, error } = usePortfolioSummaryQuery()
 
   if (!data && loading) {
-    return <LoadingPage message="Retrieving your portfolio information" />;
+    return <LoadingPage message="Retrieving your portfolio information" />
   }
 
   if (error) {
-    return <ErrorPage message={error.message} />;
+    return <ErrorPage message={error.message} />
   }
 
   if (!data && loading) {
-    return <LoadingPage message="Retrieving your portfolio information" />;
+    return <LoadingPage message="Retrieving your portfolio information" />
   }
 
   if (data?.portfolioSummary.setUpStatus === SetUpStatus.NoAccounts) {
@@ -35,7 +32,7 @@ export default function HomePage() {
       <PageWrapper>
         <NoAccounts />
       </PageWrapper>
-    );
+    )
   }
 
   if (data?.portfolioSummary.setUpStatus === SetUpStatus.AccountSetupRequired) {
@@ -46,7 +43,7 @@ export default function HomePage() {
       >
         <OutstandingAccountSetupList />
       </PageWrapper>
-    );
+    )
   }
 
   return (
@@ -95,16 +92,12 @@ export default function HomePage() {
                 <p className="mt-1">
                   Our
                   {' '}
-                  <Link
-                    className="group"
-                    href={TypedRoutes.taxOpportunities()}
-                  >
-                    <span className="underline">
-                      Tax Opportunities
-                    </span>
+                  <Link className="group" href={TypedRoutes.taxOpportunities()}>
+                    <span className="underline">Tax Opportunities</span>
                   </Link>
                   {' '}
-                  will direct you to the best tax-saving opportunities for your portfolio.
+                  will direct you to the best tax-saving opportunities for your
+                  portfolio.
                 </p>
               </div>
               <div className="shrink-0">
@@ -116,7 +109,6 @@ export default function HomePage() {
                     Tax Opportunities
                   </Button>
                 </Link>
-
               </div>
             </div>
           </div>
@@ -125,5 +117,5 @@ export default function HomePage() {
       <HarvestSummaryCards />
       <LotsTable />
     </PageWrapper>
-  );
+  )
 }

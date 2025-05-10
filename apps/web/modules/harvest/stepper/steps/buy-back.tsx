@@ -1,67 +1,67 @@
-import type { HarvestTransactionRecordFragment } from '~/generated/gql';
-import { Badge } from '@repo/ui/components/badge';
-import { Button } from '@repo/ui/components/button';
-import { Calendar } from '@repo/ui/components/calendar';
+import type { HarvestTransactionRecordFragment } from '~/generated/gql'
+import { Badge } from '@repo/ui/components/badge'
+import { Button } from '@repo/ui/components/button'
+import { Calendar } from '@repo/ui/components/calendar'
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card';
-import { Input } from '@repo/ui/components/input';
-import { Label } from '@repo/ui/components/label';
+} from '@repo/ui/components/card'
+import { Input } from '@repo/ui/components/input'
+import { Label } from '@repo/ui/components/label'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover';
-import { Switch } from '@repo/ui/components/switch';
+} from '@repo/ui/components/popover'
+import { Switch } from '@repo/ui/components/switch'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@repo/ui/components/tabs';
+} from '@repo/ui/components/tabs'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@repo/ui/components/tooltip';
-import { cn } from '@repo/ui/utils';
-import { capitalCase } from 'change-case';
-import { CalendarIcon, Info } from 'lucide-react';
+} from '@repo/ui/components/tooltip'
+import { cn } from '@repo/ui/utils'
+import { capitalCase } from 'change-case'
+import { CalendarIcon, Info } from 'lucide-react'
 
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   HarvestType,
   useHarvestQuery,
   useUpdateHarvestMutation,
   useUpdateHarvestTransactionMutation,
-} from '~/generated/gql';
-import { LoadingPage } from '~/modules/utility-components';
-import { Format, formatDate } from '~/modules/utils';
+} from '~/generated/gql'
+import { LoadingPage } from '~/modules/utility-components'
+import { Format, formatDate } from '~/modules/utils'
 
 type ConfigureProps = {
-  harvestId: string;
-};
+  harvestId: string
+}
 
 export default function BuyBack({ harvestId }: ConfigureProps) {
-  const [label, setLabel] = useState<string>('');
+  const [label, setLabel] = useState<string>('')
   const { data, loading } = useHarvestQuery({
     onCompleted: (data) => {
-      setLabel(data.harvest.label);
+      setLabel(data.harvest.label)
     },
     variables: {
       id: harvestId,
     },
-  });
+  })
 
-  const [mutate] = useUpdateHarvestMutation();
+  const [mutate] = useUpdateHarvestMutation()
 
   if (loading || !data) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
 
   if (data.harvest.type === HarvestType.ReduceCostBasis) {
@@ -94,7 +94,7 @@ export default function BuyBack({ harvestId }: ConfigureProps) {
           </TabsContent>
         </Tabs>
       </div>
-    );
+    )
   }
 
   return (
@@ -103,7 +103,7 @@ export default function BuyBack({ harvestId }: ConfigureProps) {
       <Input
         value={label}
         onChange={(e) => {
-          setLabel(e.target.value);
+          setLabel(e.target.value)
         }}
         onBlur={(e) => {
           void mutate({
@@ -115,22 +115,22 @@ export default function BuyBack({ harvestId }: ConfigureProps) {
               },
               id: data.harvest.id,
             },
-          });
+          })
         }}
       />
       {data.harvest.harvestTransactions?.map(transaction => (
         <TransactionCard key={transaction.id} transaction={transaction} />
       ))}
     </div>
-  );
+  )
 }
 
 function TransactionCard({
   transaction,
 }: {
-  transaction: HarvestTransactionRecordFragment;
+  transaction: HarvestTransactionRecordFragment
 }) {
-  const [updateTransaction] = useUpdateHarvestTransactionMutation();
+  const [updateTransaction] = useUpdateHarvestTransactionMutation()
 
   return (
     <Card key={transaction.id}>
@@ -187,9 +187,7 @@ function TransactionCard({
                 <p className="text-sm font-medium text-muted-foreground">
                   Quantity
                 </p>
-                <p>
-                  {transaction.harvestTransactionItem.quantity}
-                </p>
+                <p>{transaction.harvestTransactionItem.quantity}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
@@ -241,9 +239,7 @@ function TransactionCard({
                       <p className="text-sm font-medium text-muted-foreground">
                         Quantity
                       </p>
-                      <p>
-                        {transaction.replacementTransactionItem.quantity}
-                      </p>
+                      <p>{transaction.replacementTransactionItem.quantity}</p>
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">
@@ -308,7 +304,7 @@ function TransactionCard({
                   },
                   id: transaction.id,
                 },
-              });
+              })
             }}
             aria-label="Toggle buyback reminder"
           />
@@ -345,7 +341,7 @@ function TransactionCard({
                   },
                   id: transaction.id,
                 },
-              });
+              })
             }}
             aria-label="Toggle buyback reminder"
           />
@@ -385,7 +381,7 @@ function TransactionCard({
                     },
                     id: transaction.id,
                   },
-                });
+                })
               }}
               disabled={date => date < new Date()}
             />
@@ -393,5 +389,5 @@ function TransactionCard({
         </Popover>
       </CardFooter>
     </Card>
-  );
+  )
 }

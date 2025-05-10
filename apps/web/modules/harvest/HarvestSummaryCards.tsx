@@ -1,17 +1,17 @@
-import { Badge } from '@repo/ui/components/badge';
-import DataCard from '@repo/ui/components/dataCard';
-import { cn } from '@repo/ui/utils';
-import { TrendingDown, TrendingUp, Wheat } from 'lucide-react';
+import { Badge } from '@repo/ui/components/badge'
+import DataCard from '@repo/ui/components/dataCard'
+import { cn } from '@repo/ui/utils'
+import { TrendingDown, TrendingUp, Wheat } from 'lucide-react'
 
-import { usePortfolioSummaryQuery } from '~/generated/gql';
-import { LoadingPage } from '~/modules/utility-components';
-import { Format, MoneyUtil } from '~/modules/utils';
+import { usePortfolioSummaryQuery } from '~/generated/gql'
+import { LoadingPage } from '~/modules/utility-components'
+import { Format, MoneyUtil } from '~/modules/utils'
 
 export default function HarvestSummaryCards() {
-  const { data, loading } = usePortfolioSummaryQuery();
+  const { data, loading } = usePortfolioSummaryQuery()
 
   if (!data && loading) {
-    return <LoadingPage message="Retrieving your portfolio information" />;
+    return <LoadingPage message="Retrieving your portfolio information" />
   }
 
   return (
@@ -115,5 +115,5 @@ export default function HarvestSummaryCards() {
         </Badge>
       </DataCard>
     </div>
-  );
+  )
 }

@@ -1,29 +1,29 @@
-import type { TextNodeAttributes } from './types';
-import { Input } from '@repo/ui/components/input';
+import type { TextNodeAttributes } from "./types";
+import { Input } from "@repo/ui/components/input";
 
-import InputField from '@repo/ui/form-builder/fields/input.field';
+import InputField from "@repo/ui/form-builder/fields/input.field";
 
-import { mergeAttributes, Node } from '@tiptap/core';
-import { ReactNodeViewRenderer } from '@tiptap/react';
-import { generateRandomFieldName } from '../../utils';
+import { mergeAttributes, Node } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import { generateRandomFieldName } from "../../utils";
 
-import { useFormKeyDown } from './hooks/use-form-key-down';
-import { InputWrapper } from './input.wrapper';
-import { FormNode } from './types';
+import { useFormKeyDown } from "./hooks/use-form-key-down";
+import { InputWrapper } from "./input.wrapper";
+import { FormNode } from "./types";
 
 export const FormTextNode = Node.create<TextNodeAttributes>({
   name: FormNode.Text, // Unique name for your node
-  group: 'block', // Allow it to act like a block element
+  group: "block", // Allow it to act like a block element
   atom: true, // Treat as a single unit (atomic)
 
   addAttributes() {
     return {
-      name: { default: generateRandomFieldName('field', 10) },
-      label: { default: '' },
-      defaultValue: { default: '' },
-      placeholder: { default: '' },
+      name: { default: generateRandomFieldName("field", 10) },
+      label: { default: "" },
+      defaultValue: { default: "" },
+      placeholder: { default: "" },
       required: { default: true },
-      description: { default: '' },
+      description: { default: "" },
       nameLocked: { default: false },
     };
   },
@@ -31,13 +31,13 @@ export const FormTextNode = Node.create<TextNodeAttributes>({
   parseHTML() {
     return [
       {
-        tag: 'form-text-node',
+        tag: "form-text-node",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['form-text-node', mergeAttributes(HTMLAttributes)];
+    return ["form-text-node", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {

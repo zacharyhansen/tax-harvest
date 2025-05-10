@@ -1,30 +1,30 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { Button } from './button';
+import { Button } from "./button";
 
 const meta = {
-  title: 'Atoms/Button',
+  title: "Atoms/Button",
   component: Button,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: { type: 'select' },
+      control: { type: "select" },
       options: [
-        'default',
-        'secondary',
-        'destructive',
-        'ghost',
-        'link',
-        'outline',
+        "default",
+        "secondary",
+        "destructive",
+        "ghost",
+        "link",
+        "outline",
       ],
     },
     size: {
-      control: { type: 'select' },
-      options: ['default', 'icon', 'sm', 'lg'],
+      control: { type: "select" },
+      options: ["default", "icon", "sm", "lg"],
     },
   },
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<typeof Button>;
 
@@ -35,42 +35,42 @@ type Story = StoryObj<typeof meta>;
 // color
 export const Default: Story = {
   args: {
-    variant: 'default',
-    children: 'ButtonShadcn',
+    variant: "default",
+    children: "ButtonShadcn",
   },
 };
 
 export const Secondary: Story = {
   args: {
-    variant: 'secondary',
-    children: 'ButtonShadcn',
+    variant: "secondary",
+    children: "ButtonShadcn",
   },
 };
 
 export const Destructive: Story = {
   args: {
-    variant: 'destructive',
-    children: 'ButtonShadcn',
+    variant: "destructive",
+    children: "ButtonShadcn",
   },
 };
 
 export const Ghost: Story = {
   args: {
-    variant: 'ghost',
-    children: 'ButtonShadcn',
+    variant: "ghost",
+    children: "ButtonShadcn",
   },
 };
 
 export const Link: Story = {
   args: {
-    variant: 'link',
-    children: 'ButtonShadcn',
+    variant: "link",
+    children: "ButtonShadcn",
   },
 };
 export const Outline: Story = {
   args: {
-    variant: 'outline',
-    children: 'ButtonShadcn',
+    variant: "outline",
+    children: "ButtonShadcn",
   },
 };
 
@@ -78,26 +78,26 @@ export const Outline: Story = {
 
 export const SizeDefault: Story = {
   args: {
-    size: 'default',
-    children: 'ButtonShadcn',
+    size: "default",
+    children: "ButtonShadcn",
   },
 };
 export const SizeIcon: Story = {
   args: {
-    size: 'icon',
-    children: 'icon',
+    size: "icon",
+    children: "icon",
   },
 };
 export const SizeLarge: Story = {
   args: {
-    size: 'lg',
-    children: 'ButtonShadcn',
+    size: "lg",
+    children: "ButtonShadcn",
   },
 };
 
 export const SizeSmall: Story = {
   args: {
-    size: 'sm',
-    children: 'ButtonShadcn',
+    size: "sm",
+    children: "ButtonShadcn",
   },
 };

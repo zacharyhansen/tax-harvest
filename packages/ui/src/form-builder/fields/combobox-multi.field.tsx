@@ -1,10 +1,7 @@
-import type { ComboboxMultiProps } from '@repo/ui/components/combobox-multi';
+import type { ComboboxMultiProps } from "@repo/ui/components/combobox-multi";
 
-import type { BaseFieldProps } from '../form-builder.types';
-import {
-  ComboboxMulti,
-
-} from '@repo/ui/components/combobox-multi';
+import type { BaseFieldProps } from "../form-builder.types";
+import { ComboboxMulti } from "@repo/ui/components/combobox-multi";
 
 import {
   FormControl,
@@ -13,8 +10,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@repo/ui/components/form';
-import { useFormContext } from 'react-hook-form';
+} from "@repo/ui/components/form";
+import { useFormContext } from "react-hook-form";
 
 /**
  * CONTROLLED
@@ -25,7 +22,7 @@ export default function ComboboxMultiField({
   description,
   ...props
 }: Readonly<
-  BaseFieldProps & Pick<ComboboxMultiProps, 'options' | 'placeholder'>
+  BaseFieldProps & Pick<ComboboxMultiProps, "options" | "placeholder">
 >) {
   const form = useFormContext();
 

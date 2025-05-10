@@ -1,6 +1,6 @@
-import type { BaseFieldProps } from '../form-builder.types';
+import type { BaseFieldProps } from "../form-builder.types";
 
-import { Checkbox } from '@repo/ui/components/checkbox';
+import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   FormControl,
   FormDescription,
@@ -8,7 +8,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@repo/ui/components/form';
+} from "@repo/ui/components/form";
 
 export default function CheckboxField({
   name,

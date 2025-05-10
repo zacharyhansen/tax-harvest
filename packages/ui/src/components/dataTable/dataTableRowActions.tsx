@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type { Row } from '@tanstack/react-table';
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import type { Row } from "@tanstack/react-table";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
-import { Button } from '../button';
+import { Button } from "../button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +15,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '../dropdown-menu';
+} from "../dropdown-menu";
 
 type DataTableRowActionsProps<TData> = {
   row: Row<TData>;
@@ -23,7 +23,7 @@ type DataTableRowActionsProps<TData> = {
 
 export function DataTableRowActions<
   TData,
-// eslint-disable-next-line no-empty-pattern
+  // eslint-disable-next-line no-empty-pattern
 >({}: DataTableRowActionsProps<TData>) {
   return (
     <DropdownMenu>

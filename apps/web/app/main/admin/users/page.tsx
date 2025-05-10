@@ -1,32 +1,32 @@
-import { clerkClient } from '@clerk/nextjs/server';
-import { Button } from '@repo/ui/components/button';
+import { clerkClient } from '@clerk/nextjs/server'
+import { Button } from '@repo/ui/components/button'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
+} from '@repo/ui/components/card'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
-import { checkRole } from '~/modules/clerk';
+import { checkRole } from '~/modules/clerk'
 
-import { SearchUsers } from '../search-users';
+import { SearchUsers } from '../search-users'
 
-import { removeRole, setRole } from './_actions';
+import { removeRole, setRole } from './_actions'
 
 export default async function AdminDashboard(params: {
-  searchParams: Promise<{ search?: string }>;
+  searchParams: Promise<{ search?: string }>
 }) {
   if (!checkRole('admin')) {
-    redirect('/');
+    redirect('/')
   }
 
-  const query = (await params.searchParams).search;
+  const query = (await params.searchParams).search
 
-  const client = clerkClient();
+  const client = clerkClient()
 
-  const users = query ? (await client.users.getUserList({ query })).data : [];
+  const users = query ? (await client.users.getUserList({ query })).data : []
 
   return (
     <>
@@ -86,8 +86,8 @@ export default async function AdminDashboard(params: {
               </div>
             </CardContent>
           </Card>
-        );
+        )
       })}
     </>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import type { NavItem } from './components/nav-main';
+import type { Meta, StoryObj } from "@storybook/react";
+import type { NavItem } from "./components/nav-main";
 
 import {
   Breadcrumb,
@@ -8,7 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@repo/ui/components/breadcrumb';
+} from "@repo/ui/components/breadcrumb";
 
 import {
   Component,
@@ -18,72 +18,72 @@ import {
   LayoutDashboard,
   ListTodo,
   Network,
-} from 'lucide-react';
-import { Button } from '../components/button';
+} from "lucide-react";
+import { Button } from "../components/button";
 
-import { Dashboard } from './dashboard';
+import { Dashboard } from "./dashboard";
 
 const meta = {
-  title: 'Molecules/Dashboard',
+  title: "Molecules/Dashboard",
   component: Dashboard,
   args: {
     navGroups: [
       {
-        title: 'Platform',
+        title: "Platform",
         items: [
           {
-            title: 'Dashboard',
-            url: '#',
+            title: "Dashboard",
+            url: "#",
             icon: LayoutDashboard,
           },
           {
-            title: 'Tasks',
-            url: '#',
+            title: "Tasks",
+            url: "#",
             icon: ListTodo,
           },
           {
-            title: 'Deals',
-            url: '#',
+            title: "Deals",
+            url: "#",
             icon: Handshake,
           },
         ] satisfies NavItem[],
       },
       {
-        title: 'Configure',
+        title: "Configure",
         items: [
           {
-            title: 'Data Tree',
-            url: '#',
+            title: "Data Tree",
+            url: "#",
             icon: Network,
           },
           {
-            url: '#',
+            url: "#",
             icon: Component,
-            title: 'Layouts',
+            title: "Layouts",
           },
           {
-            url: '#',
+            url: "#",
             icon: Goal,
-            title: 'Goals',
+            title: "Goals",
           },
           {
-            title: 'Views',
-            url: '#',
+            title: "Views",
+            url: "#",
             icon: Layers3,
             items: [
               {
-                title: 'Query Playground',
-                url: '#',
+                title: "Query Playground",
+                url: "#",
                 icon: Network,
               },
               {
-                title: 'Tables',
-                url: '#',
+                title: "Tables",
+                url: "#",
                 icon: Network,
               },
               {
-                title: 'Rules',
-                url: '#',
+                title: "Rules",
+                url: "#",
                 icon: Network,
               },
             ],
@@ -116,7 +116,7 @@ const meta = {
       </Breadcrumb>
     ),
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof Dashboard>;
 
 export default meta;

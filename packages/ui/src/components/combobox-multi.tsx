@@ -1,11 +1,11 @@
 // src/components/multi-select.tsx
 
-import type { VariantProps } from 'class-variance-authority';
-import type { ComboboxOption } from './combobox';
-import type { BaseInputProps } from './input.types';
+import type { VariantProps } from "class-variance-authority";
+import type { ComboboxOption } from "./combobox";
+import type { BaseInputProps } from "./input.types";
 
-import { Badge } from '@repo/ui/components/badge';
-import { Button } from '@repo/ui/components/button';
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -14,40 +14,40 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@repo/ui/components/command';
+} from "@repo/ui/components/command";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover';
-import { Separator } from '@repo/ui/components/separator';
-import { cn } from '@repo/ui/utils';
-import { cva } from 'class-variance-authority';
-import { CheckIcon, ChevronDown, XIcon } from 'lucide-react';
-import * as React from 'react';
-import { Label } from './label';
+} from "@repo/ui/components/popover";
+import { Separator } from "@repo/ui/components/separator";
+import { cn } from "@repo/ui/utils";
+import { cva } from "class-variance-authority";
+import { CheckIcon, ChevronDown, XIcon } from "lucide-react";
+import * as React from "react";
+import { Label } from "./label";
 
 /**
  * Variants for the multi-select component to handle different styles.
  * Uses class-variance-authority (cva) to define different styles based on "variant" prop.
  */
 const comboboxMultiVariants = cva(
-  'm-1 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110',
+  "m-1 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110",
   {
     variants: {
       variant: {
         default:
-          'border-foreground/10 bg-card text-foreground hover:bg-card/80',
+          "border-foreground/10 bg-card text-foreground hover:bg-card/80",
         secondary:
-          'border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80',
+          "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:
-          'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
-        inverted: 'inverted',
+          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        inverted: "inverted",
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: "default",
     },
   },
 );
@@ -101,22 +101,37 @@ export type ComboboxMultiProps = {
   label?: React.ReactNode;
   description?: React.ReactNode;
   value: string[];
-} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> & VariantProps<typeof comboboxMultiVariants> & BaseInputProps;
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> &
+  VariantProps<typeof comboboxMultiVariants> &
+  BaseInputProps;
 
-export const ComboboxMulti = (
-  { ref, onChange: onValueChange, value: values, options, variant, placeholder = 'Select options', animation = 0, maxCount = 3, modalPopover = false, asChild = true, className, description, label, ...props }: ComboboxMultiProps & { ref?: React.RefObject<HTMLButtonElement | null> },
-) => {
+export const ComboboxMulti = ({
+  ref,
+  onChange: onValueChange,
+  value: values,
+  options,
+  variant,
+  placeholder = "Select options",
+  animation = 0,
+  maxCount = 3,
+  modalPopover = false,
+  asChild = true,
+  className,
+  description,
+  label,
+  ...props
+}: ComboboxMultiProps & {
+  ref?: React.RefObject<HTMLButtonElement | null>;
+}) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
-  const handleInputKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
-    if (event.key === 'Enter') {
+  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
       setIsPopoverOpen(true);
     } else if (
-      event.key === 'Backspace'
-      && !event.currentTarget.value
-      && !props.disabled
+      event.key === "Backspace" &&
+      !event.currentTarget.value &&
+      !props.disabled
     ) {
       const newSelectedValues = [...values];
       newSelectedValues.pop();
@@ -126,7 +141,7 @@ export const ComboboxMulti = (
 
   const toggleOption = (option: string) => {
     const newSelectedValues = values.includes(option)
-      ? values.filter(value => value !== option)
+      ? values.filter((value) => value !== option)
       : [...values, option];
     onValueChange(newSelectedValues);
   };
@@ -136,7 +151,7 @@ export const ComboboxMulti = (
   };
 
   const handleTogglePopover = () => {
-    setIsPopoverOpen(previous => !previous);
+    setIsPopoverOpen((previous) => !previous);
   };
 
   const clearExtraOptions = () => {
@@ -148,7 +163,7 @@ export const ComboboxMulti = (
     if (values.length === options.length) {
       handleClear();
     } else {
-      const allValues = options.map(option => option.value);
+      const allValues = options.map((option) => option.value);
       onValueChange(allValues);
     }
   };
@@ -168,89 +183,83 @@ export const ComboboxMulti = (
               {...props}
               onClick={handleTogglePopover}
               className={cn(
-                'flex h-auto min-h-10 w-full min-w-[240px] items-center justify-between',
+                "flex h-auto min-h-10 w-full min-w-[240px] items-center justify-between",
                 className,
               )}
               variant="outline"
             >
-              {values.length > 0
-                ? (
-                    <div className="flex w-full items-center justify-between">
-                      <div className="flex flex-wrap items-center">
-                        {values.slice(0, maxCount).map((value) => {
-                          const option = options.find(o => o.value === value);
-                          const IconComponent = option?.icon;
-                          return (
-                            <Badge
-                              key={value}
-                              className={cn(comboboxMultiVariants({ variant }))}
-                              style={{ animationDuration: `${animation}s` }}
-                            >
-                              {IconComponent && (
-                                <IconComponent className="mr-2 size-4" />
-                              )}
-                              {option?.label}
-                              {props.disabled
-                                ? null
-                                : (
-                                    <XIcon
-                                      className="ml-2 size-4 cursor-pointer"
-                                      onClick={(event) => {
-                                        event.stopPropagation();
-                                        toggleOption(value);
-                                      }}
-                                    />
-                                  )}
-                            </Badge>
-                          );
-                        })}
-                        {values.length > maxCount && (
-                          <Badge
-                            className={cn(
-                              'text-foreground border-foreground/1 bg-transparent hover:bg-transparent',
-                              comboboxMultiVariants({ variant }),
-                            )}
-                            style={{ animationDuration: `${animation}s` }}
-                          >
-                            {`+ ${values.length - maxCount} more`}
+              {values.length > 0 ? (
+                <div className="flex w-full items-center justify-between">
+                  <div className="flex flex-wrap items-center">
+                    {values.slice(0, maxCount).map((value) => {
+                      const option = options.find((o) => o.value === value);
+                      const IconComponent = option?.icon;
+                      return (
+                        <Badge
+                          key={value}
+                          className={cn(comboboxMultiVariants({ variant }))}
+                          style={{ animationDuration: `${animation}s` }}
+                        >
+                          {IconComponent && (
+                            <IconComponent className="mr-2 size-4" />
+                          )}
+                          {option?.label}
+                          {props.disabled ? null : (
                             <XIcon
                               className="ml-2 size-4 cursor-pointer"
                               onClick={(event) => {
                                 event.stopPropagation();
-                                clearExtraOptions();
+                                toggleOption(value);
                               }}
                             />
-                          </Badge>
+                          )}
+                        </Badge>
+                      );
+                    })}
+                    {values.length > maxCount && (
+                      <Badge
+                        className={cn(
+                          "text-foreground border-foreground/1 bg-transparent hover:bg-transparent",
+                          comboboxMultiVariants({ variant }),
                         )}
-                      </div>
-                      <div className="flex items-center justify-between">
-                        {props.disabled
-                          ? null
-                          : (
-                              <>
-                                <XIcon
-                                  className="mx-2 h-4 cursor-pointer text-muted-foreground"
-                                  onClick={(event) => {
-                                    event.stopPropagation();
-                                    handleClear();
-                                  }}
-                                />
-                                <Separator
-                                  orientation="vertical"
-                                  className="flex h-full min-h-6"
-                                />
-                              </>
-                            )}
-                        <ChevronDown className="mx-2 h-4 cursor-pointer text-muted-foreground" />
-                      </div>
-                    </div>
-                  )
-                : (
-                    <div className="mx-auto flex w-full items-center justify-between">
-                      <span className="text-muted-foreground">{placeholder}</span>
-                      <ChevronDown className="h-4 cursor-pointer text-muted-foreground" />
-                    </div>
-                  )}
+                        style={{ animationDuration: `${animation}s` }}
+                      >
+                        {`+ ${values.length - maxCount} more`}
+                        <XIcon
+                          className="ml-2 size-4 cursor-pointer"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            clearExtraOptions();
+                          }}
+                        />
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    {props.disabled ? null : (
+                      <>
+                        <XIcon
+                          className="mx-2 h-4 cursor-pointer text-muted-foreground"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleClear();
+                          }}
+                        />
+                        <Separator
+                          orientation="vertical"
+                          className="flex h-full min-h-6"
+                        />
+                      </>
+                    )}
+                    <ChevronDown className="mx-2 h-4 cursor-pointer text-muted-foreground" />
+                  </div>
+                </div>
+              ) : (
+                <div className="mx-auto flex w-full items-center justify-between">
+                  <span className="text-muted-foreground">{placeholder}</span>
+                  <ChevronDown className="h-4 cursor-pointer text-muted-foreground" />
+                </div>
+              )}
             </Button>
           </div>
         </PopoverTrigger>
@@ -277,10 +286,10 @@ export const ComboboxMulti = (
                 >
                   <div
                     className={cn(
-                      'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
+                      "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                       values.length === options.length
-                        ? 'bg-primary text-primary-foreground'
-                        : 'opacity-50 [&_svg]:invisible',
+                        ? "bg-primary text-primary-foreground"
+                        : "opacity-50 [&_svg]:invisible",
                     )}
                   >
                     <CheckIcon className="size-4" />
@@ -300,10 +309,10 @@ export const ComboboxMulti = (
                     >
                       <div
                         className={cn(
-                          'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
+                          "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                           isSelected
-                            ? 'bg-primary text-primary-foreground'
-                            : 'opacity-50 [&_svg]:invisible',
+                            ? "bg-primary text-primary-foreground"
+                            : "opacity-50 [&_svg]:invisible",
                         )}
                       >
                         <CheckIcon className="size-4" />
@@ -354,4 +363,4 @@ export const ComboboxMulti = (
   );
 };
 
-ComboboxMulti.displayName = 'ComboboxMulti';
+ComboboxMulti.displayName = "ComboboxMulti";

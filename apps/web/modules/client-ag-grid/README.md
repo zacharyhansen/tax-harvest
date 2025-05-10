@@ -20,8 +20,8 @@ The JSON Cell provides a way to display and potentially edit JSON data within an
 To use the JSON cell in your AG-Grid column definition:
 
 ```typescript
-import { ColDef } from 'ag-grid-community';
-import { JsonCell } from '../../modules/client-ag-grid';
+import { ColDef } from 'ag-grid-community'
+import { JsonCell } from '../../modules/client-ag-grid'
 
 const columnDefs: ColDef[] = [
   // ... other columns
@@ -40,7 +40,7 @@ const columnDefs: ColDef[] = [
     field: 'settings',
     type: 'json', // This will automatically use the JSON cell renderer
   },
-];
+]
 ```
 
 ## Example
@@ -48,8 +48,8 @@ const columnDefs: ColDef[] = [
 Here's an example showing how the JSON cell works with different types of data:
 
 ```tsx
-import { AgGridReact } from 'ag-grid-react';
-import { themeQuartzGridOptions } from '../../modules/client-ag-grid';
+import { AgGridReact } from 'ag-grid-react'
+import { themeQuartzGridOptions } from '../../modules/client-ag-grid'
 
 // Sample data
 const rowData = [
@@ -65,7 +65,7 @@ const rowData = [
     config: { enabled: false, features: [] },
     metadata: null,
   },
-];
+]
 
 // Column definitions
 const columnDefs = [
@@ -81,7 +81,7 @@ const columnDefs = [
     field: 'metadata',
     type: 'json',
   },
-];
+]
 
 // In your component
 return (
@@ -93,5 +93,5 @@ return (
       columnDefs={columnDefs}
     />
   </div>
-);
+)
 ```

@@ -1,22 +1,21 @@
-'use client';
+'use client'
 
-import type { LotCurrentItemFragment } from '~/generated/gql';
-import { Alert } from '@repo/ui/components/alert';
-import { Button } from '@repo/ui/components/button';
+import type { LotCurrentItemFragment } from '~/generated/gql'
+import { Alert } from '@repo/ui/components/alert'
+import { Button } from '@repo/ui/components/button'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card';
-import { ArrowLeftCircle, ArrowRightCircle, Wheat } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+} from '@repo/ui/components/card'
+import { ArrowLeftCircle, ArrowRightCircle, Wheat } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react'
 import {
   HarvestStep,
   HarvestType,
-
   LotValueType,
   useCreateHarvestMutation,
   useFinalizeHarvestMutation,
@@ -24,45 +23,45 @@ import {
   useLotsCurrentForLotTypeQuery,
   usePortfolioSummaryQuery,
   useUpdateHarvestMutation,
-} from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { PageWrapper } from '~/modules/layout';
-import { LoadingPage } from '~/modules/utility-components';
-import { MoneyUtil } from '~/modules/utils';
+} from '~/generated/gql'
+import { TypedRoutes } from '~/lib/routes'
+import { PageWrapper } from '~/modules/layout'
+import { LoadingPage } from '~/modules/utility-components'
+import { MoneyUtil } from '~/modules/utils'
 
-import BuyBack from './steps/buy-back';
-import Complete from './steps/Complete';
-import LotSelection from './steps/LotSelection';
-import Finalize from './steps/Review';
-import { headerMap } from './utils';
+import BuyBack from './steps/buy-back'
+import Complete from './steps/Complete'
+import LotSelection from './steps/LotSelection'
+import Finalize from './steps/Review'
+import { headerMap } from './utils'
 
-export type LotRowType = LotCurrentItemFragment & { selectedQuantity: number };
+export type LotRowType = LotCurrentItemFragment & { selectedQuantity: number }
 
-export type StepperStep = HarvestStep | 'LOT_SELECTION';
+export type StepperStep = HarvestStep | 'LOT_SELECTION'
 
 type HarvestStepperProps = {
-  harvestType: HarvestType;
+  harvestType: HarvestType
   // Missing ID means it has not been created and we should show the lot selection to create it.
   // The Stepper then creates the harvest and routes to a page with the id as a param
-  harvestId?: string;
-};
+  harvestId?: string
+}
 
 export default function HarvestStepper({
   harvestId,
   harvestType,
 }: HarvestStepperProps) {
-  const router = useRouter();
-  const [harvestLots, setHarvestLots] = useState<LotRowType[]>([]);
-  const [counterLots, setCounterLots] = useState<LotRowType[]>([]);
+  const router = useRouter()
+  const [harvestLots, setHarvestLots] = useState<LotRowType[]>([])
+  const [counterLots, setCounterLots] = useState<LotRowType[]>([])
 
-  const { data, loading } = usePortfolioSummaryQuery();
+  const { data, loading } = usePortfolioSummaryQuery()
 
   const { data: dataHarvest, loading: loadingHarvest } = useHarvestQuery({
     skip: !harvestId,
     variables: {
       id: harvestId!,
     },
-  });
+  })
 
   /**
    * Depending on the harvest type this is the amount we are actually looking to harvest
@@ -70,7 +69,7 @@ export default function HarvestStepper({
   const harvestTarget
     = harvestType === HarvestType.ReduceTaxes
       ? data?.portfolioSummary.harvest.realized
-      : data?.portfolioSummary.harvest.unrealized;
+      : data?.portfolioSummary.harvest.unrealized
 
   const { error: errorLots, loading: loadingLots }
     = useLotsCurrentForLotTypeQuery({
@@ -80,7 +79,7 @@ export default function HarvestStepper({
             ...lot,
             selectedQuantity: 0,
           })),
-        );
+        )
       },
       skip: !harvestTarget,
       variables: {
@@ -89,7 +88,7 @@ export default function HarvestStepper({
             ? LotValueType.Gain
             : LotValueType.Loss,
       },
-    });
+    })
 
   const { error: errorCounterLots, loading: loadingCounterLots }
     = useLotsCurrentForLotTypeQuery({
@@ -99,7 +98,7 @@ export default function HarvestStepper({
             ...lot,
             selectedQuantity: 0,
           })),
-        );
+        )
       },
       skip: !harvestTarget,
       variables: {
@@ -108,36 +107,36 @@ export default function HarvestStepper({
             ? LotValueType.Loss
             : LotValueType.Gain,
       },
-    });
+    })
 
   const [createHarvest, { loading: creatingHarvest }]
-    = useCreateHarvestMutation();
+    = useCreateHarvestMutation()
   const [updateHarvest, { loading: updatingHarvest }]
-    = useUpdateHarvestMutation();
+    = useUpdateHarvestMutation()
   const [finalizeHarvest, { loading: finalizingHarvest }]
-    = useFinalizeHarvestMutation();
+    = useFinalizeHarvestMutation()
 
-  const step: StepperStep = dataHarvest?.harvest.step ?? 'LOT_SELECTION';
+  const step: StepperStep = dataHarvest?.harvest.step ?? 'LOT_SELECTION'
 
   const selectedHarvest: number = useMemo(
     () =>
       harvestLots.reduce((acc, curr) => {
         return (acc
           = acc
-            + Math.abs(Number(curr.dollarPerSharePnL) * curr.selectedQuantity));
+            + Math.abs(Number(curr.dollarPerSharePnL) * curr.selectedQuantity))
       }, 0),
     [harvestLots],
-  );
+  )
 
   const selectedCounter: number = useMemo(
     () =>
       counterLots.reduce((acc, curr) => {
         return (acc
           = acc
-            + Math.abs(Number(curr.dollarPerSharePnL) * curr.selectedQuantity));
+            + Math.abs(Number(curr.dollarPerSharePnL) * curr.selectedQuantity))
       }, 0),
     [counterLots],
-  );
+  )
 
   const handleNext = () => {
     if (step === 'LOT_SELECTION') {
@@ -148,7 +147,7 @@ export default function HarvestStepper({
               harvestId: data.createHarvest.id,
               type: harvestType,
             }),
-          );
+          )
         },
         variables: {
           directedHarvestLots: [
@@ -171,13 +170,13 @@ export default function HarvestStepper({
           ],
           harvestType,
         },
-      });
+      })
     } else if (step === HarvestStep.Configure) {
       void finalizeHarvest({
         variables: {
           id: harvestId!,
         },
-      });
+      })
     } else if (step === HarvestStep.Review) {
       void updateHarvest({
         variables: {
@@ -188,18 +187,18 @@ export default function HarvestStepper({
           },
           id: harvestId!,
         },
-      });
+      })
     }
-  };
+  }
 
   const handlePrev = () => {
     if (step === 'LOT_SELECTION') {
-      TypedRoutes.harvestFlowRoot();
+      TypedRoutes.harvestFlowRoot()
     } else if (step === HarvestStep.Configure) {
       TypedRoutes.harvestFlowType({
         harvestId: harvestId!,
         type: harvestType,
-      });
+      })
     } else if (step === HarvestStep.Review) {
       void updateHarvest({
         variables: {
@@ -210,20 +209,20 @@ export default function HarvestStepper({
           },
           id: harvestId!,
         },
-      });
+      })
     }
-  };
+  }
 
   if (errorLots ?? errorCounterLots) {
-    return <Alert>There was an error loading the lots.</Alert>;
+    return <Alert>There was an error loading the lots.</Alert>
   }
 
   if (loading || loadingHarvest || loadingLots || loadingCounterLots) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
 
   const isChangingStep
-    = creatingHarvest || updatingHarvest || finalizingHarvest;
+    = creatingHarvest || updatingHarvest || finalizingHarvest
 
   return (
     <PageWrapper
@@ -315,5 +314,5 @@ export default function HarvestStepper({
                 )
               : null}
     </PageWrapper>
-  );
+  )
 }

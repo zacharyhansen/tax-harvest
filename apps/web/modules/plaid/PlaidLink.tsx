@@ -1,22 +1,22 @@
-import type { ButtonProps } from '@repo/ui/components/button';
-import type { PlaidLinkOnSuccess, PlaidLinkOptions } from 'react-plaid-link';
-import { Alert } from '@repo/ui/components/alert';
-import { Button } from '@repo/ui/components/button';
-import { toast } from '@repo/ui/components/toast-sonner';
-import Image from 'next/image';
-import { useCallback } from 'react';
-import { usePlaidLink } from 'react-plaid-link';
+import type { ButtonProps } from '@repo/ui/components/button'
+import type { PlaidLinkOnSuccess, PlaidLinkOptions } from 'react-plaid-link'
+import { Alert } from '@repo/ui/components/alert'
+import { Button } from '@repo/ui/components/button'
+import { toast } from '@repo/ui/components/toast-sonner'
+import Image from 'next/image'
+import { useCallback } from 'react'
+import { usePlaidLink } from 'react-plaid-link'
 
-import { usePlaidSetAccessTokenAndSyncAccountsMutation } from '~/generated/gql';
+import { usePlaidSetAccessTokenAndSyncAccountsMutation } from '~/generated/gql'
 
-import plaidIcon from '../../public/icons/plaid.svg';
+import plaidIcon from '../../public/icons/plaid.svg'
 
 type PlaidLinkProps = {
-  token: string;
-} & ButtonProps;
+  token: string
+} & ButtonProps
 
 export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
-  const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation();
+  const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation()
 
   const onSuccess: PlaidLinkOnSuccess = useCallback<PlaidLinkOnSuccess>(
     (public_token, metaData) => {
@@ -50,34 +50,34 @@ export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
           loading: 'We are syncing your account and transaction data',
           success: 'Sync complete',
         },
-      );
+      )
     },
     [mutate],
-  );
+  )
 
   const config: PlaidLinkOptions = {
     onSuccess,
     token,
     // onExit
     // onEvent
-  };
+  }
 
-  const { error, open, ready } = usePlaidLink(config);
+  const { error, open, ready } = usePlaidLink(config)
 
   if (error) {
-    return <Alert variant="destructive">{JSON.stringify(error)}</Alert>;
+    return <Alert variant="destructive">{JSON.stringify(error)}</Alert>
   }
 
   return (
     <Button
       {...buttonProps}
       onClick={() => {
-        open();
+        open()
       }}
       disabled={!ready}
       iconLeft={<Image src={plaidIcon} alt="Plaid" width={24} height={24} />}
     >
       Connect
     </Button>
-  );
+  )
 }

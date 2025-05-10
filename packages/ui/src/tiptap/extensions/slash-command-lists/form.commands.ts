@@ -1,11 +1,11 @@
-import type { Editor, Range } from '@tiptap/core';
-import { createSuggestionsItems } from '@harshtalks/slash-tiptap';
+import type { Editor, Range } from "@tiptap/core";
+import { createSuggestionsItems } from "@harshtalks/slash-tiptap";
 
 import {
   formCommandIcon,
   formCommandLabel,
   FormNode,
-} from '../../nodes/form/types';
+} from "../../nodes/form/types";
 
 function selectLabel({ editor, range }: { editor: Editor; range: Range }) {
   // After inserting the content, we set the selection (cursor) inside the editable part of the node
@@ -48,7 +48,7 @@ function handleNodeInsert({
 export const formCommands = createSuggestionsItems([
   {
     title: formCommandLabel[FormNode.Text],
-    searchTerms: ['text', 'input', 'string'],
+    searchTerms: ["text", "input", "string"],
     icon: formCommandIcon[FormNode.Text],
     command: ({ editor, range }) => {
       handleNodeInsert({ editor, range, formNode: FormNode.Text });
@@ -56,7 +56,7 @@ export const formCommands = createSuggestionsItems([
   },
   {
     title: formCommandLabel[FormNode.Number],
-    searchTerms: ['number', 'input', 'integer', 'percent', 'decimal', 'dollar'],
+    searchTerms: ["number", "input", "integer", "percent", "decimal", "dollar"],
     icon: formCommandIcon[FormNode.Number],
     command: ({ editor, range }) => {
       handleNodeInsert({ editor, range, formNode: FormNode.Number });
@@ -72,7 +72,7 @@ export const formCommands = createSuggestionsItems([
   },
   {
     title: formCommandLabel[FormNode.ComboboxMulti],
-    searchTerms: ['select', 'combo', 'option', 'multi'],
+    searchTerms: ["select", "combo", "option", "multi"],
     icon: formCommandIcon[FormNode.ComboboxMulti],
     command: ({ editor, range }) => {
       handleNodeInsert({ editor, range, formNode: FormNode.ComboboxMulti });
@@ -80,7 +80,7 @@ export const formCommands = createSuggestionsItems([
   },
   {
     title: formCommandLabel[FormNode.Combobox],
-    searchTerms: ['select', 'combo', 'option', 'single'],
+    searchTerms: ["select", "combo", "option", "single"],
     icon: formCommandIcon[FormNode.Combobox],
     command: ({ editor, range }) => {
       handleNodeInsert({ editor, range, formNode: FormNode.Combobox });

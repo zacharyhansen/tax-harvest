@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { TooltipProvider } from '@radix-ui/react-tooltip';
+import type { Meta, StoryObj } from "@storybook/react";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
-import { defaultCommands } from '../extensions/slash-command-lists/default.commands';
+import { defaultCommands } from "../extensions/slash-command-lists/default.commands";
 
-import { TiptapBase } from './tiptap-base';
+import { TiptapBase } from "./tiptap-base";
 
 const meta = {
-  title: 'TipTap/Molecules/Base',
+  title: "TipTap/Molecules/Base",
   args: {
     throttleDelay: 1000,
-    output: 'html',
-    placeholder: 'Comment here...',
+    output: "html",
+    placeholder: "Comment here...",
     editable: true,
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   component: TiptapBase,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  render: args => (
+  render: (args) => (
     <TooltipProvider>
       <TiptapBase {...args} />
     </TooltipProvider>
@@ -35,29 +35,29 @@ export const Default: Story = {
 
 export const SlashCommandDefault: Story = {
   args: {
-    placeholder: 'Press \'/\' for commands.',
+    placeholder: "Press '/' for commands.",
     slashCommands: defaultCommands,
   },
 };
 
 export const Mini: Story = {
   args: {
-    placeholder: 'Press \'/\' for commands.',
-    variant: 'mini',
+    placeholder: "Press '/' for commands.",
+    variant: "mini",
   },
 };
 
 export const Max: Story = {
   args: {
-    placeholder: 'Press \'/\' for commands.',
-    variant: 'max',
+    placeholder: "Press '/' for commands.",
+    variant: "max",
   },
 };
 
 export const NotEditable: Story = {
   args: {
-    editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: 'Press \'/\' for commands.',
+    editorContentClassName: "minimal-tiptap-editor-slash-command",
+    placeholder: "Press '/' for commands.",
     editable: false,
     value: `
     <p>This is an example of how custom input nodes appear.</p>
@@ -68,8 +68,8 @@ export const NotEditable: Story = {
 
 export const InputBlocks: Story = {
   args: {
-    editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: 'Press \'/\' for commands.',
+    editorContentClassName: "minimal-tiptap-editor-slash-command",
+    placeholder: "Press '/' for commands.",
     value: `
     <p>This is an example of how custom input nodes appear.</p>
     <input-block label="Your Name" placeholder="Enter your name" />
@@ -80,8 +80,8 @@ export const InputBlocks: Story = {
 
 export const InputBlocksRendered: Story = {
   args: {
-    editorContentClassName: 'minimal-tiptap-editor-slash-command',
-    placeholder: 'Press \'/\' for commands.',
+    editorContentClassName: "minimal-tiptap-editor-slash-command",
+    placeholder: "Press '/' for commands.",
     editable: false,
     value: `
     <p>This is an example of how custom input nodes appear.</p>

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@repo/ui/components/avatar';
+} from "@repo/ui/components/avatar";
 
 import {
   DropdownMenu,
@@ -14,13 +14,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu';
+} from "@repo/ui/components/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@repo/ui/components/sidebar';
+} from "@repo/ui/components/sidebar";
 import {
   BadgeCheck,
   Bell,
@@ -28,7 +28,7 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
-} from 'lucide-react';
+} from "lucide-react";
 
 export function NavUser({
   user,
@@ -63,7 +63,7 @@ export function NavUser({
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? 'bottom' : 'right'}
+            side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
           >

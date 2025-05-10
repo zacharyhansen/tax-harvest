@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { useCallbackRef } from './useCallbackRef';
+import { useCallbackRef } from "./useCallbackRef";
 
 /**
  * @see https://github.com/radix-ui/primitives/blob/main/packages/react/use-controllable-state/src/useControllableState.tsx
@@ -27,13 +27,13 @@ function useControllableState<T>({
   const value = isControlled ? prop : uncontrolledProp;
   const handleChange = useCallbackRef(onChange);
 
-  const setValue: React.Dispatch<React.SetStateAction<T | undefined>>
-    = React.useCallback(
+  const setValue: React.Dispatch<React.SetStateAction<T | undefined>> =
+    React.useCallback(
       (nextValue) => {
         if (isControlled) {
           const setter = nextValue as SetStateFn<T>;
-          const value
-            = typeof nextValue === 'function' ? setter(prop) : nextValue;
+          const value =
+            typeof nextValue === "function" ? setter(prop) : nextValue;
           if (value !== prop) {
             handleChange(value as T);
           }
@@ -50,7 +50,7 @@ function useControllableState<T>({
 function useUncontrolledState<T>({
   defaultProp,
   onChange,
-}: Omit<UseControllableStateParams<T>, 'prop'>) {
+}: Omit<UseControllableStateParams<T>, "prop">) {
   const uncontrolledState = React.useState<T | undefined>(defaultProp);
   const [value] = uncontrolledState;
   const prevValueRef = React.useRef(value);

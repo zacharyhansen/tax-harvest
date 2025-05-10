@@ -1,10 +1,10 @@
-import type { StepperStep } from './HarvestStepper';
+import type { StepperStep } from './HarvestStepper'
 
-import { HarvestStep, HarvestType } from '~/generated/gql';
+import { HarvestStep, HarvestType } from '~/generated/gql'
 
 export const headerMap: Record<
   StepperStep,
-  Record<HarvestType, { title: string; description: string }>
+  Record<HarvestType, { title: string, description: string }>
 > = {
   [HarvestStep.Configure]: {
     [HarvestType.ReduceTaxes]: {
@@ -92,4 +92,4 @@ export const headerMap: Record<
       title: 'Capture Tax Free Gains',
     },
   },
-};
+}

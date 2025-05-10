@@ -102,9 +102,9 @@
 //       : '',
 // };
 
-import type { ICellRendererParams } from 'ag-grid-community';
+import type { ICellRendererParams } from 'ag-grid-community'
 
-import JsonCell from './cells/json.cell';
+import JsonCell from './cells/json.cell'
 
 // Define the cell renderer selector function for AG Grid
 export function cellRendererSelector(params: ICellRendererParams) {
@@ -116,11 +116,11 @@ export function cellRendererSelector(params: ICellRendererParams) {
         ...params.colDef.cellRendererParams,
         value: params.value,
       },
-    };
+    }
   }
 
   // Add other cell renderer types here as needed
 
   // Return undefined for default AG Grid behavior
-  return undefined;
+  return undefined
 }

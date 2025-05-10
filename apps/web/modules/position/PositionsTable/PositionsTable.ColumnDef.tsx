@@ -1,14 +1,14 @@
-'use client';
+'use client'
 
-import type { ColumnDef } from '@tanstack/react-table';
-import type { PositionItemFragment } from '~/generated/gql';
-import { Badge } from '@repo/ui/components/badge';
-import DataTable from '@repo/ui/components/dataTable/dataTable';
+import type { ColumnDef } from '@tanstack/react-table'
+import type { PositionItemFragment } from '~/generated/gql'
+import { Badge } from '@repo/ui/components/badge'
+import DataTable from '@repo/ui/components/dataTable/dataTable'
 
-import { createColumnHelper } from '@tanstack/react-table';
-import { Format, isOlderThanOneYear } from '~/modules/utils';
+import { createColumnHelper } from '@tanstack/react-table'
+import { Format, isOlderThanOneYear } from '~/modules/utils'
 
-const columnHelper = createColumnHelper<PositionItemFragment>();
+const columnHelper = createColumnHelper<PositionItemFragment>()
 
 const columns: ColumnDef<PositionItemFragment, never>[] = [
   columnHelper.accessor('assetSymbol', {
@@ -44,12 +44,12 @@ const columns: ColumnDef<PositionItemFragment, never>[] = [
   }),
   columnHelper.accessor('dateAcquired', {
     cell: ({ getValue }) => {
-      const isLongTermGains = isOlderThanOneYear(getValue());
+      const isLongTermGains = isOlderThanOneYear(getValue())
       return (
         <Badge variant={isLongTermGains ? 'outline' : 'secondary'}>
           {isLongTermGains ? 'Long Term' : 'Short Term'}
         </Badge>
-      );
+      )
     },
     header: 'Capital Gain',
     id: 'taxType',
@@ -61,14 +61,14 @@ const columns: ColumnDef<PositionItemFragment, never>[] = [
   columnHelper.accessor('account', {
     cell: ({ getValue }) => {
       const account = getValue<{
-        displayName?: string;
-        externalId?: string;
-      }>();
+        displayName?: string
+        externalId?: string
+      }>()
       return (
         <span>
           {account.displayName ?? Format.hideNumbers(account.externalId)}
         </span>
-      );
+      )
     },
     header: 'Account Name',
   }),
@@ -76,6 +76,6 @@ const columns: ColumnDef<PositionItemFragment, never>[] = [
     cell: DataTable.BadgeCell,
     header: 'Account Type',
   }),
-];
+]
 
-export default columns;
+export default columns

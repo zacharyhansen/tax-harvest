@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { useState } from "react";
 
-import { DateRangePicker } from './date-range-picker';
+import { DateRangePicker } from "./date-range-picker";
 
 const meta = {
-  title: 'Atoms/Calendar Date Picker',
+  title: "Atoms/Calendar Date Picker",
   component: DateRangePicker,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   args: {},
 } satisfies Meta<typeof DateRangePicker>;

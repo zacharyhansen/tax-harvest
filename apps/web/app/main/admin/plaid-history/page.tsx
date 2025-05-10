@@ -1,26 +1,26 @@
-'use client';
+'use client'
 
-import type { ColDef } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import type { ColDef } from 'ag-grid-community'
+import { AgGridReact } from 'ag-grid-react'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 
-import { useLotTransactionBatchesQuery } from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { PageWrapper } from '~/modules/layout';
-import { ErrorPage } from '~/modules/utility-components';
+import { useLotTransactionBatchesQuery } from '~/generated/gql'
+import { TypedRoutes } from '~/lib/routes'
+import { PageWrapper } from '~/modules/layout'
+import { ErrorPage } from '~/modules/utility-components'
 
 const AgGridWrapper = dynamic(
   () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
   {
     ssr: false,
   },
-);
+)
 
 export default function PlaidHistoryPage() {
-  const router = useRouter();
-  const { data, error, loading } = useLotTransactionBatchesQuery();
+  const router = useRouter()
+  const { data, error, loading } = useLotTransactionBatchesQuery()
 
   const columnDefs: ColDef[] = useMemo(() => {
     return [
@@ -40,11 +40,11 @@ export default function PlaidHistoryPage() {
         field: 'authConnectionId',
         flex: 1,
       },
-    ] satisfies ColDef[];
-  }, []);
+    ] satisfies ColDef[]
+  }, [])
 
   if (error) {
-    return <ErrorPage message={JSON.stringify(error)} />;
+    return <ErrorPage message={JSON.stringify(error)} />
   }
 
   return (
@@ -60,12 +60,12 @@ export default function PlaidHistoryPage() {
                 TypedRoutes.lotTransactionBatch({
                   lotTransactionBatchId: row.data.id,
                 }),
-              );
+              )
             }
           }}
           loading={loading}
         />
       </AgGridWrapper>
     </PageWrapper>
-  );
+  )
 }

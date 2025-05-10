@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import type React from 'react';
-import { createContext, use, useMemo } from 'react';
+import type React from "react";
+import { createContext, use, useMemo } from "react";
 
-import { useIsMobile } from '../hooks/use-is-mobile';
+import { useIsMobile } from "../hooks/use-is-mobile";
 
 export type MediaContextProps = {
   isDesktop?: boolean;
@@ -20,7 +20,7 @@ export type MediaProviderProps = {
 export function useMedia(): MediaContextProps {
   const context = use(MediaContext);
   if (!context) {
-    throw new Error('useMedia must be used within a MediaProvider');
+    throw new Error("useMedia must be used within a MediaProvider");
   }
   return context;
 }
@@ -36,8 +36,6 @@ export default function MediaProvider({
   );
 
   return (
-    <MediaContext.Provider value={value}>
-      {children}
-    </MediaContext.Provider>
+    <MediaContext.Provider value={value}>{children}</MediaContext.Provider>
   );
 }

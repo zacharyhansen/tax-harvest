@@ -1,5 +1,5 @@
-name: 'Setup Node Env, Get & Cache Dependencies'
-description: 'Setup Node Env, Get & Cache Dependencies(via yarn) for faster builds'
+name: "Setup Node Env, Get & Cache Dependencies"
+description: "Setup Node Env, Get & Cache Dependencies(via yarn) for faster builds"
 runs:
   using: composite
   steps:

@@ -1,9 +1,9 @@
-import { Button } from '@repo/ui/components/button';
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Button } from '@repo/ui/components/button'
+import { Moon, Sun } from 'lucide-react'
+import { useTheme } from 'next-themes'
 
 export default function ThemeButton() {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, theme } = useTheme()
 
   return (
     <Button
@@ -12,9 +12,9 @@ export default function ThemeButton() {
       className="size-8 rounded-full"
       onClick={() => {
         if (theme === 'light') {
-          setTheme('dark');
+          setTheme('dark')
         } else {
-          setTheme('light');
+          setTheme('light')
         }
       }}
     >
@@ -26,5 +26,5 @@ export default function ThemeButton() {
             <Sun className="size-3" />
           )}
     </Button>
-  );
+  )
 }

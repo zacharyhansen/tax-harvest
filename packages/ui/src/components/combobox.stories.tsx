@@ -1,27 +1,27 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { useState } from "react";
 
-import { Combobox } from './combobox';
+import { Combobox } from "./combobox";
 
 const frameworksList = [
-  { value: 'react', label: 'React' },
-  { value: 'angular', label: 'Angular' },
-  { value: 'vue', label: 'Vue' },
-  { value: 'svelte', label: 'Svelte' },
-  { value: 'ember', label: 'Ember' },
+  { value: "react", label: "React" },
+  { value: "angular", label: "Angular" },
+  { value: "vue", label: "Vue" },
+  { value: "svelte", label: "Svelte" },
+  { value: "ember", label: "Ember" },
 ];
 
 const meta = {
-  title: 'Atoms/Combobox',
+  title: "Atoms/Combobox",
   component: Combobox,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   args: {
     options: frameworksList,
-    value: 'react',
-    placeholder: 'Select frameworks',
+    value: "react",
+    placeholder: "Select frameworks",
     onChange: () => {},
   },
   render: (args) => {

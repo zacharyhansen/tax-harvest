@@ -1,9 +1,9 @@
-@import './partials/code.css';
-@import './partials/placeholder.css';
-@import './partials/lists.css';
-@import './partials/typography.css';
-@import './partials/zoom.css';
-@import './partials/drag-handle.css';
+@import "./partials/code.css";
+@import "./partials/placeholder.css";
+@import "./partials/lists.css";
+@import "./partials/typography.css";
+@import "./partials/zoom.css";
+@import "./partials/drag-handle.css";
 
 :root {
   --mt-overlay: rgba(251, 251, 251, 0.75);
@@ -189,11 +189,11 @@
   background: transparent;
 }
 
-[contentEditable='true']:empty:before {
+[contentEditable="true"]:empty:before {
   content: attr(aria-placeholder);
 }
 
-.minimal-tiptap-editor .ProseMirror [contentEditable='true']:empty:before {
+.minimal-tiptap-editor .ProseMirror [contentEditable="true"]:empty:before {
   content: attr(aria-placeholder);
   color: var(--mt-code-color);
 }

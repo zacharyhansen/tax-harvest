@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import DataTable from '@repo/ui/components/dataTable/dataTable';
+import DataTable from '@repo/ui/components/dataTable/dataTable'
 
-import { usePortfolioPositionsQuery } from '~/generated/gql';
+import { usePortfolioPositionsQuery } from '~/generated/gql'
 
-import columns from './PositionsTable.ColumnDef';
+import columns from './PositionsTable.ColumnDef'
 
 export default function PositionsTable() {
-  const { data, error, loading } = usePortfolioPositionsQuery();
+  const { data, error, loading } = usePortfolioPositionsQuery()
 
   return (
     <DataTable
@@ -17,5 +17,5 @@ export default function PositionsTable() {
       loading={loading}
       error={!!error}
     />
-  );
+  )
 }

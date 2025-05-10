@@ -1,16 +1,16 @@
-import type { createSuggestionsItems } from '@harshtalks/slash-tiptap';
-import type { Content, Editor, UseEditorOptions } from '@tiptap/react';
-import { enableKeyboardNavigation, Slash } from '@harshtalks/slash-tiptap';
-import { cn } from '@repo/ui/utils';
-import { Placeholder } from '@tiptap/extension-placeholder';
-import { TextStyle } from '@tiptap/extension-text-style';
-import { Typography } from '@tiptap/extension-typography';
-import { Underline } from '@tiptap/extension-underline';
-import { useEditor } from '@tiptap/react';
-import { StarterKit } from '@tiptap/starter-kit';
-import * as React from 'react';
+import type { createSuggestionsItems } from "@harshtalks/slash-tiptap";
+import type { Content, Editor, UseEditorOptions } from "@tiptap/react";
+import { enableKeyboardNavigation, Slash } from "@harshtalks/slash-tiptap";
+import { cn } from "@repo/ui/utils";
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Typography } from "@tiptap/extension-typography";
+import { Underline } from "@tiptap/extension-underline";
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+import * as React from "react";
 
-import { toast } from 'sonner';
+import { toast } from "sonner";
 import {
   CodeBlockLowlight,
   Color,
@@ -21,22 +21,22 @@ import {
   ResetMarksOnEnter,
   Selection,
   UnsetAllMarks,
-} from '../extensions';
-import GlobalDragHandle from '../extensions/drag-handler';
-import { FormCheckboxNode } from '../nodes/form/form-checkbox.node';
-import { FormComboboxNode } from '../nodes/form/form-combobox.node';
-import { FormNumberNode } from '../nodes/form/form-number.node';
-import { FormTextNode } from '../nodes/form/form-text.node';
+} from "../extensions";
+import GlobalDragHandle from "../extensions/drag-handler";
+import { FormCheckboxNode } from "../nodes/form/form-checkbox.node";
+import { FormComboboxNode } from "../nodes/form/form-combobox.node";
+import { FormNumberNode } from "../nodes/form/form-number.node";
+import { FormTextNode } from "../nodes/form/form-text.node";
 
-import { fileToBase64, getOutput, randomId } from '../utils';
+import { fileToBase64, getOutput, randomId } from "../utils";
 
-import { useThrottle } from './use-throttle';
+import { useThrottle } from "./use-throttle";
 
 export type SlashCommands = ReturnType<typeof createSuggestionsItems>;
 
 export type UseTiptapEditorProps = {
   value?: Content;
-  output?: 'html' | 'json' | 'text';
+  output?: "html" | "json" | "text";
   placeholder?: string;
   editorClassName?: string;
   throttleDelay?: number;
@@ -73,16 +73,16 @@ function createExtensions({
     StarterKit.configure({
       horizontalRule: false,
       codeBlock: false,
-      paragraph: { HTMLAttributes: { class: 'text-node' } },
-      heading: { HTMLAttributes: { class: 'heading-node' } },
-      blockquote: { HTMLAttributes: { class: 'block-node' } },
-      bulletList: { HTMLAttributes: { class: 'list-node' } },
-      orderedList: { HTMLAttributes: { class: 'list-node' } },
-      code: { HTMLAttributes: { class: 'inline', spellcheck: 'false' } },
-      dropcursor: { width: 2, class: 'ProseMirror-dropcursor border' },
+      paragraph: { HTMLAttributes: { class: "text-node" } },
+      heading: { HTMLAttributes: { class: "heading-node" } },
+      blockquote: { HTMLAttributes: { class: "block-node" } },
+      bulletList: { HTMLAttributes: { class: "list-node" } },
+      orderedList: { HTMLAttributes: { class: "list-node" } },
+      code: { HTMLAttributes: { class: "inline", spellcheck: "false" } },
+      dropcursor: { width: 2, class: "ProseMirror-dropcursor border" },
     }),
     Image.configure({
-      allowedMimeTypes: ['image/*'],
+      allowedMimeTypes: ["image/*"],
       maxFileSize: 5 * 1024 * 1024,
       allowBase64: true,
       uploadFn: async (file: File | Blob) => {
@@ -90,7 +90,7 @@ function createExtensions({
         // This function should return the uploaded image URL.
 
         // wait 3s to simulate upload
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise((resolve) => setTimeout(resolve, 3000));
 
         const source = await fileToBase64(file);
 
@@ -117,7 +117,7 @@ function createExtensions({
             const id = randomId();
 
             return {
-              type: 'image',
+              type: "image",
               attrs: {
                 id,
                 src: blobUrl,
@@ -133,51 +133,51 @@ function createExtensions({
         );
       },
       onImageRemoved({ id, src }) {
-        console.info('Image removed', { id, src });
+        console.info("Image removed", { id, src });
       },
       // eslint-disable-next-line ts/no-explicit-any
       onValidationError(errors: any) {
         for (const error of errors) {
-          toast.error('Image validation error', {
-            position: 'bottom-right',
+          toast.error("Image validation error", {
+            position: "bottom-right",
             description: error.reason,
           });
         }
       },
       onActionSuccess({ action }) {
         const mapping = {
-          copyImage: 'Copy Image',
-          copyLink: 'Copy Link',
-          download: 'Download',
+          copyImage: "Copy Image",
+          copyLink: "Copy Link",
+          download: "Download",
         };
         toast.success(mapping[action], {
-          position: 'bottom-right',
-          description: 'Image action success',
+          position: "bottom-right",
+          description: "Image action success",
         });
       },
       // eslint-disable-next-line ts/no-explicit-any
       onActionError(error: { message: any }, { action }: any) {
         const mapping = {
-          copyImage: 'Copy Image',
-          copyLink: 'Copy Link',
-          download: 'Download',
+          copyImage: "Copy Image",
+          copyLink: "Copy Link",
+          download: "Download",
         };
         // @ts-expect-error typing for tiptap
         toast.error(`Failed to ${mapping[action]}`, {
-          position: 'bottom-right',
+          position: "bottom-right",
           description: error.message,
         });
       },
     }),
     FileHandler.configure({
       allowBase64: true,
-      allowedMimeTypes: ['image/*'],
+      allowedMimeTypes: ["image/*"],
       maxFileSize: 5 * 1024 * 1024,
       onDrop: (editor, files, pos) => {
         files.forEach(async (file) => {
           const source = await fileToBase64(file);
           editor.commands.insertContentAt(pos, {
-            type: 'image',
+            type: "image",
             attrs: { src: source },
           });
         });
@@ -186,15 +186,15 @@ function createExtensions({
         files.forEach(async (file) => {
           const source = await fileToBase64(file);
           editor.commands.insertContent({
-            type: 'image',
+            type: "image",
             attrs: { src: source },
           });
         });
       },
       onValidationError: (errors) => {
         for (const error of errors) {
-          toast.error('Image validation error', {
-            position: 'bottom-right',
+          toast.error("Image validation error", {
+            position: "bottom-right",
             description: error.reason,
           });
         }
@@ -243,8 +243,8 @@ function createExtensions({
 
 export function useTiptapEditor({
   value,
-  output = 'html',
-  placeholder = '',
+  output = "html",
+  placeholder = "",
   editorClassName,
   throttleDelay = 0,
   onUpdate,
@@ -282,11 +282,11 @@ export function useTiptapEditor({
     extensions: createExtensions({ placeholder, slashCommands }),
     editorProps: {
       attributes: {
-        autocomplete: 'off',
-        autocorrect: 'off',
-        autocapitalize: 'off',
-        class: cn('focus:outline-none', editorClassName, {
-          'px-8': props.editable,
+        autocomplete: "off",
+        autocorrect: "off",
+        autocapitalize: "off",
+        class: cn("focus:outline-none", editorClassName, {
+          "px-8": props.editable,
         }),
       },
       handleDOMEvents: {

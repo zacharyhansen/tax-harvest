@@ -1,11 +1,12 @@
-import type { VariantProps } from 'class-variance-authority';
-import type * as React from 'react';
+import type { VariantProps } from "class-variance-authority";
+import type * as React from "react";
 
-import { cn } from '@repo/ui/utils';
+import { cn } from "@repo/ui/utils";
 
-import { badgeVariants } from './badge.variants';
+import { badgeVariants } from "./badge.variants";
 
-export type BadgeProps = {} & React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof badgeVariants>;
+export type BadgeProps = {} & React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof badgeVariants>;
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (

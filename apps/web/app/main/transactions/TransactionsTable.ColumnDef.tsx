@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import type { ColumnDef } from '@tanstack/react-table';
-import type { TransactionTableItemFragment } from '~/generated/gql';
-import DataTable from '@repo/ui/components/dataTable/dataTable';
+import type { ColumnDef } from '@tanstack/react-table'
+import type { TransactionTableItemFragment } from '~/generated/gql'
+import DataTable from '@repo/ui/components/dataTable/dataTable'
 
-import { createColumnHelper } from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table'
 
-const columnHelper = createColumnHelper<TransactionTableItemFragment>();
+const columnHelper = createColumnHelper<TransactionTableItemFragment>()
 
 const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
   columnHelper.accessor('transactionDate', {
@@ -53,7 +53,7 @@ const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
         <div className="flex space-x-2">
           <span className="truncate font-medium">{row.getValue('memo')}</span>
         </div>
-      );
+      )
     },
     header: ({ column }) => (
       <DataTable.BasicHeader column={column} title="Description" />
@@ -97,6 +97,6 @@ const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
     ),
     size: 90,
   }),
-];
+]
 
-export default columns;
+export default columns

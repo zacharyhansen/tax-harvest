@@ -1,19 +1,25 @@
-'use client';
+"use client";
 
-import * as SliderPrimitive from '@radix-ui/react-slider';
-import * as React from 'react';
+import * as SliderPrimitive from "@radix-ui/react-slider";
+import * as React from "react";
 
-import { cn } from '../utils';
+import { cn } from "../utils";
 
 export type SliderProps = React.ComponentPropsWithoutRef<
   typeof SliderPrimitive.Root
 >;
 
-const Slider = ({ ref, className, ...props }: SliderProps & { ref?: React.RefObject<React.ElementRef<typeof SliderPrimitive.Root> | null> }) => (
+const Slider = ({
+  ref,
+  className,
+  ...props
+}: SliderProps & {
+  ref?: React.RefObject<React.ElementRef<typeof SliderPrimitive.Root> | null>;
+}) => (
   <SliderPrimitive.Root
     ref={ref}
     className={cn(
-      'relative flex w-full touch-none select-none items-center',
+      "relative flex w-full touch-none select-none items-center",
       className,
     )}
     {...props}

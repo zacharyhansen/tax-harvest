@@ -8,9 +8,7 @@ import { PlaidService } from './plaid.service'
 export class PlaidController {
   private readonly logger = new Logger(PlaidController.name)
 
-  constructor(
-    private readonly plaidService: PlaidService,
-  ) {}
+  constructor(private readonly plaidService: PlaidService) {}
   // switch (evt.type) {
   //   case 'user.created':
   //     this.logger.log(`Clerk user create event for ${evt.data.id}`);

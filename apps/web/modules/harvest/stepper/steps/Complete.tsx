@@ -1,49 +1,49 @@
-'use client';
+'use client'
 
-import { Badge } from '@repo/ui/components/badge';
-import { Button } from '@repo/ui/components/button';
-import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, DollarSign, Rows3, Wheat } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Badge } from '@repo/ui/components/badge'
+import { Button } from '@repo/ui/components/button'
+import { motion } from 'framer-motion'
+import { ArrowRight, Calendar, DollarSign, Rows3, Wheat } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-import { useUser } from '~/app/main/user.provider';
-import { useHarvestQuery } from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { LoadingPage } from '~/modules/utility-components';
-import { formatDate } from '~/modules/utils';
+import { useUser } from '~/app/main/user.provider'
+import { useHarvestQuery } from '~/generated/gql'
+import { TypedRoutes } from '~/lib/routes'
+import { LoadingPage } from '~/modules/utility-components'
+import { formatDate } from '~/modules/utils'
 
 type HarvestSuccessProps = {
-  harvestId: string;
-};
+  harvestId: string
+}
 
 export default function Complete({ harvestId }: HarvestSuccessProps) {
-  const { user } = useUser();
-  const router = useRouter();
-  const [isVisible, setIsVisible] = useState(false);
+  const { user } = useUser()
+  const router = useRouter()
+  const [isVisible, setIsVisible] = useState(false)
   const { data, loading } = useHarvestQuery({
     variables: {
       id: harvestId,
     },
-  });
+  })
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
-    setIsVisible(true);
-  }, []);
+    setIsVisible(true)
+  }, [])
 
   if (loading) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
   const repurchase = data?.harvest.harvestTransactions?.reduce(
     (acc, curr) => acc || !!curr.revert,
     false,
-  );
+  )
 
   const notify = data?.harvest.harvestTransactions?.reduce(
     (acc, curr) => acc || !!curr.notify,
     false,
-  );
+  )
 
   return (
     <div className="flex items-center justify-center rounded-3xl bg-gradient-to-br from-green-50 to-green-200 p-4 py-24 dark:from-green-800">
@@ -144,5 +144,5 @@ export default function Complete({ harvestId }: HarvestSuccessProps) {
         </Button>
       </motion.div>
     </div>
-  );
+  )
 }

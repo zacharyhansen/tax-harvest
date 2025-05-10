@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import type { ReactNode } from 'react';
-import type { UseFormReturn } from 'react-hook-form';
-import { useState } from 'react';
+import type { ReactNode } from "react";
+import type { UseFormReturn } from "react-hook-form";
+import { useState } from "react";
 
-import { Alert } from './alert';
-import { Button } from './button';
-import { Form } from './form';
+import { Alert } from "./alert";
+import { Button } from "./button";
+import { Form } from "./form";
 import {
   ResponsiveDialog,
   ResponsiveDialogBody,
@@ -17,7 +17,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from './reponsive-dialog';
+} from "./reponsive-dialog";
 
 type FormDialogProps = {
   children: ReactNode;
@@ -43,28 +43,24 @@ export default function FormDialog({
   const [isOpen, setIsOpen] = useState<boolean>(defaultOpen);
   const [error, setError] = useState<boolean>(false);
 
-  const disabled
-    = form.formState.isSubmitting
-      || form.formState.isLoading
-      || form.formState.isValidating;
+  const disabled =
+    form.formState.isSubmitting ||
+    form.formState.isLoading ||
+    form.formState.isValidating;
 
   return (
     <ResponsiveDialog open={isOpen} onOpenChange={setIsOpen}>
       <ResponsiveDialogTrigger asChild>{trigger}</ResponsiveDialogTrigger>
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
-          {title
-            ? (
-                <ResponsiveDialogTitle>{title}</ResponsiveDialogTitle>
-              )
-            : null}
-          {description
-            ? (
-                <ResponsiveDialogDescription>
-                  {description}
-                </ResponsiveDialogDescription>
-              )
-            : null}
+          {title ? (
+            <ResponsiveDialogTitle>{title}</ResponsiveDialogTitle>
+          ) : null}
+          {description ? (
+            <ResponsiveDialogDescription>
+              {description}
+            </ResponsiveDialogDescription>
+          ) : null}
         </ResponsiveDialogHeader>
 
         <Form {...form}>
@@ -105,13 +101,11 @@ export default function FormDialog({
             Submit
           </Button>
         </ResponsiveDialogFooter>
-        {error
-          ? (
-              <Alert variant="destructive">
-                There was an error with the submission
-              </Alert>
-            )
-          : null}
+        {error ? (
+          <Alert variant="destructive">
+            There was an error with the submission
+          </Alert>
+        ) : null}
       </ResponsiveDialogContent>
     </ResponsiveDialog>
   );

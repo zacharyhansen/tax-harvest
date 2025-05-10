@@ -1,6 +1,6 @@
-import type { CellContext } from '@tanstack/react-table';
+import type { CellContext } from "@tanstack/react-table";
 
-import { cn } from '@repo/ui/utils/cn';
+import { cn } from "@repo/ui/utils/cn";
 
 export default function PercentCell<TData, TValue>({
   colored = true,
@@ -15,16 +15,16 @@ export default function PercentCell<TData, TValue>({
   }
 
   const amount = (value ?? Number.parseFloat(String(getValue()))) / 100;
-  const formatted = new Intl.NumberFormat('en-US', {
+  const formatted = new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 2,
-    style: 'percent',
+    style: "percent",
   }).format(amount);
 
   return (
     <div
-      className={cn('font-medium', {
-        'text-green-600': colored && amount > 0,
-        'text-red-600': colored && amount < 0,
+      className={cn("font-medium", {
+        "text-green-600": colored && amount > 0,
+        "text-red-600": colored && amount < 0,
       })}
     >
       {formatted}

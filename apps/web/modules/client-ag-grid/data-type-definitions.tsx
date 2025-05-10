@@ -1,6 +1,6 @@
-import type { AgGridReactProps } from 'ag-grid-react';
+import type { AgGridReactProps } from 'ag-grid-react'
 
-import { DateFormatter } from '../utils/DateFormatter';
+import { DateFormatter } from '../utils/DateFormatter'
 
 export const dataTypeDefinitions = {
   text: {
@@ -57,4 +57,4 @@ export const dataTypeDefinitions = {
         : '',
     columnTypes: ['edit'],
   },
-} satisfies AgGridReactProps['dataTypeDefinitions'];
+} satisfies AgGridReactProps['dataTypeDefinitions']

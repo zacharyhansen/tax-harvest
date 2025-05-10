@@ -223,7 +223,9 @@ export class PlaidService {
               )
             }
             // remove for next selection in case of duplicates (should never happen but we will fail FK contraints if so)
-            plaidAccounts = plaidAccounts.filter(a => a.id !== plaidAccount.id)
+            plaidAccounts = plaidAccounts.filter(
+              a => a.id !== plaidAccount.id,
+            )
 
             return trx.account.update({
               data: {

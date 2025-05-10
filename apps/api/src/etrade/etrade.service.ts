@@ -807,7 +807,6 @@ export class EtradeService implements ConnectionProvider {
   }
 
   private createResponseHandler(
-
     // eslint-disable-next-line ts/no-explicit-any
     resolve: (value: any) => void,
 

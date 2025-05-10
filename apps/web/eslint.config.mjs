@@ -1,34 +1,28 @@
-import antfu from '@antfu/eslint-config';
-import graphqlPlugin from '@graphql-eslint/eslint-plugin';
-import nextPlugin from '@next/eslint-plugin-next';
-import jestDom from 'eslint-plugin-jest-dom';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import playwright from 'eslint-plugin-playwright';
-import tailwind from 'eslint-plugin-tailwindcss';
-import testingLibrary from 'eslint-plugin-testing-library';
+import antfu from '@antfu/eslint-config'
+import graphqlPlugin from '@graphql-eslint/eslint-plugin'
+import nextPlugin from '@next/eslint-plugin-next'
+import jestDom from 'eslint-plugin-jest-dom'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
+import playwright from 'eslint-plugin-playwright'
+import tailwind from 'eslint-plugin-tailwindcss'
+import testingLibrary from 'eslint-plugin-testing-library'
 
 export default antfu(
   {
     react: true,
     typescript: true,
     graphql: true,
-    lessOpinionated: true,
-    isInEditor: false,
-
-    stylistic: {
-      semi: true,
-    },
-
     formatters: {
       css: true,
+      html: true,
+      markdown: 'prettier',
     },
-
     ignores: ['generated/**/*', 'next-env.d.ts'],
   },
   ...tailwind.configs['flat/recommended'],
   jsxA11y.flatConfigs.recommended,
   {
-  // Setup GraphQL Parser
+    // Setup GraphQL Parser
     files: ['**/*.{graphql,gql}'],
     languageOptions: {
       parser: graphqlPlugin.parser,
@@ -36,9 +30,12 @@ export default antfu(
     plugins: {
       '@graphql-eslint': graphqlPlugin,
     },
+    rules: {
+      'style/spaced-comment': 'off',
+    },
   },
   {
-  // Setup recommended config for operations files
+    // Setup recommended config for operations files
     files: ['**/*.{graphql,gql}'],
     rules: graphqlPlugin.configs['flat/operations-recommended'].rules,
   },
@@ -62,7 +59,10 @@ export default antfu(
   },
   {
     rules: {
-      'no-console': ['error', { allow: ['info', 'warn', 'error', 'time', 'timeEnd'] }],
+      'no-console': [
+        'error',
+        { allow: ['info', 'warn', 'error', 'time', 'timeEnd'] },
+      ],
       'react/no-context-provider': 'off', // breaks with current react/nextjs verisons
       'antfu/no-top-level-await': 'off', // Allow top-level await
       'style/brace-style': ['error', '1tbs'], // Use the default brace style
@@ -74,4 +74,4 @@ export default antfu(
       'ts/no-explicit-any': 'error',
     },
   },
-);
+)

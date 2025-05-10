@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
 import {
   AlertDialog,
@@ -10,10 +10,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from './alert-dialog';
+} from "./alert-dialog";
 
 const meta = {
-  title: 'Atoms/Alert',
+  title: "Atoms/Alert",
   component: () => {
     return (
       <AlertDialog>
@@ -39,7 +39,7 @@ const meta = {
     );
   },
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<object>;
 

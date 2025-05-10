@@ -1,34 +1,34 @@
-'use client';
+"use client";
 
-import type { Meta, StoryObj } from '@storybook/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@repo/ui/components/button';
-import { Toaster } from '@repo/ui/components/sonner';
-import { TooltipProvider } from '@repo/ui/components/tooltip';
-import { Cat, Dog, Fish, Rabbit, Turtle } from 'lucide-react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@repo/ui/components/button";
+import { Toaster } from "@repo/ui/components/sonner";
+import { TooltipProvider } from "@repo/ui/components/tooltip";
+import { Cat, Dog, Fish, Rabbit, Turtle } from "lucide-react";
 
-import { FormProvider, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import * as z from 'zod';
-import CheckboxField from './fields/checkbox.field';
-import ComboboxMultiField from './fields/combobox-multi.field';
-import ComboboxField from './fields/combobox.field';
-import DatePickerField from './fields/date-picker.field';
-import DateRangePickerField from './fields/date-range-picker.field';
-import InputField from './fields/input.field';
-import PasswordInputField from './fields/password-input.field';
-import PhoneInputField from './fields/phone-input.field';
-import SliderField from './fields/slider.field';
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
+import CheckboxField from "./fields/checkbox.field";
+import ComboboxMultiField from "./fields/combobox-multi.field";
+import ComboboxField from "./fields/combobox.field";
+import DatePickerField from "./fields/date-picker.field";
+import DateRangePickerField from "./fields/date-range-picker.field";
+import InputField from "./fields/input.field";
+import PasswordInputField from "./fields/password-input.field";
+import PhoneInputField from "./fields/phone-input.field";
+import SliderField from "./fields/slider.field";
 
-import SwitchField from './fields/switch.field';
-import TextareaField from './fields/textarea.field';
-import TiptapBasicField from './fields/tiptap-minimal-field';
+import SwitchField from "./fields/switch.field";
+import TextareaField from "./fields/textarea.field";
+import TiptapBasicField from "./fields/tiptap-minimal-field";
 
 const formSchema = z.object({
   name_7152014886: z.boolean().default(true).optional(),
   name_9359847824: z.string().optional(),
   name_1463101423: z.string().optional(),
-  name_7292896262: z.array(z.string()).nonempty('Please at least one item'),
+  name_7292896262: z.array(z.string()).nonempty("Please at least one item"),
   name_4857646071: z.string().optional(),
   name_4133530872: z.string().optional(),
   name_8308954598: z.coerce.date(),
@@ -43,13 +43,13 @@ const formSchema = z.object({
 });
 
 const meta = {
-  title: 'Molecules/Form',
+  title: "Molecules/Form",
   args: {
-    children: 'Shadcn',
+    children: "Shadcn",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<object>;
 
@@ -65,14 +65,14 @@ export const AllFields: Story = {
       defaultValues: {
         name_8308954598: new Date(),
         name_4680007971: new Date(),
-        name_1463101423: 'RTER',
+        name_1463101423: "RTER",
         name_1463101428: 2,
-        name_9359847824: 'react',
+        name_9359847824: "react",
         name_8308954599: {
           from: new Date(),
         },
         name_6914029254: 50,
-        name_7292896262: ['react'],
+        name_7292896262: ["react"],
       },
     });
 
@@ -87,8 +87,8 @@ export const AllFields: Story = {
           </pre>,
         );
       } catch (error) {
-        console.error('Form submission error', error);
-        toast.error('Failed to submit the form. Please try again.');
+        console.error("Form submission error", error);
+        toast.error("Failed to submit the form. Please try again.");
       }
     }
 
@@ -125,11 +125,11 @@ export const AllFields: Story = {
               label="Combobox Field"
               description="This is used when a user is selecting a single value."
               options={[
-                { value: 'react', label: 'React' },
-                { value: 'angular', label: 'Angular' },
-                { value: 'vue', label: 'Vue' },
-                { value: 'svelte', label: 'Svelte' },
-                { value: 'ember', label: 'Ember' },
+                { value: "react", label: "React" },
+                { value: "angular", label: "Angular" },
+                { value: "vue", label: "Vue" },
+                { value: "svelte", label: "Svelte" },
+                { value: "ember", label: "Ember" },
               ]}
             />
 
@@ -138,11 +138,11 @@ export const AllFields: Story = {
               label="Combobox Multi Field"
               description="This is used when a user is selecting multiple values."
               options={[
-                { value: 'react', label: 'React', icon: Turtle },
-                { value: 'angular', label: 'Angular', icon: Cat },
-                { value: 'vue', label: 'Vue', icon: Dog },
-                { value: 'svelte', label: 'Svelte', icon: Rabbit },
-                { value: 'ember', label: 'Ember', icon: Fish },
+                { value: "react", label: "React", icon: Turtle },
+                { value: "angular", label: "Angular", icon: Cat },
+                { value: "vue", label: "Vue", icon: Dog },
+                { value: "svelte", label: "Svelte", icon: Rabbit },
+                { value: "ember", label: "Ember", icon: Fish },
               ]}
             />
 

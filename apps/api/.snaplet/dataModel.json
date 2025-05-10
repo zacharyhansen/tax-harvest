@@ -655,12 +655,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "AccountToAuthConnection",
-          "relationFromFields": [
-            "authConnectionId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["authConnectionId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -673,12 +669,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "AccountToPortfolio",
-          "relationFromFields": [
-            "portfolioId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["portfolioId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -691,12 +683,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "AccountToUser",
-          "relationFromFields": [
-            "createdById"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["createdById"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -777,17 +765,12 @@
       "uniqueConstraints": [
         {
           "name": "Account_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "Account_provider_externalId_key",
-          "fields": [
-            "externalId",
-            "provider"
-          ],
+          "fields": ["externalId", "provider"],
           "nullNotDistinct": false
         }
       ]
@@ -1265,12 +1248,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "AssetToAssetType",
-          "relationFromFields": [
-            "assetTypeCode"
-          ],
-          "relationToFields": [
-            "code"
-          ],
+          "relationFromFields": ["assetTypeCode"],
+          "relationToFields": ["code"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -1393,16 +1372,12 @@
       "uniqueConstraints": [
         {
           "name": "Asset_pkey",
-          "fields": [
-            "symbol"
-          ],
+          "fields": ["symbol"],
           "nullNotDistinct": false
         },
         {
           "name": "Asset_plaid_security_id_key",
-          "fields": [
-            "plaid_security_id"
-          ],
+          "fields": ["plaid_security_id"],
           "nullNotDistinct": false
         }
       ]
@@ -1486,9 +1461,7 @@
       "uniqueConstraints": [
         {
           "name": "AssetType_pkey",
-          "fields": [
-            "code"
-          ],
+          "fields": ["code"],
           "nullNotDistinct": false
         }
       ]
@@ -1728,12 +1701,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "AuthConnectionToPortfolio",
-          "relationFromFields": [
-            "portfolioId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["portfolioId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -1746,12 +1715,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "AuthConnectionToUser",
-          "relationFromFields": [
-            "userId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["userId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -1790,26 +1755,17 @@
       "uniqueConstraints": [
         {
           "name": "AuthConnection_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "AuthConnection_externalId_key",
-          "fields": [
-            "externalId"
-          ],
+          "fields": ["externalId"],
           "nullNotDistinct": false
         },
         {
           "name": "AuthConnection_source_userId_portfolioId_externalId_key",
-          "fields": [
-            "externalId",
-            "portfolioId",
-            "source",
-            "userId"
-          ],
+          "fields": ["externalId", "portfolioId", "source", "userId"],
           "nullNotDistinct": false
         }
       ]
@@ -1951,12 +1907,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "FileToAccount",
-          "relationFromFields": [
-            "accountId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["accountId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -1981,9 +1933,7 @@
       "uniqueConstraints": [
         {
           "name": "File_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -2139,12 +2089,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "HarvestToPortfolio",
-          "relationFromFields": [
-            "portfolioId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["portfolioId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2157,12 +2103,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "HarvestToUser",
-          "relationFromFields": [
-            "createdById"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["createdById"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2187,9 +2129,7 @@
       "uniqueConstraints": [
         {
           "name": "Harvest_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -2373,12 +2313,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "HarvestTransactionToHarvest",
-          "relationFromFields": [
-            "harvestId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["harvestId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2391,12 +2327,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "HarvestTransaction_harvestTransactionItemIdToHarvestTransactionItem",
-          "relationFromFields": [
-            "harvestTransactionItemId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["harvestTransactionItemId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2409,12 +2341,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "HarvestTransaction_replacementTransactionItemIdToHarvestTransactionItem",
-          "relationFromFields": [
-            "replacementTransactionItemId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["replacementTransactionItemId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2427,12 +2355,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "HarvestTransaction_revertHarvestTransactionItemIdToHarvestTransactionItem",
-          "relationFromFields": [
-            "revertHarvestTransactionItemId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["revertHarvestTransactionItemId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2445,12 +2369,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "HarvestTransaction_revertReplacementTransactionItemIdToHarvestTransactionItem",
-          "relationFromFields": [
-            "revertReplacementTransactionItemId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["revertReplacementTransactionItemId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2461,37 +2381,27 @@
       "uniqueConstraints": [
         {
           "name": "HarvestTransaction_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "HarvestTransaction_harvestTransactionItemId_key",
-          "fields": [
-            "harvestTransactionItemId"
-          ],
+          "fields": ["harvestTransactionItemId"],
           "nullNotDistinct": false
         },
         {
           "name": "HarvestTransaction_replacementTransactionItemId_key",
-          "fields": [
-            "replacementTransactionItemId"
-          ],
+          "fields": ["replacementTransactionItemId"],
           "nullNotDistinct": false
         },
         {
           "name": "HarvestTransaction_revertHarvestTransactionItemId_key",
-          "fields": [
-            "revertHarvestTransactionItemId"
-          ],
+          "fields": ["revertHarvestTransactionItemId"],
           "nullNotDistinct": false
         },
         {
           "name": "HarvestTransaction_revertReplacementTransactionItemId_key",
-          "fields": [
-            "revertReplacementTransactionItemId"
-          ],
+          "fields": ["revertReplacementTransactionItemId"],
           "nullNotDistinct": false
         }
       ]
@@ -2633,12 +2543,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "HarvestTransactionItemToAsset",
-          "relationFromFields": [
-            "assetSymbol"
-          ],
-          "relationToFields": [
-            "symbol"
-          ],
+          "relationFromFields": ["assetSymbol"],
+          "relationToFields": ["symbol"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2651,12 +2557,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "HarvestTransactionItemToLot",
-          "relationFromFields": [
-            "lotId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["lotId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2723,9 +2625,7 @@
       "uniqueConstraints": [
         {
           "name": "HarvestTransactionItem_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -2857,12 +2757,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "LogToPortfolio",
-          "relationFromFields": [
-            "portfolioId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["portfolioId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -2873,9 +2769,7 @@
       "uniqueConstraints": [
         {
           "name": "Log_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -3339,12 +3233,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "LotToAccount",
-          "relationFromFields": [
-            "accountId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["accountId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3357,12 +3247,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "LotToAsset",
-          "relationFromFields": [
-            "assetSymbol"
-          ],
-          "relationToFields": [
-            "symbol"
-          ],
+          "relationFromFields": ["assetSymbol"],
+          "relationToFields": ["symbol"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3375,12 +3261,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "LotToFile",
-          "relationFromFields": [
-            "fileId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["fileId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3393,12 +3275,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "LotToPosition",
-          "relationFromFields": [
-            "positionId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["positionId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3437,17 +3315,12 @@
       "uniqueConstraints": [
         {
           "name": "Lot_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "Lot_positionId_externalId_key",
-          "fields": [
-            "externalId",
-            "positionId"
-          ],
+          "fields": ["externalId", "positionId"],
           "nullNotDistinct": false
         }
       ]
@@ -3645,12 +3518,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "LotChangeLogToLot",
-          "relationFromFields": [
-            "lotId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["lotId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3663,12 +3532,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "LotChangeLogToLotTransactionBatch",
-          "relationFromFields": [
-            "lotTransactionBatchId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["lotTransactionBatchId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3681,12 +3546,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "LotChangeLogToTransaction",
-          "relationFromFields": [
-            "transactionId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["transactionId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3697,9 +3558,7 @@
       "uniqueConstraints": [
         {
           "name": "LotChangeLog_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -3897,12 +3756,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "LotTransactionBatchToAuthConnection",
-          "relationFromFields": [
-            "authConnectionId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["authConnectionId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3915,12 +3770,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "LotTransactionBatchToPortfolio",
-          "relationFromFields": [
-            "portfolioId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["portfolioId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -3945,9 +3796,7 @@
       "uniqueConstraints": [
         {
           "name": "LotTransactionBatch_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -4131,12 +3980,8 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "PortfolioToUser",
-          "relationFromFields": [
-            "createdById"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["createdById"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -4231,9 +4076,7 @@
       "uniqueConstraints": [
         {
           "name": "Portfolio_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]
@@ -4585,12 +4428,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "PositionToAccount",
-          "relationFromFields": [
-            "accountId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["accountId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -4603,12 +4442,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "PositionToAsset",
-          "relationFromFields": [
-            "assetSymbol"
-          ],
-          "relationToFields": [
-            "symbol"
-          ],
+          "relationFromFields": ["assetSymbol"],
+          "relationToFields": ["symbol"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -4633,17 +4468,12 @@
       "uniqueConstraints": [
         {
           "name": "Position_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "Position_accountId_externalId_key",
-          "fields": [
-            "accountId",
-            "externalId"
-          ],
+          "fields": ["accountId", "externalId"],
           "nullNotDistinct": false
         }
       ]
@@ -4785,12 +4615,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "PriceHourlyToAsset",
-          "relationFromFields": [
-            "assetSymbol"
-          ],
-          "relationToFields": [
-            "symbol"
-          ],
+          "relationFromFields": ["assetSymbol"],
+          "relationToFields": ["symbol"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -4801,10 +4627,7 @@
       "uniqueConstraints": [
         {
           "name": "PriceHourly_pkey",
-          "fields": [
-            "assetSymbol",
-            "startDate"
-          ],
+          "fields": ["assetSymbol", "startDate"],
           "nullNotDistinct": false
         }
       ]
@@ -4918,12 +4741,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "PriceHourlyVectorToAsset",
-          "relationFromFields": [
-            "assetSymbol"
-          ],
-          "relationToFields": [
-            "symbol"
-          ],
+          "relationFromFields": ["assetSymbol"],
+          "relationToFields": ["symbol"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -4948,18 +4767,12 @@
       "uniqueConstraints": [
         {
           "name": "PriceHourlyVector_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "PriceHourlyVector_assetSymbol_startDate_vectorWindow_key",
-          "fields": [
-            "assetSymbol",
-            "startDate",
-            "vectorWindow"
-          ],
+          "fields": ["assetSymbol", "startDate", "vectorWindow"],
           "nullNotDistinct": false
         }
       ]
@@ -5101,12 +4914,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "RealizedPAndLToAccount",
-          "relationFromFields": [
-            "accountId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["accountId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -5117,17 +4926,12 @@
       "uniqueConstraints": [
         {
           "name": "RealizedPAndL_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "RealizedPAndL_accountId_year_key",
-          "fields": [
-            "accountId",
-            "year"
-          ],
+          "fields": ["accountId", "year"],
           "nullNotDistinct": false
         }
       ]
@@ -5479,12 +5283,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "TransactionToAccount",
-          "relationFromFields": [
-            "accountId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["accountId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -5497,12 +5297,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "TransactionToAsset",
-          "relationFromFields": [
-            "assetSymbol"
-          ],
-          "relationToFields": [
-            "symbol"
-          ],
+          "relationFromFields": ["assetSymbol"],
+          "relationToFields": ["symbol"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -5527,17 +5323,12 @@
       "uniqueConstraints": [
         {
           "name": "Transaction_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "Transaction_accountId_externalId_key",
-          "fields": [
-            "accountId",
-            "externalId"
-          ],
+          "fields": ["accountId", "externalId"],
           "nullNotDistinct": false
         }
       ]
@@ -5789,16 +5580,12 @@
       "uniqueConstraints": [
         {
           "name": "User_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "User_stripeCustomerId_key",
-          "fields": [
-            "stripeCustomerId"
-          ],
+          "fields": ["stripeCustomerId"],
           "nullNotDistinct": false
         }
       ]
@@ -5884,12 +5671,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "UsersOnPortfoliosToPortfolio",
-          "relationFromFields": [
-            "portfolioId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["portfolioId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -5902,12 +5685,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "UsersOnPortfoliosToUser",
-          "relationFromFields": [
-            "userId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["userId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -5918,10 +5697,7 @@
       "uniqueConstraints": [
         {
           "name": "UsersOnPortfolios_pkey",
-          "fields": [
-            "portfolioId",
-            "userId"
-          ],
+          "fields": ["portfolioId", "userId"],
           "nullNotDistinct": false
         }
       ]
@@ -6035,12 +5811,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "VectorGraphToAsset",
-          "relationFromFields": [
-            "assetSymbol"
-          ],
-          "relationToFields": [
-            "symbol"
-          ],
+          "relationFromFields": ["assetSymbol"],
+          "relationToFields": ["symbol"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -6053,12 +5825,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "VectorGraphToPriceHourlyVector",
-          "relationFromFields": [
-            "priceHourlyVectorId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["priceHourlyVectorId"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -6069,18 +5837,12 @@
       "uniqueConstraints": [
         {
           "name": "VectorGraph_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         },
         {
           "name": "VectorGraph_assetSymbol_type_priceHourlyVectorId_key",
-          "fields": [
-            "assetSymbol",
-            "priceHourlyVectorId",
-            "type"
-          ],
+          "fields": ["assetSymbol", "priceHourlyVectorId", "type"],
           "nullNotDistinct": false
         }
       ]
@@ -6124,12 +5886,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "_AssetToUserToAsset",
-          "relationFromFields": [
-            "A"
-          ],
-          "relationToFields": [
-            "symbol"
-          ],
+          "relationFromFields": ["A"],
+          "relationToFields": ["symbol"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -6142,12 +5900,8 @@
           "isRequired": true,
           "kind": "object",
           "relationName": "_AssetToUserToUser",
-          "relationFromFields": [
-            "B"
-          ],
-          "relationToFields": [
-            "id"
-          ],
+          "relationFromFields": ["B"],
+          "relationToFields": ["id"],
           "isList": false,
           "isId": false,
           "isGenerated": false,
@@ -6158,10 +5912,7 @@
       "uniqueConstraints": [
         {
           "name": "_AssetToUser_AB_unique",
-          "fields": [
-            "A",
-            "B"
-          ],
+          "fields": ["A", "B"],
           "nullNotDistinct": false
         }
       ]
@@ -6287,9 +6038,7 @@
       "uniqueConstraints": [
         {
           "name": "_prisma_migrations_pkey",
-          "fields": [
-            "id"
-          ],
+          "fields": ["id"],
           "nullNotDistinct": false
         }
       ]

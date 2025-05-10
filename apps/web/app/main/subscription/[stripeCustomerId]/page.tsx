@@ -109,5 +109,5 @@
 // }
 
 export default async function CheckoutForm() {
-  return <div>CheckoutForm</div>;
+  return <div>CheckoutForm</div>
 }

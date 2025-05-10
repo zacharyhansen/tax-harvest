@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-import type { GridOptions } from 'ag-grid-community';
-import { themeBalham, themeQuartz } from 'ag-grid-community';
+import type { GridOptions } from 'ag-grid-community'
+import { themeBalham, themeQuartz } from 'ag-grid-community'
 
-import { cellRendererSelector } from './cell-renderer-selector';
-import { defaultColumnTypes } from './column-types';
-import { dataTypeDefinitions } from './data-type-definitions';
+import { cellRendererSelector } from './cell-renderer-selector'
+import { defaultColumnTypes } from './column-types'
+import { dataTypeDefinitions } from './data-type-definitions'
 
 const baseGridOptions: GridOptions = {
   dataTypeDefinitions,
@@ -22,7 +22,7 @@ const baseGridOptions: GridOptions = {
     cellRendererSelector,
     // pagination: true,
   },
-};
+}
 
 export const themeBalhamGridOptions: GridOptions = {
   ...baseGridOptions,
@@ -42,7 +42,7 @@ export const themeBalhamGridOptions: GridOptions = {
       'dark',
     ),
   headerHeight: 32,
-};
+}
 
 export const themeQuartzGridOptions: GridOptions = {
   ...baseGridOptions,
@@ -62,4 +62,4 @@ export const themeQuartzGridOptions: GridOptions = {
       'dark',
     ),
   headerHeight: 40,
-};
+}

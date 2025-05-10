@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import type { ReactNode } from 'react';
-import type { PageWrapperProps } from './page-wrapper';
-import { ScrollArea } from '@repo/ui/components/scroll-area';
+import type { ReactNode } from 'react'
+import type { PageWrapperProps } from './page-wrapper'
+import { ScrollArea } from '@repo/ui/components/scroll-area'
 
-import clsx from 'clsx';
-import { Children } from 'react';
-import PageWrapper from './page-wrapper';
+import clsx from 'clsx'
+import { Children } from 'react'
+import PageWrapper from './page-wrapper'
 
 export default function PageWrapperWithNav({
   children,
   ...pageWrapperProps
 }: Readonly<PageWrapperProps>) {
-  const childrenArray = Children.toArray(children).slice(0, 2);
+  const childrenArray = Children.toArray(children).slice(0, 2)
 
   return (
     <div
@@ -26,9 +26,9 @@ export default function PageWrapperWithNav({
         <ScrollArea className="h-full px-2 py-4">{childrenArray[1]}</ScrollArea>
       </nav>
     </div>
-  );
+  )
 }
 
 export function PageNavTitle({ children }: { children: ReactNode }) {
-  return <h2 className="mb-2 text-center text-lg font-semibold">{children}</h2>;
+  return <h2 className="mb-2 text-center text-lg font-semibold">{children}</h2>
 }

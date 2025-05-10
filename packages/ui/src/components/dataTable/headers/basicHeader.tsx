@@ -1,13 +1,13 @@
-import type { Column } from '@tanstack/react-table';
+import type { Column } from "@tanstack/react-table";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   CaretSortIcon,
   EyeNoneIcon,
-} from '@radix-ui/react-icons';
+} from "@radix-ui/react-icons";
 
-import { cn } from '@repo/ui/utils/cn';
-import { Button } from '../../button';
+import { cn } from "@repo/ui/utils/cn";
+import { Button } from "../../button";
 
 import {
   DropdownMenu,
@@ -15,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../../dropdown-menu';
+} from "../../dropdown-menu";
 
 type BasicHeaderProps<TData, TValue> = {
   column: Column<TData, TValue>;
@@ -32,7 +32,7 @@ export function BasicHeader<TData, TValue>({
   }
 
   return (
-    <div className={cn('flex items-center space-x-2', className)}>
+    <div className={cn("flex items-center space-x-2", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -41,17 +41,13 @@ export function BasicHeader<TData, TValue>({
             className="-ml-3 h-8 data-[state=open]:bg-accent"
           >
             <span>{title}</span>
-            {column.getIsSorted() === 'desc'
-              ? (
-                  <ArrowDownIcon className="ml-2 size-4" />
-                )
-              : column.getIsSorted() === 'asc'
-                ? (
-                    <ArrowUpIcon className="ml-2 size-4" />
-                  )
-                : (
-                    <CaretSortIcon className="ml-2 size-4" />
-                  )}
+            {column.getIsSorted() === "desc" ? (
+              <ArrowDownIcon className="ml-2 size-4" />
+            ) : column.getIsSorted() === "asc" ? (
+              <ArrowUpIcon className="ml-2 size-4" />
+            ) : (
+              <CaretSortIcon className="ml-2 size-4" />
+            )}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

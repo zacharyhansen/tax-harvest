@@ -106,8 +106,8 @@
 //   );
 // }
 
-const PricingOptions = () => {
-  return <div>PricingOptions</div>;
-};
+function PricingOptions() {
+  return <div>PricingOptions</div>
+}
 
-export default PricingOptions;
+export default PricingOptions

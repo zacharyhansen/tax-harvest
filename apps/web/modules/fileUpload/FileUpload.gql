@@ -20,6 +20,7 @@ fragment FileItem on File {
 
 mutation CreateFiles($data: [FileCreateManyInput!]!) {
   createFiles(data: $data) {
+    id
     ...FileItem
   }
 }

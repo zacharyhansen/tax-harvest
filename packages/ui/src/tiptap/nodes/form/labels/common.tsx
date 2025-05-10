@@ -1,23 +1,23 @@
-import type { NodeViewProps } from '@tiptap/core';
-import type { BaseFormNodeAttributes } from '../types';
-import { Button } from '@repo/ui/components/button';
+import type { NodeViewProps } from "@tiptap/core";
+import type { BaseFormNodeAttributes } from "../types";
+import { Button } from "@repo/ui/components/button";
 import {
   ResponsiveDialogDescription,
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@repo/ui/components/reponsive-dialog';
+} from "@repo/ui/components/reponsive-dialog";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@repo/ui/components/tooltip';
+} from "@repo/ui/components/tooltip";
 
-import { snakeCase } from 'change-case';
-import { Asterisk, Info, Pencil, Rows3, Trash2 } from 'lucide-react';
-import { Fragment } from 'react/jsx-runtime';
+import { snakeCase } from "change-case";
+import { Asterisk, Info, Pencil, Rows3, Trash2 } from "lucide-react";
+import { Fragment } from "react/jsx-runtime";
 
 type FooterProps = {
   isDirty?: boolean;
@@ -66,9 +66,9 @@ export function InfoAndDeleteIcons({
         <TooltipContent>
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm">
             {[
-              { label: 'Slug:', value: name },
-              { label: 'Default value:', value: defaultValue },
-            ].map(item => (
+              { label: "Slug:", value: name },
+              { label: "Default value:", value: defaultValue },
+            ].map((item) => (
               <Fragment key={item.label}>
                 <dt className="font-medium text-muted-foreground">
                   {item.label}
@@ -117,8 +117,8 @@ export function LabelInput({
 }: Readonly<
   NodeViewProps & { onKeyDown: (event: React.KeyboardEvent) => void }
 >) {
-  const { required, label, nameLocked, name }
-    = node.attrs as BaseFormNodeAttributes;
+  const { required, label, nameLocked, name } =
+    node.attrs as BaseFormNodeAttributes;
 
   return (
     <>
@@ -140,25 +140,23 @@ export function LabelInput({
       >
         {label}
       </div>
-      {required
-        ? (
-            <Tooltip>
-              <TooltipTrigger
-                asChild
-                onClick={() => {
-                  updateAttributes({
-                    required: !required,
-                  });
-                }}
-              >
-                <Asterisk className="size-6 cursor-pointer rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Required</p>
-              </TooltipContent>
-            </Tooltip>
-          )
-        : null}
+      {required ? (
+        <Tooltip>
+          <TooltipTrigger
+            asChild
+            onClick={() => {
+              updateAttributes({
+                required: !required,
+              });
+            }}
+          >
+            <Asterisk className="size-6 cursor-pointer rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Required</p>
+          </TooltipContent>
+        </Tooltip>
+      ) : null}
     </>
   );
 }

@@ -105,17 +105,27 @@ export class LotService {
     if (lotValueType === LotValueType.GAIN) {
       query = query.where('LotCurrent.gainTotal', '>', '0')
       if (minTotalPAndL) {
-        query = query.where('LotCurrent.gainTotal', '>=', minTotalPAndL.abs().toString())
+        query = query.where(
+          'LotCurrent.gainTotal',
+          '>=',
+          minTotalPAndL.abs().toString(),
+        )
       }
     }
     else if (lotValueType === LotValueType.LOSS) {
       query = query.where('LotCurrent.gainTotal', '<', '0')
       if (minTotalPAndL) {
-        query = query.where('LotCurrent.gainTotal', '<=', minTotalPAndL.abs().neg().toString())
+        query = query.where(
+          'LotCurrent.gainTotal',
+          '<=',
+          minTotalPAndL.abs().neg().toString(),
+        )
       }
     }
 
-    return query.orderBy('dollarPerSharePnL', 'desc').execute() as Promise<LotCurrent[]>
+    return query.orderBy('dollarPerSharePnL', 'desc').execute() as Promise<
+      LotCurrent[]
+    >
   }
 
   private static lotCurrentFields: SelectExpression<

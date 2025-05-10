@@ -23,7 +23,7 @@ fragment AccountItem on Account {
   updatedAt
   createdBy {
     id
-    # eslint-disable-next-line @graphql-eslint/known-fragment-nam          es
+    # eslint-disable-next-line @graphql-eslint/known-fragment-names
     ...UserItem
   }
   _realizedProfitAndLoss {

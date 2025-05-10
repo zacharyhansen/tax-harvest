@@ -1,18 +1,18 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { Label } from './label';
+import { Label } from "./label";
 
 const meta = {
-  title: 'Atoms/Label',
+  title: "Atoms/Label",
   args: {
-    children: 'Shadcn',
+    children: "Shadcn",
   },
-  tags: ['autodocs'],
-  component: args => <Label {...args}>{args.children}</Label>,
+  tags: ["autodocs"],
+  component: (args) => <Label {...args}>{args.children}</Label>,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-} satisfies Meta<React.ComponentPropsWithRef<'label'>>;
+} satisfies Meta<React.ComponentPropsWithRef<"label">>;
 
 export default meta;
 

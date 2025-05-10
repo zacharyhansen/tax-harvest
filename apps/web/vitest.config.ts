@@ -1,8 +1,8 @@
 /// <reference types="vitest" />
 
-import React from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import { defineConfig } from 'vitest/config';
+import React from '@vitejs/plugin-react'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [React(), tsconfigPaths()],
@@ -41,4 +41,4 @@ export default defineConfig({
     },
     exclude: ['**/tests/**', '**/node_modules/**'],
   },
-});
+})

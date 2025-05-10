@@ -11,4 +11,4 @@ export type BaseInputProps = {
  */
 export type BaseInputPropsType = BaseInputProps;
 
-export type BaseInputPropsUnion = 'placeholder' | 'disabled';
+export type BaseInputPropsUnion = "placeholder" | "disabled";

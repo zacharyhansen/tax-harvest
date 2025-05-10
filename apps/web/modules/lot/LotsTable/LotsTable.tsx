@@ -1,16 +1,16 @@
-'use client';
+'use client'
 
-import type { ColumnDef } from '@tanstack/react-table';
-import type { LotItemFragment } from '~/generated/gql';
-import { Badge } from '@repo/ui/components/badge';
-import DataTable from '@repo/ui/components/dataTable/dataTable';
+import type { ColumnDef } from '@tanstack/react-table'
+import type { LotItemFragment } from '~/generated/gql'
+import { Badge } from '@repo/ui/components/badge'
+import DataTable from '@repo/ui/components/dataTable/dataTable'
 
-import { createColumnHelper } from '@tanstack/react-table';
-import { usePortfolioLotsQuery } from '~/generated/gql';
-import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-import { Format, isOlderThanOneYear } from '~/modules/utils';
+import { createColumnHelper } from '@tanstack/react-table'
+import { usePortfolioLotsQuery } from '~/generated/gql'
+import { ErrorPage, LoadingPage } from '~/modules/utility-components'
+import { Format, isOlderThanOneYear } from '~/modules/utils'
 
-const columnHelper = createColumnHelper<LotItemFragment>();
+const columnHelper = createColumnHelper<LotItemFragment>()
 
 const columnDef: ColumnDef<LotItemFragment, never>[] = [
   columnHelper.accessor('assetSymbol', {
@@ -28,12 +28,12 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
   }),
   columnHelper.accessor('acquiredDate', {
     cell: ({ getValue }) => {
-      const isLongTermGains = isOlderThanOneYear(getValue());
+      const isLongTermGains = isOlderThanOneYear(getValue())
       return (
         <Badge variant={isLongTermGains ? 'default' : 'secondary'}>
           {isLongTermGains ? 'Long Term' : 'Short Term'}
         </Badge>
-      );
+      )
     },
     header: 'Capital Gain',
     id: 'taxType',
@@ -50,8 +50,8 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
           (sum, row) => sum + Number(row.getValue<string>('remainingQty') || 0),
           0,
         )
-        .toFixed(2);
-      return <DataTable.FooterCell label="Total" value={total} />;
+        .toFixed(2)
+      return <DataTable.FooterCell label="Total" value={total} />
     },
     header: 'Quantity',
     size: 110,
@@ -77,10 +77,10 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
               + Number(row.getValue<string>('remainingQty') || 0)
               * row.getValue<number>('price'),
             0,
-          );
+          )
         return (
           <DataTable.FooterCell label="Total" value={Format.money(total)} />
-        );
+        )
       },
       header: 'Cost Basis',
       id: 'costBasis',
@@ -104,10 +104,10 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
   ),
   columnHelper.accessor(
     (row) => {
-      const cost = Number(row.remainingQty || 0) * Number(row.price || 0);
+      const cost = Number(row.remainingQty || 0) * Number(row.price || 0)
       const value
-        = Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0);
-      return value - cost;
+        = Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0)
+      return value - cost
     },
     {
       aggregationFn: 'sumMoney',
@@ -140,27 +140,27 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
   columnHelper.accessor('account.name', {
     cell: ({ getValue }) => {
       const account = getValue<{
-        name?: string;
-        externalId?: string;
-      }>();
+        name?: string
+        externalId?: string
+      }>()
       return (
         <span>{account.name ?? Format.hideNumbers(account.externalId)}</span>
-      );
+      )
     },
     header: 'Account Name',
     size: 310,
   }),
-];
+]
 
 export default function LotsTable() {
-  const { data, error, loading } = usePortfolioLotsQuery();
+  const { data, error, loading } = usePortfolioLotsQuery()
 
   if (loading) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
 
   if (error) {
-    return <ErrorPage message={error.message} />;
+    return <ErrorPage message={error.message} />
   }
 
   return (
@@ -181,28 +181,28 @@ export default function LotsTable() {
       }}
       customAggregationFns={{
         avgPricePaid: (_columnId, leafRows) => {
-          let totalQuantity = 0;
-          let totalPaid = 0;
+          let totalQuantity = 0
+          let totalPaid = 0
           leafRows.forEach((row) => {
-            const qty = Number(row.original.remainingQty) || 0;
-            totalQuantity += qty;
-            totalPaid += (Number(row.original.price) || 0) * qty;
-          });
-          return Format.money(totalPaid / totalQuantity, 4);
+            const qty = Number(row.original.remainingQty) || 0
+            totalQuantity += qty
+            totalPaid += (Number(row.original.price) || 0) * qty
+          })
+          return Format.money(totalPaid / totalQuantity, 4)
         },
         totalGainPct: (_columnId, leafRows) => {
-          let totalGain = 0;
-          let totalPaid = 0;
+          let totalGain = 0
+          let totalPaid = 0
           leafRows.forEach((row) => {
-            totalGain += Number(row.getValue('totalGain')) || 0;
-            totalPaid += Number(row.getValue('costBasis')) || 0;
-          });
+            totalGain += Number(row.getValue('totalGain')) || 0
+            totalPaid += Number(row.getValue('costBasis')) || 0
+          })
           return new Intl.NumberFormat('en-US', {
             maximumFractionDigits: 2,
             style: 'percent',
-          }).format(totalGain / totalPaid);
+          }).format(totalGain / totalPaid)
         },
       }}
     />
-  );
+  )
 }

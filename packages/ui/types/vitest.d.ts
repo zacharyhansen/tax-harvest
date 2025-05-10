@@ -1,5 +1,5 @@
-import type { TestingLibraryMatchers } from '@testing-library/jest-dom/matchers';
-import 'vitest';
+import type { TestingLibraryMatchers } from "@testing-library/jest-dom/matchers";
+import "vitest";
 
 declare global {
   namespace Vi {

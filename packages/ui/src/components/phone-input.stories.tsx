@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { PhoneInput } from './phone-input';
+import { PhoneInput } from "./phone-input";
 
 const meta = {
-  title: 'Atoms/Phone Input',
+  title: "Atoms/Phone Input",
   component: PhoneInput,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   args: {
     onChange: () => {},

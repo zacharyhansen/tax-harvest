@@ -19,22 +19,22 @@ kubectl apply -f helm/tax-harvester-argocd.yaml
 
 The following table lists the configurable parameters of the Tax Harvester chart and their default values:
 
-| Parameter                        | Description                           | Default                              |
-|----------------------------------|---------------------------------------|--------------------------------------|
-| `global.namespace`               | Kubernetes namespace                   | `harvester`                          |
-| `global.domain`                  | Domain name for the application        | `harvester.example.com`              |
-| `global.ingress.enabled`         | Enable ingress                         | `true`                               |
-| `global.ingress.className`       | Ingress class name                     | `gce`                                |
-| `api.replicaCount`               | Number of API replicas                 | `1`                                  |
-| `api.image.repository`           | API image repository                   | `gcr.io/your-project/harvester-api`  |
-| `api.image.tag`                  | API image tag                          | `latest`                             |
-| `api.serviceAccountName`         | K8s service account for GCP identity   | `google-secret-service-account`      |
-| `api.cloudsql.enabled`           | Enable Cloud SQL Proxy sidecar         | `true`                               |
-| `api.cloudsql.instanceConnectionName` | GCP Cloud SQL instance name       | `project:region:instance`            |
-| `api.migrations.enabled`         | Enable database migrations             | `true`                               |
-| `web.replicaCount`               | Number of Web replicas                 | `1`                                  |
-| `web.image.repository`           | Web image repository                   | `gcr.io/your-project/harvester-web`  |
-| `web.image.tag`                  | Web image tag                          | `latest`                             |
+| Parameter                             | Description                          | Default                             |
+| ------------------------------------- | ------------------------------------ | ----------------------------------- |
+| `global.namespace`                    | Kubernetes namespace                 | `harvester`                         |
+| `global.domain`                       | Domain name for the application      | `harvester.example.com`             |
+| `global.ingress.enabled`              | Enable ingress                       | `true`                              |
+| `global.ingress.className`            | Ingress class name                   | `gce`                               |
+| `api.replicaCount`                    | Number of API replicas               | `1`                                 |
+| `api.image.repository`                | API image repository                 | `gcr.io/your-project/harvester-api` |
+| `api.image.tag`                       | API image tag                        | `latest`                            |
+| `api.serviceAccountName`              | K8s service account for GCP identity | `google-secret-service-account`     |
+| `api.cloudsql.enabled`                | Enable Cloud SQL Proxy sidecar       | `true`                              |
+| `api.cloudsql.instanceConnectionName` | GCP Cloud SQL instance name          | `project:region:instance`           |
+| `api.migrations.enabled`              | Enable database migrations           | `true`                              |
+| `web.replicaCount`                    | Number of Web replicas               | `1`                                 |
+| `web.image.repository`                | Web image repository                 | `gcr.io/your-project/harvester-web` |
+| `web.image.tag`                       | Web image tag                        | `latest`                            |
 
 ## Structure
 
@@ -65,6 +65,7 @@ The Cloud SQL Auth Proxy creates a Unix socket at `/cloudsql/<INSTANCE_CONNECTIO
 See [Github](https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx#configuration)
 
 # GKE Set Up Notes
+
 ./cloud-sql-proxy harvester-ai-428202:us-central1:harvester-dev --port 5435
 
 `gcloud container clusters get-credentials "harvester-dev" --zone us-central1-b`
@@ -87,6 +88,7 @@ Get ArgoCD password
 ## Set up container access to google secret manager
 
 test chart
+
 ```
 helm template . > helm_output.yaml --debug
 ```

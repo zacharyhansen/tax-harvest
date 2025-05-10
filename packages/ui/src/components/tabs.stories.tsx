@@ -1,7 +1,7 @@
-import type { TabsProps } from '@radix-ui/react-tabs';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { TabsProps } from "@radix-ui/react-tabs";
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { Button } from './button';
+import { Button } from "./button";
 import {
   Card,
   CardContent,
@@ -9,18 +9,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from './card';
-import { Input } from './input';
-import { Label } from './label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
+} from "./card";
+import { Input } from "./input";
+import { Label } from "./label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 const meta = {
-  title: 'Atoms/Tabs',
+  title: "Atoms/Tabs",
   args: {
-    children: 'Shadcn',
+    children: "Shadcn",
   },
-  tags: ['autodocs'],
-  component: _args => (
+  tags: ["autodocs"],
+  component: (_args) => (
     <Tabs defaultValue="account" className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="account">Account</TabsTrigger>
@@ -75,7 +75,7 @@ const meta = {
     </Tabs>
   ),
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<TabsProps>;
 

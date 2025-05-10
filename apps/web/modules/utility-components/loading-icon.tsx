@@ -1,6 +1,6 @@
-import { cn } from '@repo/ui/utils';
+import { cn } from '@repo/ui/utils'
 
-const LoadingIcon = ({ className }: { className?: string }) => {
+function LoadingIcon({ className }: { className?: string }) {
   return (
     <svg
       fill="none"
@@ -15,7 +15,7 @@ const LoadingIcon = ({ className }: { className?: string }) => {
         fillRule="evenodd"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default LoadingIcon;
+export default LoadingIcon

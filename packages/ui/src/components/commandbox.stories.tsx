@@ -1,23 +1,23 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Cat, Dog, Fish, Rabbit, Turtle } from 'lucide-react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Cat, Dog, Fish, Rabbit, Turtle } from "lucide-react";
 
-import { CommandBox } from './commandbox';
+import { CommandBox } from "./commandbox";
 
 const priorities = [
-  { value: 'no-priority', label: 'No priority', icon: Cat },
-  { value: 'urgent', label: 'Urgent', icon: Dog },
-  { value: 'high', label: 'High', icon: Fish },
-  { value: 'medium', label: 'Medium', icon: Rabbit },
-  { value: 'low', label: 'Low', icon: Turtle },
+  { value: "no-priority", label: "No priority", icon: Cat },
+  { value: "urgent", label: "Urgent", icon: Dog },
+  { value: "high", label: "High", icon: Fish },
+  { value: "medium", label: "Medium", icon: Rabbit },
+  { value: "low", label: "Low", icon: Turtle },
 ];
 
 const meta = {
-  title: 'Atoms/Command Box',
+  title: "Atoms/Command Box",
   component: CommandBox,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   args: {
     commandOptions: priorities,
   },

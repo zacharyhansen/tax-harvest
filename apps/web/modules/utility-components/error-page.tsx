@@ -1,17 +1,17 @@
-import type { ReactNode } from 'react';
-import { Button } from '@repo/ui/components/button';
-import { CircleAlert } from 'lucide-react';
-import Link from 'next/link';
+import type { ReactNode } from 'react'
+import { Button } from '@repo/ui/components/button'
+import { CircleAlert } from 'lucide-react'
+import Link from 'next/link'
 
-import { TypedRoutes } from '~/lib/routes';
+import { TypedRoutes } from '~/lib/routes'
 
-export const ErrorPage = ({
+export function ErrorPage({
   title,
   message,
 }: {
-  title?: ReactNode;
-  message?: ReactNode;
-}) => {
+  title?: ReactNode
+  message?: ReactNode
+}) {
   return (
     <div className="grid min-h-full place-items-center px-6 py-24 text-card-foreground sm:py-32 lg:px-8">
       <div className="text-center">
@@ -37,7 +37,7 @@ export const ErrorPage = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ErrorPage;
+export default ErrorPage

@@ -14,8 +14,36 @@ fragment FiniteHarvestLotItem on LotCurrent {
   taxGain
 }
 
+fragment MatchedLotOrderItem on HarvestLotOrder {
+  accountId
+  costBasis
+  gainTotal
+  id
+  lotId
+  pricePaid
+  quantity
+  taxGain
+  assetSymbol
+  dollarPerSharePnL
+  valueTotal
+  orderType
+  acquiredDate
+  lastPrice
+}
+fragment UnrealizedHarvestItem on UnrealizedHarvestMatchResult {
+  sourceLot {
+    id
+    ...FiniteHarvestLotItem
+  }
+  matchedLotOrders {
+    id
+    ...MatchedLotOrderItem
+  }
+}
+
 query FiniteHarvest {
   finiteHarvest {
+    harvestType
     summary {
       realized {
         gainTotal
@@ -29,6 +57,8 @@ query FiniteHarvest {
       id
       ...FiniteHarvestLotItem
     }
-    harvestType
+    unrealizedHarvestMatchResults {
+      ...UnrealizedHarvestItem
+    }
   }
 }

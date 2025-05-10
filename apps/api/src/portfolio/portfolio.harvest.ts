@@ -1,8 +1,8 @@
 import { OrderType, Prisma } from '@prisma/client'
 import Decimal from 'decimal.js'
 
-import { LotValueType } from '../lot/lot.dto'
-import { HarvestLotOrder, TaxGain } from './portfolio.dto'
+import { LotValueType, TaxGain } from '../lot/lot.dto'
+import { HarvestLotOrder } from './portfolio.dto'
 
 interface PortfolioHarvestInput {
   id: string

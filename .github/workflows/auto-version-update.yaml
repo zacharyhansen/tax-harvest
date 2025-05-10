@@ -73,8 +73,8 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'release: release ${{ steps.get_version.outputs.version }}'
-          title: 'release: release ${{ steps.get_version.outputs.version }}'
+          commit-message: "release: release ${{ steps.get_version.outputs.version }}"
+          title: "release: release ${{ steps.get_version.outputs.version }}"
           body: |
             This PR updates the Helm chart values.yaml with new image tags and bumps the package json version:
             - Web: `v${{ steps.get_version.outputs.version }}`

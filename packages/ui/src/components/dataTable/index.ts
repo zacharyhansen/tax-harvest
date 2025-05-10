@@ -1,6 +1,10 @@
-export { default as DataTable } from './dataTable';
+export { default as DataTable } from "./dataTable";
 
-export function sortDecimalValue<T>(rowA: T, rowB: T, columnId: keyof T): number {
+export function sortDecimalValue<T>(
+  rowA: T,
+  rowB: T,
+  columnId: keyof T,
+): number {
   const statusA = Number(rowA[columnId] ?? 0);
   const statusB = Number(rowB[columnId] ?? 0);
 

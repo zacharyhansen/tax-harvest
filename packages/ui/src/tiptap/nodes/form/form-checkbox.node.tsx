@@ -1,27 +1,27 @@
-import type { BooleanNodeAttributes } from './types';
-import { CheckboxField } from '@repo/ui/components/checkbox';
+import type { BooleanNodeAttributes } from "./types";
+import { CheckboxField } from "@repo/ui/components/checkbox";
 
-import { mergeAttributes, Node } from '@tiptap/core';
+import { mergeAttributes, Node } from "@tiptap/core";
 
-import { NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react';
-import { generateRandomFieldName } from '../../utils';
+import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
+import { generateRandomFieldName } from "../../utils";
 
-import { FormBooleanLabel } from './labels/form-boolean.label';
-import { FormNode } from './types';
+import { FormBooleanLabel } from "./labels/form-boolean.label";
+import { FormNode } from "./types";
 
 // Define the FormTextNode extension
 export const FormCheckboxNode = Node.create<BooleanNodeAttributes>({
   name: FormNode.Checkbox, // Unique name for your node
-  group: 'block', // Allow it to act like a block element
+  group: "block", // Allow it to act like a block element
   atom: true, // Treat as a single unit (atomic)
 
   addAttributes() {
     return {
-      name: { default: generateRandomFieldName('field', 10) },
-      label: { default: '' },
+      name: { default: generateRandomFieldName("field", 10) },
+      label: { default: "" },
       defaultValue: { default: false },
       required: { default: true },
-      description: { default: '' },
+      description: { default: "" },
       nameLocked: { default: false },
     };
   },
@@ -29,13 +29,13 @@ export const FormCheckboxNode = Node.create<BooleanNodeAttributes>({
   parseHTML() {
     return [
       {
-        tag: 'form-checkbox-node',
+        tag: "form-checkbox-node",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['form-checkbox-node', mergeAttributes(HTMLAttributes)];
+    return ["form-checkbox-node", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
@@ -57,11 +57,9 @@ export const FormCheckboxNode = Node.create<BooleanNodeAttributes>({
           />
           <div className="flex flex-col space-y-1 leading-none">
             <FormBooleanLabel {...props} />
-            {description
-              ? (
-                  <p className="text-xs text-muted-foreground">{description}</p>
-                )
-              : null}
+            {description ? (
+              <p className="text-xs text-muted-foreground">{description}</p>
+            ) : null}
           </div>
         </NodeViewWrapper>
       );

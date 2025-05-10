@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import type { CellContext, ColumnDef } from '@tanstack/react-table';
-import type { LotCurrentItemFragment } from '~/generated/gql';
-import { Badge } from '@repo/ui/components/badge';
+import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import type { LotCurrentItemFragment } from '~/generated/gql'
+import { Badge } from '@repo/ui/components/badge'
 import DataTable, {
   sortDecimalValue,
-} from '@repo/ui/components/dataTable/dataTable';
-import { createColumnHelper } from '@tanstack/react-table';
+} from '@repo/ui/components/dataTable/dataTable'
+import { createColumnHelper } from '@tanstack/react-table'
 
-import { useEffect, useState } from 'react';
-import { TaxGain } from '~/generated/gql';
-import { Format } from '~/modules/utils';
+import { useEffect, useState } from 'react'
+import { TaxGain } from '~/generated/gql'
+import { Format } from '~/modules/utils'
 
 const columnHelper = createColumnHelper<
   LotCurrentItemFragment & { selectedQuantity: number }
->();
+>()
 
 const columns: ColumnDef<
   LotCurrentItemFragment & { selectedQuantity: number },
@@ -55,8 +55,8 @@ const columns: ColumnDef<
           (sum, row) =>
             sum + Number(row.getValue<string>('selectedQuantity') || 0),
           0,
-        );
-      return <DataTable.FooterCell label="Total" value={total.toFixed(2)} />;
+        )
+      return <DataTable.FooterCell label="Total" value={total.toFixed(2)} />
     },
     header: 'Selected Qty',
     sortingFn: sortDecimalValue,
@@ -65,8 +65,8 @@ const columns: ColumnDef<
   columnHelper.accessor('remainingQty', {
     aggregationFn: 'sum',
     cell: ({ getValue }) => {
-      const value = getValue();
-      return Number(value).toFixed(1);
+      const value = getValue()
+      return Number(value).toFixed(1)
     },
     footer: ({ table }) => {
       const total = table
@@ -75,8 +75,8 @@ const columns: ColumnDef<
         .reduce(
           (sum, row) => sum + Number(row.getValue<string>('remainingQty') || 0),
           0,
-        );
-      return <DataTable.FooterCell label="Total" value={total.toFixed(2)} />;
+        )
+      return <DataTable.FooterCell label="Total" value={total.toFixed(2)} />
     },
     header: 'Available Qty',
     sortingFn: sortDecimalValue,
@@ -105,8 +105,8 @@ const columns: ColumnDef<
         .reduce(
           (sum, row) => sum + Number(row.getValue<string>('value') || 0),
           0,
-        );
-      return <DataTable.FooterCell label="Total" value={Format.money(total)} />;
+        )
+      return <DataTable.FooterCell label="Total" value={Format.money(total)} />
     },
     header: 'Current Value',
     sortingFn: sortDecimalValue,
@@ -122,8 +122,8 @@ const columns: ColumnDef<
         .reduce(
           (sum, row) => sum + Number(row.getValue<string>('costBasis') || 0),
           0,
-        );
-      return <DataTable.FooterCell label="Total" value={Format.money(total)} />;
+        )
+      return <DataTable.FooterCell label="Total" value={Format.money(total)} />
     },
     header: 'Cost Basis',
     size: 130,
@@ -138,8 +138,8 @@ const columns: ColumnDef<
         .reduce(
           (sum, row) => sum + Number(row.getValue<string>('gainTotal') || 0),
           0,
-        );
-      return <DataTable.FooterCell label="Total" value={Format.money(total)} />;
+        )
+      return <DataTable.FooterCell label="Total" value={Format.money(total)} />
     },
     header: 'P & L',
     size: 130,
@@ -147,19 +147,19 @@ const columns: ColumnDef<
   }),
   columnHelper.accessor('taxGain', {
     cell: ({ getValue }) => {
-      const isLongTermGains = getValue() === TaxGain.Long;
+      const isLongTermGains = getValue() === TaxGain.Long
       return (
         <Badge variant={isLongTermGains ? 'default' : 'secondary'}>
           {isLongTermGains ? 'Long Term' : 'Short Term'}
         </Badge>
-      );
+      )
     },
     header: 'Tax Gain',
     size: 130,
   }),
-];
+]
 
-export default columns;
+export default columns
 
 function SelectedQuantityCell<TData>({
   column: { id },
@@ -167,20 +167,20 @@ function SelectedQuantityCell<TData>({
   row: { index },
   table,
 }: CellContext<TData, number>) {
-  const initialValue = getValue();
+  const initialValue = getValue()
   // We need to keep and update the state of the cell normally
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(initialValue)
 
   // When the input is blurred, we'll call our table meta's updateData function
   const onBlur = () => {
-    table.options.meta?.updateCell(index, id, value);
-  };
+    table.options.meta?.updateCell(index, id, value)
+  }
 
   // If the initialValue is changed external, sync it up with our state
   useEffect(() => {
     // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
-    setValue(initialValue);
-  }, [initialValue]);
+    setValue(initialValue)
+  }, [initialValue])
 
   return (
     <input
@@ -188,9 +188,9 @@ function SelectedQuantityCell<TData>({
       type="number"
       className="w-full"
       onChange={(e) => {
-        setValue(Number(e.target.value));
+        setValue(Number(e.target.value))
       }}
       onBlur={onBlur}
     />
-  );
+  )
 }

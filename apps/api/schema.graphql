@@ -4422,8 +4422,9 @@ input FileWhereUniqueInput {
 
 type FiniteHarvestResult {
   harvestType: HarvestType!
-  lotsCurrent: [LotCurrent!]!
+  lotsCurrent: [LotCurrent!]
   summary: PortfolioSummary!
+  unrealizedHarvestMatchResults: [UnrealizedHarvestMatchResult!]
 }
 
 input GCPUploadFile {
@@ -11564,6 +11565,11 @@ input TransactionWhereUniqueInput {
   transactionDate: DateTimeNullableFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
+}
+
+type UnrealizedHarvestMatchResult {
+  matchedLotOrders: [HarvestLotOrder!]!
+  sourceLot: LotCurrent!
 }
 
 type User {

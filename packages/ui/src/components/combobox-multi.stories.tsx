@@ -1,30 +1,30 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Cat, Dog, Fish, Rabbit, Turtle } from 'lucide-react';
-import { useState } from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Cat, Dog, Fish, Rabbit, Turtle } from "lucide-react";
+import { useState } from "react";
 
-import { ComboboxMulti } from './combobox-multi';
+import { ComboboxMulti } from "./combobox-multi";
 
 const frameworksList = [
-  { value: 'react', label: 'React', icon: Turtle },
-  { value: 'angular', label: 'Angular', icon: Cat },
-  { value: 'vue', label: 'Vue', icon: Dog },
-  { value: 'svelte', label: 'Svelte', icon: Rabbit },
-  { value: 'ember', label: 'Ember', icon: Fish },
+  { value: "react", label: "React", icon: Turtle },
+  { value: "angular", label: "Angular", icon: Cat },
+  { value: "vue", label: "Vue", icon: Dog },
+  { value: "svelte", label: "Svelte", icon: Rabbit },
+  { value: "ember", label: "Ember", icon: Fish },
 ];
 
 const meta = {
-  title: 'Atoms/Combobox Multi',
+  title: "Atoms/Combobox Multi",
   component: ComboboxMulti,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   args: {
     options: frameworksList,
     onChange: () => {},
-    value: ['react', 'angular'],
-    placeholder: 'Select frameworks',
-    variant: 'inverted',
+    value: ["react", "angular"],
+    placeholder: "Select frameworks",
+    variant: "inverted",
     animation: 2,
     maxCount: 3,
   },

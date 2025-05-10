@@ -20,6 +20,7 @@ fragment LotItem on Lot {
 
 query PortfolioLots($where: LotWhereInput, $includeTaxAdvantaged: Boolean) {
   lots(where: $where, includeTaxAdvantaged: $includeTaxAdvantaged) {
+    id
     ...LotItem
   }
 }

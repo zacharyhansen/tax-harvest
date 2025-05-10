@@ -1,6 +1,6 @@
-import type { InputProps } from '@repo/ui/components/input';
+import type { InputProps } from "@repo/ui/components/input";
 
-import type { BaseFieldProps } from '../form-builder.types';
+import type { BaseFieldProps } from "../form-builder.types";
 import {
   FormControl,
   FormDescription,
@@ -8,8 +8,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@repo/ui/components/form';
-import { PasswordInput } from '@repo/ui/components/password-input';
+} from "@repo/ui/components/form";
+import { PasswordInput } from "@repo/ui/components/password-input";
 
 export default function PasswordInputField({
   name,

@@ -1,30 +1,25 @@
-'use client';
+'use client'
 
 import {
   EmbeddedCheckout,
   EmbeddedCheckoutProvider,
   useStripe,
-} from '@stripe/react-stripe-js';
-import { use, useCallback } from 'react';
+} from '@stripe/react-stripe-js'
+import { use, useCallback } from 'react'
 
-import { useStripeSessionLazyQuery } from '~/generated/gql';
-import { LoadingPage } from '~/modules/utility-components';
+import { useStripeSessionLazyQuery } from '~/generated/gql'
+import { LoadingPage } from '~/modules/utility-components'
 
-export default function StripePriceIdPage(
-  props: {
-    params: Promise<{ stripePriceId: string; stripeCustomerId: string }>;
-  },
-) {
-  const params = use(props.params);
+export default function StripePriceIdPage(props: {
+  params: Promise<{ stripePriceId: string, stripeCustomerId: string }>
+}) {
+  const params = use(props.params)
 
-  const {
-    stripeCustomerId,
-    stripePriceId,
-  } = params;
+  const { stripeCustomerId, stripePriceId } = params
 
-  const stripe = useStripe();
+  const stripe = useStripe()
 
-  const [getSession] = useStripeSessionLazyQuery();
+  const [getSession] = useStripeSessionLazyQuery()
 
   const fetchClientSecret = useCallback(() => {
     return getSession({
@@ -32,11 +27,11 @@ export default function StripePriceIdPage(
         stripeCustomerId,
         stripePriceId,
       },
-    }).then(result => result.data?.stripeSession.client_secret ?? '');
-  }, [getSession, stripePriceId, stripeCustomerId]);
+    }).then(result => result.data?.stripeSession.client_secret ?? '')
+  }, [getSession, stripePriceId, stripeCustomerId])
 
   if (!stripe) {
-    return <LoadingPage message="Loading payment options" />;
+    return <LoadingPage message="Loading payment options" />
   }
 
   return (
@@ -50,5 +45,5 @@ export default function StripePriceIdPage(
         <EmbeddedCheckout className="rounded-lg" />
       </EmbeddedCheckoutProvider>
     </div>
-  );
+  )
 }

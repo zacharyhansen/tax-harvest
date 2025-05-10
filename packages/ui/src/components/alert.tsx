@@ -1,11 +1,19 @@
-import type { VariantProps } from 'class-variance-authority';
-import { cn } from '@repo/ui/utils';
+import type { VariantProps } from "class-variance-authority";
+import { cn } from "@repo/ui/utils";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { alertVariants } from './alert.variants';
+import { alertVariants } from "./alert.variants";
 
-const Alert = ({ ref, className, variant, ...props }: React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants> & { ref?: React.RefObject<HTMLDivElement | null> }) => (
+const Alert = ({
+  ref,
+  className,
+  variant,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> &
+  VariantProps<typeof alertVariants> & {
+    ref?: React.RefObject<HTMLDivElement | null>;
+  }) => (
   <div
     ref={ref}
     role="alert"
@@ -13,25 +21,37 @@ const Alert = ({ ref, className, variant, ...props }: React.HTMLAttributes<HTMLD
     {...props}
   />
 );
-Alert.displayName = 'Alert';
+Alert.displayName = "Alert";
 
-const AlertTitle = ({ ref, className, ...props }: React.HTMLAttributes<HTMLHeadingElement> & { ref?: React.RefObject<HTMLParagraphElement | null> }) => (
+const AlertTitle = ({
+  ref,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement> & {
+  ref?: React.RefObject<HTMLParagraphElement | null>;
+}) => (
   // eslint-disable-next-line jsx-a11y/heading-has-content
   <h5
     ref={ref}
-    className={cn('mb-1 font-medium leading-none tracking-tight', className)}
+    className={cn("mb-1 font-medium leading-none tracking-tight", className)}
     {...props}
   />
 );
-AlertTitle.displayName = 'AlertTitle';
+AlertTitle.displayName = "AlertTitle";
 
-const AlertDescription = ({ ref, className, ...props }: React.HTMLAttributes<HTMLParagraphElement> & { ref?: React.RefObject<HTMLParagraphElement | null> }) => (
+const AlertDescription = ({
+  ref,
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement> & {
+  ref?: React.RefObject<HTMLParagraphElement | null>;
+}) => (
   <div
     ref={ref}
-    className={cn('text-sm [&_p]:leading-relaxed', className)}
+    className={cn("text-sm [&_p]:leading-relaxed", className)}
     {...props}
   />
 );
-AlertDescription.displayName = 'AlertDescription';
+AlertDescription.displayName = "AlertDescription";
 
 export { Alert, AlertDescription, AlertTitle };

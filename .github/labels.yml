@@ -12,7 +12,7 @@
   color: FDC720
 - name: 🧪 Tests
   description: Indicates the scope is related to the tests
-  color: '088E26'
+  color: "088E26"
 - name: ⚙️ Configuration
   description: Indicates the scope is related to the configuration
   color: BDBDBD
@@ -24,7 +24,7 @@
   color: FF4D4D
 - name: 🏠 Github Configuration
   description: Indicates the change is related to github settings
-  color: '555555'
+  color: "555555"
 - name: 🚀 Feature
   description: Feature added in the PR
   color: F10505

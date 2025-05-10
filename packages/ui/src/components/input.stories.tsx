@@ -1,47 +1,47 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import type { InputProps } from './input';
-import { Button } from './button';
-import { Input } from './input';
+import type { InputProps } from "./input";
+import { Button } from "./button";
+import { Input } from "./input";
 
 const meta = {
-  title: 'Atoms/Input',
-  component: args => <Input {...args} />,
-  tags: ['autodocs'],
+  title: "Atoms/Input",
+  component: (args) => <Input {...args} />,
+  tags: ["autodocs"],
   args: {
-    type: 'text',
+    type: "text",
   },
   argTypes: {
     type: {
-      control: { type: 'select' },
+      control: { type: "select" },
       options: [
-        'file',
-        'email',
-        'password',
-        'text',
-        'checkbox',
-        'radio',
-        ' date',
-        'datetime-local',
-        'email',
-        'hidden',
-        'image',
-        'month',
-        'number',
-        'password',
-        'range',
-        'reset',
-        'search',
-        'submit',
-        'tel',
-        'time',
-        'url',
-        'week',
+        "file",
+        "email",
+        "password",
+        "text",
+        "checkbox",
+        "radio",
+        " date",
+        "datetime-local",
+        "email",
+        "hidden",
+        "image",
+        "month",
+        "number",
+        "password",
+        "range",
+        "reset",
+        "search",
+        "submit",
+        "tel",
+        "time",
+        "url",
+        "week",
       ],
     },
   },
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<InputProps>;
 
@@ -51,8 +51,8 @@ type Story = StoryObj<typeof meta>;
 
 export const InputDefault: Story = {
   args: {
-    type: 'text',
-    placeholder: 'Name',
+    type: "text",
+    placeholder: "Name",
   },
 };
 

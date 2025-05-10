@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
-import type { PortfolioDetailItemFragment } from '~/generated/gql';
+import type { PortfolioDetailItemFragment } from '~/generated/gql'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@repo/ui/components/button';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@repo/ui/components/button'
 import {
   Card,
   CardContent,
@@ -11,22 +11,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card';
-import { Separator } from '@repo/ui/components/separator';
-import { toast } from '@repo/ui/components/toast-sonner';
-import InputField from '@repo/ui/form-builder/fields/input.field';
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
-import { DollarSign } from 'lucide-react';
-import { FormProvider } from 'react-hook-form';
+} from '@repo/ui/components/card'
+import { Separator } from '@repo/ui/components/separator'
+import { toast } from '@repo/ui/components/toast-sonner'
+import InputField from '@repo/ui/form-builder/fields/input.field'
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form'
+import { DollarSign } from 'lucide-react'
+import { FormProvider } from 'react-hook-form'
 
-import { z } from 'zod';
+import { z } from 'zod'
 import {
   usePortfolioByIdQuery,
   useUpdatePortfolioMutation,
-} from '~/generated/gql';
-import { usePortfolio } from '~/modules/portfolio';
-import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-import { zodNumber } from '~/modules/utils/zod-utils';
+} from '~/generated/gql'
+import { usePortfolio } from '~/modules/portfolio'
+import { ErrorPage, LoadingPage } from '~/modules/utility-components'
+import { zodNumber } from '~/modules/utils/zod-utils'
 
 const formSchema = z.object({
   harvestCycleWeeks: zodNumber.pipe(z.coerce.number().gte(1)),
@@ -37,35 +37,35 @@ const formSchema = z.object({
   harvestTickerBucketLowerLimitShort: zodNumber.pipe(z.coerce.number().gte(0)),
   name: z.string().min(3),
   minimumLotPAndL: zodNumber.pipe(z.coerce.number().gte(0)),
-});
+})
 
 export default function PortfolioPage() {
-  const { portfolio } = usePortfolio();
+  const { portfolio } = usePortfolio()
   const { data, error, loading } = usePortfolioByIdQuery({
     variables: {
       id: portfolio.id,
     },
-  });
+  })
 
   if (error) {
     return (
       <ErrorPage message="Could not load portfolio at this time. If the issue persists, please contact support @support" />
-    );
+    )
   }
 
   if (loading || !data) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
 
-  return <Form portfolio={data.portfolioById} />;
+  return <Form portfolio={data.portfolioById} />
 }
 
 function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
   const [update, { loading }] = useUpdatePortfolioMutation({
     onError: () => {
-      toast.error('Unable to update Portfolio');
+      toast.error('Unable to update Portfolio')
     },
-  });
+  })
 
   const { form, handleSubmit } = useStandardForm<z.infer<typeof formSchema>>({
     defaultValues: {
@@ -131,7 +131,7 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
           },
         }).then(({ data: result }) => {
           if (!result) {
-            return;
+            return
           }
           form.reset({
             ...result.updatePortfolio,
@@ -151,16 +151,16 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
               result.updatePortfolio.harvestTickerBucketLowerLimitShort,
             ),
             minimumLotPAndL: Number(result.updatePortfolio.minimumLotPAndL),
-          });
+          })
         }),
         {
           error: 'Error',
           loading: 'Saving',
           success: 'Saved',
         },
-      );
+      )
     },
-  });
+  })
 
   return (
     <FormProvider {...form}>
@@ -261,5 +261,5 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
         </form>
       </Card>
     </FormProvider>
-  );
+  )
 }

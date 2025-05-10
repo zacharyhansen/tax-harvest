@@ -1,4 +1,4 @@
-@import './tiptap/styles/index.css';
+@import "./tiptap/styles/index.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -170,8 +170,8 @@ html {
 .cl-fileDropAreaHint,
 .cl-fileDropAreaFooterHint,
 .cl-form
-  p[data-localization-key='userProfile.emailAddressPage.emailCode.formHint'],
-p[data-localization-key='userProfile.profilePage.successMessage'] {
+  p[data-localization-key="userProfile.emailAddressPage.emailCode.formHint"],
+p[data-localization-key="userProfile.profilePage.successMessage"] {
   @apply text-muted-foreground;
 }
 
@@ -179,9 +179,9 @@ p[data-localization-key='userProfile.profilePage.successMessage'] {
   @apply bg-border;
 }
 
-.cl-formFieldInput[type='text'],
-.cl-formFieldInput[type='email'],
-.cl-formFieldInput[type='password'] {
+.cl-formFieldInput[type="text"],
+.cl-formFieldInput[type="email"],
+.cl-formFieldInput[type="password"] {
   @apply border-input bg-background text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
 }
 
@@ -210,7 +210,7 @@ p[data-localization-key='userProfile.profilePage.successMessage'] {
   @apply text-foreground;
 }
 
-button[data-localization-key='userProfile.start.dangerSection.deleteAccountButton'] {
+button[data-localization-key="userProfile.start.dangerSection.deleteAccountButton"] {
   @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
 }
 
@@ -253,7 +253,7 @@ button[data-localization-key='userProfile.start.dangerSection.deleteAccountButto
   @apply border-input bg-background text-foreground rounded-full border px-2.5 py-0.5 text-xs !shadow-none;
 }
 
-.cl-badge[data-localization-key='badge__unverified'] {
+.cl-badge[data-localization-key="badge__unverified"] {
   @apply text-destructive border bg-transparent dark:text-red-500;
 }
 
@@ -300,7 +300,7 @@ button[data-localization-key='userProfile.start.dangerSection.deleteAccountButto
   @apply border-input from-background to-background rounded-lg rounded-l-none border bg-gradient-to-t;
 }
 
-h1[data-localization-key='userProfile.navbar.title'] {
+h1[data-localization-key="userProfile.navbar.title"] {
   @apply text-foreground;
 }
 
@@ -325,7 +325,7 @@ h1[data-localization-key='userProfile.navbar.title'] {
   @apply border-input bg-background border;
 }
 
-.cl-menuItem[data-color='neutral'] {
+.cl-menuItem[data-color="neutral"] {
   @apply text-foreground hover:bg-muted;
 }
 

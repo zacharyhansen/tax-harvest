@@ -1,11 +1,18 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql'
 
-import { TaxGain } from '../portfolio/portfolio.dto'
-
 export enum LotValueType {
   GAIN = 'GAIN',
   LOSS = 'LOSS',
 }
+
+export enum TaxGain {
+  LONG = 'LONG',
+  SHORT = 'SHORT',
+}
+
+registerEnumType(TaxGain, {
+  name: 'TaxGain',
+})
 
 registerEnumType(LotValueType, {
   name: 'LotValueType',

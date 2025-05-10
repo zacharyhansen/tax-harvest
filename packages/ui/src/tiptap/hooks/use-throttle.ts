@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef } from "react";
 
 // eslint-disable-next-line ts/no-explicit-any
 export function useThrottle<T extends (...args: any[]) => void>(

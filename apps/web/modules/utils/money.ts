@@ -3,23 +3,21 @@ export default class MoneyUtil {
     amount?: string | number | null,
   ): 'positive' | 'nuetral' | 'negative' {
     if (!amount) {
-      return 'nuetral';
+      return 'nuetral'
     }
     if ((typeof amount === 'string' ? Number.parseFloat(amount) : amount) > 0) {
-      return 'positive';
+      return 'positive'
     }
-    return 'negative';
+    return 'negative'
   }
 
-  static colored(
-    amount?: string | number | null,
-  ): string {
+  static colored(amount?: string | number | null, classNumber?: number): string {
     if (!amount) {
-      return 'text-gray-500';
+      return `text-gray-${classNumber || 500}`
     }
     if ((typeof amount === 'string' ? Number.parseFloat(amount) : amount) > 0) {
-      return 'text-green-600';
+      return `text-green-${classNumber || 600}`
     }
-    return 'text-red-600';
+    return `text-red-${classNumber || 600}`
   }
 }

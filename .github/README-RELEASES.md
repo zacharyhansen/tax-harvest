@@ -25,6 +25,7 @@ This repository is configured with GitHub Actions workflows to automate the rele
 5. Click "Run workflow"
 
 This will:
+
 - Generate a new version number based on the previous tag
 - Build and push Docker images
 - Update Helm chart values
@@ -44,6 +45,7 @@ This action can be run manually to update the version in the package.json file:
 5. Click "Run workflow"
 
 This will:
+
 - Update the version in the root package.json file
 - Create a pull request with the changes
 
@@ -79,6 +81,7 @@ For the changelog to be most effective, follow the [Conventional Commits](https:
 ```
 
 Common types:
+
 - feat: A new feature
 - fix: A bug fix
 - docs: Documentation changes

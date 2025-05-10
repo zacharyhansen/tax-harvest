@@ -1,28 +1,28 @@
-'use client';
+'use client'
 
-import type { ColDef } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import type { ColDef } from 'ag-grid-community'
+import { AgGridReact } from 'ag-grid-react'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 
-import { useLogsQuery } from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { PageWrapper } from '~/modules/layout';
-import { ErrorPage } from '~/modules/utility-components';
+import { useLogsQuery } from '~/generated/gql'
+import { TypedRoutes } from '~/lib/routes'
+import { PageWrapper } from '~/modules/layout'
+import { ErrorPage } from '~/modules/utility-components'
 
 const AgGridWrapper = dynamic(
   () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
   {
     ssr: false,
   },
-);
+)
 
 export default function LogsPage() {
-  const router = useRouter();
+  const router = useRouter()
   const { data, error, loading } = useLogsQuery({
     variables: {},
-  });
+  })
 
   const columnDefs: ColDef[] = useMemo(() => {
     return [
@@ -46,11 +46,11 @@ export default function LogsPage() {
       },
       { headerName: 'Type', field: 'type' },
       { headerName: 'Created At', field: 'createdAt', cellDataType: 'date' },
-    ] satisfies ColDef[];
-  }, []);
+    ] satisfies ColDef[]
+  }, [])
 
   if (error) {
-    return <ErrorPage message={JSON.stringify(error)} />;
+    return <ErrorPage message={JSON.stringify(error)} />
   }
 
   return (
@@ -62,12 +62,12 @@ export default function LogsPage() {
           rowSelection="single"
           onRowClicked={(row) => {
             if (row.data) {
-              router.push(TypedRoutes.log({ logId: row.data.id }));
+              router.push(TypedRoutes.log({ logId: row.data.id }))
             }
           }}
           loading={loading}
         />
       </AgGridWrapper>
     </PageWrapper>
-  );
+  )
 }

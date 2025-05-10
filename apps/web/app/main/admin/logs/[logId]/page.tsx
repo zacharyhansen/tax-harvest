@@ -1,33 +1,31 @@
-'use client';
-import ReactJsonView from '@microlink/react-json-view';
+'use client'
+import ReactJsonView from '@microlink/react-json-view'
 
-import { useTheme } from 'next-themes';
-import { use } from 'react';
+import { useTheme } from 'next-themes'
+import { use } from 'react'
 
-import { useLogQuery } from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { PageWrapper } from '~/modules/layout';
-import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { useLogQuery } from '~/generated/gql'
+import { TypedRoutes } from '~/lib/routes'
+import { PageWrapper } from '~/modules/layout'
+import { ErrorPage, LoadingPage } from '~/modules/utility-components'
 
-export default function LogPage(
-  props: {
-    params: Promise<typeof TypedRoutes.log.params>;
-  },
-) {
-  const params = use(props.params);
-  const theme = useTheme();
-  const safeParams = TypedRoutes.log.parse(params);
+export default function LogPage(props: {
+  params: Promise<typeof TypedRoutes.log.params>
+}) {
+  const params = use(props.params)
+  const theme = useTheme()
+  const safeParams = TypedRoutes.log.parse(params)
 
   const { data, error, loading } = useLogQuery({
     variables: { logId: safeParams.logId },
-  });
+  })
 
   if (error) {
-    return <ErrorPage message={JSON.stringify(error)} />;
+    return <ErrorPage message={JSON.stringify(error)} />
   }
 
   if (loading) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
 
   return (
@@ -61,5 +59,5 @@ export default function LogPage(
         indentWidth={6}
       />
     </PageWrapper>
-  );
+  )
 }

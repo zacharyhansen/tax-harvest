@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { useContainerSize } from '../hooks/use-container-size';
+import { useContainerSize } from "../hooks/use-container-size";
 
 // type MeasuredContainerProps<T extends React.ElementType> = {
 //   as: T;
@@ -33,4 +33,4 @@ export const MeasuredContainer = (
   );
 };
 
-MeasuredContainer.displayName = 'MeasuredContainer';
+MeasuredContainer.displayName = "MeasuredContainer";

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import type { BaseInputProps } from './input.types';
-import { Button } from '@repo/ui/components/button';
+import type { BaseInputProps } from "./input.types";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -9,20 +9,20 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@repo/ui/components/command';
+} from "@repo/ui/components/command";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover';
+} from "@repo/ui/components/popover";
 
-import { Check, ChevronsUpDown } from 'lucide-react';
-import * as React from 'react';
+import { Check, ChevronsUpDown } from "lucide-react";
+import * as React from "react";
 
-import { z } from 'zod';
-import { cn } from '../utils';
-import { Label } from './label';
+import { z } from "zod";
+import { cn } from "../utils";
+import { Label } from "./label";
 
 export const ComboboxOptionSchema = z.object({
   label: z.any(), // React.ReactNode (can be anything, e.g., string, number, JSX)
@@ -53,9 +53,20 @@ export type ComboboxProps = {
   filter?: (value: string, search: string, keywords?: string[]) => number;
 } & BaseInputProps;
 
-const Combobox = (
-  { ref, options, placeholder, disabled, value, onChange, className, description, label, filter }: Readonly<ComboboxProps> & { ref?: React.RefObject<HTMLButtonElement | null> },
-) => {
+const Combobox = ({
+  ref,
+  options,
+  placeholder,
+  disabled,
+  value,
+  onChange,
+  className,
+  description,
+  label,
+  filter,
+}: Readonly<ComboboxProps> & {
+  ref?: React.RefObject<HTMLButtonElement | null>;
+}) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -70,22 +81,20 @@ const Combobox = (
               aria-expanded={open}
               type="button"
               className={cn(
-                'w-full min-w-[200px] max-w-full items-center justify-between',
-                disabled && 'cursor-not-allowed opacity-50',
+                "w-full min-w-[200px] max-w-full items-center justify-between",
+                disabled && "cursor-not-allowed opacity-50",
                 className,
               )}
               ref={ref}
               disabled={disabled}
             >
-              {value
-                ? (
-                    options.find(option => option.value === value)?.label
-                  )
-                : (
-                    <div className="text-muted-foreground">
-                      {placeholder ?? 'Select...'}
-                    </div>
-                  )}
+              {value ? (
+                options.find((option) => option.value === value)?.label
+              ) : (
+                <div className="text-muted-foreground">
+                  {placeholder ?? "Select..."}
+                </div>
+              )}
               <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
             </Button>
           </div>
@@ -93,36 +102,36 @@ const Combobox = (
         <PopoverContent
           className="z-[60] p-0"
           style={{
-            maxHeight: 'calc(var(--radix-popper-available-height) - 10px)',
+            maxHeight: "calc(var(--radix-popper-available-height) - 10px)",
           }}
         >
           <Command
             className="max-h-[var(--radix-popper-available-height)]"
             filter={filter}
           >
-            <CommandInput placeholder={placeholder ?? 'Search...'} />
+            <CommandInput placeholder={placeholder ?? "Search..."} />
             <CommandList>
               <CommandEmpty>No results.</CommandEmpty>
               <CommandGroup>
-                {options.map(option => (
+                {options.map((option) => (
                   <CommandItem
                     key={option.value}
                     value={option.value}
                     keywords={
-                      option.keywords
-                      ?? (typeof option.label === 'string'
+                      option.keywords ??
+                      (typeof option.label === "string"
                         ? [option.label]
                         : [option.value])
                     }
                     onSelect={(currentValue) => {
-                      onChange(currentValue === value ? '' : currentValue);
+                      onChange(currentValue === value ? "" : currentValue);
                       setOpen(false);
                     }}
                   >
                     <Check
                       className={cn(
-                        'mr-2 h-4 w-4',
-                        value === option.value ? 'opacity-100' : 'opacity-0',
+                        "mr-2 h-4 w-4",
+                        value === option.value ? "opacity-100" : "opacity-0",
                       )}
                     />
                     {option.richLabel ?? option.label}
@@ -140,6 +149,6 @@ const Combobox = (
   );
 };
 
-Combobox.displayName = 'Combobox';
+Combobox.displayName = "Combobox";
 
 export { Combobox };

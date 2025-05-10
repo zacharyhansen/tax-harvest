@@ -1,17 +1,17 @@
-'use client';
-import type { DropzoneProps, FileRejection } from 'react-dropzone';
-import { FileText, Upload, X } from 'lucide-react';
-import Image from 'next/image';
-import React from 'react';
-import Dropzone from 'react-dropzone';
-import { toast } from 'sonner';
+"use client";
+import type { DropzoneProps, FileRejection } from "react-dropzone";
+import { FileText, Upload, X } from "lucide-react";
+import Image from "next/image";
+import React from "react";
+import Dropzone from "react-dropzone";
+import { toast } from "sonner";
 
-import { useControllableState } from '../hooks/useControllableState';
-import { cn, formatBytes } from '../utils';
+import { useControllableState } from "../hooks/useControllableState";
+import { cn, formatBytes } from "../utils";
 
-import { Button } from './button';
-import { Progress } from './progress';
-import { ScrollArea } from './scroll-area';
+import { Button } from "./button";
+import { Progress } from "./progress";
+import { ScrollArea } from "./scroll-area";
 
 type FileUploaderProps = {
   /**
@@ -55,7 +55,7 @@ type FileUploaderProps = {
    * ```
    * @example accept={["image/png", "image/jpeg"]}
    */
-  accept?: DropzoneProps['accept'];
+  accept?: DropzoneProps["accept"];
 
   /**
    * Maximum file size for the uploader.
@@ -63,7 +63,7 @@ type FileUploaderProps = {
    * @default 1024 * 1024 * 2 // 2MB
    * @example maxSize={1024 * 1024 * 2} // 2MB
    */
-  maxSize?: DropzoneProps['maxSize'];
+  maxSize?: DropzoneProps["maxSize"];
 
   /**
    * Maximum number of files for the uploader.
@@ -71,7 +71,7 @@ type FileUploaderProps = {
    * @default 1
    * @example maxFileCount={4}
    */
-  maxFileCount?: DropzoneProps['maxFiles'];
+  maxFileCount?: DropzoneProps["maxFiles"];
 
   /**
    * Whether the uploader should accept multiple files.
@@ -94,7 +94,7 @@ type FileUploaderProps = {
 
 export function FileUploader({
   description,
-  title = 'Drag \'n\' drop files here, or click to select files',
+  title = "Drag 'n' drop files here, or click to select files",
   ...props
 }: FileUploaderProps) {
   const {
@@ -119,7 +119,7 @@ export function FileUploader({
   const onDrop = React.useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
-        toast.error('Cannot upload more than 1 file at a time');
+        toast.error("Cannot upload more than 1 file at a time");
         return;
       }
 
@@ -128,7 +128,7 @@ export function FileUploader({
         return;
       }
 
-      const newFiles = acceptedFiles.map(file =>
+      const newFiles = acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         }),
@@ -145,12 +145,12 @@ export function FileUploader({
       }
 
       if (
-        onUpload
-        && updatedFiles.length > 0
-        && updatedFiles.length <= maxFileCount
+        onUpload &&
+        updatedFiles.length > 0 &&
+        updatedFiles.length <= maxFileCount
       ) {
-        const target
-          = updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`;
+        const target =
+          updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`;
 
         toast.promise(onUpload(updatedFiles), {
           error: `Failed to upload ${target}`,
@@ -206,77 +206,71 @@ export function FileUploader({
           <div
             {...getRootProps()}
             className={cn(
-              'border-muted-foreground/25 hover:bg-muted/25 group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed px-5 py-2.5 text-center transition',
-              'ring-offset-background focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-              isDragActive && 'border-muted-foreground/50',
-              isDisabled && 'pointer-events-none opacity-60',
+              "border-muted-foreground/25 hover:bg-muted/25 group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed px-5 py-2.5 text-center transition",
+              "ring-offset-background focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+              isDragActive && "border-muted-foreground/50",
+              isDisabled && "pointer-events-none opacity-60",
               className,
             )}
             {...dropzoneProps}
           >
             <input {...getInputProps()} />
-            {isDragActive
-              ? (
-                  <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
-                    <div className="rounded-full border border-dashed p-3">
-                      <Upload
-                        className="size-7 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <p className="font-medium text-muted-foreground">
-                      Drop the files here
+            {isDragActive ? (
+              <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
+                <div className="rounded-full border border-dashed p-3">
+                  <Upload
+                    className="size-7 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                </div>
+                <p className="font-medium text-muted-foreground">
+                  Drop the files here
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
+                <div className="rounded-full border border-dashed p-3">
+                  <Upload
+                    className="size-7 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="flex flex-col gap-px">
+                  <p className="font-medium text-muted-foreground">{title}</p>
+                  {description ? (
+                    <p className="text-sm text-muted-foreground/70">
+                      {description}
                     </p>
-                  </div>
-                )
-              : (
-                  <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
-                    <div className="rounded-full border border-dashed p-3">
-                      <Upload
-                        className="size-7 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-px">
-                      <p className="font-medium text-muted-foreground">{title}</p>
-                      {description
-                        ? (
-                            <p className="text-sm text-muted-foreground/70">
-                              {description}
-                            </p>
-                          )
-                        : (
-                            description
-                          )}
-                      <p className="text-xs text-muted-foreground/70">
-                        You can upload
-                        {maxFileCount > 1
-                          ? ` ${maxFileCount === Infinity ? 'multiple' : maxFileCount}
+                  ) : (
+                    description
+                  )}
+                  <p className="text-xs text-muted-foreground/70">
+                    You can upload
+                    {maxFileCount > 1
+                      ? ` ${maxFileCount === Infinity ? "multiple" : maxFileCount}
                       files (up to ${formatBytes(maxSize)} each)`
-                          : ` a file with ${formatBytes(maxSize)}`}
-                      </p>
-                    </div>
-                  </div>
-                )}
+                      : ` a file with ${formatBytes(maxSize)}`}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </Dropzone>
-      {files?.length
-        ? (
-            <ScrollArea className="h-fit w-full px-3">
-              <div className="flex max-h-48 flex-col gap-4">
-                {files.map((file, index) => (
-                  <FileCard
-                    key={index}
-                    file={file}
-                    onRemove={() => onRemove(index)}
-                    progress={progresses?.[file.name]}
-                  />
-                ))}
-              </div>
-            </ScrollArea>
-          )
-        : null}
+      {files?.length ? (
+        <ScrollArea className="h-fit w-full px-3">
+          <div className="flex max-h-48 flex-col gap-4">
+            {files.map((file, index) => (
+              <FileCard
+                key={index}
+                file={file}
+                onRemove={() => onRemove(index)}
+                progress={progresses?.[file.name]}
+              />
+            ))}
+          </div>
+        </ScrollArea>
+      ) : null}
     </div>
   );
 }
@@ -321,7 +315,7 @@ function FileCard({ file, onRemove, progress }: FileCardProps) {
 }
 
 function isFileWithPreview(file: File): file is File & { preview: string } {
-  return 'preview' in file && typeof file.preview === 'string';
+  return "preview" in file && typeof file.preview === "string";
 }
 
 type FilePreviewProps = {
@@ -329,7 +323,7 @@ type FilePreviewProps = {
 };
 
 function FilePreview({ file }: FilePreviewProps) {
-  if (file.type.startsWith('image/')) {
+  if (file.type.startsWith("image/")) {
     return (
       <Image
         src={file.preview}

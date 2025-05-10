@@ -4,11 +4,13 @@ npm-debug.log
 npm-debug.log.*
 
 # Build Files
-/build
-/public/build
-/dist
-/reports
-/apps/api/server.ts
+**/build
+**/public/build
+**/dist
+**/reports
+**/generated/
+/helm
+/pnpm-lock.yaml
 
 # Enviroment Files
 .env

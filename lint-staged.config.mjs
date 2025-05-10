@@ -1,9 +1,7 @@
 const config = {
-  '**/*.{js,jsx,mjs,cjs,ts,tsx,mts}': [
-    'vitest related --run',
-  ],
-  '**/*.{md,json,yaml,yml}': 'eslint --fix',
+  "**/*.{js,jsx,mjs,cjs,ts,tsx,mts}": ["vitest related --run"],
+  "**/*.{md,json,yaml,yml}": "eslint --fix",
   // '*': 'node --run typos',
-}
+};
 
-export default config
+export default config;

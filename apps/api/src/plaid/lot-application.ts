@@ -100,7 +100,9 @@ export function findSubsetHybrid({
   }
 }
 
-export function findLotChangeSets(params: FindSubsetHybridArgs): { lotChanges: LotChange[] } {
+export function findLotChangeSets(params: FindSubsetHybridArgs): {
+  lotChanges: LotChange[]
+} {
   const results = findSubsetHybrid(params)
 
   const lotChanges: LotChange[][] = []

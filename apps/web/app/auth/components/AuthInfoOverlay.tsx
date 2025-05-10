@@ -1,4 +1,4 @@
-import { BarChart2, CircleDollarSign, Shield } from 'lucide-react';
+import { BarChart2, CircleDollarSign, Shield } from 'lucide-react'
 
 export function AuthInfoOverlay() {
   return (
@@ -52,5 +52,5 @@ export function AuthInfoOverlay() {
         </div>
       </div>
     </div>
-  );
+  )
 }

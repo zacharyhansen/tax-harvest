@@ -21,5 +21,5 @@ runs:
       uses: docker/login-action@v3
       with:
         username: oauth2accesstoken
-        password: '${{ steps.auth.outputs.access_token }}'
-        registry: '${{ env.AR_REPO_LOCATION }}-docker.pkg.dev'
+        password: "${{ steps.auth.outputs.access_token }}"
+        registry: "${{ env.AR_REPO_LOCATION }}-docker.pkg.dev"

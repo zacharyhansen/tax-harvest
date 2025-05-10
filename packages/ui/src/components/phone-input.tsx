@@ -1,5 +1,5 @@
-import type { InputProps } from '@repo/ui/components/input';
-import { Button } from '@repo/ui/components/button';
+import type { InputProps } from "@repo/ui/components/input";
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -7,72 +7,83 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@repo/ui/components/command';
-import { Input } from '@repo/ui/components/input';
+} from "@repo/ui/components/command";
+import { Input } from "@repo/ui/components/input";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover';
+} from "@repo/ui/components/popover";
 
-import { CheckIcon, ChevronsUpDown } from 'lucide-react';
+import { CheckIcon, ChevronsUpDown } from "lucide-react";
 
-import * as React from 'react';
-import * as RPNInput from 'react-phone-number-input';
-import flags from 'react-phone-number-input/flags';
-import { cn } from '../utils';
-import { ScrollArea } from './scroll-area';
+import * as React from "react";
+import * as RPNInput from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
+import { cn } from "../utils";
+import { ScrollArea } from "./scroll-area";
 
 export type PhoneInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  'onChange' | 'value'
+  "onChange" | "value"
 > &
-Omit<RPNInput.Props<typeof RPNInput.default>, 'onChange'> & {
-  onChange?: (value: RPNInput.Value) => void;
-};
+  Omit<RPNInput.Props<typeof RPNInput.default>, "onChange"> & {
+    onChange?: (value: RPNInput.Value) => void;
+  };
 
 // @ts-expect-error - ref is not required
-const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps>
-  = ({ ref, className, onChange, defaultCountry = 'US', ...props }: PhoneInputProps & { ref?: React.RefObject<React.ElementRef<typeof RPNInput.default> | null> }) => {
-    return (
-      <RPNInput.default
-        ref={ref}
-        className={cn('flex', className)}
-        flagComponent={FlagComponent}
-        countrySelectComponent={CountrySelect}
-        // eslint-disable-next-line ts/no-use-before-define
-        inputComponent={InputComponent}
-        defaultCountry={defaultCountry}
-        smartCaret={false}
-        /**
-         * Handles the onChange event.
-         *
-         * react-phone-number-input might trigger the onChange event as undefined
-         * when a valid phone number is not entered. To prevent this,
-         * the value is coerced to an empty string.
-         *
-         * @param {E164Number | undefined} value - The entered value
-         */
-        onChange={(value) => {
-          if (value) {
-            onChange?.(value);
-          }
-        }}
-        {...props}
-      />
-    );
-  };
-PhoneInput.displayName = 'PhoneInput';
+const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> = ({
+  ref,
+  className,
+  onChange,
+  defaultCountry = "US",
+  ...props
+}: PhoneInputProps & {
+  ref?: React.RefObject<React.ElementRef<typeof RPNInput.default> | null>;
+}) => {
+  return (
+    <RPNInput.default
+      ref={ref}
+      className={cn("flex", className)}
+      flagComponent={FlagComponent}
+      countrySelectComponent={CountrySelect}
+      // eslint-disable-next-line ts/no-use-before-define
+      inputComponent={InputComponent}
+      defaultCountry={defaultCountry}
+      smartCaret={false}
+      /**
+       * Handles the onChange event.
+       *
+       * react-phone-number-input might trigger the onChange event as undefined
+       * when a valid phone number is not entered. To prevent this,
+       * the value is coerced to an empty string.
+       *
+       * @param {E164Number | undefined} value - The entered value
+       */
+      onChange={(value) => {
+        if (value) {
+          onChange?.(value);
+        }
+      }}
+      {...props}
+    />
+  );
+};
+PhoneInput.displayName = "PhoneInput";
 
-const InputComponent = ({ ref, className, ...props }: InputProps & { ref?: React.RefObject<HTMLInputElement | null> }) => (
+const InputComponent = ({
+  ref,
+  className,
+  ...props
+}: InputProps & { ref?: React.RefObject<HTMLInputElement | null> }) => (
   <Input
-    className={cn('rounded-e-lg rounded-s-none', className)}
+    className={cn("rounded-e-lg rounded-s-none", className)}
     {...props}
     ref={ref}
   />
 );
-InputComponent.displayName = 'InputComponent';
+InputComponent.displayName = "InputComponent";
 
 type CountrySelectOption = {
   label: string;
@@ -111,8 +122,8 @@ function CountrySelect({
           <FlagComponent country={value} countryName={value} />
           <ChevronsUpDown
             className={cn(
-              '-mr-2 h-4 w-4 opacity-50',
-              disabled ? 'hidden' : 'opacity-100',
+              "-mr-2 h-4 w-4 opacity-50",
+              disabled ? "hidden" : "opacity-100",
             )}
           />
         </Button>
@@ -145,8 +156,8 @@ function CountrySelect({
                     )}
                     <CheckIcon
                       className={cn(
-                        'ml-auto h-4 w-4',
-                        option.value === value ? 'opacity-100' : 'opacity-0',
+                        "ml-auto h-4 w-4",
+                        option.value === value ? "opacity-100" : "opacity-0",
                       )}
                     />
                   </CommandItem>
@@ -169,6 +180,6 @@ function FlagComponent({ country, countryName }: RPNInput.FlagProps) {
     </span>
   );
 }
-FlagComponent.displayName = 'FlagComponent';
+FlagComponent.displayName = "FlagComponent";
 
 export { PhoneInput };

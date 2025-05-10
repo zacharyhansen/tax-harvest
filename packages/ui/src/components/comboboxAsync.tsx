@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Button } from '@repo/ui/components/button';
+import { Button } from "@repo/ui/components/button";
 import {
   Command,
   CommandEmpty,
@@ -8,19 +8,19 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@repo/ui/components/command';
+} from "@repo/ui/components/command";
 
-import { Label } from '@repo/ui/components/label';
+import { Label } from "@repo/ui/components/label";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover';
-import { cn } from '@repo/ui/utils';
-import { Check, ChevronsUpDown, Loader2 } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
-import { useDebounce } from '../hooks/use-debounce';
+} from "@repo/ui/components/popover";
+import { cn } from "@repo/ui/utils";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useDebounce } from "../hooks/use-debounce";
 
 export type ComboboxAsyncOption = {
   value: string;
@@ -82,11 +82,11 @@ export function ComboboxAsync<T>({
   notFound,
   loadingSkeleton,
   label,
-  placeholder = 'Select...',
+  placeholder = "Select...",
   value,
   onChange,
   disabled = false,
-  width = '200px',
+  width = "200px",
   className,
   triggerClassName,
   noResultsMessage,
@@ -99,7 +99,7 @@ export function ComboboxAsync<T>({
   const [error, setError] = useState<string | null>(null);
   const [selectedValue, setSelectedValue] = useState(value);
   const [selectedOption, setSelectedOption] = useState<T | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, preload ? 0 : 400);
   const [originalOptions, setOriginalOptions] = useState<T[]>([]);
   useEffect(() => {
@@ -112,7 +112,7 @@ export function ComboboxAsync<T>({
   // Initialize selectedOption when options are loaded and value exists
   useEffect(() => {
     if (value && options.length > 0) {
-      const option = options.find(opt => getOptionValue(opt) === value);
+      const option = options.find((opt) => getOptionValue(opt) === value);
       if (option) {
         // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
         setSelectedOption(option);
@@ -134,7 +134,7 @@ export function ComboboxAsync<T>({
         setOptions(data);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : 'Failed to fetch options',
+          err instanceof Error ? err.message : "Failed to fetch options",
         );
       } finally {
         setLoading(false);
@@ -156,7 +156,7 @@ export function ComboboxAsync<T>({
         setOptions(data);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : 'Failed to fetch options',
+          err instanceof Error ? err.message : "Failed to fetch options",
         );
       } finally {
         setLoading(false);
@@ -169,7 +169,7 @@ export function ComboboxAsync<T>({
       if (debouncedSearchTerm) {
         // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
         setOptions(
-          originalOptions.filter(option =>
+          originalOptions.filter((option) =>
             filterFn ? filterFn(option, debouncedSearchTerm) : true,
           ),
         );
@@ -184,10 +184,10 @@ export function ComboboxAsync<T>({
 
   const handleSelect = useCallback(
     (currentValue: string) => {
-      const newValue
-        = clearable && currentValue === selectedValue ? '' : currentValue;
+      const newValue =
+        clearable && currentValue === selectedValue ? "" : currentValue;
       setSelectedOption(
-        options.find(option => getOptionValue(option) === newValue) || null,
+        options.find((option) => getOptionValue(option) === newValue) || null,
       );
       setSelectedValue(newValue);
       onChange(newValue);
@@ -206,8 +206,8 @@ export function ComboboxAsync<T>({
             role="combobox"
             aria-expanded={open}
             className={cn(
-              'w-full justify-between',
-              disabled && 'cursor-not-allowed opacity-50',
+              "w-full justify-between",
+              disabled && "cursor-not-allowed opacity-50",
               triggerClassName,
             )}
             disabled={disabled}
@@ -219,7 +219,7 @@ export function ComboboxAsync<T>({
           </Button>
         </div>
       </PopoverTrigger>
-      <PopoverContent style={{ width }} className={cn('p-0', className)}>
+      <PopoverContent style={{ width }} className={cn("p-0", className)}>
         <Command shouldFilter={false}>
           <div className="relative w-full border-b">
             <CommandInput
@@ -239,19 +239,19 @@ export function ComboboxAsync<T>({
             {error && (
               <div className="p-4 text-center text-destructive">{error}</div>
             )}
-            {loading
-              && options.length === 0
-              && (loadingSkeleton || <DefaultLoadingSkeleton />)}
-            {!loading
-              && !error
-              && options.length === 0
-              && (notFound || (
+            {loading &&
+              options.length === 0 &&
+              (loadingSkeleton || <DefaultLoadingSkeleton />)}
+            {!loading &&
+              !error &&
+              options.length === 0 &&
+              (notFound || (
                 <CommandEmpty>
                   {noResultsMessage ?? `No ${label.toLowerCase()} found.`}
                 </CommandEmpty>
               ))}
             <CommandGroup>
-              {options.map(option => (
+              {options.map((option) => (
                 <CommandItem
                   key={getOptionValue(option)}
                   value={getOptionValue(option)}
@@ -260,10 +260,10 @@ export function ComboboxAsync<T>({
                   {renderOption(option)}
                   <Check
                     className={cn(
-                      'ml-auto h-3 w-3',
+                      "ml-auto h-3 w-3",
                       selectedValue === getOptionValue(option)
-                        ? 'opacity-100'
-                        : 'opacity-0',
+                        ? "opacity-100"
+                        : "opacity-0",
                     )}
                   />
                 </CommandItem>
@@ -279,7 +279,7 @@ export function ComboboxAsync<T>({
 function DefaultLoadingSkeleton() {
   return (
     <CommandGroup>
-      {[1, 2, 3].map(i => (
+      {[1, 2, 3].map((i) => (
         <CommandItem key={i} disabled>
           <div className="flex w-full items-center gap-2">
             <div className="size-6 animate-pulse rounded-full bg-muted" />

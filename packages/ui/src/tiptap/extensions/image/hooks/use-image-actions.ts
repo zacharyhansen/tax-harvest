@@ -1,8 +1,8 @@
-import type { Node } from '@tiptap/pm/model';
-import type { Editor } from '@tiptap/react';
-import * as React from 'react';
+import type { Node } from "@tiptap/pm/model";
+import type { Editor } from "@tiptap/react";
+import * as React from "react";
 
-import { isUrl } from '../../../utils';
+import { isUrl } from "../../../utils";
 
 type UseImageActionsProps = {
   editor: Editor;
@@ -49,9 +49,9 @@ export function useImageActions({
       const nodeAtSelection = tr.doc.nodeAt(selection.from);
 
       if (
-        nodeAtSelection
-        && nodeAtSelection.type.name === 'image'
-        && dispatch
+        nodeAtSelection &&
+        nodeAtSelection.type.name === "image" &&
+        dispatch
       ) {
         tr.deleteSelection();
         return true;

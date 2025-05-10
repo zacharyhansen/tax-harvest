@@ -1,14 +1,14 @@
-import { cn } from '../utils';
+import { cn } from "../utils";
 
 export function TypographyH1({
   className,
   children,
   ...props
-}: React.ComponentProps<'h1'>) {
+}: React.ComponentProps<"h1">) {
   return (
     <h1
       className={cn(
-        'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
+        "scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl",
         className,
       )}
       {...props}
@@ -22,11 +22,11 @@ export function TypographyH2({
   className,
   children,
   ...props
-}: React.ComponentProps<'h2'>) {
+}: React.ComponentProps<"h2">) {
   return (
     <h2
       className={cn(
-        'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
+        "scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0",
         className,
       )}
       {...props}
@@ -40,11 +40,11 @@ export function TypographyH3({
   className,
   children,
   ...props
-}: React.ComponentProps<'h3'>) {
+}: React.ComponentProps<"h3">) {
   return (
     <h3
       className={cn(
-        'scroll-m-20 text-2xl font-semibold tracking-tight',
+        "scroll-m-20 text-2xl font-semibold tracking-tight",
         className,
       )}
       {...props}
@@ -58,11 +58,11 @@ export function TypographyH4({
   className,
   children,
   ...props
-}: React.ComponentProps<'h4'>) {
+}: React.ComponentProps<"h4">) {
   return (
     <h4
       className={cn(
-        'scroll-m-20 text-xl font-semibold tracking-tight',
+        "scroll-m-20 text-xl font-semibold tracking-tight",
         className,
       )}
       {...props}
@@ -76,10 +76,10 @@ export function TypographyP({
   className,
   children,
   ...props
-}: React.ComponentProps<'p'>) {
+}: React.ComponentProps<"p">) {
   return (
     <p
-      className={cn('leading-7 [&:not(:first-child)]:mt-6', className)}
+      className={cn("leading-7 [&:not(:first-child)]:mt-6", className)}
       {...props}
     >
       {children}
@@ -91,10 +91,10 @@ export function TypographyBlockquote({
   className,
   children,
   ...props
-}: React.ComponentProps<'blockquote'>) {
+}: React.ComponentProps<"blockquote">) {
   return (
     <blockquote
-      className={cn('mt-6 border-l-2 pl-6 italic', className)}
+      className={cn("mt-6 border-l-2 pl-6 italic", className)}
       {...props}
     >
       {children}
@@ -106,9 +106,9 @@ export function Tr({
   className,
   children,
   ...props
-}: React.ComponentProps<'tr'>) {
+}: React.ComponentProps<"tr">) {
   return (
-    <tr className={cn('even:bg-muted m-0 border-t p-0', className)} {...props}>
+    <tr className={cn("even:bg-muted m-0 border-t p-0", className)} {...props}>
       {children}
     </tr>
   );
@@ -117,11 +117,11 @@ export function Th({
   className,
   children,
   ...props
-}: React.ComponentProps<'th'>) {
+}: React.ComponentProps<"th">) {
   return (
     <th
       className={cn(
-        'border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right',
+        "border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right",
         className,
       )}
       {...props}
@@ -134,11 +134,11 @@ export function Td({
   className,
   children,
   ...props
-}: React.ComponentProps<'td'>) {
+}: React.ComponentProps<"td">) {
   return (
     <td
       className={cn(
-        'border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right',
+        "border px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right",
         className,
       )}
       {...props}
@@ -197,9 +197,9 @@ export function TypographyListItem({
   className,
   children,
   ...props
-}: React.ComponentProps<'li'>) {
+}: React.ComponentProps<"li">) {
   return (
-    <li className={cn('', className)} {...props}>
+    <li className={cn("", className)} {...props}>
       {children}
     </li>
   );
@@ -209,9 +209,9 @@ export function TypographyList({
   className,
   children,
   ...props
-}: React.ComponentProps<'ul'>) {
+}: React.ComponentProps<"ul">) {
   return (
-    <ul className={cn('my-6 ml-6 list-disc [&>li]:mt-2', className)} {...props}>
+    <ul className={cn("my-6 ml-6 list-disc [&>li]:mt-2", className)} {...props}>
       {children}
     </ul>
   );
@@ -221,11 +221,11 @@ export function TypographyInlineCode({
   className,
   children,
   ...props
-}: React.ComponentProps<'code'>) {
+}: React.ComponentProps<"code">) {
   return (
     <code
       className={cn(
-        'bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
+        "bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold",
         className,
       )}
       {...props}
@@ -239,9 +239,9 @@ export function TypographyLead({
   className,
   children,
   ...props
-}: React.ComponentProps<'p'>) {
+}: React.ComponentProps<"p">) {
   return (
-    <p className={cn('text-muted-foreground text-xl', className)} {...props}>
+    <p className={cn("text-muted-foreground text-xl", className)} {...props}>
       {children}
     </p>
   );
@@ -251,9 +251,9 @@ export function TypographyLarge({
   className,
   children,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<"div">) {
   return (
-    <div className={cn('text-lg font-semibold', className)} {...props}>
+    <div className={cn("text-lg font-semibold", className)} {...props}>
       {children}
     </div>
   );
@@ -263,10 +263,10 @@ export function TypographySmall({
   className,
   children,
   ...props
-}: React.ComponentProps<'small'>) {
+}: React.ComponentProps<"small">) {
   return (
     <small
-      className={cn('text-sm font-medium leading-none', className)}
+      className={cn("text-sm font-medium leading-none", className)}
       {...props}
     >
       {children}
@@ -278,9 +278,9 @@ export function TypographyMuted({
   className,
   children,
   ...props
-}: React.ComponentProps<'p'>) {
+}: React.ComponentProps<"p">) {
   return (
-    <p className={cn('text-muted-foreground text-sm', className)} {...props}>
+    <p className={cn("text-muted-foreground text-sm", className)} {...props}>
       {children}
     </p>
   );

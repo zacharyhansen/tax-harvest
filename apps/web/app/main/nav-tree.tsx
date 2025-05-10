@@ -1,4 +1,4 @@
-import type { NavGroup } from '@repo/ui/layouts/dashboard';
+import type { NavGroup } from '@repo/ui/layouts/dashboard'
 import {
   Logs,
   Merge,
@@ -9,9 +9,9 @@ import {
   Users,
   Wallet2,
   Waypoints,
-} from 'lucide-react';
+} from 'lucide-react'
 
-import { TypedRoutes } from '~/lib/routes';
+import { TypedRoutes } from '~/lib/routes'
 
 export const NavTree: NavGroup[] = [
   {
@@ -76,4 +76,4 @@ export const NavTree: NavGroup[] = [
       },
     ],
   },
-];
+]

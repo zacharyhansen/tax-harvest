@@ -4,7 +4,7 @@ export const envSchema = z.object({
   // App
   NODE_ENV: z.enum(['development', 'production', 'test']),
   CLIENT_ORIGIN: z.string(),
-  NUETRAL_ACCOUNT_AMOUNT: z.coerce.number(),
+  NUETRAL_HARVEST_THRESHOLD: z.coerce.number(),
   PORT: z.string(),
   // Database
   DATABASE_URL: z.string(),

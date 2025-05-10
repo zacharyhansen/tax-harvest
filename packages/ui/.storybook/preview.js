@@ -1,5 +1,5 @@
-import '../src/tailwind.css';
-import '../src/tiptap/styles/index.css';
+import "../src/tailwind.css";
+import "../src/tiptap/styles/index.css";
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
@@ -12,7 +12,7 @@ const preview = {
     },
     options: {
       storySort: {
-        order: ['Atoms', 'Molecules', 'TipTap', 'Typography', 'Colors'], // Define your order here
+        order: ["Atoms", "Molecules", "TipTap", "Typography", "Colors"], // Define your order here
       },
     },
   },

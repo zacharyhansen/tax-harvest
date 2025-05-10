@@ -1,7 +1,7 @@
-import type { CellContext } from '@tanstack/react-table';
+import type { CellContext } from "@tanstack/react-table";
 
-import { cn } from '@repo/ui/utils/cn';
-import { DateFormatter } from '@repo/ui/utils/date-formatter';
+import { cn } from "@repo/ui/utils/cn";
+import { DateFormatter } from "@repo/ui/utils/date-formatter";
 
 export default function DateCell<TData, TValue>({
   getValue,
@@ -11,7 +11,7 @@ export default function DateCell<TData, TValue>({
   }
 
   return (
-    <div className={cn('font-medium')}>
+    <div className={cn("font-medium")}>
       {DateFormatter.shortDay(getValue<string | Date | null | undefined>())}
     </div>
   );

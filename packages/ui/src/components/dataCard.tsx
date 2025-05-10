@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from './card';
-import { Skeleton } from './skeleton';
+import { Card, CardContent, CardHeader, CardTitle } from "./card";
+import { Skeleton } from "./skeleton";
 
 export type DataCardProps = {
   data: ReactNode;
@@ -29,18 +29,14 @@ export default function DataCard({
         {icon || null}
       </CardHeader>
       <CardContent>
-        {loading
-          ? (
-              <Skeleton className="h-8 w-full" />
-            )
-          : (
-              <div className="text-2xl font-bold">{data}</div>
-            )}
-        {description
-          ? (
-              <p className="text-xs text-muted-foreground">{description}</p>
-            )
-          : null}
+        {loading ? (
+          <Skeleton className="h-8 w-full" />
+        ) : (
+          <div className="text-2xl font-bold">{data}</div>
+        )}
+        {description ? (
+          <p className="text-xs text-muted-foreground">{description}</p>
+        ) : null}
         {children || null}
       </CardContent>
     </Card>

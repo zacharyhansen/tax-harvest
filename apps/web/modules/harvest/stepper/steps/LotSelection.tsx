@@ -1,37 +1,37 @@
-import type { RowSelectionState } from '@tanstack/react-table';
-import type { LotRowType } from '../HarvestStepper';
-import NumberFlow from '@number-flow/react';
-import { Button } from '@repo/ui/components/button';
-import DataTable from '@repo/ui/components/dataTable/dataTable';
-import { Separator } from '@repo/ui/components/separator';
-import { toast } from '@repo/ui/components/toast-sonner';
+import type { RowSelectionState } from '@tanstack/react-table'
+import type { LotRowType } from '../HarvestStepper'
+import NumberFlow from '@number-flow/react'
+import { Button } from '@repo/ui/components/button'
+import DataTable from '@repo/ui/components/dataTable/dataTable'
+import { Separator } from '@repo/ui/components/separator'
+import { toast } from '@repo/ui/components/toast-sonner'
 
-import { useMemo } from 'react';
+import { useMemo } from 'react'
 
-import { HarvestType, useDirectedHarvestLazyQuery } from '~/generated/gql';
+import { HarvestType, useDirectedHarvestLazyQuery } from '~/generated/gql'
 
-import { Format } from '~/modules/utils';
-import columns from './RealizedDirectedHarvest.ColumnDef';
+import { Format } from '~/modules/utils'
+import columns from './RealizedDirectedHarvest.ColumnDef'
 
 const tableLabel: Record<HarvestType, string> = {
   [HarvestType.ReduceTaxes]: 'Select Positions',
   [HarvestType.ReduceCostBasis]: 'Select Loss Positions',
   [HarvestType.Sell]: 'Select Sale Positions',
   [HarvestType.CaptureGainsTaxFree]: 'Select Gains',
-};
+}
 
 type LotSelectionProps = {
-  harvestLots: LotRowType[];
-  counterLots: LotRowType[];
-  setHarvestLots: (lots: LotRowType[]) => void;
-  setCounterLots: (lots: LotRowType[]) => void;
-  harvestType: HarvestType;
-  targetRealized: number;
-  targetUnrealized: number;
-  targetTotal: number;
-  selectedHarvest: number;
-  selectedCounter: number;
-};
+  harvestLots: LotRowType[]
+  counterLots: LotRowType[]
+  setHarvestLots: (lots: LotRowType[]) => void
+  setCounterLots: (lots: LotRowType[]) => void
+  harvestType: HarvestType
+  targetRealized: number
+  targetUnrealized: number
+  targetTotal: number
+  selectedHarvest: number
+  selectedCounter: number
+}
 
 export default function LotSelection({
   counterLots,
@@ -44,19 +44,19 @@ export default function LotSelection({
   targetRealized,
   targetUnrealized,
 }: LotSelectionProps) {
-  const [directedHarvest] = useDirectedHarvestLazyQuery();
+  const [directedHarvest] = useDirectedHarvestLazyQuery()
 
   const rowSelectionState: RowSelectionState = useMemo(() => {
     return harvestLots.reduce((acc, curr, i) => {
-      return { ...acc, [i]: !!curr.selectedQuantity };
-    }, {});
-  }, [harvestLots]);
+      return { ...acc, [i]: !!curr.selectedQuantity }
+    }, {})
+  }, [harvestLots])
 
   const rowCounterSelectionState: RowSelectionState = useMemo(() => {
     return counterLots.reduce((acc, curr, i) => {
-      return { ...acc, [i]: !!curr.selectedQuantity };
-    }, {});
-  }, [counterLots]);
+      return { ...acc, [i]: !!curr.selectedQuantity }
+    }, {})
+  }, [counterLots])
 
   return (
     <>
@@ -84,13 +84,13 @@ export default function LotSelection({
                                     data.directedHarvest.allOrders.find(
                                       order => order.lotId === lot.id,
                                     )?.quantity ?? 0,
-                                  );
+                                  )
                                   return {
                                     ...lot,
                                     selectedQuantity,
-                                  };
+                                  }
                                 }),
-                              );
+                              )
                             },
                             variables: {
                               lots: harvestLots.map(lot => ({
@@ -106,7 +106,7 @@ export default function LotSelection({
                             success: 'Positions selected',
                             error: 'Error selecting positions',
                           },
-                        );
+                        )
                       }}
                     >
                       Select for me
@@ -118,9 +118,9 @@ export default function LotSelection({
         )}
         columns={columns}
         onUpdateCell={(rowIndex, columnId, value) => {
-          const newLots = harvestLots.slice();
-          newLots[rowIndex]!.selectedQuantity = value as number;
-          setHarvestLots(newLots);
+          const newLots = harvestLots.slice()
+          newLots[rowIndex]!.selectedQuantity = value as number
+          setHarvestLots(newLots)
         }}
         data={harvestLots}
         noResultsAlert="There are no lots that match the harvesting parameters."
@@ -130,22 +130,22 @@ export default function LotSelection({
           sorting: [{ id: 'gainTotal', desc: true }],
         }}
         onRowSelectionChange={({ selectedRows }) => {
-          const newlots = harvestLots.map(lot => ({ ...lot }));
+          const newlots = harvestLots.map(lot => ({ ...lot }))
           // Loop over all lots
           newlots.forEach((newLot) => {
             const isNewLotSelected = selectedRows.find(
               lot => lot.id === newLot.id,
-            );
+            )
 
             // If the lot has been selected (its value is still 0) set it to the remainingQty
             if (isNewLotSelected && !newLot.selectedQuantity) {
-              newLot.selectedQuantity = Number(isNewLotSelected.remainingQty);
+              newLot.selectedQuantity = Number(isNewLotSelected.remainingQty)
               // Else we set it to 0 if its been desected
             } else if (!isNewLotSelected) {
-              newLot.selectedQuantity = 0;
+              newLot.selectedQuantity = 0
             }
-          });
-          setHarvestLots(newlots);
+          })
+          setHarvestLots(newlots)
         }}
       />
       {harvestType === HarvestType.ReduceCostBasis
@@ -171,13 +171,13 @@ export default function LotSelection({
                                       data.directedHarvest.allOrders.find(
                                         order => order.lotId === lot.id,
                                       )?.quantity ?? 0,
-                                    );
+                                    )
                                     return {
                                       ...lot,
                                       selectedQuantity,
-                                    };
+                                    }
                                   }),
-                                );
+                                )
                               },
                               variables: {
                                 lots: counterLots.map(lot => ({
@@ -193,7 +193,7 @@ export default function LotSelection({
                               success: 'Gain positions selected',
                               error: 'Error selecting gain positions',
                             },
-                          );
+                          )
                         }}
                       >
                         Select for me
@@ -214,9 +214,9 @@ export default function LotSelection({
                 )}
                 columns={columns}
                 onUpdateCell={(rowIndex, columnId, value) => {
-                  const newLots = counterLots.slice();
-                  newLots[rowIndex]!.selectedQuantity = value as number;
-                  setCounterLots(newLots);
+                  const newLots = counterLots.slice()
+                  newLots[rowIndex]!.selectedQuantity = value as number
+                  setCounterLots(newLots)
                 }}
                 data={counterLots}
                 noResultsAlert="There are no lots that match the harvesting parameters."
@@ -226,24 +226,24 @@ export default function LotSelection({
                 enableRowSelection={true}
                 rowSelectionState={rowCounterSelectionState}
                 onRowSelectionChange={({ selectedRows }) => {
-                  const newlots = counterLots.map(lot => ({ ...lot }));
+                  const newlots = counterLots.map(lot => ({ ...lot }))
                   // Loop over all lots
                   newlots.forEach((newLot) => {
                     const isNewLotSelected = selectedRows.find(
                       lot => lot.id === newLot.id,
-                    );
+                    )
 
                     // If the lot has been selected (its value is still 0) set it to the remainingQty
                     if (isNewLotSelected && !newLot.selectedQuantity) {
                       newLot.selectedQuantity = Number(
                         isNewLotSelected.remainingQty,
-                      );
+                      )
                       // Else we set it to 0 if its been desected
                     } else if (!isNewLotSelected) {
-                      newLot.selectedQuantity = 0;
+                      newLot.selectedQuantity = 0
                     }
-                  });
-                  setCounterLots(newlots);
+                  })
+                  setCounterLots(newlots)
                 }}
                 className="h-1/2"
               />
@@ -276,13 +276,13 @@ export default function LotSelection({
                                         data.directedHarvest.allOrders.find(
                                           order => order.lotId === lot.id,
                                         )?.quantity ?? 0,
-                                      );
+                                      )
                                       return {
                                         ...lot,
                                         selectedQuantity,
-                                      };
+                                      }
                                     }),
-                                  );
+                                  )
                                 },
                                 variables: {
                                   lots: counterLots.map(lot => ({
@@ -298,7 +298,7 @@ export default function LotSelection({
                                 success: 'Gain positions selected',
                                 error: 'Error selecting gain positions',
                               },
-                            );
+                            )
                           }}
                         >
                           Select for me
@@ -323,9 +323,9 @@ export default function LotSelection({
                 )}
                 columns={columns}
                 onUpdateCell={(rowIndex, columnId, value) => {
-                  const newLots = counterLots.slice();
-                  newLots[rowIndex]!.selectedQuantity = value as number;
-                  setCounterLots(newLots);
+                  const newLots = counterLots.slice()
+                  newLots[rowIndex]!.selectedQuantity = value as number
+                  setCounterLots(newLots)
                 }}
                 data={counterLots}
                 noResultsAlert="There are no lots that match the harvesting parameters."
@@ -335,24 +335,24 @@ export default function LotSelection({
                 enableRowSelection={true}
                 rowSelectionState={rowCounterSelectionState}
                 onRowSelectionChange={({ selectedRows }) => {
-                  const newlots = counterLots.map(lot => ({ ...lot }));
+                  const newlots = counterLots.map(lot => ({ ...lot }))
                   // Loop over all lots
                   newlots.forEach((newLot) => {
                     const isNewLotSelected = selectedRows.find(
                       lot => lot.id === newLot.id,
-                    );
+                    )
 
                     // If the lot has been selected (its value is still 0) set it to the remainingQty
                     if (isNewLotSelected && !newLot.selectedQuantity) {
                       newLot.selectedQuantity = Number(
                         isNewLotSelected.remainingQty,
-                      );
+                      )
                       // Else we set it to 0 if its been desected
                     } else if (!isNewLotSelected) {
-                      newLot.selectedQuantity = 0;
+                      newLot.selectedQuantity = 0
                     }
-                  });
-                  setCounterLots(newlots);
+                  })
+                  setCounterLots(newlots)
                 }}
                 className="h-1/2"
               />
@@ -360,5 +360,5 @@ export default function LotSelection({
           )
         : null}
     </>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import type { BaseFieldProps } from '../form-builder.types';
+import type { BaseFieldProps } from "../form-builder.types";
 
 import {
   FormControl,
@@ -6,8 +6,8 @@ import {
   FormField,
   FormItem,
   FormLabel,
-} from '@repo/ui/components/form';
-import { Switch } from '@repo/ui/components/switch';
+} from "@repo/ui/components/form";
+import { Switch } from "@repo/ui/components/switch";
 
 export default function SwitchField({
   name,

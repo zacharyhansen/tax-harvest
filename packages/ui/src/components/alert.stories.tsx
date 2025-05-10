@@ -1,16 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import type { VariantProps } from 'class-variance-authority';
-import type { alertVariants } from './alert.variants';
+import type { Meta, StoryObj } from "@storybook/react";
+import type { VariantProps } from "class-variance-authority";
+import type { alertVariants } from "./alert.variants";
 
-import { Terminal } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from './alert';
+import { Terminal } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "./alert";
 
 type TypeCustomAlertProps = {} & VariantProps<typeof alertVariants>;
 
 const meta = {
-  title: 'Atoms/Alert',
+  title: "Atoms/Alert",
   args: {
-    variant: 'default',
+    variant: "default",
   },
   render: ({ variant }) => (
     <Alert variant={variant}>
@@ -21,15 +21,15 @@ const meta = {
       </AlertDescription>
     </Alert>
   ),
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: { type: 'select' },
-      options: ['default', 'destructive'],
+      control: { type: "select" },
+      options: ["default", "destructive"],
     },
   },
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<TypeCustomAlertProps>;
 
@@ -40,7 +40,7 @@ type Story = StoryObj<typeof meta>;
 // Colors
 export const AlertDefaultDemo: Story = {
   args: {
-    variant: 'default',
+    variant: "default",
   },
   render: ({ variant }) => (
     <Alert variant={variant}>
@@ -54,7 +54,7 @@ export const AlertDefaultDemo: Story = {
 };
 export const AlertDestructiveDemo: Story = {
   args: {
-    variant: 'destructive',
+    variant: "destructive",
   },
   render: ({ variant }) => (
     <Alert variant={variant}>

@@ -1,15 +1,15 @@
-import type { ReactNode } from 'react';
-import { cn } from '@repo/ui/utils';
+import type { ReactNode } from 'react'
+import { cn } from '@repo/ui/utils'
 
-import LoadingIcon from './loading-icon';
+import LoadingIcon from './loading-icon'
 
-export const LoadingPage = ({
+export function LoadingPage({
   className,
   message,
 }: {
-  className?: string;
-  message?: ReactNode;
-}) => {
+  className?: string
+  message?: ReactNode
+}) {
   return (
     <div
       className={cn(
@@ -22,7 +22,7 @@ export const LoadingPage = ({
         <div>{message ?? 'Loading'}</div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoadingPage;
+export default LoadingPage

@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { Button } from '@repo/ui/components/button';
+import { Button } from '@repo/ui/components/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,31 +8,28 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu';
-import {
-  SidebarMenuButton,
-  useSidebar,
-} from '@repo/ui/components/sidebar';
-import { toast } from '@repo/ui/components/toast-sonner';
-import { ChevronsUpDown, Wallet2 } from 'lucide-react';
+} from '@repo/ui/components/dropdown-menu'
+import { SidebarMenuButton, useSidebar } from '@repo/ui/components/sidebar'
+import { toast } from '@repo/ui/components/toast-sonner'
+import { ChevronsUpDown, Wallet2 } from 'lucide-react'
 
 import {
   usePortfoliosQuery,
   useSwitchPortfolioMutation,
-} from '~/generated/gql';
-import CreatePortfolioDialog from './CreatePortfolioDialog';
+} from '~/generated/gql'
+import CreatePortfolioDialog from './CreatePortfolioDialog'
 
-import { usePortfolio } from './providers/PortfolioProvider';
+import { usePortfolio } from './providers/PortfolioProvider'
 
 export function PortfolioSwitcher() {
-  const { isMobile } = useSidebar();
-  const { data } = usePortfoliosQuery();
-  const { portfolio, reload } = usePortfolio();
+  const { isMobile } = useSidebar()
+  const { data } = usePortfoliosQuery()
+  const { portfolio, reload } = usePortfolio()
   const [switchPortfolio] = useSwitchPortfolioMutation({
     onError: () => {
-      toast.error('Unable to switch porfolio');
+      toast.error('Unable to switch porfolio')
     },
-  });
+  })
 
   return (
     <DropdownMenu>
@@ -71,7 +68,7 @@ export function PortfolioSwitcher() {
                 variables: {
                   porfolioId: portfolio.id,
                 },
-              });
+              })
             }}
             className="gap-2 p-2"
           >
@@ -93,5 +90,5 @@ export function PortfolioSwitcher() {
         </CreatePortfolioDialog>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

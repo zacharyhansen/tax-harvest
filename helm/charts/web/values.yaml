@@ -45,7 +45,7 @@ env:
   NODE_ENV: production
   extras:
     # Frontend configuration
-    PORT: '3000'
+    PORT: "3000"
 
 # Cloud SQL configuration for the web service (disabled by default)
 cloudsql:

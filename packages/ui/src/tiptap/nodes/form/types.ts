@@ -1,6 +1,6 @@
-import type { ComboboxOption } from '@repo/ui/components/combobox';
+import type { ComboboxOption } from "@repo/ui/components/combobox";
 
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from "lucide-react";
 import {
   Binary,
   CalendarCheck,
@@ -9,29 +9,28 @@ import {
   ChevronsLeftRightEllipsis,
   Grid2X2,
   KeyRound,
-
   PencilRuler,
   Phone,
   ScanText,
   Square,
   SquareMousePointer,
   ToggleLeft,
-} from 'lucide-react';
+} from "lucide-react";
 
 export enum FormNode {
-  Text = 'Text',
-  Combobox = 'Combobox',
-  Checkbox = 'Checkbox',
-  Number = 'Number',
-  ComboboxMulti = 'ComboboxMulti',
-  Switch = 'Switch',
-  Password = 'Password',
-  Textarea = 'Textarea',
-  DatePicker = 'DatePicker',
-  DateRangePicker = 'DateRangePicker',
-  Phone = 'Phone',
-  Tiptap = 'Tiptap',
-  Slider = 'Slider',
+  Text = "Text",
+  Combobox = "Combobox",
+  Checkbox = "Checkbox",
+  Number = "Number",
+  ComboboxMulti = "ComboboxMulti",
+  Switch = "Switch",
+  Password = "Password",
+  Textarea = "Textarea",
+  DatePicker = "DatePicker",
+  DateRangePicker = "DateRangePicker",
+  Phone = "Phone",
+  Tiptap = "Tiptap",
+  Slider = "Slider",
 }
 
 export type BaseFormNodeAttributes = {
@@ -79,17 +78,17 @@ export const formCommandIcon: Record<FormNode, LucideIcon> = {
 };
 
 export const formCommandLabel: Record<FormNode, string> = {
-  [FormNode.Text]: 'Text',
-  [FormNode.Number]: 'Number',
-  [FormNode.Checkbox]: 'Checkbox',
-  [FormNode.ComboboxMulti]: 'Multi Select',
-  [FormNode.Combobox]: 'Select',
-  [FormNode.DatePicker]: 'Date',
-  [FormNode.DateRangePicker]: 'Date Range',
-  [FormNode.Password]: 'Password',
-  [FormNode.Phone]: 'Phone',
-  [FormNode.Slider]: 'Slider',
-  [FormNode.Switch]: 'Switch',
-  [FormNode.Textarea]: 'Textarea',
-  [FormNode.Tiptap]: 'Rich Text',
+  [FormNode.Text]: "Text",
+  [FormNode.Number]: "Number",
+  [FormNode.Checkbox]: "Checkbox",
+  [FormNode.ComboboxMulti]: "Multi Select",
+  [FormNode.Combobox]: "Select",
+  [FormNode.DatePicker]: "Date",
+  [FormNode.DateRangePicker]: "Date Range",
+  [FormNode.Password]: "Password",
+  [FormNode.Phone]: "Phone",
+  [FormNode.Slider]: "Slider",
+  [FormNode.Switch]: "Switch",
+  [FormNode.Textarea]: "Textarea",
+  [FormNode.Tiptap]: "Rich Text",
 };

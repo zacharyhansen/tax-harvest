@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { Button } from '@repo/ui/components/button';
+import { Button } from '@repo/ui/components/button'
 // import { useState } from 'react';
 import {
   Card,
@@ -8,12 +8,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card';
-import { toast } from '@repo/ui/components/toast-sonner';
-import { Receipt } from 'lucide-react';
+} from '@repo/ui/components/card'
+import { toast } from '@repo/ui/components/toast-sonner'
+import { Receipt } from 'lucide-react'
 
-import { useUpdateAllAssetPricesMutation } from '~/generated/gql';
-import { PageWrapper } from '~/modules/layout';
+import { useUpdateAllAssetPricesMutation } from '~/generated/gql'
+import { PageWrapper } from '~/modules/layout'
 
 export default function ActionsPage() {
   // const [updateHourlyAssetPrices] = useUpdateHourlyAssetPricesMutation();
@@ -27,7 +27,7 @@ export default function ActionsPage() {
   // const [to, setTo] = useState(new Date());
   // const [startDate, setStartDate] = useState(new Date());
 
-  const [updateAllAssetPrices] = useUpdateAllAssetPricesMutation();
+  const [updateAllAssetPrices] = useUpdateAllAssetPricesMutation()
 
   return (
     <PageWrapper
@@ -53,7 +53,7 @@ export default function ActionsPage() {
                   error: 'There was an error',
                   loading: 'Loading',
                   success: 'Prices updated',
-                });
+                })
               }}
             >
               Refresh Prices
@@ -152,5 +152,5 @@ export default function ActionsPage() {
         </Card> */}
       </div>
     </PageWrapper>
-  );
+  )
 }

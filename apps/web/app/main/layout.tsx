@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   ClerkLoaded,
@@ -7,7 +7,7 @@ import {
   SignedOut,
   UserButton,
   useUser,
-} from '@clerk/nextjs';
+} from '@clerk/nextjs'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,31 +15,31 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@repo/ui/components/breadcrumb';
-import { Toaster } from '@repo/ui/components/sonner';
-import { Dashboard } from '@repo/ui/layouts/dashboard';
-import MediaProvider from '@repo/ui/providers/media-provider';
-import { ThemeProvider } from '@repo/ui/providers/theme-provider';
-import { capitalCase } from 'change-case';
-import { usePathname } from 'next/navigation';
+} from '@repo/ui/components/breadcrumb'
+import { Toaster } from '@repo/ui/components/sonner'
+import { Dashboard } from '@repo/ui/layouts/dashboard'
+import MediaProvider from '@repo/ui/providers/media-provider'
+import { ThemeProvider } from '@repo/ui/providers/theme-provider'
+import { capitalCase } from 'change-case'
+import { usePathname } from 'next/navigation'
 
-import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs';
-import { PlaidConnectButton } from '~/modules/plaid';
-import { PortfolioProvider, PortfolioSwitcher } from '~/modules/portfolio';
-import ApolloProviderWrapper from './ApolloProviderWrapper';
+import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs'
+import { PlaidConnectButton } from '~/modules/plaid'
+import { PortfolioProvider, PortfolioSwitcher } from '~/modules/portfolio'
+import ApolloProviderWrapper from './ApolloProviderWrapper'
 
-import { NavTree } from './nav-tree';
-import ThemeButton from './theme-button';
-import { UserProvider } from './user.provider';
+import { NavTree } from './nav-tree'
+import ThemeButton from './theme-button'
+import { UserProvider } from './user.provider'
 
 export default function MainLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
-  const breadcrumbs = useBreadcrumbs() || [];
-  const pathname = usePathname();
-  const clerkUser = useUser();
+  const breadcrumbs = useBreadcrumbs() || []
+  const pathname = usePathname()
+  const clerkUser = useUser()
 
   return (
     <ClerkLoaded>
@@ -56,7 +56,7 @@ export default function MainLayout({
                       <Breadcrumb>
                         <BreadcrumbList>
                           {breadcrumbs.map(({ title, link }, index) => {
-                            const formattedTitle = capitalCase(title);
+                            const formattedTitle = capitalCase(title)
                             return index === breadcrumbs.length - 1
                               ? (
                                   <BreadcrumbItem key={title}>
@@ -80,7 +80,7 @@ export default function MainLayout({
                                       className="hidden md:flex"
                                     />
                                   </div>
-                                );
+                                )
                           })}
                         </BreadcrumbList>
                       </Breadcrumb>
@@ -112,5 +112,5 @@ export default function MainLayout({
         </SignedOut>
       </ApolloProviderWrapper>
     </ClerkLoaded>
-  );
+  )
 }

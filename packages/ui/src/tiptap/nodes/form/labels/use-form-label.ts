@@ -1,11 +1,11 @@
-import type { NodeViewProps } from '@tiptap/core';
-import type { DefaultValues, FieldValues } from 'react-hook-form';
-import type { z, ZodType } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { snakeCase } from 'change-case';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import type { NodeViewProps } from "@tiptap/core";
+import type { DefaultValues, FieldValues } from "react-hook-form";
+import type { z, ZodType } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { snakeCase } from "change-case";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function useFormLabel<
   // eslint-disable-next-line ts/no-explicit-any
@@ -32,14 +32,14 @@ export function useFormLabel<
   const nodeEndPos = getPos() + node.nodeSize;
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
       editor
         .chain()
         .focus(nodeEndPos)
         .insertContent([
           {
-            type: 'paragraph',
+            type: "paragraph",
           },
         ])
         .run();
@@ -57,18 +57,18 @@ export function useFormLabel<
     try {
       updateAttributes(values);
       setOpen(false);
-      toast.success('Saved');
+      toast.success("Saved");
     } catch (error) {
-      console.error('Form submission error', error);
-      toast.error('Failed to save. Please try again.');
+      console.error("Form submission error", error);
+      toast.error("Failed to save. Please try again.");
     }
   };
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === 'label' && !value.nameLocked && value.label) {
+      if (name === "label" && !value.nameLocked && value.label) {
         // @ts-expect-error cant get the types to always include name and label
-        setValue('name', snakeCase(value.label));
+        setValue("name", snakeCase(value.label));
       }
     });
     return () => {

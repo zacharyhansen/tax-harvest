@@ -1,6 +1,6 @@
-import { cleanup } from '@testing-library/react';
-import { afterEach } from 'vitest';
-import '@testing-library/jest-dom/vitest';
+import { cleanup } from "@testing-library/react";
+import { afterEach } from "vitest";
+import "@testing-library/jest-dom/vitest";
 
 class MockPointerEvent extends Event {
   button: number;
@@ -11,7 +11,7 @@ class MockPointerEvent extends Event {
     super(type, props);
     this.button = props.button ?? 0;
     this.ctrlKey = props.ctrlKey ?? false;
-    this.pointerType = props.pointerType ?? 'mouse';
+    this.pointerType = props.pointerType ?? "mouse";
   }
 }
 

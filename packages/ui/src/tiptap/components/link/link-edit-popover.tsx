@@ -1,18 +1,18 @@
-import type { toggleVariants } from '@repo/ui/components/toggle.variants';
-import type { Editor } from '@tiptap/react';
-import type { VariantProps } from 'class-variance-authority';
-import { Link2Icon } from '@radix-ui/react-icons';
+import type { toggleVariants } from "@repo/ui/components/toggle.variants";
+import type { Editor } from "@tiptap/react";
+import type { VariantProps } from "class-variance-authority";
+import { Link2Icon } from "@radix-ui/react-icons";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover';
+} from "@repo/ui/components/popover";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { ToolbarButton } from '../toolbar-button';
+import { ToolbarButton } from "../toolbar-button";
 
-import { LinkEditBlock } from './link-edit-block';
+import { LinkEditBlock } from "./link-edit-block";
 
 type LinkEditPopoverProps = {
   editor: Editor;
@@ -22,23 +22,23 @@ function LinkEditPopover({ editor, size, variant }: LinkEditPopoverProps) {
   const [open, setOpen] = React.useState(false);
 
   const { from, to } = editor.state.selection;
-  const text = editor.state.doc.textBetween(from, to, ' ');
+  const text = editor.state.doc.textBetween(from, to, " ");
 
   const onSetLink = React.useCallback(
     (url: string, text?: string, openInNewTab?: boolean) => {
       editor
         .chain()
         .focus()
-        .extendMarkRange('link')
+        .extendMarkRange("link")
         .insertContent({
-          type: 'text',
+          type: "text",
           text: text ?? url,
           marks: [
             {
-              type: 'link',
+              type: "link",
               attrs: {
                 href: url,
-                target: openInNewTab ? '_blank' : '',
+                target: openInNewTab ? "_blank" : "",
               },
             },
           ],
@@ -55,10 +55,10 @@ function LinkEditPopover({ editor, size, variant }: LinkEditPopoverProps) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <ToolbarButton
-          isActive={editor.isActive('link')}
+          isActive={editor.isActive("link")}
           tooltip="Link"
           aria-label="Insert link"
-          disabled={editor.isActive('codeBlock')}
+          disabled={editor.isActive("codeBlock")}
           size={size}
           variant={variant}
         >

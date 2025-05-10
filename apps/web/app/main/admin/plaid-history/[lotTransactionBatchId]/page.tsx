@@ -1,42 +1,40 @@
-'use client';
+'use client'
 
-import type { ColDef } from 'ag-grid-community';
-import ReactJsonView from '@microlink/react-json-view';
+import type { ColDef } from 'ag-grid-community'
+import ReactJsonView from '@microlink/react-json-view'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@repo/ui/components/tabs';
-import { AgGridReact } from 'ag-grid-react';
-import { useTheme } from 'next-themes';
-import dynamic from 'next/dynamic';
-import { use, useMemo } from 'react';
+} from '@repo/ui/components/tabs'
+import { AgGridReact } from 'ag-grid-react'
+import { useTheme } from 'next-themes'
+import dynamic from 'next/dynamic'
+import { use, useMemo } from 'react'
 
-import { useLotTransactionBatchQuery } from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { PageWrapper } from '~/modules/layout';
-import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { useLotTransactionBatchQuery } from '~/generated/gql'
+import { TypedRoutes } from '~/lib/routes'
+import { PageWrapper } from '~/modules/layout'
+import { ErrorPage, LoadingPage } from '~/modules/utility-components'
 
 const AgGridWrapper = dynamic(
   () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
   {
     ssr: false,
   },
-);
+)
 
-export default function LotTransactionBatchPage(
-  props: {
-    params: Promise<typeof TypedRoutes.lotTransactionBatch.params>;
-  },
-) {
-  const params = use(props.params);
-  const theme = useTheme();
-  const safeParams = TypedRoutes.lotTransactionBatch.parse(params);
+export default function LotTransactionBatchPage(props: {
+  params: Promise<typeof TypedRoutes.lotTransactionBatch.params>
+}) {
+  const params = use(props.params)
+  const theme = useTheme()
+  const safeParams = TypedRoutes.lotTransactionBatch.parse(params)
 
   const { data, error, loading } = useLotTransactionBatchQuery({
     variables: { lotTransactionBatchId: safeParams.lotTransactionBatchId },
-  });
+  })
 
   const columnDefs: ColDef[] = useMemo(
     () =>
@@ -91,14 +89,14 @@ export default function LotTransactionBatchPage(
         },
       ] satisfies ColDef[],
     [],
-  );
+  )
 
   if (error) {
-    return <ErrorPage message={JSON.stringify(error)} />;
+    return <ErrorPage message={JSON.stringify(error)} />
   }
 
   if (loading) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
 
   return (
@@ -200,5 +198,5 @@ export default function LotTransactionBatchPage(
         </TabsContent>
       </Tabs>
     </PageWrapper>
-  );
+  )
 }

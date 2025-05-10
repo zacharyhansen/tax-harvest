@@ -1,27 +1,27 @@
-'use client';
+'use client'
 
-import { Button } from '@repo/ui/components/button';
+import { Button } from '@repo/ui/components/button'
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card';
-import { usePathname, useRouter } from 'next/navigation';
+} from '@repo/ui/components/card'
+import { usePathname, useRouter } from 'next/navigation'
 
-export const SearchUsers = () => {
-  const router = useRouter();
-  const pathname = usePathname();
+export function SearchUsers() {
+  const router = useRouter()
+  const pathname = usePathname()
 
   return (
     <div>
       <form
         onSubmit={(e) => {
-          e.preventDefault();
-          const form = e.currentTarget;
-          const formData = new FormData(form);
-          const queryTerm = formData.get('search') as string;
-          router.push(`${pathname}?search=${queryTerm}`);
+          e.preventDefault()
+          const form = e.currentTarget
+          const formData = new FormData(form)
+          const queryTerm = formData.get('search') as string
+          router.push(`${pathname}?search=${queryTerm}`)
         }}
       >
         <Card>
@@ -40,5 +40,5 @@ export const SearchUsers = () => {
         </Card>
       </form>
     </div>
-  );
-};
+  )
+}

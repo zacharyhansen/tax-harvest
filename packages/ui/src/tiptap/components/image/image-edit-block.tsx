@@ -1,9 +1,9 @@
-import type { Editor } from '@tiptap/react';
-import { Button } from '@repo/ui/components/button';
+import type { Editor } from "@tiptap/react";
+import { Button } from "@repo/ui/components/button";
 
-import { Input } from '@repo/ui/components/input';
-import { Label } from '@repo/ui/components/label';
-import * as React from 'react';
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
+import * as React from "react";
 
 type ImageEditBlockProps = {
   editor: Editor;
@@ -15,7 +15,7 @@ export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({
   close,
 }) => {
   const fileInputReference = React.useRef<HTMLInputElement>(null);
-  const [link, setLink] = React.useState('');
+  const [link, setLink] = React.useState("");
 
   const handleClick = React.useCallback(() => {
     fileInputReference.current?.click();

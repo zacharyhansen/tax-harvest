@@ -1,15 +1,15 @@
-'use client';
+'use client'
 
-import type { ColumnDef } from '@tanstack/react-table';
-import type { LotItemFragment } from '~/generated/gql';
-import { Badge } from '@repo/ui/components/badge';
-import DataTable from '@repo/ui/components/dataTable/dataTable';
+import type { ColumnDef } from '@tanstack/react-table'
+import type { LotItemFragment } from '~/generated/gql'
+import { Badge } from '@repo/ui/components/badge'
+import DataTable from '@repo/ui/components/dataTable/dataTable'
 
-import { createColumnHelper } from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table'
 
-import { Format, isOlderThanOneYear } from '../utils';
+import { Format, isOlderThanOneYear } from '../utils'
 
-const columnHelper = createColumnHelper<LotItemFragment>();
+const columnHelper = createColumnHelper<LotItemFragment>()
 
 const columns: ColumnDef<LotItemFragment, never>[] = [
   columnHelper.accessor('assetSymbol', {
@@ -27,12 +27,12 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
   }),
   columnHelper.accessor('acquiredDate', {
     cell: ({ getValue }) => {
-      const isLongTermGains = isOlderThanOneYear(getValue());
+      const isLongTermGains = isOlderThanOneYear(getValue())
       return (
         <Badge variant={isLongTermGains ? 'default' : 'secondary'}>
           {isLongTermGains ? 'Long Term' : 'Short Term'}
         </Badge>
-      );
+      )
     },
     header: 'Capital Gain',
     id: 'taxType',
@@ -47,8 +47,8 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
         .reduce(
           (sum, row) => sum + Number(row.getValue<string>('remainingQty') || 0),
           0,
-        );
-      return <DataTable.FooterCell label="Total" value={total} />;
+        )
+      return <DataTable.FooterCell label="Total" value={total} />
     },
     header: 'Quantity',
     size: 100,
@@ -74,10 +74,10 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
               + Number(row.getValue<string>('remainingQty') || 0)
               * row.getValue<number>('price'),
             0,
-          );
+          )
         return (
           <DataTable.FooterCell label="Total" value={Format.money(total)} />
-        );
+        )
       },
       header: 'Cost Basis',
       id: 'costBasis',
@@ -101,10 +101,10 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
   ),
   columnHelper.accessor(
     (row) => {
-      const cost = Number(row.remainingQty || 0) * Number(row.price || 0);
+      const cost = Number(row.remainingQty || 0) * Number(row.price || 0)
       const value
-        = Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0);
-      return value - cost;
+        = Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0)
+      return value - cost
     },
     {
       aggregationFn: 'sumMoney',
@@ -137,18 +137,18 @@ const columns: ColumnDef<LotItemFragment, never>[] = [
   columnHelper.accessor('account', {
     cell: ({ getValue }) => {
       const account = getValue<{
-        displayName?: string;
-        externalId?: string;
-      }>();
+        displayName?: string
+        externalId?: string
+      }>()
       return (
         <span>
           {account.displayName ?? Format.hideNumbers(account.externalId)}
         </span>
-      );
+      )
     },
     header: 'Account Name',
     size: 300,
   }),
-];
+]
 
-export default columns;
+export default columns

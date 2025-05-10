@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { CheckboxField } from './checkbox';
+import { CheckboxField } from "./checkbox";
 
 const meta = {
-  title: 'Atoms/Checkboxfield',
+  title: "Atoms/Checkboxfield",
   component: CheckboxField,
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof CheckboxField>;
 
 export default meta;
@@ -20,22 +20,22 @@ export const Checkbox: Story = {
 };
 
 export const Label: Story = {
-  args: { label: 'Label', id: 'test' },
+  args: { label: "Label", id: "test" },
 };
 
 export const Disabled: Story = {
   args: {
-    label: 'Label',
-    description: 'I am a description for the text box field.',
+    label: "Label",
+    description: "I am a description for the text box field.",
     disabled: true,
-    id: 'disabled',
+    id: "disabled",
   },
 };
 
 export const KitchedSink: Story = {
   args: {
-    label: 'Label',
-    id: 'kitchenSink',
-    description: 'I am a description for the text box field.',
+    label: "Label",
+    id: "kitchenSink",
+    description: "I am a description for the text box field.",
   },
 };

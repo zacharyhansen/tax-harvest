@@ -1,16 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, within } from '@storybook/test';
+import type { Meta, StoryObj } from "@storybook/react";
+import { expect, userEvent, within } from "@storybook/test";
 
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from './accordion';
+} from "./accordion";
 
 const meta = {
-  title: 'Atoms/Accordion',
-  render: _args => (
+  title: "Atoms/Accordion",
+  render: (_args) => (
     <Accordion type="single" collapsible className="w-80">
       <AccordionItem value="item-1">
         <AccordionTrigger>Is it accessible?</AccordionTrigger>
@@ -35,7 +35,7 @@ const meta = {
     </Accordion>
   ),
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<object>;
 
@@ -49,7 +49,7 @@ export const AcorrdionDemo: Story = {
 
 export const AccordionWithOneItem: Story = {
   args: {},
-  render: _args => (
+  render: (_args) => (
     <Accordion type="single" collapsible className="w-80">
       <AccordionItem value="item-1">
         <AccordionTrigger>Accordion</AccordionTrigger>
@@ -63,13 +63,13 @@ export const AccordionWithOneItem: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
-    const elementButtonControl = await canvas.findByRole('button');
+    const elementButtonControl = await canvas.findByRole("button");
 
     await expect(elementButtonControl).toBeVisible();
 
-    await step('simulation click accordion', async () => {
+    await step("simulation click accordion", async () => {
       await userEvent.click(elementButtonControl);
-      const elementAccordionContent = await canvas.findByTestId('description');
+      const elementAccordionContent = await canvas.findByTestId("description");
 
       await expect(elementAccordionContent).toBeVisible();
     });

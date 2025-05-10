@@ -6,23 +6,14 @@ import {
 } from '@nestjs/graphql'
 import { OrderType as PrismaOrderType } from '@prisma/client'
 
-import { LotCurrent } from '~/lot/lot.dto'
+import { LotCurrent, TaxGain } from '~/lot/lot.dto'
 import { HarvestType, OrderType } from '../generated/graphql'
-
-export enum TaxGain {
-  LONG = 'LONG',
-  SHORT = 'SHORT',
-}
 
 export enum SetUpStatus {
   NO_ACCOUNTS = 'NO_ACCOUNTS',
   ACCOUNT_SETUP_REQUIRED = 'ACCOUNT_SETUP_REQUIRED',
   COMPLETE = 'COMPLETE',
 }
-
-registerEnumType(TaxGain, {
-  name: 'TaxGain',
-})
 
 registerEnumType(SetUpStatus, {
   name: 'SetUpStatus',
@@ -176,15 +167,27 @@ export class HarvestResult {
 }
 
 @ObjectType()
+export class UnrealizedHarvestMatchResult {
+  @Field(() => LotCurrent)
+  sourceLot: LotCurrent
+
+  @Field(() => [HarvestLotOrder])
+  matchedLotOrders: HarvestLotOrder[]
+}
+
+@ObjectType()
 export class FiniteHarvestResult {
   @Field(() => PortfolioSummary)
   summary: PortfolioSummary
 
-  @Field(() => [LotCurrent])
-  lotsCurrent: LotCurrent[]
-
   @Field(() => HarvestType)
   harvestType: HarvestType
+
+  @Field(() => [LotCurrent], { nullable: true })
+  lotsCurrent?: LotCurrent[]
+
+  @Field(() => [UnrealizedHarvestMatchResult], { nullable: true })
+  unrealizedHarvestMatchResults?: UnrealizedHarvestMatchResult[]
 }
 
 @InputType()

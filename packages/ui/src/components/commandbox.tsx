@@ -1,7 +1,7 @@
-'use client';
-import type { LucideIcon } from 'lucide-react';
-import { CheckIcon } from '@radix-ui/react-icons';
-import { Button } from '@repo/ui/components/button';
+"use client";
+import type { LucideIcon } from "lucide-react";
+import { CheckIcon } from "@radix-ui/react-icons";
+import { Button } from "@repo/ui/components/button";
 
 import {
   Command,
@@ -9,18 +9,18 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@repo/ui/components/command';
+} from "@repo/ui/components/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover';
+} from "@repo/ui/components/popover";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { useHotkeys } from '../hooks/use-hot-keys';
-import { cn } from '../utils';
-import { Label } from './label';
+import { useHotkeys } from "../hooks/use-hot-keys";
+import { cn } from "../utils";
+import { Label } from "./label";
 
 type CommandOption = {
   value: string;
@@ -40,23 +40,24 @@ export type CommandBoxProps = {
 
 export function CommandBox({
   commandOptions,
-  commandKey = 'P',
+  commandKey = "P",
   label,
-  placeholder = 'Select...',
+  placeholder = "Select...",
   filter,
   defaultValue,
   onChange,
 }: CommandBoxProps) {
   const [openPopover, setOpenPopover] = React.useState(false);
 
-  const [selectedCommand, setSelectedCommand]
-    = React.useState<CommandOption | null>(
+  const [selectedCommand, setSelectedCommand] =
+    React.useState<CommandOption | null>(
       defaultValue
-        ? (commandOptions.find(option => option.value === defaultValue) ?? null)
+        ? (commandOptions.find((option) => option.value === defaultValue) ??
+            null)
         : null,
     );
 
-  const [searchValue, setSearchValue] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState("");
 
   const isSearching = searchValue.length > 0;
 
@@ -73,7 +74,7 @@ export function CommandBox({
     setSelectedCommand(command);
     onChange?.(command?.value ?? null);
     setOpenPopover(false);
-    setSearchValue('');
+    setSearchValue("");
   };
 
   return (
@@ -87,19 +88,17 @@ export function CommandBox({
             size="sm"
             className="flex w-full justify-between text-[0.8125rem]"
           >
-            {selectedCommand
-              ? (
-                  <div className="flex items-center space-x-2 text-current">
-                    <selectedCommand.icon
-                      className={cn('mr-2 size-4')}
-                      aria-hidden="true"
-                    />
-                    {selectedCommand.label}
-                  </div>
-                )
-              : (
-                  <span>{placeholder}</span>
-                )}
+            {selectedCommand ? (
+              <div className="flex items-center space-x-2 text-current">
+                <selectedCommand.icon
+                  className={cn("mr-2 size-4")}
+                  aria-hidden="true"
+                />
+                {selectedCommand.label}
+              </div>
+            ) : (
+              <span>{placeholder}</span>
+            )}
             <Kbd commandKey={commandKey} />
           </Button>
         </div>
@@ -135,7 +134,7 @@ export function CommandBox({
                   value={option.value}
                   onSelect={(value) => {
                     handleSelectedCommand(
-                      commandOptions.find(p => p.value === value) ?? null,
+                      commandOptions.find((p) => p.value === value) ?? null,
                     );
                   }}
                   className="group flex w-full items-center justify-between rounded-lg text-[0.8125rem] leading-normal"

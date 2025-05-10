@@ -37,167 +37,176 @@ async function main() {
   await seed.$resetDatabase()
   await runSqlFile('prisma/seed/insert-assets.sql')
 
-  const { User, Portfolio } = await seed.User(() => [{
-    email: 'zach@seed.com',
-    id: mainUserId,
-    name: '(seed) Zachary Hansen',
-    AuthConnection: () => [
-      {
-        source: 'LOCAL',
-        type: 'OAUTH_1',
-        externalId: context => copycat.uuid(context.seed),
-        Portfolio: {
-          name: 'Roth Example',
-          id: context => copycat.uuid(context.seed),
-          // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
-          UsersOnPortfolios: () => [
-            {
-              role: 'ADMIN',
-              userId: mainUserId,
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-            },
-          ],
-          Account: () => [
-            {
-              type: 'investment',
-              name: 'Etrade Example',
-              provider: 'ETRADE',
-              subType: 'investment',
-              institution: AccountInstitution.BROKERAGE,
-              createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-              Lot: () => exampleLots,
-              skipSetup: taxAdvantadedSubTypes.has('investment'),
-            },
-            {
-              type: 'investment',
-              name: 'Etrade Example Roth',
-              provider: 'ETRADE',
-              subType: 'roth',
-              institution: AccountInstitution.BROKERAGE,
-              createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-              Lot: () => exampleLots,
-              skipSetup: taxAdvantadedSubTypes.has('roth'),
-            },
-          ],
+  const { User, Portfolio } = await seed.User(() => [
+    {
+      email: 'zach@seed.com',
+      id: mainUserId,
+      name: '(seed) Zachary Hansen',
+      AuthConnection: () => [
+        {
+          source: 'LOCAL',
+          type: 'OAUTH_1',
+          externalId: context => copycat.uuid(context.seed),
+          Portfolio: {
+            name: 'Roth Example',
+            id: context => copycat.uuid(context.seed),
+            // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
+            UsersOnPortfolios: () => [
+              {
+                role: 'ADMIN',
+                userId: mainUserId,
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+              },
+            ],
+            Account: () => [
+              {
+                type: 'investment',
+                name: 'Etrade Example',
+                provider: 'ETRADE',
+                subType: 'investment',
+                institution: AccountInstitution.BROKERAGE,
+                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                Lot: () => exampleLots,
+                skipSetup: taxAdvantadedSubTypes.has('investment'),
+              },
+              {
+                type: 'investment',
+                name: 'Etrade Example Roth',
+                provider: 'ETRADE',
+                subType: 'roth',
+                institution: AccountInstitution.BROKERAGE,
+                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                Lot: () => exampleLots,
+                skipSetup: taxAdvantadedSubTypes.has('roth'),
+              },
+            ],
+          },
         },
-      },
-      {
-        source: 'LOCAL',
-        type: 'OAUTH_1',
-        externalId: context => copycat.uuid(context.seed),
-        Portfolio: {
-          name: 'Realized Loss Example',
-          id: context => copycat.uuid(context.seed),
-          // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
-          UsersOnPortfolios: () => [
-            {
-              role: 'ADMIN',
-              userId: mainUserId,
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-            },
-          ],
-          Account: () => [
-            {
-              type: 'investment',
-              name: 'Etrade Example',
-              provider: 'ETRADE',
-              subType: 'investment',
-              institution: AccountInstitution.BROKERAGE,
-              createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-              Lot: () => exampleLots,
-              skipSetup: true,
-              RealizedPAndL: () => [{
-                shortTerm: '-3000',
-                year: new Date().getFullYear(),
-              }],
-            },
-          ],
+        {
+          source: 'LOCAL',
+          type: 'OAUTH_1',
+          externalId: context => copycat.uuid(context.seed),
+          Portfolio: {
+            name: 'Realized Loss Example',
+            id: context => copycat.uuid(context.seed),
+            // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
+            UsersOnPortfolios: () => [
+              {
+                role: 'ADMIN',
+                userId: mainUserId,
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+              },
+            ],
+            Account: () => [
+              {
+                type: 'investment',
+                name: 'Etrade Example',
+                provider: 'ETRADE',
+                subType: 'investment',
+                institution: AccountInstitution.BROKERAGE,
+                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                Lot: () => exampleLots,
+                skipSetup: true,
+                RealizedPAndL: () => [
+                  {
+                    shortTerm: '-3000',
+                    year: new Date().getFullYear(),
+                  },
+                ],
+              },
+            ],
+          },
         },
-      },
-      {
-        source: 'LOCAL',
-        type: 'OAUTH_1',
-        externalId: context => copycat.uuid(context.seed),
-        Portfolio: {
-          name: 'Realized Gain Example',
-          id: context => copycat.uuid(context.seed),
-          // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
-          UsersOnPortfolios: () => [
-            {
-              role: 'ADMIN',
-              userId: mainUserId,
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-            },
-          ],
-          Account: () => [
-            {
-              type: 'investment',
-              name: 'Etrade Example',
-              provider: 'ETRADE',
-              subType: 'investment',
-              institution: AccountInstitution.BROKERAGE,
-              createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-              Lot: () => exampleLots,
-              skipSetup: true,
-              RealizedPAndL: () => [{
-                shortTerm: '10000',
-                year: new Date().getFullYear(),
-              }],
-            },
-          ],
+        {
+          source: 'LOCAL',
+          type: 'OAUTH_1',
+          externalId: context => copycat.uuid(context.seed),
+          Portfolio: {
+            name: 'Realized Gain Example',
+            id: context => copycat.uuid(context.seed),
+            // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
+            UsersOnPortfolios: () => [
+              {
+                role: 'ADMIN',
+                userId: mainUserId,
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+              },
+            ],
+            Account: () => [
+              {
+                type: 'investment',
+                name: 'Etrade Example',
+                provider: 'ETRADE',
+                subType: 'investment',
+                institution: AccountInstitution.BROKERAGE,
+                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                Lot: () => exampleLots,
+                skipSetup: true,
+                RealizedPAndL: () => [
+                  {
+                    shortTerm: '10000',
+                    year: new Date().getFullYear(),
+                  },
+                ],
+              },
+            ],
+          },
         },
-      },
-      {
-        source: 'LOCAL',
-        type: 'OAUTH_1',
-        externalId: context => copycat.uuid(context.seed),
-        Portfolio: {
-          name: 'Neutral Example',
-          id: context => copycat.uuid(context.seed),
-          // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
-          UsersOnPortfolios: () => [
-            {
-              role: 'ADMIN',
-              userId: mainUserId,
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-            },
-          ],
-          Account: () => [
-            {
-              type: 'investment',
-              name: 'Etrade Example',
-              provider: 'ETRADE',
-              subType: 'investment',
-              institution: AccountInstitution.BROKERAGE,
-              createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-              // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
-              Lot: () => exampleLots,
-              skipSetup: true,
-              RealizedPAndL: () => [{
-                shortTerm: '300',
-                year: new Date().getFullYear(),
-              }],
-            },
-          ],
+        {
+          source: 'LOCAL',
+          type: 'OAUTH_1',
+          externalId: context => copycat.uuid(context.seed),
+          Portfolio: {
+            name: 'Neutral Example',
+            id: context => copycat.uuid(context.seed),
+            // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
+            UsersOnPortfolios: () => [
+              {
+                role: 'ADMIN',
+                userId: mainUserId,
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+              },
+            ],
+            Account: () => [
+              {
+                type: 'investment',
+                name: 'Etrade Example',
+                provider: 'ETRADE',
+                subType: 'investment',
+                institution: AccountInstitution.BROKERAGE,
+                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                Lot: () => exampleLots,
+                skipSetup: true,
+                RealizedPAndL: () => [
+                  {
+                    shortTerm: '300',
+                    year: new Date().getFullYear(),
+                  },
+                ],
+              },
+            ],
+          },
         },
-      },
-    ],
-  }, {
-    email: 'troy@seed.com',
-    id: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
-    name: '(seed) Troy Bolus',
-    AuthConnection: () => [
-      {
-        source: 'LOCAL',
-        type: 'OAUTH_1',
-        externalId: crypto.randomUUID(),
-      },
-    ],
-  }])
+      ],
+    },
+    {
+      email: 'troy@seed.com',
+      id: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
+      name: '(seed) Troy Bolus',
+      AuthConnection: () => [
+        {
+          source: 'LOCAL',
+          type: 'OAUTH_1',
+          externalId: crypto.randomUUID(),
+        },
+      ],
+    },
+  ])
 
   const usersToAddToPortfolios = User.filter(user => user.id !== mainUserId)
 

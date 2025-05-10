@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import { PasswordInput } from './password-input';
+import { PasswordInput } from "./password-input";
 
 const meta = {
-  title: 'Atoms/Password Input',
+  title: "Atoms/Password Input",
   component: PasswordInput,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   args: {
     disabled: false,

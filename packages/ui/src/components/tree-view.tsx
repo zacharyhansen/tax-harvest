@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import type { LucideIcon } from 'lucide-react';
-import type { ReactNode } from 'react';
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { cva } from 'class-variance-authority';
-import { ChevronRight } from 'lucide-react';
-import React from 'react';
+import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { cva } from "class-variance-authority";
+import { ChevronRight } from "lucide-react";
+import React from "react";
 
-import { cn } from '../utils';
+import { cn } from "../utils";
 
 const treeVariants = cva(
-  'group px-2 before:absolute before:left-0 before:-z-10 before:h-8 before:w-full before:rounded-lg before:bg-accent/70 before:opacity-0 hover:before:opacity-100',
+  "group px-2 before:absolute before:left-0 before:-z-10 before:h-8 before:w-full before:rounded-lg before:bg-accent/70 before:opacity-0 hover:before:opacity-100",
 );
 
 const selectedTreeVariants = cva(
-  'text-accent-foreground before:bg-accent/70 before:opacity-100',
+  "text-accent-foreground before:bg-accent/70 before:opacity-100",
 );
 
 type TreeDataItem = {
@@ -51,11 +51,20 @@ type TreeViewProps = React.HTMLAttributes<HTMLDivElement> & {
   leafClassName?: string;
 };
 
-const TreeView = (
-  { ref, data, initialSelectedItemId, onSelectChange, expandAll, defaultLeafIcon, defaultNodeIcon, className, hideActionsTillHover = false, ...props }: TreeViewProps & { ref?: React.RefObject<HTMLDivElement | null> },
-) => {
+const TreeView = ({
+  ref,
+  data,
+  initialSelectedItemId,
+  onSelectChange,
+  expandAll,
+  defaultLeafIcon,
+  defaultNodeIcon,
+  className,
+  hideActionsTillHover = false,
+  ...props
+}: TreeViewProps & { ref?: React.RefObject<HTMLDivElement | null> }) => {
   const [selectedItemId, setSelectedItemId] = React.useState<
-      string | undefined
+    string | undefined
   >(initialSelectedItemId);
 
   const handleSelectChange = React.useCallback(
@@ -101,7 +110,7 @@ const TreeView = (
   }, [data, expandAll, initialSelectedItemId]);
 
   return (
-    <div className={cn('relative overflow-hidden p-2', className)}>
+    <div className={cn("relative overflow-hidden p-2", className)}>
       {/* eslint-disable-next-line ts/no-use-before-define */}
       <TreeItem
         data={data}
@@ -117,7 +126,7 @@ const TreeView = (
     </div>
   );
 };
-TreeView.displayName = 'TreeView';
+TreeView.displayName = "TreeView";
 
 type TreeItemProps = TreeViewProps & {
   selectedItemId?: string;
@@ -132,48 +141,57 @@ type TreeItemProps = TreeViewProps & {
   hideActionsTillHover: boolean;
 };
 
-const TreeItem = (
-  { ref, className, data, selectedItemId, handleSelectChange, expandedItemIds, defaultNodeIcon, defaultLeafIcon, hideActionsTillHover, nodeClassName, leafClassName, ...props }: TreeItemProps & { ref?: React.RefObject<HTMLDivElement | null> },
-) => {
+const TreeItem = ({
+  ref,
+  className,
+  data,
+  selectedItemId,
+  handleSelectChange,
+  expandedItemIds,
+  defaultNodeIcon,
+  defaultLeafIcon,
+  hideActionsTillHover,
+  nodeClassName,
+  leafClassName,
+  ...props
+}: TreeItemProps & { ref?: React.RefObject<HTMLDivElement | null> }) => {
   if (!Array.isArray(data)) {
     data = [data];
   }
   return (
     <div ref={ref} role="tree" className={className} {...props}>
       <ul>
-        {data.map(item => (
+        {data.map((item) => (
           <li key={item.id}>
-            {item.children
-              ? (
-                  <TreeNode
-                    item={item}
-                    selectedItemId={selectedItemId}
-                    expandedItemIds={expandedItemIds}
-                    handleSelectChange={handleSelectChange}
-                    defaultNodeIcon={defaultNodeIcon}
-                    defaultLeafIcon={defaultLeafIcon}
-                    nodeClassName={nodeClassName}
-                    leafClassName={leafClassName}
-                  />
-                )
-              : (
-            //  eslint-disable-next-line ts/no-use-before-define
-                  <TreeLeaf
-                    item={item}
-                    selectedItemId={selectedItemId}
-                    handleSelectChange={handleSelectChange}
-                    defaultLeafIcon={defaultLeafIcon}
-                    hideActionsTillHover={hideActionsTillHover}
-                    leafClassName={leafClassName}
-                  />
-                )}
+            {item.children ? (
+              <TreeNode
+                item={item}
+                selectedItemId={selectedItemId}
+                expandedItemIds={expandedItemIds}
+                handleSelectChange={handleSelectChange}
+                defaultNodeIcon={defaultNodeIcon}
+                defaultLeafIcon={defaultLeafIcon}
+                nodeClassName={nodeClassName}
+                leafClassName={leafClassName}
+              />
+            ) : (
+              //  eslint-disable-next-line ts/no-use-before-define
+              <TreeLeaf
+                item={item}
+                selectedItemId={selectedItemId}
+                handleSelectChange={handleSelectChange}
+                defaultLeafIcon={defaultLeafIcon}
+                hideActionsTillHover={hideActionsTillHover}
+                leafClassName={leafClassName}
+              />
+            )}
           </li>
         ))}
       </ul>
     </div>
   );
 };
-TreeItem.displayName = 'TreeItem';
+TreeItem.displayName = "TreeItem";
 
 function TreeNode({
   item,
@@ -256,23 +274,31 @@ function TreeNode({
   );
 }
 
-const TreeLeaf = (
-  { ref, className, item, selectedItemId, handleSelectChange, defaultLeafIcon, hideActionsTillHover, leafClassName, ...props }: React.HTMLAttributes<HTMLDivElement> & {
-    item: TreeDataItem;
-    selectedItemId?: string;
-    handleSelectChange: (item: TreeDataItem | undefined) => void;
-    // eslint-disable-next-line ts/no-explicit-any
-    defaultLeafIcon?: any;
-    hideActionsTillHover: boolean;
-    leafClassName?: string;
-  } & { ref?: React.RefObject<HTMLDivElement | null> },
-) => {
+const TreeLeaf = ({
+  ref,
+  className,
+  item,
+  selectedItemId,
+  handleSelectChange,
+  defaultLeafIcon,
+  hideActionsTillHover,
+  leafClassName,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  item: TreeDataItem;
+  selectedItemId?: string;
+  handleSelectChange: (item: TreeDataItem | undefined) => void;
+  // eslint-disable-next-line ts/no-explicit-any
+  defaultLeafIcon?: any;
+  hideActionsTillHover: boolean;
+  leafClassName?: string;
+} & { ref?: React.RefObject<HTMLDivElement | null> }) => {
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       ref={ref}
       className={cn(
-        'ml-5 flex cursor-pointer items-center py-2 text-left before:right-1',
+        "ml-5 flex cursor-pointer items-center py-2 text-left before:right-1",
         treeVariants(),
         className,
         selectedItemId === item.id && selectedTreeVariants(),
@@ -299,14 +325,23 @@ const TreeLeaf = (
     </div>
   );
 };
-TreeLeaf.displayName = 'TreeLeaf';
+TreeLeaf.displayName = "TreeLeaf";
 
-const AccordionTrigger = ({ ref, className, children, ...props }: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & { ref?: React.RefObject<React.ElementRef<typeof AccordionPrimitive.Trigger> | null> }) => (
+const AccordionTrigger = ({
+  ref,
+  className,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & {
+  ref?: React.RefObject<React.ElementRef<
+    typeof AccordionPrimitive.Trigger
+  > | null>;
+}) => (
   <AccordionPrimitive.Header>
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'flex w-full flex-1 items-center py-2 transition-all first:[&[data-state=open]>svg]:rotate-90',
+        "flex w-full flex-1 items-center py-2 transition-all first:[&[data-state=open]>svg]:rotate-90",
         className,
       )}
       {...props}
@@ -318,11 +353,20 @@ const AccordionTrigger = ({ ref, className, children, ...props }: React.Componen
 );
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
-const AccordionContent = ({ ref, className, children, ...props }: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> & { ref?: React.RefObject<React.ElementRef<typeof AccordionPrimitive.Content> | null> }) => (
+const AccordionContent = ({
+  ref,
+  className,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> & {
+  ref?: React.RefObject<React.ElementRef<
+    typeof AccordionPrimitive.Content
+  > | null>;
+}) => (
   <AccordionPrimitive.Content
     ref={ref}
     className={cn(
-      'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm transition-all',
+      "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm transition-all",
       className,
     )}
     {...props}
@@ -367,8 +411,8 @@ function TreeActions({
   return (
     <div
       className={cn(
-        isSelected || !hideActionsTillHover ? 'block' : 'hidden',
-        'absolute right-3 group-hover:block',
+        isSelected || !hideActionsTillHover ? "block" : "hidden",
+        "absolute right-3 group-hover:block",
       )}
     >
       {children}

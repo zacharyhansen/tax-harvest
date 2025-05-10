@@ -1,22 +1,22 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
-import { Button } from '@repo/ui/components/button';
+import type { Meta, StoryObj } from "@storybook/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DragHandleDots2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { Button } from "@repo/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card';
+} from "@repo/ui/components/card";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-} from '@repo/ui/components/form';
+} from "@repo/ui/components/form";
 
-import { Input } from '@repo/ui/components/input';
+import { Input } from "@repo/ui/components/input";
 
 import {
   ResponsiveDialog,
@@ -25,11 +25,11 @@ import {
   ResponsiveDialogContent,
   ResponsiveDialogFooter,
   ResponsiveDialogTrigger,
-} from '@repo/ui/components/reponsive-dialog';
-import { useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Sortable, SortableDragHandle, SortableItem } from './sortable';
+} from "@repo/ui/components/reponsive-dialog";
+import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
+import { Sortable, SortableDragHandle, SortableItem } from "./sortable";
 
 const schema = z.object({
   flipTricks: z.array(
@@ -48,12 +48,12 @@ function SortableForm() {
     defaultValues: {
       flipTricks: [
         {
-          spin: '360',
-          name: 'Kickflip',
+          spin: "360",
+          name: "Kickflip",
         },
         {
-          spin: '180',
-          name: 'Heelflip',
+          spin: "180",
+          name: "Heelflip",
         },
       ],
     },
@@ -65,7 +65,7 @@ function SortableForm() {
 
   const { fields, append, move, remove } = useFieldArray({
     control: form.control,
-    name: 'flipTricks',
+    name: "flipTricks",
   });
 
   return (
@@ -84,7 +84,7 @@ function SortableForm() {
             size="sm"
             className="w-fit"
             onClick={() => {
-              append({ name: '', spin: '' });
+              append({ name: "", spin: "" });
             }}
           >
             Add trick
@@ -102,14 +102,14 @@ function SortableForm() {
               onMove={({ activeIndex, overIndex }) => {
                 move(activeIndex, overIndex);
               }}
-              overlay={(
+              overlay={
                 <div className="grid grid-cols-[0.5fr,1fr,auto,auto] items-center gap-2">
                   <div className="h-8 w-full rounded-sm bg-primary/10" />
                   <div className="h-8 w-full rounded-sm bg-primary/10" />
                   <div className="size-8 shrink-0 rounded-sm bg-primary/10" />
                   <div className="size-8 shrink-0 rounded-sm bg-primary/10" />
                 </div>
-              )}
+              }
             >
               <div className="flex w-full flex-col gap-2">
                 {fields.map((field, index) => (
@@ -180,11 +180,11 @@ function SortableForm() {
 }
 
 const meta = {
-  title: 'Atoms/Sortable',
+  title: "Atoms/Sortable",
   component: Sortable,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   args: { value: [] },
   render: SortableForm,

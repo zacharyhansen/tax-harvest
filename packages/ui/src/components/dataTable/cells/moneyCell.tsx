@@ -1,6 +1,6 @@
-import type { CellContext } from '@tanstack/react-table';
+import type { CellContext } from "@tanstack/react-table";
 
-import { cn } from '@repo/ui/utils/cn';
+import { cn } from "@repo/ui/utils/cn";
 
 export default function MoneyCell<TData, TValue>({
   colored = true,
@@ -16,17 +16,17 @@ export default function MoneyCell<TData, TValue>({
 
   const cellValue = Number(value ?? getValue());
 
-  const formatted = new Intl.NumberFormat('en-US', {
-    currency: 'USD',
-    style: 'currency',
+  const formatted = new Intl.NumberFormat("en-US", {
+    currency: "USD",
+    style: "currency",
     maximumFractionDigits: 2,
   }).format(cellValue);
 
   return (
     <div
       className={cn({
-        'text-green-600': colored && cellValue > 0,
-        'text-red-600': colored && cellValue < 0,
+        "text-green-600": colored && cellValue > 0,
+        "text-red-600": colored && cellValue < 0,
       })}
     >
       {formatted}

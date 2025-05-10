@@ -1,29 +1,29 @@
-import type { NumberNodeAttributes } from '../form/types';
-import { Input } from '@repo/ui/components/input';
+import type { NumberNodeAttributes } from "../form/types";
+import { Input } from "@repo/ui/components/input";
 
-import InputField from '@repo/ui/form-builder/fields/input.field';
-import { mergeAttributes, Node } from '@tiptap/core';
+import InputField from "@repo/ui/form-builder/fields/input.field";
+import { mergeAttributes, Node } from "@tiptap/core";
 
-import { ReactNodeViewRenderer } from '@tiptap/react';
-import { generateRandomFieldName } from '../../utils';
-import { FormNode } from '../form/types';
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import { generateRandomFieldName } from "../../utils";
+import { FormNode } from "../form/types";
 
-import { useFormKeyDown } from './hooks/use-form-key-down';
-import { InputWrapper } from './input.wrapper';
+import { useFormKeyDown } from "./hooks/use-form-key-down";
+import { InputWrapper } from "./input.wrapper";
 
 export const FormNumberNode = Node.create<NumberNodeAttributes>({
   name: FormNode.Number, // Unique name for your node
-  group: 'block', // Allow it to act like a block element
+  group: "block", // Allow it to act like a block element
   atom: true, // Treat as a single unit (atomic)
 
   addAttributes() {
     return {
-      name: { default: generateRandomFieldName('field', 10) },
-      label: { default: '' },
-      defaultValue: { default: '' },
-      placeholder: { default: '' },
+      name: { default: generateRandomFieldName("field", 10) },
+      label: { default: "" },
+      defaultValue: { default: "" },
+      placeholder: { default: "" },
       required: { default: true },
-      description: { default: '' },
+      description: { default: "" },
       nameLocked: { default: false },
     };
   },
@@ -31,13 +31,13 @@ export const FormNumberNode = Node.create<NumberNodeAttributes>({
   parseHTML() {
     return [
       {
-        tag: 'form-number-node',
+        tag: "form-number-node",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['form-number-node', mergeAttributes(HTMLAttributes)];
+    return ["form-number-node", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {

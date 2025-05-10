@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Eraser } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Eraser } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { Button } from './button';
+import { Button } from "./button";
 
 type SignatureInputProps = {
   canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -15,14 +15,14 @@ function preventScroll(event: TouchEvent) {
 }
 
 function disableTouchScroll(canvas: HTMLCanvasElement) {
-  canvas.addEventListener('touchstart', preventScroll, { passive: false });
-  canvas.addEventListener('touchmove', preventScroll, { passive: false });
-  canvas.addEventListener('touchend', preventScroll, { passive: false });
+  canvas.addEventListener("touchstart", preventScroll, { passive: false });
+  canvas.addEventListener("touchmove", preventScroll, { passive: false });
+  canvas.addEventListener("touchend", preventScroll, { passive: false });
 
   return () => {
-    canvas.removeEventListener('touchstart', preventScroll);
-    canvas.removeEventListener('touchmove', preventScroll);
-    canvas.removeEventListener('touchend', preventScroll);
+    canvas.removeEventListener("touchstart", preventScroll);
+    canvas.removeEventListener("touchmove", preventScroll);
+    canvas.removeEventListener("touchend", preventScroll);
   };
 }
 
@@ -41,7 +41,7 @@ export function SignatureInput({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
-      const context = canvas.getContext('2d');
+      const context = canvas.getContext("2d");
       if (context) {
         const width = 440;
         const height = 220;
@@ -54,8 +54,8 @@ export function SignatureInput({
         context.scale(SCALE, SCALE);
 
         context.lineWidth = 2;
-        context.lineCap = 'round';
-        context.strokeStyle = 'black';
+        context.lineCap = "round";
+        context.strokeStyle = "black";
       }
       // removing scroll behavior on touch screens, while drawing
       return disableTouchScroll(canvas);
@@ -77,7 +77,7 @@ export function SignatureInput({
     setIsDrawing(false);
     setLastPosition(null);
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     if (canvas && context) {
       context.beginPath();
       const dataUrl = canvas.toDataURL();
@@ -96,15 +96,15 @@ export function SignatureInput({
     }
 
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     if (canvas && context) {
       const rect = canvas.getBoundingClientRect();
-      const x
-        = ('touches' in event
+      const x =
+        ("touches" in event
           ? (event.touches[0]?.clientX ?? 0)
           : event.clientX) - rect.left;
-      const y
-        = ('touches' in event
+      const y =
+        ("touches" in event
           ? (event.touches[0]?.clientY ?? 0)
           : event.clientY) - rect.top;
 
@@ -128,7 +128,7 @@ export function SignatureInput({
 
   const clearSignature = () => {
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     if (canvas && context) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       onSignatureChange(null); // Clear signature in the form as well

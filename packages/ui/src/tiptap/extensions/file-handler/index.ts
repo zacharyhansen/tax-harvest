@@ -1,9 +1,9 @@
-import type { Editor } from '@tiptap/react';
-import type { FileError, FileValidationOptions } from '../../utils';
+import type { Editor } from "@tiptap/react";
+import type { FileError, FileValidationOptions } from "../../utils";
 
-import { Plugin, PluginKey } from '@tiptap/pm/state';
-import { Extension } from '@tiptap/react';
-import { filterFiles } from '../../utils';
+import { Plugin, PluginKey } from "@tiptap/pm/state";
+import { Extension } from "@tiptap/react";
+import { filterFiles } from "../../utils";
 
 type FileHandlePluginOptions = {
   key?: PluginKey;
@@ -25,7 +25,7 @@ function FileHandlePlugin(options: FileHandlePluginOptions) {
   } = options;
 
   return new Plugin({
-    key: key ?? new PluginKey('fileHandler'),
+    key: key ?? new PluginKey("fileHandler"),
 
     props: {
       handleDrop(view, event) {
@@ -79,7 +79,7 @@ function FileHandlePlugin(options: FileHandlePluginOptions) {
             allowBase64: options.allowBase64,
           },
         );
-        const html = clipboardData.getData('text/html');
+        const html = clipboardData.getData("text/html");
 
         if (errors.length > 0 && onValidationError) {
           onValidationError(errors);
@@ -94,9 +94,9 @@ function FileHandlePlugin(options: FileHandlePluginOptions) {
 }
 
 export const FileHandler = Extension.create<
-  Omit<FileHandlePluginOptions, 'key' | 'editor'>
+  Omit<FileHandlePluginOptions, "key" | "editor">
 >({
-  name: 'fileHandler',
+  name: "fileHandler",
 
   addOptions() {
     return {

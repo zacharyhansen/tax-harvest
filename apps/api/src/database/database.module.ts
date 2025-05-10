@@ -47,8 +47,6 @@ import { Database } from './database'
       },
     },
   ],
-  imports: [
-    ConfigModule,
-  ],
+  imports: [ConfigModule],
 })
 export class DatabaseModule {}

@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import type { Table } from '@tanstack/react-table';
-import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import type { Table } from "@tanstack/react-table";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 
-import { Button } from '../button';
+import { Button } from "../button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from '../dropdown-menu';
+} from "../dropdown-menu";
 
 type DataTableViewOptionsProps<TData> = {
   table: Table<TData>;
@@ -38,8 +38,8 @@ export function DataTableViewOptions<TData>({
         {table
           .getAllColumns()
           .filter(
-            column =>
-              typeof column.accessorFn !== 'undefined' && column.getCanHide(),
+            (column) =>
+              typeof column.accessorFn !== "undefined" && column.getCanHide(),
           )
           .map((column) => {
             return (
@@ -47,9 +47,9 @@ export function DataTableViewOptions<TData>({
                 key={column.id}
                 className="capitalize"
                 checked={column.getIsVisible()}
-                onCheckedChange={value => column.toggleVisibility(!!value)}
+                onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {typeof column.columnDef.header === 'string'
+                {typeof column.columnDef.header === "string"
                   ? column.columnDef.header
                   : column.id}
               </DropdownMenuCheckboxItem>

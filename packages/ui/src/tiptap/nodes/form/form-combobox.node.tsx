@@ -1,29 +1,29 @@
-import type { ComboboxNodeAttributes } from './types';
-import { Input } from '@repo/ui/components/input';
+import type { ComboboxNodeAttributes } from "./types";
+import { Input } from "@repo/ui/components/input";
 
-import ComboboxField from '@repo/ui/form-builder/fields/combobox.field';
+import ComboboxField from "@repo/ui/form-builder/fields/combobox.field";
 
-import { mergeAttributes, Node } from '@tiptap/core';
-import { ReactNodeViewRenderer } from '@tiptap/react';
-import { generateRandomFieldName } from '../../utils';
+import { mergeAttributes, Node } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import { generateRandomFieldName } from "../../utils";
 
-import { useFormKeyDown } from './hooks/use-form-key-down';
-import { InputWrapper } from './input.wrapper';
-import { FormNode } from './types';
+import { useFormKeyDown } from "./hooks/use-form-key-down";
+import { InputWrapper } from "./input.wrapper";
+import { FormNode } from "./types";
 
 export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
   name: FormNode.Combobox, // Unique name for your node
-  group: 'block', // Allow it to act like a block element
+  group: "block", // Allow it to act like a block element
   atom: true, // Treat as a single unit (atomic)
 
   addAttributes() {
     return {
-      name: { default: generateRandomFieldName('field', 10) },
-      label: { default: '' },
-      defaultValue: { default: '' },
-      placeholder: { default: '' },
+      name: { default: generateRandomFieldName("field", 10) },
+      label: { default: "" },
+      defaultValue: { default: "" },
+      placeholder: { default: "" },
       required: { default: true },
-      description: { default: '' },
+      description: { default: "" },
       nameLocked: { default: false },
       options: {
         default: [],
@@ -32,7 +32,7 @@ export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
           try {
             return json ? JSON.parse(json) : [];
           } catch (error) {
-            console.error('Failed to parse options JSON:', error);
+            console.error("Failed to parse options JSON:", error);
             return [];
           }
         },
@@ -41,7 +41,7 @@ export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
             return {};
           }
           return {
-            'data-options': JSON.stringify(attributes.options),
+            "data-options": JSON.stringify(attributes.options),
           };
         },
       },
@@ -51,13 +51,13 @@ export const FormComboboxNode = Node.create<ComboboxNodeAttributes>({
   parseHTML() {
     return [
       {
-        tag: 'form-combobox-node',
+        tag: "form-combobox-node",
       },
     ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['form-combobox-node', mergeAttributes(HTMLAttributes)];
+    return ["form-combobox-node", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {

@@ -1,9 +1,10 @@
-import antfu from '@antfu/eslint-config'
+import antfu from "@antfu/eslint-config";
 
-export default antfu({
-
-}, {
-  rules: {
-    'node/prefer-global/process': ['error', 'always'],
+export default antfu(
+  {},
+  {
+    rules: {
+      "node/prefer-global/process": ["error", "always"],
+    },
   },
-})
+);

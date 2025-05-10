@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import FormDialog from '@repo/ui/components/form-dialog';
-import InputField from '@repo/ui/form-builder/fields/input.field';
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
-import { z } from 'zod';
+import type { ReactNode } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import FormDialog from '@repo/ui/components/form-dialog'
+import InputField from '@repo/ui/form-builder/fields/input.field'
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form'
+import { z } from 'zod'
 
 // import {
 //   AccountInstitution,
@@ -17,13 +17,13 @@ import { z } from 'zod';
 // import { usePortfolio } from "../portfolio/providers/PortfolioProvider";
 
 type CreateAccountDialogProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 const formSchema = z.object({
   name: z.string().min(1),
   type: z.string(),
-});
+})
 
 export default function CreateAccountDialog({
   children,
@@ -74,7 +74,7 @@ export default function CreateAccountDialog({
       //   }
       // );
     },
-  });
+  })
   return (
     <FormDialog
       form={form}
@@ -90,5 +90,5 @@ export default function CreateAccountDialog({
         placeholder="My Account Type"
       />
     </FormDialog>
-  );
+  )
 }

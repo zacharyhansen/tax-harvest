@@ -4414,8 +4414,9 @@ export type FileWhereUniqueInput = {
 export type FiniteHarvestResult = {
   __typename?: 'FiniteHarvestResult';
   harvestType: HarvestType;
-  lotsCurrent: Array<LotCurrent>;
+  lotsCurrent?: Maybe<Array<LotCurrent>>;
   summary: PortfolioSummary;
+  unrealizedHarvestMatchResults?: Maybe<Array<UnrealizedHarvestMatchResult>>;
 };
 
 export type GcpUploadFile = {
@@ -11780,6 +11781,12 @@ export type TransactionWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type UnrealizedHarvestMatchResult = {
+  __typename?: 'UnrealizedHarvestMatchResult';
+  matchedLotOrders: Array<HarvestLotOrder>;
+  sourceLot: LotCurrent;
+};
+
 export type User = {
   __typename?: 'User';
   Account?: Maybe<Array<Account>>;
@@ -13038,10 +13045,14 @@ export type StripeSessionQuery = { __typename?: 'Query', stripeSession: { __type
 
 export type FiniteHarvestLotItemFragment = { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain };
 
+export type MatchedLotOrderItemFragment = { __typename?: 'HarvestLotOrder', accountId: string, costBasis: string, gainTotal: string, id: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any, lastPrice: string };
+
+export type UnrealizedHarvestItemFragment = { __typename?: 'UnrealizedHarvestMatchResult', sourceLot: { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }, matchedLotOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any, lastPrice: string }> };
+
 export type FiniteHarvestQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FiniteHarvestQuery = { __typename?: 'Query', finiteHarvest: { __typename?: 'FiniteHarvestResult', harvestType: HarvestType, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } }, lotsCurrent: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }> } };
+export type FiniteHarvestQuery = { __typename?: 'Query', finiteHarvest: { __typename?: 'FiniteHarvestResult', harvestType: HarvestType, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } }, lotsCurrent?: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }> | null, unrealizedHarvestMatchResults?: Array<{ __typename?: 'UnrealizedHarvestMatchResult', sourceLot: { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain }, matchedLotOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any, lastPrice: string }> }> | null } };
 
 export type AccountTransactionItemFragment = { __typename?: 'Account', id: string, name?: string | null, authConnection: { __typename?: 'AuthConnection', id: string, source: AuthSource } };
 
@@ -13066,7 +13077,7 @@ export type VerificationEtradeQueryVariables = Exact<{
 }>;
 
 
-export type VerificationEtradeQuery = { __typename?: 'Query', requestOauthConnection: { __typename?: 'AuthConnectionExt', verificationUrl?: string | null } };
+export type VerificationEtradeQuery = { __typename?: 'Query', requestOauthConnection: { __typename?: 'AuthConnectionExt', id: string, verificationUrl?: string | null } };
 
 export type OauthEtradeMutationVariables = Exact<{
   verifier: Scalars['String']['input'];
@@ -13234,7 +13245,7 @@ export type PositionItemFragment = { __typename?: 'Position', change?: string | 
 export type PortfolioPositionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PortfolioPositionsQuery = { __typename?: 'Query', portfolioPositions: Array<{ __typename?: 'Position', change?: string | null, changePCT?: string | null, commissionDay?: string | null, commissionTotal?: string | null, costPerShare?: string | null, costTotal?: string | null, dateAcquired?: any | null, dateExpiration?: any | null, externalId?: string | null, feesDay?: string | null, feesOther?: string | null, gainDay?: string | null, gainTotal?: string | null, gainTotalPCT?: string | null, id: string, marketValue?: string | null, pricePaid?: string | null, quantity: string, quoteStatus?: string | null, assetSymbol: string, type?: string | null, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } }> };
+export type PortfolioPositionsQuery = { __typename?: 'Query', portfolioPositions: Array<{ __typename?: 'Position', id: string, change?: string | null, changePCT?: string | null, commissionDay?: string | null, commissionTotal?: string | null, costPerShare?: string | null, costTotal?: string | null, dateAcquired?: any | null, dateExpiration?: any | null, externalId?: string | null, feesDay?: string | null, feesOther?: string | null, gainDay?: string | null, gainTotal?: string | null, gainTotalPCT?: string | null, marketValue?: string | null, pricePaid?: string | null, quantity: string, quoteStatus?: string | null, assetSymbol: string, type?: string | null, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } }> };
 
 export type Chart3MonthQueryVariables = Exact<{
   asset: Scalars['String']['input'];
@@ -13462,6 +13473,37 @@ export const FiniteHarvestLotItemFragmentDoc = gql`
   taxGain
 }
     `;
+export const MatchedLotOrderItemFragmentDoc = gql`
+    fragment MatchedLotOrderItem on HarvestLotOrder {
+  accountId
+  costBasis
+  gainTotal
+  id
+  lotId
+  pricePaid
+  quantity
+  taxGain
+  assetSymbol
+  dollarPerSharePnL
+  valueTotal
+  orderType
+  acquiredDate
+  lastPrice
+}
+    `;
+export const UnrealizedHarvestItemFragmentDoc = gql`
+    fragment UnrealizedHarvestItem on UnrealizedHarvestMatchResult {
+  sourceLot {
+    id
+    ...FiniteHarvestLotItem
+  }
+  matchedLotOrders {
+    id
+    ...MatchedLotOrderItem
+  }
+}
+    ${FiniteHarvestLotItemFragmentDoc}
+${MatchedLotOrderItemFragmentDoc}`;
 export const AccountTransactionItemFragmentDoc = gql`
     fragment AccountTransactionItem on Account {
   id
@@ -14451,6 +14493,7 @@ export type StripeSessionQueryResult = Apollo.QueryResult<StripeSessionQuery, St
 export const FiniteHarvestDocument = gql`
     query FiniteHarvest {
   finiteHarvest {
+    harvestType
     summary {
       realized {
         gainTotal
@@ -14464,10 +14507,13 @@ export const FiniteHarvestDocument = gql`
       id
       ...FiniteHarvestLotItem
     }
-    harvestType
+    unrealizedHarvestMatchResults {
+      ...UnrealizedHarvestItem
+    }
   }
 }
-    ${FiniteHarvestLotItemFragmentDoc}`;
+    ${FiniteHarvestLotItemFragmentDoc}
+${UnrealizedHarvestItemFragmentDoc}`;
 
 /**
  * __useFiniteHarvestQuery__
@@ -14584,6 +14630,7 @@ export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const VerificationEtradeDocument = gql`
     query VerificationEtrade($portfolioId: String!) {
   requestOauthConnection(authSource: ETRADE_REQUEST, portfolioId: $portfolioId) {
+    id
     verificationUrl
   }
 }
@@ -14846,6 +14893,7 @@ export type SignedUrlsForDownloadQueryResult = Apollo.QueryResult<SignedUrlsForD
 export const CreateFilesDocument = gql`
     mutation CreateFiles($data: [FileCreateManyInput!]!) {
   createFiles(data: $data) {
+    id
     ...FileItem
   }
 }
@@ -15195,6 +15243,7 @@ export type FinalizeHarvestMutationOptions = Apollo.BaseMutationOptions<Finalize
 export const PortfolioLotsDocument = gql`
     query PortfolioLots($where: LotWhereInput, $includeTaxAdvantaged: Boolean) {
   lots(where: $where, includeTaxAdvantaged: $includeTaxAdvantaged) {
+    id
     ...LotItem
   }
 }
@@ -15380,6 +15429,7 @@ export type SwitchPortfolioMutationOptions = Apollo.BaseMutationOptions<SwitchPo
 export const PortfolioPositionsDocument = gql`
     query PortfolioPositions {
   portfolioPositions {
+    id
     ...PositionItem
   }
 }

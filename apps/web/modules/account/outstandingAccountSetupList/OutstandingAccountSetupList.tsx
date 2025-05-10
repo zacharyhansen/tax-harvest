@@ -1,31 +1,31 @@
-import { Badge } from '@repo/ui/components/badge';
-import { Button } from '@repo/ui/components/button';
-import { toast } from '@repo/ui/components/toast-sonner';
-import { cn } from '@repo/ui/utils';
-import { capitalCase } from 'change-case';
-import { CheckCircle, CircleCheckBig, CircleDashed } from 'lucide-react';
-import Link from 'next/link';
+import { Badge } from '@repo/ui/components/badge'
+import { Button } from '@repo/ui/components/button'
+import { toast } from '@repo/ui/components/toast-sonner'
+import { cn } from '@repo/ui/utils'
+import { capitalCase } from 'change-case'
+import { CheckCircle, CircleCheckBig, CircleDashed } from 'lucide-react'
+import Link from 'next/link'
 
 import {
   PortfolioSummaryDocument,
   useAccountSummariesQuery,
   useUpdateAccountMutation,
-} from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+} from '~/generated/gql'
+import { TypedRoutes } from '~/lib/routes'
+import { ErrorPage, LoadingPage } from '~/modules/utility-components'
 
 export default function OutstandingAccountSetupList() {
-  const { data, loading, error, refetch } = useAccountSummariesQuery();
+  const { data, loading, error, refetch } = useAccountSummariesQuery()
 
   const [mutate] = useUpdateAccountMutation({
     onCompleted: () => {
-      void refetch();
+      void refetch()
     },
     refetchQueries: [PortfolioSummaryDocument],
-  });
+  })
 
   if (loading) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
 
   if (error) {
@@ -34,7 +34,7 @@ export default function OutstandingAccountSetupList() {
         message="Could not load accounts at this time. If this issue persists please
         contact support @support"
       />
-    );
+    )
   }
 
   return (
@@ -42,7 +42,7 @@ export default function OutstandingAccountSetupList() {
       {data?.accounts.map((account) => {
         const isComplete
           = (account.uploadedPositions && account.setRealizedValues)
-            || account.skipSetup;
+            || account.skipSetup
         return (
           <div
             key={account.id}
@@ -136,7 +136,7 @@ export default function OutstandingAccountSetupList() {
                               success: 'Setup skipped',
                               error: 'Could not skip setup',
                             },
-                          );
+                          )
                         }}
                       >
                         Skip setup
@@ -145,8 +145,8 @@ export default function OutstandingAccountSetupList() {
                   )}
             </div>
           </div>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

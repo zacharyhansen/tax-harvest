@@ -1,23 +1,23 @@
-import type React from 'react';
-import type { ReactNode } from 'react';
-import type { UserItemFragment } from '~/generated/gql';
+import type React from 'react'
+import type { ReactNode } from 'react'
+import type { UserItemFragment } from '~/generated/gql'
 
-import { createContext, use, useMemo } from 'react';
-import { useUserQuery } from '~/generated/gql';
-import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { createContext, use, useMemo } from 'react'
+import { useUserQuery } from '~/generated/gql'
+import { ErrorPage, LoadingPage } from '~/modules/utility-components'
 
 type UserContextType = {
-  user: UserItemFragment;
-};
+  user: UserItemFragment
+}
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined)
 
 type UserProviderProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const { data, error, loading } = useUserQuery();
+  const { data, error, loading } = useUserQuery()
 
   const value = useMemo(
     () => ({
@@ -26,26 +26,26 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       },
     }),
     [data],
-  );
+  )
 
   if (loading) {
-    return <LoadingPage />;
+    return <LoadingPage />
   }
 
   if (!value.user) {
-    console.error(JSON.stringify(error));
-    return <ErrorPage message="Unable to find user in system." />;
+    console.error(JSON.stringify(error))
+    return <ErrorPage message="Unable to find user in system." />
   }
 
   // @ts-expect-error typing issues
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
-};
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
+}
 
 // Custom hook to use the UserContext
-export const useUser = (): UserContextType => {
-  const context = use(UserContext);
+export function useUser(): UserContextType {
+  const context = use(UserContext)
   if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error('useUser must be used within a UserProvider')
   }
-  return context;
-};
+  return context
+}

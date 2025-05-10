@@ -2,12 +2,12 @@ import {
   CopyIcon,
   ExternalLinkIcon,
   LinkBreak2Icon,
-} from '@radix-ui/react-icons';
-import { Separator } from '@repo/ui/components/separator';
+} from "@radix-ui/react-icons";
+import { Separator } from "@repo/ui/components/separator";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { ToolbarButton } from '../toolbar-button';
+import { ToolbarButton } from "../toolbar-button";
 
 type LinkPopoverBlockProps = {
   url: string;
@@ -20,7 +20,7 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
   onClear,
   onEdit,
 }) => {
-  const [copyTitle, setCopyTitle] = React.useState<string>('Copy');
+  const [copyTitle, setCopyTitle] = React.useState<string>("Copy");
 
   const handleCopy = React.useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -28,9 +28,9 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
       navigator.clipboard
         .writeText(url)
         .then(() => {
-          setCopyTitle('Copied!');
+          setCopyTitle("Copied!");
           setTimeout(() => {
-            setCopyTitle('Copy');
+            setCopyTitle("Copy");
           }, 1000);
         })
         .catch(console.error);
@@ -39,7 +39,7 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
   );
 
   const handleOpenLink = React.useCallback(() => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, "_blank", "noopener,noreferrer");
   }, [url]);
 
   return (

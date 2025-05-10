@@ -1,1 +1,1 @@
-export { default as PlaidConnectButton } from './PlaidConnectButton';
+export { default as PlaidConnectButton } from './PlaidConnectButton'

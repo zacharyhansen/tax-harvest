@@ -1,18 +1,18 @@
-import { ClerkProvider } from '@clerk/nextjs';
-import { cn } from '@repo/ui/utils';
-import { Inter } from 'next/font/google';
-import NextTopLoader from 'nextjs-toploader';
-import '@repo/ui/tailwind.css';
+import { ClerkProvider } from '@clerk/nextjs'
+import { cn } from '@repo/ui/utils'
+import { Inter } from 'next/font/google'
+import NextTopLoader from 'nextjs-toploader'
+import '@repo/ui/tailwind.css'
 
 const inter = Inter({
   display: 'swap',
   subsets: ['latin'],
-});
+})
 
 export default function LocaleLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html
@@ -32,5 +32,5 @@ export default function LocaleLayout({
         </ClerkProvider>
       </body>
     </html>
-  );
+  )
 }

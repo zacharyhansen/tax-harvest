@@ -3,6 +3,7 @@ query VerificationEtrade($portfolioId: String!) {
     authSource: ETRADE_REQUEST
     portfolioId: $portfolioId
   ) {
+    id
     verificationUrl
   }
 }

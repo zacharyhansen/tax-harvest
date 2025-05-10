@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 
-import type { BadgeProps } from './badge';
-import { Badge } from './badge';
+import type { BadgeProps } from "./badge";
+import { Badge } from "./badge";
 
 const meta = {
-  title: 'Atoms/Badge',
-  render: args => <Badge {...args}>{args.children}</Badge>,
-  tags: ['autodocs'],
+  title: "Atoms/Badge",
+  render: (args) => <Badge {...args}>{args.children}</Badge>,
+  tags: ["autodocs"],
   args: {
-    variant: 'default',
-    children: 'Im a badge',
+    variant: "default",
+    children: "Im a badge",
   },
   argTypes: {
     variant: {
-      control: { type: 'select' },
-      options: ['default', 'secondary', 'outline', 'destructive'],
+      control: { type: "select" },
+      options: ["default", "secondary", "outline", "destructive"],
     },
   },
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
 } satisfies Meta<BadgeProps>;
 
@@ -29,21 +29,21 @@ type Story = StoryObj<typeof meta>;
 // colors
 export const Default: Story = {
   args: {
-    variant: 'default',
+    variant: "default",
   },
 };
 export const Secondary: Story = {
   args: {
-    variant: 'secondary',
+    variant: "secondary",
   },
 };
 export const Outline: Story = {
   args: {
-    variant: 'outline',
+    variant: "outline",
   },
 };
 export const Destructive: Story = {
   args: {
-    variant: 'destructive',
+    variant: "destructive",
   },
 };

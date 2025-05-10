@@ -15,20 +15,20 @@ type CheckHotkeyMatch = (event: KeyboardEvent) => boolean;
 function parseHotkey(hotkey: string): Hotkey {
   const keys = hotkey
     .toLowerCase()
-    .split('+')
-    .map(part => part.trim());
+    .split("+")
+    .map((part) => part.trim());
 
   const modifiers: KeyboardModifiers = {
-    alt: keys.includes('alt'),
-    ctrl: keys.includes('ctrl'),
-    meta: keys.includes('meta'),
-    mod: keys.includes('mod'),
-    shift: keys.includes('shift'),
+    alt: keys.includes("alt"),
+    ctrl: keys.includes("ctrl"),
+    meta: keys.includes("meta"),
+    mod: keys.includes("mod"),
+    shift: keys.includes("shift"),
   };
 
-  const reservedKeys = new Set(['alt', 'ctrl', 'meta', 'shift', 'mod']);
+  const reservedKeys = new Set(["alt", "ctrl", "meta", "shift", "mod"]);
 
-  const freeKey = keys.find(key => !reservedKeys.has(key));
+  const freeKey = keys.find((key) => !reservedKeys.has(key));
 
   return {
     ...modifiers,
@@ -61,9 +61,9 @@ function isExactHotkey(hotkey: Hotkey, event: KeyboardEvent): boolean {
   }
 
   if (
-    key
-    && (pressedKey.toLowerCase() === key.toLowerCase()
-      || event.code.replace('Key', '').toLowerCase() === key.toLowerCase())
+    key &&
+    (pressedKey.toLowerCase() === key.toLowerCase() ||
+      event.code.replace("Key", "").toLowerCase() === key.toLowerCase())
   ) {
     return true;
   }
@@ -72,7 +72,7 @@ function isExactHotkey(hotkey: Hotkey, event: KeyboardEvent): boolean {
 }
 
 function getHotkeyMatcher(hotkey: string): CheckHotkeyMatch {
-  return event => isExactHotkey(parseHotkey(hotkey), event);
+  return (event) => isExactHotkey(parseHotkey(hotkey), event);
 }
 
 type HotkeyItemOptions = {
@@ -92,8 +92,8 @@ function shouldFireEvent(
     }
 
     return (
-      !event.target.isContentEditable
-      && !tagsToIgnore.includes(event.target.tagName)
+      !event.target.isContentEditable &&
+      !tagsToIgnore.includes(event.target.tagName)
     );
   }
 

@@ -67,7 +67,9 @@ export function findAllMatchingSubsetsBottomUp({
 
   // Initialize DP table with full quantities of all lots
   dp[0] = new Map()
-  dp[0].set(key(totalQuantity, totalValue), [tuples.map(lot => ({ ...lot }))])
+  dp[0].set(key(totalQuantity, totalValue), [
+    tuples.map(lot => ({ ...lot })),
+  ])
 
   if (time) {
     console.time('findAllMatchingSubsetsBottomUp:mainLoop')

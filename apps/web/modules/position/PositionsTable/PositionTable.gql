@@ -30,6 +30,7 @@ fragment PositionItem on Position {
 
 query PortfolioPositions {
   portfolioPositions {
+    id
     ...PositionItem
   }
 }

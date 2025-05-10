@@ -1,18 +1,18 @@
-import type { FiniteHarvestLotItemFragment } from '~/generated/gql';
-import { Button } from '@repo/ui/components/button';
-import { cn } from '@repo/ui/utils';
+import type { FiniteHarvestLotItemFragment } from '~/generated/gql'
+import { Button } from '@repo/ui/components/button'
+import { cn } from '@repo/ui/utils'
 
-import { Decimal } from 'decimal.js';
-import { Check } from 'lucide-react';
-import { HarvestType } from '~/generated/gql';
-import { clientEnvironment } from '~/lib/env/clientEnvironment';
-import { Format, MoneyUtil } from '~/modules/utils';
+import { Decimal } from 'decimal.js'
+import { Check } from 'lucide-react'
+import { HarvestType } from '~/generated/gql'
+import { clientEnvironment } from '~/lib/env/clientEnvironment'
+import { Format, MoneyUtil } from '~/modules/utils'
 
 type HarvestingOpportunityCardProps = {
-  lot: FiniteHarvestLotItemFragment;
-  harvestType: HarvestType;
-  netPosition: number;
-};
+  lot: FiniteHarvestLotItemFragment
+  harvestType: HarvestType
+  netPosition: number
+}
 
 export function HarvestingOpportunityCard({
   lot,
@@ -20,17 +20,22 @@ export function HarvestingOpportunityCard({
   netPosition,
 }: HarvestingOpportunityCardProps) {
   // Determine if this is a gain position by comparing current value to cost basis
-  const costBasis = new Decimal(lot.costBasis ?? 0);
+  const costBasis = new Decimal(lot.costBasis ?? 0)
   const currentValue = new Decimal(lot.lastPrice ?? 0).mul(
     lot.remainingQty ?? 0,
-  );
+  )
   const purchaseDate = lot.acquiredDate
     ? new Date(lot.acquiredDate).toLocaleDateString()
-    : 'Unknown';
-  const quantity = new Decimal(lot.remainingQty);
-  const sellQuantity = Math.min(new Decimal(netPosition).abs().div(lot.dollarPerSharePnL).abs().toNumber(), quantity.toNumber());
-  const taxSavings = new Decimal(lot.gainTotal).mul(clientEnvironment.NEXT_PUBLIC_TAX_PERCENTAGE);
-  const colorClass = MoneyUtil.colored(taxSavings.toNumber());
+    : 'Unknown'
+  const quantity = new Decimal(lot.remainingQty)
+  const sellQuantity = Math.min(
+    new Decimal(netPosition).abs().div(lot.dollarPerSharePnL).abs().toNumber(),
+    quantity.toNumber(),
+  )
+  const taxSavings = new Decimal(lot.gainTotal).mul(
+    clientEnvironment.NEXT_PUBLIC_TAX_PERCENTAGE,
+  )
+  const colorClass = MoneyUtil.colored(taxSavings.toNumber())
 
   return (
     <div className="mb-2 overflow-hidden rounded-lg border bg-muted shadow-md">
@@ -53,7 +58,9 @@ export function HarvestingOpportunityCard({
                     )
                   : (
                       <span className="text-muted-foreground">
-                        {harvestType === HarvestType.ReduceCostBasis ? 'Harvest Loss' : 'Offset Gains'}
+                        {harvestType === HarvestType.ReduceCostBasis
+                          ? 'Harvest Loss'
+                          : 'Offset Gains'}
                       </span>
                     )}
             </div>
@@ -108,11 +115,11 @@ export function HarvestingOpportunityCard({
         <div className="mt-4 flex w-full flex-col justify-end md:mt-0 md:w-auto md:flex-row md:gap-8">
           <div className="mb-2 md:mb-0">
             <div className="text-sm text-[#AAAAAA]">
-              {harvestType === HarvestType.ReduceTaxes ? 'Potential Loss' : 'Potential Gain'}
+              {harvestType === HarvestType.ReduceTaxes
+                ? 'Potential Loss'
+                : 'Potential Gain'}
             </div>
-            <div
-              className={cn('text-base', colorClass)}
-            >
+            <div className={cn('text-base', colorClass)}>
               {Format.money(lot.gainTotal)}
             </div>
           </div>
@@ -126,5 +133,5 @@ export function HarvestingOpportunityCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

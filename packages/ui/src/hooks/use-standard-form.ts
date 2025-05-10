@@ -1,9 +1,8 @@
-import type { FieldValues, UseFormProps } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
+import type { FieldValues, UseFormProps } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 export function useStandardForm<
   TFieldValues extends FieldValues = FieldValues,
-
   // eslint-disable-next-line ts/no-explicit-any
   TContext = any,
 >({

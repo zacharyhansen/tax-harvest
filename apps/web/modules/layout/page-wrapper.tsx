@@ -1,22 +1,22 @@
-'use client';
+'use client'
 
-import type { ReactNode } from 'react';
-import clsx from 'clsx';
+import type { ReactNode } from 'react'
+import clsx from 'clsx'
 
-import { ErrorPage, LoadingPage } from '../utility-components';
+import { ErrorPage, LoadingPage } from '../utility-components'
 
 export type PageWrapperProps = {
-  description?: ReactNode;
-  children: ReactNode;
-  title?: ReactNode;
+  description?: ReactNode
+  children: ReactNode
+  title?: ReactNode
   // eslint-disable-next-line ts/no-explicit-any
-  error?: any | null;
-  loading?: boolean;
-  className?: string;
-  cornerElement?: ReactNode;
-  next?: ReactNode;
-  prev?: ReactNode;
-};
+  error?: any | null
+  loading?: boolean
+  className?: string
+  cornerElement?: ReactNode
+  next?: ReactNode
+  prev?: ReactNode
+}
 
 export default function PageWrapper({
   children,
@@ -30,13 +30,13 @@ export default function PageWrapper({
   prev,
 }: Readonly<PageWrapperProps>) {
   if (error) {
-    console.error({ error });
+    console.error({ error })
     return (
       <ErrorPage
         message=" There was an error loading your data. If this issue persists please
         contact our support"
       />
-    );
+    )
   }
 
   return (
@@ -78,5 +78,5 @@ export default function PageWrapper({
       </div>
       {children}
     </div>
-  );
+  )
 }

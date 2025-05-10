@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import type { Table } from '@tanstack/react-table';
-import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { MixIcon } from '@radix-ui/react-icons';
+import type { Table } from "@tanstack/react-table";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { MixIcon } from "@radix-ui/react-icons";
 
-import { Button } from '../button';
+import { Button } from "../button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from '../dropdown-menu';
+} from "../dropdown-menu";
 
 type DataTableGroupOptionsProps<TData> = {
   table: Table<TData>;
@@ -23,7 +23,8 @@ export function DataTableGroupOptions<TData>({
   const groupableColumns = table
     .getAllColumns()
     .filter(
-      column => typeof column.accessorFn !== 'undefined' && column.getCanGroup(),
+      (column) =>
+        typeof column.accessorFn !== "undefined" && column.getCanGroup(),
     );
 
   if (!groupableColumns.length) {
@@ -54,7 +55,7 @@ export function DataTableGroupOptions<TData>({
               checked={column.getIsGrouped()}
               onCheckedChange={() => handler()}
             >
-              {typeof column.columnDef.header === 'string'
+              {typeof column.columnDef.header === "string"
                 ? column.columnDef.header
                 : column.id}
             </DropdownMenuCheckboxItem>

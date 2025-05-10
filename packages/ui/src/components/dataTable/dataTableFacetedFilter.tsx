@@ -1,10 +1,10 @@
-import type { Column } from '@tanstack/react-table';
-import type * as React from 'react';
-import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
+import type { Column } from "@tanstack/react-table";
+import type * as React from "react";
+import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 
-import { cn } from '@repo/ui/utils';
-import { Badge } from '../badge';
-import { Button } from '../button';
+import { cn } from "@repo/ui/utils";
+import { Badge } from "../badge";
+import { Button } from "../button";
 import {
   Command,
   CommandEmpty,
@@ -13,10 +13,10 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '../command';
-import { Popover, PopoverContent, PopoverTrigger } from '../popover';
+} from "../command";
+import { Popover, PopoverContent, PopoverTrigger } from "../popover";
 
-import { Separator } from '../separator';
+import { Separator } from "../separator";
 
 type DataTableFacetedFilterProps<TData, TValue> = {
   column?: Column<TData, TValue>;
@@ -52,30 +52,26 @@ export function DataTableFacetedFilter<TData, TValue>({
                 {selectedValues.size}
               </Badge>
               <div className="hidden space-x-1 lg:flex">
-                {selectedValues.size > 2
-                  ? (
+                {selectedValues.size > 2 ? (
+                  <Badge
+                    variant="secondary"
+                    className="rounded-sm px-1 font-normal"
+                  >
+                    {selectedValues.size} selected
+                  </Badge>
+                ) : (
+                  options
+                    .filter((option) => selectedValues.has(option.value))
+                    .map((option) => (
                       <Badge
                         variant="secondary"
+                        key={option.value}
                         className="rounded-sm px-1 font-normal"
                       >
-                        {selectedValues.size}
-                        {' '}
-                        selected
+                        {option.label}
                       </Badge>
-                    )
-                  : (
-                      options
-                        .filter(option => selectedValues.has(option.value))
-                        .map(option => (
-                          <Badge
-                            variant="secondary"
-                            key={option.value}
-                            className="rounded-sm px-1 font-normal"
-                          >
-                            {option.label}
-                          </Badge>
-                        ))
-                    )}
+                    ))
+                )}
               </div>
             </>
           )}
@@ -106,13 +102,13 @@ export function DataTableFacetedFilter<TData, TValue>({
                   >
                     <div
                       className={cn(
-                        'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
+                        "border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                         isSelected
-                          ? 'bg-primary text-primary-foreground'
-                          : 'opacity-50 [&_svg]:invisible',
+                          ? "bg-primary text-primary-foreground"
+                          : "opacity-50 [&_svg]:invisible",
                       )}
                     >
-                      <CheckIcon className={cn('h-4 w-4')} />
+                      <CheckIcon className={cn("h-4 w-4")} />
                     </div>
                     {option.icon && (
                       <option.icon className="mr-2 size-4 text-muted-foreground" />

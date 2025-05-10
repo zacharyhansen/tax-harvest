@@ -1,7 +1,7 @@
-import type { CellContext } from '@tanstack/react-table';
+import type { CellContext } from "@tanstack/react-table";
 
-import type { UserObject } from '../../avatar-group';
-import { Avatar, AvatarFallback, AvatarImage } from '../../avatar';
+import type { UserObject } from "../../avatar-group";
+import { Avatar, AvatarFallback, AvatarImage } from "../../avatar";
 
 export default function UserCell<TData, TValue>({
   getValue,
@@ -14,7 +14,7 @@ export default function UserCell<TData, TValue>({
         <Avatar>
           <AvatarImage src={photo ?? undefined} alt="avatar" />
           <AvatarFallback>
-            {name?.split(' ').map(name => name[0])}
+            {name?.split(" ").map((name) => name[0])}
           </AvatarFallback>
         </Avatar>
       </div>
