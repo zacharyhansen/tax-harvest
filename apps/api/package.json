@@ -114,7 +114,7 @@
     "@faker-js/faker": "^9.0.0",
     "@nestjs/cli": "11.0.7",
     "@nestjs/schematics": "^10.2.3",
-    "@nestjs/testing": "11.0.7",
+    "@nestjs/testing": "11.1.0",
     "@snaplet/copycat": "^5.1.0",
     "@snaplet/seed": "^0.98.0",
     "@swc/cli": "^0.4.0",
