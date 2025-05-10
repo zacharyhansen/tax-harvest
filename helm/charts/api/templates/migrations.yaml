@@ -1,1 +1,1 @@
-{ { - include "common.migrations" . - } }
+{{ - include "common.migrations" . - }}
