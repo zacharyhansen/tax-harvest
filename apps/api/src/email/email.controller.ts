@@ -1,5 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common'
+import { HarvestNotificationFrequency } from '@prisma/client'
 import { Public } from '~/auth/decorators/public.decorator'
+import { CronTasksService } from '../cron-tasks/cron-tasks.service'
 import { EmailService } from './email.service'
 
 interface TestEmailDto {
@@ -7,14 +9,27 @@ interface TestEmailDto {
   name?: string
 }
 
+interface TestPortfolioNotificationDto {
+  frequency: HarvestNotificationFrequency
+}
+
 @Controller('email')
 export class EmailController {
-  constructor(private readonly emailService: EmailService) {}
+  constructor(
+    private readonly emailService: EmailService,
+    private readonly cronTasksService: CronTasksService,
+  ) {}
 
   @Post('test')
   @Public()
   async sendTestEmail(@Body() { to, name = 'Test User' }: TestEmailDto) {
     await this.emailService.sendWelcomeEmail(to, name)
     return { message: 'Test email sent successfully' }
+  }
+
+  @Post('test/portfolio-notifications')
+  async sendTestPortfolioNotifications(@Body() { frequency }: TestPortfolioNotificationDto) {
+    await this.cronTasksService.sendPortfolioNotifications(frequency)
+    return { message: `Portfolio notifications for ${frequency} frequency triggered successfully` }
   }
 }

@@ -2,7 +2,7 @@ global:
   projectID: harvester-ai-428202
   clusterLocation: us-central1-b
   clusterName: harvester-dev
-  namespace: harvester
+  namespace: harvester-dev
   ingress:
     enabled: true
     className: gce
@@ -20,6 +20,8 @@ global:
 serviceAccounts:
   - name: google-secret-service-account
     gcpServiceAccount: harvester-secret-manager
+  - name: harvester-api
+    gcpServiceAccount: harvester-api
 api:
   enabled: true
   replicaCount: 1
@@ -282,9 +284,6 @@ secrets:
 argocd:
   enabled: true
   server:
-    basehref: /
-    rootpath: /
-    staticassets: /shared/app
     tls:
       enabled: true
       secretName: argocd-server-tls

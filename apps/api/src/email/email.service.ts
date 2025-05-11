@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { HarvestNotificationFrequency } from '@prisma/client'
 import { MailService } from '@sendgrid/mail'
 
 export interface SendEmailParams {
@@ -79,6 +80,26 @@ export class EmailService {
       <p>Click the link below to reset your password:</p>
       <a href="${resetUrl}">Reset Password</a>
       <p>If you didn't request this, please ignore this email.</p>
+    `
+
+    await this.sendEmail({
+      to,
+      subject,
+      html,
+    })
+  }
+
+  async sendPortfolioNotification(
+    to: string,
+    portfolioName: string,
+    frequency: HarvestNotificationFrequency,
+  ): Promise<void> {
+    const subject = `TaxHarvest Portfolio Update - ${portfolioName}`
+    const html = `
+      <h1>Portfolio Update: ${portfolioName}</h1>
+      <p>This is your ${frequency.toLowerCase()} portfolio update from TaxHarvest.</p>
+      <p>Log in to your account to view the latest tax harvesting opportunities and portfolio performance.</p>
+      <a href="${this.configService.get('CLIENT_ORIGIN')}/portfolios">View Your Portfolios</a>
     `
 
     await this.sendEmail({

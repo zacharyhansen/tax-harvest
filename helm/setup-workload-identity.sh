@@ -3,7 +3,7 @@
 # Variables
 PROJECT_ID="harvester-ai-428202"
 GSA_NAME="harvester-secret-manager"
-K8S_NAMESPACE="harvester"
+K8S_NAMESPACE="harvester-dev"
 KSA_NAME="google-secret-service-account"
 CLUSTER_NAME="harvester-dev"
 REGION="us-central1-b"
