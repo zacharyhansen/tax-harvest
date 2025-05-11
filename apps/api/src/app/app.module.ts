@@ -12,6 +12,7 @@ import { ClerkGuard } from '~/auth/guards/clerk.guard'
 import { CacheModule } from '~/cache/cache.module'
 import { ClerkModule } from '~/clerk/clerk.module'
 import { DatabaseModule } from '~/database/database.module'
+import { EmailModule } from '~/email/email.module'
 import { envSchema } from '~/env/env.schema'
 import { EtradeModule } from '~/etrade/etrade.module'
 import { FileModule } from '~/file/file.module'
@@ -75,6 +76,7 @@ import { errorFormatPlugin } from '../plugins/error-format'
     LogsModule,
     LotTransactionBatchModule,
     StripeModule,
+    EmailModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ClerkGuard }],
 })

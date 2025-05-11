@@ -35,6 +35,7 @@ export const envSchema = z.object({
   GCS_LOTS_BUCKET_NAME: z.string(),
   // Sendgrid
   SENDGRID_API_KEY: z.string(),
+  DEFAULT_EMAIL_ADDRESS: z.string(),
 })
 
 export type Env = z.infer<typeof envSchema>

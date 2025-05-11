@@ -63,6 +63,7 @@ api:
       PORT: 8000
       NUETRAL_HARVEST_THRESHOLD: 1000
       CLIENT_HOME_PAGE_PATH: /main/home
+      DEFAULT_EMAIL_ADDRESS: support@taxharvest.ai
     secretRefs:
       - name: DATABASE_URL
         valueFrom:
