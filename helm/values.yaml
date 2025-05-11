@@ -20,8 +20,6 @@ global:
 serviceAccounts:
   - name: google-secret-service-account
     gcpServiceAccount: harvester-secret-manager
-  - name: harvester-api
-    gcpServiceAccount: harvester-api
 api:
   enabled: true
   replicaCount: 1
@@ -54,7 +52,7 @@ api:
     timeoutSeconds: 3
     failureThreshold: 3
     successThreshold: 1
-  serviceAccountName: harvester-api
+  serviceAccountName: google-secret-service-account
   cloudsql:
     enabled: true
     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
