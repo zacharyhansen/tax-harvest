@@ -52,7 +52,7 @@ api:
     timeoutSeconds: 3
     failureThreshold: 3
     successThreshold: 1
-  serviceAccountName: google-secret-service-account
+  serviceAccountName: harvester-api
   cloudsql:
     enabled: true
     instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
