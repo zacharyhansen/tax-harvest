@@ -1,4 +1,28 @@
 ---
+# Config Connector Application
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: config-connector
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: config-connector
+    repoURL: https://googlecloudplatform.github.io/config-connector
+    targetRevision: 1.99.0
+    helm:
+      releaseName: config-connector
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: config-connector
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
 # External Secrets Operator Application
 apiVersion: argoproj.io/v1alpha1
 kind: Application
