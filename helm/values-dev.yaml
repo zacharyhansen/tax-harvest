@@ -5,9 +5,9 @@ global:
     enabled: true
     className: gce
     annotations:
-      networking.gke.io/managed-certificates: harvester-dev-cert
+      # networking.gke.io/managed-certificates: harvester-dev-cert
       kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
-      kubernetes.io/ingress.allow-http: "false"
+      kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
     rules:
       - host: dev.taxharvest.ai
@@ -38,9 +38,9 @@ argocd:
   ingress:
     enabled: true
     annotations:
-      networking.gke.io/managed-certificates: argocd-dev-cert
+      # networking.gke.io/managed-certificates: argocd-dev-cert
       kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
-      kubernetes.io/ingress.allow-http: "false"
+      kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
     host: argocd-dev.taxharvest.ai
     path: /
