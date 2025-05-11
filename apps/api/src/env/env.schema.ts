@@ -33,6 +33,8 @@ export const envSchema = z.object({
   // Google
   GOOGLE_PROJECT: z.string(),
   GCS_LOTS_BUCKET_NAME: z.string(),
+  // Sendgrid
+  SENDGRID_API_KEY: z.string(),
 })
 
 export type Env = z.infer<typeof envSchema>

@@ -134,6 +134,11 @@ api:
           secretKeyRef:
             name: stripe
             key: STRIPE_SECRET_KEY
+      - name: SENDGRID_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: sendgrid
+            key: SENDGRID_API_KEY
   migrations:
     enabled: true
     activeDeadlineSeconds: 300 # Force job termination after 5 minutes
@@ -268,6 +273,11 @@ secrets:
           remoteKey: PLAID_SECRET_KEY
         - secretKey: PLAID_CLIENT_ID
           remoteKey: PLAID_CLIENT_ID
+    - name: sendgrid
+      target: sendgrid
+      data:
+        - secretKey: SENDGRID_API_KEY
+          remoteKey: SENDGRID_API_KEY
 argocd:
   enabled: true
   server:
