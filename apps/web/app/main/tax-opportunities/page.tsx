@@ -1,5 +1,6 @@
 'use client'
 
+import NumberFlow from '@number-flow/react'
 import {
   Card,
   CardContent,
@@ -13,10 +14,10 @@ import {
   TooltipTrigger,
 } from '@repo/ui/components/tooltip'
 import { cn } from '@repo/ui/utils'
+
 import { ArrowUpCircle, BarChart3, Info, TrendingDown } from 'lucide-react'
 
 import { HarvestType, useFiniteHarvestQuery } from '~/generated/gql'
-
 import { PageWrapper } from '~/modules/layout'
 import { ErrorPage, LoadingPage } from '~/modules/utility-components'
 import { Format, MoneyUtil } from '~/modules/utils'
@@ -118,9 +119,10 @@ export default function TaxOpportunitiesPage() {
                       ),
                     )}
                   >
-                    {Format.money(
-                      data?.finiteHarvest.summary.realized.gainTotal ?? 0,
-                    )}
+                    <NumberFlow
+                      value={data?.finiteHarvest.summary.realized.gainTotal ?? 0}
+                      format={{ currency: 'USD', style: 'currency' }}
+                    />
                   </span>
                 </div>
               </div>
@@ -138,9 +140,10 @@ export default function TaxOpportunitiesPage() {
                       ),
                     )}
                   >
-                    {Format.money(
-                      data?.finiteHarvest.summary.unrealized.gainTotal ?? 0,
-                    )}
+                    <NumberFlow
+                      value={data?.finiteHarvest.summary.unrealized.gainTotal ?? 0}
+                      format={{ currency: 'USD', style: 'currency' }}
+                    />
                   </span>
                 </div>
               </div>
@@ -158,9 +161,11 @@ export default function TaxOpportunitiesPage() {
                       ),
                     )}
                   >
-                    {Format.money(
-                      data?.finiteHarvest.summary.unrealized.lossTotal ?? 0,
-                    )}
+                    <NumberFlow
+                      defaultValue={0}
+                      value={data?.finiteHarvest.summary.unrealized.lossTotal ?? 0}
+                      format={{ currency: 'USD', style: 'currency' }}
+                    />
                   </span>
                 </div>
               </div>

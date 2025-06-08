@@ -23,11 +23,12 @@ import { ThemeProvider } from '@repo/ui/providers/theme-provider'
 import { capitalCase } from 'change-case'
 import { usePathname } from 'next/navigation'
 
+import { AddAccountButton } from '~/modules/account/add-account/add-account.button'
 import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs'
 import { PlaidConnectButton } from '~/modules/plaid'
 import { PortfolioProvider, PortfolioSwitcher } from '~/modules/portfolio'
-import ApolloProviderWrapper from './ApolloProviderWrapper'
 
+import ApolloProviderWrapper from './ApolloProviderWrapper'
 import { NavTree } from './nav-tree'
 import ThemeButton from './theme-button'
 import { UserProvider } from './user.provider'
@@ -88,6 +89,7 @@ export default function MainLayout({
                     sidebarOptions={(
                       <>
                         <SignedIn>
+                          <AddAccountButton />
                           <PlaidConnectButton />
                           <UserButton />
                           <ThemeButton />

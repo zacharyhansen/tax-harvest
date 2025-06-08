@@ -4,7 +4,7 @@ export function AuthInfoOverlay() {
   return (
     <div className="absolute inset-0 z-20 flex flex-col items-start justify-center rounded-3xl bg-black/40 p-12 text-white">
       <h2 className="mb-6 text-2xl font-bold">
-        AI-Powered Tax Loss Harvesting
+        AI Powered Tax Loss Harvesting & Financial Tooling
       </h2>
       <p className="mb-8 max-w-md">
         Maximize tax efficiency with our automated platform that identifies

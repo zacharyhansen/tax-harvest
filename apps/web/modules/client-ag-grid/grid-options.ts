@@ -1,11 +1,26 @@
 'use client'
 
-import type { GridOptions } from 'ag-grid-community'
+import type { GridOptions, ThemeDefaultParams } from 'ag-grid-community'
 import { themeBalham, themeQuartz } from 'ag-grid-community'
 
 import { cellRendererSelector } from './cell-renderer-selector'
 import { defaultColumnTypes } from './column-types'
 import { dataTypeDefinitions } from './data-type-definitions'
+
+const styleParams: Partial<ThemeDefaultParams> = {
+  backgroundColor: 'var(--background)',
+  accentColor: 'var(--foreground)',
+  borderColor: 'var(--border)',
+  headerBackgroundColor: 'var(--muted)',
+  headerTextColor: 'var(--muted-foreground)',
+  rowHoverColor: 'var(--muted)/50',
+  textColor: 'var(--foreground)',
+  borderRadius: 'var(--radius-md)',
+  wrapperBorderRadius: 'var(--radius)',
+  inputBorderRadius: 'var(--radius-md)',
+  buttonBorderRadius: 'var(--radius-md)',
+  checkboxBorderRadius: 'var(--radius-md)',
+}
 
 const baseGridOptions: GridOptions = {
   dataTypeDefinitions,
@@ -24,42 +39,22 @@ const baseGridOptions: GridOptions = {
   },
 }
 
+const customThemeQuartz = themeQuartz
+  .withParams(styleParams, 'light')
+  .withParams(styleParams, 'dark')
+  .withParams(styleParams, 'system')
+
+const customThemeBalham = themeBalham
+  .withParams(styleParams, 'light')
+  .withParams(styleParams, 'dark')
+  .withParams(styleParams, 'system')
+
 export const themeBalhamGridOptions: GridOptions = {
   ...baseGridOptions,
-  theme: themeBalham
-    .withParams(
-      {
-        backgroundColor: '#ffffff',
-        accentColor: '#020817',
-      },
-      'light',
-    )
-    .withParams(
-      {
-        backgroundColor: '#16161d',
-        accentColor: '#aab1d3',
-      },
-      'dark',
-    ),
-  headerHeight: 32,
+  theme: customThemeBalham,
 }
 
 export const themeQuartzGridOptions: GridOptions = {
   ...baseGridOptions,
-  theme: themeQuartz
-    .withParams(
-      {
-        backgroundColor: '#ffffff',
-        accentColor: '#020817',
-      },
-      'light',
-    )
-    .withParams(
-      {
-        backgroundColor: '#16161d',
-        accentColor: '#aab1d3',
-      },
-      'dark',
-    ),
-  headerHeight: 40,
+  theme: customThemeQuartz,
 }
