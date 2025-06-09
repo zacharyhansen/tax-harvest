@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "concurrently \"next dev --turbopack\" \"pnpm codegen:watch\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -12,11 +12,7 @@
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
     "url": "npx next-typesafe-url -w",
-    "codegen": "graphql-codegen --config codegen.ts",
-    "codegen:watch": "graphql-codegen --watch",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build",
-    "migrate:create": "dotenv -e .env.local -- prisma migrate dev --create-only --name",
-    "migrate": "dotenv -e .env.local -- prisma migrate dev"
+    "codegen:watch": "graphql-codegen --watch"
   },
   "peerDependencies": {
     "typescript": "5.4.2",

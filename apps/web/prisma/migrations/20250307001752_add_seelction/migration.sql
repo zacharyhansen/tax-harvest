@@ -1,2 +1,0 @@
--- AlterEnum
-ALTER TYPE "HarvestStep" ADD VALUE 'LOT_SELECTION';

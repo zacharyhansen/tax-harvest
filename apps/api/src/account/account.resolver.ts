@@ -171,6 +171,7 @@ export class AccountResolver {
       accountId: account.id,
       select,
       year: year ?? new Date().getFullYear(),
+      portfolioId: account.portfolioId,
     })
   }
 }

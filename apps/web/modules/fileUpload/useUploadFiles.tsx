@@ -1,4 +1,4 @@
-import type { FileItemFragment } from '~/generated/gql'
+import type { FileItemFragment, GcpUploadFile } from '~/generated/gql'
 import { toast } from '@repo/ui/components/toast-sonner'
 
 import { useState } from 'react'
@@ -8,65 +8,74 @@ import {
   useCreateFilesMutation,
   useSignedUrlsForUploadLazyQuery,
 } from '~/generated/gql'
+import { usePortfolio } from '../portfolio'
 import { getErrorMessage } from '../utils/get-error-message'
 
-type UseUploadFileOptions = {
+interface UseUploadFileOptions {
   defaultUploadedFiles?: FileItemFragment[]
-  accountId: string
+  accountId?: string
+  onFileUploaded?: (files: GcpUploadFile[]) => Promise<void>
+  onUploadError?: (error: Error) => void
 }
 
 export function useUploadFiles({
   accountId,
   defaultUploadedFiles = [],
+  onFileUploaded,
+  onUploadError,
 }: UseUploadFileOptions) {
   const { user } = useUser()
   const [isUploading, setIsUploading] = useState(false)
   const [uploadedFiles, setUploadedFiles]
     = useState<FileItemFragment[]>(defaultUploadedFiles)
+  const { portfolio } = usePortfolio()
 
   const [signedUrls] = useSignedUrlsForUploadLazyQuery()
   const [createFiles] = useCreateFilesMutation()
 
   const onUpload = async (files: File[]) => {
-    return new Promise<void>((resolve, reject) => {
-      console.error('started upload')
-      setIsUploading(true)
-      console.error({ files })
+    setIsUploading(true)
 
-      const fileInput = files.map(file => ({
-        fileName: `${file.name}_${new Date().getTime()}`, // GCP bucket request are PUT - add uuid to ensure unique
-        type: file.type,
-      }))
-      console.error({ fileInput })
+    const fileInput: GcpUploadFile[] = files.map(file => ({
+      fileName: `${file.name}_${new Date().getTime()}`, // GCP bucket request are PUT - add uuid to ensure unique
+      type: file.type,
+      displayName: file.name,
+    }))
 
-      void signedUrls({
-        onCompleted: async (results) => {
-          // Upload files to GCP using signed urls
-          await Promise.all(
-            files.map((file, i) =>
-              fetch(results.generateSignedUrlsForUpload.uploadUrls[i]!, {
-                body: file,
-                method: 'PUT',
-              }),
-            ),
-          ).catch((err) => {
-            console.error(err)
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject(err as Error)
-          })
+    return signedUrls({
+      onCompleted: async (results) => {
+        // Upload files to GCP using signed urls
+        await Promise.all(
+          files.map((file, i) =>
+            fetch(results.generateSignedUrlsForUpload.uploadUrls[i]!, {
+              body: file,
+              method: 'PUT',
+            }),
+          ),
+        ).catch((err) => {
+          console.error(err)
+          throw err
+        })
+
+        if (onFileUploaded) {
+          await onFileUploaded(fileInput)
+        } else {
+          if (!accountId) {
+            throw new Error('Account ID is required to upload files')
+          }
 
           // Add records to DB for said files
-          await createFiles({
+          return createFiles({
             onCompleted: ({ createFiles }) => {
-              console.error('setUploadedFiles')
-
+              setIsUploading(false)
               setUploadedFiles(prev =>
                 prev ? [...prev, ...createFiles] : createFiles,
               )
             },
             onError: (err) => {
               console.error(err)
-              reject(err)
+              setIsUploading(false)
+              throw err
             },
             variables: {
               data: fileInput.map((file, i) => ({
@@ -75,22 +84,20 @@ export function useUploadFiles({
                 gcpFilename: file.fileName,
                 type: file.type,
                 uploadedBy: user.id,
+                portfolioId: portfolio.id,
               })),
             },
           })
-          setIsUploading(false)
-          resolve()
-        },
-        onError: (err) => {
-          toast.error(getErrorMessage(err))
-          setIsUploading(false)
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject(err as Error)
-        },
-        variables: {
-          files: fileInput,
-        },
-      })
+        }
+      },
+      onError: (err) => {
+        toast.error(getErrorMessage(err))
+        setIsUploading(false)
+        onUploadError?.(err)
+      },
+      variables: {
+        files: fileInput,
+      },
     })
   }
 

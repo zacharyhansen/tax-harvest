@@ -48,7 +48,6 @@ export default function OutstandingAccountSetupList() {
             key={account.id}
             className={cn(
               'flex flex-col items-start justify-between rounded-lg border p-2 sm:flex-row sm:items-center',
-              isComplete && 'border-green-300 bg-green-50',
             )}
           >
             <div className="flex flex-wrap space-x-2">

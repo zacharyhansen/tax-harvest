@@ -89,8 +89,16 @@ model Portfolio {
   createdBy           User?                 @relation(fields: [createdById], references: [id], onDelete: SetNull)
   authConnections     AuthConnection[]
   harvests            Harvest[]
-  Log                 Log[]
-  LotTransactionBatch LotTransactionBatch[]
+  log                 Log[]
+  lotTransactionBatch LotTransactionBatch[]
+  lotChangeLog        LotChangeLog[]
+  harvestTransaction  HarvestTransaction[]
+  files               File[]
+  lots                Lot[]
+  positions           Position[]
+  transactions        Transaction[]
+  realizedPAndL       RealizedPAndL[]
+  harvestTransactionItem HarvestTransactionItem[]
 }
 
 enum HarvestType {
@@ -131,6 +139,7 @@ model HarvestTransaction {
   createdAt                          DateTime @default(now())
   updatedAt                          DateTime @default(now()) @updatedAt
   harvestId                          String   @db.Uuid
+  portfolioId                        String   @db.Uuid
   /// Is this transaction part of counter group of transactions for harvest (i.e. selling a gain to counter the loss that was selected)
   counterTransaction                 Boolean  @default(false)
   /// Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
@@ -144,6 +153,7 @@ model HarvestTransaction {
   revertHarvestTransactionItemId     String?  @unique @db.Uuid
   revertReplacementTransactionItemId String?  @unique @db.Uuid
 
+  portfolio                        Portfolio               @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   harvest                          Harvest                 @relation(fields: [harvestId], references: [id], onDelete: Cascade)
   harvestTransactionItem           HarvestTransactionItem  @relation(name: "harvestTransaction", fields: [harvestTransactionItemId], references: [id], onDelete: Restrict)
   replacementTransactionItem       HarvestTransactionItem? @relation(name: "replacementTransaction", fields: [replacementTransactionItemId], references: [id], onDelete: SetNull)
@@ -153,6 +163,7 @@ model HarvestTransaction {
 
 model HarvestTransactionItem {
   id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  portfolioId   String    @db.Uuid
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   orderType     OrderType
@@ -162,6 +173,7 @@ model HarvestTransactionItem {
   quantity      Decimal   @db.Decimal(14, 4)
   price         Decimal   @db.Decimal(14, 4)
 
+  portfolio                    Portfolio           @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   asset                        Asset               @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
   lotSold                      Lot?                @relation(fields: [lotId], references: [id], onDelete: SetNull)
   harvestTransaction           HarvestTransaction? @relation(name: "harvestTransaction")
@@ -179,9 +191,9 @@ model Account {
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @default(now()) @updatedAt
   /// External provider of the account - null if its an system generated account
-  provider         AccountProvider    @default(SYSTEM)
+  provider         AccountProvider    @default(UNCONNECTED)
   /// The auth connection the account has been provided from 
-  authConnectionId String             @db.Uuid
+  authConnectionId String?             @db.Uuid
   /// The unique id in the external system for the account (only unique in combination with provider)
   externalId       String?
   name             String?
@@ -192,9 +204,9 @@ model Account {
   /// The description of the account
   description      String?
   /// What institution does this account fall under
-  institution      AccountInstitution
+  institution      AccountInstitution?
   /// The type of account
-  type             String             @default("Unknown")
+  type             String             @default("Unconnected")
   subType          String?
   /// The mode of the account
   mode             AccountMode?
@@ -245,7 +257,7 @@ model Account {
 
   /// @HideField({ match: '@(Account)Create*Input' })
   createdBy      User            @relation(fields: [createdById], references: [id], onDelete: Restrict)
-  authConnection AuthConnection  @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
+  authConnection AuthConnection?  @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
   portfolio      Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   positions      Position[]
   transactions   Transaction[]
@@ -268,7 +280,9 @@ model RealizedPAndL {
   longTerm     Decimal  @default(0) @db.Decimal(14, 4)
   dividend     Decimal  @default(0) @db.Decimal(14, 4)
   deferredLoss Decimal  @default(0) @db.Decimal(14, 4)
+  portfolioId  String   @db.Uuid
 
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   @@unique([accountId, year])
@@ -300,7 +314,9 @@ model Transaction {
   displaySymbol      String?
   detailsURI         String?
   appliedToLots      Boolean   @default(false)
+  portfolioId        String    @db.Uuid
 
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   asset        Asset          @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
   account      Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
   lotChangeLog LotChangeLog[]
@@ -356,6 +372,7 @@ model LotChangeLog {
   lotTransactionBatch LotTransactionBatch @relation(fields: [lotTransactionBatchId], references: [id], onDelete: Cascade)
   transaction         Transaction?        @relation(fields: [transactionId], references: [id], onDelete: SetNull)
   lot                 Lot?                @relation(fields: [lotId], references: [id], onDelete: SetNull)
+  portfolio           Portfolio           @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
   @@index([portfolioId, lotTransactionBatchId])
   @@index([portfolioId, transactionId])
@@ -375,6 +392,7 @@ model Position {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @default(now()) @updatedAt
   accountId      String    @db.Uuid
+  portfolioId    String    @db.Uuid
   /// The unique id in the external system for the position
   externalId     String?
   dateAcquired   DateTime?
@@ -398,9 +416,10 @@ model Position {
   change          Decimal? @db.Decimal(14, 4)
   quoteStatus     String?
 
-  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  asset   Asset   @relation(fields: [assetSymbol], references: [symbol])
-  lots    Lot[]
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  asset     Asset   @relation(fields: [assetSymbol], references: [symbol])
+  lots      Lot[]
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
   @@unique([accountId, externalId])
   @@index([accountId])
@@ -417,6 +436,7 @@ model Lot {
   updatedAt          DateTime @default(now()) @updatedAt
   positionId         String?  @db.Uuid
   accountId          String   @db.Uuid
+  portfolioId        String   @db.Uuid
   assetSymbol        String
   /// The unique id in the external system for the lot (positionLotId)
   externalId         String?
@@ -458,6 +478,7 @@ model Lot {
   account                 Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   harvestTransactionItems HarvestTransactionItem[]
   lotChangeLog            LotChangeLog[]
+  portfolio               Portfolio                @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
   @@unique([positionId, externalId])
   @@index([accountId])
@@ -726,9 +747,11 @@ model File {
   accountId   String   @db.Uuid
   displayName String
   fileType    FileType @default(ETRADE_LOTS)
+  portfolioId String   @db.Uuid
 
   account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
   lots    Lot[]
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 }
 
 enum LogType {
@@ -891,6 +914,7 @@ enum AccountProvider {
   ETRADE
   PLAID
   SYSTEM
+  UNCONNECTED
 }
 
 enum AccountStatus {

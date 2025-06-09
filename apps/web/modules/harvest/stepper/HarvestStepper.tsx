@@ -39,7 +39,7 @@ export type LotRowType = LotCurrentItemFragment & { selectedQuantity: number }
 
 export type StepperStep = HarvestStep | 'LOT_SELECTION'
 
-type HarvestStepperProps = {
+interface HarvestStepperProps {
   harvestType: HarvestType
   // Missing ID means it has not been created and we should show the lot selection to create it.
   // The Stepper then creates the harvest and routes to a page with the id as a param

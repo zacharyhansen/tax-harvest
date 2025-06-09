@@ -59,7 +59,7 @@ export class CsvService {
           remainingQty: new Decimal(record.Quantity),
         } satisfies Omit<
           Insertable<Lot>,
-          'accountId' | 'id' | 'createdAt' | 'updatedAt' | 'excludeFromHarvest'
+          'accountId' | 'id' | 'createdAt' | 'updatedAt' | 'excludeFromHarvest' | 'portfolioId'
         >)
       }
     }

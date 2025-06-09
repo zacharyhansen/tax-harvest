@@ -7,4 +7,7 @@ export class GCPUploadFile {
 
   @Field(() => String)
   type: string
+
+  @Field(() => String)
+  displayName: string
 }

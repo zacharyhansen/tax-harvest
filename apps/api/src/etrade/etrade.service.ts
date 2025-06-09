@@ -516,11 +516,11 @@ export class EtradeService implements ConnectionProvider {
         accountTransactions =>
           accountTransactions.TransactionListResponse.Transaction?.map(
             (transactionData) => {
-              const internalAccountId = accounts.find(
+              const internalAccount = accounts.find(
                 internalAcc =>
                   internalAcc.externalId === transactionData.accountId,
-              )?.id
-              if (!internalAccountId) {
+              )
+              if (!internalAccount) {
                 throw new Error('Could not find an account for the positions')
               }
 
@@ -537,6 +537,7 @@ export class EtradeService implements ConnectionProvider {
                   },
                 })
               }
+              const internalAccountId = internalAccount.id
               return {
                 create: {
                   accountId: internalAccountId,
@@ -562,6 +563,7 @@ export class EtradeService implements ConnectionProvider {
                   ),
                   transactionDate: dateOrNull(transactionData.transactionDate),
                   type: transactionData.transactionType,
+                  portfolioId: internalAccount.portfolioId,
                 },
                 update: {
                   amount: transactionData.amount,
@@ -655,16 +657,17 @@ export class EtradeService implements ConnectionProvider {
                       symbol: position.Product.productId.symbol,
                     },
                   })
-                  const internalAccountId = accounts.find(
+                  const internalAccount = accounts.find(
                     internalAcc =>
                       internalAcc.externalId === account.accountId
                       && internalAcc.provider === 'ETRADE',
-                  )?.id
-                  if (!internalAccountId) {
+                  )
+                  if (!internalAccount) {
                     throw new Error(
                       'Could not find an account for the positions',
                     )
                   }
+                  const internalAccountId = internalAccount.id
                   accountIds.add(internalAccountId)
                   return {
                     accountId: internalAccountId,
@@ -712,6 +715,7 @@ export class EtradeService implements ConnectionProvider {
                     quantity: position.quantity ?? 0,
                     quoteStatus: position.quoteStatus,
                     type: position.positionType ?? 'Unkown',
+                    portfolioId: internalAccount.portfolioId,
                   } satisfies Prisma.PositionCreateManyInput
                 }) ?? []
               )
@@ -755,6 +759,7 @@ export class EtradeService implements ConnectionProvider {
           assetSymbol: true,
           externalId: true,
           id: true,
+          portfolioId: true,
         },
       })
 
@@ -797,6 +802,7 @@ export class EtradeService implements ConnectionProvider {
               shortType: lot.shortType,
               termCode: lot.termCode,
               totalCostForGainPct: lot.totalCostForGainPct,
+              portfolioId: position.portfolioId,
             } satisfies Prisma.LotCreateManyInput
           }),
         ),

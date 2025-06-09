@@ -24,3 +24,10 @@ mutation CreateFiles($data: [FileCreateManyInput!]!) {
     ...FileItem
   }
 }
+
+mutation InitAccountFileUpload($fileData: [InitFileUploadPayload!]!, $accountData: InitAccountFileUploadPayload!) {
+  initAccountFileUpload(fileData: $fileData, accountData: $accountData) {
+    id
+    ...FileItem
+  }
+}

@@ -175,12 +175,15 @@ export class HarvestResolver {
       type: () => String,
     })
     id: string,
+    @ClerkContext()
+    { metadata }: ClerkClaims,
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestSelect>(info).value
 
     return this.harvestService.finalizeHarvest({
       harvestId: id,
       select,
+      portfolioId: metadata.portfolioId,
     })
   }
 

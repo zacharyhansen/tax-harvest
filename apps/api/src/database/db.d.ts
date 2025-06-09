@@ -51,7 +51,7 @@ export interface _PrismaMigrations {
 
 export interface Account {
   accountValueTotal: Numeric | null;
-  authConnectionId: string;
+  authConnectionId: string | null;
   balanceAccount: Numeric | null;
   balanceMoneyMarket: Numeric | null;
   balanceShortAdjustment: Numeric | null;
@@ -73,7 +73,7 @@ export interface Account {
   fundsWithheldFromPurchasingPower: Numeric | null;
   fundsWithheldFromWithdrawal: Numeric | null;
   id: Generated<string>;
-  institution: "AUTO" | "AUTOLOAN" | "BETA" | "BROKERAGE" | "CC_BALANCETRANSFER" | "EXTERNAL" | "FUTURES" | "GANIS" | "GENPACT" | "GENPACT_LEAD" | "GLOBALTRADING" | "HEIL" | "HELOC" | "LENDING" | "LOYALTY" | "MORTGAGE" | "NONUS" | "ONTRACK" | "RJO" | "SBASKET" | "STOCKPLAN" | "VISA" | "WDBH";
+  institution: "AUTO" | "AUTOLOAN" | "BETA" | "BROKERAGE" | "CC_BALANCETRANSFER" | "EXTERNAL" | "FUTURES" | "GANIS" | "GENPACT" | "GENPACT_LEAD" | "GLOBALTRADING" | "HEIL" | "HELOC" | "LENDING" | "LOYALTY" | "MORTGAGE" | "NONUS" | "ONTRACK" | "RJO" | "SBASKET" | "STOCKPLAN" | "VISA" | "WDBH" | null;
   key: string | null;
   liveURL: string | null;
   liveURLCreated: Timestamp | null;
@@ -87,7 +87,7 @@ export interface Account {
   optionLevel: "LEVEL_1" | "LEVEL_2" | "LEVEL_3" | "LEVEL_4" | "NO_OPTIONS" | null;
   plaidAccountMask: string | null;
   portfolioId: string;
-  provider: Generated<"ETRADE" | "PLAID" | "SYSTEM">;
+  provider: Generated<"ETRADE" | "PLAID" | "SYSTEM" | "UNCONNECTED">;
   raw: Json | null;
   setRealizedValues: Generated<boolean>;
   skipSetup: Generated<boolean>;
@@ -167,6 +167,7 @@ export interface File {
   fileType: Generated<"ETRADE_LOTS">;
   gcpFilename: string;
   id: Generated<string>;
+  portfolioId: string;
   type: string;
   updatedAt: Generated<Timestamp>;
   uploadedBy: string;
@@ -192,6 +193,7 @@ export interface HarvestTransaction {
   harvestTransactionItemId: string;
   id: Generated<string>;
   notify: Generated<boolean>;
+  portfolioId: string;
   replacementTransactionItemId: string | null;
   revert: Generated<boolean>;
   revertDate: Generated<Timestamp>;
@@ -207,6 +209,7 @@ export interface HarvestTransactionItem {
   id: Generated<string>;
   lotId: string | null;
   orderType: "BUY" | "BUY_TO_CLOSE" | "BUY_TO_OPEN" | "SELL" | "SELL_TO_CLOSE" | "SELL_TO_OPEN";
+  portfolioId: string;
   price: Numeric;
   quantity: Numeric;
   updatedAt: Generated<Timestamp>;
@@ -248,6 +251,7 @@ export interface Lot {
   orderNo: Numeric | null;
   originalQty: Numeric | null;
   paymentCurrency: Generated<string | null>;
+  portfolioId: string;
   positionId: string | null;
   price: Numeric;
   remainingQty: Numeric;
@@ -342,6 +346,7 @@ export interface Position {
   gainTotalPCT: Numeric | null;
   id: Generated<string>;
   marketValue: Numeric | null;
+  portfolioId: string;
   pricePaid: Numeric | null;
   quantity: Numeric;
   quoteStatus: string | null;
@@ -378,6 +383,7 @@ export interface RealizedPAndL {
   dividend: Generated<Numeric>;
   id: Generated<string>;
   longTerm: Generated<Numeric>;
+  portfolioId: string;
   shortTerm: Generated<Numeric>;
   updatedAt: Generated<Timestamp>;
   year: number;
@@ -398,6 +404,7 @@ export interface Transaction {
   id: Generated<string>;
   memo: string | null;
   paymentCurrency: string | null;
+  portfolioId: string;
   postDate: Timestamp | null;
   price: Numeric | null;
   quantity: Numeric | null;

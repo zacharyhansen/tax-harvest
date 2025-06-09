@@ -26,7 +26,7 @@ export default async function AdminDashboard(params: {
 
   const client = clerkClient()
 
-  const users = query ? (await client.users.getUserList({ query })).data : []
+  const users = query ? (await (await client).users.getUserList({ query })).data : []
 
   return (
     <>

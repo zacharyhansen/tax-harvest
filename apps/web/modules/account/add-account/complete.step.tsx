@@ -16,7 +16,7 @@ export function CompleteStep() {
       <div className="py-8 text-center">
         <h2 className="mb-4 text-xl font-semibold">Tax Savings Calculated</h2>
         <p className="mb-8 text-gray-400">
-          Based on your portfolio, we think we could save you at least
+          Based on your portfolio, we think we could save you a minimum of
         </p>
 
         <div className="mb-8 text-5xl font-bold text-green-500">

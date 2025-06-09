@@ -121,6 +121,7 @@ describe('plaidService', () => {
       const transactions = PlaidService.convertPlaidTransactions({
         investmentsTransactionsGetResponse: transactionsData,
         accounts: mockAccounts,
+        portfolioId: 'test-portfolio',
       })
 
       writeFileSync(
@@ -165,7 +166,7 @@ describe('plaidService', () => {
               ? new Decimal(position.costTotal as number)
               : undefined,
             symbol,
-          }),
+          }, 'test-portfolio'),
         ]
       })
 

@@ -15,10 +15,12 @@ export class RealizedPandLService {
     accountId,
     select,
     year,
+    portfolioId,
   }: {
     accountId: string
     year: number
     select: Prisma.RealizedPAndLSelect
+    portfolioId: string
   }): Promise<RealizedPAndL> {
     try {
       const realizedPAndL
@@ -49,6 +51,11 @@ export class RealizedPandLService {
             account: {
               connect: {
                 id: accountId,
+              },
+            },
+            portfolio: {
+              connect: {
+                id: portfolioId,
               },
             },
             year,

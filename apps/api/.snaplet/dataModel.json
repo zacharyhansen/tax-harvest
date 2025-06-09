@@ -66,7 +66,7 @@
           "name": "authConnectionId",
           "columnName": "authConnectionId",
           "type": "uuid",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -150,7 +150,7 @@
           "name": "institution",
           "columnName": "institution",
           "type": "AccountInstitution",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -652,7 +652,7 @@
         {
           "name": "AuthConnection",
           "type": "AuthConnection",
-          "isRequired": true,
+          "isRequired": false,
           "kind": "object",
           "relationName": "AccountToAuthConnection",
           "relationFromFields": [
@@ -1946,6 +1946,20 @@
           "maxLength": null
         },
         {
+          "id": "public.File.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Account",
           "type": "Account",
           "isRequired": true,
@@ -1953,6 +1967,24 @@
           "relationName": "FileToAccount",
           "relationFromFields": [
             "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "FileToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
           ],
           "relationToFields": [
             "id"
@@ -2368,6 +2400,20 @@
           "maxLength": null
         },
         {
+          "id": "public.HarvestTransaction.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Harvest",
           "type": "Harvest",
           "isRequired": true,
@@ -2447,6 +2493,24 @@
           "relationName": "HarvestTransaction_revertReplacementTransactionItemIdToHarvestTransactionItem",
           "relationFromFields": [
             "revertReplacementTransactionItemId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "HarvestTransactionToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
           ],
           "relationToFields": [
             "id"
@@ -2628,6 +2692,20 @@
           "maxLength": null
         },
         {
+          "id": "public.HarvestTransactionItem.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Asset",
           "type": "Asset",
           "isRequired": true,
@@ -2653,6 +2731,24 @@
           "relationName": "HarvestTransactionItemToLot",
           "relationFromFields": [
             "lotId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "HarvestTransactionItemToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
           ],
           "relationToFields": [
             "id"
@@ -3334,6 +3430,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Lot.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Account",
           "type": "Account",
           "isRequired": true,
@@ -3377,6 +3487,24 @@
           "relationName": "LotToFile",
           "relationFromFields": [
             "fileId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "LotToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
           ],
           "relationToFields": [
             "id"
@@ -3665,6 +3793,24 @@
           "relationName": "LotChangeLogToLotTransactionBatch",
           "relationFromFields": [
             "lotTransactionBatchId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "LotChangeLogToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
           ],
           "relationToFields": [
             "id"
@@ -4186,11 +4332,53 @@
           "hasDefaultValue": false
         },
         {
+          "name": "File",
+          "type": "File",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "FileToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Harvest",
           "type": "Harvest",
           "isRequired": false,
           "kind": "object",
           "relationName": "HarvestToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "HarvestTransaction",
+          "type": "HarvestTransaction",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "HarvestTransactionToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "HarvestTransactionItem",
+          "type": "HarvestTransactionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "HarvestTransactionItemToPortfolio",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4214,11 +4402,81 @@
           "hasDefaultValue": false
         },
         {
+          "name": "Lot",
+          "type": "Lot",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "LotChangeLog",
+          "type": "LotChangeLog",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotChangeLogToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "LotTransactionBatch",
           "type": "LotTransactionBatch",
           "isRequired": false,
           "kind": "object",
           "relationName": "LotTransactionBatchToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Position",
+          "type": "Position",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PositionToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "RealizedPAndL",
+          "type": "RealizedPAndL",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "RealizedPAndLToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Transaction",
+          "type": "Transaction",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "TransactionToPortfolio",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4594,6 +4852,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Position.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Account",
           "type": "Account",
           "isRequired": true,
@@ -4622,6 +4894,24 @@
           ],
           "relationToFields": [
             "symbol"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PositionToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
           ],
           "isList": false,
           "isId": false,
@@ -5110,6 +5400,20 @@
           "maxLength": null
         },
         {
+          "id": "public.RealizedPAndL.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Account",
           "type": "Account",
           "isRequired": true,
@@ -5117,6 +5421,24 @@
           "relationName": "RealizedPAndLToAccount",
           "relationFromFields": [
             "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "RealizedPAndLToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
           ],
           "relationToFields": [
             "id"
@@ -5488,6 +5810,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Transaction.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Account",
           "type": "Account",
           "isRequired": true,
@@ -5516,6 +5852,24 @@
           ],
           "relationToFields": [
             "symbol"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "TransactionToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
           ],
           "isList": false,
           "isId": false,
@@ -6171,7 +6525,7 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "_AssetToUser_AB_unique",
+          "name": "_AssetToUser_AB_pkey",
           "fields": [
             "A",
             "B"
@@ -6418,6 +6772,9 @@
         },
         {
           "name": "SYSTEM"
+        },
+        {
+          "name": "UNCONNECTED"
         }
       ]
     },

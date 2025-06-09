@@ -65,6 +65,7 @@ export class HarvestService {
                     .div(replacementAsset.lastPrice)
                     .floor()
                     .toNumber() || 0,
+                portfolioId,
               }
 
             return {
@@ -92,6 +93,7 @@ export class HarvestService {
               orderType: OrderType.SELL,
               price: currentLot.lastPrice ?? 0,
               quantity: currentLot.selectedQuantity,
+              portfolioId,
             }
           }),
         })
@@ -134,6 +136,7 @@ export class HarvestService {
                     replacementTransactionItems[i]?.id,
                   revert: replacementTransactionItems.length > 0,
                   revertDate: this.getPostWashSaleDate(new Date()),
+                  portfolioId,
                 }
               }),
             },
@@ -168,9 +171,11 @@ export class HarvestService {
   async finalizeHarvest({
     harvestId,
     select,
+    portfolioId,
   }: {
     harvestId: string
     select: Prisma.HarvestSelect
+    portfolioId: string
   }) {
     const transactions = await this.prismaService.harvestTransaction.findMany({
       include: {
@@ -198,6 +203,7 @@ export class HarvestService {
           orderType: OrderType.BUY,
           price: transaction.harvestTransactionItem.price,
           quantity: transaction.harvestTransactionItem.quantity,
+          portfolioId,
         })
         if (transaction.replacementTransactionItem) {
           indexMap[transaction.id].replacement = revertTransactionItems.length
@@ -206,6 +212,7 @@ export class HarvestService {
             orderType: OrderType.SELL,
             price: transaction.replacementTransactionItem.price,
             quantity: transaction.replacementTransactionItem.quantity,
+            portfolioId,
           })
         }
       }

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 // see https://credenza.rdev.pro/
 
-import type * as React from "react";
+import type * as React from 'react';
 
-import { useIsMobile } from "../hooks/use-is-mobile";
-import { cn } from "../utils";
+import { useIsMobile } from '../hooks/use-is-mobile';
+import { cn } from '../utils';
 
 import {
   Dialog,
@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./dialog";
+} from './dialog';
 import {
   Drawer,
   DrawerClose,
@@ -25,11 +25,11 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "./drawer";
+} from './drawer';
 
-type BaseProps = {
+interface BaseProps {
   children: React.ReactNode;
-};
+}
 
 export type RootResponsiveDialogProps = {
   open?: boolean;
@@ -38,6 +38,7 @@ export type RootResponsiveDialogProps = {
 
 export type ResponsiveDialogProps = {
   className?: string;
+  overlayClassName?: string;
   asChild?: true;
 } & BaseProps;
 
@@ -88,7 +89,7 @@ function ResponsiveDialogContent({
 
   return (
     <ResponsiveDialogContent
-      className={cn("max-h-screen overflow-auto", className)}
+      className={cn('max-h-screen overflow-auto', className)}
       {...props}
     >
       {children}
@@ -149,7 +150,7 @@ function ResponsiveDialogBody({
   ...props
 }: ResponsiveDialogProps) {
   return (
-    <div className={cn("overflow-auto px-4 md:px-1", className)} {...props}>
+    <div className={cn('overflow-auto px-4 md:px-1', className)} {...props}>
       {children}
     </div>
   );

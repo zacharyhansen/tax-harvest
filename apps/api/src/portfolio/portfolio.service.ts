@@ -1,13 +1,13 @@
-import { writeFileSync } from 'node:fs'
+import type { ClerkClaims } from '~/auth/types'
 
+import { writeFileSync } from 'node:fs'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Portfolio, PortfolioRole, Prisma } from '@prisma/client'
+
 import Decimal from 'decimal.js'
 
 import { sql } from 'kysely'
-
-import { ClerkClaims } from '~/auth/types'
 import { LotCurrent, LotValueType } from '~/lot/lot.dto'
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 import { AccountService } from '../account/account.service'

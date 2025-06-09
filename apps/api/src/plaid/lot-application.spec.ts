@@ -736,7 +736,7 @@ describe('sell transaction allocation strategies', () => {
         targetQuantity: D(6),
         targetValue: D(127.43),
         symbol: 'TEST',
-      })
+      }, 'test-portfolio')
 
       // This test will throw an error if the lot changes are not unique
       expect(result.lotChanges.length).toBe(4)
@@ -899,7 +899,7 @@ describe('sell transaction allocation strategies', () => {
           ],
           targetQuantity: D(4),
           targetValue: D(78.99),
-        })
+        }, 'test-portfolio')
 
         expect(
           result.lotChanges.map(l => ({

@@ -1,117 +1,203 @@
-@import "./tiptap/styles/index.css";
+@import './tiptap/styles/index.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Custom scrollbar styling */
 @layer base {
-  :root {
-    --background: 40 60% 100%;
-    --foreground: 40 65% 2%;
-    --muted: 40 40% 95%;
-    --muted-foreground: 40 12% 28%;
-    --popover: 40 60% 100%;
-    --popover-foreground: 40 65% 2%;
-    --card: 40 60% 100%;
-    --card-foreground: 40 65% 2%;
-    --border: 40 15% 94%;
-    --input: 40 15% 94%;
-    --primary: 40 100% 49%;
-    --primary-foreground: 40 100% 9%;
-    --secondary: 40 12% 80%;
-    --secondary-foreground: 40 12% 20%;
-    --accent: 40 19% 71%;
-    --accent-foreground: 40 19% 11%;
-    --destructive: 10 84% 24%;
-    --destructive-foreground: 10 84% 84%;
-    --ring: 40 100% 49%;
-    --radius: 0.5rem;
-
-    --chart-1: 0 72.2% 50.6%;
-    --chart-2: 142.1 76.2% 36.3%;
-    --chart-3: 24.6 95% 53.1%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-
-    --chart-sim-0: 210 90% 50%; /* Vivid Blue */
-    --chart-sim-1: 35 100% 55%; /* Bright Orange */
-    --chart-sim-2: 140 70% 45%; /* Fresh Green */
-    --chart-sim-3: 300 80% 65%; /* Soft Purple */
-    --chart-sim-4: 0 85% 55%; /* Bold Red */
-    --chart-sim-5: 190 85% 45%; /* Teal */
-    --chart-sim-6: 50 80% 60%; /* Golden Yellow */
-    --chart-sim-7: 320 70% 50%; /* Pinkish Magenta */
-    --chart-sim-8: 265 65% 60%; /* Lavender */
-    --chart-sim-9: 120 50% 40%; /* Forest Green */
+  /* For Webkit browsers (Chrome, Safari) */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
   }
 
-  .dark {
-    --background: 40 47% 2%;
-    --foreground: 40 23% 97%;
-    --muted: 40 40% 5%;
-    --muted-foreground: 40 12% 72%;
-    --popover: 40 47% 2%;
-    --popover-foreground: 40 23% 97%;
-    --card: 40 47% 2%;
-    --card-foreground: 40 23% 97%;
-    --border: 40 15% 13%;
-    --input: 40 15% 13%;
-    --primary: 40 100% 49%;
-    --primary-foreground: 40 100% 9%;
-    --secondary: 40 2% 9%;
-    --secondary-foreground: 40 2% 69%;
-    --accent: 40 10% 18%;
-    --accent-foreground: 40 10% 78%;
-    --destructive: 0 100% 72.59%;
-    --destructive-foreground: 0 0% 100%;
-    --ring: 40 100% 49%;
-
-    --chart-1: 0 72.2% 50.6%;
-    --chart-2: 142.1 76.2% 36.3%;
-    --chart-3: 262.1 83.3% 57.8%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
-}
-
-/* Sidebar */
-@layer base {
-  :root {
-    --sidebar-background: 40 60% 100%;
-    --sidebar-foreground: 40 65% 2%;
-    --sidebar-primary: 40 100% 49%;
-    --sidebar-primary-foreground: 40 100% 9%;
-    --sidebar-accent: 40 19% 71%;
-    --sidebar-accent-foreground: 40 19% 11%;
-    --sidebar-border: 40 15% 94%;
-    --sidebar-ring: 40 100% 49%;
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+    border-radius: var(--radius-sm);
   }
 
-  .dark {
-    --sidebar-background: 40 47% 2%;
-    --sidebar-foreground: 40 23% 97%;
-    --sidebar-primary: 40 100% 49%;
-    --sidebar-primary-foreground: 40 100% 9%;
-    --sidebar-accent: 40 10% 18%;
-    --sidebar-accent-foreground: 40 10% 78%;
-    --sidebar-border: 40 15% 13%;
-    --sidebar-ring: 40 100% 49%;
+  ::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: var(--radius-sm);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #cccccc;
+  }
+
+  /* Dark mode for Webkit browsers */
+  .dark ::-webkit-scrollbar-thumb {
+    background: #444444;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #666666;
+  }
+
+  /* For Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #e0e0e0 var(--background);
+  }
+  .dark * {
+    scrollbar-color: #444444 var(--background);
   }
 }
 
 /* Random custom  */
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
+  html {
+    @apply bg-background font-sans;
   }
 }
 
-@layer utilities {
-  .link {
-    @apply font-medium text-blue-600 hover:underline dark:text-blue-500;
-  }
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(0 0% 14.902%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 14.902%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 14.902%);
+  --primary: hsl(37.6923 92.126% 50.1961%);
+  --primary-foreground: hsl(0 0% 0%);
+  --secondary: hsl(220 14.2857% 95.8824%);
+  --secondary-foreground: hsl(215 13.7931% 34.1176%);
+  --muted: hsl(210 20% 98.0392%);
+  --muted-foreground: hsl(220 8.9362% 46.0784%);
+  --accent: hsl(48 100% 96.0784%);
+  --accent-foreground: hsl(22.7273 82.5% 31.3725%);
+  --destructive: hsl(0 84.2365% 60.1961%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(220 13.0435% 90.9804%);
+  --input: hsl(220 13.0435% 90.9804%);
+  --ring: hsl(37.6923 92.126% 50.1961%);
+  --chart-1: hsl(37.6923 92.126% 50.1961%);
+  --chart-2: hsl(32.1327 94.6188% 43.7255%);
+  --chart-3: hsl(25.9649 90.4762% 37.0588%);
+  --chart-4: hsl(22.7273 82.5% 31.3725%);
+  --chart-5: hsl(21.7143 77.7778% 26.4706%);
+  --sidebar: hsl(210 20% 98.0392%);
+  --sidebar-foreground: hsl(0 0% 14.902%);
+  --sidebar-primary: hsl(37.6923 92.126% 50.1961%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(48 100% 96.0784%);
+  --sidebar-accent-foreground: hsl(22.7273 82.5% 31.3725%);
+  --sidebar-border: hsl(220 13.0435% 90.9804%);
+  --sidebar-ring: hsl(37.6923 92.126% 50.1961%);
+  --font-sans: Inter, sans-serif;
+  --font-serif: Source Serif 4, serif;
+  --font-mono: JetBrains Mono, monospace;
+  --radius: 0.375rem;
+  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 2px 4px -2px hsl(0 0% 0% / 0.1);
+  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 4px 6px -2px hsl(0 0% 0% / 0.1);
+  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 8px 10px -2px hsl(0 0% 0% / 0.1);
+  --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
+}
+
+.dark {
+  --background: hsl(0 0% 9.0196%);
+  --foreground: hsl(0 0% 89.8039%);
+  --card: hsl(0 0% 14.902%);
+  --card-foreground: hsl(0 0% 89.8039%);
+  --popover: hsl(0 0% 14.902%);
+  --popover-foreground: hsl(0 0% 89.8039%);
+  --primary: hsl(37.6923 92.126% 50.1961%);
+  --primary-foreground: hsl(0 0% 0%);
+  --secondary: hsl(0 0% 14.902%);
+  --secondary-foreground: hsl(0 0% 89.8039%);
+  --muted: hsl(0 0% 14.902%);
+  --muted-foreground: hsl(0 0% 63.9216%);
+  --accent: hsl(22.7273 82.5% 31.3725%);
+  --accent-foreground: hsl(48 96.6387% 76.6667%);
+  --destructive: hsl(0 84.2365% 60.1961%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 25.098%);
+  --input: hsl(0 0% 25.098%);
+  --ring: hsl(37.6923 92.126% 50.1961%);
+  --chart-1: hsl(43.2558 96.4126% 56.2745%);
+  --chart-2: hsl(32.1327 94.6188% 43.7255%);
+  --chart-3: hsl(22.7273 82.5% 31.3725%);
+  --chart-4: hsl(25.9649 90.4762% 37.0588%);
+  --chart-5: hsl(22.7273 82.5% 31.3725%);
+  --sidebar: hsl(0 0% 5.8824%);
+  --sidebar-foreground: hsl(0 0% 89.8039%);
+  --sidebar-primary: hsl(37.6923 92.126% 50.1961%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(22.7273 82.5% 31.3725%);
+  --sidebar-accent-foreground: hsl(48 96.6387% 76.6667%);
+  --sidebar-border: hsl(0 0% 25.098%);
+  --sidebar-ring: hsl(37.6923 92.126% 50.1961%);
+  --font-sans: Inter, sans-serif;
+  --font-serif: Source Serif 4, serif;
+  --font-mono: JetBrains Mono, monospace;
+  --radius: 0.375rem;
+  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 2px 4px -2px hsl(0 0% 0% / 0.1);
+  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 4px 6px -2px hsl(0 0% 0% / 0.1);
+  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 8px 10px -2px hsl(0 0% 0% / 0.1);
+  --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
 }
 
 html {
@@ -169,9 +255,8 @@ html {
 .cl-breadcrumbsItemDivider,
 .cl-fileDropAreaHint,
 .cl-fileDropAreaFooterHint,
-.cl-form
-  p[data-localization-key="userProfile.emailAddressPage.emailCode.formHint"],
-p[data-localization-key="userProfile.profilePage.successMessage"] {
+.cl-form p[data-localization-key='userProfile.emailAddressPage.emailCode.formHint'],
+p[data-localization-key='userProfile.profilePage.successMessage'] {
   @apply text-muted-foreground;
 }
 
@@ -179,9 +264,9 @@ p[data-localization-key="userProfile.profilePage.successMessage"] {
   @apply bg-border;
 }
 
-.cl-formFieldInput[type="text"],
-.cl-formFieldInput[type="email"],
-.cl-formFieldInput[type="password"] {
+.cl-formFieldInput[type='text'],
+.cl-formFieldInput[type='email'],
+.cl-formFieldInput[type='password'] {
   @apply border-input bg-background text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
 }
 
@@ -210,7 +295,7 @@ p[data-localization-key="userProfile.profilePage.successMessage"] {
   @apply text-foreground;
 }
 
-button[data-localization-key="userProfile.start.dangerSection.deleteAccountButton"] {
+button[data-localization-key='userProfile.start.dangerSection.deleteAccountButton'] {
   @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
 }
 
@@ -253,7 +338,7 @@ button[data-localization-key="userProfile.start.dangerSection.deleteAccountButto
   @apply border-input bg-background text-foreground rounded-full border px-2.5 py-0.5 text-xs !shadow-none;
 }
 
-.cl-badge[data-localization-key="badge__unverified"] {
+.cl-badge[data-localization-key='badge__unverified'] {
   @apply text-destructive border bg-transparent dark:text-red-500;
 }
 
@@ -300,7 +385,7 @@ button[data-localization-key="userProfile.start.dangerSection.deleteAccountButto
   @apply border-input from-background to-background rounded-lg rounded-l-none border bg-gradient-to-t;
 }
 
-h1[data-localization-key="userProfile.navbar.title"] {
+h1[data-localization-key='userProfile.navbar.title'] {
   @apply text-foreground;
 }
 
@@ -325,7 +410,7 @@ h1[data-localization-key="userProfile.navbar.title"] {
   @apply border-input bg-background border;
 }
 
-.cl-menuItem[data-color="neutral"] {
+.cl-menuItem[data-color='neutral'] {
   @apply text-foreground hover:bg-muted;
 }
 

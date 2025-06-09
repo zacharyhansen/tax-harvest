@@ -1,6 +1,8 @@
 import type { GraphQLResolveInfo } from 'graphql'
+import type { ClerkClaims } from '~/auth/types'
 import { Args, Info, Mutation, Resolver } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
+import { ClerkContext } from '~/auth/decorators/clerk-context.decorator'
 import { RealizedPAndL, RealizedPAndLUpdateInput } from '../generated/graphql'
 import { PrismaService } from '../prisma/prisma.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
@@ -24,13 +26,15 @@ export class RealizedPandLResolver {
       type: () => RealizedPAndLUpdateInput,
     })
     input: Prisma.RealizedPAndLUpdateInput,
+    @ClerkContext()
+    clerkContext: ClerkClaims,
   ): Promise<RealizedPAndL> {
     const { select } = new PrismaSelect(info).value
 
     return this.prismaService.realizedPAndL.update({
       data: input,
       select: select as Prisma.RealizedPAndLSelect,
-      where: { id },
+      where: { id, portfolioId: clerkContext.metadata.portfolioId },
     })
   }
 }

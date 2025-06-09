@@ -101,7 +101,7 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="shrink-0">
-                <Link className="group" href={TypedRoutes.harvestFlowRoot()}>
+                <Link className="group" href={TypedRoutes.taxOpportunities()}>
                   <Button
                     variant="outline"
                     iconRight={<Scissors className="size-4" />}

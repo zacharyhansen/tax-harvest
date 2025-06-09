@@ -1,6 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@repo/ui/components/button'
-import { Input } from '@repo/ui/components/input'
+import {
+  FileUpload,
+  FileUploadDropzone,
+  FileUploadItem,
+  FileUploadItemDelete,
+  FileUploadItemMetadata,
+  FileUploadItemPreview,
+  FileUploadList,
+  FileUploadTrigger,
+} from '@repo/ui/components/file-upload'
 import { Label } from '@repo/ui/components/label'
 import {
   ResponsiveDialog,
@@ -16,26 +25,25 @@ import {
 import { defineStepper } from '@repo/ui/components/stepper'
 import { toast } from '@repo/ui/components/toast-sonner'
 import InputField from '@repo/ui/form-builder/fields/input.field'
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form'
 
-import { DollarSign, Plus } from 'lucide-react'
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form'
+import { DollarSign, Plus, Upload, X } from 'lucide-react'
+import { useCallback, useState } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { z } from 'zod'
-
 import {
-  useAccountQuery,
+  FileType,
+  useInitAccountFileUploadMutation,
   useUpdateAccountMutation,
   useUpdateAccountRealizedPAndLMutation,
 } from '~/generated/gql'
-import { EtradeCSVUpload } from '~/modules/fileUpload'
+import { useUploadFiles } from '~/modules/fileUpload/useUploadFiles'
 import { zodNumber } from '~/modules/utils/zod-utils'
 import { AnalyzeStep } from './analyze.step'
 import { CompleteStep } from './complete.step'
 import { OngoingStep } from './ongoing.step'
 
-const accountId = '123'
-
-const { Scoped, useStepper, steps } = defineStepper(
+const { useStepper } = defineStepper(
   { id: 'upload', title: 'Upload Portfolio', description: 'Upload your portfolio CSV file to automatically capture your tax lots' },
   { id: 'analyze', title: 'Analyzing Account', description: 'Building the most optimal strategies for your account based on its current tax lots' },
   { id: 'complete', title: 'Complete', description: 'Your account is ready to go!' },
@@ -52,22 +60,18 @@ const accountFormSchema = z.object({
 })
 
 export function AddAccountButton() {
+  const [files, setFiles] = useState<File[]>([])
+
+  const onFileReject = useCallback((file: File, message: string) => {
+    toast(message, {
+      description: `"${file.name.length > 20 ? `${file.name.slice(0, 20)}...` : file.name}" has been rejected`,
+    })
+  }, [])
   const stepper = useStepper()
 
-  const [update, { loading }] = useUpdateAccountMutation({
-    onError: () => {
-      toast.error('Unable to update account.')
-    },
-  })
+  const [createFiles] = useInitAccountFileUploadMutation()
 
-  const [updateRealizedPAndL, { loading: loadingUpdateRealizedPAndL }]
-    = useUpdateAccountRealizedPAndLMutation({
-      onError: () => {
-        toast.error('Unable to update account.')
-      },
-    })
-
-  const { form, handleSubmit } = useStandardForm<
+  const { form } = useStandardForm<
     z.infer<typeof accountFormSchema>
   >({
     defaultValues: {
@@ -79,69 +83,39 @@ export function AddAccountButton() {
       accountName: 'My First Account',
     },
     resolver: zodResolver(accountFormSchema),
-    handleSubmit: ({
-      deferredLoss,
-      description,
-      dividend,
-      longTerm,
-      shortTerm,
-    }) => {
-      return toast.promise(
-        Promise.all([
-          update({
-            variables: {
-              accountUpdateInput: {
-                description: {
-                  set: description,
-                },
-              },
-              accountWhereUniqueInput: {
-                id: accountId,
-              },
-            },
-          }),
-          updateRealizedPAndL({
-            variables: {
-              id: accountId,
-              input: {
-                deferredLoss: {
-                  set: deferredLoss.toString(),
-                },
-                dividend: {
-                  set: dividend.toString(),
-                },
-                longTerm: {
-                  set: longTerm.toString(),
-                },
-                shortTerm: {
-                  set: shortTerm.toString(),
-                },
-              },
-            },
-          }),
-        ]).then(([updateAccount, updateRealizedPAndL]) => {
-          form.reset({
-            deferredLoss: Number(
-              updateRealizedPAndL.data?.updateRealizedPAndL.deferredLoss,
-            ),
-            description: updateAccount.data?.updateAccount.description,
-            dividend: Number(
-              updateRealizedPAndL.data?.updateRealizedPAndL.dividend,
-            ),
-            longTerm: Number(
-              updateRealizedPAndL.data?.updateRealizedPAndL.longTerm,
-            ),
-            shortTerm: Number(
-              updateRealizedPAndL.data?.updateRealizedPAndL.shortTerm,
-            ),
-          })
-        }),
-        {
-          error: 'Error',
-          loading: 'Saving',
-          success: 'Saved',
+    handleSubmit: () => {},
+  })
+
+  const { onUpload } = useUploadFiles({
+    defaultUploadedFiles: [],
+    onUploadError: () => {
+      toast.error('Error uploading files')
+      stepper.goTo('upload')
+    },
+    onFileUploaded: async (files) => {
+      await createFiles({
+        variables: {
+          fileData: files.map(file => ({
+            displayName: file.displayName,
+            gcpFilename: file.fileName,
+            type: file.type,
+            fileType: FileType.EtradeLots,
+          })),
+          accountData: {
+            name: form.getValues('accountName'),
+            deferredLoss: form.getValues('deferredLoss'),
+            dividend: form.getValues('dividend'),
+            longTerm: form.getValues('longTerm'),
+            shortTerm: form.getValues('shortTerm'),
+          },
         },
-      )
+        onError: () => {
+          stepper.goTo('upload')
+        },
+        onCompleted: () => {
+          stepper.goTo('complete')
+        },
+      })
     },
   })
 
@@ -166,10 +140,10 @@ export function AddAccountButton() {
           </ResponsiveDialogTitle>
           <ResponsiveDialogDescription>
             {stepper.switch({
-              upload: step => <div>{step.description}</div>,
-              analyze: step => <div>{step.description}</div>,
-              complete: step => <div>{step.description}</div>,
-              ongoing: step => <div>{step.description}</div>,
+              upload: step => step.description,
+              analyze: step => step.description,
+              complete: step => step.description,
+              ongoing: step => step.description,
             })}
           </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
@@ -180,15 +154,52 @@ export function AddAccountButton() {
                 {/* Upload Section */}
                 <div className="mb-6">
                   <h2 className="mb-3 text-lg font-semibold">Upload Portfolio CSV</h2>
-
-                  <EtradeCSVUpload accountId="123" />
+                  <FileUpload
+                    maxFiles={2}
+                    maxSize={5 * 1024 * 1024}
+                    className="w-full"
+                    value={files}
+                    onValueChange={setFiles}
+                    onFileReject={onFileReject}
+                    multiple
+                    accept="text/csv"
+                  >
+                    <FileUploadDropzone>
+                      <div className="flex flex-col items-center gap-1 text-center">
+                        <div className="flex items-center justify-center rounded-full border p-2.5">
+                          <Upload className="size-6 text-muted-foreground" />
+                        </div>
+                        <p className="text-sm font-medium">Drag & drop files here</p>
+                        <p className="text-xs text-muted-foreground">
+                          Or click to browse (max 2 files, up to 5MB each)
+                        </p>
+                      </div>
+                      <FileUploadTrigger asChild>
+                        <Button variant="outline" size="sm" className="mt-2 w-fit">
+                          Browse files
+                        </Button>
+                      </FileUploadTrigger>
+                    </FileUploadDropzone>
+                    <FileUploadList>
+                      {files.map(file => (
+                        <FileUploadItem key={file.name} value={file}>
+                          <FileUploadItemPreview />
+                          <FileUploadItemMetadata />
+                          <FileUploadItemDelete asChild>
+                            <Button variant="ghost" size="icon" className="size-7">
+                              <X />
+                            </Button>
+                          </FileUploadItemDelete>
+                        </FileUploadItem>
+                      ))}
+                    </FileUploadList>
+                  </FileUpload>
                 </div>
 
                 <InputField
                   name="accountName"
                   label="Account Name"
                   type="text"
-                  className="w-full"
                 />
                 {/* Tax Information Grid */}
                 <div className="mb-6 grid grid-cols-2 gap-4">
@@ -229,12 +240,6 @@ export function AddAccountButton() {
                     />
                   </div>
                 </div>
-
-                {/* Net Account Status */}
-                <div className="mb-6">
-                  <Label className="mb-2 block text-sm text-gray-400">Net Account Status</Label>
-                  <div className="text-xl font-bold text-white">$12,542</div>
-                </div>
               </div>
             </FormProvider>
           ))}
@@ -250,29 +255,37 @@ export function AddAccountButton() {
         </ResponsiveDialogBody>
         <ResponsiveDialogFooter>
           {stepper.switch({
-            upload: step => (
+            upload: _step => (
               <>
-                <ResponsiveDialogClose>
+                <ResponsiveDialogClose asChild>
                   <Button variant="outline">Close</Button>
                 </ResponsiveDialogClose>
-                <Button onClick={stepper.next}>Next</Button>
+                <Button
+                  disabled={files.length === 0}
+                  onClick={() => stepper.afterGoTo('analyze', () => {
+                    onUpload(files)
+                  })}
+                >
+                  Next
+                </Button>
               </>
             ),
-            analyze: step => (
+            analyze: _step => (
               <>
+                <Button variant="outline" onClick={stepper.prev}>Back</Button>
                 <Button onClick={stepper.next}>Next</Button>
               </>
             ),
-            complete: step => (
+            complete: _step => (
               <>
                 <Button variant="outline" onClick={stepper.prev}>Back</Button>
                 <Button onClick={stepper.next}>Next</Button>
               </>
             ),
-            ongoing: step => (
+            ongoing: _step => (
               <>
                 <Button variant="outline" onClick={stepper.prev}>Back</Button>
-                <ResponsiveDialogClose>
+                <ResponsiveDialogClose asChild>
                   <Button variant="outline" onClick={stepper.reset}>Skip for now</Button>
                 </ResponsiveDialogClose>
               </>

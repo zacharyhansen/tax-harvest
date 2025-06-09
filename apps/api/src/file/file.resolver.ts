@@ -4,6 +4,7 @@ import {
   Args,
   Field,
   Info,
+  InputType,
   Mutation,
   ObjectType,
   Query,
@@ -11,11 +12,47 @@ import {
 } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
-import { File, FileCreateManyInput } from '../generated/graphql'
+import { File, FileCreateManyInput, FileType } from '../generated/graphql'
 import { GCPUploadFile } from '../google-storage/google-storage.dto'
 import { GoogleStorageService } from '../google-storage/google-storage.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
 import { FileService } from './file.service'
+
+export @InputType()
+class InitFileUploadPayload {
+  @Field(() => String)
+  gcpFilename: string
+
+  @Field(() => String)
+  displayName: string
+
+  @Field(() => String)
+  type: string
+
+  @Field(() => FileType)
+  fileType: FileType
+}
+
+export @InputType()
+class InitAccountFileUploadPayload {
+  @Field(() => String)
+  name: string
+
+  @Field(() => Number)
+  deferredLoss: number
+
+  @Field(() => Number)
+  dividend: number
+
+  @Field(() => Number)
+  longTerm: number
+
+  @Field(() => Number)
+  shortTerm: number
+
+  @Field(() => String, { nullable: true })
+  description?: string
+}
 
 @ObjectType()
 class SignedUrlsForUploadPayload {
@@ -52,6 +89,46 @@ export class FileResolver {
     return this.fileService.createAndProcessFiles({
       data,
       select,
+      portfolioId: clerkContext.metadata.portfolioId,
+    })
+  }
+
+  @Mutation(() => [File], {
+    name: 'initAccountFileUpload',
+  })
+  async initAccountFileUpload(
+    @ClerkContext()
+    clerkContext: ClerkClaims,
+    @Info()
+    info: GraphQLResolveInfo,
+    @Args('fileData', { type: () => [InitFileUploadPayload] })
+    fileData: InitFileUploadPayload[],
+    @Args('accountData', { type: () => InitAccountFileUploadPayload })
+    accountData: InitAccountFileUploadPayload,
+  ): Promise<File[]> {
+    const { select } = new PrismaSelect<Prisma.FileSelect>(info).value
+
+    return this.fileService.initAccountFileUpload({
+      accountCreateInput: {
+        name: accountData.name,
+        description: accountData.description,
+        createdBy: { connect: { id: clerkContext.sub } },
+        portfolio: { connect: { id: clerkContext.metadata.portfolioId } },
+        realizedPAndL: {
+          create: [{
+            deferredLoss: accountData.deferredLoss.toString(),
+            dividend: accountData.dividend.toString(),
+            longTerm: accountData.longTerm.toString(),
+            shortTerm: accountData.shortTerm.toString(),
+            year: new Date().getFullYear(),
+            portfolioId: clerkContext.metadata.portfolioId,
+          }],
+        },
+      },
+      fileData,
+      select,
+      portfolioId: clerkContext.metadata.portfolioId,
+      userId: clerkContext.sub,
     })
   }
 

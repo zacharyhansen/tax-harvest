@@ -5,6 +5,7 @@ import { CsvService } from '../csv/csv.service'
 import { GoogleStorageService } from '../google-storage/google-storage.service'
 import { LotService } from '../lot/lot.service'
 import { PrismaService } from '../prisma/prisma.service'
+import { InitFileUploadPayload } from './file.resolver'
 
 @Injectable()
 export class FileService {
@@ -18,9 +19,11 @@ export class FileService {
   async createAndProcessFiles({
     data,
     select,
+    portfolioId,
   }: {
     data: Prisma.FileCreateManyInput[]
     select: Prisma.FileSelect
+    portfolioId: string
   }) {
     const createdFiles = await this.prismaService.file.createManyAndReturn({
       data,
@@ -51,6 +54,7 @@ export class FileService {
                   price: lot.price.toString(),
                   remainingQty: lot.remainingQty.toString(),
                   accountId: file.accountId,
+                  portfolioId,
                 }) satisfies Prisma.LotCreateManyInput,
             ),
             lotSeededDate,
@@ -60,5 +64,33 @@ export class FileService {
     }
 
     return createdFiles
+  }
+
+  async initAccountFileUpload({
+    accountCreateInput,
+    fileData,
+    select,
+    portfolioId,
+    userId,
+  }: {
+    accountCreateInput: Prisma.AccountCreateInput
+    fileData: InitFileUploadPayload[]
+    select: Prisma.FileSelect
+    portfolioId: string
+    userId: string
+  }) {
+    const account = await this.prismaService.account.create({
+      data: accountCreateInput,
+    })
+    return this.createAndProcessFiles({
+      data: fileData.map(file => ({
+        ...file,
+        uploadedBy: userId,
+        accountId: account.id,
+        portfolioId,
+      })),
+      select,
+      portfolioId,
+    })
   }
 }

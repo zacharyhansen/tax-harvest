@@ -100,10 +100,13 @@ export function findSubsetHybrid({
   }
 }
 
-export function findLotChangeSets(params: FindSubsetHybridArgs): {
-  lotChanges: LotChange[]
-} {
-  const results = findSubsetHybrid(params)
+export function findLotChangeSets(
+  params: FindSubsetHybridArgs,
+  portfolioId: string,
+): {
+    lotChanges: LotChange[]
+  } {
+  const results = findSubsetHybrid({ ...params })
 
   const lotChanges: LotChange[][] = []
 
@@ -132,6 +135,11 @@ export function findLotChangeSets(params: FindSubsetHybridArgs): {
           },
           price: resultLot.price,
           acquiredDate: resultLot.acquiredDate,
+          portfolio: {
+            connect: {
+              id: portfolioId,
+            },
+          },
         },
       }
 

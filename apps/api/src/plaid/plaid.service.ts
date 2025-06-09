@@ -132,6 +132,7 @@ export class PlaidService {
       = await this.prismaService.account.findMany({
         where: {
           authConnectionId: {
+            // @ts-expect-error - this should exist
             in: [...existingAuthConnections.keys()],
           },
           portfolioId: {
@@ -243,7 +244,7 @@ export class PlaidService {
           [...existingAuthConnections.values()].map(auth =>
             this.client
               .itemRemove({
-                access_token: auth.secret!,
+                access_token: auth?.secret ?? '',
                 client_id: this.configService.get('PLAID_CLIENT_ID'),
                 secret: this.configService.get('PLAID_SECRET_KEY'),
               })
@@ -258,6 +259,7 @@ export class PlaidService {
         await trx.authConnection.deleteMany({
           where: {
             id: {
+              // @ts-expect-error - this should exist
               in: [...existingAuthConnections.keys()],
             },
           },
@@ -333,7 +335,7 @@ export class PlaidService {
           where: {
             account: {
               authConnectionId: {
-                in: accounts.map(a => a.authConnectionId),
+                in: accounts.map(a => a.authConnectionId ?? ''),
               },
             },
           },
@@ -342,6 +344,7 @@ export class PlaidService {
           data: PlaidService.convertPlaidHoldings({
             holdingsResponse: plaidResponse.data,
             accounts,
+            portfolioId: plaidAuthConnection.portfolioId,
           }),
         }),
       ]),
@@ -442,7 +445,7 @@ export class PlaidService {
             targetQuantity,
             targetValue,
             symbol,
-          }).lotChanges
+          }, authConnection.portfolioId).lotChanges
         },
       )
     }
@@ -722,12 +725,12 @@ export class PlaidService {
   /**
    * Updates and records plaid transactions but DOES NOT affect lots
    *
-   * @param startDate The earliest/earlier date (i.e. 2 years ago)
-   * @param endDate The latest/later date (i.e. today)
-   * @param page The page number to fetch
-   * @param plaidAuthConnection The plaid auth connection to use
-   * @param applyToLots Whether to try and apply the transactions to lots (for those transactions for the account that have occured with date > account.lotSeededDate)
-   * @returns void
+   * @param {object} params - The parameters object
+   * @param {AuthConnection} params.plaidAuthConnection - The plaid auth connection to use
+   * @param {Date} [params.startDate] - The earliest/earlier date (i.e. 2 years ago)
+   * @param {Date} [params.endDate] - The latest/later date (i.e. today)
+   * @param {number} [params.page] - The page number to fetch
+   * @returns {Promise<void>}
    */
   async syncPlaidTransactions({
     endDate,
@@ -813,6 +816,7 @@ export class PlaidService {
       PlaidService.convertPlaidTransactions({
         investmentsTransactionsGetResponse: plaidResponse.data,
         accounts,
+        portfolioId: plaidAuthConnection.portfolioId,
       }).map((input) => {
         return this.prismaService.transaction.upsert({
           create: input,
@@ -1009,9 +1013,11 @@ export class PlaidService {
   static convertPlaidTransactions({
     investmentsTransactionsGetResponse,
     accounts,
+    portfolioId,
   }: {
     investmentsTransactionsGetResponse: InvestmentsTransactionsGetResponse
     accounts: (Account | Prisma.AccountCreateInput)[]
+    portfolioId: string
   }): Prisma.TransactionCreateInput[] {
     const securityMap = new Map<string, string>()
     for (const security of investmentsTransactionsGetResponse.securities) {
@@ -1038,6 +1044,11 @@ export class PlaidService {
                 externalId: transaction.account_id,
                 provider: AccountProvider.PLAID,
               },
+            },
+          },
+          portfolio: {
+            connect: {
+              id: portfolioId,
             },
           },
           amount: transaction.amount,
@@ -1073,9 +1084,11 @@ export class PlaidService {
   static convertPlaidHoldings({
     holdingsResponse,
     accounts,
+    portfolioId,
   }: {
     holdingsResponse: InvestmentsHoldingsGetResponse
     accounts: Account[]
+    portfolioId: string
   }): Prisma.PositionCreateManyInput[] {
     const securityMap = new Map<string, string>()
     for (const security of holdingsResponse.securities) {
@@ -1100,6 +1113,7 @@ export class PlaidService {
         costTotal: holding.cost_basis,
         marketValue: holding.institution_value,
         quantity: holding.quantity,
+        portfolioId,
       }
     })
   }

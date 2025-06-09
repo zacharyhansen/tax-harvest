@@ -2,7 +2,7 @@ import { FileUploader } from '@repo/ui/components/file-uploader'
 
 import { useUploadFiles } from './useUploadFiles'
 
-type EtradeCSVUploadProps = {
+interface EtradeCSVUploadProps {
   accountId: string
 }
 
