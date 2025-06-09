@@ -25,7 +25,7 @@ import { usePathname } from 'next/navigation'
 
 import { AddAccountButton } from '~/modules/account/add-account/add-account.button'
 import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs'
-import { PlaidConnectButton } from '~/modules/plaid'
+// import { PlaidConnectButton } from '~/modules/plaid'
 import { PortfolioProvider, PortfolioSwitcher } from '~/modules/portfolio'
 
 import ApolloProviderWrapper from './ApolloProviderWrapper'
@@ -90,7 +90,7 @@ export default function MainLayout({
                       <>
                         <SignedIn>
                           <AddAccountButton />
-                          <PlaidConnectButton />
+                          {/* <PlaidConnectButton /> */}
                           <UserButton />
                           <ThemeButton />
                         </SignedIn>

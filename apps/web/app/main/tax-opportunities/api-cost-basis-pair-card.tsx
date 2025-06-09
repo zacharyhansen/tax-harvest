@@ -17,7 +17,7 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
         <h3 className="font-semibold">
           Cost Basis Reset Strategy - Matched Pair
         </h3>
-        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
+        <p className="mt-1 text-sm text-(--color-text-secondary)">
           Pair these trades to reset your cost basis with minimal tax impact
         </p>
       </div>

@@ -2,7 +2,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { cn } from '@repo/ui/utils'
 import { Inter } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
-import '@repo/ui/tailwind.css'
+import './globals.css'
 
 const inter = Inter({
   display: 'swap',

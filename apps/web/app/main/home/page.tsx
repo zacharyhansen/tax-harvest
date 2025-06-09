@@ -49,7 +49,7 @@ export default function HomePage() {
   return (
     <PageWrapper className="mx-auto">
       <div className="mb-4 w-full">
-        <div className="relative overflow-hidden rounded-lg bg-gradient-to-r from-yellow-500 to-green-500">
+        <div className="relative overflow-hidden rounded-lg bg-linear-to-r from-yellow-500 to-green-500">
           {/* Patterned background */}
           <div className="absolute inset-0 opacity-10">
             <svg

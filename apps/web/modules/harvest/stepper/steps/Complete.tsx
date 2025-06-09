@@ -46,7 +46,7 @@ export default function Complete({ harvestId }: HarvestSuccessProps) {
   )
 
   return (
-    <div className="flex items-center justify-center rounded-3xl bg-gradient-to-br from-green-50 to-green-200 p-4 py-24 dark:from-green-800">
+    <div className="flex items-center justify-center rounded-3xl bg-linear-to-br from-green-50 to-green-200 p-4 py-24 dark:from-green-800">
       <motion.div
         className="flex w-[400px] flex-col items-center justify-center rounded-3xl bg-background p-8 text-center shadow-xl"
         initial={{ rotate: -180, scale: 0 }}

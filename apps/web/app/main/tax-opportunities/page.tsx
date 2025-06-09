@@ -53,8 +53,8 @@ export default function TaxOpportunitiesPage() {
           </div>
 
           {/* Portfolio Summary Card - Show realized gain/loss position */}
-          <Card className="w-full rounded-xl border-0 bg-muted md:w-auto">
-            <CardHeader className="rounded-t-xl bg-secondary p-4 pb-2">
+          <Card className="bg-muted/70 w-full rounded-xl border-0 md:w-auto">
+            <CardHeader className="bg-muted rounded-t-xl p-4 pb-2">
               <CardTitle className="text-sm font-medium">
                 Net Realized Position
               </CardTitle>
@@ -70,7 +70,7 @@ export default function TaxOpportunitiesPage() {
                   {Format.money(netPosition)}
                 </span>
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-xs">
                 {data?.finiteHarvest.harvestType === HarvestType.ReduceCostBasis
                   ? 'Balanced position: Look for cost basis management opportunities'
                   : data?.finiteHarvest.harvestType === HarvestType.ReduceTaxes
@@ -84,10 +84,10 @@ export default function TaxOpportunitiesPage() {
         {/* Portfolio Status */}
         <div className="mb-8 flex flex-col items-start">
           {/* Tax Status */}
-          <div className="w-full overflow-hidden rounded-xl border-0 bg-muted">
-            <div className="flex items-center justify-between border-b bg-secondary p-4">
+          <div className="bg-muted/70 w-full overflow-hidden rounded-xl border-0">
+            <div className="bg-muted flex items-center justify-between border-b p-4">
               <div className="flex items-center space-x-2">
-                <BarChart3 className="size-5 text-primary" />
+                <BarChart3 className="text-primary size-5" />
                 <h2 className="text-lg font-semibold">Portfolio Tax Status</h2>
               </div>
               <TooltipProvider>
@@ -108,7 +108,7 @@ export default function TaxOpportunitiesPage() {
             <div className="grid grid-cols-3 divide-x">
               <div className="p-6">
                 <div className="flex flex-col">
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-muted-foreground text-sm">
                     Net Position (Realized P & L)
                   </span>
                   <span
@@ -129,7 +129,7 @@ export default function TaxOpportunitiesPage() {
 
               <div className="p-6">
                 <div className="flex flex-col">
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-muted-foreground text-sm">
                     Unrealized Gain
                   </span>
                   <span
@@ -150,7 +150,7 @@ export default function TaxOpportunitiesPage() {
 
               <div className="p-6">
                 <div className="flex flex-col">
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-muted-foreground text-sm">
                     Unrealized Loss
                   </span>
                   <span
