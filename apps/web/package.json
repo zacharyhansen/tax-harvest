@@ -52,7 +52,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.54.2",
-    "react-plaid-link": "^3.6.1",
+    "react-plaid-link": "^4.0.1",
     "server-only": "^0.0.1",
     "stripe": "^18.1.0",
     "usehooks-ts": "^3.1.1"
