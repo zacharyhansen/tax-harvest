@@ -126,7 +126,7 @@ api:
     command: [/bin/sh, -c]
     args:
       - |
-        /app/scripts/migrate.sh
+        chmod +x /app/scripts/migrate.sh && /app/scripts/migrate.sh
     cloudsql:
       restartPolicy: Never
       enabled: true
