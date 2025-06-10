@@ -1,6 +1,5 @@
 import type { ClerkClaims } from '~/auth/types'
 
-import { writeFileSync } from 'node:fs'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Portfolio, PortfolioRole, Prisma } from '@prisma/client'
@@ -626,11 +625,6 @@ export class PortfolioService {
             }
           }
         }
-        writeFileSync('sourceLots.json', JSON.stringify(sourceLots, null, 2))
-        writeFileSync(
-          'matchingLots.json',
-          JSON.stringify(matchingLots, null, 2),
-        )
 
         const unrealizedHarvestMatchResults: {
           sourceLot: LotCurrent
