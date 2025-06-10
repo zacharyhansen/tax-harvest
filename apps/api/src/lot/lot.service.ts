@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { Decimal } from 'decimal.js'
 
-import { SelectExpression } from 'kysely'
+import { SelectExpression, sql } from 'kysely'
 
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 import { Database } from '../database/database'
@@ -15,7 +15,7 @@ export class LotService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly db: Database,
-  ) {}
+  ) { }
 
   upsertLotsForAccount({
     lotSeededDate,
@@ -89,45 +89,51 @@ export class LotService {
     lotValueType?: LotValueType
     minTotalPAndL?: Decimal
   }): Promise<LotCurrent[]> {
-    let query = this.db
-      .selectFrom('LotCurrent')
-      .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
-      .select(LotService.lotCurrentFields)
-      .where('Account.portfolioId', '=', portfolioId)
-      // remove tax advantaged accounts
-      .where('Account.subType', 'not in', [...taxAdvantadedSubTypes])
-      // Filter out fractional shares
-      .where('LotCurrent.remainingQty', '>=', '1')
-    // Order is important  here - biggest winners at top, biggest losers at bottom by per share $
+    return this.db.transaction().execute(async (trx) => {
+      await sql`SELECT set_config('app.current_portfolio_id', ${portfolioId}::text, TRUE)`.execute(
+        trx,
+      )
 
-    if (lotIds) {
-      query = query.where('LotCurrent.id', 'in', lotIds)
-    }
+      let query = trx
+        .selectFrom('LotCurrent')
+        .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
+        .select(LotService.lotCurrentFields)
+        .where('Account.portfolioId', '=', portfolioId)
+        // remove tax advantaged accounts
+        .where('Account.subType', 'not in', [...taxAdvantadedSubTypes])
+        // Filter out fractional shares
+        .where('LotCurrent.remainingQty', '>=', '1')
+      // Order is important  here - biggest winners at top, biggest losers at bottom by per share $
 
-    if (lotValueType === LotValueType.GAIN) {
-      query = query.where('LotCurrent.gainTotal', '>', '0')
-      if (minTotalPAndL) {
-        query = query.where(
-          'LotCurrent.gainTotal',
-          '>=',
-          minTotalPAndL.abs().toString(),
-        )
+      if (lotIds) {
+        query = query.where('LotCurrent.id', 'in', lotIds)
       }
-    }
-    else if (lotValueType === LotValueType.LOSS) {
-      query = query.where('LotCurrent.gainTotal', '<', '0')
-      if (minTotalPAndL) {
-        query = query.where(
-          'LotCurrent.gainTotal',
-          '<=',
-          minTotalPAndL.abs().neg().toString(),
-        )
-      }
-    }
 
-    return query.orderBy('dollarPerSharePnL', 'desc').execute() as Promise<
-      LotCurrent[]
-    >
+      if (lotValueType === LotValueType.GAIN) {
+        query = query.where('LotCurrent.gainTotal', '>', '0')
+        if (minTotalPAndL) {
+          query = query.where(
+            'LotCurrent.gainTotal',
+            '>=',
+            minTotalPAndL.abs().toString(),
+          )
+        }
+      }
+      else if (lotValueType === LotValueType.LOSS) {
+        query = query.where('LotCurrent.gainTotal', '<', '0')
+        if (minTotalPAndL) {
+          query = query.where(
+            'LotCurrent.gainTotal',
+            '<=',
+            minTotalPAndL.abs().neg().toString(),
+          )
+        }
+      }
+
+      return query.orderBy('dollarPerSharePnL', 'desc').execute() as Promise<
+        LotCurrent[]
+      >
+    })
   }
 
   private static lotCurrentFields: SelectExpression<

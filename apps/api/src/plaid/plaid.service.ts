@@ -55,7 +55,13 @@ export class PlaidService {
     )
   }
 
-  async linkToken({ userId, portfolioId }: { userId: string, portfolioId: string }) {
+  async linkToken({
+    userId,
+    portfolioId,
+  }: {
+    userId: string
+    portfolioId: string
+  }) {
     const user = await this.assertUserIsCreatedInPlaid({ userId, portfolioId })
 
     const response = await this.client.linkTokenCreate({
@@ -99,37 +105,42 @@ export class PlaidService {
     portfolioId: string
     metaData: PlaidLinkOnSuccessMetadata
   }): Promise<Account[]> {
-    const existingAccounts = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).account.findMany({
-      include: {
-        authConnection: true,
-      },
-      where: {
-        AND: [
-          {
-            portfolioId: {
-              equals: portfolioId,
+    const existingAccounts = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .account
+      .findMany({
+        include: {
+          authConnection: true,
+        },
+        where: {
+          AND: [
+            {
+              portfolioId: {
+                equals: portfolioId,
+              },
             },
-          },
-          {
-            OR: metaData.accounts.map(account => ({
-              plaidAccountMask: {
-                equals: account.mask,
-              },
-              name: {
-                equals: account.name,
-              },
-            })),
-          },
-        ],
-      },
-    })
+            {
+              OR: metaData.accounts.map(account => ({
+                plaidAccountMask: {
+                  equals: account.mask,
+                },
+                name: {
+                  equals: account.name,
+                },
+              })),
+            },
+          ],
+        },
+      })
 
     const existingAuthConnections = new Map(
       existingAccounts.map(a => [a.authConnectionId, a.authConnection]),
     )
 
-    const allExistingAccountsForAuthConnections
-      = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).account.findMany({
+    const allExistingAccountsForAuthConnections = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .account
+      .findMany({
         where: {
           authConnectionId: {
             // @ts-expect-error - this should exist
@@ -181,90 +192,95 @@ export class PlaidService {
       },
     }
 
-    const plaidAuthConnection = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.upsert({
-      create: payload,
-      update: payload,
-      where: {
-        source_userId_portfolioId_externalId: {
-          externalId: itemId,
-          portfolioId,
-          source: AuthSource.PLAID,
-          userId,
+    const plaidAuthConnection = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .authConnection
+      .upsert({
+        create: payload,
+        update: payload,
+        where: {
+          source_userId_portfolioId_externalId: {
+            externalId: itemId,
+            portfolioId,
+            source: AuthSource.PLAID,
+            userId,
+          },
         },
-      },
-    })
+      })
 
     // Transfer existing accounts to new link before sync and clean up old link
     if (existingAccounts.length > 0) {
-      await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
-        // Move accounts to new link to persist their data
-        await trx.account.updateMany({
-          data: {
-            authConnectionId: plaidAuthConnection.id,
-          },
-          where: {
-            id: {
-              in: existingAccounts.map(a => a.id),
+      await this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .$transaction(async (trx) => {
+          // Move accounts to new link to persist their data
+          await trx.account.updateMany({
+            data: {
+              authConnectionId: plaidAuthConnection.id,
             },
-          },
-        })
-        // Update accounts so that external id is set up correctly for upserts
-        let plaidAccounts = [...metaData.accounts]
-        await Promise.all(
-          existingAccounts.map((account) => {
-            const plaidAccount = plaidAccounts.find(
-              ma =>
-                ma.mask === account.plaidAccountMask
-                && ma.name === account.name,
-            )
-
-            if (!plaidAccount) {
-              throw new Error(
-                `'Unable to locate plaid account for an existing account when it should exist - mask: ${account.plaidAccountMask}  name: ${account.name}`,
+            where: {
+              id: {
+                in: existingAccounts.map(a => a.id),
+              },
+            },
+          })
+          // Update accounts so that external id is set up correctly for upserts
+          let plaidAccounts = [...metaData.accounts]
+          await Promise.all(
+            existingAccounts.map((account) => {
+              const plaidAccount = plaidAccounts.find(
+                ma =>
+                  ma.mask === account.plaidAccountMask
+                  && ma.name === account.name,
               )
-            }
-            // remove for next selection in case of duplicates (should never happen but we will fail FK contraints if so)
-            plaidAccounts = plaidAccounts.filter(
-              a => a.id !== plaidAccount.id,
-            )
 
-            return trx.account.update({
-              data: {
-                externalId: plaidAccount.id,
-              },
-              where: {
-                id: account.id,
-              },
-            })
-          }),
-        )
+              if (!plaidAccount) {
+                throw new Error(
+                  `'Unable to locate plaid account for an existing account when it should exist - mask: ${account.plaidAccountMask}  name: ${account.name}`,
+                )
+              }
+              // remove for next selection in case of duplicates (should never happen but we will fail FK contraints if so)
+              plaidAccounts = plaidAccounts.filter(
+                a => a.id !== plaidAccount.id,
+              )
 
-        // Delete the plaid connections in plaid
-        await Promise.all(
-          [...existingAuthConnections.values()].map(auth =>
-            this.client
-              .itemRemove({
-                access_token: auth?.secret ?? '',
-                client_id: this.configService.get('PLAID_CLIENT_ID'),
-                secret: this.configService.get('PLAID_SECRET_KEY'),
+              return trx.account.update({
+                data: {
+                  externalId: plaidAccount.id,
+                },
+                where: {
+                  id: account.id,
+                },
               })
-              .catch((error: unknown) => {
-                this.logger.error(error)
-                throw new Error(error as string)
-              }),
-          ),
-        )
+            }),
+          )
 
-        // Delete our records of it
-        await trx.authConnection.deleteMany({
-          where: {
-            id: {
-              // @ts-expect-error - this should exist
-              in: [...existingAuthConnections.keys()],
+          // Delete the plaid connections in plaid
+          await Promise.all(
+            [...existingAuthConnections.values()].map(auth =>
+              this.client
+                .itemRemove({
+                  access_token: auth?.secret ?? '',
+                  client_id: this.configService.get('PLAID_CLIENT_ID'),
+                  secret: this.configService.get('PLAID_SECRET_KEY'),
+                })
+                .catch((error: unknown) => {
+                  this.logger.error(error)
+                  throw new Error(error as string)
+                }),
+            ),
+          )
+
+          // Delete our records of it
+          await trx.authConnection.deleteMany({
+            where: {
+              id: {
+                // @ts-expect-error - this should exist
+                in: [...existingAuthConnections.keys()],
+              },
             },
-          },
+          })
         })
-      })
     }
 
     return this.syncPlaidItem({
@@ -293,16 +309,19 @@ export class PlaidService {
         secret: this.configService.get('PLAID_SECRET_KEY'),
       })
       .catch(async (error: unknown) => {
-        await this.prismaService.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId)).log.create({
-          data: {
-            data: error as InputJsonValue,
-            description: '/investmentsHoldingsGet',
-            responseStatus: (error as { status: number }).status,
-            source: AuthSource.PLAID,
-            type: LogType.EXTERNAL_SYNC,
-            portfolioId: plaidAuthConnection.portfolioId,
-          },
-        })
+        await this.prismaService
+          .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+          .log
+          .create({
+            data: {
+              data: error as InputJsonValue,
+              description: '/investmentsHoldingsGet',
+              responseStatus: (error as { status: number }).status,
+              source: AuthSource.PLAID,
+              type: LogType.EXTERNAL_SYNC,
+              portfolioId: plaidAuthConnection.portfolioId,
+            },
+          })
         throw new Error('Sync failed.')
       })
 
@@ -316,39 +335,44 @@ export class PlaidService {
         securities: plaidResponse.data.securities,
         portfolioId: plaidAuthConnection.portfolioId,
       }),
-      this.prismaService.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId)).log.create({
-        data: {
-          data: plaidResponse.data as unknown as InputJsonValue,
-          description: '/investmentsHoldingsGet',
-          responseStatus: plaidResponse.status,
-          source: AuthSource.PLAID,
-          type: LogType.EXTERNAL_SYNC,
-          portfolioId: plaidAuthConnection.portfolioId,
-        },
-      }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+        .log
+        .create({
+          data: {
+            data: plaidResponse.data as unknown as InputJsonValue,
+            description: '/investmentsHoldingsGet',
+            responseStatus: plaidResponse.status,
+            source: AuthSource.PLAID,
+            type: LogType.EXTERNAL_SYNC,
+            portfolioId: plaidAuthConnection.portfolioId,
+          },
+        }),
     ])
 
     // Remove all the positions we are syncing (cant know which have been deleted or not)
     // Then create them - return the created positions and the unapplied transactions
     await Promise.all([
-      this.prismaService.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId)).$transaction([
-        this.prismaService.position.deleteMany({
-          where: {
-            account: {
-              authConnectionId: {
-                in: accounts.map(a => a.authConnectionId ?? ''),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+        .$transaction([
+          this.prismaService.position.deleteMany({
+            where: {
+              account: {
+                authConnectionId: {
+                  in: accounts.map(a => a.authConnectionId ?? ''),
+                },
               },
             },
-          },
-        }),
-        this.prismaService.position.createMany({
-          data: PlaidService.convertPlaidHoldings({
-            holdingsResponse: plaidResponse.data,
-            accounts,
-            portfolioId: plaidAuthConnection.portfolioId,
           }),
-        }),
-      ]),
+          this.prismaService.position.createMany({
+            data: PlaidService.convertPlaidHoldings({
+              holdingsResponse: plaidResponse.data,
+              accounts,
+              portfolioId: plaidAuthConnection.portfolioId,
+            }),
+          }),
+        ]),
       this.syncPlaidTransactions({
         plaidAuthConnection,
       }),
@@ -369,38 +393,47 @@ export class PlaidService {
   }): Promise<void> {
     this.logger.log('Applying new transactions')
     const [finalPositions, initialLots, transactions] = await Promise.all([
-      this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)).position.findMany({
-        where: {
-          account: {
-            authConnectionId: {
-              equals: authConnection.id,
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .position
+        .findMany({
+          where: {
+            account: {
+              authConnectionId: {
+                equals: authConnection.id,
+              },
             },
           },
-        },
-      }),
-      this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)).lot.findMany({
-        where: {
-          account: {
-            authConnectionId: {
-              equals: authConnection.id,
+        }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .lot
+        .findMany({
+          where: {
+            account: {
+              authConnectionId: {
+                equals: authConnection.id,
+              },
             },
           },
-        },
-      }),
-      this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)).transaction.findMany({
-        where: {
-          account: {
-            authConnectionId: {
-              equals: authConnection.id,
+        }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .transaction
+        .findMany({
+          where: {
+            account: {
+              authConnectionId: {
+                equals: authConnection.id,
+              },
             },
+            appliedToLots: false,
           },
-          appliedToLots: false,
-        },
-        // Important to order by transaction date descending since greedy FIFO assume newest first
-        orderBy: {
-          transactionDate: 'desc',
-        },
-      }),
+          // Important to order by transaction date descending since greedy FIFO assume newest first
+          orderBy: {
+            transactionDate: 'desc',
+          },
+        }),
     ])
 
     const intitialLotMap = new Map<string, Lot>()
@@ -416,22 +449,25 @@ export class PlaidService {
 
     let lotResults: LotChange[] = []
     try {
-      await this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)).log.create({
-        data: {
-          data: JSON.parse(
-            JSON.stringify({
-              lotTupleMap: Array.from(lotTupleMap.entries()),
-              initialLots,
-              newTransactions,
-              finalPositions,
-            }),
-          ),
-          description: 'Attempting trx merge with lotTupleMap',
-          source: AuthSource.PLAID,
-          type: LogType.PLAID_TRX_MERGE,
-          portfolioId: authConnection.portfolioId,
-        },
-      })
+      await this.prismaService
+        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .log
+        .create({
+          data: {
+            data: JSON.parse(
+              JSON.stringify({
+                lotTupleMap: Array.from(lotTupleMap.entries()),
+                initialLots,
+                newTransactions,
+                finalPositions,
+              }),
+            ),
+            description: 'Attempting trx merge with lotTupleMap',
+            source: AuthSource.PLAID,
+            type: LogType.PLAID_TRX_MERGE,
+            portfolioId: authConnection.portfolioId,
+          },
+        })
       lotResults = Array.from(lotTupleMap.entries()).flatMap(
         ([symbol, lotTuples]) => {
           const position = finalPositions.find(p => p.assetSymbol === symbol)
@@ -441,116 +477,124 @@ export class PlaidService {
           const targetValue = position?.costTotal
             ? position.costTotal
             : undefined
-          return findLotChangeSets({
-            lotsData: lotTuples,
-            targetQuantity,
-            targetValue,
-            symbol,
-          }, authConnection.portfolioId).lotChanges
+          return findLotChangeSets(
+            {
+              lotsData: lotTuples,
+              targetQuantity,
+              targetValue,
+              symbol,
+            },
+            authConnection.portfolioId,
+          ).lotChanges
         },
       )
     }
     catch (error) {
       console.error(error)
-      await this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)).log.create({
-        data: {
-          data: error as InputJsonValue,
-          description: `Trx merge failed with error: ${JSON.stringify(error)}`,
-          source: AuthSource.PLAID,
-          type: LogType.PLAID_TRX_MERGE,
-          portfolioId: authConnection.portfolioId,
-        },
-      })
-      throw error
-    }
-
-    await this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)).$transaction(async (trx) => {
-      const lotTransactionBatch = await trx.lotTransactionBatch.create({
-        data: {
-          authConnectionId: authConnection.id,
-          portfolioId: authConnection.portfolioId,
-          positionsAfter: finalPositions,
-          lotTupleMap: JSON.parse(
-            JSON.stringify(Array.from(lotTupleMap.entries())),
-          ),
-          initialLots,
-          newTransactions,
-          newBuys,
-          newSells,
-        },
-      })
-
-      const lotUpsertResults: Prisma.LotCreateInput[] = lotResults.map(
-        (assetResult) => {
-          return assetResult.upsert
-        },
-      )
-
-      await Promise.all(
-        lotUpsertResults.map(upsert =>
-          trx.lot.upsert({
-            where: {
-              id: upsert.id,
-            },
-            create: upsert,
-            update: upsert,
-          }),
-        ),
-      )
-
-      await Promise.all([
-        // update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
-        trx.account.updateMany({
-          where: {
-            authConnection: {
-              id: authConnection.id,
-            },
-          },
+      await this.prismaService
+        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .log
+        .create({
           data: {
-            lotSeededDate: transactions[0]?.transactionDate ?? undefined,
-          },
-        }),
-        // update appliedToLots to true so we know we do not need to process these again
-        trx.transaction.updateMany({
-          where: {
-            account: {
-              authConnectionId: authConnection.id,
-            },
-          },
-          data: {
-            appliedToLots: true,
-          },
-        }),
-        trx.log.create({
-          data: {
-            data: JSON.parse(JSON.stringify({ lotResults })),
-            description: 'Trx merge results',
+            data: error as InputJsonValue,
+            description: `Trx merge failed with error: ${JSON.stringify(error)}`,
             source: AuthSource.PLAID,
             type: LogType.PLAID_TRX_MERGE,
             portfolioId: authConnection.portfolioId,
           },
-        }),
-        trx.lotChangeLog.createMany({
-          data: lotUpsertResults.map((upsert, index) => {
-            return {
-              lotTransactionBatchId: lotTransactionBatch.id,
-              lotId: upsert.id,
-              quantityChange: (
-                intitialLotMap.get(upsert.id ?? '')?.remainingQty
-                ?? new Decimal(0)
-              ).minus(upsert.remainingQty as Decimal),
-              accountId: upsert.account.connect?.id ?? '',
-              portfolioId: authConnection.portfolioId,
-              lotBefore: intitialLotMap.get(upsert.id ?? ''),
-              lotAfter: JSON.parse(JSON.stringify(upsert)),
-              operationType: lotResults[index].isNewBuy
-                ? OperationType.create
-                : OperationType.update,
-            }
+        })
+      throw error
+    }
+
+    await this.prismaService
+      .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+      .$transaction(async (trx) => {
+        const lotTransactionBatch = await trx.lotTransactionBatch.create({
+          data: {
+            authConnectionId: authConnection.id,
+            portfolioId: authConnection.portfolioId,
+            positionsAfter: finalPositions,
+            lotTupleMap: JSON.parse(
+              JSON.stringify(Array.from(lotTupleMap.entries())),
+            ),
+            initialLots,
+            newTransactions,
+            newBuys,
+            newSells,
+          },
+        })
+
+        const lotUpsertResults: Prisma.LotCreateInput[] = lotResults.map(
+          (assetResult) => {
+            return assetResult.upsert
+          },
+        )
+
+        await Promise.all(
+          lotUpsertResults.map(upsert =>
+            trx.lot.upsert({
+              where: {
+                id: upsert.id,
+              },
+              create: upsert,
+              update: upsert,
+            }),
+          ),
+        )
+
+        await Promise.all([
+          // update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
+          trx.account.updateMany({
+            where: {
+              authConnection: {
+                id: authConnection.id,
+              },
+            },
+            data: {
+              lotSeededDate: transactions[0]?.transactionDate ?? undefined,
+            },
           }),
-        }),
-      ])
-    })
+          // update appliedToLots to true so we know we do not need to process these again
+          trx.transaction.updateMany({
+            where: {
+              account: {
+                authConnectionId: authConnection.id,
+              },
+            },
+            data: {
+              appliedToLots: true,
+            },
+          }),
+          trx.log.create({
+            data: {
+              data: JSON.parse(JSON.stringify({ lotResults })),
+              description: 'Trx merge results',
+              source: AuthSource.PLAID,
+              type: LogType.PLAID_TRX_MERGE,
+              portfolioId: authConnection.portfolioId,
+            },
+          }),
+          trx.lotChangeLog.createMany({
+            data: lotUpsertResults.map((upsert, index) => {
+              return {
+                lotTransactionBatchId: lotTransactionBatch.id,
+                lotId: upsert.id,
+                quantityChange: (
+                  intitialLotMap.get(upsert.id ?? '')?.remainingQty
+                  ?? new Decimal(0)
+                ).minus(upsert.remainingQty as Decimal),
+                accountId: upsert.account.connect?.id ?? '',
+                portfolioId: authConnection.portfolioId,
+                lotBefore: intitialLotMap.get(upsert.id ?? ''),
+                lotAfter: JSON.parse(JSON.stringify(upsert)),
+                operationType: lotResults[index].isNewBuy
+                  ? OperationType.create
+                  : OperationType.update,
+              }
+            }),
+          }),
+        ])
+      })
   }
 
   static lotDataMapFromLotsAndTransactions({
@@ -562,11 +606,11 @@ export class PlaidService {
     transactions: Transaction[]
     useTestLotId?: boolean
   }): {
-      lotTupleMap: Map<string, LotData[]>
-      newBuys: Transaction[]
-      newSells: Transaction[]
-      newTransactions: Transaction[]
-    } {
+    lotTupleMap: Map<string, LotData[]>
+    newBuys: Transaction[]
+    newSells: Transaction[]
+    newTransactions: Transaction[]
+  } {
     const lotTupleMap = new Map<string, LotData[]>()
     const newTransactions = transactions.filter(trx => !trx.appliedToLots)
     const newBuys = newTransactions.filter(
@@ -658,25 +702,31 @@ export class PlaidService {
     userId: string
     portfolioId: string
   }): Promise<User> {
-    const user = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).user.findUniqueOrThrow({
-      where: {
-        id: userId,
-      },
-    })
+    const user = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .user
+      .findUniqueOrThrow({
+        where: {
+          id: userId,
+        },
+      })
 
     if (!user.plaidUserToken) {
       const plaidUser = await this.plaidCreateUser({
         userId: user.id,
       })
-      return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).user.update({
-        data: {
-          plaidCustomerId: plaidUser.data.user_id,
-          plaidUserToken: plaidUser.data.user_token,
-        },
-        where: {
-          id: user.id,
-        },
-      })
+      return this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .user
+        .update({
+          data: {
+            plaidCustomerId: plaidUser.data.user_id,
+            plaidUserToken: plaidUser.data.user_token,
+          },
+          where: {
+            id: user.id,
+          },
+        })
     }
     return user
   }
@@ -708,21 +758,24 @@ export class PlaidService {
   }: {
     authConnectionId: string
   }) {
-    return this.prismaService.$extends(PrismaService.forPortfolio(authConnectionId)).transaction.findFirst({
-      where: {
-        account: {
-          authConnectionId: {
-            equals: authConnectionId,
+    return this.prismaService
+      .$extends(PrismaService.forPortfolio(authConnectionId))
+      .transaction
+      .findFirst({
+        where: {
+          account: {
+            authConnectionId: {
+              equals: authConnectionId,
+            },
           },
         },
-      },
-      orderBy: {
-        transactionDate: 'desc',
-      },
-      select: {
-        transactionDate: true,
-      },
-    })
+        orderBy: {
+          transactionDate: 'desc',
+        },
+        select: {
+          transactionDate: true,
+        },
+      })
   }
 
   /**
@@ -767,11 +820,11 @@ export class PlaidService {
       secret: this.configService.get('PLAID_SECRET_KEY'),
       start_date: mostRecentTransaction?.transactionDate
         ? new Intl.DateTimeFormat('en-CA').format(
-            mostRecentTransaction.transactionDate,
-          )
+          mostRecentTransaction.transactionDate,
+        )
         : new Intl.DateTimeFormat('en-CA').format(
-            startDate ?? new Date().setFullYear(end_date.getFullYear() - 2),
-          ),
+          startDate ?? new Date().setFullYear(end_date.getFullYear() - 2),
+        ),
     })
 
     this.logger.log(
@@ -789,23 +842,28 @@ export class PlaidService {
         securities: plaidResponse.data.securities,
         portfolioId: plaidAuthConnection.portfolioId,
       }),
-      this.prismaService.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId)).log.create({
-        data: {
-          data: plaidResponse.data as unknown as InputJsonValue,
-          description: '/investmentsTransactionsGet',
-          responseStatus: plaidResponse.status,
-          source: AuthSource.PLAID,
-          type: LogType.EXTERNAL_SYNC,
-          portfolioId: plaidAuthConnection.portfolioId,
-        },
-      }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+        .log
+        .create({
+          data: {
+            data: plaidResponse.data as unknown as InputJsonValue,
+            description: '/investmentsTransactionsGet',
+            responseStatus: plaidResponse.status,
+            source: AuthSource.PLAID,
+            type: LogType.EXTERNAL_SYNC,
+            portfolioId: plaidAuthConnection.portfolioId,
+          },
+        }),
     ])
 
     const lastTransOfPage = plaidResponse.data.investment_transactions.at(-1)
 
     // Only fetch more pages if the last transaction of the current page is not already in the DB
-    const currentTransactionsAreNew
-      = !(await this.prismaService.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId)).transaction.findUnique({
+    const currentTransactionsAreNew = !(await this.prismaService
+      .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+      .transaction
+      .findUnique({
         where: {
           accountId_externalId: {
             accountId: accounts.find(
@@ -822,20 +880,23 @@ export class PlaidService {
         accounts,
         portfolioId: plaidAuthConnection.portfolioId,
       }).map((input) => {
-        return this.prismaService.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId)).transaction.upsert({
-          create: input,
-          update: input,
-          where: {
-            accountId_externalId: {
-              accountId: accounts.find(
-                a =>
-                  a.externalId
-                  === input.account.connect?.provider_externalId?.externalId,
-              )!.id,
-              externalId: input.externalId,
+        return this.prismaService
+          .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+          .transaction
+          .upsert({
+            create: input,
+            update: input,
+            where: {
+              accountId_externalId: {
+                accountId: accounts.find(
+                  a =>
+                    a.externalId
+                    === input.account.connect?.provider_externalId?.externalId,
+                )!.id,
+                externalId: input.externalId,
+              },
             },
-          },
-        })
+          })
       }),
     )
 
@@ -854,7 +915,13 @@ export class PlaidService {
     }
   }
 
-  async assertPlaidSecuritiesExist({ securities, portfolioId }: { securities: Security[], portfolioId: string }) {
+  async assertPlaidSecuritiesExist({
+    securities,
+    portfolioId,
+  }: {
+    securities: Security[]
+    portfolioId: string
+  }) {
     return Promise.all(
       PlaidService.convertPlaidAssets({
         securities: securities.filter(
@@ -864,13 +931,16 @@ export class PlaidService {
             ?? security.market_identifier_code,
         ),
       }).map((input) => {
-        return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).asset.upsert({
-          create: input,
-          update: input,
-          where: {
-            symbol: input.symbol,
-          },
-        })
+        return this.prismaService
+          .$extends(PrismaService.forPortfolio(portfolioId))
+          .asset
+          .upsert({
+            create: input,
+            update: input,
+            where: {
+              symbol: input.symbol,
+            },
+          })
       }),
     )
   }
@@ -882,28 +952,32 @@ export class PlaidService {
     plaidAccounts: AccountBase[]
     plaidAuthConnection: AuthConnection
   }) {
-    return this.prismaService.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId)).$transaction(
-      PlaidService.convertPlaidAccounts({
-        plaidAccounts,
-        plaidAuthConnection,
-      }).map((input) => {
-        return this.prismaService.account.upsert({
-          create: input,
-          update: input,
-          where: {
-            provider_externalId: {
-              externalId: input.externalId!,
-              provider: AccountProvider.PLAID,
+    return this.prismaService
+      .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+      .$transaction(
+        PlaidService.convertPlaidAccounts({
+          plaidAccounts,
+          plaidAuthConnection,
+        }).map((input) => {
+          return this.prismaService.account.upsert({
+            create: input,
+            update: input,
+            where: {
+              provider_externalId: {
+                externalId: input.externalId!,
+                provider: AccountProvider.PLAID,
+              },
             },
-          },
-        })
-      }),
-    )
+          })
+        }),
+      )
   }
 
   private async handleHoldingsUpdate(webhookData: PlaidWebhook): Promise<void> {
-    const authConnection
-      = await this.prismaService.$extends(PrismaService.bypassRLS()).authConnection.findUniqueOrThrow({
+    const authConnection = await this.prismaService
+      .$extends(PrismaService.bypassRLS())
+      .authConnection
+      .findUniqueOrThrow({
         where: { externalId: webhookData.item_id },
         include: {
           accounts: {
@@ -924,15 +998,18 @@ export class PlaidService {
         break
       }
       default: {
-        await this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)).log.create({
-          data: {
-            data: webhookData as unknown as InputJsonValue,
-            description: `/${webhookData.webhook_code}`,
-            source: AuthSource.PLAID,
-            type: LogType.EXTERNAL_SYNC,
-            portfolioId: authConnection.portfolioId,
-          },
-        })
+        await this.prismaService
+          .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+          .log
+          .create({
+            data: {
+              data: webhookData as unknown as InputJsonValue,
+              description: `/${webhookData.webhook_code}`,
+              source: AuthSource.PLAID,
+              type: LogType.EXTERNAL_SYNC,
+              portfolioId: authConnection.portfolioId,
+            },
+          })
         this.logger.warn(`Unhandled webhook code: ${webhookData.webhook_code}`)
       }
     }
@@ -961,8 +1038,8 @@ export class PlaidService {
     return securities.map((security) => {
       const symbol
         = security.ticker_symbol
-          ?? security.name
-          ?? security.market_identifier_code
+        ?? security.name
+        ?? security.market_identifier_code
       // Only upsert minimum here - polygon should be source of other data
       const input: Prisma.AssetCreateInput = {
         plaid_security_id: security.security_id,

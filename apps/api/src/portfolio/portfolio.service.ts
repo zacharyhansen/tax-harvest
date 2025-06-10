@@ -43,20 +43,23 @@ export class PortfolioService {
     private readonly harvestService: HarvestService,
     private readonly accountService: AccountService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   getPortfoliosByUserId(userId: string, args: Prisma.PortfolioFindManyArgs) {
-    return this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.findMany({
-      ...args,
-      select: undefined, // dont allow nested seelct due to RLS bypass
-      where: {
-        usersOnPortfolios: {
-          some: {
-            userId,
+    return this.prismaService
+      .$extends(PrismaService.bypassRLS())
+      .portfolio
+      .findMany({
+        ...args,
+        select: undefined, // dont allow nested seelct due to RLS bypass
+        where: {
+          usersOnPortfolios: {
+            some: {
+              userId,
+            },
           },
         },
-      },
-    })
+      })
   }
 
   async switchPortfolio(clerkContext: ClerkClaims, portfolioId: string) {
@@ -80,16 +83,19 @@ export class PortfolioService {
     portfolioId?: string,
   ) {
     const user = await this.userService.asserUserExists(userId)
-    return this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.findUniqueOrThrow({
-      where: {
-        id: portfolioId,
-        usersOnPortfolios: {
-          some: {
-            userId: user.id,
+    return this.prismaService
+      .$extends(PrismaService.bypassRLS())
+      .portfolio
+      .findUniqueOrThrow({
+        where: {
+          id: portfolioId,
+          usersOnPortfolios: {
+            some: {
+              userId: user.id,
+            },
           },
         },
-      },
-    })
+      })
 
     // .catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId))
   }
@@ -99,18 +105,21 @@ export class PortfolioService {
     portfolioId: string,
     select: Prisma.PortfolioSelect,
   ) {
-    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findFirstOrThrow({
-      select,
-      where: {
-        id: portfolioId,
-        // Enforce user has access to the portfolio
-        usersOnPortfolios: {
-          some: {
-            userId,
+    return this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .portfolio
+      .findFirstOrThrow({
+        select,
+        where: {
+          id: portfolioId,
+          // Enforce user has access to the portfolio
+          usersOnPortfolios: {
+            some: {
+              userId,
+            },
           },
         },
-      },
-    })
+      })
   }
 
   getPortfolioById(portfolioId: string) {
@@ -126,17 +135,20 @@ export class PortfolioService {
     userId: string,
     select: Prisma.PortfolioSelect,
   ) {
-    return this.prismaService.$extends(PrismaService.forPortfolio(id)).portfolio.findUniqueOrThrow({
-      select,
-      where: {
-        id,
-        usersOnPortfolios: {
-          some: {
-            userId,
+    return this.prismaService
+      .$extends(PrismaService.forPortfolio(id))
+      .portfolio
+      .findUniqueOrThrow({
+        select,
+        where: {
+          id,
+          usersOnPortfolios: {
+            some: {
+              userId,
+            },
           },
         },
-      },
-    })
+      })
   }
 
   async createPortfolio(
@@ -144,17 +156,20 @@ export class PortfolioService {
     portfolioCreateInput: Prisma.PortfolioCreateInput,
     role?: PortfolioRole,
   ) {
-    const portfolio = await this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.create({
-      data: {
-        ...portfolioCreateInput,
-        usersOnPortfolios: {
-          create: {
-            role,
-            userId: clerkContext.sub,
+    const portfolio = await this.prismaService
+      .$extends(PrismaService.bypassRLS())
+      .portfolio
+      .create({
+        data: {
+          ...portfolioCreateInput,
+          usersOnPortfolios: {
+            create: {
+              role,
+              userId: clerkContext.sub,
+            },
           },
         },
-      },
-    })
+      })
 
     await this.clerkService.updatePublicMetaData(clerkContext.sub, {
       ...clerkContext.metadata,
@@ -175,38 +190,45 @@ export class PortfolioService {
     userId: string,
     portfolioId?: string,
   ): Promise<Portfolio> {
-    const portfolio = await this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.findFirst({
-      where: {
-        usersOnPortfolios: {
-          some: {
-            portfolioId: {
-              equals: portfolioId,
-            },
-            userId: {
-              equals: userId,
+    const portfolio = await this.prismaService
+      .$extends(PrismaService.bypassRLS())
+      .portfolio
+      .findFirst({
+        where: {
+          usersOnPortfolios: {
+            some: {
+              portfolioId: {
+                equals: portfolioId,
+              },
+              userId: {
+                equals: userId,
+              },
             },
           },
         },
-      },
-    })
+      })
 
     let authedPortfolio = portfolio
     // If the user does not have at least 1 portfolio we create it and connect them to it as an admin
     if (!portfolio) {
-      authedPortfolio = await this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.create({
-        data: {
-          createdById: userId,
-          id: portfolioId,
-          usersOnPortfolios: {
-            create: {
-              role: 'ADMIN',
-              userId,
+      authedPortfolio = await this.prismaService
+        .$extends(PrismaService.bypassRLS())
+        .portfolio
+        .create({
+          data: {
+            createdById: userId,
+            id: portfolioId,
+            usersOnPortfolios: {
+              create: {
+                role: 'ADMIN',
+                userId,
+              },
             },
           },
-        },
-      }).catch(() => {
-        throw new Error('Unauthorized access to portfolio')
-      })
+        })
+        .catch(() => {
+          throw new Error('Unauthorized access to portfolio')
+        })
     }
 
     if (!authedPortfolio) {
@@ -227,13 +249,16 @@ export class PortfolioService {
     const [realized, unrealized, accounts, setupAccounts] = await Promise.all([
       this.summaryRealized({ id }),
       this.summaryUnrealized({ id }),
-      this.prismaService.$extends(PrismaService.forPortfolio(id)).account.count({
-        where: {
-          ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
-            portfolioId: id,
-          }),
-        },
-      }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(id))
+        .account
+        .count({
+          where: {
+            ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
+              portfolioId: id,
+            }),
+          },
+        }),
       this.accountService.setupAccounts({
         id,
         select: {
@@ -334,7 +359,9 @@ export class PortfolioService {
     id: string
   }): Promise<PortfolioSummaryUnrealized> {
     const result = await this.db.transaction().execute(async (trx) => {
-      await sql`SELECT set_config('app.current_portfolio_id', ${id}::text, TRUE)`.execute(trx)
+      await sql`SELECT set_config('app.current_portfolio_id', ${id}::text, TRUE)`.execute(
+        trx,
+      )
 
       return await trx
         .selectFrom('LotCurrent')
@@ -384,18 +411,21 @@ export class PortfolioService {
   }: {
     id: string
   }): Promise<PortfolioSummaryRealized> {
-    const pAndL = await this.prismaService.$extends(PrismaService.forPortfolio(id)).realizedPAndL.findMany({
-      where: {
-        account: {
-          ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
-            portfolioId: id,
-          }),
+    const pAndL = await this.prismaService
+      .$extends(PrismaService.forPortfolio(id))
+      .realizedPAndL
+      .findMany({
+        where: {
+          account: {
+            ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
+              portfolioId: id,
+            }),
+          },
+          year: {
+            equals: new Date().getFullYear(),
+          },
         },
-        year: {
-          equals: new Date().getFullYear(),
-        },
-      },
-    })
+      })
 
     const gainShortTerm = pAndL.reduce((acc, curr) => {
       return (acc += Number(curr.shortTerm))
@@ -433,11 +463,14 @@ export class PortfolioService {
         id: portfolioId,
       }),
       this.lotService.lotCurrent({ portfolioId }),
-      this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
-        where: {
-          id: portfolioId,
-        },
-      }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .portfolio
+        .findUniqueOrThrow({
+          where: {
+            id: portfolioId,
+          },
+        }),
     ])
 
     const harvest = new Harvest({
@@ -477,11 +510,14 @@ export class PortfolioService {
     targetUnrealized: number
   }) {
     const [portfolio, lots] = await Promise.all([
-      this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
-        where: {
-          id: portfolioId,
-        },
-      }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .portfolio
+        .findUniqueOrThrow({
+          where: {
+            id: portfolioId,
+          },
+        }),
       this.lotService.lotCurrent({
         lotIds: directedLots.map(lot => lot.lotId),
         portfolioId,
@@ -518,11 +554,14 @@ export class PortfolioService {
   }: {
     portfolioId: string
   }): Promise<FiniteHarvestResult> {
-    const portfolio = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
-      where: {
-        id: portfolioId,
-      },
-    })
+    const portfolio = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .portfolio
+      .findUniqueOrThrow({
+        where: {
+          id: portfolioId,
+        },
+      })
 
     const [summary, lots] = await Promise.all([
       this.summary({
@@ -532,11 +571,14 @@ export class PortfolioService {
         portfolioId,
         minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
       }),
-      this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
-        where: {
-          id: portfolioId,
-        },
-      }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .portfolio
+        .findUniqueOrThrow({
+          where: {
+            id: portfolioId,
+          },
+        }),
     ])
 
     const harvestType
@@ -647,9 +689,18 @@ export class PortfolioService {
   }): Prisma.AccountWhereInput {
     return {
       portfolioId,
-      subType: {
-        notIn: [...taxAdvantadedSubTypes],
-      },
+      OR: [
+        {
+          subType: {
+            notIn: [...taxAdvantadedSubTypes],
+          },
+        },
+        {
+          subType: {
+            equals: null,
+          },
+        },
+      ],
     }
   }
 }

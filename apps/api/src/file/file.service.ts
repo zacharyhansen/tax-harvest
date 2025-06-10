@@ -14,7 +14,7 @@ export class FileService {
     private readonly googleStorageService: GoogleStorageService,
     private readonly csvService: CsvService,
     private readonly lotService: LotService,
-  ) {}
+  ) { }
 
   async createAndProcessFiles({
     data,
@@ -25,10 +25,13 @@ export class FileService {
     select: Prisma.FileSelect
     portfolioId: string
   }) {
-    const createdFiles = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).file.createManyAndReturn({
-      data,
-      select,
-    })
+    const createdFiles = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .file
+      .createManyAndReturn({
+        data,
+        select,
+      })
     for (const file of createdFiles) {
       const fileContent = await this.googleStorageService.getGCPFileAsString({
         gcpFileName: file.gcpFilename,
@@ -80,9 +83,12 @@ export class FileService {
     portfolioId: string
     userId: string
   }) {
-    const account = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).account.create({
-      data: accountCreateInput,
-    })
+    const account = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .account
+      .create({
+        data: accountCreateInput,
+      })
     return this.createAndProcessFiles({
       data: fileData.map(file => ({
         ...file,

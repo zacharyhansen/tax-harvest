@@ -1,4 +1,4 @@
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkLoaded, ClerkProvider } from '@clerk/nextjs'
 import { cn } from '@repo/ui/utils'
 import { Inter } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
@@ -28,7 +28,9 @@ export default function LocaleLayout({
           signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
           signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
         >
-          {children}
+          <ClerkLoaded>
+            {children}
+          </ClerkLoaded>
         </ClerkProvider>
       </body>
     </html>

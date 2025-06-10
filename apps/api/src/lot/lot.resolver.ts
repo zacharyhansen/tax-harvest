@@ -16,7 +16,7 @@ export class LotResolver {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly lotService: LotService,
-  ) {}
+  ) { }
 
   @Query(() => [Lot], { name: 'lots', nullable: false })
   lots(
@@ -36,6 +36,32 @@ export class LotResolver {
     includeTaxAdvantaged: boolean,
   ) {
     const { select } = new PrismaSelect<Prisma.LotSelect>(info).value
+
+    const whereFilter: Prisma.LotWhereInput = {
+      ...where,
+      account: {
+        portfolio: {
+          id: clerkContext.metadata.portfolioId,
+        },
+      },
+    }
+
+    if (!includeTaxAdvantaged) {
+      whereFilter.account!.OR = [
+        {
+          subType: {
+            notIn: [...taxAdvantadedSubTypes],
+
+          },
+        },
+        {
+          subType: {
+            equals: null,
+          },
+        },
+      ]
+    }
+
     return this.prismaService.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId)).lot.findMany({
       orderBy: [
         {
@@ -46,19 +72,7 @@ export class LotResolver {
         },
       ],
       select,
-      where: {
-        ...where,
-        account: {
-          portfolio: {
-            id: clerkContext.metadata.portfolioId,
-          },
-          subType: includeTaxAdvantaged
-            ? undefined
-            : {
-                notIn: [...taxAdvantadedSubTypes],
-              },
-        },
-      },
+      where: whereFilter,
     })
   }
 

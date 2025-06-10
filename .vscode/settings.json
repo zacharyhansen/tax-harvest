@@ -16,6 +16,16 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "workbench.editor.tabSizing": "shrink",
   "files.eol": "\n",
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.next/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.next": true
+  },
   "[dotenv]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
@@ -25,30 +35,14 @@
   "[sql]": {
     "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
   },
-  "sqltools.connections": [
-    {
-      "previewLimit": 50,
-      "server": "localhost",
-      "port": 5432,
-      "driver": "PostgreSQL",
-      "name": "local-odigos",
-      "database": "core",
-      "username": "postgres"
-    }
-  ],
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.fontFamily": "JetBrains Mono",
   "editor.fontSize": 13,
-  "yaml.schemas": {
-    "file:///Users/zacharyhansen/.vscode/extensions/atlassian.atlascode-3.0.2/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml",
-    "https://unpkg.com/graphql-config/config-schema.json": "file:///Users/zacharymartinezhansen/Desktop/Code/tax-harvest/.graphqlrc.yml"
-  },
-  // Disable the default formatter, use eslint instead
-  "prettier.enable": false,
-  "editor.formatOnSave": false,
+  "prettier.enable": true,
+  "editor.formatOnSave": true,
 
   // Auto fix
   "editor.codeActionsOnSave": {
@@ -85,8 +79,6 @@
     "yaml",
     "toml",
     "xml",
-    "gql",
-    "graphql",
     "astro",
     "svelte",
     "css",
@@ -97,9 +89,11 @@
     "prisma"
   ],
   "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
-  }
+  },
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "typescript.tsserver.log": "verbose"
 }
