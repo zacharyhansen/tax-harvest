@@ -474,7 +474,7 @@ export class EtradeService implements ConnectionProvider {
     await this.syncTransactions(internalAccounts, token, secret)
     // await this.syncOrders(internalAccounts, token, secret);
 
-    return (this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)) as PrismaClient).authConnection.update({
+    return (this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)) as unknown as PrismaClient).authConnection.update({
       data: {
         syncedAt: new Date(),
       },
