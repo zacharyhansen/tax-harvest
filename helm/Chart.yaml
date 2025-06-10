@@ -2,7 +2,7 @@ apiVersion: v2
 name: harvester
 description: Helm chart for Tax Harvester application
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: 1.0.0
 dependencies:
   - name: api
@@ -13,7 +13,7 @@ dependencies:
     repository: file://./charts/web
   - name: secrets
     version: 0.1.0
-    repository: "file://./charts/secrets"
+    repository: 'file://./charts/secrets'
     condition: secrets.enabled
   - name: argocd
     version: 0.1.0

@@ -2,4 +2,4 @@ apiVersion: v2
 name: common
 description: A common Helm chart with templates for microservice deployments
 type: library
-version: 0.1.0
+version: 0.1.1

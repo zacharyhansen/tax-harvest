@@ -40,12 +40,14 @@ spec:
             - name: INSTANCE_CONNECTION_NAME
               value: {{ .Values.migrations.cloudsql.instanceConnectionName | quote }}
             {{- end }}
+            # Add general environment variables except secrets
             {{- if .Values.env.extras }}
             {{- range $key, $value := .Values.env.extras }}
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
             {{- end }}
+            # Add migration-specific environment variables
             {{- if .Values.migrations.env }}
             {{- if .Values.migrations.env.extras }}
             {{- range $key, $value := .Values.migrations.env.extras }}
@@ -53,16 +55,7 @@ spec:
               value: {{ $value | quote }}
             {{- end }}
             {{- end }}
-            {{- end }}
-            {{- if .Values.env.secretRefs }}
-            {{- range .Values.env.secretRefs }}
-            - name: {{ .name }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .valueFrom.secretKeyRef.name }}
-                  key: {{ .valueFrom.secretKeyRef.key }}
-            {{- end }}
-            {{- end }}
+            # Add migration-specific secrets (these will override any general secrets)
             {{- if .Values.migrations.env.secretRefs }}
             {{- range .Values.migrations.env.secretRefs }}
             - name: {{ .name }}
@@ -70,6 +63,7 @@ spec:
                 secretKeyRef:
                   name: {{ .valueFrom.secretKeyRef.name }}
                   key: {{ .valueFrom.secretKeyRef.key }}
+            {{- end }}
             {{- end }}
             {{- end }}
           # {{- if hasKey .Values "cloudsql" }}
