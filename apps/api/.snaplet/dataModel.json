@@ -776,13 +776,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "Account_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "Account_provider_externalId_key",
           "fields": [
             "externalId",
@@ -1392,13 +1385,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "Asset_pkey",
-          "fields": [
-            "symbol"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "Asset_plaid_security_id_key",
           "fields": [
             "plaid_security_id"
@@ -1483,15 +1469,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "AssetType_pkey",
-          "fields": [
-            "code"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "AuthConnection": {
       "id": "public.AuthConnection",
@@ -1789,13 +1767,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "AuthConnection_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "AuthConnection_externalId_key",
           "fields": [
             "externalId"
@@ -2010,15 +1981,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "File_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "Harvest": {
       "id": "public.Harvest",
@@ -2216,15 +2179,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "Harvest_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "HarvestTransaction": {
       "id": "public.HarvestTransaction",
@@ -2524,13 +2479,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "HarvestTransaction_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "HarvestTransaction_harvestTransactionItemId_key",
           "fields": [
             "harvestTransactionItemId"
@@ -2816,15 +2764,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "HarvestTransactionItem_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "Log": {
       "id": "public.Log",
@@ -2966,15 +2906,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "Log_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "Lot": {
       "id": "public.Lot",
@@ -3564,13 +3496,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "Lot_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "Lot_positionId_externalId_key",
           "fields": [
             "externalId",
@@ -3840,15 +3765,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "LotChangeLog_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "LotTransactionBatch": {
       "id": "public.LotTransactionBatch",
@@ -4088,15 +4005,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "LotTransactionBatch_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "Portfolio": {
       "id": "public.Portfolio",
@@ -4500,15 +4409,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "Portfolio_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "Position": {
       "id": "public.Position",
@@ -4936,13 +4837,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "Position_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "Position_accountId_externalId_key",
           "fields": [
             "accountId",
@@ -5102,16 +4996,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "PriceHourly_pkey",
-          "fields": [
-            "assetSymbol",
-            "startDate"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "PriceHourlyVector": {
       "id": "public.PriceHourlyVector",
@@ -5250,13 +5135,6 @@
         }
       ],
       "uniqueConstraints": [
-        {
-          "name": "PriceHourlyVector_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
         {
           "name": "PriceHourlyVector_assetSymbol_startDate_vectorWindow_key",
           "fields": [
@@ -5451,13 +5329,6 @@
         }
       ],
       "uniqueConstraints": [
-        {
-          "name": "RealizedPAndL_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
         {
           "name": "RealizedPAndL_accountId_year_key",
           "fields": [
@@ -5894,13 +5765,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "Transaction_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "Transaction_accountId_externalId_key",
           "fields": [
             "accountId",
@@ -6156,13 +6020,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "User_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "User_stripeCustomerId_key",
           "fields": [
             "stripeCustomerId"
@@ -6283,16 +6140,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "UsersOnPortfolios_pkey",
-          "fields": [
-            "portfolioId",
-            "userId"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "VectorGraph": {
       "id": "public.VectorGraph",
@@ -6436,13 +6284,6 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "VectorGraph_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        },
-        {
           "name": "VectorGraph_assetSymbol_type_priceHourlyVectorId_key",
           "fields": [
             "assetSymbol",
@@ -6523,16 +6364,7 @@
           "hasDefaultValue": false
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "_AssetToUser_AB_pkey",
-          "fields": [
-            "A",
-            "B"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     },
     "_prisma_migrations": {
       "id": "public._prisma_migrations",
@@ -6652,15 +6484,7 @@
           "maxLength": null
         }
       ],
-      "uniqueConstraints": [
-        {
-          "name": "_prisma_migrations_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
+      "uniqueConstraints": []
     }
   },
   "enums": {

@@ -100,13 +100,13 @@ const Combobox = ({
           </div>
         </PopoverTrigger>
         <PopoverContent
-          className="z-[60] p-0"
+          className="z-60 p-0"
           style={{
             maxHeight: "calc(var(--radix-popper-available-height) - 10px)",
           }}
         >
           <Command
-            className="max-h-[var(--radix-popper-available-height)]"
+            className="max-h-(--radix-popper-available-height)"
             filter={filter}
           >
             <CommandInput placeholder={placeholder ?? "Search..."} />

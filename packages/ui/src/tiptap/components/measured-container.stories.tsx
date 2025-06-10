@@ -20,7 +20,7 @@ const meta = {
     output: "html",
     placeholder: "Comment here...",
     editable: true,
-    editorClassName: "focus:outline-none p-4 h-full",
+    editorClassName: "focus:outline-hidden p-4 h-full",
     onChange: (value) => {
       console.info(value);
     },
@@ -66,7 +66,7 @@ const meta = {
             <LinkBubbleMenu editor={editor} />
             {props.slashCommand || !props.editable ? (
               <SlashCmd.Root editor={editor}>
-                <SlashCmd.Cmd className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-lg border border-muted bg-background  p-4 shadow-[rgba(100,_100,_111,_0.2)_0px_7px_29px_0px] transition-all">
+                <SlashCmd.Cmd className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-lg border border-muted bg-background  p-4 shadow-[rgba(100,100,111,0.2)_0px_7px_29px_0px] transition-all">
                   <SlashCmd.Empty>No commands available</SlashCmd.Empty>
                   <SlashCmd.List>
                     {defaultCommands.map((item) => {

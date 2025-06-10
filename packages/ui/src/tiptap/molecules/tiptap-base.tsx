@@ -41,7 +41,7 @@ export const TiptapBase = ({
   const editor = useTiptapEditor({
     value,
     onUpdate: onChange,
-    editorClassName: cn("h-full px-5 py-4 focus:outline-none", editorClassName),
+    editorClassName: cn("h-full px-5 py-4 focus:outline-hidden", editorClassName),
     ...props,
   });
 
@@ -87,7 +87,7 @@ export const TiptapBase = ({
         {/* SLASH COMMANDS */}
         {props.slashCommands?.length && props.editable ? (
           <SlashCmd.Root editor={editor}>
-            <SlashCmd.Cmd className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-lg border border-muted bg-background p-1 shadow-[rgba(100,_100,_111,_0.2)_0px_7px_29px_0px] transition-all">
+            <SlashCmd.Cmd className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-lg border border-muted bg-background p-1 shadow-[rgba(100,100,111,0.2)_0px_7px_29px_0px] transition-all">
               <SlashCmd.Empty className="flex w-full min-w-72 cursor-pointer items-center space-x-2 rounded-lg p-1 text-left text-sm">
                 <Search size={18} className="mr-4" /> No search results
               </SlashCmd.Empty>

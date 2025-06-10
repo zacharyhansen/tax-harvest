@@ -238,7 +238,7 @@ export function FormComboboxLabel(props: NodeViewProps) {
                     </ResponsiveDialogHeader>
                     <ResponsiveDialogBody className="flex flex-col space-y-2">
                       <div className="flex w-full flex-col gap-2 py-1">
-                        <div className="grid h-8 grid-cols-[0.5fr,1fr,auto,auto] items-center gap-2">
+                        <div className="grid h-8 grid-cols-[0.5fr_1fr_auto_auto] items-center gap-2">
                           <Label>Label</Label>
                           <Label>Value</Label>
                           {/* Empty spaces for alignment with the last two columns */}
@@ -253,7 +253,7 @@ export function FormComboboxLabel(props: NodeViewProps) {
                             move(activeIndex, overIndex);
                           }}
                           overlay={
-                            <div className="grid grid-cols-[0.5fr,1fr,auto,auto] items-center gap-2">
+                            <div className="grid grid-cols-[0.5fr_1fr_auto_auto] items-center gap-2">
                               <div className="h-8 w-full rounded-sm bg-primary/10" />
                               <div className="h-8 w-full rounded-sm bg-primary/10" />
                               <div className="size-8 shrink-0 rounded-sm bg-primary/10" />
@@ -268,7 +268,7 @@ export function FormComboboxLabel(props: NodeViewProps) {
                                 value={option.id}
                                 asChild
                               >
-                                <div className="grid grid-cols-[0.5fr,1fr,auto,auto] items-center gap-2">
+                                <div className="grid grid-cols-[0.5fr_1fr_auto_auto] items-center gap-2">
                                   <FormField
                                     control={optionsForm.control}
                                     name={`options.${index}.label`}

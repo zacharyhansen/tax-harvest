@@ -46,8 +46,9 @@ export class PortfolioService {
   ) {}
 
   getPortfoliosByUserId(userId: string, args: Prisma.PortfolioFindManyArgs) {
-    return this.prismaService.portfolio.findMany({
+    return this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.findMany({
       ...args,
+      select: undefined, // dont allow nested seelct due to RLS bypass
       where: {
         usersOnPortfolios: {
           some: {
@@ -76,24 +77,21 @@ export class PortfolioService {
    */
   async getPortfolioAndAssertUserExistsAndHasPortfolio(
     userId: string,
-    select: Prisma.PortfolioSelect,
     portfolioId?: string,
   ) {
     const user = await this.userService.asserUserExists(userId)
-
-    return this.prismaService.portfolio
-      .findFirstOrThrow({
-        select,
-        where: {
-          id: portfolioId,
-          usersOnPortfolios: {
-            some: {
-              userId: user.id,
-            },
+    return this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.findUniqueOrThrow({
+      where: {
+        id: portfolioId,
+        usersOnPortfolios: {
+          some: {
+            userId: user.id,
           },
         },
-      })
-      .catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId))
+      },
+    })
+
+    // .catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId))
   }
 
   getPortfolioByPortfolioId(
@@ -101,7 +99,7 @@ export class PortfolioService {
     portfolioId: string,
     select: Prisma.PortfolioSelect,
   ) {
-    return this.prismaService.portfolio.findFirstOrThrow({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findFirstOrThrow({
       select,
       where: {
         id: portfolioId,
@@ -128,7 +126,7 @@ export class PortfolioService {
     userId: string,
     select: Prisma.PortfolioSelect,
   ) {
-    return this.prismaService.portfolio.findUniqueOrThrow({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(id)).portfolio.findUniqueOrThrow({
       select,
       where: {
         id,
@@ -146,7 +144,7 @@ export class PortfolioService {
     portfolioCreateInput: Prisma.PortfolioCreateInput,
     role?: PortfolioRole,
   ) {
-    const portfolio = await this.prismaService.portfolio.create({
+    const portfolio = await this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.create({
       data: {
         ...portfolioCreateInput,
         usersOnPortfolios: {
@@ -177,7 +175,7 @@ export class PortfolioService {
     userId: string,
     portfolioId?: string,
   ): Promise<Portfolio> {
-    const portfolio = await this.prismaService.portfolio.findFirst({
+    const portfolio = await this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.findFirst({
       where: {
         usersOnPortfolios: {
           some: {
@@ -195,22 +193,20 @@ export class PortfolioService {
     let authedPortfolio = portfolio
     // If the user does not have at least 1 portfolio we create it and connect them to it as an admin
     if (!portfolio) {
-      authedPortfolio = await this.prismaService.portfolio
-        .create({
-          data: {
-            createdById: userId,
-            id: portfolioId,
-            usersOnPortfolios: {
-              create: {
-                role: 'ADMIN',
-                userId,
-              },
+      authedPortfolio = await this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.create({
+        data: {
+          createdById: userId,
+          id: portfolioId,
+          usersOnPortfolios: {
+            create: {
+              role: 'ADMIN',
+              userId,
             },
           },
-        })
-        .catch(() => {
-          throw new Error('Unauthorized access to portfolio')
-        })
+        },
+      }).catch(() => {
+        throw new Error('Unauthorized access to portfolio')
+      })
     }
 
     if (!authedPortfolio) {
@@ -231,7 +227,7 @@ export class PortfolioService {
     const [realized, unrealized, accounts, setupAccounts] = await Promise.all([
       this.summaryRealized({ id }),
       this.summaryUnrealized({ id }),
-      this.prismaService.account.count({
+      this.prismaService.$extends(this.prismaService.forPortfolio(id)).account.count({
         where: {
           ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
             portfolioId: id,
@@ -337,26 +333,30 @@ export class PortfolioService {
   }: {
     id: string
   }): Promise<PortfolioSummaryUnrealized> {
-    const result = await this.db
-      .selectFrom('LotCurrent')
-      .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
-      .select([
-        sql<
-          number | null
-        >`SUM(CASE WHEN "LotCurrent"."gainTotal" < 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
-          'lossTotal',
-        ),
-        sql<
-          number | null
-        >`SUM(CASE WHEN "LotCurrent"."gainTotal" >= 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
-          'gainTotal',
-        ),
-        sql<number>`COUNT(DISTINCT "Account"."id")`.as('accountCount'),
-        sql<number>`COUNT("LotCurrent"."id")`.as('lotCount'),
-      ])
-      .where('Account.portfolioId', '=', id)
-      .where('Account.subType', 'not in', [...taxAdvantadedSubTypes])
-      .executeTakeFirst()
+    const result = await this.db.transaction().execute(async (trx) => {
+      await sql`SELECT set_config('app.current_portfolio_id', ${id}::text, TRUE)`.execute(trx)
+
+      return await trx
+        .selectFrom('LotCurrent')
+        .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
+        .select([
+          sql<
+            number | null
+          >`SUM(CASE WHEN "LotCurrent"."gainTotal" < 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
+            'lossTotal',
+          ),
+          sql<
+            number | null
+          >`SUM(CASE WHEN "LotCurrent"."gainTotal" >= 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
+            'gainTotal',
+          ),
+          sql<number>`COUNT(DISTINCT "Account"."id")`.as('accountCount'),
+          sql<number>`COUNT("LotCurrent"."id")`.as('lotCount'),
+        ])
+        .where('Account.portfolioId', '=', id)
+        .where('Account.subType', 'not in', [...taxAdvantadedSubTypes])
+        .executeTakeFirst()
+    })
 
     if (result) {
       const gainTotal = new Decimal(result.gainTotal ?? 0)
@@ -384,7 +384,7 @@ export class PortfolioService {
   }: {
     id: string
   }): Promise<PortfolioSummaryRealized> {
-    const pAndL = await this.prismaService.realizedPAndL.findMany({
+    const pAndL = await this.prismaService.$extends(this.prismaService.forPortfolio(id)).realizedPAndL.findMany({
       where: {
         account: {
           ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
@@ -433,7 +433,7 @@ export class PortfolioService {
         id: portfolioId,
       }),
       this.lotService.lotCurrent({ portfolioId }),
-      this.prismaService.portfolio.findUniqueOrThrow({
+      this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
         where: {
           id: portfolioId,
         },
@@ -477,7 +477,7 @@ export class PortfolioService {
     targetUnrealized: number
   }) {
     const [portfolio, lots] = await Promise.all([
-      this.prismaService.portfolio.findUniqueOrThrow({
+      this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
         where: {
           id: portfolioId,
         },
@@ -518,7 +518,7 @@ export class PortfolioService {
   }: {
     portfolioId: string
   }): Promise<FiniteHarvestResult> {
-    const portfolio = await this.prismaService.portfolio.findUniqueOrThrow({
+    const portfolio = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
       where: {
         id: portfolioId,
       },
@@ -532,7 +532,7 @@ export class PortfolioService {
         portfolioId,
         minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
       }),
-      this.prismaService.portfolio.findUniqueOrThrow({
+      this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
         where: {
           id: portfolioId,
         },

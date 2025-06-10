@@ -63,8 +63,8 @@ spec:
                   key: {{ .valueFrom.secretKeyRef.key }}
             {{- end }}
             {{- end }}
-            {{- if .Values.migrations.secretRefs }}
-            {{- range .Values.migrations.secretRefs }}
+            {{- if .Values.migrations.env.secretRefs }}
+            {{- range .Values.migrations.env.secretRefs }}
             - name: {{ .name }}
               valueFrom:
                 secretKeyRef:

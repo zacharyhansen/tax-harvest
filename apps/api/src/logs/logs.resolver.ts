@@ -31,7 +31,7 @@ export class LogsResolver {
     orderBy?: Prisma.LogOrderByWithRelationInput,
   ) {
     const { select } = new PrismaSelect<Prisma.LogSelect>(info).value
-    return this.logsService.logs({
+    return this.logsService.logs(clerkContext.metadata.portfolioId, {
       select,
       where: {
         portfolioId: clerkContext.metadata.portfolioId,
@@ -47,7 +47,7 @@ export class LogsResolver {
     @ClerkContext()
     clerkContext: ClerkClaims,
   ) {
-    return this.prismaService.log.count({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(clerkContext.metadata.portfolioId)).log.count({
       where: {
         portfolioId: clerkContext.metadata.portfolioId,
       },
@@ -60,7 +60,7 @@ export class LogsResolver {
     @ClerkContext()
     clerkContext: ClerkClaims,
   ) {
-    return this.prismaService.log.findUnique({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(clerkContext.metadata.portfolioId)).log.findUnique({
       where: { id: logId, portfolioId: clerkContext.metadata.portfolioId },
     })
   }

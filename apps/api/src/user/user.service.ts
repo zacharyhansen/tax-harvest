@@ -25,55 +25,49 @@ export class UserService {
   /**
    * Important method that serves as the creation / entry point for users added to our app
    * @param id Clerk User Id that we will use as primary key
-   * @param select
    * @returns User
    */
   asserUserExists(
     id: string,
-    select?: Prisma.UserSelect,
     input?: Omit<Prisma.UserCreateInput, 'stripeCustomerId'>,
   ) {
-    return this.prismaService.user
-      .findUniqueOrThrow({
-        select,
-        where: {
-          id,
-        },
-      })
-      .catch(async () => {
-        const clerkUser = await this.clerkService.user(id)
-        // Create user in stripe and plaid so we can add the ids
-        const [stripeUser, plaidUser] = await Promise.all([
-          this.stripeService.createCustomer({
-            params: {
-              email:
+    return this.prismaService.user.findUniqueOrThrow({
+      where: {
+        id,
+      },
+    }).catch(async () => {
+      const clerkUser = await this.clerkService.user(id)
+      // Create user in stripe and plaid so we can add the ids
+      const [stripeUser, plaidUser] = await Promise.all([
+        this.stripeService.createCustomer({
+          params: {
+            email:
                 clerkUser.primaryEmailAddress?.emailAddress
                 ?? input?.email
                 ?? undefined,
-              metadata: {
-                clerk_id: clerkUser.id,
-              },
-              name: clerkUser.fullName ?? input?.name ?? undefined,
-              phone:
+            metadata: {
+              clerk_id: clerkUser.id,
+            },
+            name: clerkUser.fullName ?? input?.name ?? undefined,
+            phone:
                 clerkUser.primaryPhoneNumber?.phoneNumber
                 ?? input?.phoneNumber
                 ?? undefined,
-            },
-          }),
-          this.plaidService.plaidCreateUser({ userId: clerkUser.id }),
-        ])
-
-        return this.prismaService.user.create({
-          data: {
-            ...input,
-            id,
-            plaidCustomerId: plaidUser.data.user_id,
-            plaidUserToken: plaidUser.data.user_token,
-            stripeCustomerId: stripeUser.id,
           },
-          select,
-        })
+        }),
+        this.plaidService.plaidCreateUser({ userId: clerkUser.id }),
+      ])
+
+      return this.prismaService.user.create({
+        data: {
+          ...input,
+          id,
+          plaidCustomerId: plaidUser.data.user_id,
+          plaidUserToken: plaidUser.data.user_token,
+          stripeCustomerId: stripeUser.id,
+        },
       })
+    })
   }
 
   async upsertUserById(input: Prisma.UserCreateInput) {
@@ -90,8 +84,8 @@ export class UserService {
     return this.prismaService.user.update(args)
   }
 
-  async updateUserFavorites(args: Prisma.UserUpdateArgs) {
-    return this.prismaService.user.update(args)
+  async updateUserFavorites(args: Prisma.UserUpdateArgs, portfolioId: string) {
+    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).user.update(args)
   }
 
   async findOneById(id: string) {

@@ -124,15 +124,11 @@ export class PortfolioResolver {
     name: 'portfolioAuthed',
   })
   async portfolio(
-    @Info()
-    info: GraphQLResolveInfo,
     @ClerkContext()
     { metadata, sub }: ClerkClaims,
   ) {
-    const { select } = new PrismaSelect<Prisma.PortfolioSelect>(info).value
     return await this.portfolioService.getPortfolioAndAssertUserExistsAndHasPortfolio(
       sub,
-      select,
       metadata.portfolioId,
     )
   }
@@ -185,7 +181,7 @@ export class PortfolioResolver {
     })
     data: Prisma.PortfolioUpdateInput,
   ) {
-    return this.prismaService.portfolio.update({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).portfolio.update({
       data,
       where: {
         id: metadata.portfolioId,

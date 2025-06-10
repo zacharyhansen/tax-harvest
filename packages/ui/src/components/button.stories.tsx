@@ -15,7 +15,7 @@ const meta = {
         "destructive",
         "ghost",
         "link",
-        "outline",
+        "outline-solid",
       ],
     },
     size: {
@@ -69,7 +69,7 @@ export const Link: Story = {
 };
 export const Outline: Story = {
   args: {
-    variant: "outline",
+    variant: "outline-solid",
     children: "ButtonShadcn",
   },
 };

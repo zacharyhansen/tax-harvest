@@ -6333,6 +6333,7 @@ export type HarvestWhereUniqueInput = {
 
 export type InitAccountFileUploadPayload = {
   deferredLoss: Scalars['Float']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   dividend: Scalars['Float']['input'];
   longTerm: Scalars['Float']['input'];
   name: Scalars['String']['input'];

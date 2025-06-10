@@ -80,7 +80,6 @@ export class ClerkController {
         // Keep user creation to this single entry point (even tho it requires an extra request)
         await this.userService.asserUserExists(
           evt.data.id,
-          { id: true },
           {
             email,
             id: evt.data.id,

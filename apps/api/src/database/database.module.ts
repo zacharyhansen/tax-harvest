@@ -34,13 +34,7 @@ import { Database } from './database'
           },
           dialect: new PostgresDialect({
             pool: new pg.Pool({
-              database: process.env.DATABASE_NAME,
-              host: process.env.DATABASE_HOST,
-              password: process.env.DATABASE_PASSWORD,
-              port: Number.parseInt(
-                process.env.DATABASE_PORT?.toString() ?? '5432',
-              ),
-              user: process.env.DATABASE_USER,
+              connectionString: process.env.DATABASE_URL,
             }),
           }),
         })

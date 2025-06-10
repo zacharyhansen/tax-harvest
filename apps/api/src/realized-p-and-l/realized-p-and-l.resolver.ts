@@ -31,7 +31,7 @@ export class RealizedPandLResolver {
   ): Promise<RealizedPAndL> {
     const { select } = new PrismaSelect(info).value
 
-    return this.prismaService.realizedPAndL.update({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(clerkContext.metadata.portfolioId)).realizedPAndL.update({
       data: input,
       select: select as Prisma.RealizedPAndLSelect,
       where: { id, portfolioId: clerkContext.metadata.portfolioId },

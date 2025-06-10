@@ -46,11 +46,12 @@ export class AuthConnectionResolver {
     const { select } = new PrismaSelect<Prisma.AuthConnectionSelect>(info)
       .value
 
-    return this.prismaService.authConnection.findUnique({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(currentUser.metadata.portfolioId)).authConnection.findUnique({
       select,
       where: {
         id,
         userId: currentUser.sub,
+        portfolioId: currentUser.metadata.portfolioId,
       },
     })
   }
@@ -121,6 +122,7 @@ export class AuthConnectionResolver {
       id,
       select,
       userId: currentUser.sub,
+      portfolioId: currentUser.metadata.portfolioId,
     })
   }
 

@@ -285,7 +285,7 @@ export function useTiptapEditor({
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
-        class: cn("focus:outline-none", editorClassName, {
+        class: cn("focus:outline-hidden", editorClassName, {
           "px-8": props.editable,
         }),
       },

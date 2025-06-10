@@ -14,7 +14,7 @@ export class PositionService {
     portfolioId: string
     select: Prisma.PositionSelect
   }) {
-    return this.prismaService.position.findMany({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).position.findMany({
       select,
       where: {
         account: {

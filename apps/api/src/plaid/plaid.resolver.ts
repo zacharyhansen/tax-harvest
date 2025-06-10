@@ -28,6 +28,7 @@ export class PlaidResolver {
   ) {
     const plaidResponse = await this.plaidService.linkToken({
       userId: currentUser.sub,
+      portfolioId: currentUser.metadata.portfolioId,
     })
 
     return plaidResponse.data.link_token
@@ -63,7 +64,7 @@ export class PlaidResolver {
       userId: currentUser.sub,
     })
 
-    return this.prismaService.account.findMany({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(currentUser.metadata.portfolioId)).account.findMany({
       select,
       where: {
         id: { in: accounts.map(a => a.id) },

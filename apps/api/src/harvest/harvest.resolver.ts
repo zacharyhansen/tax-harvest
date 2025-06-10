@@ -73,31 +73,14 @@ export class HarvestResolver {
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestSelect>(info).value
 
-    return this.prismaService.harvest.findMany({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvest.findMany({
       orderBy: [
         {
           date: 'desc',
         },
       ],
       select,
-      where: {
-        AND: where
-          ? [
-              {
-                portfolioId: {
-                  equals: metadata.portfolioId,
-                },
-              },
-              where,
-            ]
-          : [
-              {
-                portfolioId: {
-                  equals: metadata.portfolioId,
-                },
-              },
-            ],
-      },
+      where,
     })
   }
 
@@ -118,7 +101,7 @@ export class HarvestResolver {
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestSelect>(info).value
 
-    return this.prismaService.harvest.findUniqueOrThrow({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvest.findUniqueOrThrow({
       select,
       where: {
         id,
@@ -151,7 +134,7 @@ export class HarvestResolver {
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestSelect>(info).value
 
-    return this.prismaService.harvest.update({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvest.update({
       data,
       select,
       where: {
@@ -204,15 +187,20 @@ export class HarvestResolver {
       type: () => HarvestTransactionUpdateInput,
     })
     data: Prisma.HarvestTransactionUpdateInput,
+    @ClerkContext()
+    { metadata }: ClerkClaims,
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestTransactionSelect>(info)
       .value
 
-    return this.prismaService.harvestTransaction.update({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvestTransaction.update({
       data,
       select,
       where: {
         id,
+        portfolioId: {
+          equals: metadata.portfolioId,
+        },
       },
     })
   }
@@ -234,16 +222,21 @@ export class HarvestResolver {
       type: () => HarvestTransactionItemUpdateInput,
     })
     data: Prisma.HarvestTransactionItemUpdateInput,
+    @ClerkContext()
+    { metadata }: ClerkClaims,
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestTransactionItemSelect>(
       info,
     ).value
 
-    return this.prismaService.harvestTransactionItem.update({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvestTransactionItem.update({
       data,
       select,
       where: {
         id,
+        portfolioId: {
+          equals: metadata.portfolioId,
+        },
       },
     })
   }

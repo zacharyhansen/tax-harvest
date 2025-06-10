@@ -341,7 +341,7 @@ const AccordionTrigger = ({
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex w-full flex-1 items-center py-2 transition-all first:[&[data-state=open]>svg]:rotate-90",
+        "flex w-full flex-1 items-center py-2 transition-all [&[data-state=open]>svg]:first:rotate-90",
         className,
       )}
       {...props}

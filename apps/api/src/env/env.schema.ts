@@ -8,11 +8,6 @@ export const envSchema = z.object({
   PORT: z.string(),
   // Database
   DATABASE_URL: z.string(),
-  DATABASE_NAME: z.string(),
-  DATABASE_USER: z.string(),
-  DATABASE_PASSWORD: z.string(),
-  DATABASE_HOST: z.string(),
-  DATABASE_PORT: z.string(),
   // Clerk
   CLERK_SECRET_KEY: z.string(),
   CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET: z.string(),

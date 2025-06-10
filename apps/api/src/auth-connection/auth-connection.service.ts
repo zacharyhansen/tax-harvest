@@ -18,11 +18,13 @@ export class AuthConnectionService {
     id,
     select,
     userId,
+    portfolioId,
   }: {
     id?: string
     authConnection?: AuthConnection
     userId: string
     select: Prisma.AuthConnectionSelect
+    portfolioId: string
   }): Promise<AuthConnection> {
     if (!id && !authConnection) {
       throw new Error('You must provide an id or existing connection to sync')
@@ -30,9 +32,10 @@ export class AuthConnectionService {
 
     const connection
       = authConnection
-        ?? (await this.prismaService.authConnection.findUniqueOrThrow({
+        ?? (await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.findUniqueOrThrow({
           where: {
             id,
+            portfolioId,
           },
         }))
 
@@ -105,30 +108,6 @@ export class AuthConnectionService {
       }
     }
   }
-
-  // async authConnectionExt(
-  //   id: string,
-  //   select: Prisma.AuthConnectionSelect,
-  // ): Promise<AuthConnectionExt> {
-  //   const authConnection =
-  //     await this.prismaService.authConnection.findUniqueOrThrow({
-  //       select: {
-  //         ...select,
-  //         authedAt: true,
-  //         source: true,
-  //       },
-  //       where: {
-  //         id,
-  //       },
-  //     });
-  //   return {
-  //     ...authConnection,
-  //     _requiresReAuth: this.requiresReAuth(
-  //       authConnection.source,
-  //       authConnection.authedAt,
-  //     ),
-  //   } satisfies AuthConnectionExt;
-  // }
 
   requiresReAuth(source: AuthSource, authedAt: Date) {
     switch (source) {

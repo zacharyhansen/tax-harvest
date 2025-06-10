@@ -82,10 +82,11 @@ export class AccountResolver {
       type: () => String,
     })
     id: string,
+    @ClerkContext() { metadata }: ClerkClaims,
   ): Promise<Account> {
     const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value
 
-    return this.accountService.getAccount({
+    return this.accountService.getAccount(metadata.portfolioId, {
       select,
       where: {
         id,
@@ -150,10 +151,12 @@ export class AccountResolver {
       type: () => AccountWhereUniqueInput,
     })
     accountWhereUniqueInput: Prisma.AccountWhereUniqueInput,
+    @ClerkContext() { metadata }: ClerkClaims,
   ): Promise<Account> {
     return this.accountService.updateAccount(
       accountUpdateInput,
       accountWhereUniqueInput,
+      metadata.portfolioId,
     )
   }
 

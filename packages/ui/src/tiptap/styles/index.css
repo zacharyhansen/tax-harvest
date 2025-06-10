@@ -1,9 +1,9 @@
-@import "./partials/code.css";
-@import "./partials/placeholder.css";
-@import "./partials/lists.css";
-@import "./partials/typography.css";
-@import "./partials/zoom.css";
-@import "./partials/drag-handle.css";
+@import './partials/code.css';
+@import './partials/placeholder.css';
+@import './partials/lists.css';
+@import './partials/typography.css';
+@import './partials/zoom.css';
+@import './partials/drag-handle.css';
 
 :root {
   --mt-overlay: rgba(251, 251, 251, 0.75);
@@ -151,11 +151,11 @@
 }
 
 .minimal-tiptap-editor .ProseMirror hr {
-  @apply my-3 h-0.5 w-full border-none bg-[var(--mt-hr)];
+  @apply my-3 h-0.5 w-full border-none bg-(--mt-hr);
 }
 
 .minimal-tiptap-editor .ProseMirror-focused hr.ProseMirror-selectednode {
-  @apply outline-muted-foreground rounded-full outline outline-2 outline-offset-1;
+  @apply outline-muted-foreground rounded-full outline-solid outline-2 outline-offset-1;
 }
 
 .minimal-tiptap-editor .ProseMirror .ProseMirror-gapcursor {

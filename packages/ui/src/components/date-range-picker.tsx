@@ -57,7 +57,7 @@ const months = [
 
 // eslint-disable-next-line tailwindcss/no-contradicting-classname
 const multiSelectVariants = cva(
-  "flex items-center justify-start whitespace-nowrap rounded-lg text-sm font-medium text-foreground ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50",
+  "flex items-center justify-start whitespace-nowrap rounded-lg text-sm font-medium text-foreground ring-offset-background transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -73,7 +73,7 @@ const multiSelectVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "outline",
+      variant: "outline-solid",
     },
   },
 );

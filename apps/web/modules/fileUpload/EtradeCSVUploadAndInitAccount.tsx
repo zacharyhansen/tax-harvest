@@ -1,27 +1,44 @@
 import { FileUploader } from '@repo/ui/components/file-uploader'
 
-import { useUploadFiles } from './useUploadFiles'
+// import { useUploadFiles } from './useUploadFiles'
+// import { useInitAccountFileUploadMutation } from '~/generated/gql'
+// import { usePortfolio } from '~/portfolio/usePortfolio'
 
 interface EtradeCSVUploadProps {
   accountId: string
 }
 
 export default function EtradeCSVUpload({ accountId }: EtradeCSVUploadProps) {
-  const [createFiles] = use()
-  const { isUploading, onUpload } = useUploadFiles({
-    defaultUploadedFiles: [],
-    onFileUploaded: async (files) => {
-      console.error({ files })
-    },
-  })
+  // const { portfolioId } = usePortfolio()
+  // const [createFiles] = useInitAccountFileUploadMutation()
+
+  // const { isUploading, onUpload } = useUploadFiles({
+  //   defaultUploadedFiles: [],
+  //   onFileUploaded: async (files) => {
+  //     createFiles({
+  //       variables: {
+  //         data: files.map((file) => ({
+  //           accountId,
+  //           displayName: file.displayName,
+  //           gcpFilename: file.fileName,
+  //           type: 'ETRADE_CSV',
+  //           uploadedBy: 'ETRADE_CSV_UPLOAD',
+  //           portfolioId: portfolioId,
+  //         })),
+  //       },
+  //     })
+  //   },
+  // })
 
   return (
     <FileUploader
       title="Add Current Etrade Positions"
       description="The positions will replace any existing positions for this account in the portfolio."
       maxSize={1024 * 1024 * 2}
-      onUpload={onUpload}
-      disabled={isUploading}
+      onUpload={async (files) => {
+        console.log('upload', files)
+      }}
+      disabled={false}
       accept={{
         'text/csv': [],
       }}

@@ -1,3 +1,4 @@
+/* eslint-disable ts/ban-ts-comment */
 import { Injectable, Logger } from '@nestjs/common'
 import { Prisma, RealizedPAndL } from '@prisma/client'
 
@@ -24,8 +25,9 @@ export class RealizedPandLService {
   }): Promise<RealizedPAndL> {
     try {
       const realizedPAndL
-        = await this.prismaService.realizedPAndL.findUniqueOrThrow({
-          select,
+      // @ts-ignore - ignore types
+        = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).realizedPAndL.findUniqueOrThrow({
+          select: select as Prisma.RealizedPAndLSelect,
           where: {
             accountId_year: {
               accountId,
@@ -36,7 +38,7 @@ export class RealizedPandLService {
       return realizedPAndL
     }
     catch {
-      return this.prismaService.$transaction(async (trx) => {
+      return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
         await trx.account.update({
           data: {
             setRealizedValues: true,
@@ -45,7 +47,7 @@ export class RealizedPandLService {
             id: accountId,
           },
         })
-
+        // @ts-ignore - ignore types
         return trx.realizedPAndL.create({
           data: {
             account: {

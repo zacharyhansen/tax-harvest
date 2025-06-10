@@ -292,7 +292,7 @@ function DataTable<TData, TValue>({
   return (
     <div
       className={cn(
-        "mx-auto flex min-h-96 w-fit max-w-full flex-grow flex-col space-y-2",
+        "mx-auto flex min-h-96 w-fit max-w-full grow flex-col space-y-2",
         className,
       )}
     >

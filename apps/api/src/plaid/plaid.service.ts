@@ -55,8 +55,8 @@ export class PlaidService {
     )
   }
 
-  async linkToken({ userId }: { userId: string }) {
-    const user = await this.assertUserIsCreatedInPlaid({ userId })
+  async linkToken({ userId, portfolioId }: { userId: string, portfolioId: string }) {
+    const user = await this.assertUserIsCreatedInPlaid({ userId, portfolioId })
 
     const response = await this.client.linkTokenCreate({
       client_id: this.configService.get('PLAID_CLIENT_ID'),
@@ -99,7 +99,7 @@ export class PlaidService {
     portfolioId: string
     metaData: PlaidLinkOnSuccessMetadata
   }): Promise<Account[]> {
-    const existingAccounts = await this.prismaService.account.findMany({
+    const existingAccounts = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).account.findMany({
       include: {
         authConnection: true,
       },
@@ -129,7 +129,7 @@ export class PlaidService {
     )
 
     const allExistingAccountsForAuthConnections
-      = await this.prismaService.account.findMany({
+      = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).account.findMany({
         where: {
           authConnectionId: {
             // @ts-expect-error - this should exist
@@ -181,7 +181,7 @@ export class PlaidService {
       },
     }
 
-    const plaidAuthConnection = await this.prismaService.authConnection.upsert({
+    const plaidAuthConnection = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.upsert({
       create: payload,
       update: payload,
       where: {
@@ -196,7 +196,7 @@ export class PlaidService {
 
     // Transfer existing accounts to new link before sync and clean up old link
     if (existingAccounts.length > 0) {
-      await this.prismaService.$transaction(async (trx) => {
+      await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
         // Move accounts to new link to persist their data
         await trx.account.updateMany({
           data: {
@@ -293,7 +293,7 @@ export class PlaidService {
         secret: this.configService.get('PLAID_SECRET_KEY'),
       })
       .catch(async (error: unknown) => {
-        await this.prismaService.log.create({
+        await this.prismaService.$extends(this.prismaService.forPortfolio(plaidAuthConnection.portfolioId)).log.create({
           data: {
             data: error as InputJsonValue,
             description: '/investmentsHoldingsGet',
@@ -314,8 +314,9 @@ export class PlaidService {
       }),
       this.assertPlaidSecuritiesExist({
         securities: plaidResponse.data.securities,
+        portfolioId: plaidAuthConnection.portfolioId,
       }),
-      this.prismaService.log.create({
+      this.prismaService.$extends(this.prismaService.forPortfolio(plaidAuthConnection.portfolioId)).log.create({
         data: {
           data: plaidResponse.data as unknown as InputJsonValue,
           description: '/investmentsHoldingsGet',
@@ -330,7 +331,7 @@ export class PlaidService {
     // Remove all the positions we are syncing (cant know which have been deleted or not)
     // Then create them - return the created positions and the unapplied transactions
     await Promise.all([
-      this.prismaService.$transaction([
+      this.prismaService.$extends(this.prismaService.forPortfolio(plaidAuthConnection.portfolioId)).$transaction([
         this.prismaService.position.deleteMany({
           where: {
             account: {
@@ -368,7 +369,7 @@ export class PlaidService {
   }): Promise<void> {
     this.logger.log('Applying new transactions')
     const [finalPositions, initialLots, transactions] = await Promise.all([
-      this.prismaService.position.findMany({
+      this.prismaService.$extends(this.prismaService.forPortfolio(authConnection.portfolioId)).position.findMany({
         where: {
           account: {
             authConnectionId: {
@@ -377,7 +378,7 @@ export class PlaidService {
           },
         },
       }),
-      this.prismaService.lot.findMany({
+      this.prismaService.$extends(this.prismaService.forPortfolio(authConnection.portfolioId)).lot.findMany({
         where: {
           account: {
             authConnectionId: {
@@ -386,7 +387,7 @@ export class PlaidService {
           },
         },
       }),
-      this.prismaService.transaction.findMany({
+      this.prismaService.$extends(this.prismaService.forPortfolio(authConnection.portfolioId)).transaction.findMany({
         where: {
           account: {
             authConnectionId: {
@@ -415,7 +416,7 @@ export class PlaidService {
 
     let lotResults: LotChange[] = []
     try {
-      await this.prismaService.log.create({
+      await this.prismaService.$extends(this.prismaService.forPortfolio(authConnection.portfolioId)).log.create({
         data: {
           data: JSON.parse(
             JSON.stringify({
@@ -451,7 +452,7 @@ export class PlaidService {
     }
     catch (error) {
       console.error(error)
-      await this.prismaService.log.create({
+      await this.prismaService.$extends(this.prismaService.forPortfolio(authConnection.portfolioId)).log.create({
         data: {
           data: error as InputJsonValue,
           description: `Trx merge failed with error: ${JSON.stringify(error)}`,
@@ -463,7 +464,7 @@ export class PlaidService {
       throw error
     }
 
-    await this.prismaService.$transaction(async (trx) => {
+    await this.prismaService.$extends(this.prismaService.forPortfolio(authConnection.portfolioId)).$transaction(async (trx) => {
       const lotTransactionBatch = await trx.lotTransactionBatch.create({
         data: {
           authConnectionId: authConnection.id,
@@ -652,10 +653,12 @@ export class PlaidService {
 
   async assertUserIsCreatedInPlaid({
     userId,
+    portfolioId,
   }: {
     userId: string
+    portfolioId: string
   }): Promise<User> {
-    const user = await this.prismaService.user.findUniqueOrThrow({
+    const user = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).user.findUniqueOrThrow({
       where: {
         id: userId,
       },
@@ -665,7 +668,7 @@ export class PlaidService {
       const plaidUser = await this.plaidCreateUser({
         userId: user.id,
       })
-      return this.prismaService.user.update({
+      return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).user.update({
         data: {
           plaidCustomerId: plaidUser.data.user_id,
           plaidUserToken: plaidUser.data.user_token,
@@ -705,7 +708,7 @@ export class PlaidService {
   }: {
     authConnectionId: string
   }) {
-    return this.prismaService.transaction.findFirst({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(authConnectionId)).transaction.findFirst({
       where: {
         account: {
           authConnectionId: {
@@ -784,8 +787,9 @@ export class PlaidService {
       }),
       this.assertPlaidSecuritiesExist({
         securities: plaidResponse.data.securities,
+        portfolioId: plaidAuthConnection.portfolioId,
       }),
-      this.prismaService.log.create({
+      this.prismaService.$extends(this.prismaService.forPortfolio(plaidAuthConnection.portfolioId)).log.create({
         data: {
           data: plaidResponse.data as unknown as InputJsonValue,
           description: '/investmentsTransactionsGet',
@@ -801,7 +805,7 @@ export class PlaidService {
 
     // Only fetch more pages if the last transaction of the current page is not already in the DB
     const currentTransactionsAreNew
-      = !(await this.prismaService.transaction.findUnique({
+      = !(await this.prismaService.$extends(this.prismaService.forPortfolio(plaidAuthConnection.portfolioId)).transaction.findUnique({
         where: {
           accountId_externalId: {
             accountId: accounts.find(
@@ -818,7 +822,7 @@ export class PlaidService {
         accounts,
         portfolioId: plaidAuthConnection.portfolioId,
       }).map((input) => {
-        return this.prismaService.transaction.upsert({
+        return this.prismaService.$extends(this.prismaService.forPortfolio(plaidAuthConnection.portfolioId)).transaction.upsert({
           create: input,
           update: input,
           where: {
@@ -850,7 +854,7 @@ export class PlaidService {
     }
   }
 
-  async assertPlaidSecuritiesExist({ securities }: { securities: Security[] }) {
+  async assertPlaidSecuritiesExist({ securities, portfolioId }: { securities: Security[], portfolioId: string }) {
     return Promise.all(
       PlaidService.convertPlaidAssets({
         securities: securities.filter(
@@ -860,7 +864,7 @@ export class PlaidService {
             ?? security.market_identifier_code,
         ),
       }).map((input) => {
-        return this.prismaService.asset.upsert({
+        return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).asset.upsert({
           create: input,
           update: input,
           where: {
@@ -878,7 +882,7 @@ export class PlaidService {
     plaidAccounts: AccountBase[]
     plaidAuthConnection: AuthConnection
   }) {
-    return this.prismaService.$transaction(
+    return this.prismaService.$extends(this.prismaService.forPortfolio(plaidAuthConnection.portfolioId)).$transaction(
       PlaidService.convertPlaidAccounts({
         plaidAccounts,
         plaidAuthConnection,
@@ -899,7 +903,7 @@ export class PlaidService {
 
   private async handleHoldingsUpdate(webhookData: PlaidWebhook): Promise<void> {
     const authConnection
-      = await this.prismaService.authConnection.findUniqueOrThrow({
+      = await this.prismaService.$extends(this.prismaService.bypassRLS()).authConnection.findUniqueOrThrow({
         where: { externalId: webhookData.item_id },
         include: {
           accounts: {
@@ -920,7 +924,7 @@ export class PlaidService {
         break
       }
       default: {
-        await this.prismaService.log.create({
+        await this.prismaService.$extends(this.prismaService.forPortfolio(authConnection.portfolioId)).log.create({
           data: {
             data: webhookData as unknown as InputJsonValue,
             description: `/${webhookData.webhook_code}`,

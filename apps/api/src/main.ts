@@ -33,7 +33,7 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
     origin: [
-      process.env.CLIENT_ORIGIN ?? 'http://localhost:3000',
+      process.env.CLIENT_ORIGIN!,
       'https://sandbox.embed.apollographql.com',
     ],
   })

@@ -70,31 +70,11 @@ api:
           secretKeyRef:
             name: database
             key: DATABASE_URL
-      - name: DATABASE_NAME
+      - name: DATABASE_URL_MIGRATION
         valueFrom:
           secretKeyRef:
             name: database
-            key: DATABASE_NAME
-      - name: DATABASE_HOST
-        valueFrom:
-          secretKeyRef:
-            name: database
-            key: DATABASE_HOST
-      - name: DATABASE_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: database
-            key: DATABASE_PASSWORD
-      - name: DATABASE_PORT
-        valueFrom:
-          secretKeyRef:
-            name: database
-            key: DATABASE_PORT
-      - name: DATABASE_USER
-        valueFrom:
-          secretKeyRef:
-            name: database
-            key: DATABASE_USER
+            key: DATABASE_URL_MIGRATION
       - name: CLERK_SECRET_KEY
         valueFrom:
           secretKeyRef:
@@ -152,6 +132,14 @@ api:
       enabled: true
       instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
       resources: {}
+    env:
+      # use different connection for migrations to avoid RLS
+      secretRefs:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: database
+              key: DATABASE_URL_MIGRATION
 web:
   enabled: true
   replicaCount: 1
@@ -211,16 +199,8 @@ secrets:
       data:
         - secretKey: DATABASE_URL
           remoteKey: DATABASE_URL
-        - secretKey: DATABASE_NAME
-          remoteKey: DATABASE_NAME
-        - secretKey: DATABASE_HOST
-          remoteKey: DATABASE_HOST
-        - secretKey: DATABASE_PORT
-          remoteKey: DATABASE_PORT
-        - secretKey: DATABASE_USER
-          remoteKey: DATABASE_USER
-        - secretKey: DATABASE_PASSWORD
-          remoteKey: DATABASE_PASSWORD
+        - secretKey: DATABASE_URL_MIGRATION
+          remoteKey: DATABASE_URL_MIGRATION
     - name: clerk
       target: clerk
       data:

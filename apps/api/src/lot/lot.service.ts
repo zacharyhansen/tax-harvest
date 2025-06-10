@@ -22,13 +22,15 @@ export class LotService {
     accountId,
     lots,
     replace,
+    portfolioId,
   }: {
     accountId: string
     lots: Prisma.LotCreateManyInput[]
     replace: boolean
     lotSeededDate?: Date
+    portfolioId: string
   }) {
-    return this.prismaService.$transaction(async (trx) => {
+    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
       await trx.account.update({
         data: {
           uploadedPositions: true,

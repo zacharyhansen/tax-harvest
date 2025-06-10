@@ -7,7 +7,7 @@ import { PrismaService } from '../prisma/prisma.service'
 export class LogsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  logs(args: Prisma.LogFindManyArgs) {
-    return this.prismaService.log.findMany(args)
+  logs(portfolioId: string, args: Prisma.LogFindManyArgs) {
+    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).log.findMany(args)
   }
 }

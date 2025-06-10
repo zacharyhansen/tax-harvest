@@ -19,11 +19,11 @@ export class UserResolver {
   async user(
     @ClerkContext()
     clerkContext: ClerkClaims,
-    @Info()
-    info: GraphQLResolveInfo,
-  ): Promise<User> {
-    const { select } = new PrismaSelect<Prisma.UserSelect>(info).value
-    return this.userService.asserUserExists(clerkContext.sub, select)
+  ): Promise<User> { // only ever return top level fields as exposing more is security risk
+    return this.userService.asserUserExists(
+      clerkContext.sub,
+      undefined,
+    )
   }
 
   @Mutation(() => User, {
@@ -77,7 +77,7 @@ export class UserResolver {
       where: {
         id: currentUser.sub,
       },
-    })
+    }, currentUser.metadata.portfolioId)
   }
 
   @Query(() => User, {

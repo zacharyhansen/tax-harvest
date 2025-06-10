@@ -36,7 +36,7 @@ export class LotResolver {
     includeTaxAdvantaged: boolean,
   ) {
     const { select } = new PrismaSelect<Prisma.LotSelect>(info).value
-    return this.prismaService.lot.findMany({
+    return this.prismaService.$extends(this.prismaService.forPortfolio(clerkContext.metadata.portfolioId)).lot.findMany({
       orderBy: [
         {
           assetSymbol: 'asc',

@@ -135,7 +135,7 @@ export function LabelInput({
               : snakeCase(event.currentTarget.textContent ?? name),
           });
         }}
-        className="w-fit min-w-12 pr-1 text-sm font-medium leading-none outline-none"
+        className="w-fit min-w-12 pr-1 text-sm font-medium leading-none outline-hidden"
         aria-placeholder="Add a label"
       >
         {label}

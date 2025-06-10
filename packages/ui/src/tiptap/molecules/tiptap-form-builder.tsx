@@ -82,7 +82,7 @@ export const TiptapBasic = ({
   const editor = useTiptapEditor({
     value,
     onUpdate: onChange,
-    editorClassName: cn("h-full px-5 py-4 focus:outline-none", editorClassName),
+    editorClassName: cn("h-full px-5 py-4 focus:outline-hidden", editorClassName),
     ...props,
   });
 
@@ -111,7 +111,7 @@ export const TiptapBasic = ({
         <LinkBubbleMenu editor={editor} />
         {props.slashCommand || !props.editable ? (
           <SlashCmd.Root editor={editor}>
-            <SlashCmd.Cmd className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-lg border border-muted bg-background p-4 shadow-[rgba(100,_100,_111,_0.2)_0px_7px_29px_0px] transition-all">
+            <SlashCmd.Cmd className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-lg border border-muted bg-background p-4 shadow-[rgba(100,100,111,0.2)_0px_7px_29px_0px] transition-all">
               <SlashCmd.Empty>No commands available</SlashCmd.Empty>
               <SlashCmd.List>
                 {defaultCommands.map((item) => {

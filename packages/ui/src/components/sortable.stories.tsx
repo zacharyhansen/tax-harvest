@@ -103,7 +103,7 @@ function SortableForm() {
                 move(activeIndex, overIndex);
               }}
               overlay={
-                <div className="grid grid-cols-[0.5fr,1fr,auto,auto] items-center gap-2">
+                <div className="grid grid-cols-[0.5fr_1fr_auto_auto] items-center gap-2">
                   <div className="h-8 w-full rounded-sm bg-primary/10" />
                   <div className="h-8 w-full rounded-sm bg-primary/10" />
                   <div className="size-8 shrink-0 rounded-sm bg-primary/10" />
@@ -114,7 +114,7 @@ function SortableForm() {
               <div className="flex w-full flex-col gap-2">
                 {fields.map((field, index) => (
                   <SortableItem key={field.id} value={field.id} asChild>
-                    <div className="grid grid-cols-[0.5fr,1fr,auto,auto] items-center gap-2">
+                    <div className="grid grid-cols-[0.5fr_1fr_auto_auto] items-center gap-2">
                       <FormField
                         control={form.control}
                         name={`flipTricks.${index}.spin`}

@@ -59,7 +59,7 @@ export const FormTextNode = Node.create<TextNodeAttributes>({
             }}
             onKeyDown={handleKeyDown}
             value={placeholder}
-            className="text-muted-foreground transition-all duration-200 placeholder:text-transparent focus:outline-none focus:placeholder:text-gray-400"
+            className="text-muted-foreground transition-all duration-200 placeholder:text-transparent focus:outline-hidden focus:placeholder:text-gray-400"
           />
         </InputWrapper>
       );
