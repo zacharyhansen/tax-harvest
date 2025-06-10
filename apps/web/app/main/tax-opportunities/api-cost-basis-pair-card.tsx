@@ -1,28 +1,35 @@
-import type { UnrealizedHarvestItemFragment } from '~/generated/gql'
-import { Button } from '@repo/ui/components/button'
-import { Card } from '@repo/ui/components/card'
-import { cn } from '@repo/ui/utils'
+import {
+  useCreateHarvestMutation,
+  HarvestType,
+  type UnrealizedHarvestItemFragment,
+} from '~/generated/gql';
+import { Button } from '@repo/ui/components/button';
+import { Card } from '@repo/ui/components/card';
+import { cn } from '@repo/ui/utils';
 
-import { ArrowUpCircle, Check, TrendingDown } from 'lucide-react'
-import { Format, MoneyUtil } from '~/modules/utils'
+import { ArrowUpCircle, Check, TrendingDown } from 'lucide-react';
+import { Format, MoneyUtil } from '~/modules/utils';
+import { toast } from '@repo/ui/components/toast-sonner';
 
 export type CostBasisPairCardProps = {
-  harvestItem: UnrealizedHarvestItemFragment
-}
+  harvestItem: UnrealizedHarvestItemFragment;
+};
 
 export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
+  const [createHarvest] = useCreateHarvestMutation();
+
   return (
-    <Card className="overflow-hidden border-0 bg-muted shadow-sm">
-      <div className="border-b bg-muted p-4">
+    <Card className="bg-muted overflow-hidden border-0 shadow-sm">
+      <div className="bg-muted border-b p-4">
         <h3 className="font-semibold">
           Cost Basis Reset Strategy - Matched Pair
         </h3>
-        <p className="mt-1 text-sm text-(--color-text-secondary)">
+        <p className="text-(--color-text-secondary) mt-1 text-sm">
           Pair these trades to reset your cost basis with minimal tax impact
         </p>
       </div>
 
-      <div className="grid gap-0 divide-x divide-border md:grid-cols-2">
+      <div className="divide-border grid gap-0 divide-x md:grid-cols-2">
         {/* Gain Position */}
         <LotOrderCard
           assetSymbol={harvestItem.sourceLot.symbol ?? ''}
@@ -47,22 +54,48 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
               currentPricePerShare={Number(lotOrder.lastPrice)}
             />
           ))}
-
         </div>
       </div>
 
       <div className="border-t p-4 text-white">
         {/* Single Execute Trade button for the entire pair */}
         <div className="flex justify-center">
-          <Button variant="default" className="w-full max-w-xl">
-            <Check className="mr-2 size-4" />
-            {' '}
-            Execute Trade
+          <Button
+            variant="default"
+            className="w-full max-w-xl"
+            onClick={() => {
+              toast.promise(
+                createHarvest({
+                  variables: {
+                    directedHarvestLots: [
+                      {
+                        lotId: harvestItem.sourceLot.id,
+                        quantity: Number(harvestItem.sourceLot.remainingQty),
+                        counterTransaction: false,
+                      },
+                      ...harvestItem.matchedLotOrders.map(lotOrder => ({
+                        lotId: lotOrder.lotId,
+                        quantity: Number(lotOrder.quantity),
+                        counterTransaction: true,
+                      })),
+                    ],
+                    harvestType: HarvestType.ReduceCostBasis,
+                  },
+                }),
+                {
+                  loading: 'Creating harvest...',
+                  success: 'Harvest created successfully',
+                  error: 'Failed to create harvest',
+                }
+              );
+            }}
+          >
+            <Check className="mr-2 size-4" /> Execute Trade
           </Button>
         </div>
       </div>
     </Card>
-  )
+  );
 }
 
 function LotOrderCard({
@@ -74,15 +107,15 @@ function LotOrderCard({
   costBasisPerShare,
   currentPricePerShare,
 }: {
-  assetSymbol: string
-  pAndL: number
-  shares: number
-  totalShares: number
-  aquiredDate: Date
-  costBasisPerShare: number
-  currentPricePerShare: number
+  assetSymbol: string;
+  pAndL: number;
+  shares: number;
+  totalShares: number;
+  aquiredDate: Date;
+  costBasisPerShare: number;
+  currentPricePerShare: number;
 }) {
-  const moneyClass = MoneyUtil.colored(pAndL)
+  const moneyClass = MoneyUtil.colored(pAndL);
 
   return (
     <div className="p-4">
@@ -90,9 +123,9 @@ function LotOrderCard({
         <div className="flex items-center">
           <div
             className={cn(
-              'flex h-8 items-center justify-center rounded-md text-xs font-bold px-1',
+              'flex h-8 items-center justify-center rounded-md px-1 text-xs font-bold',
               moneyClass,
-              pAndL > 0 ? 'bg-green-100' : 'bg-red-100',
+              pAndL > 0 ? 'bg-green-100' : 'bg-red-100'
             )}
           >
             {assetSymbol}
@@ -100,18 +133,12 @@ function LotOrderCard({
           <div className="ml-2">
             <h4 className="font-semibold">{assetSymbol}</h4>
             <div className={`flex items-center text-xs ${moneyClass}`}>
-              {pAndL > 0
-                ? (
-                    <ArrowUpCircle className="mr-1 size-3" />
-                  )
-                : (
-                    <TrendingDown className="mr-1 size-3" />
-                  )}
-              <span>
-                {pAndL > 0 ? 'Gain' : 'Loss'}
-                {' '}
-                Position
-              </span>
+              {pAndL > 0 ? (
+                <ArrowUpCircle className="mr-1 size-3" />
+              ) : (
+                <TrendingDown className="mr-1 size-3" />
+              )}
+              <span>{pAndL > 0 ? 'Gain' : 'Loss'} Position</span>
             </div>
           </div>
         </div>
@@ -124,16 +151,13 @@ function LotOrderCard({
         <div>
           <div className="text-muted-foreground">Quantity</div>
           <div className="font-medium">
-            {shares === totalShares ? shares : `${shares} / ${totalShares}`}
-            {' '}
+            {shares === totalShares ? shares : `${shares} / ${totalShares}`}{' '}
             shares
           </div>
         </div>
         <div>
           <div className="text-muted-foreground">Held For</div>
-          <div className="font-medium">
-            {Format.relativeDays(aquiredDate)}
-          </div>
+          <div className="font-medium">{Format.relativeDays(aquiredDate)}</div>
         </div>
         <div>
           <div className="text-muted-foreground">Purchase Price</div>
@@ -149,5 +173,5 @@ function LotOrderCard({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -123,11 +123,17 @@ export class PortfolioService {
   }
 
   getPortfolioById(portfolioId: string) {
-    return this.db
-      .selectFrom('Portfolio')
-      .selectAll()
-      .where('Portfolio.id', '=', portfolioId)
-      .executeTakeFirstOrThrow()
+    return this.db.transaction().execute(async (trx) => {
+      await sql`SELECT set_config('app.current_portfolio_id', ${portfolioId}::text, TRUE)`.execute(
+        trx,
+      )
+
+      return await trx
+        .selectFrom('Portfolio')
+        .selectAll()
+        .where('Portfolio.id', '=', portfolioId)
+        .executeTakeFirstOrThrow()
+    })
   }
 
   getPortfolioByIdWithUserId(

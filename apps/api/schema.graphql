@@ -5080,7 +5080,10 @@ type HarvestTransactionItem {
   createdAt: DateTime!
   harvestTransaction: HarvestTransaction
   id: ID!
+  lotAcquiredDate: DateTime!
   lotId: String
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   lotSold: Lot
   orderType: OrderType!
   portfolio: Portfolio!
@@ -5094,6 +5097,8 @@ type HarvestTransactionItem {
 }
 
 type HarvestTransactionItemAvgAggregate {
+  lotPriceAtHarvest: Decimal
+  lotPricePaid: Decimal
   price: Decimal
   quantity: Decimal
 }
@@ -5104,7 +5109,10 @@ type HarvestTransactionItemCountAggregate {
   completedDate: Int!
   createdAt: Int!
   id: Int!
+  lotAcquiredDate: Int!
   lotId: Int!
+  lotPriceAtHarvest: Int!
+  lotPricePaid: Int!
   orderType: Int!
   portfolioId: Int!
   price: Int!
@@ -5116,7 +5124,10 @@ input HarvestTransactionItemCreateManyAssetInput {
   completedDate: DateTime
   createdAt: DateTime
   id: String
+  lotAcquiredDate: DateTime!
   lotId: String
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   orderType: OrderType!
   portfolioId: String!
   price: Decimal!
@@ -5134,6 +5145,9 @@ input HarvestTransactionItemCreateManyLotSoldInput {
   completedDate: DateTime
   createdAt: DateTime
   id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   orderType: OrderType!
   portfolioId: String!
   price: Decimal!
@@ -5151,7 +5165,10 @@ input HarvestTransactionItemCreateManyPortfolioInput {
   completedDate: DateTime
   createdAt: DateTime
   id: String
+  lotAcquiredDate: DateTime!
   lotId: String
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   orderType: OrderType!
   price: Decimal!
   quantity: Decimal!
@@ -5248,6 +5265,9 @@ input HarvestTransactionItemCreateWithoutAssetInput {
   createdAt: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   lotSold: LotCreateNestedOneWithoutHarvestTransactionItemsInput
   orderType: OrderType!
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput!
@@ -5264,6 +5284,9 @@ input HarvestTransactionItemCreateWithoutHarvestTransactionInput {
   completedDate: DateTime
   createdAt: DateTime
   id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   lotSold: LotCreateNestedOneWithoutHarvestTransactionItemsInput
   orderType: OrderType!
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput!
@@ -5281,6 +5304,9 @@ input HarvestTransactionItemCreateWithoutLotSoldInput {
   createdAt: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   orderType: OrderType!
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput!
   price: Decimal!
@@ -5297,6 +5323,9 @@ input HarvestTransactionItemCreateWithoutPortfolioInput {
   createdAt: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   lotSold: LotCreateNestedOneWithoutHarvestTransactionItemsInput
   orderType: OrderType!
   price: Decimal!
@@ -5313,6 +5342,9 @@ input HarvestTransactionItemCreateWithoutReplacementTransactionInput {
   createdAt: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   lotSold: LotCreateNestedOneWithoutHarvestTransactionItemsInput
   orderType: OrderType!
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput!
@@ -5329,6 +5361,9 @@ input HarvestTransactionItemCreateWithoutRevertHarvestTransactionInput {
   createdAt: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   lotSold: LotCreateNestedOneWithoutHarvestTransactionItemsInput
   orderType: OrderType!
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput!
@@ -5345,6 +5380,9 @@ input HarvestTransactionItemCreateWithoutRevertReplacementTransactionInput {
   createdAt: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
   lotSold: LotCreateNestedOneWithoutHarvestTransactionItemsInput
   orderType: OrderType!
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput!
@@ -5366,7 +5404,10 @@ type HarvestTransactionItemMaxAggregate {
   completedDate: DateTime
   createdAt: DateTime
   id: String
+  lotAcquiredDate: DateTime
   lotId: String
+  lotPriceAtHarvest: Decimal
+  lotPricePaid: Decimal
   orderType: OrderType
   portfolioId: String
   price: Decimal
@@ -5379,7 +5420,10 @@ type HarvestTransactionItemMinAggregate {
   completedDate: DateTime
   createdAt: DateTime
   id: String
+  lotAcquiredDate: DateTime
   lotId: String
+  lotPriceAtHarvest: Decimal
+  lotPricePaid: Decimal
   orderType: OrderType
   portfolioId: String
   price: Decimal
@@ -5405,7 +5449,10 @@ input HarvestTransactionItemScalarWhereInput {
   completedDate: DateTimeNullableFilter
   createdAt: DateTimeFilter
   id: UuidFilter
+  lotAcquiredDate: DateTimeFilter
   lotId: UuidNullableFilter
+  lotPriceAtHarvest: DecimalFilter
+  lotPricePaid: DecimalFilter
   orderType: EnumOrderTypeFilter
   portfolioId: UuidFilter
   price: DecimalFilter
@@ -5414,6 +5461,8 @@ input HarvestTransactionItemScalarWhereInput {
 }
 
 type HarvestTransactionItemSumAggregate {
+  lotPriceAtHarvest: Decimal
+  lotPricePaid: Decimal
   price: Decimal
   quantity: Decimal
 }
@@ -5424,6 +5473,9 @@ input HarvestTransactionItemUpdateInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   lotSold: LotUpdateOneWithoutHarvestTransactionItemsNestedInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput
@@ -5439,6 +5491,9 @@ input HarvestTransactionItemUpdateManyMutationInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   price: DecimalFieldUpdateOperationsInput
   quantity: DecimalFieldUpdateOperationsInput
@@ -5580,6 +5635,9 @@ input HarvestTransactionItemUpdateWithoutAssetInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   lotSold: LotUpdateOneWithoutHarvestTransactionItemsNestedInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput
@@ -5596,6 +5654,9 @@ input HarvestTransactionItemUpdateWithoutHarvestTransactionInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   lotSold: LotUpdateOneWithoutHarvestTransactionItemsNestedInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput
@@ -5613,6 +5674,9 @@ input HarvestTransactionItemUpdateWithoutLotSoldInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput
   price: DecimalFieldUpdateOperationsInput
@@ -5629,6 +5693,9 @@ input HarvestTransactionItemUpdateWithoutPortfolioInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   lotSold: LotUpdateOneWithoutHarvestTransactionItemsNestedInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   price: DecimalFieldUpdateOperationsInput
@@ -5645,6 +5712,9 @@ input HarvestTransactionItemUpdateWithoutReplacementTransactionInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   lotSold: LotUpdateOneWithoutHarvestTransactionItemsNestedInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput
@@ -5661,6 +5731,9 @@ input HarvestTransactionItemUpdateWithoutRevertHarvestTransactionInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   lotSold: LotUpdateOneWithoutHarvestTransactionItemsNestedInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput
@@ -5677,6 +5750,9 @@ input HarvestTransactionItemUpdateWithoutRevertReplacementTransactionInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
   lotSold: LotUpdateOneWithoutHarvestTransactionItemsNestedInput
   orderType: EnumOrderTypeFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput
@@ -5739,7 +5815,10 @@ input HarvestTransactionItemWhereInput {
   createdAt: DateTimeFilter
   harvestTransaction: HarvestTransactionNullableScalarRelationFilter
   id: UuidFilter
+  lotAcquiredDate: DateTimeFilter
   lotId: UuidNullableFilter
+  lotPriceAtHarvest: DecimalFilter
+  lotPricePaid: DecimalFilter
   lotSold: LotNullableScalarRelationFilter
   orderType: EnumOrderTypeFilter
   portfolio: PortfolioScalarRelationFilter
@@ -5762,7 +5841,10 @@ input HarvestTransactionItemWhereUniqueInput {
   createdAt: DateTimeFilter
   harvestTransaction: HarvestTransactionNullableScalarRelationFilter
   id: String
+  lotAcquiredDate: DateTimeFilter
   lotId: UuidNullableFilter
+  lotPriceAtHarvest: DecimalFilter
+  lotPricePaid: DecimalFilter
   lotSold: LotNullableScalarRelationFilter
   orderType: EnumOrderTypeFilter
   portfolio: PortfolioScalarRelationFilter

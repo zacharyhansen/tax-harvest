@@ -207,7 +207,10 @@ export interface HarvestTransactionItem {
   completedDate: Timestamp | null;
   createdAt: Generated<Timestamp>;
   id: Generated<string>;
+  lotAcquiredDate: Timestamp;
   lotId: string | null;
+  lotPriceAtHarvest: Numeric;
+  lotPricePaid: Numeric;
   orderType: "BUY" | "BUY_TO_CLOSE" | "BUY_TO_OPEN" | "SELL" | "SELL_TO_CLOSE" | "SELL_TO_OPEN";
   portfolioId: string;
   price: Numeric;

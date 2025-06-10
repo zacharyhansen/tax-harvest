@@ -17,7 +17,7 @@ export class HarvestService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly lotService: LotService,
-  ) {}
+  ) { }
 
   async createHarvest({
     createdById,
@@ -34,6 +34,8 @@ export class HarvestService {
     portfolioId: string
     date?: Date
   }): Promise<Harvest> {
+    const harvestlotMap = new Map(harvestLots.map(lot => [lot.lotId, lot]))
+
     const currentLotsWithReplacement = await this.lotService
       .lotCurrent({
         lotIds: harvestLots.map(lot => lot.lotId),
@@ -42,8 +44,11 @@ export class HarvestService {
       .then(async (resultLots) => {
         // generate the replacement transaction and add the selected quanty to our result records
         return Promise.all(
-          resultLots.map(async (lot, harvestLotIndex) => {
-            const originalLot = harvestLots[harvestLotIndex]
+          resultLots.map(async (lot) => {
+            const originalLot = harvestlotMap.get(lot.id)
+            if (!originalLot) {
+              throw new Error(`Original lot not found for ${lot.id}`)
+            }
             const replacementAsset
               = await this.prismaService.asset.findUniqueOrThrow({
                 where: {
@@ -57,16 +62,19 @@ export class HarvestService {
 
             const replacementHarvestTransactionItem: Prisma.HarvestTransactionItemCreateManyInput
               = {
-                assetSymbol: 'AAPL',
-                orderType: OrderType.BUY,
-                price: replacementAsset.lastPrice,
-                quantity:
-                  saleValue
-                    .div(replacementAsset.lastPrice)
-                    .floor()
-                    .toNumber() || 0,
-                portfolioId,
-              }
+              assetSymbol: 'AAPL',
+              orderType: OrderType.BUY,
+              price: replacementAsset.lastPrice,
+              quantity:
+                saleValue
+                  .div(replacementAsset.lastPrice)
+                  .floor()
+                  .toNumber() || 0,
+              portfolioId,
+              lotAcquiredDate: lot.acquiredDate,
+              lotPricePaid: lot.price,
+              lotPriceAtHarvest: lot.lastPrice,
+            }
 
             return {
               ...lot,
@@ -94,6 +102,9 @@ export class HarvestService {
               price: currentLot.lastPrice ?? 0,
               quantity: currentLot.selectedQuantity,
               portfolioId,
+              lotAcquiredDate: currentLot.acquiredDate,
+              lotPricePaid: currentLot.price,
+              lotPriceAtHarvest: currentLot.lastPrice,
             }
           }),
         })
@@ -141,7 +152,7 @@ export class HarvestService {
               }),
             },
           },
-          label: `TODO LABEL`,
+          label: `${new Date().toLocaleDateString('en-US')} ${entryTransactionItems.map(item => `${item.quantity} x ${item.assetSymbol}`).join(', ')} for ${replacementTransactionItems.map(item => `${item.quantity} x ${item.assetSymbol}`).join(', ')}`,
           portfolioId,
           type: harvestType,
         },
@@ -204,6 +215,9 @@ export class HarvestService {
           price: transaction.harvestTransactionItem.price,
           quantity: transaction.harvestTransactionItem.quantity,
           portfolioId,
+          lotAcquiredDate: transaction.harvestTransactionItem.lotAcquiredDate,
+          lotPricePaid: transaction.harvestTransactionItem.lotPricePaid,
+          lotPriceAtHarvest: transaction.harvestTransactionItem.lotPriceAtHarvest,
         })
         if (transaction.replacementTransactionItem) {
           indexMap[transaction.id].replacement = revertTransactionItems.length
@@ -213,6 +227,9 @@ export class HarvestService {
             price: transaction.replacementTransactionItem.price,
             quantity: transaction.replacementTransactionItem.quantity,
             portfolioId,
+            lotAcquiredDate: transaction.replacementTransactionItem.lotAcquiredDate,
+            lotPricePaid: transaction.replacementTransactionItem.lotPricePaid,
+            lotPriceAtHarvest: transaction.replacementTransactionItem.lotPriceAtHarvest,
           })
         }
       }

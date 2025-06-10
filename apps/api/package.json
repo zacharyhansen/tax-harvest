@@ -35,7 +35,7 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "build:clean": "rimraf dist; exit 0",
-    "codegen:snaplet": "npx @snaplet/seed sync",
+    "codegen:snaplet": "dotenv -e .env.local.migration -- npx @snaplet/seed sync",
     "codegen:kysely": "npx kysely-codegen --out-file ./src/database/db.d.ts",
     "codegen": "npx prisma generate && pnpm codegen:kysely && pnpm codegen:snaplet",
     "migrate": "dotenv -e .env.local.migration -- prisma migrate dev",
@@ -43,7 +43,7 @@
     "sync": "node dist/command/post-migrate.js",
     "postmigrate": "pnpm codegen",
     "migrate:create": "dotenv -e .env.local.migration -- prisma migrate dev --create-only --name",
-    "seed": "DATABASE_URL=\"$DATABASE_URL_MIGRATION\" prisma db seed",
+    "seed": "dotenv -e .env.local.migration -- prisma db seed",
     "prisma:generate": "prisma generate --schema=./prisma/schema.prisma"
   },
   "@snaplet/seed": {

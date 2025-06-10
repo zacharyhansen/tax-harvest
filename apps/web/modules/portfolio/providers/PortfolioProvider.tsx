@@ -6,6 +6,8 @@ import { createContext, use, useMemo, useState } from 'react';
 import { usePortfolioAuthedQuery } from '~/generated/gql';
 import { ErrorPage } from '~/modules/utility-components';
 import LoadingScreen from '~/app/main/loading';
+import { PortfolioSwitcher } from '../portfolio-switcher';
+import { SidebarProvider } from '@repo/ui/components/sidebar';
 
 const PortfolioContext = createContext<{
   portfolio: PortfolioItemFragment;
@@ -40,7 +42,13 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   }
 
   if (error || !ctx?.portfolio) {
-    return <ErrorPage message="Unable to load portfolio" />;
+    return (
+      <ErrorPage message="Unable to load portfolio">
+        <SidebarProvider>
+          <PortfolioSwitcher />
+        </SidebarProvider>
+      </ErrorPage>
+    );
   }
 
   return (

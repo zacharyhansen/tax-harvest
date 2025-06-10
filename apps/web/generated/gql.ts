@@ -5069,7 +5069,10 @@ export type HarvestTransactionItem = {
   createdAt: Scalars['DateTime']['output'];
   harvestTransaction?: Maybe<HarvestTransaction>;
   id: Scalars['ID']['output'];
+  lotAcquiredDate: Scalars['DateTime']['output'];
   lotId?: Maybe<Scalars['String']['output']>;
+  lotPriceAtHarvest: Scalars['Decimal']['output'];
+  lotPricePaid: Scalars['Decimal']['output'];
   lotSold?: Maybe<Lot>;
   orderType: OrderType;
   portfolio: Portfolio;
@@ -5084,6 +5087,8 @@ export type HarvestTransactionItem = {
 
 export type HarvestTransactionItemAvgAggregate = {
   __typename?: 'HarvestTransactionItemAvgAggregate';
+  lotPriceAtHarvest?: Maybe<Scalars['Decimal']['output']>;
+  lotPricePaid?: Maybe<Scalars['Decimal']['output']>;
   price?: Maybe<Scalars['Decimal']['output']>;
   quantity?: Maybe<Scalars['Decimal']['output']>;
 };
@@ -5095,7 +5100,10 @@ export type HarvestTransactionItemCountAggregate = {
   completedDate: Scalars['Int']['output'];
   createdAt: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
+  lotAcquiredDate: Scalars['Int']['output'];
   lotId: Scalars['Int']['output'];
+  lotPriceAtHarvest: Scalars['Int']['output'];
+  lotPricePaid: Scalars['Int']['output'];
   orderType: Scalars['Int']['output'];
   portfolioId: Scalars['Int']['output'];
   price: Scalars['Int']['output'];
@@ -5107,7 +5115,10 @@ export type HarvestTransactionItemCreateManyAssetInput = {
   completedDate?: InputMaybe<Scalars['DateTime']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
   lotId?: InputMaybe<Scalars['String']['input']>;
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   orderType: OrderType;
   portfolioId: Scalars['String']['input'];
   price: Scalars['Decimal']['input'];
@@ -5125,6 +5136,9 @@ export type HarvestTransactionItemCreateManyLotSoldInput = {
   completedDate?: InputMaybe<Scalars['DateTime']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   orderType: OrderType;
   portfolioId: Scalars['String']['input'];
   price: Scalars['Decimal']['input'];
@@ -5142,7 +5156,10 @@ export type HarvestTransactionItemCreateManyPortfolioInput = {
   completedDate?: InputMaybe<Scalars['DateTime']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
   lotId?: InputMaybe<Scalars['String']['input']>;
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   orderType: OrderType;
   price: Scalars['Decimal']['input'];
   quantity: Scalars['Decimal']['input'];
@@ -5239,6 +5256,9 @@ export type HarvestTransactionItemCreateWithoutAssetInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   harvestTransaction?: InputMaybe<HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   lotSold?: InputMaybe<LotCreateNestedOneWithoutHarvestTransactionItemsInput>;
   orderType: OrderType;
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput;
@@ -5255,6 +5275,9 @@ export type HarvestTransactionItemCreateWithoutHarvestTransactionInput = {
   completedDate?: InputMaybe<Scalars['DateTime']['input']>;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   lotSold?: InputMaybe<LotCreateNestedOneWithoutHarvestTransactionItemsInput>;
   orderType: OrderType;
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput;
@@ -5272,6 +5295,9 @@ export type HarvestTransactionItemCreateWithoutLotSoldInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   harvestTransaction?: InputMaybe<HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   orderType: OrderType;
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput;
   price: Scalars['Decimal']['input'];
@@ -5288,6 +5314,9 @@ export type HarvestTransactionItemCreateWithoutPortfolioInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   harvestTransaction?: InputMaybe<HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   lotSold?: InputMaybe<LotCreateNestedOneWithoutHarvestTransactionItemsInput>;
   orderType: OrderType;
   price: Scalars['Decimal']['input'];
@@ -5304,6 +5333,9 @@ export type HarvestTransactionItemCreateWithoutReplacementTransactionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   harvestTransaction?: InputMaybe<HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   lotSold?: InputMaybe<LotCreateNestedOneWithoutHarvestTransactionItemsInput>;
   orderType: OrderType;
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput;
@@ -5320,6 +5352,9 @@ export type HarvestTransactionItemCreateWithoutRevertHarvestTransactionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   harvestTransaction?: InputMaybe<HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   lotSold?: InputMaybe<LotCreateNestedOneWithoutHarvestTransactionItemsInput>;
   orderType: OrderType;
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput;
@@ -5336,6 +5371,9 @@ export type HarvestTransactionItemCreateWithoutRevertReplacementTransactionInput
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   harvestTransaction?: InputMaybe<HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate: Scalars['DateTime']['input'];
+  lotPriceAtHarvest: Scalars['Decimal']['input'];
+  lotPricePaid: Scalars['Decimal']['input'];
   lotSold?: InputMaybe<LotCreateNestedOneWithoutHarvestTransactionItemsInput>;
   orderType: OrderType;
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput;
@@ -5358,7 +5396,10 @@ export type HarvestTransactionItemMaxAggregate = {
   completedDate?: Maybe<Scalars['DateTime']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
+  lotAcquiredDate?: Maybe<Scalars['DateTime']['output']>;
   lotId?: Maybe<Scalars['String']['output']>;
+  lotPriceAtHarvest?: Maybe<Scalars['Decimal']['output']>;
+  lotPricePaid?: Maybe<Scalars['Decimal']['output']>;
   orderType?: Maybe<OrderType>;
   portfolioId?: Maybe<Scalars['String']['output']>;
   price?: Maybe<Scalars['Decimal']['output']>;
@@ -5372,7 +5413,10 @@ export type HarvestTransactionItemMinAggregate = {
   completedDate?: Maybe<Scalars['DateTime']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
+  lotAcquiredDate?: Maybe<Scalars['DateTime']['output']>;
   lotId?: Maybe<Scalars['String']['output']>;
+  lotPriceAtHarvest?: Maybe<Scalars['Decimal']['output']>;
+  lotPricePaid?: Maybe<Scalars['Decimal']['output']>;
   orderType?: Maybe<OrderType>;
   portfolioId?: Maybe<Scalars['String']['output']>;
   price?: Maybe<Scalars['Decimal']['output']>;
@@ -5398,7 +5442,10 @@ export type HarvestTransactionItemScalarWhereInput = {
   completedDate?: InputMaybe<DateTimeNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<UuidFilter>;
+  lotAcquiredDate?: InputMaybe<DateTimeFilter>;
   lotId?: InputMaybe<UuidNullableFilter>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFilter>;
+  lotPricePaid?: InputMaybe<DecimalFilter>;
   orderType?: InputMaybe<EnumOrderTypeFilter>;
   portfolioId?: InputMaybe<UuidFilter>;
   price?: InputMaybe<DecimalFilter>;
@@ -5408,6 +5455,8 @@ export type HarvestTransactionItemScalarWhereInput = {
 
 export type HarvestTransactionItemSumAggregate = {
   __typename?: 'HarvestTransactionItemSumAggregate';
+  lotPriceAtHarvest?: Maybe<Scalars['Decimal']['output']>;
+  lotPricePaid?: Maybe<Scalars['Decimal']['output']>;
   price?: Maybe<Scalars['Decimal']['output']>;
   quantity?: Maybe<Scalars['Decimal']['output']>;
 };
@@ -5418,6 +5467,9 @@ export type HarvestTransactionItemUpdateInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   harvestTransaction?: InputMaybe<HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   lotSold?: InputMaybe<LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -5433,6 +5485,9 @@ export type HarvestTransactionItemUpdateManyMutationInput = {
   completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   price?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   quantity?: InputMaybe<DecimalFieldUpdateOperationsInput>;
@@ -5574,6 +5629,9 @@ export type HarvestTransactionItemUpdateWithoutAssetInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   harvestTransaction?: InputMaybe<HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   lotSold?: InputMaybe<LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -5590,6 +5648,9 @@ export type HarvestTransactionItemUpdateWithoutHarvestTransactionInput = {
   completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   lotSold?: InputMaybe<LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -5607,6 +5668,9 @@ export type HarvestTransactionItemUpdateWithoutLotSoldInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   harvestTransaction?: InputMaybe<HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
   price?: InputMaybe<DecimalFieldUpdateOperationsInput>;
@@ -5623,6 +5687,9 @@ export type HarvestTransactionItemUpdateWithoutPortfolioInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   harvestTransaction?: InputMaybe<HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   lotSold?: InputMaybe<LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   price?: InputMaybe<DecimalFieldUpdateOperationsInput>;
@@ -5639,6 +5706,9 @@ export type HarvestTransactionItemUpdateWithoutReplacementTransactionInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   harvestTransaction?: InputMaybe<HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   lotSold?: InputMaybe<LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -5655,6 +5725,9 @@ export type HarvestTransactionItemUpdateWithoutRevertHarvestTransactionInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   harvestTransaction?: InputMaybe<HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   lotSold?: InputMaybe<LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -5671,6 +5744,9 @@ export type HarvestTransactionItemUpdateWithoutRevertReplacementTransactionInput
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   harvestTransaction?: InputMaybe<HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotAcquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  lotPricePaid?: InputMaybe<DecimalFieldUpdateOperationsInput>;
   lotSold?: InputMaybe<LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
   orderType?: InputMaybe<EnumOrderTypeFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -5733,7 +5809,10 @@ export type HarvestTransactionItemWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   harvestTransaction?: InputMaybe<HarvestTransactionNullableScalarRelationFilter>;
   id?: InputMaybe<UuidFilter>;
+  lotAcquiredDate?: InputMaybe<DateTimeFilter>;
   lotId?: InputMaybe<UuidNullableFilter>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFilter>;
+  lotPricePaid?: InputMaybe<DecimalFilter>;
   lotSold?: InputMaybe<LotNullableScalarRelationFilter>;
   orderType?: InputMaybe<EnumOrderTypeFilter>;
   portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
@@ -5756,7 +5835,10 @@ export type HarvestTransactionItemWhereUniqueInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   harvestTransaction?: InputMaybe<HarvestTransactionNullableScalarRelationFilter>;
   id?: InputMaybe<Scalars['String']['input']>;
+  lotAcquiredDate?: InputMaybe<DateTimeFilter>;
   lotId?: InputMaybe<UuidNullableFilter>;
+  lotPriceAtHarvest?: InputMaybe<DecimalFilter>;
+  lotPricePaid?: InputMaybe<DecimalFilter>;
   lotSold?: InputMaybe<LotNullableScalarRelationFilter>;
   orderType?: InputMaybe<EnumOrderTypeFilter>;
   portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
@@ -14938,6 +15020,26 @@ export type HarvestsQueryVariables = Exact<{
 
 export type HarvestsQuery = { __typename?: 'Query', harvests: Array<{ __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
 
+export type HarvestTransactionItemTableItemFragment = { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string };
+
+export type HarvestTransactionTableItemFragment = { __typename?: 'HarvestTransaction', id: string, revertDate: any, revert: boolean, notify: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null };
+
+export type HarvestsAndTransactionsQueryVariables = Exact<{
+  where?: InputMaybe<HarvestWhereInput>;
+}>;
+
+
+export type HarvestsAndTransactionsQuery = { __typename?: 'Query', harvests: Array<{ __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revertDate: any, revert: boolean, notify: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
+
+export type HarvestSingleItemFragment = { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revertDate: any, revert: boolean, notify: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
+
+export type HarvestSingleQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type HarvestSingleQuery = { __typename?: 'Query', harvest: { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revertDate: any, revert: boolean, notify: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } } };
+
 export type AccountSummaryFragment = { __typename?: 'Account', id: string, uploadedPositions: boolean, setRealizedValues: boolean, name?: string | null, type: string, subType?: string | null, accountValueTotal?: string | null, skipSetup: boolean };
 
 export type PortfolioSummaryQueryVariables = Exact<{ [key: string]: never; }>;
@@ -15364,6 +15466,56 @@ export const HarvestTableItemFragmentDoc = gql`
   }
 }
     ${UserItemFragmentDoc}`;
+export const HarvestTransactionItemTableItemFragmentDoc = gql`
+    fragment HarvestTransactionItemTableItem on HarvestTransactionItem {
+  id
+  orderType
+  assetSymbol
+  quantity
+  price
+  lotId
+  completedDate
+  lotAcquiredDate
+  lotPricePaid
+  lotPriceAtHarvest
+}
+    `;
+export const HarvestTransactionTableItemFragmentDoc = gql`
+    fragment HarvestTransactionTableItem on HarvestTransaction {
+  id
+  revertDate
+  revert
+  notify
+  counterTransaction
+  harvestTransactionItem {
+    id
+    ...HarvestTransactionItemTableItem
+  }
+  replacementTransactionItem {
+    id
+    ...HarvestTransactionItemTableItem
+  }
+  revertHarvestTransactionItem {
+    id
+    ...HarvestTransactionItemTableItem
+  }
+  revertReplacementTransactionItem {
+    id
+    ...HarvestTransactionItemTableItem
+  }
+}
+    ${HarvestTransactionItemTableItemFragmentDoc}`;
+export const HarvestSingleItemFragmentDoc = gql`
+    fragment HarvestSingleItem on Harvest {
+  id
+  ...HarvestTableItem
+  harvestTransactions {
+    id
+    ...HarvestTransactionTableItem
+  }
+}
+    ${HarvestTableItemFragmentDoc}
+${HarvestTransactionTableItemFragmentDoc}`;
 export const AccountSummaryFragmentDoc = gql`
     fragment AccountSummary on Account {
   id
@@ -16135,6 +16287,87 @@ export type HarvestsQueryHookResult = ReturnType<typeof useHarvestsQuery>;
 export type HarvestsLazyQueryHookResult = ReturnType<typeof useHarvestsLazyQuery>;
 export type HarvestsSuspenseQueryHookResult = ReturnType<typeof useHarvestsSuspenseQuery>;
 export type HarvestsQueryResult = Apollo.QueryResult<HarvestsQuery, HarvestsQueryVariables>;
+export const HarvestsAndTransactionsDocument = gql`
+    query HarvestsAndTransactions($where: HarvestWhereInput) {
+  harvests(where: $where) {
+    id
+    ...HarvestSingleItem
+  }
+}
+    ${HarvestSingleItemFragmentDoc}`;
+
+/**
+ * __useHarvestsAndTransactionsQuery__
+ *
+ * To run a query within a React component, call `useHarvestsAndTransactionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHarvestsAndTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHarvestsAndTransactionsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useHarvestsAndTransactionsQuery(baseOptions?: Apollo.QueryHookOptions<HarvestsAndTransactionsQuery, HarvestsAndTransactionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HarvestsAndTransactionsQuery, HarvestsAndTransactionsQueryVariables>(HarvestsAndTransactionsDocument, options);
+      }
+export function useHarvestsAndTransactionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HarvestsAndTransactionsQuery, HarvestsAndTransactionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HarvestsAndTransactionsQuery, HarvestsAndTransactionsQueryVariables>(HarvestsAndTransactionsDocument, options);
+        }
+export function useHarvestsAndTransactionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<HarvestsAndTransactionsQuery, HarvestsAndTransactionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<HarvestsAndTransactionsQuery, HarvestsAndTransactionsQueryVariables>(HarvestsAndTransactionsDocument, options);
+        }
+export type HarvestsAndTransactionsQueryHookResult = ReturnType<typeof useHarvestsAndTransactionsQuery>;
+export type HarvestsAndTransactionsLazyQueryHookResult = ReturnType<typeof useHarvestsAndTransactionsLazyQuery>;
+export type HarvestsAndTransactionsSuspenseQueryHookResult = ReturnType<typeof useHarvestsAndTransactionsSuspenseQuery>;
+export type HarvestsAndTransactionsQueryResult = Apollo.QueryResult<HarvestsAndTransactionsQuery, HarvestsAndTransactionsQueryVariables>;
+export const HarvestSingleDocument = gql`
+    query HarvestSingle($id: String!) {
+  harvest(id: $id) {
+    ...HarvestSingleItem
+  }
+}
+    ${HarvestSingleItemFragmentDoc}`;
+
+/**
+ * __useHarvestSingleQuery__
+ *
+ * To run a query within a React component, call `useHarvestSingleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHarvestSingleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHarvestSingleQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useHarvestSingleQuery(baseOptions: Apollo.QueryHookOptions<HarvestSingleQuery, HarvestSingleQueryVariables> & ({ variables: HarvestSingleQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HarvestSingleQuery, HarvestSingleQueryVariables>(HarvestSingleDocument, options);
+      }
+export function useHarvestSingleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HarvestSingleQuery, HarvestSingleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HarvestSingleQuery, HarvestSingleQueryVariables>(HarvestSingleDocument, options);
+        }
+export function useHarvestSingleSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<HarvestSingleQuery, HarvestSingleQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<HarvestSingleQuery, HarvestSingleQueryVariables>(HarvestSingleDocument, options);
+        }
+export type HarvestSingleQueryHookResult = ReturnType<typeof useHarvestSingleQuery>;
+export type HarvestSingleLazyQueryHookResult = ReturnType<typeof useHarvestSingleLazyQuery>;
+export type HarvestSingleSuspenseQueryHookResult = ReturnType<typeof useHarvestSingleSuspenseQuery>;
+export type HarvestSingleQueryResult = Apollo.QueryResult<HarvestSingleQuery, HarvestSingleQueryVariables>;
 export const PortfolioSummaryDocument = gql`
     query PortfolioSummary {
   portfolioSummary {

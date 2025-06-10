@@ -3,51 +3,23 @@
 import { useRouter } from 'next/navigation';
 import {
   type HarvestTableItemFragment,
-  useHarvestsAndTransactionsQuery,
+  useHarvestsQuery,
 } from '~/generated/gql';
+import { TypedRoutes } from '~/lib/routes';
 import { LoadingPage } from '~/modules/utility-components';
+import GridTable from '~/modules/client-ag-grid/grid-table';
 import type { ColDef } from 'ag-grid-community';
 import UserCell from '@repo/ui/components/dataTable/cells/userCell';
 import { capitalCase } from 'change-case';
 import { Badge } from '@repo/ui/components/badge';
 import {
   Card,
+  CardContent,
   CardHeader,
   CardTitle,
-  CardContent,
 } from '@repo/ui/components/card';
-import { HarvestCard } from './harvest-card';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Info } from 'lucide-react';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-    scale: 0.95,
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      type: 'spring',
-      stiffness: 260,
-      damping: 20,
-    },
-  },
-};
+import { motion } from 'framer-motion';
+import { Info, History } from 'lucide-react';
 
 const columnDefs: ColDef<HarvestTableItemFragment>[] = [
   {
@@ -79,23 +51,14 @@ const columnDefs: ColDef<HarvestTableItemFragment>[] = [
 
 export default function HarvestsPage() {
   const router = useRouter();
-  const { data, loading } = useHarvestsAndTransactionsQuery({
-    variables: {
-      where: {
-        date: {
-          gte: new Date(new Date().setHours(0, 0, 0, 0)),
-          lte: new Date(new Date().setHours(23, 59, 59, 999)),
-        },
-      },
-    },
-  });
+  const { data, loading } = useHarvestsQuery();
   if (loading) {
     <LoadingPage />;
   }
 
-  if (!data?.harvests.length) {
+  if (!data?.harvests?.length) {
     return (
-      <div className="flex grow flex-col gap-4 pt-4">
+      <div className="grow pt-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -117,9 +80,9 @@ export default function HarvestsPage() {
                   damping: 20,
                 }}
               >
-                <Info className="text-muted-foreground h-5 w-5" />
+                <History className="text-muted-foreground h-5 w-5" />
               </motion.div>
-              <CardTitle className="text-lg">No Harvests Today</CardTitle>
+              <CardTitle className="text-lg">No Historical Harvests</CardTitle>
             </CardHeader>
             <CardContent>
               <motion.p
@@ -128,8 +91,9 @@ export default function HarvestsPage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                There are no tax-loss harvesting opportunities identified for
-                today. Check back later or adjust your portfolio settings.
+                Your completed tax-loss harvesting transactions will appear
+                here. Start harvesting opportunities from your portfolio to
+                build your history.
               </motion.p>
             </CardContent>
           </Card>
@@ -139,19 +103,15 @@ export default function HarvestsPage() {
   }
 
   return (
-    <motion.div
-      className="flex grow flex-col gap-4 pt-4"
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-    >
-      <AnimatePresence>
-        {data?.harvests?.map((harvest, index) => (
-          <motion.div key={harvest.id} variants={cardVariants} layout>
-            <HarvestCard harvest={harvest} />
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </motion.div>
+    <div className="grow pt-4">
+      <GridTable<HarvestTableItemFragment>
+        rowData={data?.harvests}
+        columnDefs={columnDefs}
+        loading={loading}
+        onRowClicked={row => {
+          router.push(TypedRoutes.harvest({ id: row?.data?.id ?? '' }));
+        }}
+      />
+    </div>
   );
 }

@@ -19,3 +19,62 @@ query Harvests($where: HarvestWhereInput) {
     ...HarvestTableItem
   }
 }
+
+fragment HarvestTransactionItemTableItem on HarvestTransactionItem {
+  id
+  orderType
+  assetSymbol
+  quantity
+  price
+  lotId
+  completedDate
+  lotAcquiredDate
+  lotPricePaid
+  lotPriceAtHarvest
+}
+
+fragment HarvestTransactionTableItem on HarvestTransaction {
+  id
+  revertDate
+  revert
+  notify
+  counterTransaction
+  harvestTransactionItem {
+    id
+    ...HarvestTransactionItemTableItem
+  }
+  replacementTransactionItem {
+    id
+    ...HarvestTransactionItemTableItem
+  }
+  revertHarvestTransactionItem {
+    id
+    ...HarvestTransactionItemTableItem
+  }
+  revertReplacementTransactionItem {
+    id
+    ...HarvestTransactionItemTableItem
+  }
+}
+
+query HarvestsAndTransactions($where: HarvestWhereInput) {
+  harvests(where: $where) {
+    id
+    ...HarvestSingleItem
+  }
+}
+
+fragment HarvestSingleItem on Harvest {
+  id
+  ...HarvestTableItem
+  harvestTransactions {
+    id
+    ...HarvestTransactionTableItem
+  }
+}
+
+query HarvestSingle($id: String!) {
+  harvest(id: $id) {
+    ...HarvestSingleItem
+  }
+}

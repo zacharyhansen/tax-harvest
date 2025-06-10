@@ -23,7 +23,7 @@ export class HarvestResolver {
   constructor(
     private readonly harvestService: HarvestService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   @Mutation(() => Harvest, {
     description: 'Create harvest based on selected DirectedHarvestLot',

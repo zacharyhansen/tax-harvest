@@ -1,7 +1,8 @@
-import type { CellContext } from "@tanstack/react-table";
+import type { CellContext } from '@tanstack/react-table';
 
-import type { UserObject } from "../../avatar-group";
-import { Avatar, AvatarFallback, AvatarImage } from "../../avatar";
+import type { UserObject } from '../../avatar-group';
+import { Avatar, AvatarFallback, AvatarImage } from '../../avatar';
+import { cn, stringToInitials, stringToTailwindColor } from '@repo/ui/utils';
 
 export default function UserCell<TData, TValue>({
   getValue,
@@ -13,8 +14,13 @@ export default function UserCell<TData, TValue>({
       <div className="shrink-0">
         <Avatar>
           <AvatarImage src={photo ?? undefined} alt="avatar" />
-          <AvatarFallback>
-            {name?.split(" ").map((name) => name[0])}
+          <AvatarFallback
+            className={cn(
+              'uppercase opacity-80',
+              stringToTailwindColor(name ?? email ?? '')
+            )}
+          >
+            {stringToInitials(name)}
           </AvatarFallback>
         </Avatar>
       </div>

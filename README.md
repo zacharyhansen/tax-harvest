@@ -52,7 +52,7 @@
   <a href="https://vitest.dev">
     <img src="https://vitest.dev/logo.svg" alt="Vitest" width="40" height="40" />
   </a>
-  
+
   <a href="https://testing-library.com">
     <img src="https://testing-library.com/img/logo-large.png" alt="Testing Library" width="40" height="40" />
   </a>
@@ -187,3 +187,12 @@ pnpm dlx turbo link
 - [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
 
 ## Database
+
+These must be ran in the target DB to create the app user used by prisma for RLS
+
+```sql
+CREATE ROLE app_user LOGIN PASSWORD 'password';
+GRANT USAGE ON SCHEMA public TO app_user;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app_user;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user;
+```

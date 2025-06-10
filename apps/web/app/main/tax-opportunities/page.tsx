@@ -1,42 +1,40 @@
-'use client'
+'use client';
 
-import NumberFlow from '@number-flow/react'
+import NumberFlow from '@number-flow/react';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card'
+} from '@repo/ui/components/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@repo/ui/components/tooltip'
-import { cn } from '@repo/ui/utils'
-
-import { ArrowUpCircle, BarChart3, Info, TrendingDown } from 'lucide-react'
-
-import { HarvestType, useFiniteHarvestQuery } from '~/generated/gql'
-import { PageWrapper } from '~/modules/layout'
-import { ErrorPage, LoadingPage } from '~/modules/utility-components'
-import { Format, MoneyUtil } from '~/modules/utils'
-import { CostBasisPairCard } from './api-cost-basis-pair-card'
-import { HarvestingOpportunityCard } from './harvesting-opportunity-card'
-import NoOpportunities from './no-opportunities'
+} from '@repo/ui/components/tooltip';
+import { cn } from '@repo/ui/utils';
+import { ArrowUpCircle, BarChart3, Info, TrendingDown } from 'lucide-react';
+import { HarvestType, useFiniteHarvestQuery } from '~/generated/gql';
+import { PageWrapper } from '~/modules/layout';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { Format, MoneyUtil } from '~/modules/utils';
+import { CostBasisPairCard } from './api-cost-basis-pair-card';
+import { HarvestingOpportunityCard } from './harvesting-opportunity-card';
+import NoOpportunities from './no-opportunities';
 
 export default function TaxOpportunitiesPage() {
-  const { data, error, loading } = useFiniteHarvestQuery()
+  const { data, error, loading } = useFiniteHarvestQuery();
 
   if (error) {
-    return <ErrorPage />
+    return <ErrorPage />;
   }
 
   if (loading || !data) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
-  const netPosition = data?.finiteHarvest.summary.realized.gainTotal
+  const netPosition = data?.finiteHarvest.summary.realized.gainTotal;
 
   return (
     <PageWrapper className="flex-1">
@@ -64,7 +62,7 @@ export default function TaxOpportunitiesPage() {
                 <span
                   className={cn(
                     'text-2xl font-bold',
-                    MoneyUtil.colored(netPosition),
+                    MoneyUtil.colored(netPosition)
                   )}
                 >
                   {Format.money(netPosition)}
@@ -115,12 +113,14 @@ export default function TaxOpportunitiesPage() {
                     className={cn(
                       'mt-1 text-3xl font-semibold',
                       MoneyUtil.colored(
-                        data?.finiteHarvest.summary.realized.gainTotal ?? 0,
-                      ),
+                        data?.finiteHarvest.summary.realized.gainTotal ?? 0
+                      )
                     )}
                   >
                     <NumberFlow
-                      value={data?.finiteHarvest.summary.realized.gainTotal ?? 0}
+                      value={
+                        data?.finiteHarvest.summary.realized.gainTotal ?? 0
+                      }
                       format={{ currency: 'USD', style: 'currency' }}
                     />
                   </span>
@@ -136,12 +136,14 @@ export default function TaxOpportunitiesPage() {
                     className={cn(
                       'mt-1 text-3xl font-semibold',
                       MoneyUtil.colored(
-                        data?.finiteHarvest.summary.unrealized.gainTotal ?? 0,
-                      ),
+                        data?.finiteHarvest.summary.unrealized.gainTotal ?? 0
+                      )
                     )}
                   >
                     <NumberFlow
-                      value={data?.finiteHarvest.summary.unrealized.gainTotal ?? 0}
+                      value={
+                        data?.finiteHarvest.summary.unrealized.gainTotal ?? 0
+                      }
                       format={{ currency: 'USD', style: 'currency' }}
                     />
                   </span>
@@ -157,13 +159,15 @@ export default function TaxOpportunitiesPage() {
                     className={cn(
                       'mt-1 text-3xl font-semibold',
                       MoneyUtil.colored(
-                        data?.finiteHarvest.summary.unrealized.lossTotal ?? 0,
-                      ),
+                        data?.finiteHarvest.summary.unrealized.lossTotal ?? 0
+                      )
                     )}
                   >
                     <NumberFlow
                       defaultValue={0}
-                      value={data?.finiteHarvest.summary.unrealized.lossTotal ?? 0}
+                      value={
+                        data?.finiteHarvest.summary.unrealized.lossTotal ?? 0
+                      }
                       format={{ currency: 'USD', style: 'currency' }}
                     />
                   </span>
@@ -195,56 +199,55 @@ export default function TaxOpportunitiesPage() {
 
         {/* Main Content Area */}
         <div className="space-y-8">
-
-          {data.finiteHarvest.harvestType === HarvestType.ReduceCostBasis
-            ? data.finiteHarvest.unrealizedHarvestMatchResults?.length
-              ? data.finiteHarvest.unrealizedHarvestMatchResults?.map(result => (
+          {data.finiteHarvest.harvestType === HarvestType.ReduceCostBasis ? (
+            data.finiteHarvest.unrealizedHarvestMatchResults?.length ? (
+              data.finiteHarvest.unrealizedHarvestMatchResults?.map(result => (
                 <CostBasisPairCard
                   key={result.sourceLot.id}
                   harvestItem={result}
                 />
               ))
-              : <NoOpportunities />
-            : data?.finiteHarvest?.lotsCurrent?.length
-              ? (
-                  <div className="space-y-6">
-                    <div className="flex flex-col space-y-2">
-                      <div className="flex items-center space-x-2">
-                        {data.finiteHarvest.summary.realized.gainTotal > 0
-                          ? (
-                              <TrendingDown className="size-5 text-red-500" />
-                            )
-                          : (
-                              <ArrowUpCircle className="size-5 text-green-500" />
-                            )}
-                        <h2 className="text-lg font-semibold">
-                          {data.finiteHarvest.summary.realized.gainTotal > 0
-                            ? 'Loss Harvesting Opportunities'
-                            : 'Gain Harvesting Opportunities'}
-                        </h2>
-                      </div>
-                      <p className="text-muted-foreground">
-                        {data.finiteHarvest.summary.realized.gainTotal > 0
-                          ? 'Harvest these losses to offset your realized gains and reduce your tax liability'
-                          : 'Harvest these gains to offset your realized losses and optimize your tax position'}
-                      </p>
-                    </div>
+            ) : (
+              <NoOpportunities />
+            )
+          ) : data?.finiteHarvest?.lotsCurrent?.length ? (
+            <div className="space-y-6">
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center space-x-2">
+                  {data.finiteHarvest.summary.realized.gainTotal > 0 ? (
+                    <TrendingDown className="size-5 text-red-500" />
+                  ) : (
+                    <ArrowUpCircle className="size-5 text-green-500" />
+                  )}
+                  <h2 className="text-lg font-semibold">
+                    {data.finiteHarvest.summary.realized.gainTotal > 0
+                      ? 'Loss Harvesting Opportunities'
+                      : 'Gain Harvesting Opportunities'}
+                  </h2>
+                </div>
+                <p className="text-muted-foreground">
+                  {data.finiteHarvest.summary.realized.gainTotal > 0
+                    ? 'Harvest these losses to offset your realized gains and reduce your tax liability'
+                    : 'Harvest these gains to offset your realized losses and optimize your tax position'}
+                </p>
+              </div>
 
-                    <div className="mt-8 grid grid-cols-1 gap-8">
-                      {data?.finiteHarvest?.lotsCurrent?.map(lot => (
-                        <HarvestingOpportunityCard
-                          key={lot.id}
-                          lot={lot}
-                          harvestType={data.finiteHarvest.harvestType}
-                          netPosition={data.finiteHarvest.summary.realized.gainTotal}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )
-              : <NoOpportunities />}
+              <div className="mt-8 grid grid-cols-1 gap-8">
+                {data?.finiteHarvest?.lotsCurrent?.map(lot => (
+                  <HarvestingOpportunityCard
+                    key={lot.id}
+                    lot={lot}
+                    harvestType={data.finiteHarvest.harvestType}
+                    netPosition={data.finiteHarvest.summary.realized.gainTotal}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <NoOpportunities />
+          )}
         </div>
       </div>
     </PageWrapper>
-  )
+  );
 }

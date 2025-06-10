@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
 import {
   RedirectToSignIn,
@@ -36,6 +35,11 @@ import { UserProvider } from './user.provider';
 import { SetUpStatus, usePortfolioSummaryQuery } from '~/generated/gql';
 import { Button } from '@repo/ui/components/button';
 import LoadingScreen from './loading';
+import { ModuleRegistry } from 'ag-grid-community';
+import { AllCommunityModule } from 'ag-grid-community';
+
+// Ag grid register
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 export default function MainLayout({
   children,

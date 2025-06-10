@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { Button } from '@repo/ui/components/button'
-import { cn } from '@repo/ui/utils'
-import { Bell, CreditCard, Wallet2 } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { TypedRoutes } from '~/lib/routes'
+import { Button } from '@repo/ui/components/button';
+import { cn } from '@repo/ui/utils';
+import { Bell, CreditCard, Wallet2 } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { TypedRoutes } from '~/lib/routes';
 
 export function Sidebar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const routes = [
     {
@@ -31,18 +31,23 @@ export function Sidebar() {
       label: 'Payment',
       icon: CreditCard,
     },
-  ]
+  ];
 
   return (
     <nav className="flex flex-col space-y-2">
-      {routes.map((route) => {
-        const isActive = route.exact ? pathname === route.href : pathname?.startsWith(route.href)
+      {routes.map(route => {
+        const isActive = route.exact
+          ? pathname === route.href
+          : pathname?.startsWith(route.href);
 
         return (
           <Button
             key={route.href}
             variant={isActive ? 'secondary' : 'ghost'}
-            className={cn('justify-start', isActive ? 'bg-muted font-medium' : 'font-normal')}
+            className={cn(
+              'justify-start',
+              isActive ? 'bg-muted font-medium' : 'font-normal'
+            )}
             asChild
           >
             <Link href={route.href}>
@@ -50,8 +55,8 @@ export function Sidebar() {
               {route.label}
             </Link>
           </Button>
-        )
+        );
       })}
     </nav>
-  )
+  );
 }

@@ -12,13 +12,11 @@ import {
 import { SidebarMenuButton, useSidebar } from '@repo/ui/components/sidebar'
 import { toast } from '@repo/ui/components/toast-sonner'
 import { ChevronsUpDown, Wallet2 } from 'lucide-react'
-
 import {
   usePortfoliosQuery,
   useSwitchPortfolioMutation,
 } from '~/generated/gql'
 import CreatePortfolioDialog from './CreatePortfolioDialog'
-
 import { usePortfolio } from './providers/PortfolioProvider'
 
 export function PortfolioSwitcher() {
