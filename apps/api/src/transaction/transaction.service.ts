@@ -16,7 +16,7 @@ export class TransactionService {
     portfolioId: string,
     args: Prisma.TransactionFindManyArgs,
   ) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).transaction.findMany({
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).transaction.findMany({
       ...args,
       orderBy: {
         transactionDate: 'desc',

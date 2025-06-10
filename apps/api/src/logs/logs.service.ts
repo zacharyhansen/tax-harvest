@@ -8,6 +8,6 @@ export class LogsService {
   constructor(private readonly prismaService: PrismaService) {}
 
   logs(portfolioId: string, args: Prisma.LogFindManyArgs) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).log.findMany(args)
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).log.findMany(args)
   }
 }

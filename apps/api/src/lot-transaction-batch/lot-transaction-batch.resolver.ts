@@ -32,7 +32,7 @@ export class LotTransactionBatchResolver {
   ) {
     const { select } = new PrismaSelect<Prisma.LotTransactionBatchSelect>(info)
       .value
-    return this.prismaService.$extends(this.prismaService.forPortfolio(clerkContext.metadata.portfolioId)).lotTransactionBatch.findMany({
+    return this.prismaService.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId)).lotTransactionBatch.findMany({
       select,
       where: {
         portfolioId: clerkContext.metadata.portfolioId,
@@ -52,7 +52,7 @@ export class LotTransactionBatchResolver {
   ) {
     const { select } = new PrismaSelect<Prisma.LotTransactionBatchSelect>(info)
       .value
-    return this.prismaService.$extends(this.prismaService.forPortfolio(clerkContext.metadata.portfolioId)).lotTransactionBatch.findUnique({
+    return this.prismaService.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId)).lotTransactionBatch.findUnique({
       where: {
         id: lotTransactionBatchId,
         portfolioId: clerkContext.metadata.portfolioId,

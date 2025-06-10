@@ -47,7 +47,7 @@ export class LogsResolver {
     @ClerkContext()
     clerkContext: ClerkClaims,
   ) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(clerkContext.metadata.portfolioId)).log.count({
+    return this.prismaService.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId)).log.count({
       where: {
         portfolioId: clerkContext.metadata.portfolioId,
       },
@@ -60,7 +60,7 @@ export class LogsResolver {
     @ClerkContext()
     clerkContext: ClerkClaims,
   ) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(clerkContext.metadata.portfolioId)).log.findUnique({
+    return this.prismaService.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId)).log.findUnique({
       where: { id: logId, portfolioId: clerkContext.metadata.portfolioId },
     })
   }

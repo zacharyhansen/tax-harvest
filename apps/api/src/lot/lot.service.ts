@@ -30,7 +30,7 @@ export class LotService {
     lotSeededDate?: Date
     portfolioId: string
   }) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
       await trx.account.update({
         data: {
           uploadedPositions: true,

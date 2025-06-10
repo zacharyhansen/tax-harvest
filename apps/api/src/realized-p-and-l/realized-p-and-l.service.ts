@@ -26,7 +26,7 @@ export class RealizedPandLService {
     try {
       const realizedPAndL
       // @ts-ignore - ignore types
-        = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).realizedPAndL.findUniqueOrThrow({
+        = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).realizedPAndL.findUniqueOrThrow({
           select: select as Prisma.RealizedPAndLSelect,
           where: {
             accountId_year: {
@@ -38,7 +38,7 @@ export class RealizedPandLService {
       return realizedPAndL
     }
     catch {
-      return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
+      return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
         await trx.account.update({
           data: {
             setRealizedValues: true,

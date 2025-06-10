@@ -25,7 +25,7 @@ export class FileService {
     select: Prisma.FileSelect
     portfolioId: string
   }) {
-    const createdFiles = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).file.createManyAndReturn({
+    const createdFiles = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).file.createManyAndReturn({
       data,
       select,
     })
@@ -80,7 +80,7 @@ export class FileService {
     portfolioId: string
     userId: string
   }) {
-    const account = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).account.create({
+    const account = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).account.create({
       data: accountCreateInput,
     })
     return this.createAndProcessFiles({

@@ -64,7 +64,7 @@ export class PlaidResolver {
       userId: currentUser.sub,
     })
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(currentUser.metadata.portfolioId)).account.findMany({
+    return this.prismaService.$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId)).account.findMany({
       select,
       where: {
         id: { in: accounts.map(a => a.id) },

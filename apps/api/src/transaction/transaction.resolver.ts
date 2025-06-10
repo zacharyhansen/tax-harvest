@@ -30,7 +30,7 @@ export class TransactionResolver {
   ): Promise<Transaction> {
     const { select } = new PrismaSelect<Prisma.TransactionSelect>(info).value
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).transaction.findUniqueOrThrow({
+    return this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).transaction.findUniqueOrThrow({
       select,
       where: {
         id,

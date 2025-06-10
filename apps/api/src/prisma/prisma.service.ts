@@ -24,7 +24,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     await this.$connect()
   }
 
-  bypassRLS() {
+  static bypassRLS() {
     return Prisma.defineExtension(prisma =>
       prisma.$extends({
         client: {
@@ -81,7 +81,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     )
   }
 
-  forPortfolio(portfolioId: string) {
+  static forPortfolio(portfolioId: string) {
     return Prisma.defineExtension(prisma =>
       prisma.$extends({
         client: {

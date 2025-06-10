@@ -181,7 +181,7 @@ export class PortfolioResolver {
     })
     data: Prisma.PortfolioUpdateInput,
   ) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).portfolio.update({
+    return this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).portfolio.update({
       data,
       where: {
         id: metadata.portfolioId,

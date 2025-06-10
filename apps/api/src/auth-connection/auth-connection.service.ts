@@ -32,7 +32,7 @@ export class AuthConnectionService {
 
     const connection
       = authConnection
-        ?? (await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.findUniqueOrThrow({
+        ?? (await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.findUniqueOrThrow({
           where: {
             id,
             portfolioId,

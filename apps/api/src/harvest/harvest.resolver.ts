@@ -73,7 +73,7 @@ export class HarvestResolver {
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestSelect>(info).value
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvest.findMany({
+    return this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).harvest.findMany({
       orderBy: [
         {
           date: 'desc',
@@ -101,7 +101,7 @@ export class HarvestResolver {
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestSelect>(info).value
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvest.findUniqueOrThrow({
+    return this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).harvest.findUniqueOrThrow({
       select,
       where: {
         id,
@@ -134,7 +134,7 @@ export class HarvestResolver {
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestSelect>(info).value
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvest.update({
+    return this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).harvest.update({
       data,
       select,
       where: {
@@ -193,7 +193,7 @@ export class HarvestResolver {
     const { select } = new PrismaSelect<Prisma.HarvestTransactionSelect>(info)
       .value
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvestTransaction.update({
+    return this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).harvestTransaction.update({
       data,
       select,
       where: {
@@ -229,7 +229,7 @@ export class HarvestResolver {
       info,
     ).value
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(metadata.portfolioId)).harvestTransactionItem.update({
+    return this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).harvestTransactionItem.update({
       data,
       select,
       where: {

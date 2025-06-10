@@ -78,7 +78,7 @@ export class HarvestService {
         )
       })
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).$transaction(async (tx) => {
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).$transaction(async (tx) => {
       // Create entry transaction items (sales based on selection)
 
       /**
@@ -177,7 +177,7 @@ export class HarvestService {
     select: Prisma.HarvestSelect
     portfolioId: string
   }) {
-    const transactions = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).harvestTransaction.findMany({
+    const transactions = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).harvestTransaction.findMany({
       include: {
         harvestTransactionItem: true,
         replacementTransactionItem: true,
@@ -219,7 +219,7 @@ export class HarvestService {
     }
 
     // Insert them
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).$transaction(async (tx) => {
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).$transaction(async (tx) => {
       const createdItems = await tx.harvestTransactionItem.createManyAndReturn({
         data: revertTransactionItems,
       })

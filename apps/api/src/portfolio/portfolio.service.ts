@@ -46,7 +46,7 @@ export class PortfolioService {
   ) {}
 
   getPortfoliosByUserId(userId: string, args: Prisma.PortfolioFindManyArgs) {
-    return this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.findMany({
+    return this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.findMany({
       ...args,
       select: undefined, // dont allow nested seelct due to RLS bypass
       where: {
@@ -80,7 +80,7 @@ export class PortfolioService {
     portfolioId?: string,
   ) {
     const user = await this.userService.asserUserExists(userId)
-    return this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.findUniqueOrThrow({
+    return this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.findUniqueOrThrow({
       where: {
         id: portfolioId,
         usersOnPortfolios: {
@@ -99,7 +99,7 @@ export class PortfolioService {
     portfolioId: string,
     select: Prisma.PortfolioSelect,
   ) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findFirstOrThrow({
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findFirstOrThrow({
       select,
       where: {
         id: portfolioId,
@@ -126,7 +126,7 @@ export class PortfolioService {
     userId: string,
     select: Prisma.PortfolioSelect,
   ) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(id)).portfolio.findUniqueOrThrow({
+    return this.prismaService.$extends(PrismaService.forPortfolio(id)).portfolio.findUniqueOrThrow({
       select,
       where: {
         id,
@@ -144,7 +144,7 @@ export class PortfolioService {
     portfolioCreateInput: Prisma.PortfolioCreateInput,
     role?: PortfolioRole,
   ) {
-    const portfolio = await this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.create({
+    const portfolio = await this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.create({
       data: {
         ...portfolioCreateInput,
         usersOnPortfolios: {
@@ -175,7 +175,7 @@ export class PortfolioService {
     userId: string,
     portfolioId?: string,
   ): Promise<Portfolio> {
-    const portfolio = await this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.findFirst({
+    const portfolio = await this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.findFirst({
       where: {
         usersOnPortfolios: {
           some: {
@@ -193,7 +193,7 @@ export class PortfolioService {
     let authedPortfolio = portfolio
     // If the user does not have at least 1 portfolio we create it and connect them to it as an admin
     if (!portfolio) {
-      authedPortfolio = await this.prismaService.$extends(this.prismaService.bypassRLS()).portfolio.create({
+      authedPortfolio = await this.prismaService.$extends(PrismaService.bypassRLS()).portfolio.create({
         data: {
           createdById: userId,
           id: portfolioId,
@@ -227,7 +227,7 @@ export class PortfolioService {
     const [realized, unrealized, accounts, setupAccounts] = await Promise.all([
       this.summaryRealized({ id }),
       this.summaryUnrealized({ id }),
-      this.prismaService.$extends(this.prismaService.forPortfolio(id)).account.count({
+      this.prismaService.$extends(PrismaService.forPortfolio(id)).account.count({
         where: {
           ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
             portfolioId: id,
@@ -384,7 +384,7 @@ export class PortfolioService {
   }: {
     id: string
   }): Promise<PortfolioSummaryRealized> {
-    const pAndL = await this.prismaService.$extends(this.prismaService.forPortfolio(id)).realizedPAndL.findMany({
+    const pAndL = await this.prismaService.$extends(PrismaService.forPortfolio(id)).realizedPAndL.findMany({
       where: {
         account: {
           ...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
@@ -433,7 +433,7 @@ export class PortfolioService {
         id: portfolioId,
       }),
       this.lotService.lotCurrent({ portfolioId }),
-      this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
+      this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
         where: {
           id: portfolioId,
         },
@@ -477,7 +477,7 @@ export class PortfolioService {
     targetUnrealized: number
   }) {
     const [portfolio, lots] = await Promise.all([
-      this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
+      this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
         where: {
           id: portfolioId,
         },
@@ -518,7 +518,7 @@ export class PortfolioService {
   }: {
     portfolioId: string
   }): Promise<FiniteHarvestResult> {
-    const portfolio = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
+    const portfolio = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
       where: {
         id: portfolioId,
       },
@@ -532,7 +532,7 @@ export class PortfolioService {
         portfolioId,
         minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
       }),
-      this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
+      this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).portfolio.findUniqueOrThrow({
         where: {
           id: portfolioId,
         },

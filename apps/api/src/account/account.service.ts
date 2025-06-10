@@ -16,7 +16,7 @@ export class AccountService {
     portfolioId: string,
     args: Prisma.AccountFindManyArgs,
   ) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).account.findMany({
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).account.findMany({
       ...args,
       orderBy: {
         name: 'asc',
@@ -41,7 +41,7 @@ export class AccountService {
     id: string
     select: Prisma.AccountSelect
   }) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(id)).account.findMany({
+    return this.prismaService.$extends(PrismaService.forPortfolio(id)).account.findMany({
       where: {
         AND: [
           {
@@ -65,11 +65,11 @@ export class AccountService {
   }
 
   getAccount(portfolioId: string, args: Prisma.AccountFindUniqueOrThrowArgs) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).account.findUniqueOrThrow(args)
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).account.findUniqueOrThrow(args)
   }
 
   createAccountForPortfolio(accountInsertObject: Prisma.AccountCreateInput) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(accountInsertObject.portfolio!.connect!.id!)).account.create({ data: accountInsertObject })
+    return this.prismaService.$extends(PrismaService.forPortfolio(accountInsertObject.portfolio!.connect!.id!)).account.create({ data: accountInsertObject })
   }
 
   updateAccount(
@@ -77,7 +77,7 @@ export class AccountService {
     accountWhereUniqueInput: Prisma.AccountWhereUniqueInput,
     portfolioId: string,
   ) {
-    return this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).account.update({
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).account.update({
       data: accountUpdateInput,
       where: {
         ...accountWhereUniqueInput,

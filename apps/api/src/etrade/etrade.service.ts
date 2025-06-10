@@ -8,6 +8,7 @@ import {
   AuthType,
   OptionLevel,
   Prisma,
+  PrismaClient,
 } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { OAuth } from 'oauth'
@@ -89,7 +90,7 @@ export class EtradeService implements ConnectionProvider {
     try {
       // If we already have a request auth and its valid lets return that
       const existingRequestAuth
-        = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.findFirst({
+        = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.findFirst({
           where: {
             source: 'ETRADE_REQUEST',
             userId,
@@ -107,14 +108,14 @@ export class EtradeService implements ConnectionProvider {
       // Otherwise we need to go get one and upsert it to the DB
       const { token, tokenSecret } = await this.getRequestToken()
       const verificationUrl = this.getAuthorizeUrl(token)
-      const existing = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.findFirst({
+      const existing = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.findFirst({
         where: {
           portfolioId,
           source: AuthSource.ETRADE_REQUEST,
           userId,
         },
       })
-      const requestAuth = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.upsert({
+      const requestAuth = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.upsert({
         create: {
           externalId: crypto.randomUUID(),
           portfolioId,
@@ -156,7 +157,7 @@ export class EtradeService implements ConnectionProvider {
     select: Prisma.AuthConnectionSelect
   }): Promise<AuthConnection> {
     try {
-      const requestAuth = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.findFirst({
+      const requestAuth = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.findFirst({
         where: {
           portfolioId,
           source: AuthSource.ETRADE_REQUEST,
@@ -179,7 +180,7 @@ export class EtradeService implements ConnectionProvider {
                 reject(err)
               }
               const existing
-                = await this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.findFirst({
+                = await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.findFirst({
                   where: {
                     portfolioId,
                     source: AuthSource.ETRADE_ACCESS,
@@ -187,7 +188,7 @@ export class EtradeService implements ConnectionProvider {
                   },
                 })
               resolve(
-                this.prismaService.$extends(this.prismaService.forPortfolio(portfolioId)).authConnection.upsert({
+                this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.upsert({
                   create: {
                     authedAt: new Date(),
                     externalId: crypto.randomUUID(),
@@ -356,7 +357,7 @@ export class EtradeService implements ConnectionProvider {
               accountBalance.BalanceResponse?.accountId === account.accountId,
           )
           const balance = balanceMatch?.BalanceResponse
-          return this.prismaService.$extends(this.prismaService.bypassRLS()).account.upsert({
+          return this.prismaService.$extends(PrismaService.bypassRLS()).account.upsert({
             create: {
               accountValueTotal:
                 balance?.Computed?.RealTimeValues?.totalAccountValue,
@@ -473,13 +474,14 @@ export class EtradeService implements ConnectionProvider {
     await this.syncTransactions(internalAccounts, token, secret)
     // await this.syncOrders(internalAccounts, token, secret);
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(authConnection.portfolioId)).authConnection.update({
+    return (this.prismaService.$extends(PrismaService.forPortfolio(authConnection.portfolioId)) as PrismaClient).authConnection.update({
       data: {
         syncedAt: new Date(),
       },
       select,
       where: {
         id: authConnection.id,
+        portfolioId: authConnection.portfolioId,
       },
     })
   }
@@ -598,7 +600,7 @@ export class EtradeService implements ConnectionProvider {
           ) ?? [],
       )
 
-    return this.prismaService.$extends(this.prismaService.forPortfolio(accounts[0].portfolioId)).$transaction([
+    return this.prismaService.$extends(PrismaService.forPortfolio(accounts[0].portfolioId)).$transaction([
       ...assetsUpsert.map(t => this.prismaService.asset.upsert(t)),
       ...transactionOperations.map(t =>
         this.prismaService.transaction.upsert(t),
@@ -738,7 +740,7 @@ export class EtradeService implements ConnectionProvider {
       }),
     )
 
-    await this.prismaService.$extends(this.prismaService.forPortfolio(accounts[0].portfolioId)).$transaction(async (tx) => {
+    await this.prismaService.$extends(PrismaService.forPortfolio(accounts[0].portfolioId)).$transaction(async (tx) => {
       // Upsert the assets
       await Promise.all(assetsUpsert.map(upsert => tx.asset.upsert(upsert)))
 
