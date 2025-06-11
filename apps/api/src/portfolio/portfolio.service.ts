@@ -251,9 +251,9 @@ export class PortfolioService {
   }
 
   async summary({ id }: { id: string }): Promise<PortfolioSummary> {
-    const [realized, unrealized, accounts, setupAccounts] = await Promise.all([
+    const [realized, currentLots, accounts, setupAccounts] = await Promise.all([
       this.summaryRealized({ id }),
-      this.summaryUnrealized({ id }),
+      this.lotService.lotCurrent({ portfolioId: id }),
       this.prismaService
         .$extends(PrismaService.forPortfolio(id))
         .account
@@ -272,11 +272,43 @@ export class PortfolioService {
       }),
     ])
 
+    const summaryCurrentLots = this.summaryCurrentLots(currentLots)
+
     return {
       ...PortfolioService.calculateHarvest({
-        realized,
-        unrealized,
+        realized: {
+          accountCount: realized.accountCount,
+          gainTotal: realized.gainTotal,
+          gainShortTerm: realized.gainShortTerm,
+          gainLongTerm: realized.gainLongTerm,
+          dividend: realized.dividend,
+        },
+        unrealized: {
+          gainTotal: summaryCurrentLots.gainTotal,
+          lossTotal: summaryCurrentLots.lossTotal,
+          accountCount: summaryCurrentLots.accountCount,
+          total: summaryCurrentLots.totalUnrealized,
+          positionCount: summaryCurrentLots.positionCount,
+        },
       }),
+      includingCurrentHarvest: {
+        ...PortfolioService.calculateHarvest({
+          realized: {
+            accountCount: realized.accountCount,
+            gainTotal: new Decimal(realized.gainTotal).plus(summaryCurrentLots.realizedDollarChangeFromCurrentHarvest).toNumber(),
+            gainShortTerm: new Decimal(realized.gainShortTerm).plus(summaryCurrentLots.realizedDollarChangeFromCurrentHarvest).toNumber(),
+            gainLongTerm: realized.gainLongTerm,
+            dividend: realized.dividend,
+          },
+          unrealized: {
+            gainTotal: summaryCurrentLots.unrealizedGainTotalWithCurrentHarvest,
+            lossTotal: summaryCurrentLots.unrealizedLossTotalWithCurrentHarvest,
+            accountCount: summaryCurrentLots.accountCount,
+            total: summaryCurrentLots.totalWithCurrentHarvest,
+            positionCount: summaryCurrentLots.positionCount,
+          },
+        }),
+      },
       setUpStatus:
         accounts === 0
           ? SetUpStatus.NO_ACCOUNTS
@@ -292,7 +324,7 @@ export class PortfolioService {
   }: {
     realized: PortfolioSummaryRealized
     unrealized: PortfolioSummaryUnrealized
-  }): Omit<PortfolioSummary, 'setUpStatus'> {
+  }): Omit<PortfolioSummary, 'setUpStatus' | 'includingCurrentHarvest'> {
     let gainTotalUnrealized = new Decimal(unrealized.gainTotal)
     let lossTotalUnrealized = new Decimal(unrealized.lossTotal)
     const gainTotalRealized = new Decimal(realized.gainTotal)
@@ -353,61 +385,54 @@ export class PortfolioService {
       unrealized,
     }
 
-    return {
-      ...summary,
-    }
+    return summary
   }
 
-  async summaryUnrealized({
-    id,
-  }: {
-    id: string
-  }): Promise<PortfolioSummaryUnrealized> {
-    const result = await this.db.transaction().execute(async (trx) => {
-      await sql`SELECT set_config('app.current_portfolio_id', ${id}::text, TRUE)`.execute(
-        trx,
+  summaryCurrentLots(lots: LotCurrent[]) {
+    const totals = {
+      accountCount: new Decimal(0),
+      unrealizedGainTotal: new Decimal(0),
+      unrealizedLossTotal: new Decimal(0),
+      unrealizedGainTotalWithCurrentHarvest: new Decimal(0),
+      unrealizedLossTotalWithCurrentHarvest: new Decimal(0),
+      positionCount: new Decimal(0),
+      realizedDollarChangeFromCurrentHarvest: new Decimal(0),
+      unrealizedDollarChangeFromCurrentHarvest: new Decimal(0),
+    }
+
+    const accountIds = new Set<string>()
+    const lotCounts = new Set<string>()
+
+    for (const lot of lots) {
+      accountIds.add(lot.accountId)
+      lotCounts.add(lot.id)
+      totals.realizedDollarChangeFromCurrentHarvest = totals.realizedDollarChangeFromCurrentHarvest.plus(
+        new Decimal(lot.dollarPerSharePnL)
+          .mul(new Decimal(lot.remainingQty)),
       )
-
-      return await trx
-        .selectFrom('LotCurrent')
-        .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
-        .select([
-          sql<
-            number | null
-          >`SUM(CASE WHEN "LotCurrent"."gainTotal" < 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
-            'lossTotal',
-          ),
-          sql<
-            number | null
-          >`SUM(CASE WHEN "LotCurrent"."gainTotal" >= 0 THEN "LotCurrent"."gainTotal" ELSE 0 END)`.as(
-            'gainTotal',
-          ),
-          sql<number>`COUNT(DISTINCT "Account"."id")`.as('accountCount'),
-          sql<number>`COUNT("LotCurrent"."id")`.as('lotCount'),
-        ])
-        .where('Account.portfolioId', '=', id)
-        .where('Account.subType', 'not in', [...taxAdvantadedSubTypes])
-        .executeTakeFirst()
-    })
-
-    if (result) {
-      const gainTotal = new Decimal(result.gainTotal ?? 0)
-      const lossTotal = new Decimal(result.lossTotal ?? 0)
-      return {
-        accountCount: Number(result.accountCount),
-        gainTotal: gainTotal.toNumber(),
-        lossTotal: lossTotal.toNumber(),
-        positionCount: Number(result.lotCount),
-        total: gainTotal.plus(lossTotal).toNumber(),
+      totals.unrealizedDollarChangeFromCurrentHarvest = totals.unrealizedDollarChangeFromCurrentHarvest.minus(
+        new Decimal(lot.dollarPerSharePnL)
+          .mul(new Decimal(lot.remainingQty)),
+      )
+      if (Number(lot.gainTotal) < 0) {
+        totals.unrealizedLossTotal = totals.unrealizedLossTotal.plus(new Decimal(lot.gainTotal))
+      }
+      else {
+        totals.unrealizedGainTotal = totals.unrealizedGainTotal.plus(new Decimal(lot.gainTotal))
       }
     }
 
     return {
-      accountCount: 0,
-      gainTotal: 0,
-      lossTotal: 0,
-      positionCount: 0,
-      total: 0,
+      accountCount: totals.accountCount.toNumber(),
+      gainTotal: totals.unrealizedGainTotal.toNumber(),
+      lossTotal: totals.unrealizedLossTotal.toNumber(),
+      positionCount: totals.positionCount.toNumber(),
+      totalUnrealized: totals.unrealizedGainTotal.plus(totals.unrealizedLossTotal).toNumber(),
+      realizedDollarChangeFromCurrentHarvest: totals.realizedDollarChangeFromCurrentHarvest.toNumber(),
+      unrealizedDollarChangeFromCurrentHarvest: totals.unrealizedDollarChangeFromCurrentHarvest.toNumber(),
+      unrealizedGainTotalWithCurrentHarvest: totals.unrealizedGainTotal.minus(totals.realizedDollarChangeFromCurrentHarvest).toNumber(),
+      unrealizedLossTotalWithCurrentHarvest: totals.unrealizedLossTotal.minus(totals.unrealizedDollarChangeFromCurrentHarvest).toNumber(),
+      totalWithCurrentHarvest: totals.unrealizedGainTotalWithCurrentHarvest.plus(totals.unrealizedLossTotalWithCurrentHarvest).toNumber(),
     }
   }
 

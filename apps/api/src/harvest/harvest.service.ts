@@ -89,6 +89,7 @@ export class HarvestService {
     return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).$transaction(async (tx) => {
       // Create entry transaction items (sales based on selection)
 
+      const dateOfHarvest = new Date()
       /**
        * The entry transcations that start the harvest
        */
@@ -105,6 +106,7 @@ export class HarvestService {
               lotAcquiredDate: currentLot.acquiredDate,
               lotPricePaid: currentLot.price,
               lotPriceAtHarvest: currentLot.lastPrice,
+              date: dateOfHarvest,
             }
           }),
         })

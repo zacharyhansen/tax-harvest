@@ -206,6 +206,7 @@ export interface HarvestTransactionItem {
   assetSymbol: string;
   completedDate: Timestamp | null;
   createdAt: Generated<Timestamp>;
+  date: Generated<Timestamp>;
   id: Generated<string>;
   lotAcquiredDate: Timestamp;
   lotId: string | null;

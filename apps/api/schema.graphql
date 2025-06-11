@@ -5078,6 +5078,9 @@ type HarvestTransactionItem {
   assetSymbol: String!
   completedDate: DateTime
   createdAt: DateTime!
+
+  """The date of the harvest transtion item is assumed to be executed"""
+  date: DateTime!
   harvestTransaction: HarvestTransaction
   id: ID!
   lotAcquiredDate: DateTime!
@@ -5108,6 +5111,7 @@ type HarvestTransactionItemCountAggregate {
   assetSymbol: Int!
   completedDate: Int!
   createdAt: Int!
+  date: Int!
   id: Int!
   lotAcquiredDate: Int!
   lotId: Int!
@@ -5123,6 +5127,7 @@ type HarvestTransactionItemCountAggregate {
 input HarvestTransactionItemCreateManyAssetInput {
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   id: String
   lotAcquiredDate: DateTime!
   lotId: String
@@ -5144,6 +5149,7 @@ input HarvestTransactionItemCreateManyLotSoldInput {
   assetSymbol: String!
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   id: String
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
@@ -5164,6 +5170,7 @@ input HarvestTransactionItemCreateManyPortfolioInput {
   assetSymbol: String!
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   id: String
   lotAcquiredDate: DateTime!
   lotId: String
@@ -5263,6 +5270,7 @@ input HarvestTransactionItemCreateOrConnectWithoutRevertReplacementTransactionIn
 input HarvestTransactionItemCreateWithoutAssetInput {
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5283,6 +5291,7 @@ input HarvestTransactionItemCreateWithoutHarvestTransactionInput {
   asset: AssetCreateNestedOneWithoutHarvestTransactionItemsInput!
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   id: String
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
@@ -5302,6 +5311,7 @@ input HarvestTransactionItemCreateWithoutLotSoldInput {
   asset: AssetCreateNestedOneWithoutHarvestTransactionItemsInput!
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5321,6 +5331,7 @@ input HarvestTransactionItemCreateWithoutPortfolioInput {
   asset: AssetCreateNestedOneWithoutHarvestTransactionItemsInput!
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5340,6 +5351,7 @@ input HarvestTransactionItemCreateWithoutReplacementTransactionInput {
   asset: AssetCreateNestedOneWithoutHarvestTransactionItemsInput!
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5359,6 +5371,7 @@ input HarvestTransactionItemCreateWithoutRevertHarvestTransactionInput {
   asset: AssetCreateNestedOneWithoutHarvestTransactionItemsInput!
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5378,6 +5391,7 @@ input HarvestTransactionItemCreateWithoutRevertReplacementTransactionInput {
   asset: AssetCreateNestedOneWithoutHarvestTransactionItemsInput!
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5403,6 +5417,7 @@ type HarvestTransactionItemMaxAggregate {
   assetSymbol: String
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   id: String
   lotAcquiredDate: DateTime
   lotId: String
@@ -5419,6 +5434,7 @@ type HarvestTransactionItemMinAggregate {
   assetSymbol: String
   completedDate: DateTime
   createdAt: DateTime
+  date: DateTime
   id: String
   lotAcquiredDate: DateTime
   lotId: String
@@ -5448,6 +5464,7 @@ input HarvestTransactionItemScalarWhereInput {
   assetSymbol: StringFilter
   completedDate: DateTimeNullableFilter
   createdAt: DateTimeFilter
+  date: DateTimeFilter
   id: UuidFilter
   lotAcquiredDate: DateTimeFilter
   lotId: UuidNullableFilter
@@ -5471,6 +5488,7 @@ input HarvestTransactionItemUpdateInput {
   asset: AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5490,6 +5508,7 @@ input HarvestTransactionItemUpdateInput {
 input HarvestTransactionItemUpdateManyMutationInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
   lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
@@ -5633,6 +5652,7 @@ input HarvestTransactionItemUpdateWithWhereUniqueWithoutPortfolioInput {
 input HarvestTransactionItemUpdateWithoutAssetInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5653,6 +5673,7 @@ input HarvestTransactionItemUpdateWithoutHarvestTransactionInput {
   asset: AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
   lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
@@ -5672,6 +5693,7 @@ input HarvestTransactionItemUpdateWithoutLotSoldInput {
   asset: AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5691,6 +5713,7 @@ input HarvestTransactionItemUpdateWithoutPortfolioInput {
   asset: AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5710,6 +5733,7 @@ input HarvestTransactionItemUpdateWithoutReplacementTransactionInput {
   asset: AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5729,6 +5753,7 @@ input HarvestTransactionItemUpdateWithoutRevertHarvestTransactionInput {
   asset: AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5748,6 +5773,7 @@ input HarvestTransactionItemUpdateWithoutRevertReplacementTransactionInput {
   asset: AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5813,6 +5839,7 @@ input HarvestTransactionItemWhereInput {
   assetSymbol: StringFilter
   completedDate: DateTimeNullableFilter
   createdAt: DateTimeFilter
+  date: DateTimeFilter
   harvestTransaction: HarvestTransactionNullableScalarRelationFilter
   id: UuidFilter
   lotAcquiredDate: DateTimeFilter
@@ -5839,6 +5866,7 @@ input HarvestTransactionItemWhereUniqueInput {
   assetSymbol: StringFilter
   completedDate: DateTimeNullableFilter
   createdAt: DateTimeFilter
+  date: DateTimeFilter
   harvestTransaction: HarvestTransactionNullableScalarRelationFilter
   id: String
   lotAcquiredDate: DateTimeFilter
@@ -7897,6 +7925,9 @@ type LotCurrent {
   accountId: String!
   acquiredDate: DateTime!
   costBasis: String!
+
+  """How many shares from this lot are in todays current harvest."""
+  currentHarvestQty: String!
   dollarPerSharePnL: String!
   gainTotal: String!
   gainTotalPct: String!
@@ -10275,8 +10306,15 @@ type PortfolioSumAggregate {
 
 type PortfolioSummary {
   harvest: HarvestPotential!
+  includingCurrentHarvest: PortfolioSummaryIncludingHarvest!
   realized: PortfolioSummaryRealized!
   setUpStatus: SetUpStatus!
+  unrealized: PortfolioSummaryUnrealized!
+}
+
+type PortfolioSummaryIncludingHarvest {
+  harvest: HarvestPotential!
+  realized: PortfolioSummaryRealized!
   unrealized: PortfolioSummaryUnrealized!
 }
 
@@ -12399,12 +12437,6 @@ type Query {
 
   """Summary summary"""
   portfolioSummary: PortfolioSummary!
-
-  """Summary values for portfolio for realized change"""
-  portfolioSummaryRealized: PortfolioSummaryRealized!
-
-  """Summary values for portfolio for unrealized change"""
-  portfolioSummaryUnrealized: PortfolioSummaryUnrealized!
 
   """Get all portfolios for a user"""
   portfolios: [Portfolio!]!

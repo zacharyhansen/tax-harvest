@@ -15,8 +15,6 @@ import {
   FiniteHarvestResult,
   HarvestResult,
   PortfolioSummary,
-  PortfolioSummaryRealized,
-  PortfolioSummaryUnrealized,
 } from './portfolio.dto'
 import { PortfolioService } from './portfolio.service'
 
@@ -25,7 +23,7 @@ export class PortfolioResolver {
   constructor(
     private readonly portfolioService: PortfolioService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   @Query(() => FiniteHarvestResult, {
     description: 'New harvest endpoint that returns all orders and summary',
@@ -49,32 +47,6 @@ export class PortfolioResolver {
     { metadata }: ClerkClaims,
   ): Promise<PortfolioSummary> {
     return this.portfolioService.summary({
-      id: metadata.portfolioId,
-    })
-  }
-
-  @Query(() => PortfolioSummaryUnrealized, {
-    description: 'Summary values for portfolio for unrealized change',
-    name: 'portfolioSummaryUnrealized',
-  })
-  async portfolioSummaryUnrealized(
-    @ClerkContext()
-    { metadata }: ClerkClaims,
-  ) {
-    return this.portfolioService.summaryUnrealized({
-      id: metadata.portfolioId,
-    })
-  }
-
-  @Query(() => PortfolioSummaryRealized, {
-    description: 'Summary values for portfolio for realized change',
-    name: 'portfolioSummaryRealized',
-  })
-  async portfolioSummaryRealized(
-    @ClerkContext()
-    { metadata }: ClerkClaims,
-  ) {
-    return this.portfolioService.summaryUnrealized({
       id: metadata.portfolioId,
     })
   }

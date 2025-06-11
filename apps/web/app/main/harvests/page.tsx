@@ -1,15 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import {
-  type HarvestTableItemFragment,
-  useHarvestsAndTransactionsQuery,
-} from '~/generated/gql';
+import { useHarvestsAndTransactionsQuery } from '~/generated/gql';
 import { LoadingPage } from '~/modules/utility-components';
-import type { ColDef } from 'ag-grid-community';
-import UserCell from '@repo/ui/components/dataTable/cells/userCell';
-import { capitalCase } from 'change-case';
-import { Badge } from '@repo/ui/components/badge';
 import {
   Card,
   CardHeader,
@@ -19,6 +12,9 @@ import {
 import { HarvestCard } from './harvest-card';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Info } from 'lucide-react';
+import Link from 'next/link';
+import { TypedRoutes } from '~/lib/routes';
+import { Button } from '@repo/ui/components/button';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -48,34 +44,6 @@ const cardVariants = {
     },
   },
 };
-
-const columnDefs: ColDef<HarvestTableItemFragment>[] = [
-  {
-    headerName: 'Name',
-    field: 'label',
-    flex: 1,
-  },
-  {
-    headerName: 'Amount',
-    field: 'amount',
-    cellDataType: 'usd',
-  },
-  {
-    headerName: 'Status',
-    field: 'step',
-    cellDataType: 'status',
-  },
-  {
-    headerName: 'Type',
-    field: 'type',
-    cellRenderer: ({ data }: { data: HarvestTableItemFragment }) => (
-      <Badge>{capitalCase(data.type)}</Badge>
-    ),
-  },
-  { headerName: 'Harvest Date', field: 'date', cellDataType: 'date' },
-  { headerName: 'Created By', field: 'createdBy', cellRenderer: UserCell },
-  { headerName: 'Created At', field: 'createdAt', cellDataType: 'date' },
-];
 
 export default function HarvestsPage() {
   const router = useRouter();
@@ -128,8 +96,11 @@ export default function HarvestsPage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                There are no tax-loss harvesting opportunities identified for
-                today. Check back later or adjust your portfolio settings.
+                You have no added harvests for today. Check out
+                <Link href={TypedRoutes.taxOpportunities()}>
+                  <Button variant="link">Tax Loss Harvesting</Button>
+                </Link>
+                to see harvest opportunities.
               </motion.p>
             </CardContent>
           </Card>

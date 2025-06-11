@@ -74,6 +74,18 @@ export class HarvestPotential {
 }
 
 @ObjectType()
+export class PortfolioSummaryIncludingHarvest {
+  @Field(() => PortfolioSummaryRealized)
+  realized: PortfolioSummaryRealized
+
+  @Field(() => PortfolioSummaryUnrealized)
+  unrealized: PortfolioSummaryUnrealized
+
+  @Field(() => HarvestPotential)
+  harvest: HarvestPotential
+}
+
+@ObjectType()
 export class PortfolioSummary {
   @Field(() => PortfolioSummaryRealized)
   realized: PortfolioSummaryRealized
@@ -86,6 +98,9 @@ export class PortfolioSummary {
 
   @Field(() => SetUpStatus)
   setUpStatus: SetUpStatus
+
+  @Field(() => PortfolioSummaryIncludingHarvest)
+  includingCurrentHarvest: PortfolioSummaryIncludingHarvest
 }
 
 @ObjectType()

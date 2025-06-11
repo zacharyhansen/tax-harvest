@@ -11,20 +11,21 @@ import {
 } from '@repo/ui/components/card';
 import { Info } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Alert, AlertDescription, AlertTitle } from '@repo/ui/components/alert';
 
 export default function WashHarvestsPage() {
   const { data, loading } = useHarvestsAndTransactionsQuery({
     variables: {
       where: {
         date: {
-          gte: new Date(new Date().setHours(23, 59, 59, 999)),
-          lte: new Date(new Date().setDate(new Date().getDate() + 32)),
+          lte: new Date(new Date().setHours(23, 59, 59, 999)),
+          gte: new Date(new Date().setDate(new Date().getDate() - 32)),
         },
       },
     },
   });
 
-  if (loading) {
+  if (loading || !data) {
     <LoadingPage />;
   }
 
@@ -76,6 +77,13 @@ export default function WashHarvestsPage() {
 
   return (
     <div className="flex grow flex-col gap-4 pt-4">
+      <Alert variant="info">
+        <AlertTitle>Wash Harvests</AlertTitle>
+        <AlertDescription>
+          Once capturing your harvests, you should not revert the portfolio
+          changes until the wash window is closed.
+        </AlertDescription>
+      </Alert>
       {data?.harvests?.map(harvest => (
         <HarvestCard key={harvest.id} harvest={harvest} />
       ))}

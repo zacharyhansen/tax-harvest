@@ -19,8 +19,6 @@ import { HarvestType, useFiniteHarvestQuery } from '~/generated/gql';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { Format, MoneyUtil } from '~/modules/utils';
-import { CostBasisPairCard } from './api-cost-basis-pair-card';
-import { HarvestingOpportunityCard } from './harvesting-opportunity-card';
 import NoOpportunities from './no-opportunities';
 import {
   Tabs,
@@ -31,6 +29,36 @@ import {
 import UnrealizedHarvestPage from './unrealized-harvest-items';
 import UnrealizedHarvestItems from './unrealized-harvest-items';
 import RealizedHarvestItems from './realized-harvest-items';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    scale: 0.95,
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 260,
+      damping: 20,
+    },
+  },
+};
 
 export default function TaxOpportunitiesPage() {
   const { data, error, loading } = useFiniteHarvestQuery();
@@ -46,50 +74,65 @@ export default function TaxOpportunitiesPage() {
   const netPosition = data?.finiteHarvest.summary.realized.gainTotal;
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8">
+    <motion.div
+      className="container mx-auto max-w-6xl px-4 py-8"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+    >
       {/* Page Header */}
-      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <motion.div
+        className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+        variants={itemVariants}
+      >
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
+          <motion.h1
+            className="text-3xl font-bold tracking-tight"
+            variants={itemVariants}
+          >
             Tax Loss Harvesting
-          </h1>
-          <p className="text-muted-foreground">
+          </motion.h1>
+          <motion.p className="text-muted-foreground" variants={itemVariants}>
             Optimize your portfolio for tax efficiency
-          </p>
+          </motion.p>
         </div>
 
-        {/* Portfolio Summary Card - Show realized gain/loss position */}
-        <Card className="bg-muted/70 w-full rounded-xl border-0 md:w-auto">
-          <CardHeader className="bg-muted rounded-t-xl p-4 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Net Realized Position
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-2">
-            <div className="flex items-center gap-2">
-              <span
-                className={cn(
-                  'text-2xl font-bold',
-                  MoneyUtil.colored(netPosition)
-                )}
-              >
-                {Format.money(netPosition)}
-              </span>
-            </div>
-            <p className="text-muted-foreground mt-1 text-xs">
-              {data?.finiteHarvest.harvestType === HarvestType.ReduceCostBasis
-                ? 'Balanced position: Look for cost basis management opportunities'
-                : data?.finiteHarvest.harvestType === HarvestType.ReduceTaxes
-                  ? 'Net realized gain: Consider harvesting losses'
-                  : 'Net realized loss: Consider harvesting gains'}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+        {/* Portfolio Summary Card */}
+        <motion.div variants={itemVariants}>
+          <Card className="bg-muted/70 w-full rounded-xl border-0 md:w-auto">
+            <CardHeader className="bg-muted rounded-t-xl p-4 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Net Realized Position
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-2">
+              <div className="flex items-center gap-2">
+                <span
+                  className={cn(
+                    'text-2xl font-bold',
+                    MoneyUtil.colored(netPosition)
+                  )}
+                >
+                  {Format.money(netPosition)}
+                </span>
+              </div>
+              <p className="text-muted-foreground mt-1 text-xs">
+                {data?.finiteHarvest.harvestType === HarvestType.ReduceCostBasis
+                  ? 'Balanced position: Look for cost basis management opportunities'
+                  : data?.finiteHarvest.harvestType === HarvestType.ReduceTaxes
+                    ? 'Net realized gain: Consider harvesting losses'
+                    : 'Net realized loss: Consider harvesting gains'}
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
 
       {/* Portfolio Status */}
-      <div className="mb-8 flex flex-col items-start">
-        {/* Tax Status */}
+      <motion.div
+        className="mb-8 flex flex-col items-start"
+        variants={itemVariants}
+      >
         <div className="bg-muted/70 w-full overflow-hidden rounded-xl border-0">
           <div className="bg-muted flex items-center justify-between border-b p-4">
             <div className="flex items-center space-x-2">
@@ -110,8 +153,11 @@ export default function TaxOpportunitiesPage() {
             </TooltipProvider>
           </div>
 
-          <div className="grid grid-cols-3 divide-x">
-            <div className="p-6">
+          <motion.div
+            className="grid grid-cols-3 divide-x"
+            variants={itemVariants}
+          >
+            <motion.div className="p-6" variants={itemVariants}>
               <div className="flex flex-col">
                 <span className="text-muted-foreground text-sm">
                   Net Position (Realized P & L)
@@ -130,9 +176,9 @@ export default function TaxOpportunitiesPage() {
                   />
                 </span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="p-6">
+            <motion.div className="p-6" variants={itemVariants}>
               <div className="flex flex-col">
                 <span className="text-muted-foreground text-sm">
                   Unrealized Gain
@@ -153,9 +199,9 @@ export default function TaxOpportunitiesPage() {
                   />
                 </span>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="p-6">
+            <motion.div className="p-6" variants={itemVariants}>
               <div className="flex flex-col">
                 <span className="text-muted-foreground text-sm">
                   Unrealized Loss
@@ -177,56 +223,46 @@ export default function TaxOpportunitiesPage() {
                   />
                 </span>
               </div>
-            </div>
-
-            {/* <div className="p-6">
-                <div className="flex flex-col">
-                  <span className="text-sm text-muted-foreground">
-                    Net Position
-                  </span>
-                  <span
-                    className={cn('mt-1 text-3xl font-semibold', MoneyUtil.colored(netPosition))}
-                  >
-                    {Format.money(netPosition)}
-                  </span>
-                  <span className="mt-2 text-sm text-muted-foreground">
-                    {taxStatus.isNeutralAccount
-                      ? 'Balanced position: Optimize cost basis'
-                      : taxStatus.netRealizedPosition > 0
-                        ? 'Harvest losses to offset realized gains'
-                        : 'Capture gains to offset realized losses'}
-                  </span>
-                </div> */}
-            {/* </div> */}
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
-      {data.finiteHarvest.unrealizedHarvestMatchResults?.length &&
-      data.finiteHarvest.lotsCurrent?.length ? (
-        <Tabs defaultValue="realized">
-          <TabsList>
-            <TabsTrigger value="realized">Realized</TabsTrigger>
-            <TabsTrigger value="unrealized">Unrealized</TabsTrigger>
-          </TabsList>
-          <TabsContent value="realized" className="space-y-8">
+      <AnimatePresence>
+        {data.finiteHarvest.unrealizedHarvestMatchResults?.length &&
+        data.finiteHarvest.lotsCurrent?.length ? (
+          <motion.div variants={itemVariants}>
+            <Tabs defaultValue="realized">
+              <TabsList>
+                <TabsTrigger value="realized">Realized</TabsTrigger>
+                <TabsTrigger value="unrealized">Unrealized</TabsTrigger>
+              </TabsList>
+              <TabsContent value="realized" className="space-y-8">
+                <RealizedHarvestItems finiteHarvest={data.finiteHarvest} />
+              </TabsContent>
+              <TabsContent value="unrealized" className="space-y-8">
+                <UnrealizedHarvestItems
+                  items={data.finiteHarvest.unrealizedHarvestMatchResults ?? []}
+                />
+              </TabsContent>
+            </Tabs>
+          </motion.div>
+        ) : data.finiteHarvest.lotsCurrent?.length ? (
+          <motion.div variants={itemVariants}>
             <RealizedHarvestItems finiteHarvest={data.finiteHarvest} />
-          </TabsContent>
-          <TabsContent value="unrealized" className="space-y-8">
+          </motion.div>
+        ) : data.finiteHarvest.unrealizedHarvestMatchResults?.length ? (
+          <motion.div variants={itemVariants}>
             <UnrealizedHarvestItems
               items={data.finiteHarvest.unrealizedHarvestMatchResults ?? []}
             />
-          </TabsContent>
-        </Tabs>
-      ) : data.finiteHarvest.lotsCurrent?.length ? (
-        <RealizedHarvestItems finiteHarvest={data.finiteHarvest} />
-      ) : data.finiteHarvest.unrealizedHarvestMatchResults?.length ? (
-        <UnrealizedHarvestItems
-          items={data.finiteHarvest.unrealizedHarvestMatchResults ?? []}
-        />
-      ) : (
-        <NoOpportunities />
-      )}
-    </div>
+          </motion.div>
+        ) : (
+          <motion.div variants={itemVariants}>
+            <NoOpportunities />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

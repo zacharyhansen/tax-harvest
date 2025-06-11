@@ -421,6 +421,7 @@ export enum HarvestTransactionItemScalarFieldEnum {
     updatedAt = "updatedAt",
     orderType = "orderType",
     assetSymbol = "assetSymbol",
+    date = "date",
     completedDate = "completedDate",
     quantity = "quantity",
     price = "price",
@@ -26915,6 +26916,8 @@ export class HarvestTransactionItemCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     assetSymbol?: true;
     @Field(() => Boolean, {nullable:true})
+    date?: true;
+    @Field(() => Boolean, {nullable:true})
     completedDate?: true;
     @Field(() => Boolean, {nullable:true})
     quantity?: true;
@@ -26947,6 +26950,8 @@ export class HarvestTransactionItemCountAggregate {
     @Field(() => Int, {nullable:false})
     assetSymbol!: number;
     @Field(() => Int, {nullable:false})
+    date!: number;
+    @Field(() => Int, {nullable:false})
     completedDate!: number;
     @Field(() => Int, {nullable:false})
     quantity!: number;
@@ -26978,6 +26983,8 @@ export class HarvestTransactionItemCountOrderByAggregateInput {
     orderType?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     assetSymbol?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    date?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     completedDate?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -27015,6 +27022,8 @@ export class HarvestTransactionItemCreateManyAssetInput {
     updatedAt?: Date | string;
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -27063,6 +27072,8 @@ export class HarvestTransactionItemCreateManyLotSoldInput {
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -27106,6 +27117,8 @@ export class HarvestTransactionItemCreateManyPortfolioInput {
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -27143,6 +27156,8 @@ export class HarvestTransactionItemCreateManyInput {
     orderType!: `${OrderType}`;
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -27348,6 +27363,8 @@ export class HarvestTransactionItemCreateWithoutAssetInput {
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -27397,6 +27414,8 @@ export class HarvestTransactionItemCreateWithoutHarvestTransactionInput {
     updatedAt?: Date | string;
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -27448,6 +27467,8 @@ export class HarvestTransactionItemCreateWithoutLotSoldInput {
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -27497,6 +27518,8 @@ export class HarvestTransactionItemCreateWithoutPortfolioInput {
     updatedAt?: Date | string;
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -27548,6 +27571,8 @@ export class HarvestTransactionItemCreateWithoutReplacementTransactionInput {
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -27597,6 +27622,8 @@ export class HarvestTransactionItemCreateWithoutRevertHarvestTransactionInput {
     updatedAt?: Date | string;
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -27648,6 +27675,8 @@ export class HarvestTransactionItemCreateWithoutRevertReplacementTransactionInpu
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -27697,6 +27726,8 @@ export class HarvestTransactionItemCreateInput {
     updatedAt?: Date | string;
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -27788,6 +27819,8 @@ export class HarvestTransactionItemGroupBy {
     orderType!: `${OrderType}`;
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
+    @Field(() => Date, {nullable:false})
+    date!: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -27842,6 +27875,8 @@ export class HarvestTransactionItemMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     assetSymbol?: true;
     @Field(() => Boolean, {nullable:true})
+    date?: true;
+    @Field(() => Boolean, {nullable:true})
     completedDate?: true;
     @Field(() => Boolean, {nullable:true})
     quantity?: true;
@@ -27871,6 +27906,8 @@ export class HarvestTransactionItemMaxAggregate {
     orderType?: `${OrderType}`;
     @Field(() => String, {nullable:true})
     assetSymbol?: string;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:true})
@@ -27902,6 +27939,8 @@ export class HarvestTransactionItemMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     assetSymbol?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
+    date?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
     completedDate?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     quantity?: `${SortOrder}`;
@@ -27931,6 +27970,8 @@ export class HarvestTransactionItemMinAggregateInput {
     orderType?: true;
     @Field(() => Boolean, {nullable:true})
     assetSymbol?: true;
+    @Field(() => Boolean, {nullable:true})
+    date?: true;
     @Field(() => Boolean, {nullable:true})
     completedDate?: true;
     @Field(() => Boolean, {nullable:true})
@@ -27962,6 +28003,8 @@ export class HarvestTransactionItemMinAggregate {
     @Field(() => String, {nullable:true})
     assetSymbol?: string;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:true})
     quantity?: Decimal;
@@ -27991,6 +28034,8 @@ export class HarvestTransactionItemMinOrderByAggregateInput {
     orderType?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     assetSymbol?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    date?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     completedDate?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -28037,6 +28082,8 @@ export class HarvestTransactionItemOrderByWithAggregationInput {
     orderType?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     assetSymbol?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    date?: `${SortOrder}`;
     @Field(() => SortOrderInput, {nullable:true})
     completedDate?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrder, {nullable:true})
@@ -28082,6 +28129,8 @@ export class HarvestTransactionItemOrderByWithRelationInput {
     orderType?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     assetSymbol?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    date?: `${SortOrder}`;
     @Field(() => SortOrderInput, {nullable:true})
     completedDate?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrder, {nullable:true})
@@ -28152,6 +28201,8 @@ export class HarvestTransactionItemScalarWhereWithAggregatesInput {
     orderType?: InstanceType<typeof EnumOrderTypeWithAggregatesFilter>;
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     assetSymbol?: InstanceType<typeof StringWithAggregatesFilter>;
+    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
+    date?: InstanceType<typeof DateTimeWithAggregatesFilter>;
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     completedDate?: InstanceType<typeof DateTimeNullableWithAggregatesFilter>;
     @Field(() => DecimalWithAggregatesFilter, {nullable:true})
@@ -28195,6 +28246,8 @@ export class HarvestTransactionItemScalarWhereInput {
     orderType?: InstanceType<typeof EnumOrderTypeFilter>;
     @Field(() => StringFilter, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    date?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeNullableFilter, {nullable:true})
     completedDate?: InstanceType<typeof DateTimeNullableFilter>;
     @Field(() => DecimalFilter, {nullable:true})
@@ -28312,6 +28365,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutAssetInput {
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -28362,6 +28417,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutHarvestTransactionInput
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -28409,6 +28466,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutLotSoldInput {
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -28454,6 +28513,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutPortfolioInput {
     orderType!: `${OrderType}`;
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -28505,6 +28566,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutReplacementTransactionI
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -28551,6 +28614,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutRevertHarvestTransactio
     orderType!: `${OrderType}`;
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -28599,6 +28664,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutRevertReplacementTransa
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
     @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
     @Type(() => Object)
@@ -28645,6 +28712,8 @@ export class HarvestTransactionItemUncheckedCreateInput {
     orderType!: `${OrderType}`;
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
     @Field(() => Date, {nullable:true})
     completedDate?: Date | string;
     @Field(() => GraphQLDecimal, {nullable:false})
@@ -28730,6 +28799,8 @@ export class HarvestTransactionItemUncheckedUpdateManyWithoutAssetInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -28801,6 +28872,8 @@ export class HarvestTransactionItemUncheckedUpdateManyWithoutLotSoldInput {
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -28868,6 +28941,8 @@ export class HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioInput {
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -28902,6 +28977,8 @@ export class HarvestTransactionItemUncheckedUpdateManyInput {
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -28934,6 +29011,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutAssetInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -28980,6 +29059,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutHarvestTransactionInput
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29023,6 +29104,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutLotSoldInput {
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29065,6 +29148,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutPortfolioInput {
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29111,6 +29196,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutReplacementTransactionI
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29154,6 +29241,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutRevertHarvestTransactio
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29197,6 +29286,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutRevertReplacementTransa
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29240,6 +29331,8 @@ export class HarvestTransactionItemUncheckedUpdateInput {
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29282,6 +29375,8 @@ export class HarvestTransactionItemUpdateManyMutationInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29615,6 +29710,8 @@ export class HarvestTransactionItemUpdateWithoutAssetInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29661,6 +29758,8 @@ export class HarvestTransactionItemUpdateWithoutHarvestTransactionInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29707,6 +29806,8 @@ export class HarvestTransactionItemUpdateWithoutLotSoldInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29753,6 +29854,8 @@ export class HarvestTransactionItemUpdateWithoutPortfolioInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29799,6 +29902,8 @@ export class HarvestTransactionItemUpdateWithoutReplacementTransactionInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29845,6 +29950,8 @@ export class HarvestTransactionItemUpdateWithoutRevertHarvestTransactionInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29891,6 +29998,8 @@ export class HarvestTransactionItemUpdateWithoutRevertReplacementTransactionInpu
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -29937,6 +30046,8 @@ export class HarvestTransactionItemUpdateInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
@@ -30090,6 +30201,8 @@ export class HarvestTransactionItemWhereUniqueInput {
     orderType?: InstanceType<typeof EnumOrderTypeFilter>;
     @Field(() => StringFilter, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    date?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeNullableFilter, {nullable:true})
     completedDate?: InstanceType<typeof DateTimeNullableFilter>;
     @Field(() => DecimalFilter, {nullable:true})
@@ -30154,6 +30267,8 @@ export class HarvestTransactionItemWhereInput {
     orderType?: InstanceType<typeof EnumOrderTypeFilter>;
     @Field(() => StringFilter, {nullable:true})
     assetSymbol?: InstanceType<typeof StringFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    date?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeNullableFilter, {nullable:true})
     completedDate?: InstanceType<typeof DateTimeNullableFilter>;
     @Field(() => DecimalFilter, {nullable:true})
@@ -30209,6 +30324,11 @@ export class HarvestTransactionItem {
     orderType!: `${OrderType}`;
     @Field(() => String, {nullable:false})
     assetSymbol!: string;
+    /**
+     * The date of the harvest transtion item is assumed to be executed
+     */
+    @Field(() => Date, {description:'The date of the harvest transtion item is assumed to be executed',nullable:false})
+    date!: Date;
     @Field(() => Date, {nullable:true})
     completedDate!: Date | null;
     @Field(() => GraphQLDecimal, {nullable:false})
