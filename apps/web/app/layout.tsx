@@ -90,8 +90,6 @@ export default function LocaleLayout({
 
         <ClerkProvider
           afterSignOutUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
-          signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
-          signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
         >
           <ClerkLoaded>{children}</ClerkLoaded>
         </ClerkProvider>

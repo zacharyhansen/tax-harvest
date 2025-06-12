@@ -1,10 +1,9 @@
-import type { ReactNode } from 'react'
-import MediaProvider from '@repo/ui/providers/media-provider'
-import { ThemeProvider } from '@repo/ui/providers/theme-provider'
-import { Tractor } from 'lucide-react'
-import Link from 'next/link'
-
-import { AuthInfoOverlay } from './components/AuthInfoOverlay'
+import type { ReactNode } from 'react';
+import MediaProvider from '@repo/ui/providers/media-provider';
+import { ThemeProvider } from '@repo/ui/providers/theme-provider';
+import { Tractor } from 'lucide-react';
+import Link from 'next/link';
+import { AuthInfoOverlay } from './components/AuthInfoOverlay';
 
 export default function AuthLayout({
   children,
@@ -28,5 +27,5 @@ export default function AuthLayout({
         </div>
       </ThemeProvider>
     </MediaProvider>
-  )
+  );
 }
