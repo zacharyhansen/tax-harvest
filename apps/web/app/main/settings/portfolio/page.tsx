@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import type { PortfolioDetailItemFragment } from '~/generated/gql'
+import type { PortfolioDetailItemFragment } from '~/generated/gql';
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@repo/ui/components/button'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/ui/components/button';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card'
-import { Separator } from '@repo/ui/components/separator'
-import { toast } from '@repo/ui/components/toast-sonner'
-import InputField from '@repo/ui/form-builder/fields/input.field'
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form'
-import { DollarSign } from 'lucide-react'
-import { FormProvider } from 'react-hook-form'
+} from '@repo/ui/components/card';
+import { Separator } from '@repo/ui/components/separator';
+import { toast } from '@repo/ui/components/toast-sonner';
+import InputField from '@repo/ui/form-builder/fields/input.field';
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
+import { DollarSign } from 'lucide-react';
+import { FormProvider } from 'react-hook-form';
 
-import { z } from 'zod'
+import { z } from 'zod';
 import {
-  usePortfolioByIdQuery,
+  usePortfolioDetailAuthedQuery,
   useUpdatePortfolioMutation,
-} from '~/generated/gql'
-import { usePortfolio } from '~/modules/portfolio'
-import { ErrorPage, LoadingPage } from '~/modules/utility-components'
-import { zodNumber } from '~/modules/utils/zod-utils'
+} from '~/generated/gql';
+import { usePortfolio } from '~/modules/portfolio';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { zodNumber } from '~/modules/utils/zod-utils';
 
 const formSchema = z.object({
   harvestCycleWeeks: zodNumber.pipe(z.coerce.number().gte(1)),
@@ -36,54 +36,50 @@ const formSchema = z.object({
   harvestTickerBucketLowerLimitShort: zodNumber.pipe(z.coerce.number().gte(0)),
   name: z.string().min(3),
   minimumLotPAndL: zodNumber.pipe(z.coerce.number().gte(0)),
-})
+});
 
 export default function PortfolioPage() {
-  const { portfolio } = usePortfolio()
-  const { data, error, loading } = usePortfolioByIdQuery({
-    variables: {
-      id: portfolio.id,
-    },
-  })
+  const { portfolio } = usePortfolio();
+  const { data, error, loading } = usePortfolioDetailAuthedQuery({});
 
   if (error) {
     return (
       <ErrorPage message="Could not load portfolio at this time. If the issue persists, please contact support @support" />
-    )
+    );
   }
 
   if (loading || !data) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
-  return <Form portfolio={data.portfolioById} />
+  return <Form portfolio={data.portfolioAuthed} />;
 }
 
 function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
   const [update, { loading }] = useUpdatePortfolioMutation({
     onError: () => {
-      toast.error('Unable to update Portfolio')
+      toast.error('Unable to update Portfolio');
     },
-  })
+  });
 
   const { form, handleSubmit } = useStandardForm<z.infer<typeof formSchema>>({
     defaultValues: {
       minimumLotPAndL: Number(portfolio.minimumLotPAndL),
       harvestCycleWeeks: portfolio.harvestCycleWeeks,
       harvestShareDollarThreshold: Number(
-        portfolio.harvestShareDollarThreshold,
+        portfolio.harvestShareDollarThreshold
       ),
       harvestTickerBucketDollarSizeLong: Number(
-        portfolio.harvestTickerBucketDollarSizeLong,
+        portfolio.harvestTickerBucketDollarSizeLong
       ),
       harvestTickerBucketDollarSizeShort: Number(
-        portfolio.harvestTickerBucketDollarSizeShort,
+        portfolio.harvestTickerBucketDollarSizeShort
       ),
       harvestTickerBucketLowerLimitLong: Number(
-        portfolio.harvestTickerBucketLowerLimitLong,
+        portfolio.harvestTickerBucketLowerLimitLong
       ),
       harvestTickerBucketLowerLimitShort: Number(
-        portfolio.harvestTickerBucketLowerLimitShort,
+        portfolio.harvestTickerBucketLowerLimitShort
       ),
       name: portfolio.name,
     },
@@ -130,43 +126,47 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
           },
         }).then(({ data: result }) => {
           if (!result) {
-            return
+            return;
           }
           form.reset({
             ...result.updatePortfolio,
             harvestShareDollarThreshold: Number(
-              result.updatePortfolio.harvestShareDollarThreshold,
+              result.updatePortfolio.harvestShareDollarThreshold
             ),
             harvestTickerBucketDollarSizeLong: Number(
-              result.updatePortfolio.harvestTickerBucketDollarSizeLong,
+              result.updatePortfolio.harvestTickerBucketDollarSizeLong
             ),
             harvestTickerBucketDollarSizeShort: Number(
-              result.updatePortfolio.harvestTickerBucketDollarSizeShort,
+              result.updatePortfolio.harvestTickerBucketDollarSizeShort
             ),
             harvestTickerBucketLowerLimitLong: Number(
-              result.updatePortfolio.harvestTickerBucketLowerLimitLong,
+              result.updatePortfolio.harvestTickerBucketLowerLimitLong
             ),
             harvestTickerBucketLowerLimitShort: Number(
-              result.updatePortfolio.harvestTickerBucketLowerLimitShort,
+              result.updatePortfolio.harvestTickerBucketLowerLimitShort
             ),
             minimumLotPAndL: Number(result.updatePortfolio.minimumLotPAndL),
-          })
+          });
         }),
         {
           error: 'Error',
           loading: 'Saving',
           success: 'Saved',
-        },
-      )
+        }
+      );
     },
-  })
+  });
 
   return (
     <FormProvider {...form}>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Portfolio Settings</h1>
-          <p className="text-muted-foreground">Manage your portfolio settings and preferences.</p>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Portfolio Settings
+          </h1>
+          <p className="text-muted-foreground">
+            Manage your portfolio settings and preferences.
+          </p>
         </div>
         <Card className="w-full max-w-2xl">
           <CardHeader>
@@ -260,5 +260,5 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
         </Card>
       </div>
     </FormProvider>
-  )
+  );
 }

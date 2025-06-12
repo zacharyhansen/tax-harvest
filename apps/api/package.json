@@ -93,6 +93,7 @@
     "graphql-fields": "^2.0.3",
     "graphql-parse-resolve-info": "4.13.0",
     "graphql-type-json": "^0.3.2",
+    "ip6": "^0.2.11",
     "kysely": "^0.27.4",
     "lodash.get": "^4.4.2",
     "oauth": "^0.10.0",

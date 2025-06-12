@@ -36,6 +36,7 @@ export const TypedRoutes = {
     }),
   ),
   home: makeRoute(() => `/main/home`),
+  invite: makeRoute(() => `/main/invite`),
   lotSelection: makeRoute(
     ({ type }) => `/main/harvest-flow/lot-selection/${type}`,
     z.object({ type: z.nativeEnum(HarvestType) }),

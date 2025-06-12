@@ -9298,6 +9298,8 @@ export type LotWhereUniqueInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   accessOauthConnection: AuthConnectionExt;
+  /** Add User to Portfolio. True if user added, False if user is invited as they do not exist */
+  addUserToPortfolio: Scalars['Boolean']['output'];
   /** Create a new connected account */
   createAccountForPortfolio: Account;
   createFiles: Array<File>;
@@ -9310,6 +9312,10 @@ export type Mutation = {
   /** Finalize harvest for review */
   finalizeHarvest: Harvest;
   initAccountFileUpload: Array<File>;
+  /** Invite User to Platform */
+  inviteUsersToPlatform: Scalars['Boolean']['output'];
+  /** Remove User from Portfolio */
+  removeUserFromPortfolio: Scalars['Boolean']['output'];
   /** Set up plaid auth connection and create accounts from syncing plaid */
   setAccessTokenAndSyncAccounts: Array<Account>;
   /** Log the user into a different portfolio */
@@ -9347,6 +9353,11 @@ export type MutationAccessOauthConnectionArgs = {
 };
 
 
+export type MutationAddUserToPortfolioArgs = {
+  email: Scalars['String']['input'];
+};
+
+
 export type MutationCreateAccountForPortfolioArgs = {
   accountCreateInput: AccountCreateInput;
 };
@@ -9381,6 +9392,16 @@ export type MutationFinalizeHarvestArgs = {
 export type MutationInitAccountFileUploadArgs = {
   accountData: InitAccountFileUploadPayload;
   fileData: Array<InitFileUploadPayload>;
+};
+
+
+export type MutationInviteUsersToPlatformArgs = {
+  emails: Array<Scalars['String']['input']>;
+};
+
+
+export type MutationRemoveUserFromPortfolioArgs = {
+  userId: Scalars['String']['input'];
 };
 
 
@@ -12728,8 +12749,6 @@ export type Query = {
   lots: Array<Lot>;
   /** Get authenticated portfolio */
   portfolioAuthed: Portfolio;
-  /** Get portfolio by portfolio id */
-  portfolioById: Portfolio;
   portfolioPositions: Array<Position>;
   /** Summary summary */
   portfolioSummary: PortfolioSummary;
@@ -12746,6 +12765,8 @@ export type Query = {
   transactions: Array<Transaction>;
   /** Get current user */
   userCurrent: User;
+  /** Get all users on a portfolio */
+  usersOnPortfolio: Array<User>;
 };
 
 
@@ -12837,11 +12858,6 @@ export type QueryLotTransactionBatchesArgs = {
 export type QueryLotsArgs = {
   includeTaxAdvantaged?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<LotWhereInput>;
-};
-
-
-export type QueryPortfolioByIdArgs = {
-  id: Scalars['String']['input'];
 };
 
 
@@ -15304,6 +15320,32 @@ export type AccountRealizedPlQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AccountRealizedPlQuery = { __typename?: 'Query', accounts: Array<{ __typename?: 'Account', id: string, name?: string | null, realizedPAndL?: Array<{ __typename?: 'RealizedPAndL', id: string, year: number, shortTerm: string, longTerm: string, dividend: string, deferredLoss: string, updatedAt: any }> | null }> };
 
+export type InviteUsersToPlatformMutationVariables = Exact<{
+  emails: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+
+export type InviteUsersToPlatformMutation = { __typename?: 'Mutation', inviteUsersToPlatform: boolean };
+
+export type AddUserToPortfolioMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type AddUserToPortfolioMutation = { __typename?: 'Mutation', addUserToPortfolio: boolean };
+
+export type RemoveUserFromPortfolioMutationVariables = Exact<{
+  userId: Scalars['String']['input'];
+}>;
+
+
+export type RemoveUserFromPortfolioMutation = { __typename?: 'Mutation', removeUserFromPortfolio: boolean };
+
+export type UsersOnPortfolioQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersOnPortfolioQuery = { __typename?: 'Query', usersOnPortfolio: Array<{ __typename?: 'User', id: string, name?: string | null, email?: string | null }> };
+
 export type PortfolioTableItemFragment = { __typename?: 'Portfolio', createdById?: string | null, id: string, name: string, createdAt: any, createdBy?: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } | null, accounts?: Array<{ __typename?: 'Account', id: string, status: AccountStatus, name?: string | null, institution?: AccountInstitution | null }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', name?: string | null, id: string, photo?: string | null, email?: string | null } }> | null };
 
 export type PortfolioTableQueryVariables = Exact<{ [key: string]: never; }>;
@@ -15317,13 +15359,6 @@ export type UpdatePortfolioMutationVariables = Exact<{
 
 
 export type UpdatePortfolioMutation = { __typename?: 'Mutation', updatePortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
-
-export type PortfolioByIdQueryVariables = Exact<{
-  id: Scalars['String']['input'];
-}>;
-
-
-export type PortfolioByIdQuery = { __typename?: 'Query', portfolioById: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type StripeSessionQueryVariables = Exact<{
   stripePriceId: Scalars['String']['input'];
@@ -15537,6 +15572,11 @@ export type PortfolioAuthedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PortfolioAuthedQuery = { __typename?: 'Query', portfolioAuthed: { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null } };
+
+export type PortfolioDetailAuthedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PortfolioDetailAuthedQuery = { __typename?: 'Query', portfolioAuthed: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById?: string | null, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type SwitchPortfolioMutationVariables = Exact<{
   porfolioId: Scalars['String']['input'];
@@ -16770,6 +16810,140 @@ export type AccountRealizedPlQueryHookResult = ReturnType<typeof useAccountReali
 export type AccountRealizedPlLazyQueryHookResult = ReturnType<typeof useAccountRealizedPlLazyQuery>;
 export type AccountRealizedPlSuspenseQueryHookResult = ReturnType<typeof useAccountRealizedPlSuspenseQuery>;
 export type AccountRealizedPlQueryResult = Apollo.QueryResult<AccountRealizedPlQuery, AccountRealizedPlQueryVariables>;
+export const InviteUsersToPlatformDocument = gql`
+    mutation InviteUsersToPlatform($emails: [String!]!) {
+  inviteUsersToPlatform(emails: $emails)
+}
+    `;
+export type InviteUsersToPlatformMutationFn = Apollo.MutationFunction<InviteUsersToPlatformMutation, InviteUsersToPlatformMutationVariables>;
+
+/**
+ * __useInviteUsersToPlatformMutation__
+ *
+ * To run a mutation, you first call `useInviteUsersToPlatformMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteUsersToPlatformMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inviteUsersToPlatformMutation, { data, loading, error }] = useInviteUsersToPlatformMutation({
+ *   variables: {
+ *      emails: // value for 'emails'
+ *   },
+ * });
+ */
+export function useInviteUsersToPlatformMutation(baseOptions?: Apollo.MutationHookOptions<InviteUsersToPlatformMutation, InviteUsersToPlatformMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InviteUsersToPlatformMutation, InviteUsersToPlatformMutationVariables>(InviteUsersToPlatformDocument, options);
+      }
+export type InviteUsersToPlatformMutationHookResult = ReturnType<typeof useInviteUsersToPlatformMutation>;
+export type InviteUsersToPlatformMutationResult = Apollo.MutationResult<InviteUsersToPlatformMutation>;
+export type InviteUsersToPlatformMutationOptions = Apollo.BaseMutationOptions<InviteUsersToPlatformMutation, InviteUsersToPlatformMutationVariables>;
+export const AddUserToPortfolioDocument = gql`
+    mutation AddUserToPortfolio($email: String!) {
+  addUserToPortfolio(email: $email)
+}
+    `;
+export type AddUserToPortfolioMutationFn = Apollo.MutationFunction<AddUserToPortfolioMutation, AddUserToPortfolioMutationVariables>;
+
+/**
+ * __useAddUserToPortfolioMutation__
+ *
+ * To run a mutation, you first call `useAddUserToPortfolioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddUserToPortfolioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addUserToPortfolioMutation, { data, loading, error }] = useAddUserToPortfolioMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useAddUserToPortfolioMutation(baseOptions?: Apollo.MutationHookOptions<AddUserToPortfolioMutation, AddUserToPortfolioMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddUserToPortfolioMutation, AddUserToPortfolioMutationVariables>(AddUserToPortfolioDocument, options);
+      }
+export type AddUserToPortfolioMutationHookResult = ReturnType<typeof useAddUserToPortfolioMutation>;
+export type AddUserToPortfolioMutationResult = Apollo.MutationResult<AddUserToPortfolioMutation>;
+export type AddUserToPortfolioMutationOptions = Apollo.BaseMutationOptions<AddUserToPortfolioMutation, AddUserToPortfolioMutationVariables>;
+export const RemoveUserFromPortfolioDocument = gql`
+    mutation RemoveUserFromPortfolio($userId: String!) {
+  removeUserFromPortfolio(userId: $userId)
+}
+    `;
+export type RemoveUserFromPortfolioMutationFn = Apollo.MutationFunction<RemoveUserFromPortfolioMutation, RemoveUserFromPortfolioMutationVariables>;
+
+/**
+ * __useRemoveUserFromPortfolioMutation__
+ *
+ * To run a mutation, you first call `useRemoveUserFromPortfolioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveUserFromPortfolioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeUserFromPortfolioMutation, { data, loading, error }] = useRemoveUserFromPortfolioMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useRemoveUserFromPortfolioMutation(baseOptions?: Apollo.MutationHookOptions<RemoveUserFromPortfolioMutation, RemoveUserFromPortfolioMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveUserFromPortfolioMutation, RemoveUserFromPortfolioMutationVariables>(RemoveUserFromPortfolioDocument, options);
+      }
+export type RemoveUserFromPortfolioMutationHookResult = ReturnType<typeof useRemoveUserFromPortfolioMutation>;
+export type RemoveUserFromPortfolioMutationResult = Apollo.MutationResult<RemoveUserFromPortfolioMutation>;
+export type RemoveUserFromPortfolioMutationOptions = Apollo.BaseMutationOptions<RemoveUserFromPortfolioMutation, RemoveUserFromPortfolioMutationVariables>;
+export const UsersOnPortfolioDocument = gql`
+    query UsersOnPortfolio {
+  usersOnPortfolio {
+    id
+    name
+    email
+  }
+}
+    `;
+
+/**
+ * __useUsersOnPortfolioQuery__
+ *
+ * To run a query within a React component, call `useUsersOnPortfolioQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersOnPortfolioQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersOnPortfolioQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUsersOnPortfolioQuery(baseOptions?: Apollo.QueryHookOptions<UsersOnPortfolioQuery, UsersOnPortfolioQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersOnPortfolioQuery, UsersOnPortfolioQueryVariables>(UsersOnPortfolioDocument, options);
+      }
+export function useUsersOnPortfolioLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersOnPortfolioQuery, UsersOnPortfolioQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersOnPortfolioQuery, UsersOnPortfolioQueryVariables>(UsersOnPortfolioDocument, options);
+        }
+export function useUsersOnPortfolioSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UsersOnPortfolioQuery, UsersOnPortfolioQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UsersOnPortfolioQuery, UsersOnPortfolioQueryVariables>(UsersOnPortfolioDocument, options);
+        }
+export type UsersOnPortfolioQueryHookResult = ReturnType<typeof useUsersOnPortfolioQuery>;
+export type UsersOnPortfolioLazyQueryHookResult = ReturnType<typeof useUsersOnPortfolioLazyQuery>;
+export type UsersOnPortfolioSuspenseQueryHookResult = ReturnType<typeof useUsersOnPortfolioSuspenseQuery>;
+export type UsersOnPortfolioQueryResult = Apollo.QueryResult<UsersOnPortfolioQuery, UsersOnPortfolioQueryVariables>;
 export const PortfolioTableDocument = gql`
     query PortfolioTable {
   portfolios {
@@ -16843,46 +17017,6 @@ export function useUpdatePortfolioMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdatePortfolioMutationHookResult = ReturnType<typeof useUpdatePortfolioMutation>;
 export type UpdatePortfolioMutationResult = Apollo.MutationResult<UpdatePortfolioMutation>;
 export type UpdatePortfolioMutationOptions = Apollo.BaseMutationOptions<UpdatePortfolioMutation, UpdatePortfolioMutationVariables>;
-export const PortfolioByIdDocument = gql`
-    query PortfolioById($id: String!) {
-  portfolioById(id: $id) {
-    ...PortfolioDetailItem
-  }
-}
-    ${PortfolioDetailItemFragmentDoc}`;
-
-/**
- * __usePortfolioByIdQuery__
- *
- * To run a query within a React component, call `usePortfolioByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `usePortfolioByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePortfolioByIdQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function usePortfolioByIdQuery(baseOptions: Apollo.QueryHookOptions<PortfolioByIdQuery, PortfolioByIdQueryVariables> & ({ variables: PortfolioByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
-      }
-export function usePortfolioByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioByIdQuery, PortfolioByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
-        }
-export function usePortfolioByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioByIdQuery, PortfolioByIdQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<PortfolioByIdQuery, PortfolioByIdQueryVariables>(PortfolioByIdDocument, options);
-        }
-export type PortfolioByIdQueryHookResult = ReturnType<typeof usePortfolioByIdQuery>;
-export type PortfolioByIdLazyQueryHookResult = ReturnType<typeof usePortfolioByIdLazyQuery>;
-export type PortfolioByIdSuspenseQueryHookResult = ReturnType<typeof usePortfolioByIdSuspenseQuery>;
-export type PortfolioByIdQueryResult = Apollo.QueryResult<PortfolioByIdQuery, PortfolioByIdQueryVariables>;
 export const StripeSessionDocument = gql`
     query StripeSession($stripePriceId: String!, $stripeCustomerId: String!) {
   stripeSession(
@@ -17907,6 +18041,45 @@ export type PortfolioAuthedQueryHookResult = ReturnType<typeof usePortfolioAuthe
 export type PortfolioAuthedLazyQueryHookResult = ReturnType<typeof usePortfolioAuthedLazyQuery>;
 export type PortfolioAuthedSuspenseQueryHookResult = ReturnType<typeof usePortfolioAuthedSuspenseQuery>;
 export type PortfolioAuthedQueryResult = Apollo.QueryResult<PortfolioAuthedQuery, PortfolioAuthedQueryVariables>;
+export const PortfolioDetailAuthedDocument = gql`
+    query PortfolioDetailAuthed {
+  portfolioAuthed {
+    ...PortfolioDetailItem
+  }
+}
+    ${PortfolioDetailItemFragmentDoc}`;
+
+/**
+ * __usePortfolioDetailAuthedQuery__
+ *
+ * To run a query within a React component, call `usePortfolioDetailAuthedQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePortfolioDetailAuthedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePortfolioDetailAuthedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePortfolioDetailAuthedQuery(baseOptions?: Apollo.QueryHookOptions<PortfolioDetailAuthedQuery, PortfolioDetailAuthedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PortfolioDetailAuthedQuery, PortfolioDetailAuthedQueryVariables>(PortfolioDetailAuthedDocument, options);
+      }
+export function usePortfolioDetailAuthedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PortfolioDetailAuthedQuery, PortfolioDetailAuthedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PortfolioDetailAuthedQuery, PortfolioDetailAuthedQueryVariables>(PortfolioDetailAuthedDocument, options);
+        }
+export function usePortfolioDetailAuthedSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PortfolioDetailAuthedQuery, PortfolioDetailAuthedQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PortfolioDetailAuthedQuery, PortfolioDetailAuthedQueryVariables>(PortfolioDetailAuthedDocument, options);
+        }
+export type PortfolioDetailAuthedQueryHookResult = ReturnType<typeof usePortfolioDetailAuthedQuery>;
+export type PortfolioDetailAuthedLazyQueryHookResult = ReturnType<typeof usePortfolioDetailAuthedLazyQuery>;
+export type PortfolioDetailAuthedSuspenseQueryHookResult = ReturnType<typeof usePortfolioDetailAuthedSuspenseQuery>;
+export type PortfolioDetailAuthedQueryResult = Apollo.QueryResult<PortfolioDetailAuthedQuery, PortfolioDetailAuthedQueryVariables>;
 export const SwitchPortfolioDocument = gql`
     mutation SwitchPortfolio($porfolioId: String!) {
   switchPortfolio(porfolioId: $porfolioId) {

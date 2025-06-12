@@ -1,0 +1,19 @@
+mutation InviteUsersToPlatform($emails: [String!]!) {
+  inviteUsersToPlatform(emails: $emails)
+}
+
+mutation AddUserToPortfolio($email: String!) {
+  addUserToPortfolio(email: $email)
+}
+
+mutation RemoveUserFromPortfolio($userId: String!) {
+  removeUserFromPortfolio(userId: $userId)
+}
+
+query UsersOnPortfolio {
+  usersOnPortfolio {
+    id
+    name
+    email
+  }
+}

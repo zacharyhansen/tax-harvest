@@ -46,6 +46,11 @@ query PortfolioAuthed {
     ...PortfolioItem
   }
 }
+query PortfolioDetailAuthed {
+  portfolioAuthed {
+    ...PortfolioDetailItem
+  }
+}
 mutation SwitchPortfolio($porfolioId: String!) {
   switchPortfolio(porfolioId: $porfolioId) {
     ...PortfolioItem

@@ -15,6 +15,9 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    {
+      rawBody: true,
+    },
     // {
     //   snapshot: true,
     //   abortOnError: false,

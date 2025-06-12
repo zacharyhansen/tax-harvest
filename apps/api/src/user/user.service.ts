@@ -16,7 +16,7 @@ export class UserService {
     private readonly stripeService: StripeService,
     private readonly clerkService: ClerkService,
     private readonly plaidService: PlaidService,
-  ) {}
+  ) { }
 
   async user(args: Prisma.UserFindUniqueOrThrowArgs) {
     return this.prismaService.user.findUniqueOrThrow(args)
@@ -42,17 +42,17 @@ export class UserService {
         this.stripeService.createCustomer({
           params: {
             email:
-                clerkUser.primaryEmailAddress?.emailAddress
-                ?? input?.email
-                ?? undefined,
+              clerkUser.primaryEmailAddress?.emailAddress
+              ?? input?.email
+              ?? undefined,
             metadata: {
               clerk_id: clerkUser.id,
             },
             name: clerkUser.fullName ?? input?.name ?? undefined,
             phone:
-                clerkUser.primaryPhoneNumber?.phoneNumber
-                ?? input?.phoneNumber
-                ?? undefined,
+              clerkUser.primaryPhoneNumber?.phoneNumber
+              ?? input?.phoneNumber
+              ?? undefined,
           },
         }),
         this.plaidService.plaidCreateUser({ userId: clerkUser.id }),

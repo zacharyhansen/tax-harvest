@@ -1,5 +1,6 @@
 import type { RawBodyRequest } from '@nestjs/common'
 import {
+  Body,
   Controller,
   Headers,
   Logger,
@@ -22,7 +23,7 @@ export class ClerkController {
   constructor(
     private readonly userService: UserService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   @Post('webhook')
   @Public()
@@ -32,15 +33,13 @@ export class ClerkController {
     @Headers('svix-signature') svixSignature: string,
     @Req() request: RawBodyRequest<Request>,
     @Res() res: Response,
+    @Body() payload: unknown,
   ) {
     try {
       // Verify webhook secret exists
       const webhookSecret = this.configService.get<string>(
         'CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET',
-      )
-      if (!webhookSecret) {
-        throw new Error('Missing WEBHOOK_SECRET in environment variables')
-      }
+      )!
 
       // Verify required headers
       if (!svixId || !svixTimestamp || !svixSignature) {
@@ -53,15 +52,12 @@ export class ClerkController {
 
       // Initialize webhook instance
       const wh = new Webhook(webhookSecret)
-
       // Verify the webhook payload
-      const payload = request.rawBody?.toString('utf8')
-
       if (!payload) {
         throw new Error('Missing webhook payload.')
       }
 
-      const evt = wh.verify(payload, {
+      const evt = wh.verify(request.rawBody?.toString('utf8') ?? '', {
         'svix-id': svixId,
         'svix-signature': svixSignature,
         'svix-timestamp': svixTimestamp,
