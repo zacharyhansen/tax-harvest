@@ -1,6 +1,6 @@
 {
   "name": "tax-harvest",
-  "version": "3.0.12",
+  "version": "3.0.13",
   "private": true,
   "packageManager": "pnpm@9.14.2",
   "description": "Super cool risk app",
