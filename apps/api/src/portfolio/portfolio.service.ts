@@ -304,7 +304,7 @@ export class PortfolioService {
             gainTotal: summaryCurrentLots.unrealizedGainTotalWithCurrentHarvest,
             lossTotal: summaryCurrentLots.unrealizedLossTotalWithCurrentHarvest,
             accountCount: summaryCurrentLots.accountCount,
-            total: summaryCurrentLots.totalWithCurrentHarvest,
+            total: summaryCurrentLots.totalUnrealizedWithCurrentHarvest,
             positionCount: summaryCurrentLots.positionCount,
           },
         }),
@@ -397,7 +397,6 @@ export class PortfolioService {
       unrealizedLossTotalWithCurrentHarvest: new Decimal(0),
       positionCount: new Decimal(0),
       realizedDollarChangeFromCurrentHarvest: new Decimal(0),
-      unrealizedDollarChangeFromCurrentHarvest: new Decimal(0),
     }
 
     const accountIds = new Set<string>()
@@ -406,33 +405,37 @@ export class PortfolioService {
     for (const lot of lots) {
       accountIds.add(lot.accountId)
       lotCounts.add(lot.id)
+      // console.log(lot.currentHarvestQty, lot.dollarPerSharePnL)
       totals.realizedDollarChangeFromCurrentHarvest = totals.realizedDollarChangeFromCurrentHarvest.plus(
         new Decimal(lot.dollarPerSharePnL)
-          .mul(new Decimal(lot.remainingQty)),
-      )
-      totals.unrealizedDollarChangeFromCurrentHarvest = totals.unrealizedDollarChangeFromCurrentHarvest.minus(
-        new Decimal(lot.dollarPerSharePnL)
-          .mul(new Decimal(lot.remainingQty)),
+          .mul(new Decimal(lot.currentHarvestQty)),
       )
       if (Number(lot.gainTotal) < 0) {
         totals.unrealizedLossTotal = totals.unrealizedLossTotal.plus(new Decimal(lot.gainTotal))
+        totals.unrealizedLossTotalWithCurrentHarvest = totals.unrealizedLossTotalWithCurrentHarvest.plus(
+          new Decimal(lot.dollarPerSharePnL)
+            .mul(new Decimal(lot.remainingQty).minus(new Decimal(lot.currentHarvestQty))),
+        )
       }
       else {
         totals.unrealizedGainTotal = totals.unrealizedGainTotal.plus(new Decimal(lot.gainTotal))
+        totals.unrealizedGainTotalWithCurrentHarvest = totals.unrealizedGainTotalWithCurrentHarvest.plus(
+          new Decimal(lot.dollarPerSharePnL)
+            .mul(new Decimal(lot.remainingQty).minus(new Decimal(lot.currentHarvestQty))),
+        )
       }
     }
 
     return {
       accountCount: totals.accountCount.toNumber(),
+      positionCount: totals.positionCount.toNumber(),
       gainTotal: totals.unrealizedGainTotal.toNumber(),
       lossTotal: totals.unrealizedLossTotal.toNumber(),
-      positionCount: totals.positionCount.toNumber(),
       totalUnrealized: totals.unrealizedGainTotal.plus(totals.unrealizedLossTotal).toNumber(),
       realizedDollarChangeFromCurrentHarvest: totals.realizedDollarChangeFromCurrentHarvest.toNumber(),
-      unrealizedDollarChangeFromCurrentHarvest: totals.unrealizedDollarChangeFromCurrentHarvest.toNumber(),
-      unrealizedGainTotalWithCurrentHarvest: totals.unrealizedGainTotal.minus(totals.realizedDollarChangeFromCurrentHarvest).toNumber(),
-      unrealizedLossTotalWithCurrentHarvest: totals.unrealizedLossTotal.minus(totals.unrealizedDollarChangeFromCurrentHarvest).toNumber(),
-      totalWithCurrentHarvest: totals.unrealizedGainTotalWithCurrentHarvest.plus(totals.unrealizedLossTotalWithCurrentHarvest).toNumber(),
+      unrealizedGainTotalWithCurrentHarvest: totals.unrealizedGainTotalWithCurrentHarvest.toNumber(),
+      unrealizedLossTotalWithCurrentHarvest: totals.unrealizedLossTotalWithCurrentHarvest.toNumber(),
+      totalUnrealizedWithCurrentHarvest: totals.unrealizedGainTotalWithCurrentHarvest.plus(totals.unrealizedLossTotalWithCurrentHarvest).toNumber(),
     }
   }
 

@@ -126,9 +126,10 @@ model Harvest {
   type        HarvestType
   step        HarvestStep @default(CONFIGURE)
 
-  createdBy           User                 @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  portfolio           Portfolio            @relation(fields: [portfolioId], references: [id])
-  harvestTransactions HarvestTransaction[]
+  createdBy               User                     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  portfolio               Portfolio                @relation(fields: [portfolioId], references: [id])
+  harvestTransactions     HarvestTransaction[]
+  harvestTransactionItems HarvestTransactionItem[]
 
   @@index([portfolioId])
 }
@@ -164,6 +165,7 @@ model HarvestTransaction {
 model HarvestTransactionItem {
   id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   portfolioId       String    @db.Uuid
+  harvestId         String    @db.Uuid
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @default(now()) @updatedAt
   orderType         OrderType
@@ -179,6 +181,7 @@ model HarvestTransactionItem {
   lotPricePaid      Decimal   @db.Decimal(14, 4)
   lotPriceAtHarvest Decimal   @db.Decimal(14, 4)
 
+  harvest                      Harvest             @relation(fields: [harvestId], references: [id], onDelete: Cascade)
   portfolio                    Portfolio           @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   asset                        Asset               @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
   lotSold                      Lot?                @relation(fields: [lotId], references: [id], onDelete: SetNull)

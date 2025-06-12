@@ -240,4 +240,33 @@ export class HarvestResolver {
       },
     })
   }
+
+  @Mutation(() => Boolean, {
+    description: 'Delete multiple harvests by their IDs',
+    name: 'deleteHarvests',
+  })
+  async deleteHarvests(
+    @ClerkContext()
+    { metadata }: ClerkClaims,
+    @Args('ids', {
+      nullable: false,
+      type: () => [String],
+    })
+    ids: string[],
+  ) {
+    const result = await this.prismaService
+      .$extends(PrismaService.forPortfolio(metadata.portfolioId))
+      .harvest
+      .deleteMany({
+        where: {
+          id: {
+            in: ids,
+          },
+          portfolioId: {
+            equals: metadata.portfolioId,
+          },
+        },
+      })
+    return result.count > 0
+  }
 }

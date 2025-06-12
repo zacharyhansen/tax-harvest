@@ -32,6 +32,12 @@ export class LotCurrent {
   @Field({ description: 'How many shares from this lot are in todays current harvest.' })
   currentHarvestQty: string
 
+  @Field({
+    description: 'The ID of the harvest that is currently being processed for this lot.',
+    nullable: true,
+  })
+  harvestId?: string
+
   @Field(() => Date)
   acquiredDate: Date
 

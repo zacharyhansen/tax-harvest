@@ -207,6 +207,7 @@ export interface HarvestTransactionItem {
   completedDate: Timestamp | null;
   createdAt: Generated<Timestamp>;
   date: Generated<Timestamp>;
+  harvestId: string;
   id: Generated<string>;
   lotAcquiredDate: Timestamp;
   lotId: string | null;

@@ -60,7 +60,7 @@ export class HarvestService {
               originalLot.quantity,
             )
 
-            const replacementHarvestTransactionItem: Prisma.HarvestTransactionItemCreateManyInput
+            const replacementHarvestTransactionItem: Omit<Prisma.HarvestTransactionItemCreateManyInput, 'harvestId'>
               = {
               assetSymbol: 'AAPL',
               orderType: OrderType.BUY,
@@ -90,6 +90,27 @@ export class HarvestService {
       // Create entry transaction items (sales based on selection)
 
       const dateOfHarvest = new Date()
+
+      const harvest = await tx.harvest.create({
+        data: {
+          amount: currentLotsWithReplacement
+            .reduce((acc, curr) => {
+              return acc.add(
+                new Decimal(curr.dollarPerSharePnL ?? 0).times(
+                  curr.selectedQuantity,
+                ),
+              )
+            }, new Decimal(0))
+            .absoluteValue()
+            .toString(),
+          createdById,
+          date,
+          portfolioId,
+          type: harvestType,
+          label: `${new Date().toLocaleDateString('en-US')} ${currentLotsWithReplacement.map(item => `${item.selectedQuantity} x ${item.symbol}`).join(', ')} for ${currentLotsWithReplacement.map(item => `${item.replacementHarvestTransactionItem.quantity} x ${item.replacementHarvestTransactionItem.assetSymbol}`).join(', ')}`,
+        },
+      })
+
       /**
        * The entry transcations that start the harvest
        */
@@ -107,6 +128,7 @@ export class HarvestService {
               lotPricePaid: currentLot.price,
               lotPriceAtHarvest: currentLot.lastPrice,
               date: dateOfHarvest,
+              harvestId: harvest.id,
             }
           }),
         })
@@ -119,25 +141,19 @@ export class HarvestService {
           ? []
           : await tx.harvestTransactionItem.createManyAndReturn({
             data: currentLotsWithReplacement.map((currentLot) => {
-              return currentLot.replacementHarvestTransactionItem
+              return {
+                ...currentLot.replacementHarvestTransactionItem,
+                harvestId: harvest.id,
+              }
             }),
           })
 
       // Create/select the top level harvest with our transaction items attached
-      return tx.harvest.create({
+      return tx.harvest.update({
+        where: {
+          id: harvest.id,
+        },
         data: {
-          amount: currentLotsWithReplacement
-            .reduce((acc, curr) => {
-              return acc.add(
-                new Decimal(curr.dollarPerSharePnL ?? 0).times(
-                  curr.selectedQuantity,
-                ),
-              )
-            }, new Decimal(0))
-            .absoluteValue()
-            .toString(),
-          createdById,
-          date,
           harvestTransactions: {
             createMany: {
               data: entryTransactionItems.map((entryTransactionItem, i) => {
@@ -154,9 +170,6 @@ export class HarvestService {
               }),
             },
           },
-          label: `${new Date().toLocaleDateString('en-US')} ${entryTransactionItems.map(item => `${item.quantity} x ${item.assetSymbol}`).join(', ')} for ${replacementTransactionItems.map(item => `${item.quantity} x ${item.assetSymbol}`).join(', ')}`,
-          portfolioId,
-          type: harvestType,
         },
         select,
       })
@@ -220,6 +233,7 @@ export class HarvestService {
           lotAcquiredDate: transaction.harvestTransactionItem.lotAcquiredDate,
           lotPricePaid: transaction.harvestTransactionItem.lotPricePaid,
           lotPriceAtHarvest: transaction.harvestTransactionItem.lotPriceAtHarvest,
+          harvestId,
         })
         if (transaction.replacementTransactionItem) {
           indexMap[transaction.id].replacement = revertTransactionItems.length
@@ -232,6 +246,7 @@ export class HarvestService {
             lotAcquiredDate: transaction.replacementTransactionItem.lotAcquiredDate,
             lotPricePaid: transaction.replacementTransactionItem.lotPricePaid,
             lotPriceAtHarvest: transaction.replacementTransactionItem.lotPriceAtHarvest,
+            harvestId,
           })
         }
       }

@@ -4574,6 +4574,7 @@ type Harvest {
   createdBy: User!
   createdById: String!
   date: DateTime!
+  harvestTransactionItems: [HarvestTransactionItem!]
   harvestTransactions: [HarvestTransaction!]
   id: ID!
   label: String!
@@ -4589,6 +4590,7 @@ type HarvestAvgAggregate {
 }
 
 type HarvestCount {
+  harvestTransactionItems: Int!
   harvestTransactions: Int!
 }
 
@@ -4654,6 +4656,12 @@ input HarvestCreateNestedManyWithoutPortfolioInput {
   createMany: HarvestCreateManyPortfolioInputEnvelope
 }
 
+input HarvestCreateNestedOneWithoutHarvestTransactionItemsInput {
+  connect: HarvestWhereUniqueInput
+  connectOrCreate: HarvestCreateOrConnectWithoutHarvestTransactionItemsInput
+  create: HarvestCreateWithoutHarvestTransactionItemsInput
+}
+
 input HarvestCreateNestedOneWithoutHarvestTransactionsInput {
   connect: HarvestWhereUniqueInput
   connectOrCreate: HarvestCreateOrConnectWithoutHarvestTransactionsInput
@@ -4662,6 +4670,11 @@ input HarvestCreateNestedOneWithoutHarvestTransactionsInput {
 
 input HarvestCreateOrConnectWithoutCreatedByInput {
   create: HarvestCreateWithoutCreatedByInput!
+  where: HarvestWhereUniqueInput!
+}
+
+input HarvestCreateOrConnectWithoutHarvestTransactionItemsInput {
+  create: HarvestCreateWithoutHarvestTransactionItemsInput!
   where: HarvestWhereUniqueInput!
 }
 
@@ -4679,6 +4692,21 @@ input HarvestCreateWithoutCreatedByInput {
   amount: Decimal!
   createdAt: DateTime
   date: DateTime
+  harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutHarvestInput
+  harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
+  id: String
+  label: String!
+  portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
+  step: HarvestStep
+  type: HarvestType!
+  updatedAt: DateTime
+}
+
+input HarvestCreateWithoutHarvestTransactionItemsInput {
+  amount: Decimal!
+  createdAt: DateTime
+  createdBy: UserCreateNestedOneWithoutHarvestInput!
+  date: DateTime
   harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
   id: String
   label: String!
@@ -4693,6 +4721,7 @@ input HarvestCreateWithoutHarvestTransactionsInput {
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutHarvestInput!
   date: DateTime
+  harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutHarvestInput
   id: String
   label: String!
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
@@ -4706,6 +4735,7 @@ input HarvestCreateWithoutPortfolioInput {
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutHarvestInput!
   date: DateTime
+  harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutHarvestInput
   harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
   id: String
   label: String!
@@ -5081,6 +5111,8 @@ type HarvestTransactionItem {
 
   """The date of the harvest transtion item is assumed to be executed"""
   date: DateTime!
+  harvest: Harvest!
+  harvestId: String!
   harvestTransaction: HarvestTransaction
   id: ID!
   lotAcquiredDate: DateTime!
@@ -5112,6 +5144,7 @@ type HarvestTransactionItemCountAggregate {
   completedDate: Int!
   createdAt: Int!
   date: Int!
+  harvestId: Int!
   id: Int!
   lotAcquiredDate: Int!
   lotId: Int!
@@ -5128,6 +5161,7 @@ input HarvestTransactionItemCreateManyAssetInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvestId: String!
   id: String
   lotAcquiredDate: DateTime!
   lotId: String
@@ -5145,11 +5179,34 @@ input HarvestTransactionItemCreateManyAssetInputEnvelope {
   skipDuplicates: Boolean
 }
 
+input HarvestTransactionItemCreateManyHarvestInput {
+  assetSymbol: String!
+  completedDate: DateTime
+  createdAt: DateTime
+  date: DateTime
+  id: String
+  lotAcquiredDate: DateTime!
+  lotId: String
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
+  orderType: OrderType!
+  portfolioId: String!
+  price: Decimal!
+  quantity: Decimal!
+  updatedAt: DateTime
+}
+
+input HarvestTransactionItemCreateManyHarvestInputEnvelope {
+  data: [HarvestTransactionItemCreateManyHarvestInput!]!
+  skipDuplicates: Boolean
+}
+
 input HarvestTransactionItemCreateManyLotSoldInput {
   assetSymbol: String!
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvestId: String!
   id: String
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
@@ -5171,6 +5228,7 @@ input HarvestTransactionItemCreateManyPortfolioInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvestId: String!
   id: String
   lotAcquiredDate: DateTime!
   lotId: String
@@ -5192,6 +5250,13 @@ input HarvestTransactionItemCreateNestedManyWithoutAssetInput {
   connectOrCreate: [HarvestTransactionItemCreateOrConnectWithoutAssetInput!]
   create: [HarvestTransactionItemCreateWithoutAssetInput!]
   createMany: HarvestTransactionItemCreateManyAssetInputEnvelope
+}
+
+input HarvestTransactionItemCreateNestedManyWithoutHarvestInput {
+  connect: [HarvestTransactionItemWhereUniqueInput!]
+  connectOrCreate: [HarvestTransactionItemCreateOrConnectWithoutHarvestInput!]
+  create: [HarvestTransactionItemCreateWithoutHarvestInput!]
+  createMany: HarvestTransactionItemCreateManyHarvestInputEnvelope
 }
 
 input HarvestTransactionItemCreateNestedManyWithoutLotSoldInput {
@@ -5237,6 +5302,11 @@ input HarvestTransactionItemCreateOrConnectWithoutAssetInput {
   where: HarvestTransactionItemWhereUniqueInput!
 }
 
+input HarvestTransactionItemCreateOrConnectWithoutHarvestInput {
+  create: HarvestTransactionItemCreateWithoutHarvestInput!
+  where: HarvestTransactionItemWhereUniqueInput!
+}
+
 input HarvestTransactionItemCreateOrConnectWithoutHarvestTransactionInput {
   create: HarvestTransactionItemCreateWithoutHarvestTransactionInput!
   where: HarvestTransactionItemWhereUniqueInput!
@@ -5271,6 +5341,28 @@ input HarvestTransactionItemCreateWithoutAssetInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
+  harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
+  id: String
+  lotAcquiredDate: DateTime!
+  lotPriceAtHarvest: Decimal!
+  lotPricePaid: Decimal!
+  lotSold: LotCreateNestedOneWithoutHarvestTransactionItemsInput
+  orderType: OrderType!
+  portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionItemInput!
+  price: Decimal!
+  quantity: Decimal!
+  replacementTransaction: HarvestTransactionCreateNestedOneWithoutReplacementTransactionItemInput
+  revertHarvestTransaction: HarvestTransactionCreateNestedOneWithoutRevertHarvestTransactionItemInput
+  revertReplacementTransaction: HarvestTransactionCreateNestedOneWithoutRevertReplacementTransactionItemInput
+  updatedAt: DateTime
+}
+
+input HarvestTransactionItemCreateWithoutHarvestInput {
+  asset: AssetCreateNestedOneWithoutHarvestTransactionItemsInput!
+  completedDate: DateTime
+  createdAt: DateTime
+  date: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5292,6 +5384,7 @@ input HarvestTransactionItemCreateWithoutHarvestTransactionInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   id: String
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
@@ -5312,6 +5405,7 @@ input HarvestTransactionItemCreateWithoutLotSoldInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5332,6 +5426,7 @@ input HarvestTransactionItemCreateWithoutPortfolioInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5352,6 +5447,7 @@ input HarvestTransactionItemCreateWithoutReplacementTransactionInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5372,6 +5468,7 @@ input HarvestTransactionItemCreateWithoutRevertHarvestTransactionInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5392,6 +5489,7 @@ input HarvestTransactionItemCreateWithoutRevertReplacementTransactionInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
   id: String
   lotAcquiredDate: DateTime!
@@ -5418,6 +5516,7 @@ type HarvestTransactionItemMaxAggregate {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvestId: String
   id: String
   lotAcquiredDate: DateTime
   lotId: String
@@ -5435,6 +5534,7 @@ type HarvestTransactionItemMinAggregate {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
+  harvestId: String
   id: String
   lotAcquiredDate: DateTime
   lotId: String
@@ -5465,6 +5565,7 @@ input HarvestTransactionItemScalarWhereInput {
   completedDate: DateTimeNullableFilter
   createdAt: DateTimeFilter
   date: DateTimeFilter
+  harvestId: UuidFilter
   id: UuidFilter
   lotAcquiredDate: DateTimeFilter
   lotId: UuidNullableFilter
@@ -5489,6 +5590,7 @@ input HarvestTransactionItemUpdateInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
+  harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5524,6 +5626,11 @@ input HarvestTransactionItemUpdateManyWithWhereWithoutAssetInput {
   where: HarvestTransactionItemScalarWhereInput!
 }
 
+input HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput {
+  data: HarvestTransactionItemUpdateManyMutationInput!
+  where: HarvestTransactionItemScalarWhereInput!
+}
+
 input HarvestTransactionItemUpdateManyWithWhereWithoutLotSoldInput {
   data: HarvestTransactionItemUpdateManyMutationInput!
   where: HarvestTransactionItemScalarWhereInput!
@@ -5546,6 +5653,20 @@ input HarvestTransactionItemUpdateManyWithoutAssetNestedInput {
   update: [HarvestTransactionItemUpdateWithWhereUniqueWithoutAssetInput!]
   updateMany: [HarvestTransactionItemUpdateManyWithWhereWithoutAssetInput!]
   upsert: [HarvestTransactionItemUpsertWithWhereUniqueWithoutAssetInput!]
+}
+
+input HarvestTransactionItemUpdateManyWithoutHarvestNestedInput {
+  connect: [HarvestTransactionItemWhereUniqueInput!]
+  connectOrCreate: [HarvestTransactionItemCreateOrConnectWithoutHarvestInput!]
+  create: [HarvestTransactionItemCreateWithoutHarvestInput!]
+  createMany: HarvestTransactionItemCreateManyHarvestInputEnvelope
+  delete: [HarvestTransactionItemWhereUniqueInput!]
+  deleteMany: [HarvestTransactionItemScalarWhereInput!]
+  disconnect: [HarvestTransactionItemWhereUniqueInput!]
+  set: [HarvestTransactionItemWhereUniqueInput!]
+  update: [HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput!]
+  updateMany: [HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput!]
+  upsert: [HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput!]
 }
 
 input HarvestTransactionItemUpdateManyWithoutLotSoldNestedInput {
@@ -5639,6 +5760,11 @@ input HarvestTransactionItemUpdateWithWhereUniqueWithoutAssetInput {
   where: HarvestTransactionItemWhereUniqueInput!
 }
 
+input HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput {
+  data: HarvestTransactionItemUpdateWithoutHarvestInput!
+  where: HarvestTransactionItemWhereUniqueInput!
+}
+
 input HarvestTransactionItemUpdateWithWhereUniqueWithoutLotSoldInput {
   data: HarvestTransactionItemUpdateWithoutLotSoldInput!
   where: HarvestTransactionItemWhereUniqueInput!
@@ -5650,6 +5776,28 @@ input HarvestTransactionItemUpdateWithWhereUniqueWithoutPortfolioInput {
 }
 
 input HarvestTransactionItemUpdateWithoutAssetInput {
+  completedDate: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  date: DateTimeFieldUpdateOperationsInput
+  harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
+  harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
+  id: StringFieldUpdateOperationsInput
+  lotAcquiredDate: DateTimeFieldUpdateOperationsInput
+  lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
+  lotPricePaid: DecimalFieldUpdateOperationsInput
+  lotSold: LotUpdateOneWithoutHarvestTransactionItemsNestedInput
+  orderType: EnumOrderTypeFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput
+  price: DecimalFieldUpdateOperationsInput
+  quantity: DecimalFieldUpdateOperationsInput
+  replacementTransaction: HarvestTransactionUpdateOneWithoutReplacementTransactionItemNestedInput
+  revertHarvestTransaction: HarvestTransactionUpdateOneWithoutRevertHarvestTransactionItemNestedInput
+  revertReplacementTransaction: HarvestTransactionUpdateOneWithoutRevertReplacementTransactionItemNestedInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input HarvestTransactionItemUpdateWithoutHarvestInput {
+  asset: AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
@@ -5674,6 +5822,7 @@ input HarvestTransactionItemUpdateWithoutHarvestTransactionInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
+  harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
   lotPriceAtHarvest: DecimalFieldUpdateOperationsInput
@@ -5694,6 +5843,7 @@ input HarvestTransactionItemUpdateWithoutLotSoldInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
+  harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5714,6 +5864,7 @@ input HarvestTransactionItemUpdateWithoutPortfolioInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
+  harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5734,6 +5885,7 @@ input HarvestTransactionItemUpdateWithoutReplacementTransactionInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
+  harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5754,6 +5906,7 @@ input HarvestTransactionItemUpdateWithoutRevertHarvestTransactionInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
+  harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5774,6 +5927,7 @@ input HarvestTransactionItemUpdateWithoutRevertReplacementTransactionInput {
   completedDate: NullableDateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
+  harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput
   harvestTransaction: HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput
   id: StringFieldUpdateOperationsInput
   lotAcquiredDate: DateTimeFieldUpdateOperationsInput
@@ -5792,6 +5946,12 @@ input HarvestTransactionItemUpdateWithoutRevertReplacementTransactionInput {
 input HarvestTransactionItemUpsertWithWhereUniqueWithoutAssetInput {
   create: HarvestTransactionItemCreateWithoutAssetInput!
   update: HarvestTransactionItemUpdateWithoutAssetInput!
+  where: HarvestTransactionItemWhereUniqueInput!
+}
+
+input HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput {
+  create: HarvestTransactionItemCreateWithoutHarvestInput!
+  update: HarvestTransactionItemUpdateWithoutHarvestInput!
   where: HarvestTransactionItemWhereUniqueInput!
 }
 
@@ -5840,6 +6000,8 @@ input HarvestTransactionItemWhereInput {
   completedDate: DateTimeNullableFilter
   createdAt: DateTimeFilter
   date: DateTimeFilter
+  harvest: HarvestScalarRelationFilter
+  harvestId: UuidFilter
   harvestTransaction: HarvestTransactionNullableScalarRelationFilter
   id: UuidFilter
   lotAcquiredDate: DateTimeFilter
@@ -5867,6 +6029,8 @@ input HarvestTransactionItemWhereUniqueInput {
   completedDate: DateTimeNullableFilter
   createdAt: DateTimeFilter
   date: DateTimeFilter
+  harvest: HarvestScalarRelationFilter
+  harvestId: UuidFilter
   harvestTransaction: HarvestTransactionNullableScalarRelationFilter
   id: String
   lotAcquiredDate: DateTimeFilter
@@ -6269,6 +6433,7 @@ input HarvestUpdateInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutHarvestNestedInput
   date: DateTimeFieldUpdateOperationsInput
+  harvestTransactionItems: HarvestTransactionItemUpdateManyWithoutHarvestNestedInput
   harvestTransactions: HarvestTransactionUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
@@ -6327,12 +6492,25 @@ input HarvestUpdateManyWithoutPortfolioNestedInput {
   upsert: [HarvestUpsertWithWhereUniqueWithoutPortfolioInput!]
 }
 
+input HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput {
+  connect: HarvestWhereUniqueInput
+  connectOrCreate: HarvestCreateOrConnectWithoutHarvestTransactionItemsInput
+  create: HarvestCreateWithoutHarvestTransactionItemsInput
+  update: HarvestUpdateToOneWithWhereWithoutHarvestTransactionItemsInput
+  upsert: HarvestUpsertWithoutHarvestTransactionItemsInput
+}
+
 input HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput {
   connect: HarvestWhereUniqueInput
   connectOrCreate: HarvestCreateOrConnectWithoutHarvestTransactionsInput
   create: HarvestCreateWithoutHarvestTransactionsInput
   update: HarvestUpdateToOneWithWhereWithoutHarvestTransactionsInput
   upsert: HarvestUpsertWithoutHarvestTransactionsInput
+}
+
+input HarvestUpdateToOneWithWhereWithoutHarvestTransactionItemsInput {
+  data: HarvestUpdateWithoutHarvestTransactionItemsInput!
+  where: HarvestWhereInput
 }
 
 input HarvestUpdateToOneWithWhereWithoutHarvestTransactionsInput {
@@ -6354,6 +6532,21 @@ input HarvestUpdateWithoutCreatedByInput {
   amount: DecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
+  harvestTransactionItems: HarvestTransactionItemUpdateManyWithoutHarvestNestedInput
+  harvestTransactions: HarvestTransactionUpdateManyWithoutHarvestNestedInput
+  id: StringFieldUpdateOperationsInput
+  label: StringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
+  step: EnumHarvestStepFieldUpdateOperationsInput
+  type: EnumHarvestTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input HarvestUpdateWithoutHarvestTransactionItemsInput {
+  amount: DecimalFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutHarvestNestedInput
+  date: DateTimeFieldUpdateOperationsInput
   harvestTransactions: HarvestTransactionUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
@@ -6368,6 +6561,7 @@ input HarvestUpdateWithoutHarvestTransactionsInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutHarvestNestedInput
   date: DateTimeFieldUpdateOperationsInput
+  harvestTransactionItems: HarvestTransactionItemUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
@@ -6381,6 +6575,7 @@ input HarvestUpdateWithoutPortfolioInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutHarvestNestedInput
   date: DateTimeFieldUpdateOperationsInput
+  harvestTransactionItems: HarvestTransactionItemUpdateManyWithoutHarvestNestedInput
   harvestTransactions: HarvestTransactionUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
@@ -6401,6 +6596,12 @@ input HarvestUpsertWithWhereUniqueWithoutPortfolioInput {
   where: HarvestWhereUniqueInput!
 }
 
+input HarvestUpsertWithoutHarvestTransactionItemsInput {
+  create: HarvestCreateWithoutHarvestTransactionItemsInput!
+  update: HarvestUpdateWithoutHarvestTransactionItemsInput!
+  where: HarvestWhereInput
+}
+
 input HarvestUpsertWithoutHarvestTransactionsInput {
   create: HarvestCreateWithoutHarvestTransactionsInput!
   update: HarvestUpdateWithoutHarvestTransactionsInput!
@@ -6416,6 +6617,7 @@ input HarvestWhereInput {
   createdBy: UserScalarRelationFilter
   createdById: StringFilter
   date: DateTimeFilter
+  harvestTransactionItems: HarvestTransactionItemListRelationFilter
   harvestTransactions: HarvestTransactionListRelationFilter
   id: UuidFilter
   label: StringFilter
@@ -6435,6 +6637,7 @@ input HarvestWhereUniqueInput {
   createdBy: UserScalarRelationFilter
   createdById: StringFilter
   date: DateTimeFilter
+  harvestTransactionItems: HarvestTransactionItemListRelationFilter
   harvestTransactions: HarvestTransactionListRelationFilter
   id: String
   label: StringFilter
@@ -7931,6 +8134,9 @@ type LotCurrent {
   dollarPerSharePnL: String!
   gainTotal: String!
   gainTotalPct: String!
+
+  """The ID of the harvest that is currently being processed for this lot."""
+  harvestId: String
   id: String!
   lastPrice: String!
   price: String!
@@ -9098,6 +9304,9 @@ type Mutation {
 
   """Create a portfolio for a user"""
   createPortfolio(portfolioInsertObject: PortfolioCreateInput!): Portfolio!
+
+  """Delete multiple harvests by their IDs"""
+  deleteHarvests(ids: [String!]!): Boolean!
 
   """Finalize harvest for review"""
   finalizeHarvest(id: String): Harvest!

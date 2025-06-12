@@ -417,6 +417,7 @@ export enum LogScalarFieldEnum {
 export enum HarvestTransactionItemScalarFieldEnum {
     id = "id",
     portfolioId = "portfolioId",
+    harvestId = "harvestId",
     createdAt = "createdAt",
     updatedAt = "updatedAt",
     orderType = "orderType",
@@ -22528,6 +22529,8 @@ export class HarvestCountOrderByAggregateInput {
 export class HarvestCount {
     @Field(() => Int, {nullable:false})
     harvestTransactions?: number;
+    @Field(() => Int, {nullable:false})
+    harvestTransactionItems?: number;
 }
 
 @InputType()
@@ -22655,6 +22658,19 @@ export class HarvestCreateNestedManyWithoutPortfolioInput {
 }
 
 @InputType()
+export class HarvestCreateNestedOneWithoutHarvestTransactionItemsInput {
+    @Field(() => HarvestCreateWithoutHarvestTransactionItemsInput, {nullable:true})
+    @Type(() => HarvestCreateWithoutHarvestTransactionItemsInput)
+    create?: InstanceType<typeof HarvestCreateWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestCreateOrConnectWithoutHarvestTransactionItemsInput, {nullable:true})
+    @Type(() => HarvestCreateOrConnectWithoutHarvestTransactionItemsInput)
+    connectOrCreate?: InstanceType<typeof HarvestCreateOrConnectWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestWhereUniqueInput, {nullable:true})
+    @Type(() => HarvestWhereUniqueInput)
+    connect?: Prisma.AtLeast<HarvestWhereUniqueInput, 'id'>;
+}
+
+@InputType()
 export class HarvestCreateNestedOneWithoutHarvestTransactionsInput {
     @Field(() => HarvestCreateWithoutHarvestTransactionsInput, {nullable:true})
     @Type(() => HarvestCreateWithoutHarvestTransactionsInput)
@@ -22675,6 +22691,16 @@ export class HarvestCreateOrConnectWithoutCreatedByInput {
     @Field(() => HarvestCreateWithoutCreatedByInput, {nullable:false})
     @Type(() => HarvestCreateWithoutCreatedByInput)
     create!: InstanceType<typeof HarvestCreateWithoutCreatedByInput>;
+}
+
+@InputType()
+export class HarvestCreateOrConnectWithoutHarvestTransactionItemsInput {
+    @Field(() => HarvestWhereUniqueInput, {nullable:false})
+    @Type(() => HarvestWhereUniqueInput)
+    where!: Prisma.AtLeast<HarvestWhereUniqueInput, 'id'>;
+    @Field(() => HarvestCreateWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateWithoutHarvestTransactionItemsInput)
+    create!: InstanceType<typeof HarvestCreateWithoutHarvestTransactionItemsInput>;
 }
 
 @InputType()
@@ -22723,6 +22749,40 @@ export class HarvestCreateWithoutCreatedByInput {
     @Field(() => HarvestTransactionCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionCreateNestedManyWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateNestedManyWithoutHarvestInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutHarvestInput>;
+}
+
+@InputType()
+export class HarvestCreateWithoutHarvestTransactionItemsInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    label!: string;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    amount!: Decimal;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => HarvestType, {nullable:false})
+    type!: `${HarvestType}`;
+    @Field(() => HarvestStep, {nullable:true})
+    step?: `${HarvestStep}`;
+    @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
+    @Type(() => UserCreateNestedOneWithoutHarvestInput)
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutHarvestInput>;
+    @Field(() => PortfolioCreateNestedOneWithoutHarvestsInput, {nullable:false})
+    @Type(() => PortfolioCreateNestedOneWithoutHarvestsInput)
+    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestsInput>;
+    @Field(() => HarvestTransactionCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionCreateNestedManyWithoutHarvestInput)
+    harvestTransactions?: InstanceType<typeof HarvestTransactionCreateNestedManyWithoutHarvestInput>;
 }
 
 @InputType()
@@ -22751,6 +22811,9 @@ export class HarvestCreateWithoutHarvestTransactionsInput {
     @Field(() => PortfolioCreateNestedOneWithoutHarvestsInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestsInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestsInput>;
+    @Field(() => HarvestTransactionItemCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateNestedManyWithoutHarvestInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutHarvestInput>;
 }
 
 @InputType()
@@ -22779,6 +22842,9 @@ export class HarvestCreateWithoutPortfolioInput {
     @Field(() => HarvestTransactionCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionCreateNestedManyWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateNestedManyWithoutHarvestInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutHarvestInput>;
 }
 
 @InputType()
@@ -22810,6 +22876,9 @@ export class HarvestCreateInput {
     @Field(() => HarvestTransactionCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionCreateNestedManyWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateNestedManyWithoutHarvestInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutHarvestInput>;
 }
 
 @ArgsType()
@@ -23113,6 +23182,9 @@ export class HarvestOrderByWithRelationInput {
     @Field(() => HarvestTransactionOrderByRelationAggregateInput, {nullable:true})
     @Type(() => HarvestTransactionOrderByRelationAggregateInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionOrderByRelationAggregateInput>;
+    @Field(() => HarvestTransactionItemOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => HarvestTransactionItemOrderByRelationAggregateInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemOrderByRelationAggregateInput>;
 }
 
 @InputType()
@@ -23268,6 +23340,38 @@ export class HarvestUncheckedCreateWithoutCreatedByInput {
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput>;
+}
+
+@InputType()
+export class HarvestUncheckedCreateWithoutHarvestTransactionItemsInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    label!: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    amount!: Decimal;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => HarvestType, {nullable:false})
+    type!: `${HarvestType}`;
+    @Field(() => HarvestStep, {nullable:true})
+    step?: `${HarvestStep}`;
+    @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput)
+    harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput>;
 }
 
 @InputType()
@@ -23294,6 +23398,9 @@ export class HarvestUncheckedCreateWithoutHarvestTransactionsInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput>;
 }
 
 @InputType()
@@ -23321,6 +23428,9 @@ export class HarvestUncheckedCreateWithoutPortfolioInput {
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput>;
 }
 
 @InputType()
@@ -23350,6 +23460,9 @@ export class HarvestUncheckedCreateInput {
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput>;
 }
 
 @InputType()
@@ -23521,6 +23634,37 @@ export class HarvestUncheckedUpdateWithoutCreatedByInput {
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput>;
+    @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput>;
+}
+
+@InputType()
+export class HarvestUncheckedUpdateWithoutHarvestTransactionItemsInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    label?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    amount?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumHarvestTypeFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
+    @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
+    step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput)
+    harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput>;
 }
 
 @InputType()
@@ -23546,6 +23690,9 @@ export class HarvestUncheckedUpdateWithoutHarvestTransactionsInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput>;
 }
 
 @InputType()
@@ -23572,6 +23719,9 @@ export class HarvestUncheckedUpdateWithoutPortfolioInput {
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput>;
+    @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput>;
 }
 
 @InputType()
@@ -23600,6 +23750,9 @@ export class HarvestUncheckedUpdateInput {
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput>;
+    @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput>;
 }
 
 @InputType()
@@ -23718,6 +23871,25 @@ export class HarvestUpdateManyWithoutPortfolioNestedInput {
 }
 
 @InputType()
+export class HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput {
+    @Field(() => HarvestCreateWithoutHarvestTransactionItemsInput, {nullable:true})
+    @Type(() => HarvestCreateWithoutHarvestTransactionItemsInput)
+    create?: InstanceType<typeof HarvestCreateWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestCreateOrConnectWithoutHarvestTransactionItemsInput, {nullable:true})
+    @Type(() => HarvestCreateOrConnectWithoutHarvestTransactionItemsInput)
+    connectOrCreate?: InstanceType<typeof HarvestCreateOrConnectWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestUpsertWithoutHarvestTransactionItemsInput, {nullable:true})
+    @Type(() => HarvestUpsertWithoutHarvestTransactionItemsInput)
+    upsert?: InstanceType<typeof HarvestUpsertWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestWhereUniqueInput, {nullable:true})
+    @Type(() => HarvestWhereUniqueInput)
+    connect?: Prisma.AtLeast<HarvestWhereUniqueInput, 'id'>;
+    @Field(() => HarvestUpdateToOneWithWhereWithoutHarvestTransactionItemsInput, {nullable:true})
+    @Type(() => HarvestUpdateToOneWithWhereWithoutHarvestTransactionItemsInput)
+    update?: InstanceType<typeof HarvestUpdateToOneWithWhereWithoutHarvestTransactionItemsInput>;
+}
+
+@InputType()
 export class HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput {
     @Field(() => HarvestCreateWithoutHarvestTransactionsInput, {nullable:true})
     @Type(() => HarvestCreateWithoutHarvestTransactionsInput)
@@ -23734,6 +23906,16 @@ export class HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput {
     @Field(() => HarvestUpdateToOneWithWhereWithoutHarvestTransactionsInput, {nullable:true})
     @Type(() => HarvestUpdateToOneWithWhereWithoutHarvestTransactionsInput)
     update?: InstanceType<typeof HarvestUpdateToOneWithWhereWithoutHarvestTransactionsInput>;
+}
+
+@InputType()
+export class HarvestUpdateToOneWithWhereWithoutHarvestTransactionItemsInput {
+    @Field(() => HarvestWhereInput, {nullable:true})
+    @Type(() => HarvestWhereInput)
+    where?: InstanceType<typeof HarvestWhereInput>;
+    @Field(() => HarvestUpdateWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestUpdateWithoutHarvestTransactionItemsInput)
+    data!: InstanceType<typeof HarvestUpdateWithoutHarvestTransactionItemsInput>;
 }
 
 @InputType()
@@ -23791,6 +23973,39 @@ export class HarvestUpdateWithoutCreatedByInput {
     @Field(() => HarvestTransactionUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUpdateManyWithoutHarvestNestedInput>;
+    @Field(() => HarvestTransactionItemUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateManyWithoutHarvestNestedInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutHarvestNestedInput>;
+}
+
+@InputType()
+export class HarvestUpdateWithoutHarvestTransactionItemsInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    label?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    amount?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumHarvestTypeFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
+    @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
+    step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutHarvestNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutHarvestNestedInput>;
+    @Field(() => PortfolioUpdateOneRequiredWithoutHarvestsNestedInput, {nullable:true})
+    @Type(() => PortfolioUpdateOneRequiredWithoutHarvestsNestedInput)
+    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestsNestedInput>;
+    @Field(() => HarvestTransactionUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUpdateManyWithoutHarvestNestedInput)
+    harvestTransactions?: InstanceType<typeof HarvestTransactionUpdateManyWithoutHarvestNestedInput>;
 }
 
 @InputType()
@@ -23818,6 +24033,9 @@ export class HarvestUpdateWithoutHarvestTransactionsInput {
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestsNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestsNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestsNestedInput>;
+    @Field(() => HarvestTransactionItemUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateManyWithoutHarvestNestedInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutHarvestNestedInput>;
 }
 
 @InputType()
@@ -23845,6 +24063,9 @@ export class HarvestUpdateWithoutPortfolioInput {
     @Field(() => HarvestTransactionUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUpdateManyWithoutHarvestNestedInput>;
+    @Field(() => HarvestTransactionItemUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateManyWithoutHarvestNestedInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutHarvestNestedInput>;
 }
 
 @InputType()
@@ -23875,6 +24096,9 @@ export class HarvestUpdateInput {
     @Field(() => HarvestTransactionUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUpdateManyWithoutHarvestNestedInput>;
+    @Field(() => HarvestTransactionItemUpdateManyWithoutHarvestNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateManyWithoutHarvestNestedInput)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutHarvestNestedInput>;
 }
 
 @InputType()
@@ -23901,6 +24125,19 @@ export class HarvestUpsertWithWhereUniqueWithoutPortfolioInput {
     @Field(() => HarvestCreateWithoutPortfolioInput, {nullable:false})
     @Type(() => HarvestCreateWithoutPortfolioInput)
     create!: InstanceType<typeof HarvestCreateWithoutPortfolioInput>;
+}
+
+@InputType()
+export class HarvestUpsertWithoutHarvestTransactionItemsInput {
+    @Field(() => HarvestUpdateWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestUpdateWithoutHarvestTransactionItemsInput)
+    update!: InstanceType<typeof HarvestUpdateWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestCreateWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateWithoutHarvestTransactionItemsInput)
+    create!: InstanceType<typeof HarvestCreateWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestWhereInput, {nullable:true})
+    @Type(() => HarvestWhereInput)
+    where?: InstanceType<typeof HarvestWhereInput>;
 }
 
 @InputType()
@@ -23957,6 +24194,9 @@ export class HarvestWhereUniqueInput {
     @Field(() => HarvestTransactionListRelationFilter, {nullable:true})
     @Type(() => HarvestTransactionListRelationFilter)
     harvestTransactions?: InstanceType<typeof HarvestTransactionListRelationFilter>;
+    @Field(() => HarvestTransactionItemListRelationFilter, {nullable:true})
+    @Type(() => HarvestTransactionItemListRelationFilter)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemListRelationFilter>;
 }
 
 @InputType()
@@ -24000,6 +24240,9 @@ export class HarvestWhereInput {
     @Field(() => HarvestTransactionListRelationFilter, {nullable:true})
     @Type(() => HarvestTransactionListRelationFilter)
     harvestTransactions?: InstanceType<typeof HarvestTransactionListRelationFilter>;
+    @Field(() => HarvestTransactionItemListRelationFilter, {nullable:true})
+    @Type(() => HarvestTransactionItemListRelationFilter)
+    harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemListRelationFilter>;
 }
 
 @ObjectType()
@@ -24030,6 +24273,8 @@ export class Harvest {
     portfolio?: InstanceType<typeof Portfolio>;
     @Field(() => [HarvestTransaction], {nullable:true})
     harvestTransactions?: Array<HarvestTransaction>;
+    @Field(() => [HarvestTransactionItem], {nullable:true})
+    harvestTransactionItems?: Array<HarvestTransactionItem>;
     @Field(() => HarvestCount, {nullable:false})
     _count?: InstanceType<typeof HarvestCount>;
 }
@@ -26908,6 +27153,8 @@ export class HarvestTransactionItemCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     portfolioId?: true;
     @Field(() => Boolean, {nullable:true})
+    harvestId?: true;
+    @Field(() => Boolean, {nullable:true})
     createdAt?: true;
     @Field(() => Boolean, {nullable:true})
     updatedAt?: true;
@@ -26942,6 +27189,8 @@ export class HarvestTransactionItemCountAggregate {
     @Field(() => Int, {nullable:false})
     portfolioId!: number;
     @Field(() => Int, {nullable:false})
+    harvestId!: number;
+    @Field(() => Int, {nullable:false})
     createdAt!: number;
     @Field(() => Int, {nullable:false})
     updatedAt!: number;
@@ -26975,6 +27224,8 @@ export class HarvestTransactionItemCountOrderByAggregateInput {
     id?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    harvestId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     createdAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -27016,12 +27267,63 @@ export class HarvestTransactionItemCreateManyAssetInput {
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
     @Field(() => OrderType, {nullable:false})
     orderType!: `${OrderType}`;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
+    completedDate?: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    quantity!: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    price!: Decimal;
+    @Field(() => String, {nullable:true})
+    lotId?: string;
+    @Field(() => Date, {nullable:false})
+    lotAcquiredDate!: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    lotPricePaid!: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    lotPriceAtHarvest!: Decimal;
+}
+
+@InputType()
+export class HarvestTransactionItemCreateManyHarvestInputEnvelope {
+    @Field(() => [HarvestTransactionItemCreateManyHarvestInput], {nullable:false})
+    @Type(() => HarvestTransactionItemCreateManyHarvestInput)
+    data!: Array<HarvestTransactionItemCreateManyHarvestInput>;
+    @Field(() => Boolean, {nullable:true})
+    skipDuplicates?: boolean;
+}
+
+@InputType()
+export class HarvestTransactionItemCreateManyHarvestInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => OrderType, {nullable:false})
+    orderType!: `${OrderType}`;
+    @Field(() => String, {nullable:false})
+    assetSymbol!: string;
     @Field(() => Date, {nullable:true})
     date?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -27063,6 +27365,8 @@ export class HarvestTransactionItemCreateManyLotSoldInput {
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -27108,6 +27412,8 @@ export class HarvestTransactionItemCreateManyPortfolioInputEnvelope {
 export class HarvestTransactionItemCreateManyPortfolioInput {
     @Field(() => String, {nullable:true})
     id?: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -27148,6 +27454,8 @@ export class HarvestTransactionItemCreateManyInput {
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -27193,6 +27501,22 @@ export class HarvestTransactionItemCreateNestedManyWithoutAssetInput {
     @Field(() => HarvestTransactionItemCreateManyAssetInputEnvelope, {nullable:true})
     @Type(() => HarvestTransactionItemCreateManyAssetInputEnvelope)
     createMany?: InstanceType<typeof HarvestTransactionItemCreateManyAssetInputEnvelope>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+}
+
+@InputType()
+export class HarvestTransactionItemCreateNestedManyWithoutHarvestInput {
+    @Field(() => [HarvestTransactionItemCreateWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemCreateWithoutHarvestInput)
+    create?: Array<HarvestTransactionItemCreateWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemCreateOrConnectWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemCreateOrConnectWithoutHarvestInput)
+    connectOrCreate?: Array<HarvestTransactionItemCreateOrConnectWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemCreateManyHarvestInputEnvelope, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateManyHarvestInputEnvelope)
+    createMany?: InstanceType<typeof HarvestTransactionItemCreateManyHarvestInputEnvelope>;
     @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
     @Type(() => HarvestTransactionItemWhereUniqueInput)
     connect?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
@@ -27303,6 +27627,16 @@ export class HarvestTransactionItemCreateOrConnectWithoutHarvestTransactionInput
 }
 
 @InputType()
+export class HarvestTransactionItemCreateOrConnectWithoutHarvestInput {
+    @Field(() => HarvestTransactionItemWhereUniqueInput, {nullable:false})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    where!: Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>;
+    @Field(() => HarvestTransactionItemCreateWithoutHarvestInput, {nullable:false})
+    @Type(() => HarvestTransactionItemCreateWithoutHarvestInput)
+    create!: InstanceType<typeof HarvestTransactionItemCreateWithoutHarvestInput>;
+}
+
+@InputType()
 export class HarvestTransactionItemCreateOrConnectWithoutLotSoldInput {
     @Field(() => HarvestTransactionItemWhereUniqueInput, {nullable:false})
     @Type(() => HarvestTransactionItemWhereUniqueInput)
@@ -27384,6 +27718,9 @@ export class HarvestTransactionItemCreateWithoutAssetInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput)
+    harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionItemsInput>;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionItemInput>;
@@ -27436,6 +27773,9 @@ export class HarvestTransactionItemCreateWithoutHarvestTransactionInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput)
+    harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionItemsInput>;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionItemInput>;
@@ -27445,6 +27785,61 @@ export class HarvestTransactionItemCreateWithoutHarvestTransactionInput {
     @Field(() => LotCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:true})
     @Type(() => LotCreateNestedOneWithoutHarvestTransactionItemsInput)
     lotSold?: InstanceType<typeof LotCreateNestedOneWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestTransactionCreateNestedOneWithoutReplacementTransactionItemInput, {nullable:true})
+    @Type(() => HarvestTransactionCreateNestedOneWithoutReplacementTransactionItemInput)
+    replacementTransaction?: InstanceType<typeof HarvestTransactionCreateNestedOneWithoutReplacementTransactionItemInput>;
+    @Field(() => HarvestTransactionCreateNestedOneWithoutRevertHarvestTransactionItemInput, {nullable:true})
+    @Type(() => HarvestTransactionCreateNestedOneWithoutRevertHarvestTransactionItemInput)
+    revertHarvestTransaction?: InstanceType<typeof HarvestTransactionCreateNestedOneWithoutRevertHarvestTransactionItemInput>;
+    @Field(() => HarvestTransactionCreateNestedOneWithoutRevertReplacementTransactionItemInput, {nullable:true})
+    @Type(() => HarvestTransactionCreateNestedOneWithoutRevertReplacementTransactionItemInput)
+    revertReplacementTransaction?: InstanceType<typeof HarvestTransactionCreateNestedOneWithoutRevertReplacementTransactionItemInput>;
+}
+
+@InputType()
+export class HarvestTransactionItemCreateWithoutHarvestInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => OrderType, {nullable:false})
+    orderType!: `${OrderType}`;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
+    completedDate?: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    quantity!: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    price!: Decimal;
+    @Field(() => Date, {nullable:false})
+    lotAcquiredDate!: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    lotPricePaid!: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    lotPriceAtHarvest!: Decimal;
+    @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:false})
+    @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput)
+    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionItemInput>;
+    @Field(() => AssetCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => AssetCreateNestedOneWithoutHarvestTransactionItemsInput)
+    asset!: InstanceType<typeof AssetCreateNestedOneWithoutHarvestTransactionItemsInput>;
+    @Field(() => LotCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:true})
+    @Type(() => LotCreateNestedOneWithoutHarvestTransactionItemsInput)
+    lotSold?: InstanceType<typeof LotCreateNestedOneWithoutHarvestTransactionItemsInput>;
+    @Field(() => HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:true})
+    @Type(() => HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput)
+    harvestTransaction?: InstanceType<typeof HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput>;
     @Field(() => HarvestTransactionCreateNestedOneWithoutReplacementTransactionItemInput, {nullable:true})
     @Type(() => HarvestTransactionCreateNestedOneWithoutReplacementTransactionItemInput)
     replacementTransaction?: InstanceType<typeof HarvestTransactionCreateNestedOneWithoutReplacementTransactionItemInput>;
@@ -27488,6 +27883,9 @@ export class HarvestTransactionItemCreateWithoutLotSoldInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput)
+    harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionItemsInput>;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionItemInput>;
@@ -27540,6 +27938,9 @@ export class HarvestTransactionItemCreateWithoutPortfolioInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput)
+    harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionItemsInput>;
     @Field(() => AssetCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
     @Type(() => AssetCreateNestedOneWithoutHarvestTransactionItemsInput)
     asset!: InstanceType<typeof AssetCreateNestedOneWithoutHarvestTransactionItemsInput>;
@@ -27592,6 +27993,9 @@ export class HarvestTransactionItemCreateWithoutReplacementTransactionInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput)
+    harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionItemsInput>;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionItemInput>;
@@ -27644,6 +28048,9 @@ export class HarvestTransactionItemCreateWithoutRevertHarvestTransactionInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput)
+    harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionItemsInput>;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionItemInput>;
@@ -27696,6 +28103,9 @@ export class HarvestTransactionItemCreateWithoutRevertReplacementTransactionInpu
     @Type(() => Object)
     @Transform(transformToDecimal)
     lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput)
+    harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionItemsInput>;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionItemInput>;
@@ -27748,6 +28158,9 @@ export class HarvestTransactionItemCreateInput {
     @Type(() => Object)
     @Transform(transformToDecimal)
     lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput, {nullable:false})
+    @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionItemsInput)
+    harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionItemsInput>;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionItemInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionItemInput>;
@@ -27811,6 +28224,8 @@ export class HarvestTransactionItemGroupBy {
     id!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:false})
     createdAt!: Date | string;
     @Field(() => Date, {nullable:false})
@@ -27867,6 +28282,8 @@ export class HarvestTransactionItemMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     portfolioId?: true;
     @Field(() => Boolean, {nullable:true})
+    harvestId?: true;
+    @Field(() => Boolean, {nullable:true})
     createdAt?: true;
     @Field(() => Boolean, {nullable:true})
     updatedAt?: true;
@@ -27898,6 +28315,8 @@ export class HarvestTransactionItemMaxAggregate {
     id?: string;
     @Field(() => String, {nullable:true})
     portfolioId?: string;
+    @Field(() => String, {nullable:true})
+    harvestId?: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -27931,6 +28350,8 @@ export class HarvestTransactionItemMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
+    harvestId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
     createdAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
@@ -27963,6 +28384,8 @@ export class HarvestTransactionItemMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     portfolioId?: true;
     @Field(() => Boolean, {nullable:true})
+    harvestId?: true;
+    @Field(() => Boolean, {nullable:true})
     createdAt?: true;
     @Field(() => Boolean, {nullable:true})
     updatedAt?: true;
@@ -27994,6 +28417,8 @@ export class HarvestTransactionItemMinAggregate {
     id?: string;
     @Field(() => String, {nullable:true})
     portfolioId?: string;
+    @Field(() => String, {nullable:true})
+    harvestId?: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28026,6 +28451,8 @@ export class HarvestTransactionItemMinOrderByAggregateInput {
     id?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    harvestId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     createdAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -28075,6 +28502,8 @@ export class HarvestTransactionItemOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
+    harvestId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
     createdAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
@@ -28122,6 +28551,8 @@ export class HarvestTransactionItemOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
+    harvestId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
     createdAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
@@ -28145,6 +28576,9 @@ export class HarvestTransactionItemOrderByWithRelationInput {
     lotPricePaid?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     lotPriceAtHarvest?: `${SortOrder}`;
+    @Field(() => HarvestOrderByWithRelationInput, {nullable:true})
+    @Type(() => HarvestOrderByWithRelationInput)
+    harvest?: InstanceType<typeof HarvestOrderByWithRelationInput>;
     @Field(() => PortfolioOrderByWithRelationInput, {nullable:true})
     @Type(() => PortfolioOrderByWithRelationInput)
     portfolio?: InstanceType<typeof PortfolioOrderByWithRelationInput>;
@@ -28193,6 +28627,8 @@ export class HarvestTransactionItemScalarWhereWithAggregatesInput {
     id?: InstanceType<typeof UuidWithAggregatesFilter>;
     @Field(() => UuidWithAggregatesFilter, {nullable:true})
     portfolioId?: InstanceType<typeof UuidWithAggregatesFilter>;
+    @Field(() => UuidWithAggregatesFilter, {nullable:true})
+    harvestId?: InstanceType<typeof UuidWithAggregatesFilter>;
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeWithAggregatesFilter>;
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
@@ -28238,6 +28674,8 @@ export class HarvestTransactionItemScalarWhereInput {
     id?: InstanceType<typeof UuidFilter>;
     @Field(() => UuidFilter, {nullable:true})
     portfolioId?: InstanceType<typeof UuidFilter>;
+    @Field(() => UuidFilter, {nullable:true})
+    harvestId?: InstanceType<typeof UuidFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
@@ -28321,6 +28759,22 @@ export class HarvestTransactionItemUncheckedCreateNestedManyWithoutAssetInput {
 }
 
 @InputType()
+export class HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput {
+    @Field(() => [HarvestTransactionItemCreateWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemCreateWithoutHarvestInput)
+    create?: Array<HarvestTransactionItemCreateWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemCreateOrConnectWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemCreateOrConnectWithoutHarvestInput)
+    connectOrCreate?: Array<HarvestTransactionItemCreateOrConnectWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemCreateManyHarvestInputEnvelope, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateManyHarvestInputEnvelope)
+    createMany?: InstanceType<typeof HarvestTransactionItemCreateManyHarvestInputEnvelope>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+}
+
+@InputType()
 export class HarvestTransactionItemUncheckedCreateNestedManyWithoutLotSoldInput {
     @Field(() => [HarvestTransactionItemCreateWithoutLotSoldInput], {nullable:true})
     @Type(() => HarvestTransactionItemCreateWithoutLotSoldInput)
@@ -28358,6 +28812,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutAssetInput {
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28408,6 +28864,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutHarvestTransactionInput
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28452,11 +28910,65 @@ export class HarvestTransactionItemUncheckedCreateWithoutHarvestTransactionInput
 }
 
 @InputType()
+export class HarvestTransactionItemUncheckedCreateWithoutHarvestInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => OrderType, {nullable:false})
+    orderType!: `${OrderType}`;
+    @Field(() => String, {nullable:false})
+    assetSymbol!: string;
+    @Field(() => Date, {nullable:true})
+    date?: Date | string;
+    @Field(() => Date, {nullable:true})
+    completedDate?: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    quantity!: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    price!: Decimal;
+    @Field(() => String, {nullable:true})
+    lotId?: string;
+    @Field(() => Date, {nullable:false})
+    lotAcquiredDate!: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    lotPricePaid!: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:false})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    lotPriceAtHarvest!: Decimal;
+    @Field(() => HarvestTransactionUncheckedCreateNestedOneWithoutHarvestTransactionItemInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedCreateNestedOneWithoutHarvestTransactionItemInput)
+    harvestTransaction?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedOneWithoutHarvestTransactionItemInput>;
+    @Field(() => HarvestTransactionUncheckedCreateNestedOneWithoutReplacementTransactionItemInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedCreateNestedOneWithoutReplacementTransactionItemInput)
+    replacementTransaction?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedOneWithoutReplacementTransactionItemInput>;
+    @Field(() => HarvestTransactionUncheckedCreateNestedOneWithoutRevertHarvestTransactionItemInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedCreateNestedOneWithoutRevertHarvestTransactionItemInput)
+    revertHarvestTransaction?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedOneWithoutRevertHarvestTransactionItemInput>;
+    @Field(() => HarvestTransactionUncheckedCreateNestedOneWithoutRevertReplacementTransactionItemInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedCreateNestedOneWithoutRevertReplacementTransactionItemInput)
+    revertReplacementTransaction?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedOneWithoutRevertReplacementTransactionItemInput>;
+}
+
+@InputType()
 export class HarvestTransactionItemUncheckedCreateWithoutLotSoldInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28505,6 +29017,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutLotSoldInput {
 export class HarvestTransactionItemUncheckedCreateWithoutPortfolioInput {
     @Field(() => String, {nullable:true})
     id?: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28557,6 +29071,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutReplacementTransactionI
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28606,6 +29122,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutRevertHarvestTransactio
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28655,6 +29173,8 @@ export class HarvestTransactionItemUncheckedCreateWithoutRevertReplacementTransa
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28704,6 +29224,8 @@ export class HarvestTransactionItemUncheckedCreateInput {
     id?: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
@@ -28793,12 +29315,87 @@ export class HarvestTransactionItemUncheckedUpdateManyWithoutAssetInput {
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
     orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    quantity?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    price?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    lotId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    lotAcquiredDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    lotPricePaid?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput {
+    @Field(() => [HarvestTransactionItemCreateWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemCreateWithoutHarvestInput)
+    create?: Array<HarvestTransactionItemCreateWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemCreateOrConnectWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemCreateOrConnectWithoutHarvestInput)
+    connectOrCreate?: Array<HarvestTransactionItemCreateOrConnectWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput)
+    upsert?: Array<HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemCreateManyHarvestInputEnvelope, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateManyHarvestInputEnvelope)
+    createMany?: InstanceType<typeof HarvestTransactionItemCreateManyHarvestInputEnvelope>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    set?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    disconnect?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    delete?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+    @Field(() => [HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput)
+    update?: Array<HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput)
+    updateMany?: Array<HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemScalarWhereInput], {nullable:true})
+    @Type(() => HarvestTransactionItemScalarWhereInput)
+    deleteMany?: Array<HarvestTransactionItemScalarWhereInput>;
+}
+
+@InputType()
+export class HarvestTransactionItemUncheckedUpdateManyWithoutHarvestInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
+    orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -28864,6 +29461,8 @@ export class HarvestTransactionItemUncheckedUpdateManyWithoutLotSoldInput {
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -28933,6 +29532,8 @@ export class HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInpu
 export class HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -28969,6 +29570,8 @@ export class HarvestTransactionItemUncheckedUpdateManyInput {
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29005,6 +29608,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutAssetInput {
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29051,6 +29656,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutHarvestTransactionInput
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29091,11 +29698,61 @@ export class HarvestTransactionItemUncheckedUpdateWithoutHarvestTransactionInput
 }
 
 @InputType()
+export class HarvestTransactionItemUncheckedUpdateWithoutHarvestInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
+    orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    assetSymbol?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    quantity?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    price?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    lotId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    lotAcquiredDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    lotPricePaid?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestTransactionUncheckedUpdateOneWithoutHarvestTransactionItemNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedUpdateOneWithoutHarvestTransactionItemNestedInput)
+    harvestTransaction?: InstanceType<typeof HarvestTransactionUncheckedUpdateOneWithoutHarvestTransactionItemNestedInput>;
+    @Field(() => HarvestTransactionUncheckedUpdateOneWithoutReplacementTransactionItemNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedUpdateOneWithoutReplacementTransactionItemNestedInput)
+    replacementTransaction?: InstanceType<typeof HarvestTransactionUncheckedUpdateOneWithoutReplacementTransactionItemNestedInput>;
+    @Field(() => HarvestTransactionUncheckedUpdateOneWithoutRevertHarvestTransactionItemNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedUpdateOneWithoutRevertHarvestTransactionItemNestedInput)
+    revertHarvestTransaction?: InstanceType<typeof HarvestTransactionUncheckedUpdateOneWithoutRevertHarvestTransactionItemNestedInput>;
+    @Field(() => HarvestTransactionUncheckedUpdateOneWithoutRevertReplacementTransactionItemNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedUpdateOneWithoutRevertReplacementTransactionItemNestedInput)
+    revertReplacementTransaction?: InstanceType<typeof HarvestTransactionUncheckedUpdateOneWithoutRevertReplacementTransactionItemNestedInput>;
+}
+
+@InputType()
 export class HarvestTransactionItemUncheckedUpdateWithoutLotSoldInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29140,6 +29797,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutLotSoldInput {
 export class HarvestTransactionItemUncheckedUpdateWithoutPortfolioInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29188,6 +29847,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutReplacementTransactionI
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29233,6 +29894,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutRevertHarvestTransactio
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29278,6 +29941,8 @@ export class HarvestTransactionItemUncheckedUpdateWithoutRevertReplacementTransa
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29323,6 +29988,8 @@ export class HarvestTransactionItemUncheckedUpdateInput {
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -29406,6 +30073,16 @@ export class HarvestTransactionItemUpdateManyWithWhereWithoutAssetInput {
 }
 
 @InputType()
+export class HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput {
+    @Field(() => HarvestTransactionItemScalarWhereInput, {nullable:false})
+    @Type(() => HarvestTransactionItemScalarWhereInput)
+    where!: InstanceType<typeof HarvestTransactionItemScalarWhereInput>;
+    @Field(() => HarvestTransactionItemUpdateManyMutationInput, {nullable:false})
+    @Type(() => HarvestTransactionItemUpdateManyMutationInput)
+    data!: InstanceType<typeof HarvestTransactionItemUpdateManyMutationInput>;
+}
+
+@InputType()
 export class HarvestTransactionItemUpdateManyWithWhereWithoutLotSoldInput {
     @Field(() => HarvestTransactionItemScalarWhereInput, {nullable:false})
     @Type(() => HarvestTransactionItemScalarWhereInput)
@@ -29457,6 +30134,43 @@ export class HarvestTransactionItemUpdateManyWithoutAssetNestedInput {
     @Field(() => [HarvestTransactionItemUpdateManyWithWhereWithoutAssetInput], {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithWhereWithoutAssetInput)
     updateMany?: Array<HarvestTransactionItemUpdateManyWithWhereWithoutAssetInput>;
+    @Field(() => [HarvestTransactionItemScalarWhereInput], {nullable:true})
+    @Type(() => HarvestTransactionItemScalarWhereInput)
+    deleteMany?: Array<HarvestTransactionItemScalarWhereInput>;
+}
+
+@InputType()
+export class HarvestTransactionItemUpdateManyWithoutHarvestNestedInput {
+    @Field(() => [HarvestTransactionItemCreateWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemCreateWithoutHarvestInput)
+    create?: Array<HarvestTransactionItemCreateWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemCreateOrConnectWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemCreateOrConnectWithoutHarvestInput)
+    connectOrCreate?: Array<HarvestTransactionItemCreateOrConnectWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput)
+    upsert?: Array<HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemCreateManyHarvestInputEnvelope, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateManyHarvestInputEnvelope)
+    createMany?: InstanceType<typeof HarvestTransactionItemCreateManyHarvestInputEnvelope>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    set?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    disconnect?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    delete?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+    @Field(() => [HarvestTransactionItemWhereUniqueInput], {nullable:true})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>>;
+    @Field(() => [HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput)
+    update?: Array<HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput>;
+    @Field(() => [HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput], {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput)
+    updateMany?: Array<HarvestTransactionItemUpdateManyWithWhereWithoutHarvestInput>;
     @Field(() => [HarvestTransactionItemScalarWhereInput], {nullable:true})
     @Type(() => HarvestTransactionItemScalarWhereInput)
     deleteMany?: Array<HarvestTransactionItemScalarWhereInput>;
@@ -29681,6 +30395,16 @@ export class HarvestTransactionItemUpdateWithWhereUniqueWithoutAssetInput {
 }
 
 @InputType()
+export class HarvestTransactionItemUpdateWithWhereUniqueWithoutHarvestInput {
+    @Field(() => HarvestTransactionItemWhereUniqueInput, {nullable:false})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    where!: Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>;
+    @Field(() => HarvestTransactionItemUpdateWithoutHarvestInput, {nullable:false})
+    @Type(() => HarvestTransactionItemUpdateWithoutHarvestInput)
+    data!: InstanceType<typeof HarvestTransactionItemUpdateWithoutHarvestInput>;
+}
+
+@InputType()
 export class HarvestTransactionItemUpdateWithWhereUniqueWithoutLotSoldInput {
     @Field(() => HarvestTransactionItemWhereUniqueInput, {nullable:false})
     @Type(() => HarvestTransactionItemWhereUniqueInput)
@@ -29728,6 +30452,9 @@ export class HarvestTransactionItemUpdateWithoutAssetInput {
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -29776,6 +30503,9 @@ export class HarvestTransactionItemUpdateWithoutHarvestTransactionInput {
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -29785,6 +30515,57 @@ export class HarvestTransactionItemUpdateWithoutHarvestTransactionInput {
     @Field(() => LotUpdateOneWithoutHarvestTransactionItemsNestedInput, {nullable:true})
     @Type(() => LotUpdateOneWithoutHarvestTransactionItemsNestedInput)
     lotSold?: InstanceType<typeof LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
+    @Field(() => HarvestTransactionUpdateOneWithoutReplacementTransactionItemNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUpdateOneWithoutReplacementTransactionItemNestedInput)
+    replacementTransaction?: InstanceType<typeof HarvestTransactionUpdateOneWithoutReplacementTransactionItemNestedInput>;
+    @Field(() => HarvestTransactionUpdateOneWithoutRevertHarvestTransactionItemNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUpdateOneWithoutRevertHarvestTransactionItemNestedInput)
+    revertHarvestTransaction?: InstanceType<typeof HarvestTransactionUpdateOneWithoutRevertHarvestTransactionItemNestedInput>;
+    @Field(() => HarvestTransactionUpdateOneWithoutRevertReplacementTransactionItemNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUpdateOneWithoutRevertReplacementTransactionItemNestedInput)
+    revertReplacementTransaction?: InstanceType<typeof HarvestTransactionUpdateOneWithoutRevertReplacementTransactionItemNestedInput>;
+}
+
+@InputType()
+export class HarvestTransactionItemUpdateWithoutHarvestInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumOrderTypeFieldUpdateOperationsInput, {nullable:true})
+    orderType?: InstanceType<typeof EnumOrderTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    date?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    completedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    quantity?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    price?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    lotAcquiredDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    lotPricePaid?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput, {nullable:true})
+    @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput)
+    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
+    @Field(() => AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    asset?: InstanceType<typeof AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
+    @Field(() => LotUpdateOneWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => LotUpdateOneWithoutHarvestTransactionItemsNestedInput)
+    lotSold?: InstanceType<typeof LotUpdateOneWithoutHarvestTransactionItemsNestedInput>;
+    @Field(() => HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput)
+    harvestTransaction?: InstanceType<typeof HarvestTransactionUpdateOneWithoutHarvestTransactionItemNestedInput>;
     @Field(() => HarvestTransactionUpdateOneWithoutReplacementTransactionItemNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUpdateOneWithoutReplacementTransactionItemNestedInput)
     replacementTransaction?: InstanceType<typeof HarvestTransactionUpdateOneWithoutReplacementTransactionItemNestedInput>;
@@ -29824,6 +30605,9 @@ export class HarvestTransactionItemUpdateWithoutLotSoldInput {
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -29872,6 +30656,9 @@ export class HarvestTransactionItemUpdateWithoutPortfolioInput {
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
     @Field(() => AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
     @Type(() => AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
     asset?: InstanceType<typeof AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
@@ -29920,6 +30707,9 @@ export class HarvestTransactionItemUpdateWithoutReplacementTransactionInput {
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -29968,6 +30758,9 @@ export class HarvestTransactionItemUpdateWithoutRevertHarvestTransactionInput {
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -30016,6 +30809,9 @@ export class HarvestTransactionItemUpdateWithoutRevertReplacementTransactionInpu
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -30064,6 +30860,9 @@ export class HarvestTransactionItemUpdateInput {
     @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
     @Type(() => DecimalFieldUpdateOperationsInput)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput)
+    harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionItemNestedInput>;
@@ -30098,6 +30897,19 @@ export class HarvestTransactionItemUpsertWithWhereUniqueWithoutAssetInput {
     @Field(() => HarvestTransactionItemCreateWithoutAssetInput, {nullable:false})
     @Type(() => HarvestTransactionItemCreateWithoutAssetInput)
     create!: InstanceType<typeof HarvestTransactionItemCreateWithoutAssetInput>;
+}
+
+@InputType()
+export class HarvestTransactionItemUpsertWithWhereUniqueWithoutHarvestInput {
+    @Field(() => HarvestTransactionItemWhereUniqueInput, {nullable:false})
+    @Type(() => HarvestTransactionItemWhereUniqueInput)
+    where!: Prisma.AtLeast<HarvestTransactionItemWhereUniqueInput, 'id'>;
+    @Field(() => HarvestTransactionItemUpdateWithoutHarvestInput, {nullable:false})
+    @Type(() => HarvestTransactionItemUpdateWithoutHarvestInput)
+    update!: InstanceType<typeof HarvestTransactionItemUpdateWithoutHarvestInput>;
+    @Field(() => HarvestTransactionItemCreateWithoutHarvestInput, {nullable:false})
+    @Type(() => HarvestTransactionItemCreateWithoutHarvestInput)
+    create!: InstanceType<typeof HarvestTransactionItemCreateWithoutHarvestInput>;
 }
 
 @InputType()
@@ -30193,6 +31005,8 @@ export class HarvestTransactionItemWhereUniqueInput {
     NOT?: Array<HarvestTransactionItemWhereInput>;
     @Field(() => UuidFilter, {nullable:true})
     portfolioId?: InstanceType<typeof UuidFilter>;
+    @Field(() => UuidFilter, {nullable:true})
+    harvestId?: InstanceType<typeof UuidFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
@@ -30221,6 +31035,9 @@ export class HarvestTransactionItemWhereUniqueInput {
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFilter>;
+    @Field(() => HarvestScalarRelationFilter, {nullable:true})
+    @Type(() => HarvestScalarRelationFilter)
+    harvest?: InstanceType<typeof HarvestScalarRelationFilter>;
     @Field(() => PortfolioScalarRelationFilter, {nullable:true})
     @Type(() => PortfolioScalarRelationFilter)
     portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
@@ -30259,6 +31076,8 @@ export class HarvestTransactionItemWhereInput {
     id?: InstanceType<typeof UuidFilter>;
     @Field(() => UuidFilter, {nullable:true})
     portfolioId?: InstanceType<typeof UuidFilter>;
+    @Field(() => UuidFilter, {nullable:true})
+    harvestId?: InstanceType<typeof UuidFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
@@ -30287,6 +31106,9 @@ export class HarvestTransactionItemWhereInput {
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
     lotPriceAtHarvest?: InstanceType<typeof DecimalFilter>;
+    @Field(() => HarvestScalarRelationFilter, {nullable:true})
+    @Type(() => HarvestScalarRelationFilter)
+    harvest?: InstanceType<typeof HarvestScalarRelationFilter>;
     @Field(() => PortfolioScalarRelationFilter, {nullable:true})
     @Type(() => PortfolioScalarRelationFilter)
     portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
@@ -30316,6 +31138,8 @@ export class HarvestTransactionItem {
     id!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+    @Field(() => String, {nullable:false})
+    harvestId!: string;
     @Field(() => Date, {nullable:false})
     createdAt!: Date;
     @Field(() => Date, {nullable:false})
@@ -30343,6 +31167,8 @@ export class HarvestTransactionItem {
     lotPricePaid!: Decimal;
     @Field(() => GraphQLDecimal, {nullable:false})
     lotPriceAtHarvest!: Decimal;
+    @Field(() => Harvest, {nullable:false})
+    harvest?: InstanceType<typeof Harvest>;
     @Field(() => Portfolio, {nullable:false})
     portfolio?: InstanceType<typeof Portfolio>;
     @Field(() => Asset, {nullable:false})

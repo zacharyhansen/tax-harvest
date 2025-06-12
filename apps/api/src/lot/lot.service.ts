@@ -94,13 +94,6 @@ export class LotService {
         trx,
       )
 
-      // const currentHavestsQuery = trx.selectFrom('HarvestTransactionItem')
-      //   .innerJoin('HarvestTransaction', 'HarvestTransaction.harvestTransactionItemId', 'HarvestTransactionItem.id')
-      //   .innerJoin('Harvest', 'Harvest.id', 'HarvestTransaction.harvestId')
-      //   .select(['HarvestTransactionItem.lotId', 'HarvestTransactionItem.quantity'])
-      //   .where('Harvest.portfolioId', '=', portfolioId)
-      //   .where(sql<boolean>`Harvest.date::date = ${new Date().toISOString().split('T')[0]}`)
-
       let query = trx
         .selectFrom('LotCurrent')
         .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
@@ -109,15 +102,16 @@ export class LotService {
         .leftJoin('Harvest', 'Harvest.id', 'HarvestTransaction.harvestId')
         .select([
           ...LotService.lotCurrentFields,
+          'Harvest.id as harvestId',
           // Add coalesce to handle null case when there are no harvest transactions
-          sql<string>`COALESCE(SUM(CASE WHEN "Harvest"."date"::date = ${new Date().toISOString().split('T')[0]} THEN "HarvestTransactionItem"."quantity" ELSE 0 END), 0)`.as('currentHarvestQty'),
+          sql<string>`COALESCE(SUM(CASE WHEN DATE("Harvest"."date") = CURRENT_DATE THEN "HarvestTransactionItem"."quantity" ELSE 0 END), 0)`.as('currentHarvestQty'),
         ])
         .where('Account.portfolioId', '=', portfolioId)
         // remove tax advantaged accounts
         .where('Account.subType', 'not in', [...taxAdvantadedSubTypes])
         // Filter out fractional shares
         .where('LotCurrent.remainingQty', '>=', '1')
-        .groupBy(LotService.lotCurrentFields)
+        .groupBy([...LotService.lotCurrentFields, 'Harvest.id'])
       // Order is important  here - biggest winners at top, biggest losers at bottom by per share $
 
       if (lotIds) {
@@ -145,14 +139,11 @@ export class LotService {
         }
       }
 
-      // const [lots, currentHavests] = await Promise.all([
-      //   query.orderBy('dollarPerSharePnL', 'desc').execute(),
-      //   // currentHavestsQuery.execute(),
-      // ])
-
-      return query.orderBy('dollarPerSharePnL', 'desc').execute() as unknown as Promise<
+      const results = await query.orderBy('dollarPerSharePnL', 'desc').execute() as unknown as Promise<
         LotCurrent[]
       >
+
+      return results
     })
   }
 

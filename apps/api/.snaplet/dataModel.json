@@ -2214,6 +2214,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "HarvestTransactionItem",
+          "type": "HarvestTransactionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "HarvestTransactionItemToHarvest",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -2762,6 +2776,20 @@
           "maxLength": null
         },
         {
+          "id": "public.HarvestTransactionItem.harvestId",
+          "name": "harvestId",
+          "columnName": "harvestId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Asset",
           "type": "Asset",
           "isRequired": true,
@@ -2772,6 +2800,24 @@
           ],
           "relationToFields": [
             "symbol"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Harvest",
+          "type": "Harvest",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "HarvestTransactionItemToHarvest",
+          "relationFromFields": [
+            "harvestId"
+          ],
+          "relationToFields": [
+            "id"
           ],
           "isList": false,
           "isId": false,
