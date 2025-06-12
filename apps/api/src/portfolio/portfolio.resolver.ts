@@ -77,29 +77,6 @@ export class PortfolioResolver {
   }
 
   @Query(() => Portfolio, {
-    description: 'Get portfolio by portfolio id',
-    name: 'portfolioById',
-  })
-  async portfolioById(
-    @Info()
-    info: GraphQLResolveInfo,
-    @ClerkContext()
-    currentUser: ClerkClaims,
-    @Args('id', {
-      type: () => String,
-    })
-    portfolioId: string,
-  ) {
-    const { select } = new PrismaSelect<Prisma.PortfolioSelect>(info).value
-
-    return await this.portfolioService.getPortfolioByPortfolioId(
-      currentUser.sub,
-      portfolioId,
-      select,
-    )
-  }
-
-  @Query(() => Portfolio, {
     description: 'Get authenticated portfolio',
     name: 'portfolioAuthed',
   })

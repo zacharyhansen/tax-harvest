@@ -8,7 +8,7 @@ import { UserService } from './user.service'
 
 @Module({
   exports: [UserService],
-  imports: [StripeModule, forwardRef(() => ClerkModule), PlaidModule],
+  imports: [StripeModule, forwardRef(() => ClerkModule), PlaidModule, forwardRef(() => ClerkModule)],
   providers: [UserService, UserResolver],
 })
-export class UserModule {}
+export class UserModule { }

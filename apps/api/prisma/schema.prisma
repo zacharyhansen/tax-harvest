@@ -63,7 +63,7 @@ model Portfolio {
   id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now()) @updatedAt
-  createdById       String?
+  createdById       String
   name              String   @default("Main")
   /// How often should we harvest for the portfolio
   harvestCycleWeeks Int      @default(4)
@@ -86,7 +86,7 @@ model Portfolio {
 
   accounts               Account[]
   usersOnPortfolios      UsersOnPortfolios[]
-  createdBy              User?                    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdBy              User                     @relation(fields: [createdById], references: [id], onDelete: Restrict)
   authConnections        AuthConnection[]
   harvests               Harvest[]
   log                    Log[]

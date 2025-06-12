@@ -35,6 +35,7 @@ async function main() {
 
   // Truncate all tables in the database
   await seed.$resetDatabase()
+
   await runSqlFile('prisma/seed/insert-assets.sql')
 
   const { User, Portfolio } = await seed.User(() => [
@@ -50,7 +51,7 @@ async function main() {
           Portfolio: {
             name: 'Roth Example',
             id: context => copycat.uuid(context.seed),
-            // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
+            createdById: mainUserId,
             UsersOnPortfolios: () => [
               {
                 role: 'ADMIN',
@@ -91,7 +92,7 @@ async function main() {
           Portfolio: {
             name: 'Realized Loss Example',
             id: context => copycat.uuid(context.seed),
-            // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
+            createdById: mainUserId,
             UsersOnPortfolios: () => [
               {
                 role: 'ADMIN',
@@ -127,7 +128,7 @@ async function main() {
           Portfolio: {
             name: 'Realized Gain Example',
             id: context => copycat.uuid(context.seed),
-            // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
+            createdById: mainUserId,
             UsersOnPortfolios: () => [
               {
                 role: 'ADMIN',
@@ -163,7 +164,7 @@ async function main() {
           Portfolio: {
             name: 'Neutral Example',
             id: context => copycat.uuid(context.seed),
-            // createdById: "f88f8aa8-5c17-4415-951e-72a6758118c1",
+            createdById: mainUserId,
             UsersOnPortfolios: () => [
               {
                 role: 'ADMIN',

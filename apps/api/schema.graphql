@@ -9298,6 +9298,11 @@ input LotWhereUniqueInput {
 type Mutation {
   accessOauthConnection(authSource: AuthSource!, portfolioId: String!, verifier: String!): AuthConnectionExt!
 
+  """
+  Add User to Portfolio. True if user added, False if user is invited as they do not exist
+  """
+  addUserToPortfolio(email: String!): Boolean!
+
   """Create a new connected account"""
   createAccountForPortfolio(accountCreateInput: AccountCreateInput!): Account!
   createFiles(data: [FileCreateManyInput!]!): [File!]!
@@ -9314,6 +9319,12 @@ type Mutation {
   """Finalize harvest for review"""
   finalizeHarvest(id: String): Harvest!
   initAccountFileUpload(accountData: InitAccountFileUploadPayload!, fileData: [InitFileUploadPayload!]!): [File!]!
+
+  """Invite User to Platform"""
+  inviteUsersToPlatform(emails: [String!]!): Boolean!
+
+  """Remove User from Portfolio"""
+  removeUserFromPortfolio(userId: String!): Boolean!
 
   """Set up plaid auth connection and create accounts from syncing plaid"""
   setAccessTokenAndSyncAccounts(metaData: PlaidLinkOnSuccessMetadata!, publicToken: String!): [Account!]!
@@ -9737,8 +9748,8 @@ type Portfolio {
   accounts: [Account!]
   authConnections: [AuthConnection!]
   createdAt: DateTime!
-  createdBy: User
-  createdById: String
+  createdBy: User!
+  createdById: String!
   files: [File!]
 
   """How often should we harvest for the portfolio"""
@@ -9832,7 +9843,7 @@ input PortfolioCreateInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10036,7 +10047,7 @@ input PortfolioCreateOrConnectWithoutUsersOnPortfoliosInput {
 input PortfolioCreateWithoutAccountsInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10065,7 +10076,7 @@ input PortfolioCreateWithoutAccountsInput {
 input PortfolioCreateWithoutAuthConnectionsInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10124,7 +10135,7 @@ input PortfolioCreateWithoutFilesInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
   harvestTickerBucketDollarSizeLong: Decimal
@@ -10153,7 +10164,7 @@ input PortfolioCreateWithoutHarvestTransactionInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10182,7 +10193,7 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10211,7 +10222,7 @@ input PortfolioCreateWithoutHarvestsInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10240,7 +10251,7 @@ input PortfolioCreateWithoutLotChangeLogInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10269,7 +10280,7 @@ input PortfolioCreateWithoutLotTransactionBatchInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10298,7 +10309,7 @@ input PortfolioCreateWithoutLotsInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10327,7 +10338,7 @@ input PortfolioCreateWithoutPositionsInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10356,7 +10367,7 @@ input PortfolioCreateWithoutRealizedPAndLInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10385,7 +10396,7 @@ input PortfolioCreateWithoutTransactionsInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10414,7 +10425,7 @@ input PortfolioCreateWithoutUsersOnPortfoliosInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
-  createdBy: UserCreateNestedOneWithoutPortfolioInput
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10492,7 +10503,7 @@ input PortfolioScalarWhereInput {
   NOT: [PortfolioScalarWhereInput!]
   OR: [PortfolioScalarWhereInput!]
   createdAt: DateTimeFilter
-  createdById: StringNullableFilter
+  createdById: StringFilter
   harvestCycleWeeks: IntFilter
   harvestShareDollarThreshold: DecimalFilter
   harvestTickerBucketDollarSizeLong: DecimalFilter
@@ -10550,7 +10561,7 @@ input PortfolioUpdateInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10787,7 +10798,7 @@ input PortfolioUpdateWithWhereUniqueWithoutCreatedByInput {
 input PortfolioUpdateWithoutAccountsInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10816,7 +10827,7 @@ input PortfolioUpdateWithoutAccountsInput {
 input PortfolioUpdateWithoutAuthConnectionsInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10875,7 +10886,7 @@ input PortfolioUpdateWithoutFilesInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
   harvestTickerBucketDollarSizeLong: DecimalFieldUpdateOperationsInput
@@ -10904,7 +10915,7 @@ input PortfolioUpdateWithoutHarvestTransactionInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10933,7 +10944,7 @@ input PortfolioUpdateWithoutHarvestTransactionItemInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10962,7 +10973,7 @@ input PortfolioUpdateWithoutHarvestsInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10991,7 +11002,7 @@ input PortfolioUpdateWithoutLotChangeLogInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11020,7 +11031,7 @@ input PortfolioUpdateWithoutLotTransactionBatchInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11049,7 +11060,7 @@ input PortfolioUpdateWithoutLotsInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11078,7 +11089,7 @@ input PortfolioUpdateWithoutPositionsInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11107,7 +11118,7 @@ input PortfolioUpdateWithoutRealizedPAndLInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11136,7 +11147,7 @@ input PortfolioUpdateWithoutTransactionsInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11165,7 +11176,7 @@ input PortfolioUpdateWithoutUsersOnPortfoliosInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  createdBy: UserUpdateOneWithoutPortfolioNestedInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11281,8 +11292,8 @@ input PortfolioWhereInput {
   accounts: AccountListRelationFilter
   authConnections: AuthConnectionListRelationFilter
   createdAt: DateTimeFilter
-  createdBy: UserNullableScalarRelationFilter
-  createdById: StringNullableFilter
+  createdBy: UserScalarRelationFilter
+  createdById: StringFilter
   files: FileListRelationFilter
   harvestCycleWeeks: IntFilter
   harvestShareDollarThreshold: DecimalFilter
@@ -11315,8 +11326,8 @@ input PortfolioWhereUniqueInput {
   accounts: AccountListRelationFilter
   authConnections: AuthConnectionListRelationFilter
   createdAt: DateTimeFilter
-  createdBy: UserNullableScalarRelationFilter
-  createdById: StringNullableFilter
+  createdBy: UserScalarRelationFilter
+  createdById: StringFilter
   files: FileListRelationFilter
   harvestCycleWeeks: IntFilter
   harvestShareDollarThreshold: DecimalFilter
@@ -12642,9 +12653,6 @@ type Query {
 
   """Get authenticated portfolio"""
   portfolioAuthed: Portfolio!
-
-  """Get portfolio by portfolio id"""
-  portfolioById(id: String!): Portfolio!
   portfolioPositions: [Position!]!
 
   """Summary summary"""
@@ -12667,6 +12675,9 @@ type Query {
 
   """Get current user"""
   userCurrent: User!
+
+  """Get all users on a portfolio"""
+  usersOnPortfolio: [User!]!
 }
 
 enum QueryMode {
@@ -14084,11 +14095,6 @@ type UserMinAggregate {
   updatedAt: DateTime
 }
 
-input UserNullableScalarRelationFilter {
-  is: UserWhereInput
-  isNot: UserWhereInput
-}
-
 input UserScalarRelationFilter {
   is: UserWhereInput
   isNot: UserWhereInput
@@ -14184,22 +14190,20 @@ input UserUpdateOneRequiredWithoutHarvestNestedInput {
   upsert: UserUpsertWithoutHarvestInput
 }
 
+input UserUpdateOneRequiredWithoutPortfolioNestedInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutPortfolioInput
+  create: UserCreateWithoutPortfolioInput
+  update: UserUpdateToOneWithWhereWithoutPortfolioInput
+  upsert: UserUpsertWithoutPortfolioInput
+}
+
 input UserUpdateOneRequiredWithoutUsersOnPortfoliosNestedInput {
   connect: UserWhereUniqueInput
   connectOrCreate: UserCreateOrConnectWithoutUsersOnPortfoliosInput
   create: UserCreateWithoutUsersOnPortfoliosInput
   update: UserUpdateToOneWithWhereWithoutUsersOnPortfoliosInput
   upsert: UserUpsertWithoutUsersOnPortfoliosInput
-}
-
-input UserUpdateOneWithoutPortfolioNestedInput {
-  connect: UserWhereUniqueInput
-  connectOrCreate: UserCreateOrConnectWithoutPortfolioInput
-  create: UserCreateWithoutPortfolioInput
-  delete: UserWhereInput
-  disconnect: UserWhereInput
-  update: UserUpdateToOneWithWhereWithoutPortfolioInput
-  upsert: UserUpsertWithoutPortfolioInput
 }
 
 input UserUpdateToOneWithWhereWithoutAccountInput {

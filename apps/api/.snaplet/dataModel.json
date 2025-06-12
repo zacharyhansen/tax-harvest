@@ -4252,7 +4252,7 @@
           "name": "createdById",
           "columnName": "createdById",
           "type": "text",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -4390,7 +4390,7 @@
         {
           "name": "User",
           "type": "User",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "object",
           "relationName": "PortfolioToUser",
           "relationFromFields": [

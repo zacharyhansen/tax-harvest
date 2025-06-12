@@ -317,7 +317,7 @@ export interface LotTransactionBatch {
 
 export interface Portfolio {
   createdAt: Generated<Timestamp>;
-  createdById: string | null;
+  createdById: string;
   harvestCycleWeeks: Generated<number>;
   harvestShareDollarThreshold: Generated<Numeric>;
   harvestTickerBucketDollarSizeLong: Generated<Numeric>;

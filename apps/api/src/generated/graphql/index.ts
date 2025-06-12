@@ -43801,9 +43801,9 @@ export class CreateManyPortfolioArgs {
 
 @ArgsType()
 export class CreateOnePortfolioArgs {
-    @Field(() => PortfolioCreateInput, {nullable:true})
+    @Field(() => PortfolioCreateInput, {nullable:false})
     @Type(() => PortfolioCreateInput)
-    data?: InstanceType<typeof PortfolioCreateInput>;
+    data!: InstanceType<typeof PortfolioCreateInput>;
 }
 
 @ArgsType()
@@ -44162,8 +44162,8 @@ export class PortfolioCreateManyInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -44585,9 +44585,9 @@ export class PortfolioCreateWithoutAccountsInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -44670,9 +44670,9 @@ export class PortfolioCreateWithoutAuthConnectionsInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => HarvestCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestCreateNestedManyWithoutPortfolioInput)
     harvests?: InstanceType<typeof HarvestCreateNestedManyWithoutPortfolioInput>;
@@ -44834,9 +44834,9 @@ export class PortfolioCreateWithoutFilesInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -44916,9 +44916,9 @@ export class PortfolioCreateWithoutHarvestTransactionItemInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -44998,9 +44998,9 @@ export class PortfolioCreateWithoutHarvestTransactionInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45080,9 +45080,9 @@ export class PortfolioCreateWithoutHarvestsInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45162,9 +45162,9 @@ export class PortfolioCreateWithoutLogInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45244,9 +45244,9 @@ export class PortfolioCreateWithoutLotChangeLogInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45326,9 +45326,9 @@ export class PortfolioCreateWithoutLotTransactionBatchInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45408,9 +45408,9 @@ export class PortfolioCreateWithoutLotsInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45490,9 +45490,9 @@ export class PortfolioCreateWithoutPositionsInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45572,9 +45572,9 @@ export class PortfolioCreateWithoutRealizedPAndLInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45654,9 +45654,9 @@ export class PortfolioCreateWithoutTransactionsInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45733,9 +45733,9 @@ export class PortfolioCreateWithoutUsersOnPortfoliosInput {
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45818,9 +45818,9 @@ export class PortfolioCreateInput {
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
-    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:true})
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutPortfolioInput)
-    createdBy?: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
     @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
     authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
@@ -45901,8 +45901,8 @@ export class PortfolioGroupBy {
     createdAt!: Date | string;
     @Field(() => Date, {nullable:false})
     updatedAt!: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:false})
     name!: string;
     @Field(() => Int, {nullable:false})
@@ -46140,8 +46140,8 @@ export class PortfolioOrderByWithAggregationInput {
     createdAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
-    @Field(() => SortOrderInput, {nullable:true})
-    createdById?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrder, {nullable:true})
+    createdById?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     name?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -46185,8 +46185,8 @@ export class PortfolioOrderByWithRelationInput {
     createdAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
-    @Field(() => SortOrderInput, {nullable:true})
-    createdById?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrder, {nullable:true})
+    createdById?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     name?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -46279,8 +46279,8 @@ export class PortfolioScalarWhereWithAggregatesInput {
     createdAt?: InstanceType<typeof DateTimeWithAggregatesFilter>;
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeWithAggregatesFilter>;
-    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    createdById?: InstanceType<typeof StringNullableWithAggregatesFilter>;
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    createdById?: InstanceType<typeof StringWithAggregatesFilter>;
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     name?: InstanceType<typeof StringWithAggregatesFilter>;
     @Field(() => IntWithAggregatesFilter, {nullable:true})
@@ -46324,8 +46324,8 @@ export class PortfolioScalarWhereInput {
     createdAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFilter>;
-    @Field(() => StringNullableFilter, {nullable:true})
-    createdById?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    createdById?: InstanceType<typeof StringFilter>;
     @Field(() => StringFilter, {nullable:true})
     name?: InstanceType<typeof StringFilter>;
     @Field(() => IntFilter, {nullable:true})
@@ -46430,8 +46430,8 @@ export class PortfolioUncheckedCreateWithoutAccountsInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -46511,8 +46511,8 @@ export class PortfolioUncheckedCreateWithoutAuthConnectionsInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -46674,8 +46674,8 @@ export class PortfolioUncheckedCreateWithoutFilesInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -46755,8 +46755,8 @@ export class PortfolioUncheckedCreateWithoutHarvestTransactionItemInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -46836,8 +46836,8 @@ export class PortfolioUncheckedCreateWithoutHarvestTransactionInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -46917,8 +46917,8 @@ export class PortfolioUncheckedCreateWithoutHarvestsInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -46998,8 +46998,8 @@ export class PortfolioUncheckedCreateWithoutLogInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47079,8 +47079,8 @@ export class PortfolioUncheckedCreateWithoutLotChangeLogInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47160,8 +47160,8 @@ export class PortfolioUncheckedCreateWithoutLotTransactionBatchInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47241,8 +47241,8 @@ export class PortfolioUncheckedCreateWithoutLotsInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47322,8 +47322,8 @@ export class PortfolioUncheckedCreateWithoutPositionsInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47403,8 +47403,8 @@ export class PortfolioUncheckedCreateWithoutRealizedPAndLInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47484,8 +47484,8 @@ export class PortfolioUncheckedCreateWithoutTransactionsInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47565,8 +47565,8 @@ export class PortfolioUncheckedCreateWithoutUsersOnPortfoliosInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47646,8 +47646,8 @@ export class PortfolioUncheckedCreateInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
-    @Field(() => String, {nullable:true})
-    createdById?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {nullable:true})
     name?: string;
     @Field(() => Int, {nullable:true})
@@ -47801,8 +47801,8 @@ export class PortfolioUncheckedUpdateManyInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -47837,8 +47837,8 @@ export class PortfolioUncheckedUpdateWithoutAccountsInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -47912,8 +47912,8 @@ export class PortfolioUncheckedUpdateWithoutAuthConnectionsInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48063,8 +48063,8 @@ export class PortfolioUncheckedUpdateWithoutFilesInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48138,8 +48138,8 @@ export class PortfolioUncheckedUpdateWithoutHarvestTransactionItemInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48213,8 +48213,8 @@ export class PortfolioUncheckedUpdateWithoutHarvestTransactionInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48288,8 +48288,8 @@ export class PortfolioUncheckedUpdateWithoutHarvestsInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48363,8 +48363,8 @@ export class PortfolioUncheckedUpdateWithoutLogInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48438,8 +48438,8 @@ export class PortfolioUncheckedUpdateWithoutLotChangeLogInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48513,8 +48513,8 @@ export class PortfolioUncheckedUpdateWithoutLotTransactionBatchInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48588,8 +48588,8 @@ export class PortfolioUncheckedUpdateWithoutLotsInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48663,8 +48663,8 @@ export class PortfolioUncheckedUpdateWithoutPositionsInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48738,8 +48738,8 @@ export class PortfolioUncheckedUpdateWithoutRealizedPAndLInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48813,8 +48813,8 @@ export class PortfolioUncheckedUpdateWithoutTransactionsInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48888,8 +48888,8 @@ export class PortfolioUncheckedUpdateWithoutUsersOnPortfoliosInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -48963,8 +48963,8 @@ export class PortfolioUncheckedUpdateInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    createdById?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
@@ -49565,9 +49565,9 @@ export class PortfolioUpdateWithoutAccountsInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -49644,9 +49644,9 @@ export class PortfolioUpdateWithoutAuthConnectionsInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => HarvestUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestUpdateManyWithoutPortfolioNestedInput)
     harvests?: InstanceType<typeof HarvestUpdateManyWithoutPortfolioNestedInput>;
@@ -49796,9 +49796,9 @@ export class PortfolioUpdateWithoutFilesInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -49872,9 +49872,9 @@ export class PortfolioUpdateWithoutHarvestTransactionItemInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -49948,9 +49948,9 @@ export class PortfolioUpdateWithoutHarvestTransactionInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50024,9 +50024,9 @@ export class PortfolioUpdateWithoutHarvestsInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50100,9 +50100,9 @@ export class PortfolioUpdateWithoutLogInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50176,9 +50176,9 @@ export class PortfolioUpdateWithoutLotChangeLogInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50252,9 +50252,9 @@ export class PortfolioUpdateWithoutLotTransactionBatchInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50328,9 +50328,9 @@ export class PortfolioUpdateWithoutLotsInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50404,9 +50404,9 @@ export class PortfolioUpdateWithoutPositionsInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50480,9 +50480,9 @@ export class PortfolioUpdateWithoutRealizedPAndLInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50556,9 +50556,9 @@ export class PortfolioUpdateWithoutTransactionsInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50629,9 +50629,9 @@ export class PortfolioUpdateWithoutUsersOnPortfoliosInput {
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50708,9 +50708,9 @@ export class PortfolioUpdateInput {
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
-    @Field(() => UserUpdateOneWithoutPortfolioNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneWithoutPortfolioNestedInput)
-    createdBy?: InstanceType<typeof UserUpdateOneWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
     @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
     authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
@@ -50961,8 +50961,8 @@ export class PortfolioWhereUniqueInput {
     createdAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFilter>;
-    @Field(() => StringNullableFilter, {nullable:true})
-    createdById?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    createdById?: InstanceType<typeof StringFilter>;
     @Field(() => StringFilter, {nullable:true})
     name?: InstanceType<typeof StringFilter>;
     @Field(() => IntFilter, {nullable:true})
@@ -50993,9 +50993,9 @@ export class PortfolioWhereUniqueInput {
     @Field(() => UsersOnPortfoliosListRelationFilter, {nullable:true})
     @Type(() => UsersOnPortfoliosListRelationFilter)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosListRelationFilter>;
-    @Field(() => UserNullableScalarRelationFilter, {nullable:true})
-    @Type(() => UserNullableScalarRelationFilter)
-    createdBy?: InstanceType<typeof UserNullableScalarRelationFilter>;
+    @Field(() => UserScalarRelationFilter, {nullable:true})
+    @Type(() => UserScalarRelationFilter)
+    createdBy?: InstanceType<typeof UserScalarRelationFilter>;
     @Field(() => AuthConnectionListRelationFilter, {nullable:true})
     @Type(() => AuthConnectionListRelationFilter)
     authConnections?: InstanceType<typeof AuthConnectionListRelationFilter>;
@@ -51051,8 +51051,8 @@ export class PortfolioWhereInput {
     createdAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFilter>;
-    @Field(() => StringNullableFilter, {nullable:true})
-    createdById?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    createdById?: InstanceType<typeof StringFilter>;
     @Field(() => StringFilter, {nullable:true})
     name?: InstanceType<typeof StringFilter>;
     @Field(() => IntFilter, {nullable:true})
@@ -51083,9 +51083,9 @@ export class PortfolioWhereInput {
     @Field(() => UsersOnPortfoliosListRelationFilter, {nullable:true})
     @Type(() => UsersOnPortfoliosListRelationFilter)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosListRelationFilter>;
-    @Field(() => UserNullableScalarRelationFilter, {nullable:true})
-    @Type(() => UserNullableScalarRelationFilter)
-    createdBy?: InstanceType<typeof UserNullableScalarRelationFilter>;
+    @Field(() => UserScalarRelationFilter, {nullable:true})
+    @Type(() => UserScalarRelationFilter)
+    createdBy?: InstanceType<typeof UserScalarRelationFilter>;
     @Field(() => AuthConnectionListRelationFilter, {nullable:true})
     @Type(() => AuthConnectionListRelationFilter)
     authConnections?: InstanceType<typeof AuthConnectionListRelationFilter>;
@@ -51132,8 +51132,8 @@ export class Portfolio {
     createdAt!: Date;
     @Field(() => Date, {nullable:false})
     updatedAt!: Date;
-    @Field(() => String, {nullable:true})
-    createdById!: string | null;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
     @Field(() => String, {defaultValue:'Main',nullable:false})
     name!: string;
     /**
@@ -51177,8 +51177,8 @@ export class Portfolio {
     accounts?: Array<Account>;
     @Field(() => [UsersOnPortfolios], {nullable:true})
     usersOnPortfolios?: Array<UsersOnPortfolios>;
-    @Field(() => User, {nullable:true})
-    createdBy?: InstanceType<typeof User> | null;
+    @Field(() => User, {nullable:false})
+    createdBy?: InstanceType<typeof User>;
     @Field(() => [AuthConnection], {nullable:true})
     authConnections?: Array<AuthConnection>;
     @Field(() => [Harvest], {nullable:true})
@@ -67061,14 +67061,6 @@ export class UserMinOrderByAggregateInput {
 }
 
 @InputType()
-export class UserNullableScalarRelationFilter {
-    @Field(() => UserWhereInput, {nullable:true})
-    is?: InstanceType<typeof UserWhereInput>;
-    @Field(() => UserWhereInput, {nullable:true})
-    isNot?: InstanceType<typeof UserWhereInput>;
-}
-
-@InputType()
 export class UserOrderByRelationAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     _count?: `${SortOrder}`;
@@ -68029,6 +68021,25 @@ export class UserUpdateOneRequiredWithoutHarvestNestedInput {
 }
 
 @InputType()
+export class UserUpdateOneRequiredWithoutPortfolioNestedInput {
+    @Field(() => UserCreateWithoutPortfolioInput, {nullable:true})
+    @Type(() => UserCreateWithoutPortfolioInput)
+    create?: InstanceType<typeof UserCreateWithoutPortfolioInput>;
+    @Field(() => UserCreateOrConnectWithoutPortfolioInput, {nullable:true})
+    @Type(() => UserCreateOrConnectWithoutPortfolioInput)
+    connectOrCreate?: InstanceType<typeof UserCreateOrConnectWithoutPortfolioInput>;
+    @Field(() => UserUpsertWithoutPortfolioInput, {nullable:true})
+    @Type(() => UserUpsertWithoutPortfolioInput)
+    upsert?: InstanceType<typeof UserUpsertWithoutPortfolioInput>;
+    @Field(() => UserWhereUniqueInput, {nullable:true})
+    @Type(() => UserWhereUniqueInput)
+    connect?: Prisma.AtLeast<UserWhereUniqueInput, 'id' | 'stripeCustomerId'>;
+    @Field(() => UserUpdateToOneWithWhereWithoutPortfolioInput, {nullable:true})
+    @Type(() => UserUpdateToOneWithWhereWithoutPortfolioInput)
+    update?: InstanceType<typeof UserUpdateToOneWithWhereWithoutPortfolioInput>;
+}
+
+@InputType()
 export class UserUpdateOneRequiredWithoutUsersOnPortfoliosNestedInput {
     @Field(() => UserCreateWithoutUsersOnPortfoliosInput, {nullable:true})
     @Type(() => UserCreateWithoutUsersOnPortfoliosInput)
@@ -68045,31 +68056,6 @@ export class UserUpdateOneRequiredWithoutUsersOnPortfoliosNestedInput {
     @Field(() => UserUpdateToOneWithWhereWithoutUsersOnPortfoliosInput, {nullable:true})
     @Type(() => UserUpdateToOneWithWhereWithoutUsersOnPortfoliosInput)
     update?: InstanceType<typeof UserUpdateToOneWithWhereWithoutUsersOnPortfoliosInput>;
-}
-
-@InputType()
-export class UserUpdateOneWithoutPortfolioNestedInput {
-    @Field(() => UserCreateWithoutPortfolioInput, {nullable:true})
-    @Type(() => UserCreateWithoutPortfolioInput)
-    create?: InstanceType<typeof UserCreateWithoutPortfolioInput>;
-    @Field(() => UserCreateOrConnectWithoutPortfolioInput, {nullable:true})
-    @Type(() => UserCreateOrConnectWithoutPortfolioInput)
-    connectOrCreate?: InstanceType<typeof UserCreateOrConnectWithoutPortfolioInput>;
-    @Field(() => UserUpsertWithoutPortfolioInput, {nullable:true})
-    @Type(() => UserUpsertWithoutPortfolioInput)
-    upsert?: InstanceType<typeof UserUpsertWithoutPortfolioInput>;
-    @Field(() => UserWhereInput, {nullable:true})
-    @Type(() => UserWhereInput)
-    disconnect?: InstanceType<typeof UserWhereInput>;
-    @Field(() => UserWhereInput, {nullable:true})
-    @Type(() => UserWhereInput)
-    delete?: InstanceType<typeof UserWhereInput>;
-    @Field(() => UserWhereUniqueInput, {nullable:true})
-    @Type(() => UserWhereUniqueInput)
-    connect?: Prisma.AtLeast<UserWhereUniqueInput, 'id' | 'stripeCustomerId'>;
-    @Field(() => UserUpdateToOneWithWhereWithoutPortfolioInput, {nullable:true})
-    @Type(() => UserUpdateToOneWithWhereWithoutPortfolioInput)
-    update?: InstanceType<typeof UserUpdateToOneWithWhereWithoutPortfolioInput>;
 }
 
 @InputType()
