@@ -10,9 +10,11 @@ export default function UnrealizedHarvestItems({
   items: UnrealizedHarvestItemFragment[];
 }) {
   return items?.length ? (
-    items.map(item => (
-      <CostBasisPairCard key={item.sourceLot.id} harvestItem={item} />
-    ))
+    <div className="flex flex-col gap-4">
+      {items.map(item => (
+        <CostBasisPairCard key={item.sourceLot.id} harvestItem={item} />
+      ))}
+    </div>
   ) : (
     <NoOpportunities />
   );

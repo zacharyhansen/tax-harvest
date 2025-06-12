@@ -2,11 +2,17 @@ import type { FiniteHarvestLotItemFragment } from '~/generated/gql';
 import { Button } from '@repo/ui/components/button';
 import { cn } from '@repo/ui/utils';
 import { Decimal } from 'decimal.js';
-import { Wheat } from 'lucide-react';
-import { HarvestType, useCreateHarvestMutation } from '~/generated/gql';
+import { Wheat, CheckCircle2, Trash, Trash2 } from 'lucide-react';
+import {
+  FiniteHarvestDocument,
+  HarvestType,
+  useCreateHarvestMutation,
+  useDeleteHarvestsMutation,
+} from '~/generated/gql';
 import { clientEnvironment } from '~/lib/env/clientEnvironment';
 import { Format, MoneyUtil } from '~/modules/utils';
 import { toast } from '@repo/ui/components/toast-sonner';
+import { Badge } from '@repo/ui/components/badge';
 
 type HarvestingOpportunityCardProps = {
   lot: FiniteHarvestLotItemFragment;
@@ -19,7 +25,14 @@ export function HarvestingOpportunityCard({
   harvestType,
   netPosition,
 }: HarvestingOpportunityCardProps) {
-  const [createHarvest] = useCreateHarvestMutation();
+  const [createHarvest] = useCreateHarvestMutation({
+    refetchQueries: [FiniteHarvestDocument],
+    awaitRefetchQueries: true,
+  });
+  const [deleteHarvests] = useDeleteHarvestsMutation({
+    refetchQueries: [FiniteHarvestDocument],
+    awaitRefetchQueries: true,
+  });
   // Determine if this is a gain position by comparing current value to cost basis
   const costBasis = new Decimal(lot.costBasis ?? 0);
   const currentValue = new Decimal(lot.lastPrice ?? 0).mul(
@@ -38,10 +51,23 @@ export function HarvestingOpportunityCard({
   );
   const colorClass = MoneyUtil.colored(taxSavings.toNumber());
 
+  const isHarvested =
+    parseInt(lot.currentHarvestQty) === parseInt(lot.remainingQty);
+
   return (
-    <div className="bg-muted mb-2 overflow-hidden rounded-lg border shadow-md">
+    <div
+      className={cn(
+        'bg-muted mb-2 overflow-hidden rounded-lg border shadow-md transition-all duration-300',
+        isHarvested && 'bg-accent border-accent animate-in fade-in zoom-in-95'
+      )}
+    >
       {/* Header row */}
-      <div className="bg-muted flex items-center justify-between px-4 py-3">
+      <div
+        className={cn(
+          'bg-muted flex items-center justify-between px-4 py-3 transition-colors duration-300',
+          isHarvested && 'bg-accent'
+        )}
+      >
         <div className="flex items-center gap-3">
           <div className="bg-muted-foreground text-background flex h-8 items-center justify-center rounded-lg px-2 font-bold uppercase">
             {lot.symbol}
@@ -64,8 +90,33 @@ export function HarvestingOpportunityCard({
           </div>
         </div>
 
-        <div className="text-right">
+        <div className="flex items-center gap-2">
+          {isHarvested && lot.harvestId ? (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={() => {
+                  toast.promise(
+                    deleteHarvests({
+                      variables: {
+                        ids: [lot.harvestId!],
+                      },
+                    }),
+                    {
+                      loading: 'Removing from harvest...',
+                      success: 'Harvest removed successfully',
+                      error: 'Failed to remove from harvest',
+                    }
+                  );
+                }}
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            </div>
+          ) : null}
           <Button
+            disabled={isHarvested}
             onClick={() =>
               toast.promise(
                 createHarvest({
@@ -81,14 +132,15 @@ export function HarvestingOpportunityCard({
                   },
                 }),
                 {
-                  loading: 'Creating harvest...',
-                  success: 'Harvest created successfully',
-                  error: 'Failed to create harvest',
+                  loading: 'Adding to harvest...',
+                  success: 'Added to harvest successfully',
+                  error: 'Failed to add to harvest',
                 }
               )
             }
           >
-            <Wheat className="mr-2 size-4" /> Add to Harvests
+            <Wheat className="mr-2 size-4" />{' '}
+            {isHarvested ? 'Harvested' : 'Add to Harvests'}
           </Button>
         </div>
       </div>
@@ -130,7 +182,7 @@ export function HarvestingOpportunityCard({
         {/* Right side - gain/loss and savings, right-aligned */}
         <div className="mt-4 flex w-full flex-col justify-end md:mt-0 md:w-auto md:flex-row md:gap-8">
           <div className="mb-2 md:mb-0">
-            <div className="text-sm text-[#AAAAAA]">
+            <div className="text-muted-foreground text-sm">
               {harvestType === HarvestType.ReduceTaxes
                 ? 'Potential Loss'
                 : 'Potential Gain'}
@@ -141,7 +193,7 @@ export function HarvestingOpportunityCard({
           </div>
 
           <div>
-            <div className="text-sm text-[#AAAAAA]">Tax Savings</div>
+            <div className="text-muted-foreground text-sm">Tax Savings</div>
             <div className="text-base text-green-500">
               {Format.money(taxSavings.abs().toString())}
             </div>

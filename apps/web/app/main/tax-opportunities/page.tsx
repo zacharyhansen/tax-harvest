@@ -14,19 +14,16 @@ import {
   TooltipTrigger,
 } from '@repo/ui/components/tooltip';
 import { cn } from '@repo/ui/utils';
-import { ArrowUpCircle, BarChart3, Info, TrendingDown } from 'lucide-react';
+import { BarChart3, Info } from 'lucide-react';
 import { HarvestType, useFiniteHarvestQuery } from '~/generated/gql';
-import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { Format, MoneyUtil } from '~/modules/utils';
-import NoOpportunities from './no-opportunities';
 import {
   Tabs,
   TabsTrigger,
   TabsList,
   TabsContent,
 } from '@repo/ui/components/tabs';
-import UnrealizedHarvestPage from './unrealized-harvest-items';
 import UnrealizedHarvestItems from './unrealized-harvest-items';
 import RealizedHarvestItems from './realized-harvest-items';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -225,6 +222,86 @@ export default function TaxOpportunitiesPage() {
               </div>
             </motion.div>
           </motion.div>
+          <motion.div
+            className="grid grid-cols-3 divide-x"
+            variants={itemVariants}
+          >
+            <motion.div className="px-6 py-0" variants={itemVariants}>
+              <div className="flex flex-col">
+                <span className="text-muted-foreground text-xs">
+                  after current harvest
+                </span>
+                <span
+                  className={cn(
+                    'mt-1 font-semibold',
+                    MoneyUtil.colored(
+                      data?.finiteHarvest.summary.includingCurrentHarvest
+                        .realized.gainTotal ?? 0
+                    )
+                  )}
+                >
+                  <NumberFlow
+                    value={
+                      data?.finiteHarvest.summary.includingCurrentHarvest
+                        .realized.gainTotal ?? 0
+                    }
+                    format={{ currency: 'USD', style: 'currency' }}
+                  />
+                </span>
+              </div>
+            </motion.div>
+
+            <motion.div className="px-6 py-0" variants={itemVariants}>
+              <div className="flex flex-col">
+                <span className="text-muted-foreground text-xs">
+                  after current harvest
+                </span>
+                <span
+                  className={cn(
+                    'mt-1 font-semibold',
+                    MoneyUtil.colored(
+                      data?.finiteHarvest.summary.includingCurrentHarvest
+                        .unrealized.gainTotal ?? 0
+                    )
+                  )}
+                >
+                  <NumberFlow
+                    value={
+                      data?.finiteHarvest.summary.includingCurrentHarvest
+                        .unrealized.gainTotal ?? 0
+                    }
+                    format={{ currency: 'USD', style: 'currency' }}
+                  />
+                </span>
+              </div>
+            </motion.div>
+
+            <motion.div className="px-6 py-0" variants={itemVariants}>
+              <div className="flex flex-col">
+                <span className="text-muted-foreground text-xs">
+                  after current harvest
+                </span>
+                <span
+                  className={cn(
+                    'mt-1 font-semibold',
+                    MoneyUtil.colored(
+                      data?.finiteHarvest.summary.includingCurrentHarvest
+                        .unrealized.lossTotal ?? 0
+                    )
+                  )}
+                >
+                  <NumberFlow
+                    defaultValue={0}
+                    value={
+                      data?.finiteHarvest.summary.includingCurrentHarvest
+                        .unrealized.lossTotal ?? 0
+                    }
+                    format={{ currency: 'USD', style: 'currency' }}
+                  />
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </motion.div>
 
@@ -240,7 +317,7 @@ export default function TaxOpportunitiesPage() {
               <TabsContent value="realized" className="space-y-8">
                 <RealizedHarvestItems finiteHarvest={data.finiteHarvest} />
               </TabsContent>
-              <TabsContent value="unrealized" className="space-y-8">
+              <TabsContent value="unrealized" className="flex flex-col gap-4">
                 <UnrealizedHarvestItems
                   items={data.finiteHarvest.unrealizedHarvestMatchResults ?? []}
                 />
@@ -248,19 +325,11 @@ export default function TaxOpportunitiesPage() {
             </Tabs>
           </motion.div>
         ) : data.finiteHarvest.lotsCurrent?.length ? (
-          <motion.div variants={itemVariants}>
-            <RealizedHarvestItems finiteHarvest={data.finiteHarvest} />
-          </motion.div>
-        ) : data.finiteHarvest.unrealizedHarvestMatchResults?.length ? (
-          <motion.div variants={itemVariants}>
-            <UnrealizedHarvestItems
-              items={data.finiteHarvest.unrealizedHarvestMatchResults ?? []}
-            />
-          </motion.div>
+          <RealizedHarvestItems finiteHarvest={data.finiteHarvest} />
         ) : (
-          <motion.div variants={itemVariants}>
-            <NoOpportunities />
-          </motion.div>
+          <UnrealizedHarvestItems
+            items={data.finiteHarvest.unrealizedHarvestMatchResults ?? []}
+          />
         )}
       </AnimatePresence>
     </motion.div>

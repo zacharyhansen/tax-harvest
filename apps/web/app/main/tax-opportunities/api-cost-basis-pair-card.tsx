@@ -2,12 +2,20 @@ import {
   useCreateHarvestMutation,
   HarvestType,
   type UnrealizedHarvestItemFragment,
+  FiniteHarvestDocument,
+  useDeleteHarvestsMutation,
 } from '~/generated/gql';
 import { Button } from '@repo/ui/components/button';
 import { Card } from '@repo/ui/components/card';
 import { cn } from '@repo/ui/utils';
 
-import { ArrowUpCircle, Check, TrendingDown } from 'lucide-react';
+import {
+  ArrowUpCircle,
+  Trash,
+  Trash2,
+  TrendingDown,
+  Wheat,
+} from 'lucide-react';
 import { Format, MoneyUtil } from '~/modules/utils';
 import { toast } from '@repo/ui/components/toast-sonner';
 
@@ -16,10 +24,26 @@ export type CostBasisPairCardProps = {
 };
 
 export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
-  const [createHarvest] = useCreateHarvestMutation();
+  const [createHarvest] = useCreateHarvestMutation({
+    refetchQueries: [FiniteHarvestDocument],
+    awaitRefetchQueries: true,
+  });
+  const [deleteHarvests] = useDeleteHarvestsMutation({
+    refetchQueries: [FiniteHarvestDocument],
+    awaitRefetchQueries: true,
+  });
+
+  const isHarvested =
+    parseInt(harvestItem.sourceLot.remainingQty) ===
+    parseInt(harvestItem.sourceLot.currentHarvestQty);
 
   return (
-    <Card className="bg-muted overflow-hidden border-0 shadow-sm">
+    <Card
+      className={cn(
+        'bg-muted overflow-hidden border-0 shadow-sm',
+        isHarvested && 'bg-accent'
+      )}
+    >
       <div className="bg-muted border-b p-4">
         <h3 className="font-semibold">
           Cost Basis Reset Strategy - Matched Pair
@@ -59,9 +83,34 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
 
       <div className="border-t p-4 text-white">
         {/* Single Execute Trade button for the entire pair */}
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-2">
+          {isHarvested && harvestItem.sourceLot.harvestId ? (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={() => {
+                  toast.promise(
+                    deleteHarvests({
+                      variables: {
+                        ids: [harvestItem.sourceLot.harvestId!],
+                      },
+                    }),
+                    {
+                      loading: 'Removing from harvest...',
+                      success: 'Harvest removed successfully',
+                      error: 'Failed to remove from harvest',
+                    }
+                  );
+                }}
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            </div>
+          ) : null}
           <Button
             variant="default"
+            disabled={isHarvested}
             className="w-full max-w-xl"
             onClick={() => {
               toast.promise(
@@ -81,6 +130,7 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
                     ],
                     harvestType: HarvestType.ReduceCostBasis,
                   },
+                  refetchQueries: [FiniteHarvestDocument],
                 }),
                 {
                   loading: 'Creating harvest...',
@@ -90,7 +140,8 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
               );
             }}
           >
-            <Check className="mr-2 size-4" /> Execute Trade
+            <Wheat className="mr-2 size-4" />
+            {isHarvested ? 'Harvested' : 'Add to Harvest'}
           </Button>
         </div>
       </div>
