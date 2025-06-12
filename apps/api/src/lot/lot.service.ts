@@ -93,7 +93,6 @@ export class LotService {
       await sql`SELECT set_config('app.current_portfolio_id', ${portfolioId}::text, TRUE)`.execute(
         trx,
       )
-
       let query = trx
         .selectFrom('LotCurrent')
         .innerJoin('Account', 'Account.id', 'LotCurrent.accountId')
