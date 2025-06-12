@@ -104,9 +104,8 @@ export class PortfolioService {
     portfolioId: string,
     select: Prisma.PortfolioSelect,
   ) {
-    return this.prismaService
-      // eslint-disable-next-line ts/no-explicit-any
-      .$extends(PrismaService.forPortfolio(portfolioId as string) as any)
+    return (this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId)) as unknown as PrismaClient)
       .portfolio
       .findFirstOrThrow({
         select,
@@ -141,9 +140,8 @@ export class PortfolioService {
     userId: string,
     select: Prisma.PortfolioSelect,
   ) {
-    return this.prismaService
-      // eslint-disable-next-line ts/no-explicit-any
-      .$extends(PrismaService.forPortfolio(id) as any)
+    return (this.prismaService
+      .$extends(PrismaService.forPortfolio(id)) as unknown as PrismaClient)
       .portfolio
       .findUniqueOrThrow({
         select,
