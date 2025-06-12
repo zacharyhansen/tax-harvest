@@ -1,3 +1,15 @@
+import { PricingTable } from '@clerk/nextjs';
+
 export default function PaymentSettings() {
-  return <div>Payment settings content goes here.</div>
+  return (
+    <PricingTable
+      appearance={{
+        elements: {
+          drawerContent: {
+            marginTop: '4rem',
+          },
+        },
+      }}
+    />
+  );
 }

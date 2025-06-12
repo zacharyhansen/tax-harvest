@@ -318,18 +318,14 @@ export default function TaxOpportunitiesPage() {
                 <RealizedHarvestItems finiteHarvest={data.finiteHarvest} />
               </TabsContent>
               <TabsContent value="unrealized" className="flex flex-col gap-4">
-                <UnrealizedHarvestItems
-                  items={data.finiteHarvest.unrealizedHarvestMatchResults ?? []}
-                />
+                <UnrealizedHarvestItems finiteHarvest={data.finiteHarvest} />
               </TabsContent>
             </Tabs>
           </motion.div>
         ) : data.finiteHarvest.lotsCurrent?.length ? (
           <RealizedHarvestItems finiteHarvest={data.finiteHarvest} />
         ) : (
-          <UnrealizedHarvestItems
-            items={data.finiteHarvest.unrealizedHarvestMatchResults ?? []}
-          />
+          <UnrealizedHarvestItems finiteHarvest={data.finiteHarvest} />
         )}
       </AnimatePresence>
     </motion.div>

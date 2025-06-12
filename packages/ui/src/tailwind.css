@@ -70,3 +70,9 @@
     @apply bg-background font-sans;
   }
 }
+
+/* more clerk */
+
+.cl-drawerContent {
+  @apply mt-12;
+}

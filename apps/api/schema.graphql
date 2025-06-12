@@ -4553,6 +4553,9 @@ type FiniteHarvestResult {
   harvestType: HarvestType!
   lotsCurrent: [LotCurrent!]
   summary: PortfolioSummary!
+
+  """Total number of harvest lots if user is paying"""
+  totalHarvestLots: Float!
   unrealizedHarvestMatchResults: [UnrealizedHarvestMatchResult!]
 }
 

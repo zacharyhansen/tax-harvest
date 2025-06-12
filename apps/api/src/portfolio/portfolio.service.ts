@@ -2,7 +2,7 @@ import type { ClerkClaims } from '~/auth/types'
 
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { Portfolio, PortfolioRole, Prisma } from '@prisma/client'
+import { Portfolio, PortfolioRole, Prisma, PrismaClient } from '@prisma/client'
 
 import Decimal from 'decimal.js'
 
@@ -105,7 +105,8 @@ export class PortfolioService {
     select: Prisma.PortfolioSelect,
   ) {
     return this.prismaService
-      .$extends(PrismaService.forPortfolio(portfolioId))
+      // eslint-disable-next-line ts/no-explicit-any
+      .$extends(PrismaService.forPortfolio(portfolioId as string) as any)
       .portfolio
       .findFirstOrThrow({
         select,
@@ -141,7 +142,8 @@ export class PortfolioService {
     select: Prisma.PortfolioSelect,
   ) {
     return this.prismaService
-      .$extends(PrismaService.forPortfolio(id))
+      // eslint-disable-next-line ts/no-explicit-any
+      .$extends(PrismaService.forPortfolio(id) as any)
       .portfolio
       .findUniqueOrThrow({
         select,
@@ -681,12 +683,11 @@ export class PortfolioService {
           })
         }
 
-        // write results to file
-
         return {
           harvestType,
           unrealizedHarvestMatchResults,
           summary,
+          totalHarvestLots: 0,
         }
       }
       case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
@@ -705,6 +706,7 @@ export class PortfolioService {
           summary,
           lotsCurrent: directedLots,
           harvestType,
+          totalHarvestLots: directedLots.length,
         }
       }
     }

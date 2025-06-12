@@ -10,8 +10,13 @@ export interface ClerkClaims {
   nbf: number
   sid: string
   sub: string
+  pla: string
 }
 
 export interface AppTrpcContext {
   clerkclaims: ClerkClaims
+}
+
+export function isUserOnFreePlan(clerkClaims: ClerkClaims): boolean {
+  return clerkClaims.pla.includes('u:free')
 }

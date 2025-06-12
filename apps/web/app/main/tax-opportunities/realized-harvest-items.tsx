@@ -3,13 +3,39 @@
 import {
   type FiniteHarvestLotItemFragment,
   type FiniteHarvestQuery,
+  HarvestType,
+  TaxGain,
 } from '~/generated/gql';
 import NoOpportunities from './no-opportunities';
 import { CostBasisPairCard } from './api-cost-basis-pair-card';
 import { ArrowUpCircle, TrendingDown } from 'lucide-react';
 import { HarvestingOpportunityCard } from './harvesting-opportunity-card';
+import { SeePaymentPlans } from '../settings/payment/see-payment-plans';
+import { Button } from '@repo/ui/components/button';
+import Link from 'next/link';
+import { TypedRoutes } from '~/lib/routes';
 
-export default function UnrealizedHarvestItems({
+// Dummy data for the blurred card
+const dummyLot: FiniteHarvestLotItemFragment = {
+  id: 'dummy-id',
+  symbol: 'AAPL',
+  acquiredDate: '2024-01-01',
+  remainingQty: '100',
+  currentHarvestQty: '0',
+  price: '180.00',
+  lastPrice: '170.00',
+  costBasis: '18000',
+  gainTotal: '-1000',
+  dollarPerSharePnL: '-10',
+  harvestId: null,
+  accountId: 'dummy-account',
+  value: '17000',
+  gainTotalPct: '-5.56',
+  taxGain: TaxGain.Short,
+  __typename: 'LotCurrent',
+};
+
+export default function RealizedHarvestItems({
   finiteHarvest,
 }: {
   finiteHarvest: FiniteHarvestQuery['finiteHarvest'];
@@ -45,6 +71,31 @@ export default function UnrealizedHarvestItems({
             netPosition={finiteHarvest.summary.realized.gainTotal}
           />
         ))}
+
+        {/* Blurred teaser card */}
+        {finiteHarvest.totalHarvestLots >= finiteHarvest?.lotsCurrent.length &&
+          [1, 2, 3].map(i => (
+            <Link href={TypedRoutes.settingsPayment()}>
+              <div key={i} className="relative rounded-lg">
+                <div className="absolute inset-0 z-10 rounded-lg backdrop-blur-sm" />
+                <div className="absolute inset-0 z-20 flex items-center justify-center rounded-lg">
+                  <div className="bg-background/95 rounded-lg p-4 text-center shadow-lg">
+                    <Button variant="outline" className="font-semibold">
+                      Unlock More Opportunities
+                    </Button>
+                    <p className="text-muted-foreground mt-1 text-sm">
+                      Upgrade to see all harvest opportunities
+                    </p>
+                  </div>
+                </div>
+                <HarvestingOpportunityCard
+                  lot={dummyLot}
+                  harvestType={HarvestType.ReduceTaxes}
+                  netPosition={-1000}
+                />
+              </div>
+            </Link>
+          ))}
       </div>
     </div>
   ) : (

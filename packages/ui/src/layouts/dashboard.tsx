@@ -1,8 +1,8 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
-import type { NavItem } from "./components/nav-main";
+import type { NavItem } from './components/nav-main';
 
-import { Separator } from "@repo/ui/components/separator";
+import { Separator } from '@repo/ui/components/separator';
 import {
   Sidebar,
   SidebarContent,
@@ -12,8 +12,8 @@ import {
   SidebarProvider,
   SidebarRail,
   SidebarTrigger,
-} from "@repo/ui/components/sidebar";
-import { NavMain } from "./components/nav-main";
+} from '@repo/ui/components/sidebar';
+import { NavMain } from './components/nav-main';
 
 export type NavGroup = {
   title: string;
@@ -44,10 +44,10 @@ export function Dashboard({
         <SidebarHeader className="h-14">{header ?? null}</SidebarHeader>
         <SidebarContent>
           {navGroups
-            .filter((group) =>
-              group.roles ? group.roles.includes(userRole ?? "") : true,
+            .filter(group =>
+              group.roles ? group.roles.includes(userRole ?? '') : true
             )
-            .map((group) => (
+            .map(group => (
               <NavMain
                 key={group.title}
                 title={group.title}
@@ -68,7 +68,7 @@ export function Dashboard({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-50 flex h-14 items-center gap-2 border-b p-2 backdrop-blur-md transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-14">
+        <header className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 sticky top-0 z-50 flex h-14 items-center gap-2 border-b p-2 backdrop-blur-md transition-[width,height] ease-linear">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />

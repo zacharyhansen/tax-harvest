@@ -46,6 +46,7 @@ fragment UnrealizedHarvestItem on UnrealizedHarvestMatchResult {
 query FiniteHarvest {
   finiteHarvest {
     harvestType
+    totalHarvestLots
     summary {
       realized {
         gainTotal

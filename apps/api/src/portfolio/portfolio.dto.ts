@@ -201,6 +201,9 @@ export class FiniteHarvestResult {
   @Field(() => [LotCurrent], { nullable: true })
   lotsCurrent?: LotCurrent[]
 
+  @Field(() => Number, { description: 'Total number of harvest lots if user is paying' })
+  totalHarvestLots: number
+
   @Field(() => [UnrealizedHarvestMatchResult], { nullable: true })
   unrealizedHarvestMatchResults?: UnrealizedHarvestMatchResult[]
 }

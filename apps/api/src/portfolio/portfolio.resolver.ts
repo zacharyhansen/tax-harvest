@@ -3,6 +3,7 @@ import type { ClerkClaims } from '../auth/types'
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
+import { isUserOnFreePlan } from '../auth/types'
 import {
   Portfolio,
   PortfolioCreateInput,
@@ -31,11 +32,18 @@ export class PortfolioResolver {
   })
   async finiteHarvest(
     @ClerkContext()
-    { metadata }: ClerkClaims,
+    clerkClaims: ClerkClaims,
   ): Promise<FiniteHarvestResult> {
-    return this.portfolioService.finiteHarvest({
-      portfolioId: metadata.portfolioId,
+    const harvestResult = await this.portfolioService.finiteHarvest({
+      portfolioId: clerkClaims.metadata.portfolioId,
     })
+    if (isUserOnFreePlan(clerkClaims)) {
+      return {
+        ...harvestResult,
+        lotsCurrent: harvestResult.lotsCurrent?.slice(0, 3),
+      }
+    }
+    return harvestResult
   }
 
   @Query(() => PortfolioSummary, {

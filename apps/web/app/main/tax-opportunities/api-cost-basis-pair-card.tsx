@@ -44,74 +44,42 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
         isHarvested && 'bg-accent'
       )}
     >
-      <div className="bg-muted border-b p-4">
-        <h3 className="font-semibold">
-          Cost Basis Reset Strategy - Matched Pair
-        </h3>
-        <p className="text-(--color-text-secondary) mt-1 text-sm">
-          Pair these trades to reset your cost basis with minimal tax impact
-        </p>
-      </div>
-
-      <div className="divide-border grid gap-0 divide-x md:grid-cols-2">
-        {/* Gain Position */}
-        <LotOrderCard
-          assetSymbol={harvestItem.sourceLot.symbol ?? ''}
-          pAndL={Number(harvestItem.sourceLot.gainTotal)}
-          shares={Number(harvestItem.sourceLot.remainingQty)}
-          totalShares={Number(harvestItem.sourceLot.remainingQty)}
-          aquiredDate={new Date(harvestItem.sourceLot.acquiredDate)}
-          costBasisPerShare={Number(harvestItem.sourceLot.price)}
-          currentPricePerShare={Number(harvestItem.sourceLot.lastPrice)}
-        />
-
+      <div className="flex justify-between border-b p-4">
         <div>
-          {harvestItem.matchedLotOrders.map(lotOrder => (
-            <LotOrderCard
-              key={lotOrder.id}
-              assetSymbol={lotOrder.assetSymbol}
-              pAndL={Number(lotOrder.gainTotal)}
-              shares={Number(lotOrder.quantity)}
-              totalShares={Number(lotOrder.quantity)}
-              aquiredDate={new Date(lotOrder.acquiredDate)}
-              costBasisPerShare={Number(lotOrder.pricePaid)}
-              currentPricePerShare={Number(lotOrder.lastPrice)}
-            />
-          ))}
+          <h3 className="font-semibold">
+            Cost Basis Reset Strategy - Matched Pair
+          </h3>
+          <p className="text-(--color-text-secondary) mt-1 text-sm">
+            Pair these trades to reset your cost basis with minimal tax impact
+          </p>
         </div>
-      </div>
 
-      <div className="border-t p-4 text-white">
-        {/* Single Execute Trade button for the entire pair */}
         <div className="flex justify-center gap-2">
           {isHarvested && harvestItem.sourceLot.harvestId ? (
-            <div className="flex items-center gap-2">
-              <Button
-                variant="destructive"
-                size="icon"
-                onClick={() => {
-                  toast.promise(
-                    deleteHarvests({
-                      variables: {
-                        ids: [harvestItem.sourceLot.harvestId!],
-                      },
-                    }),
-                    {
-                      loading: 'Removing from harvest...',
-                      success: 'Harvest removed successfully',
-                      error: 'Failed to remove from harvest',
-                    }
-                  );
-                }}
-              >
-                <Trash2 className="size-4" />
-              </Button>
-            </div>
+            <Button
+              variant="destructive"
+              size="icon"
+              onClick={() => {
+                toast.promise(
+                  deleteHarvests({
+                    variables: {
+                      ids: [harvestItem.sourceLot.harvestId!],
+                    },
+                  }),
+                  {
+                    loading: 'Removing from harvest...',
+                    success: 'Harvest removed successfully',
+                    error: 'Failed to remove from harvest',
+                  }
+                );
+              }}
+            >
+              <Trash2 className="size-4" />
+            </Button>
           ) : null}
           <Button
             variant="default"
             disabled={isHarvested}
-            className="w-full max-w-xl"
             onClick={() => {
               toast.promise(
                 createHarvest({
@@ -143,6 +111,34 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
             <Wheat className="mr-2 size-4" />
             {isHarvested ? 'Harvested' : 'Add to Harvest'}
           </Button>
+        </div>
+      </div>
+
+      <div className="divide-border grid gap-0 divide-x md:grid-cols-2">
+        {/* Gain Position */}
+        <LotOrderCard
+          assetSymbol={harvestItem.sourceLot.symbol ?? ''}
+          pAndL={Number(harvestItem.sourceLot.gainTotal)}
+          shares={Number(harvestItem.sourceLot.remainingQty)}
+          totalShares={Number(harvestItem.sourceLot.remainingQty)}
+          aquiredDate={new Date(harvestItem.sourceLot.acquiredDate)}
+          costBasisPerShare={Number(harvestItem.sourceLot.price)}
+          currentPricePerShare={Number(harvestItem.sourceLot.lastPrice)}
+        />
+
+        <div>
+          {harvestItem.matchedLotOrders.map(lotOrder => (
+            <LotOrderCard
+              key={lotOrder.id}
+              assetSymbol={lotOrder.assetSymbol}
+              pAndL={Number(lotOrder.gainTotal)}
+              shares={Number(lotOrder.quantity)}
+              totalShares={Number(lotOrder.quantity)}
+              aquiredDate={new Date(lotOrder.acquiredDate)}
+              costBasisPerShare={Number(lotOrder.pricePaid)}
+              currentPricePerShare={Number(lotOrder.lastPrice)}
+            />
+          ))}
         </div>
       </div>
     </Card>

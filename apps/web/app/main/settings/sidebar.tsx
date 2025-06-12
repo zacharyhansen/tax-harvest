@@ -28,7 +28,7 @@ export function Sidebar() {
     },
     {
       href: TypedRoutes.settingsPayment(),
-      label: 'Payment',
+      label: 'Payment Plans',
       icon: CreditCard,
     },
   ];
