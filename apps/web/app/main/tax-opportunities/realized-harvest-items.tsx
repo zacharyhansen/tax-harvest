@@ -73,7 +73,7 @@ export default function RealizedHarvestItems({
         ))}
 
         {/* Blurred teaser card */}
-        {finiteHarvest.totalHarvestLots >= finiteHarvest?.lotsCurrent.length &&
+        {finiteHarvest.totalHarvestLots > finiteHarvest?.lotsCurrent.length &&
           [1, 2, 3].map(i => (
             <Link href={TypedRoutes.settingsPayment()}>
               <div key={i} className="relative rounded-lg">

@@ -25,11 +25,11 @@ export function HarvestingOpportunityCard({
   harvestType,
   netPosition,
 }: HarvestingOpportunityCardProps) {
-  const [createHarvest] = useCreateHarvestMutation({
+  const [createHarvest, { loading: isHarvesting }] = useCreateHarvestMutation({
     refetchQueries: [FiniteHarvestDocument],
     awaitRefetchQueries: true,
   });
-  const [deleteHarvests] = useDeleteHarvestsMutation({
+  const [deleteHarvests, { loading: isDeleting }] = useDeleteHarvestsMutation({
     refetchQueries: [FiniteHarvestDocument],
     awaitRefetchQueries: true,
   });
@@ -96,6 +96,7 @@ export function HarvestingOpportunityCard({
               <Button
                 variant="destructive"
                 size="icon"
+                loading={isDeleting}
                 onClick={() => {
                   toast.promise(
                     deleteHarvests({
@@ -138,6 +139,7 @@ export function HarvestingOpportunityCard({
                 }
               )
             }
+            loading={isHarvesting}
           >
             <Wheat className="mr-2 size-4" />{' '}
             {isHarvested ? 'Harvested' : 'Add to Harvests'}

@@ -118,9 +118,6 @@ importers:
       '@clerk/clerk-sdk-node':
         specifier: ^5.0.15
         version: 5.1.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(svix@1.65.0)
-      '@clerk/nextjs':
-        specifier: ^6.19.1
-        version: 6.19.1(next@15.3.2(@babel/core@7.27.1)(babel-plugin-react-compiler@0.0.0-experimental-6067d4e-20240925)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(svix@1.65.0)
       '@fastify/static':
         specifier: ^8.1.0
         version: 8.1.1
@@ -24136,8 +24133,8 @@ snapshots:
 
   magicast@0.3.5:
     dependencies:
-      '@babel/parser': 7.27.2
-      '@babel/types': 7.27.1
+      '@babel/parser': 7.27.5
+      '@babel/types': 7.27.6
       source-map-js: 1.2.1
 
   make-dir@4.0.0:

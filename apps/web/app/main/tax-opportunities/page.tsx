@@ -127,14 +127,16 @@ export default function TaxOpportunitiesPage() {
 
       {/* Portfolio Status */}
       <motion.div
-        className="mb-8 flex flex-col items-start"
+        className="bg-background top-16 z-10 mb-8 flex flex-col items-start md:sticky"
         variants={itemVariants}
       >
         <div className="bg-muted/70 w-full overflow-hidden rounded-xl border-0">
-          <div className="bg-muted flex items-center justify-between border-b p-4">
+          <div className="bg-muted flex items-center justify-between border-b p-3 sm:p-4">
             <div className="flex items-center space-x-2">
-              <BarChart3 className="text-primary size-5" />
-              <h2 className="text-lg font-semibold">Portfolio Tax Status</h2>
+              <BarChart3 className="text-primary size-4 sm:size-5" />
+              <h2 className="text-base font-semibold sm:text-lg">
+                Portfolio Tax Status
+              </h2>
             </div>
             <TooltipProvider>
               <Tooltip>
@@ -151,17 +153,17 @@ export default function TaxOpportunitiesPage() {
           </div>
 
           <motion.div
-            className="grid grid-cols-3 divide-x"
+            className="grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0"
             variants={itemVariants}
           >
-            <motion.div className="p-6" variants={itemVariants}>
+            <motion.div className="px-4 pt-2 sm:px-6" variants={itemVariants}>
               <div className="flex flex-col">
-                <span className="text-muted-foreground text-sm">
+                <span className="text-muted-foreground text-xs sm:text-sm">
                   Net Position (Realized P & L)
                 </span>
                 <span
                   className={cn(
-                    'mt-1 text-3xl font-semibold',
+                    'mt-1 text-2xl font-semibold sm:text-3xl',
                     MoneyUtil.colored(
                       data?.finiteHarvest.summary.realized.gainTotal ?? 0
                     )
@@ -175,14 +177,14 @@ export default function TaxOpportunitiesPage() {
               </div>
             </motion.div>
 
-            <motion.div className="p-6" variants={itemVariants}>
+            <motion.div className="px-4 pt-2 sm:px-6" variants={itemVariants}>
               <div className="flex flex-col">
-                <span className="text-muted-foreground text-sm">
+                <span className="text-muted-foreground text-xs sm:text-sm">
                   Unrealized Gain
                 </span>
                 <span
                   className={cn(
-                    'mt-1 text-3xl font-semibold',
+                    'mt-1 text-2xl font-semibold sm:text-3xl',
                     MoneyUtil.colored(
                       data?.finiteHarvest.summary.unrealized.gainTotal ?? 0
                     )
@@ -198,14 +200,14 @@ export default function TaxOpportunitiesPage() {
               </div>
             </motion.div>
 
-            <motion.div className="p-6" variants={itemVariants}>
+            <motion.div className="px-4 pt-2 sm:px-6" variants={itemVariants}>
               <div className="flex flex-col">
-                <span className="text-muted-foreground text-sm">
+                <span className="text-muted-foreground text-xs sm:text-sm">
                   Unrealized Loss
                 </span>
                 <span
                   className={cn(
-                    'mt-1 text-3xl font-semibold',
+                    'mt-1 text-2xl font-semibold sm:text-3xl',
                     MoneyUtil.colored(
                       data?.finiteHarvest.summary.unrealized.lossTotal ?? 0
                     )
@@ -223,17 +225,20 @@ export default function TaxOpportunitiesPage() {
             </motion.div>
           </motion.div>
           <motion.div
-            className="grid grid-cols-3 divide-x"
+            className="bg-muted/30 grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0"
             variants={itemVariants}
           >
-            <motion.div className="px-6 py-0" variants={itemVariants}>
+            <motion.div
+              className="px-4 py-2 sm:px-6 sm:py-3"
+              variants={itemVariants}
+            >
               <div className="flex flex-col">
-                <span className="text-muted-foreground text-xs">
+                <span className="text-muted-foreground text-[10px] sm:text-xs">
                   after current harvest
                 </span>
                 <span
                   className={cn(
-                    'mt-1 font-semibold',
+                    'mt-0.5 text-sm font-semibold sm:text-base',
                     MoneyUtil.colored(
                       data?.finiteHarvest.summary.includingCurrentHarvest
                         .realized.gainTotal ?? 0
@@ -251,14 +256,17 @@ export default function TaxOpportunitiesPage() {
               </div>
             </motion.div>
 
-            <motion.div className="px-6 py-0" variants={itemVariants}>
+            <motion.div
+              className="px-4 py-2 sm:px-6 sm:py-3"
+              variants={itemVariants}
+            >
               <div className="flex flex-col">
-                <span className="text-muted-foreground text-xs">
+                <span className="text-muted-foreground text-[10px] sm:text-xs">
                   after current harvest
                 </span>
                 <span
                   className={cn(
-                    'mt-1 font-semibold',
+                    'mt-0.5 text-sm font-semibold sm:text-base',
                     MoneyUtil.colored(
                       data?.finiteHarvest.summary.includingCurrentHarvest
                         .unrealized.gainTotal ?? 0
@@ -276,14 +284,17 @@ export default function TaxOpportunitiesPage() {
               </div>
             </motion.div>
 
-            <motion.div className="px-6 py-0" variants={itemVariants}>
+            <motion.div
+              className="px-4 py-2 sm:px-6 sm:py-3"
+              variants={itemVariants}
+            >
               <div className="flex flex-col">
-                <span className="text-muted-foreground text-xs">
+                <span className="text-muted-foreground text-[10px] sm:text-xs">
                   after current harvest
                 </span>
                 <span
                   className={cn(
-                    'mt-1 font-semibold',
+                    'mt-0.5 text-sm font-semibold sm:text-base',
                     MoneyUtil.colored(
                       data?.finiteHarvest.summary.includingCurrentHarvest
                         .unrealized.lossTotal ?? 0
