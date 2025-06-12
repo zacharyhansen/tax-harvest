@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import type { Metadata } from 'next';
 import './globals.css';
+import { clientEnvironment } from '~/lib/env/clientEnvironment';
 
 const inter = Inter({
   display: 'swap',
@@ -28,9 +29,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Tax Harvest Team' }],
   creator: 'Tax Harvest',
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-  ),
+  metadataBase: new URL(clientEnvironment.NEXT_PUBLIC_APP_URL),
   openGraph: {
     type: 'website',
     locale: 'en_US',
