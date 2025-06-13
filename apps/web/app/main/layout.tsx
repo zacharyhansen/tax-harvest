@@ -46,10 +46,6 @@ export default function MainLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const breadcrumbs = useBreadcrumbs() || [];
-  const pathname = usePathname();
-  const clerkUser = useUser();
-
   return (
     <ClerkProvider>
       <NextTopLoader color="#faa700" showSpinner={false} />
