@@ -1,10 +1,8 @@
-import type { ReactNode } from 'react';
 import MediaProvider from '@repo/ui/providers/media-provider';
 import { ThemeProvider } from '@repo/ui/providers/theme-provider';
 import { Tractor } from 'lucide-react';
 import Link from 'next/link';
 import { AuthInfoOverlay } from './auth/components/AuthInfoOverlay';
-import { SignUp } from '@clerk/nextjs';
 
 export default function SignInPage() {
   return (
@@ -15,7 +13,7 @@ export default function SignInPage() {
             <Link href="/en">
               <div className="relative z-20 flex items-center text-lg font-medium text-white">
                 <Tractor className="mr-2" />
-                TaxHarvest.ai
+                TaxHarvest.AI
               </div>
             </Link>
             <div className="absolute inset-0 m-8 rounded-3xl bg-[url('/images/coverImage.jpg')] bg-cover bg-center bg-no-repeat">
@@ -23,7 +21,23 @@ export default function SignInPage() {
             </div>
           </div>
           <div className="flex justify-center lg:p-8">
-            <SignUp />
+            <div className="bg-primary group relative overflow-hidden rounded-xl transition-all hover:scale-105 hover:shadow-xl">
+              <Link
+                href="/auth/signup"
+                className="bg-background relative flex flex-col items-center gap-4 rounded-xl px-8 py-6"
+              >
+                <div className="bg-primary/20 absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100" />
+                <h3 className="text-primary text-2xl font-bold">
+                  Join TaxHarvest.AI Today
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  Start optimizing your tax strategy with AI
+                </p>
+                <button className="bg-primary text-primary-foreground mt-2 rounded-lg px-6 py-2 shadow-lg transition-all hover:shadow-xl">
+                  Get Started →
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </ThemeProvider>

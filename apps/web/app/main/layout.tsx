@@ -7,6 +7,7 @@ import {
   SignedOut,
   UserButton,
   useUser,
+  ClerkProvider,
 } from '@clerk/nextjs';
 import {
   Breadcrumb,
@@ -22,7 +23,6 @@ import MediaProvider from '@repo/ui/providers/media-provider';
 import { ThemeProvider } from '@repo/ui/providers/theme-provider';
 import { capitalCase } from 'change-case';
 import { usePathname } from 'next/navigation';
-
 import { AddAccountButton } from '~/modules/account/add-account/add-account.button';
 import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs';
 // import { PlaidConnectButton } from '~/modules/plaid'
@@ -33,10 +33,10 @@ import { NavTree } from './nav-tree';
 import ThemeButton from './theme-button';
 import { UserProvider } from './user.provider';
 import { SetUpStatus, usePortfolioSummaryQuery } from '~/generated/gql';
-import { Button } from '@repo/ui/components/button';
 import LoadingScreen from './loading';
 import { ModuleRegistry } from 'ag-grid-community';
 import { AllCommunityModule } from 'ag-grid-community';
+import NextTopLoader from 'nextjs-toploader';
 
 // Ag grid register
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -51,7 +51,8 @@ export default function MainLayout({
   const clerkUser = useUser();
 
   return (
-    <>
+    <ClerkProvider>
+      <NextTopLoader color="#faa700" showSpinner={false} />
       <ApolloProviderWrapper>
         <SignedIn>
           <MediaProvider>
@@ -69,7 +70,7 @@ export default function MainLayout({
           <RedirectToSignIn />
         </SignedOut>
       </ApolloProviderWrapper>
-    </>
+    </ClerkProvider>
   );
 }
 

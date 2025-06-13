@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -85,15 +85,7 @@ export default function LocaleLayout({
       className={cn(inter.className, 'max-h-screen overflow-y-hidden')}
       suppressHydrationWarning={true}
     >
-      <body>
-        <NextTopLoader color="#faa700" showSpinner={false} />
-
-        <ClerkProvider
-          afterSignOutUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
-        >
-          <ClerkLoaded>{children}</ClerkLoaded>
-        </ClerkProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
