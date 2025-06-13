@@ -6,6 +6,8 @@ fragment HarvestTableItem on Harvest {
   createdAt
   amount
   label
+  afterWashRevertDate
+  notify
   createdBy {
     id
     # eslint-disable-next-line @graphql-eslint/known-fragment-names
@@ -35,9 +37,7 @@ fragment HarvestTransactionItemTableItem on HarvestTransactionItem {
 
 fragment HarvestTransactionTableItem on HarvestTransaction {
   id
-  revertDate
   revert
-  notify
   counterTransaction
   harvestTransactionItem {
     id

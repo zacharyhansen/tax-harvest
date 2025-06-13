@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { Button } from '@repo/ui/components/button'
+import { Button } from '@repo/ui/components/button';
 // import { useState } from 'react';
 import {
   Card,
@@ -8,12 +8,20 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card'
-import { toast } from '@repo/ui/components/toast-sonner'
-import { Receipt } from 'lucide-react'
+} from '@repo/ui/components/card';
+import { toast } from '@repo/ui/components/toast-sonner';
+import { Receipt } from 'lucide-react';
 
-import { useUpdateAllAssetPricesMutation } from '~/generated/gql'
-import { PageWrapper } from '~/modules/layout'
+import {
+  HarvestNotificationFrequency,
+  useSendNotificationsByFrequencyMutation,
+  useSendWashSaleNotificationsForDateMutation,
+  useUpdateAllAssetPricesMutation,
+} from '~/generated/gql';
+import { PageWrapper } from '~/modules/layout';
+import { DatePicker } from '@repo/ui/components/date-picker';
+import { useState } from 'react';
+import { Combobox } from '@repo/ui/components/combobox';
 
 export default function ActionsPage() {
   // const [updateHourlyAssetPrices] = useUpdateHourlyAssetPricesMutation();
@@ -27,7 +35,16 @@ export default function ActionsPage() {
   // const [to, setTo] = useState(new Date());
   // const [startDate, setStartDate] = useState(new Date());
 
-  const [updateAllAssetPrices] = useUpdateAllAssetPricesMutation()
+  const [date, setDate] = useState(new Date());
+  const [frequency, setFrequency] = useState(
+    HarvestNotificationFrequency.Daily
+  );
+
+  const [updateAllAssetPrices] = useUpdateAllAssetPricesMutation();
+  const [sendWashSaleNotificationsForDate] =
+    useSendWashSaleNotificationsForDateMutation();
+  const [sendNotificationsByFrequency] =
+    useSendNotificationsByFrequencyMutation();
 
   return (
     <PageWrapper
@@ -53,14 +70,94 @@ export default function ActionsPage() {
                   error: 'There was an error',
                   loading: 'Loading',
                   success: 'Prices updated',
-                })
+                });
               }}
             >
               Refresh Prices
             </Button>
           </CardContent>
         </Card>
-
+        <Card className="flex flex-col">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Receipt className="size-6" />
+              Send Wash Sale Notifications
+            </CardTitle>
+            <CardDescription>
+              Send wash sale notifications for a specific date
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2 align-bottom">
+            <DatePicker
+              label="Date"
+              mode="single"
+              value={date}
+              onChange={date => setDate(date)}
+              required
+            />
+            <Button
+              className="w-full"
+              onClick={() => {
+                toast.promise(
+                  sendWashSaleNotificationsForDate({
+                    variables: {
+                      date,
+                    },
+                  }),
+                  {
+                    error: 'There was an error',
+                    loading: 'Loading',
+                    success: 'Notifications sent',
+                  }
+                );
+              }}
+            >
+              Send Notifications
+            </Button>
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Receipt className="size-6" />
+              Send Notifications By Frequency
+            </CardTitle>
+            <CardDescription>Send notifications by frequency</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2 align-bottom">
+            <Combobox
+              options={Object.values(HarvestNotificationFrequency).map(
+                frequency => ({
+                  label: frequency,
+                  value: frequency,
+                })
+              )}
+              value={frequency}
+              onChange={value =>
+                setFrequency(value as HarvestNotificationFrequency)
+              }
+            />
+            <Button
+              className="w-full"
+              onClick={() => {
+                toast.promise(
+                  sendNotificationsByFrequency({
+                    variables: {
+                      frequency,
+                    },
+                  }),
+                  {
+                    error: 'There was an error',
+                    loading: 'Loading',
+                    success: 'Notifications sent',
+                  }
+                );
+              }}
+            >
+              Send Notifications
+            </Button>
+          </CardContent>
+        </Card>
         {/* <Card className="flex flex-col">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -152,5 +249,5 @@ export default function ActionsPage() {
         </Card> */}
       </div>
     </PageWrapper>
-  )
+  );
 }

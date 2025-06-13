@@ -18,7 +18,7 @@ export class EmailController {
   constructor(
     private readonly emailService: EmailService,
     private readonly cronTasksService: CronTasksService,
-  ) {}
+  ) { }
 
   @Post('test')
   @Public()
@@ -28,6 +28,7 @@ export class EmailController {
   }
 
   @Post('test/portfolio-notifications')
+  @Public()
   async sendTestPortfolioNotifications(@Body() { frequency }: TestPortfolioNotificationDto) {
     await this.cronTasksService.sendPortfolioNotifications(frequency)
     return { message: `Portfolio notifications for ${frequency} frequency triggered successfully` }

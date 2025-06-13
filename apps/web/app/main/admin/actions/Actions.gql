@@ -9,3 +9,13 @@
 mutation UpdateAllAssetPrices {
   updateAllAssetPrices
 }
+
+mutation SendWashSaleNotificationsForDate($date: DateTime!) {
+  sendWashSaleNotificationsForDate(date: $date)
+}
+
+mutation SendNotificationsByFrequency(
+  $frequency: HarvestNotificationFrequency!
+) {
+  sendNotificationsByFrequency(frequency: $frequency)
+}

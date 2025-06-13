@@ -1,0 +1,7 @@
+query PortfolioNotificationSettings {
+  portfolioAuthed {
+    id
+    notificationFrequency
+    endOfYearTaxOpportunityNotification
+  }
+}

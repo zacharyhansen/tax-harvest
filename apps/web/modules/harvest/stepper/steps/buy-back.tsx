@@ -1,67 +1,67 @@
-import type { HarvestTransactionRecordFragment } from '~/generated/gql'
-import { Badge } from '@repo/ui/components/badge'
-import { Button } from '@repo/ui/components/button'
-import { Calendar } from '@repo/ui/components/calendar'
+import type { HarvestTransactionRecordFragment } from '~/generated/gql';
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+import { Calendar } from '@repo/ui/components/calendar';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card'
-import { Input } from '@repo/ui/components/input'
-import { Label } from '@repo/ui/components/label'
+} from '@repo/ui/components/card';
+import { Input } from '@repo/ui/components/input';
+import { Label } from '@repo/ui/components/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@repo/ui/components/popover'
-import { Switch } from '@repo/ui/components/switch'
+} from '@repo/ui/components/popover';
+import { Switch } from '@repo/ui/components/switch';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@repo/ui/components/tabs'
+} from '@repo/ui/components/tabs';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@repo/ui/components/tooltip'
-import { cn } from '@repo/ui/utils'
-import { capitalCase } from 'change-case'
-import { CalendarIcon, Info } from 'lucide-react'
+} from '@repo/ui/components/tooltip';
+import { cn } from '@repo/ui/utils';
+import { capitalCase } from 'change-case';
+import { CalendarIcon, Info } from 'lucide-react';
 
-import { useState } from 'react'
+import { useState } from 'react';
 import {
   HarvestType,
   useHarvestQuery,
   useUpdateHarvestMutation,
   useUpdateHarvestTransactionMutation,
-} from '~/generated/gql'
-import { LoadingPage } from '~/modules/utility-components'
-import { Format, formatDate } from '~/modules/utils'
+} from '~/generated/gql';
+import { LoadingPage } from '~/modules/utility-components';
+import { Format, formatDate } from '~/modules/utils';
 
 type ConfigureProps = {
-  harvestId: string
-}
+  harvestId: string;
+};
 
 export default function BuyBack({ harvestId }: ConfigureProps) {
-  const [label, setLabel] = useState<string>('')
+  const [label, setLabel] = useState<string>('');
   const { data, loading } = useHarvestQuery({
-    onCompleted: (data) => {
-      setLabel(data.harvest.label)
+    onCompleted: data => {
+      setLabel(data.harvest.label);
     },
     variables: {
       id: harvestId,
     },
-  })
+  });
 
-  const [mutate] = useUpdateHarvestMutation()
+  const [mutate] = useUpdateHarvestMutation();
 
   if (loading || !data) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
   if (data.harvest.type === HarvestType.ReduceCostBasis) {
@@ -94,7 +94,7 @@ export default function BuyBack({ harvestId }: ConfigureProps) {
           </TabsContent>
         </Tabs>
       </div>
-    )
+    );
   }
 
   return (
@@ -102,10 +102,10 @@ export default function BuyBack({ harvestId }: ConfigureProps) {
       <Label>Harvest Name</Label>
       <Input
         value={label}
-        onChange={(e) => {
-          setLabel(e.target.value)
+        onChange={e => {
+          setLabel(e.target.value);
         }}
-        onBlur={(e) => {
+        onBlur={e => {
           void mutate({
             variables: {
               data: {
@@ -115,41 +115,39 @@ export default function BuyBack({ harvestId }: ConfigureProps) {
               },
               id: data.harvest.id,
             },
-          })
+          });
         }}
       />
       {data.harvest.harvestTransactions?.map(transaction => (
         <TransactionCard key={transaction.id} transaction={transaction} />
       ))}
     </div>
-  )
+  );
 }
 
 function TransactionCard({
   transaction,
 }: {
-  transaction: HarvestTransactionRecordFragment
+  transaction: HarvestTransactionRecordFragment;
 }) {
-  const [updateTransaction] = useUpdateHarvestTransactionMutation()
+  const [updateTransaction] = useUpdateHarvestTransactionMutation();
 
   return (
     <Card key={transaction.id}>
       <CardHeader className="py-3">
         <CardTitle className="flex flex-row items-center">
           <div>
-            {transaction.replacementTransactionItem
-              ? (
-                  <div className="flex items-center justify-center">
-                    <span>
-                      {`${capitalCase(
-                        transaction.replacementTransactionItem.orderType,
-                      )} ${transaction.replacementTransactionItem.asset.symbol} for ${transaction.harvestTransactionItem.asset.symbol}`}
-                    </span>
-                  </div>
-                )
-              : (
-                  transaction.harvestTransactionItem.asset.symbol
-                )}
+            {transaction.replacementTransactionItem ? (
+              <div className="flex items-center justify-center">
+                <span>
+                  {`${capitalCase(
+                    transaction.replacementTransactionItem.orderType
+                  )} ${transaction.replacementTransactionItem.asset.symbol} for ${transaction.harvestTransactionItem.asset.symbol}`}
+                </span>
+              </div>
+            ) : (
+              transaction.harvestTransactionItem.asset.symbol
+            )}
           </div>
           <Badge className="ml-4">
             {/* {Format.money(
@@ -164,7 +162,7 @@ function TransactionCard({
           <div className="p-2 px-4">
             <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-muted-foreground text-sm font-medium">
                   Action
                 </p>
                 <p className="font-semibold text-red-600">
@@ -172,36 +170,35 @@ function TransactionCard({
                 </p>
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-muted-foreground text-sm font-medium">
                   Security
                 </p>
                 <p className="font-semibold">
-                  {transaction.harvestTransactionItem.asset.symbol}
-                  {' '}
+                  {transaction.harvestTransactionItem.asset.symbol}{' '}
                   {formatDate(
-                    transaction.harvestTransactionItem.lotSold?.acquiredDate,
+                    transaction.harvestTransactionItem.lotSold?.acquiredDate
                   )}
                 </p>
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-muted-foreground text-sm font-medium">
                   Quantity
                 </p>
                 <p>{transaction.harvestTransactionItem.quantity}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-muted-foreground text-sm font-medium">
                   Price
                 </p>
                 <p>
                   {Format.money(
-                    transaction.harvestTransactionItem.asset.lastPrice,
+                    transaction.harvestTransactionItem.asset.lastPrice
                   )}
                 </p>
               </div>
 
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-muted-foreground text-sm font-medium">
                   Total Change
                 </p>
                 <p>
@@ -213,61 +210,59 @@ function TransactionCard({
               </div>
             </div>
           </div>
-          {transaction.replacementTransactionItem
-            ? (
-                <div className="p-2 px-4">
-                  <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Action
-                      </p>
-                      <p className=" font-semibold text-green-600 dark:text-green-400">
-                        {capitalCase(
-                          transaction.replacementTransactionItem.orderType,
-                        )}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Security
-                      </p>
-                      <p className=" font-semibold">
-                        {transaction.replacementTransactionItem.asset.symbol}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Quantity
-                      </p>
-                      <p>{transaction.replacementTransactionItem.quantity}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Price
-                      </p>
-                      <p>
-                        {Format.money(
-                          transaction.replacementTransactionItem.asset.lastPrice,
-                        )}
-                      </p>
-                    </div>
+          {transaction.replacementTransactionItem ? (
+            <div className="p-2 px-4">
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
+                <div>
+                  <p className="text-muted-foreground text-sm font-medium">
+                    Action
+                  </p>
+                  <p className="font-semibold text-green-600 dark:text-green-400">
+                    {capitalCase(
+                      transaction.replacementTransactionItem.orderType
+                    )}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-sm font-medium">
+                    Security
+                  </p>
+                  <p className="font-semibold">
+                    {transaction.replacementTransactionItem.asset.symbol}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-sm font-medium">
+                    Quantity
+                  </p>
+                  <p>{transaction.replacementTransactionItem.quantity}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-sm font-medium">
+                    Price
+                  </p>
+                  <p>
+                    {Format.money(
+                      transaction.replacementTransactionItem.asset.lastPrice
+                    )}
+                  </p>
+                </div>
 
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        Total Change
-                      </p>
-                      <p>
-                        {/* {Format.money(
+                <div>
+                  <p className="text-muted-foreground text-sm font-medium">
+                    Total Change
+                  </p>
+                  <p>
+                    {/* {Format.money(
                       Number(
                         transaction.replacementTransactionItem.asset.lastPrice
                       ) * transaction.replacementTransactionItem.quantity
                     )} */}
-                      </p>
-                    </div>
-                  </div>
+                  </p>
                 </div>
-              )
-            : null}
+              </div>
+            </div>
+          ) : null}
         </div>
       </CardContent>
       <CardFooter className="flex items-center justify-end space-x-2 py-1">
@@ -276,8 +271,7 @@ function TransactionCard({
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="flex items-center space-x-2">
-                  <Info className="inline size-4" />
-                  {' '}
+                  <Info className="inline size-4" />{' '}
                   <span className="text-sm font-normal">
                     Do you want to repurchase these positions?
                   </span>
@@ -304,7 +298,7 @@ function TransactionCard({
                   },
                   id: transaction.id,
                 },
-              })
+              });
             }}
             aria-label="Toggle buyback reminder"
           />
@@ -314,8 +308,7 @@ function TransactionCard({
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="flex items-center space-x-2">
-                  <Info className="size-4" />
-                  {' '}
+                  <Info className="size-4" />{' '}
                   <span className="text-sm font-normal">
                     Notify me on repurchase date?
                   </span>
@@ -329,7 +322,7 @@ function TransactionCard({
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <Switch
+          {/* <Switch
             checked={transaction.notify}
             onCheckedChange={() => {
               void updateTransaction({
@@ -341,34 +334,34 @@ function TransactionCard({
                   },
                   id: transaction.id,
                 },
-              })
+              });
             }}
             aria-label="Toggle buyback reminder"
-          />
+          /> */}
         </div>
-        <Popover>
+        {/* <Popover>
           <PopoverTrigger
             asChild
             disabled={!(transaction.revert || transaction.notify)}
-          >
-            <Button
+          > */}
+        {/* <Button
               variant="outline"
               className={cn(
                 'w-[240px] pl-3 text-left font-normal',
-                !(transaction.revert || transaction.notify)
-                && 'text-muted-foreground',
+                !(transaction.revert || transaction.notify) &&
+                  'text-muted-foreground'
               )}
-            >
-              {/* {transaction.revertDate ? (
+            > */}
+        {/* {transaction.revertDate ? (
                 DateFormatter.format(transaction.revertDate, 'PPP')
               ) : (
                 <span>Pick a date</span>
               )} */}
-              <CalendarIcon className="ml-auto size-4 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
+        {/* <CalendarIcon className="ml-auto size-4 opacity-50" />
+            </Button> */}
+        {/* </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start"> */}
+        {/* <Calendar
               mode="single"
               selected={transaction.revertDate}
               onSelect={(value) => {
@@ -384,10 +377,10 @@ function TransactionCard({
                 })
               }}
               disabled={date => date < new Date()}
-            />
-          </PopoverContent>
-        </Popover>
+            /> */}
+        {/* </PopoverContent>
+        </Popover> */}
       </CardFooter>
     </Card>
-  )
+  );
 }

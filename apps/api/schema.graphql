@@ -4572,6 +4572,11 @@ enum Graph {
 
 type Harvest {
   _count: HarvestCount!
+
+  """
+  Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
+  """
+  afterWashRevertDate: DateTime!
   amount: Decimal!
   createdAt: DateTime!
   createdBy: User!
@@ -4581,6 +4586,9 @@ type Harvest {
   harvestTransactions: [HarvestTransaction!]
   id: ID!
   label: String!
+
+  """should notify be performed"""
+  notify: Boolean!
   portfolio: Portfolio!
   portfolioId: String!
   step: HarvestStep!
@@ -4599,12 +4607,14 @@ type HarvestCount {
 
 type HarvestCountAggregate {
   _all: Int!
+  afterWashRevertDate: Int!
   amount: Int!
   createdAt: Int!
   createdById: Int!
   date: Int!
   id: Int!
   label: Int!
+  notify: Int!
   portfolioId: Int!
   step: Int!
   type: Int!
@@ -4612,11 +4622,13 @@ type HarvestCountAggregate {
 }
 
 input HarvestCreateManyCreatedByInput {
+  afterWashRevertDate: DateTime
   amount: Decimal!
   createdAt: DateTime
   date: DateTime
   id: String
   label: String!
+  notify: Boolean
   portfolioId: String!
   step: HarvestStep
   type: HarvestType!
@@ -4629,12 +4641,14 @@ input HarvestCreateManyCreatedByInputEnvelope {
 }
 
 input HarvestCreateManyPortfolioInput {
+  afterWashRevertDate: DateTime
   amount: Decimal!
   createdAt: DateTime
   createdById: String!
   date: DateTime
   id: String
   label: String!
+  notify: Boolean
   step: HarvestStep
   type: HarvestType!
   updatedAt: DateTime
@@ -4692,6 +4706,7 @@ input HarvestCreateOrConnectWithoutPortfolioInput {
 }
 
 input HarvestCreateWithoutCreatedByInput {
+  afterWashRevertDate: DateTime
   amount: Decimal!
   createdAt: DateTime
   date: DateTime
@@ -4699,6 +4714,7 @@ input HarvestCreateWithoutCreatedByInput {
   harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
   id: String
   label: String!
+  notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
   step: HarvestStep
   type: HarvestType!
@@ -4706,6 +4722,7 @@ input HarvestCreateWithoutCreatedByInput {
 }
 
 input HarvestCreateWithoutHarvestTransactionItemsInput {
+  afterWashRevertDate: DateTime
   amount: Decimal!
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutHarvestInput!
@@ -4713,6 +4730,7 @@ input HarvestCreateWithoutHarvestTransactionItemsInput {
   harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
   id: String
   label: String!
+  notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
   step: HarvestStep
   type: HarvestType!
@@ -4720,6 +4738,7 @@ input HarvestCreateWithoutHarvestTransactionItemsInput {
 }
 
 input HarvestCreateWithoutHarvestTransactionsInput {
+  afterWashRevertDate: DateTime
   amount: Decimal!
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutHarvestInput!
@@ -4727,6 +4746,7 @@ input HarvestCreateWithoutHarvestTransactionsInput {
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutHarvestInput
   id: String
   label: String!
+  notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
   step: HarvestStep
   type: HarvestType!
@@ -4734,6 +4754,7 @@ input HarvestCreateWithoutHarvestTransactionsInput {
 }
 
 input HarvestCreateWithoutPortfolioInput {
+  afterWashRevertDate: DateTime
   amount: Decimal!
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutHarvestInput!
@@ -4742,6 +4763,7 @@ input HarvestCreateWithoutPortfolioInput {
   harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
   id: String
   label: String!
+  notify: Boolean
   step: HarvestStep
   type: HarvestType!
   updatedAt: DateTime
@@ -4773,12 +4795,14 @@ type HarvestLotOrder {
 }
 
 type HarvestMaxAggregate {
+  afterWashRevertDate: DateTime
   amount: Decimal
   createdAt: DateTime
   createdById: String
   date: DateTime
   id: String
   label: String
+  notify: Boolean
   portfolioId: String
   step: HarvestStep
   type: HarvestType
@@ -4786,12 +4810,14 @@ type HarvestMaxAggregate {
 }
 
 type HarvestMinAggregate {
+  afterWashRevertDate: DateTime
   amount: Decimal
   createdAt: DateTime
   createdById: String
   date: DateTime
   id: String
   label: String
+  notify: Boolean
   portfolioId: String
   step: HarvestStep
   type: HarvestType
@@ -4833,12 +4859,14 @@ input HarvestScalarWhereInput {
   AND: [HarvestScalarWhereInput!]
   NOT: [HarvestScalarWhereInput!]
   OR: [HarvestScalarWhereInput!]
+  afterWashRevertDate: DateTimeFilter
   amount: DecimalFilter
   createdAt: DateTimeFilter
   createdById: StringFilter
   date: DateTimeFilter
   id: UuidFilter
   label: StringFilter
+  notify: BoolFilter
   portfolioId: UuidFilter
   step: EnumHarvestStepFilter
   type: EnumHarvestTypeFilter
@@ -4856,7 +4884,7 @@ type HarvestSumAggregate {
 }
 
 """
-Represent the logical unit of a harvest transactiont whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy
+Represent the logical unit of a harvest transaction whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy
 """
 type HarvestTransaction {
   """
@@ -4869,9 +4897,6 @@ type HarvestTransaction {
   harvestTransactionItem: HarvestTransactionItem!
   harvestTransactionItemId: String!
   id: ID!
-
-  """Should we notify post wash window? No date is no notify"""
-  notify: Boolean!
   portfolio: Portfolio!
   portfolioId: String!
   replacementTransactionItem: HarvestTransactionItem
@@ -4879,11 +4904,6 @@ type HarvestTransaction {
 
   """should revert transactions be performed"""
   revert: Boolean!
-
-  """
-  Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
-  """
-  revertDate: DateTime!
   revertHarvestTransactionItem: HarvestTransactionItem
   revertHarvestTransactionItemId: String
   revertReplacementTransactionItem: HarvestTransactionItem
@@ -4898,11 +4918,9 @@ type HarvestTransactionCountAggregate {
   harvestId: Int!
   harvestTransactionItemId: Int!
   id: Int!
-  notify: Int!
   portfolioId: Int!
   replacementTransactionItemId: Int!
   revert: Int!
-  revertDate: Int!
   revertHarvestTransactionItemId: Int!
   revertReplacementTransactionItemId: Int!
   updatedAt: Int!
@@ -4913,11 +4931,9 @@ input HarvestTransactionCreateManyHarvestInput {
   createdAt: DateTime
   harvestTransactionItemId: String!
   id: String
-  notify: Boolean
   portfolioId: String!
   replacementTransactionItemId: String
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItemId: String
   revertReplacementTransactionItemId: String
   updatedAt: DateTime
@@ -4934,10 +4950,8 @@ input HarvestTransactionCreateManyPortfolioInput {
   harvestId: String!
   harvestTransactionItemId: String!
   id: String
-  notify: Boolean
   replacementTransactionItemId: String
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItemId: String
   revertReplacementTransactionItemId: String
   updatedAt: DateTime
@@ -5021,11 +5035,9 @@ input HarvestTransactionCreateWithoutHarvestInput {
   createdAt: DateTime
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
   id: String
-  notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertHarvestTransactionInput
   revertReplacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertReplacementTransactionInput
   updatedAt: DateTime
@@ -5036,11 +5048,9 @@ input HarvestTransactionCreateWithoutHarvestTransactionItemInput {
   createdAt: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   id: String
-  notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertHarvestTransactionInput
   revertReplacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertReplacementTransactionInput
   updatedAt: DateTime
@@ -5052,10 +5062,8 @@ input HarvestTransactionCreateWithoutPortfolioInput {
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
   id: String
-  notify: Boolean
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertHarvestTransactionInput
   revertReplacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertReplacementTransactionInput
   updatedAt: DateTime
@@ -5067,10 +5075,8 @@ input HarvestTransactionCreateWithoutReplacementTransactionItemInput {
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
   id: String
-  notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertHarvestTransactionInput
   revertReplacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertReplacementTransactionInput
   updatedAt: DateTime
@@ -5082,11 +5088,9 @@ input HarvestTransactionCreateWithoutRevertHarvestTransactionItemInput {
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
   id: String
-  notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
-  revertDate: DateTime
   revertReplacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertReplacementTransactionInput
   updatedAt: DateTime
 }
@@ -5097,11 +5101,9 @@ input HarvestTransactionCreateWithoutRevertReplacementTransactionItemInput {
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
   id: String
-  notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertHarvestTransactionInput
   updatedAt: DateTime
 }
@@ -6064,11 +6066,9 @@ type HarvestTransactionMaxAggregate {
   harvestId: String
   harvestTransactionItemId: String
   id: String
-  notify: Boolean
   portfolioId: String
   replacementTransactionItemId: String
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItemId: String
   revertReplacementTransactionItemId: String
   updatedAt: DateTime
@@ -6080,11 +6080,9 @@ type HarvestTransactionMinAggregate {
   harvestId: String
   harvestTransactionItemId: String
   id: String
-  notify: Boolean
   portfolioId: String
   replacementTransactionItemId: String
   revert: Boolean
-  revertDate: DateTime
   revertHarvestTransactionItemId: String
   revertReplacementTransactionItemId: String
   updatedAt: DateTime
@@ -6104,11 +6102,9 @@ input HarvestTransactionScalarWhereInput {
   harvestId: UuidFilter
   harvestTransactionItemId: UuidFilter
   id: UuidFilter
-  notify: BoolFilter
   portfolioId: UuidFilter
   replacementTransactionItemId: UuidNullableFilter
   revert: BoolFilter
-  revertDate: DateTimeFilter
   revertHarvestTransactionItemId: UuidNullableFilter
   revertReplacementTransactionItemId: UuidNullableFilter
   updatedAt: DateTimeFilter
@@ -6120,11 +6116,9 @@ input HarvestTransactionUpdateInput {
   harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput
   harvestTransactionItem: HarvestTransactionItemUpdateOneRequiredWithoutHarvestTransactionNestedInput
   id: StringFieldUpdateOperationsInput
-  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput
   replacementTransactionItem: HarvestTransactionItemUpdateOneWithoutReplacementTransactionNestedInput
   revert: BoolFieldUpdateOperationsInput
-  revertDate: DateTimeFieldUpdateOperationsInput
   revertHarvestTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertHarvestTransactionNestedInput
   revertReplacementTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertReplacementTransactionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6134,9 +6128,7 @@ input HarvestTransactionUpdateManyMutationInput {
   counterTransaction: BoolFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  notify: BoolFieldUpdateOperationsInput
   revert: BoolFieldUpdateOperationsInput
-  revertDate: DateTimeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -6253,11 +6245,9 @@ input HarvestTransactionUpdateWithoutHarvestInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvestTransactionItem: HarvestTransactionItemUpdateOneRequiredWithoutHarvestTransactionNestedInput
   id: StringFieldUpdateOperationsInput
-  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput
   replacementTransactionItem: HarvestTransactionItemUpdateOneWithoutReplacementTransactionNestedInput
   revert: BoolFieldUpdateOperationsInput
-  revertDate: DateTimeFieldUpdateOperationsInput
   revertHarvestTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertHarvestTransactionNestedInput
   revertReplacementTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertReplacementTransactionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6268,11 +6258,9 @@ input HarvestTransactionUpdateWithoutHarvestTransactionItemInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput
   id: StringFieldUpdateOperationsInput
-  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput
   replacementTransactionItem: HarvestTransactionItemUpdateOneWithoutReplacementTransactionNestedInput
   revert: BoolFieldUpdateOperationsInput
-  revertDate: DateTimeFieldUpdateOperationsInput
   revertHarvestTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertHarvestTransactionNestedInput
   revertReplacementTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertReplacementTransactionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6284,10 +6272,8 @@ input HarvestTransactionUpdateWithoutPortfolioInput {
   harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput
   harvestTransactionItem: HarvestTransactionItemUpdateOneRequiredWithoutHarvestTransactionNestedInput
   id: StringFieldUpdateOperationsInput
-  notify: BoolFieldUpdateOperationsInput
   replacementTransactionItem: HarvestTransactionItemUpdateOneWithoutReplacementTransactionNestedInput
   revert: BoolFieldUpdateOperationsInput
-  revertDate: DateTimeFieldUpdateOperationsInput
   revertHarvestTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertHarvestTransactionNestedInput
   revertReplacementTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertReplacementTransactionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6299,10 +6285,8 @@ input HarvestTransactionUpdateWithoutReplacementTransactionItemInput {
   harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput
   harvestTransactionItem: HarvestTransactionItemUpdateOneRequiredWithoutHarvestTransactionNestedInput
   id: StringFieldUpdateOperationsInput
-  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput
   revert: BoolFieldUpdateOperationsInput
-  revertDate: DateTimeFieldUpdateOperationsInput
   revertHarvestTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertHarvestTransactionNestedInput
   revertReplacementTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertReplacementTransactionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6314,11 +6298,9 @@ input HarvestTransactionUpdateWithoutRevertHarvestTransactionItemInput {
   harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput
   harvestTransactionItem: HarvestTransactionItemUpdateOneRequiredWithoutHarvestTransactionNestedInput
   id: StringFieldUpdateOperationsInput
-  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput
   replacementTransactionItem: HarvestTransactionItemUpdateOneWithoutReplacementTransactionNestedInput
   revert: BoolFieldUpdateOperationsInput
-  revertDate: DateTimeFieldUpdateOperationsInput
   revertReplacementTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertReplacementTransactionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
@@ -6329,11 +6311,9 @@ input HarvestTransactionUpdateWithoutRevertReplacementTransactionItemInput {
   harvest: HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput
   harvestTransactionItem: HarvestTransactionItemUpdateOneRequiredWithoutHarvestTransactionNestedInput
   id: StringFieldUpdateOperationsInput
-  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput
   replacementTransactionItem: HarvestTransactionItemUpdateOneWithoutReplacementTransactionNestedInput
   revert: BoolFieldUpdateOperationsInput
-  revertDate: DateTimeFieldUpdateOperationsInput
   revertHarvestTransactionItem: HarvestTransactionItemUpdateOneWithoutRevertHarvestTransactionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
@@ -6385,13 +6365,11 @@ input HarvestTransactionWhereInput {
   harvestTransactionItem: HarvestTransactionItemScalarRelationFilter
   harvestTransactionItemId: UuidFilter
   id: UuidFilter
-  notify: BoolFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   replacementTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
   replacementTransactionItemId: UuidNullableFilter
   revert: BoolFilter
-  revertDate: DateTimeFilter
   revertHarvestTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
   revertHarvestTransactionItemId: UuidNullableFilter
   revertReplacementTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
@@ -6410,13 +6388,11 @@ input HarvestTransactionWhereUniqueInput {
   harvestTransactionItem: HarvestTransactionItemScalarRelationFilter
   harvestTransactionItemId: String
   id: String
-  notify: BoolFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   replacementTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
   replacementTransactionItemId: String
   revert: BoolFilter
-  revertDate: DateTimeFilter
   revertHarvestTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
   revertHarvestTransactionItemId: String
   revertReplacementTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
@@ -6432,6 +6408,7 @@ enum HarvestType {
 }
 
 input HarvestUpdateInput {
+  afterWashRevertDate: DateTimeFieldUpdateOperationsInput
   amount: DecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutHarvestNestedInput
@@ -6440,6 +6417,7 @@ input HarvestUpdateInput {
   harvestTransactions: HarvestTransactionUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
+  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
@@ -6447,11 +6425,13 @@ input HarvestUpdateInput {
 }
 
 input HarvestUpdateManyMutationInput {
+  afterWashRevertDate: DateTimeFieldUpdateOperationsInput
   amount: DecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
+  notify: BoolFieldUpdateOperationsInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6532,6 +6512,7 @@ input HarvestUpdateWithWhereUniqueWithoutPortfolioInput {
 }
 
 input HarvestUpdateWithoutCreatedByInput {
+  afterWashRevertDate: DateTimeFieldUpdateOperationsInput
   amount: DecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   date: DateTimeFieldUpdateOperationsInput
@@ -6539,6 +6520,7 @@ input HarvestUpdateWithoutCreatedByInput {
   harvestTransactions: HarvestTransactionUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
+  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
@@ -6546,6 +6528,7 @@ input HarvestUpdateWithoutCreatedByInput {
 }
 
 input HarvestUpdateWithoutHarvestTransactionItemsInput {
+  afterWashRevertDate: DateTimeFieldUpdateOperationsInput
   amount: DecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutHarvestNestedInput
@@ -6553,6 +6536,7 @@ input HarvestUpdateWithoutHarvestTransactionItemsInput {
   harvestTransactions: HarvestTransactionUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
+  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
@@ -6560,6 +6544,7 @@ input HarvestUpdateWithoutHarvestTransactionItemsInput {
 }
 
 input HarvestUpdateWithoutHarvestTransactionsInput {
+  afterWashRevertDate: DateTimeFieldUpdateOperationsInput
   amount: DecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutHarvestNestedInput
@@ -6567,6 +6552,7 @@ input HarvestUpdateWithoutHarvestTransactionsInput {
   harvestTransactionItems: HarvestTransactionItemUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
+  notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
@@ -6574,6 +6560,7 @@ input HarvestUpdateWithoutHarvestTransactionsInput {
 }
 
 input HarvestUpdateWithoutPortfolioInput {
+  afterWashRevertDate: DateTimeFieldUpdateOperationsInput
   amount: DecimalFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutHarvestNestedInput
@@ -6582,6 +6569,7 @@ input HarvestUpdateWithoutPortfolioInput {
   harvestTransactions: HarvestTransactionUpdateManyWithoutHarvestNestedInput
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
+  notify: BoolFieldUpdateOperationsInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6615,6 +6603,7 @@ input HarvestWhereInput {
   AND: [HarvestWhereInput!]
   NOT: [HarvestWhereInput!]
   OR: [HarvestWhereInput!]
+  afterWashRevertDate: DateTimeFilter
   amount: DecimalFilter
   createdAt: DateTimeFilter
   createdBy: UserScalarRelationFilter
@@ -6624,6 +6613,7 @@ input HarvestWhereInput {
   harvestTransactions: HarvestTransactionListRelationFilter
   id: UuidFilter
   label: StringFilter
+  notify: BoolFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   step: EnumHarvestStepFilter
@@ -6635,6 +6625,7 @@ input HarvestWhereUniqueInput {
   AND: [HarvestWhereInput!]
   NOT: [HarvestWhereInput!]
   OR: [HarvestWhereInput!]
+  afterWashRevertDate: DateTimeFilter
   amount: DecimalFilter
   createdAt: DateTimeFilter
   createdBy: UserScalarRelationFilter
@@ -6644,6 +6635,7 @@ input HarvestWhereUniqueInput {
   harvestTransactions: HarvestTransactionListRelationFilter
   id: String
   label: StringFilter
+  notify: BoolFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   step: EnumHarvestStepFilter
@@ -9325,6 +9317,8 @@ type Mutation {
 
   """Remove User from Portfolio"""
   removeUserFromPortfolio(userId: String!): Boolean!
+  sendNotificationsByFrequency(frequency: HarvestNotificationFrequency!): Boolean!
+  sendWashSaleNotificationsForDate(date: DateTime!): Boolean!
 
   """Set up plaid auth connection and create accounts from syncing plaid"""
   setAccessTokenAndSyncAccounts(metaData: PlaidLinkOnSuccessMetadata!, publicToken: String!): [Account!]!
@@ -9750,6 +9744,7 @@ type Portfolio {
   createdAt: DateTime!
   createdBy: User!
   createdById: String!
+  endOfYearTaxOpportunityNotification: Boolean!
   files: [File!]
 
   """How often should we harvest for the portfolio"""
@@ -9826,6 +9821,7 @@ type PortfolioCountAggregate {
   _all: Int!
   createdAt: Int!
   createdById: Int!
+  endOfYearTaxOpportunityNotification: Int!
   harvestCycleWeeks: Int!
   harvestShareDollarThreshold: Int!
   harvestTickerBucketDollarSizeLong: Int!
@@ -9844,6 +9840,7 @@ input PortfolioCreateInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -9871,6 +9868,7 @@ input PortfolioCreateInput {
 
 input PortfolioCreateManyCreatedByInput {
   createdAt: DateTime
+  endOfYearTaxOpportunityNotification: Boolean
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
   harvestTickerBucketDollarSizeLong: Decimal
@@ -10048,6 +10046,7 @@ input PortfolioCreateWithoutAccountsInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10077,6 +10076,7 @@ input PortfolioCreateWithoutAuthConnectionsInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10106,6 +10106,7 @@ input PortfolioCreateWithoutCreatedByInput {
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10136,6 +10137,7 @@ input PortfolioCreateWithoutFilesInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
   harvestTickerBucketDollarSizeLong: Decimal
@@ -10165,6 +10167,7 @@ input PortfolioCreateWithoutHarvestTransactionInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10194,6 +10197,7 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10223,6 +10227,7 @@ input PortfolioCreateWithoutHarvestsInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10252,6 +10257,7 @@ input PortfolioCreateWithoutLotChangeLogInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10281,6 +10287,7 @@ input PortfolioCreateWithoutLotTransactionBatchInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10310,6 +10317,7 @@ input PortfolioCreateWithoutLotsInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10339,6 +10347,7 @@ input PortfolioCreateWithoutPositionsInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10368,6 +10377,7 @@ input PortfolioCreateWithoutRealizedPAndLInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10397,6 +10407,7 @@ input PortfolioCreateWithoutTransactionsInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10426,6 +10437,7 @@ input PortfolioCreateWithoutUsersOnPortfoliosInput {
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
   files: FileCreateNestedManyWithoutPortfolioInput
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10459,6 +10471,7 @@ input PortfolioListRelationFilter {
 type PortfolioMaxAggregate {
   createdAt: DateTime
   createdById: String
+  endOfYearTaxOpportunityNotification: Boolean
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
   harvestTickerBucketDollarSizeLong: Decimal
@@ -10475,6 +10488,7 @@ type PortfolioMaxAggregate {
 type PortfolioMinAggregate {
   createdAt: DateTime
   createdById: String
+  endOfYearTaxOpportunityNotification: Boolean
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
   harvestTickerBucketDollarSizeLong: Decimal
@@ -10504,6 +10518,7 @@ input PortfolioScalarWhereInput {
   OR: [PortfolioScalarWhereInput!]
   createdAt: DateTimeFilter
   createdById: StringFilter
+  endOfYearTaxOpportunityNotification: BoolFilter
   harvestCycleWeeks: IntFilter
   harvestShareDollarThreshold: DecimalFilter
   harvestTickerBucketDollarSizeLong: DecimalFilter
@@ -10562,6 +10577,7 @@ input PortfolioUpdateInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10589,6 +10605,7 @@ input PortfolioUpdateInput {
 
 input PortfolioUpdateManyMutationInput {
   createdAt: DateTimeFieldUpdateOperationsInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
   harvestTickerBucketDollarSizeLong: DecimalFieldUpdateOperationsInput
@@ -10799,6 +10816,7 @@ input PortfolioUpdateWithoutAccountsInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10828,6 +10846,7 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10857,6 +10876,7 @@ input PortfolioUpdateWithoutCreatedByInput {
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10887,6 +10907,7 @@ input PortfolioUpdateWithoutFilesInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
   harvestTickerBucketDollarSizeLong: DecimalFieldUpdateOperationsInput
@@ -10916,6 +10937,7 @@ input PortfolioUpdateWithoutHarvestTransactionInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10945,6 +10967,7 @@ input PortfolioUpdateWithoutHarvestTransactionItemInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -10974,6 +10997,7 @@ input PortfolioUpdateWithoutHarvestsInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11003,6 +11027,7 @@ input PortfolioUpdateWithoutLotChangeLogInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11032,6 +11057,7 @@ input PortfolioUpdateWithoutLotTransactionBatchInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11061,6 +11087,7 @@ input PortfolioUpdateWithoutLotsInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11090,6 +11117,7 @@ input PortfolioUpdateWithoutPositionsInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11119,6 +11147,7 @@ input PortfolioUpdateWithoutRealizedPAndLInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11148,6 +11177,7 @@ input PortfolioUpdateWithoutTransactionsInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11177,6 +11207,7 @@ input PortfolioUpdateWithoutUsersOnPortfoliosInput {
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
   files: FileUpdateManyWithoutPortfolioNestedInput
   harvestCycleWeeks: IntFieldUpdateOperationsInput
   harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
@@ -11294,6 +11325,7 @@ input PortfolioWhereInput {
   createdAt: DateTimeFilter
   createdBy: UserScalarRelationFilter
   createdById: StringFilter
+  endOfYearTaxOpportunityNotification: BoolFilter
   files: FileListRelationFilter
   harvestCycleWeeks: IntFilter
   harvestShareDollarThreshold: DecimalFilter
@@ -11328,6 +11360,7 @@ input PortfolioWhereUniqueInput {
   createdAt: DateTimeFilter
   createdBy: UserScalarRelationFilter
   createdById: StringFilter
+  endOfYearTaxOpportunityNotification: BoolFilter
   files: FileListRelationFilter
   harvestCycleWeeks: IntFilter
   harvestShareDollarThreshold: DecimalFilter

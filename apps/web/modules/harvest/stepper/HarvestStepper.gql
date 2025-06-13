@@ -79,8 +79,6 @@ fragment HarvestTransactionItemRecord on HarvestTransactionItem {
 fragment HarvestTransactionRecord on HarvestTransaction {
   id
   revert
-  notify
-  revertDate
   counterTransaction
   harvestTransactionItem {
     id

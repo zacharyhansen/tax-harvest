@@ -80,7 +80,7 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
           ) : null}
           <Button
             variant="default"
-            disabled={isHarvested}
+            disabled={isHarvested || isHarvesting}
             onClick={() => {
               toast.promise(
                 createHarvest({
@@ -108,7 +108,6 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
                 }
               );
             }}
-            loading={isHarvesting}
           >
             <Wheat className="mr-2 size-4" />
             {isHarvested ? 'Harvested' : 'Add to Harvest'}

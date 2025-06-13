@@ -12,7 +12,7 @@ import { GqlExecutionContext } from '@nestjs/graphql'
 export class ClerkGuard implements CanActivate {
   private readonly logger = new Logger()
 
-  constructor(private reflector: Reflector) {}
+  constructor(private reflector: Reflector) { }
 
   // Convert to graphql context
   getRequest(context: ExecutionContext) {
@@ -36,10 +36,11 @@ export class ClerkGuard implements CanActivate {
 
     try {
       const gqlContext = GqlExecutionContext.create(context).getContext()
-
-      await clerkClient.verifyToken(
+      const clerk_claims = await clerkClient.verifyToken(
         gqlContext.req.headers.authorization.split(' ')[1],
       )
+
+      gqlContext.req.clerk_claims = clerk_claims
     }
     catch (error) {
       this.logger.error(error)

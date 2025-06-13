@@ -107,6 +107,7 @@ export class HarvestService {
           date,
           portfolioId,
           type: harvestType,
+          afterWashRevertDate: this.getPostWashSaleDate(new Date()),
           label: `${new Date().toLocaleDateString('en-US')} ${currentLotsWithReplacement.map(item => `${item.selectedQuantity} x ${item.symbol}`).join(', ')} for ${currentLotsWithReplacement.map(item => `${item.replacementHarvestTransactionItem.quantity} x ${item.replacementHarvestTransactionItem.assetSymbol}`).join(', ')}`,
         },
       })
@@ -164,7 +165,6 @@ export class HarvestService {
                   replacementTransactionItemId:
                     replacementTransactionItems[i]?.id,
                   revert: replacementTransactionItems.length > 0,
-                  revertDate: this.getPostWashSaleDate(new Date()),
                   portfolioId,
                 }
               }),

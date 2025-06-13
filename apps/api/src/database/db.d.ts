@@ -174,12 +174,14 @@ export interface File {
 }
 
 export interface Harvest {
+  afterWashRevertDate: Generated<Timestamp>;
   amount: Numeric;
   createdAt: Generated<Timestamp>;
   createdById: string;
   date: Generated<Timestamp>;
   id: Generated<string>;
   label: string;
+  notify: Generated<boolean>;
   portfolioId: string;
   step: Generated<"COMPLETE" | "CONFIGURE" | "REVIEW">;
   type: "CAPTURE_GAINS_TAX_FREE" | "REDUCE_COST_BASIS" | "REDUCE_TAXES" | "SELL";
@@ -192,11 +194,9 @@ export interface HarvestTransaction {
   harvestId: string;
   harvestTransactionItemId: string;
   id: Generated<string>;
-  notify: Generated<boolean>;
   portfolioId: string;
   replacementTransactionItemId: string | null;
   revert: Generated<boolean>;
-  revertDate: Generated<Timestamp>;
   revertHarvestTransactionItemId: string | null;
   revertReplacementTransactionItemId: string | null;
   updatedAt: Generated<Timestamp>;
@@ -318,6 +318,7 @@ export interface LotTransactionBatch {
 export interface Portfolio {
   createdAt: Generated<Timestamp>;
   createdById: string;
+  endOfYearTaxOpportunityNotification: Generated<boolean>;
   harvestCycleWeeks: Generated<number>;
   harvestShareDollarThreshold: Generated<Numeric>;
   harvestTickerBucketDollarSizeLong: Generated<Numeric>;

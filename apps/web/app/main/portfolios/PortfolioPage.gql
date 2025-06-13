@@ -8,6 +8,8 @@ fragment PortfolioTableItem on Portfolio {
   createdById
   id
   name
+  endOfYearTaxOpportunityNotification
+  notificationFrequency
   accounts {
     id
     status

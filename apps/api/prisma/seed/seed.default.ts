@@ -40,7 +40,7 @@ async function main() {
 
   const { User, Portfolio } = await seed.User(() => [
     {
-      email: 'zach@seed.com',
+      email: 'zachary.r.hansen@gmail.com',
       id: mainUserId,
       name: '(seed) Zachary Hansen',
       AuthConnection: () => [
@@ -56,7 +56,7 @@ async function main() {
               {
                 role: 'ADMIN',
                 userId: mainUserId,
-                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                createdById: mainUserId,
               },
             ],
             Account: () => [
@@ -66,8 +66,7 @@ async function main() {
                 provider: 'ETRADE',
                 subType: 'investment',
                 institution: AccountInstitution.BROKERAGE,
-                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                createdById: mainUserId,
                 Lot: () => exampleLots,
                 skipSetup: taxAdvantadedSubTypes.has('investment'),
               },
@@ -77,8 +76,7 @@ async function main() {
                 provider: 'ETRADE',
                 subType: 'roth',
                 institution: AccountInstitution.BROKERAGE,
-                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                createdById: mainUserId,
                 Lot: () => exampleLots,
                 skipSetup: taxAdvantadedSubTypes.has('roth'),
               },
@@ -97,7 +95,7 @@ async function main() {
               {
                 role: 'ADMIN',
                 userId: mainUserId,
-                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                createdById: mainUserId,
               },
             ],
             Account: () => [
@@ -107,8 +105,7 @@ async function main() {
                 provider: 'ETRADE',
                 subType: 'investment',
                 institution: AccountInstitution.BROKERAGE,
-                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                createdById: mainUserId,
                 Lot: () => exampleLots,
                 skipSetup: true,
                 RealizedPAndL: () => [
@@ -133,7 +130,7 @@ async function main() {
               {
                 role: 'ADMIN',
                 userId: mainUserId,
-                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                createdById: mainUserId,
               },
             ],
             Account: () => [
@@ -143,8 +140,7 @@ async function main() {
                 provider: 'ETRADE',
                 subType: 'investment',
                 institution: AccountInstitution.BROKERAGE,
-                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
-                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                createdById: mainUserId,
                 Lot: () => exampleLots,
                 skipSetup: true,
                 RealizedPAndL: () => [
@@ -169,7 +165,7 @@ async function main() {
               {
                 role: 'ADMIN',
                 userId: mainUserId,
-                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                createdById: mainUserId,
               },
             ],
             Account: () => [
@@ -179,7 +175,7 @@ async function main() {
                 provider: 'ETRADE',
                 subType: 'investment',
                 institution: AccountInstitution.BROKERAGE,
-                createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
+                createdById: mainUserId,
                 // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
                 Lot: () => exampleLots,
                 skipSetup: true,
@@ -196,14 +192,38 @@ async function main() {
       ],
     },
     {
-      email: 'troy@seed.com',
+      email: 'tbolus17@gmail.com',
       id: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
       name: '(seed) Troy Bolus',
       AuthConnection: () => [
         {
           source: 'LOCAL',
           type: 'OAUTH_1',
-          externalId: crypto.randomUUID(),
+          externalId: context => copycat.uuid(context.seed),
+          Portfolio: {
+            name: 'Ignore this one',
+            id: context => copycat.uuid(context.seed),
+            createdById: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
+            UsersOnPortfolios: () => [],
+            Account: () => [
+              {
+                type: 'investment',
+                name: 'Etrade Example',
+                provider: 'ETRADE',
+                subType: 'investment',
+                institution: AccountInstitution.BROKERAGE,
+                createdById: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
+                Lot: () => exampleLots,
+                skipSetup: true,
+                RealizedPAndL: () => [
+                  {
+                    shortTerm: '-3000',
+                    year: new Date().getFullYear(),
+                  },
+                ],
+              },
+            ],
+          },
         },
       ],
     },

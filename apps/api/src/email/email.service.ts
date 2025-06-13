@@ -1,7 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { HarvestNotificationFrequency } from '@prisma/client'
+import { HarvestNotificationFrequency, OrderType } from '@prisma/client'
 import { MailService } from '@sendgrid/mail'
+import Decimal from 'decimal.js'
 
 export interface SendEmailParams {
   to: string
@@ -99,9 +100,43 @@ export class EmailService {
       <h1>Portfolio Update: ${portfolioName}</h1>
       <p>This is your ${frequency.toLowerCase()} portfolio update from TaxHarvest.</p>
       <p>Log in to your account to view the latest tax harvesting opportunities and portfolio performance.</p>
-      <a href="${this.configService.get('CLIENT_ORIGIN')}/portfolios">View Your Portfolios</a>
+      <a href="${this.configService.get('CLIENT_ORIGIN')}/main/home">View Your Portfolios</a>
     `
+    await this.sendEmail({
+      to,
+      subject,
+      html,
+    })
+  }
 
+  async sendWashSaleNotification(
+    to: string,
+    portfolioData: {
+      id: string
+      name: string
+    },
+    harvestTransactionItemData: {
+      id: string
+      assetSymbol: string
+      orderType: OrderType
+      date: Date
+      quantity: Decimal
+    }[],
+  ): Promise<void> {
+    const subject = `TaxHarvest Wash Sale Notification - ${portfolioData.name}`
+    const html = `
+      <h1>Wash Sale Notification: ${portfolioData.name}</h1>
+      <p>This is your wash sale notification from TaxHarvest. The following transactions have left the wash sale window and can be reverted:</p>
+      <ul>
+        ${harvestTransactionItemData.map(item => `
+          <li>
+            ${item.assetSymbol} ${item.orderType} ${item.date} ${item.quantity.toString()} Shares
+          </li>
+        `).join('')}
+      </ul>
+      <p>Log in to your account to view the latest tax harvesting opportunities and portfolio performance.</p>
+      <a href="${this.configService.get('CLIENT_ORIGIN')}/main/home">View Your Portfolios</a>
+    `
     await this.sendEmail({
       to,
       subject,

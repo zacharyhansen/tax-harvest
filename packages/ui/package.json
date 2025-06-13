@@ -108,7 +108,7 @@
     "react-day-picker": "^9.4.4",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
-    "react-hook-form": "^7.54.2",
+    "react-hook-form": "^7.57.0",
     "react-medium-image-zoom": "^5.2.12",
     "react-phone-number-input": "^3.4.10",
     "sonner": "^1.5.0",

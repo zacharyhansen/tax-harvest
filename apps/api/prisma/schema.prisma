@@ -69,20 +69,21 @@ model Portfolio {
   harvestCycleWeeks Int      @default(4)
 
   /// Minimum p and l for a lot to be considered harvestable
-  minimumLotPAndL                    Decimal                      @default(100) @db.Decimal(14, 2)
+  minimumLotPAndL                     Decimal                      @default(100) @db.Decimal(14, 2)
   // Harvest Fields
   /// How much $ amount does a single share need to exceed to be a valid harvest share (i.e. shares with a p/l lower we shouldnt even care about)
-  harvestShareDollarThreshold        Decimal                      @default(".01") @db.Decimal(14, 2)
+  harvestShareDollarThreshold         Decimal                      @default(".01") @db.Decimal(14, 2)
   /// As we iterate through different tickets to build a harvest, how much $ should we target before moving to the next one
-  harvestTickerBucketDollarSizeLong  Decimal                      @default(1500) @db.Decimal(14, 2)
+  harvestTickerBucketDollarSizeLong   Decimal                      @default(1500) @db.Decimal(14, 2)
   /// How much is a valid bucket (otherwise a ticker is considered 'slop')
-  harvestTickerBucketLowerLimitLong  Decimal                      @default(".01") @db.Decimal(14, 2)
+  harvestTickerBucketLowerLimitLong   Decimal                      @default(".01") @db.Decimal(14, 2)
   /// As we iterate through different tickets to build a harvest, how much $ should we target before moving to the next one
-  harvestTickerBucketDollarSizeShort Decimal                      @default(1000) @db.Decimal(14, 2)
+  harvestTickerBucketDollarSizeShort  Decimal                      @default(1000) @db.Decimal(14, 2)
   /// How much is a valid bucket (otherwise a ticker is considered 'slop')
-  harvestTickerBucketLowerLimitShort Decimal                      @default(".01") @db.Decimal(14, 2)
+  harvestTickerBucketLowerLimitShort  Decimal                      @default(".01") @db.Decimal(14, 2)
   // notification settings
-  notificationFrequency              HarvestNotificationFrequency @default(WEEKLY)
+  notificationFrequency               HarvestNotificationFrequency @default(WEEKLY)
+  endOfYearTaxOpportunityNotification Boolean                      @default(true)
 
   accounts               Account[]
   usersOnPortfolios      UsersOnPortfolios[]
@@ -115,26 +116,30 @@ enum HarvestStep {
 }
 
 model Harvest {
-  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @default(now()) @updatedAt
-  label       String
-  createdById String
-  portfolioId String      @db.Uuid
-  amount      Decimal     @db.Decimal(14, 4)
-  date        DateTime    @default(now())
-  type        HarvestType
-  step        HarvestStep @default(CONFIGURE)
+  id                  String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @default(now()) @updatedAt
+  label               String
+  createdById         String
+  portfolioId         String      @db.Uuid
+  amount              Decimal     @db.Decimal(14, 4)
+  date                DateTime    @default(now())
+  type                HarvestType
+  step                HarvestStep @default(CONFIGURE)
+  /// Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
+  afterWashRevertDate DateTime    @default(now())
+  /// should notify be performed
+  notify              Boolean     @default(true)
 
   createdBy               User                     @relation(fields: [createdById], references: [id], onDelete: Cascade)
   portfolio               Portfolio                @relation(fields: [portfolioId], references: [id])
   harvestTransactions     HarvestTransaction[]
   harvestTransactionItems HarvestTransactionItem[]
 
-  @@index([portfolioId])
+  @@index([portfolioId, afterWashRevertDate])
 }
 
-/// Represent the logical unit of a harvest transactiont whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy
+/// Represent the logical unit of a harvest transaction whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy
 model HarvestTransaction {
   id                                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt                          DateTime @default(now())
@@ -143,12 +148,8 @@ model HarvestTransaction {
   portfolioId                        String   @db.Uuid
   /// Is this transaction part of counter group of transactions for harvest (i.e. selling a gain to counter the loss that was selected)
   counterTransaction                 Boolean  @default(false)
-  /// Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
-  revertDate                         DateTime @default(now())
   /// should revert transactions be performed
   revert                             Boolean  @default(true)
-  /// Should we notify post wash window? No date is no notify
-  notify                             Boolean  @default(true)
   harvestTransactionItemId           String   @unique @db.Uuid
   replacementTransactionItemId       String?  @unique @db.Uuid
   revertHarvestTransactionItemId     String?  @unique @db.Uuid
@@ -160,6 +161,9 @@ model HarvestTransaction {
   replacementTransactionItem       HarvestTransactionItem? @relation(name: "replacementTransaction", fields: [replacementTransactionItemId], references: [id], onDelete: SetNull)
   revertHarvestTransactionItem     HarvestTransactionItem? @relation(name: "revertHarvestTransaction", fields: [revertHarvestTransactionItemId], references: [id], onDelete: Restrict)
   revertReplacementTransactionItem HarvestTransactionItem? @relation(name: "revertReplacementTransaction", fields: [revertReplacementTransactionItemId], references: [id], onDelete: SetNull)
+
+  @@index([portfolioId])
+  @@index([harvestId])
 }
 
 model HarvestTransactionItem {

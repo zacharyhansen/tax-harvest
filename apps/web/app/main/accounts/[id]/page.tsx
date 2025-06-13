@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import type { AccountItemFragment } from '~/generated/gql'
+import type { AccountItemFragment } from '~/generated/gql';
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@repo/ui/components/button'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@repo/ui/components/button';
 import {
   Card,
   CardContent,
@@ -11,33 +11,33 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@repo/ui/components/card'
-import { toast } from '@repo/ui/components/toast-sonner'
-import InputField from '@repo/ui/form-builder/fields/input.field'
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form'
-import { DollarSign } from 'lucide-react'
-import { use } from 'react'
-import { FormProvider } from 'react-hook-form'
+} from '@repo/ui/components/card';
+import { toast } from '@repo/ui/components/toast-sonner';
+import InputField from '@repo/ui/form-builder/fields/input.field';
+import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
+import { DollarSign } from 'lucide-react';
+import { use } from 'react';
+import { FormProvider } from 'react-hook-form';
 
-import { z } from 'zod'
+import { z } from 'zod';
 import {
   useAccountQuery,
   useUpdateAccountMutation,
   useUpdateAccountRealizedPAndLMutation,
-} from '~/generated/gql'
-import { EtradeCSVUpload } from '~/modules/fileUpload'
-import { PageWrapper } from '~/modules/layout'
-import { ErrorPage, LoadingPage } from '~/modules/utility-components'
-import { zodNumber } from '~/modules/utils/zod-utils'
+} from '~/generated/gql';
+import { EtradeCSVUpload } from '~/modules/fileUpload';
+import { PageWrapper } from '~/modules/layout';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { zodNumber } from '~/modules/utils/zod-utils';
 
 export default function AccountPage(props: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
-  const params = use(props.params)
-  const { id } = params
+  const params = use(props.params);
+  const { id } = params;
   const { data, error, loading } = useAccountQuery({
     variables: { id },
-  })
+  });
 
   if (error) {
     return (
@@ -45,18 +45,18 @@ export default function AccountPage(props: {
         message="Could not load account at this time. If this issue persists please
           contact support @support"
       />
-    )
+    );
   }
 
   if (loading || !data?.account) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
   return (
     <PageWrapper>
       <AccountForm account={data.account} />
     </PageWrapper>
-  )
+  );
 }
 
 const accountFormSchema = z.object({
@@ -65,21 +65,21 @@ const accountFormSchema = z.object({
   dividend: zodNumber,
   longTerm: zodNumber,
   shortTerm: zodNumber,
-})
+});
 
 function AccountForm({ account }: { account: AccountItemFragment }) {
   const [update, { loading }] = useUpdateAccountMutation({
     onError: () => {
-      toast.error('Unable to update account.')
+      toast.error('Unable to update account.');
     },
-  })
+  });
 
-  const [updateRealizedPAndL, { loading: loadingUpdateRealizedPAndL }]
-    = useUpdateAccountRealizedPAndLMutation({
+  const [updateRealizedPAndL, { loading: loadingUpdateRealizedPAndL }] =
+    useUpdateAccountRealizedPAndLMutation({
       onError: () => {
-        toast.error('Unable to update account.')
+        toast.error('Unable to update account.');
       },
-    })
+    });
 
   const { form, handleSubmit } = useStandardForm<
     z.infer<typeof accountFormSchema>
@@ -135,28 +135,28 @@ function AccountForm({ account }: { account: AccountItemFragment }) {
         ]).then(([updateAccount, updateRealizedPAndL]) => {
           form.reset({
             deferredLoss: Number(
-              updateRealizedPAndL.data?.updateRealizedPAndL.deferredLoss,
+              updateRealizedPAndL.data?.updateRealizedPAndL.deferredLoss
             ),
             description: updateAccount.data?.updateAccount.description,
             dividend: Number(
-              updateRealizedPAndL.data?.updateRealizedPAndL.dividend,
+              updateRealizedPAndL.data?.updateRealizedPAndL.dividend
             ),
             longTerm: Number(
-              updateRealizedPAndL.data?.updateRealizedPAndL.longTerm,
+              updateRealizedPAndL.data?.updateRealizedPAndL.longTerm
             ),
             shortTerm: Number(
-              updateRealizedPAndL.data?.updateRealizedPAndL.shortTerm,
+              updateRealizedPAndL.data?.updateRealizedPAndL.shortTerm
             ),
-          })
+          });
         }),
         {
           error: 'Error',
           loading: 'Saving',
           success: 'Saved',
-        },
-      )
+        }
+      );
     },
-  })
+  });
 
   return (
     <FormProvider {...form}>
@@ -219,5 +219,5 @@ function AccountForm({ account }: { account: AccountItemFragment }) {
         </form>
       </Card>
     </FormProvider>
-  )
+  );
 }

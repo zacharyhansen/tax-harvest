@@ -14,6 +14,8 @@ fragment PortfolioDetailItem on Portfolio {
   harvestTickerBucketLowerLimitLong
   harvestTickerBucketLowerLimitShort
   minimumLotPAndL
+  endOfYearTaxOpportunityNotification
+  notificationFrequency
   accounts {
     name
     id

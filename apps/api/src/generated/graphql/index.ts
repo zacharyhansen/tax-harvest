@@ -332,7 +332,8 @@ export enum PortfolioScalarFieldEnum {
     harvestTickerBucketLowerLimitLong = "harvestTickerBucketLowerLimitLong",
     harvestTickerBucketDollarSizeShort = "harvestTickerBucketDollarSizeShort",
     harvestTickerBucketLowerLimitShort = "harvestTickerBucketLowerLimitShort",
-    notificationFrequency = "notificationFrequency"
+    notificationFrequency = "notificationFrequency",
+    endOfYearTaxOpportunityNotification = "endOfYearTaxOpportunityNotification"
 }
 
 export enum LotTransactionBatchScalarFieldEnum {
@@ -439,9 +440,7 @@ export enum HarvestTransactionScalarFieldEnum {
     harvestId = "harvestId",
     portfolioId = "portfolioId",
     counterTransaction = "counterTransaction",
-    revertDate = "revertDate",
     revert = "revert",
-    notify = "notify",
     harvestTransactionItemId = "harvestTransactionItemId",
     replacementTransactionItemId = "replacementTransactionItemId",
     revertHarvestTransactionItemId = "revertHarvestTransactionItemId",
@@ -458,7 +457,9 @@ export enum HarvestScalarFieldEnum {
     amount = "amount",
     date = "date",
     type = "type",
-    step = "step"
+    step = "step",
+    afterWashRevertDate = "afterWashRevertDate",
+    notify = "notify"
 }
 
 export enum FileScalarFieldEnum {
@@ -22472,6 +22473,10 @@ export class HarvestCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     step?: true;
     @Field(() => Boolean, {nullable:true})
+    afterWashRevertDate?: true;
+    @Field(() => Boolean, {nullable:true})
+    notify?: true;
+    @Field(() => Boolean, {nullable:true})
     _all?: true;
 }
 
@@ -22498,6 +22503,10 @@ export class HarvestCountAggregate {
     @Field(() => Int, {nullable:false})
     step!: number;
     @Field(() => Int, {nullable:false})
+    afterWashRevertDate!: number;
+    @Field(() => Int, {nullable:false})
+    notify!: number;
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }
 
@@ -22523,6 +22532,10 @@ export class HarvestCountOrderByAggregateInput {
     type?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     step?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    notify?: `${SortOrder}`;
 }
 
 @ObjectType()
@@ -22564,6 +22577,10 @@ export class HarvestCreateManyCreatedByInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
 }
 
 @InputType()
@@ -22597,6 +22614,10 @@ export class HarvestCreateManyPortfolioInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
 }
 
 @InputType()
@@ -22623,6 +22644,10 @@ export class HarvestCreateManyInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
 }
 
 @InputType()
@@ -22743,6 +22768,10 @@ export class HarvestCreateWithoutCreatedByInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestsInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestsInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestsInput>;
@@ -22774,6 +22803,10 @@ export class HarvestCreateWithoutHarvestTransactionItemsInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutHarvestInput)
     createdBy!: InstanceType<typeof UserCreateNestedOneWithoutHarvestInput>;
@@ -22805,6 +22838,10 @@ export class HarvestCreateWithoutHarvestTransactionsInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutHarvestInput)
     createdBy!: InstanceType<typeof UserCreateNestedOneWithoutHarvestInput>;
@@ -22836,6 +22873,10 @@ export class HarvestCreateWithoutPortfolioInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutHarvestInput)
     createdBy!: InstanceType<typeof UserCreateNestedOneWithoutHarvestInput>;
@@ -22867,6 +22908,10 @@ export class HarvestCreateInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
     @Type(() => UserCreateNestedOneWithoutHarvestInput)
     createdBy!: InstanceType<typeof UserCreateNestedOneWithoutHarvestInput>;
@@ -22937,6 +22982,10 @@ export class HarvestGroupBy {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:false})
     step!: `${HarvestStep}`;
+    @Field(() => Date, {nullable:false})
+    afterWashRevertDate!: Date | string;
+    @Field(() => Boolean, {nullable:false})
+    notify!: boolean;
     @Field(() => HarvestCountAggregate, {nullable:true})
     _count?: InstanceType<typeof HarvestCountAggregate>;
     @Field(() => HarvestAvgAggregate, {nullable:true})
@@ -22984,6 +23033,10 @@ export class HarvestMaxAggregateInput {
     type?: true;
     @Field(() => Boolean, {nullable:true})
     step?: true;
+    @Field(() => Boolean, {nullable:true})
+    afterWashRevertDate?: true;
+    @Field(() => Boolean, {nullable:true})
+    notify?: true;
 }
 
 @ObjectType()
@@ -23008,6 +23061,10 @@ export class HarvestMaxAggregate {
     type?: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
 }
 
 @InputType()
@@ -23032,6 +23089,10 @@ export class HarvestMaxOrderByAggregateInput {
     type?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     step?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    notify?: `${SortOrder}`;
 }
 
 @InputType()
@@ -23056,6 +23117,10 @@ export class HarvestMinAggregateInput {
     type?: true;
     @Field(() => Boolean, {nullable:true})
     step?: true;
+    @Field(() => Boolean, {nullable:true})
+    afterWashRevertDate?: true;
+    @Field(() => Boolean, {nullable:true})
+    notify?: true;
 }
 
 @ObjectType()
@@ -23080,6 +23145,10 @@ export class HarvestMinAggregate {
     type?: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
 }
 
 @InputType()
@@ -23104,6 +23173,10 @@ export class HarvestMinOrderByAggregateInput {
     type?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     step?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    notify?: `${SortOrder}`;
 }
 
 @InputType()
@@ -23134,6 +23207,10 @@ export class HarvestOrderByWithAggregationInput {
     type?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     step?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    notify?: `${SortOrder}`;
     @Field(() => HarvestCountOrderByAggregateInput, {nullable:true})
     @Type(() => HarvestCountOrderByAggregateInput)
     _count?: InstanceType<typeof HarvestCountOrderByAggregateInput>;
@@ -23173,6 +23250,10 @@ export class HarvestOrderByWithRelationInput {
     type?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     step?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    notify?: `${SortOrder}`;
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
     @Type(() => UserOrderByWithRelationInput)
     createdBy?: InstanceType<typeof UserOrderByWithRelationInput>;
@@ -23229,6 +23310,10 @@ export class HarvestScalarWhereWithAggregatesInput {
     type?: InstanceType<typeof EnumHarvestTypeWithAggregatesFilter>;
     @Field(() => EnumHarvestStepWithAggregatesFilter, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepWithAggregatesFilter>;
+    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeWithAggregatesFilter>;
+    @Field(() => BoolWithAggregatesFilter, {nullable:true})
+    notify?: InstanceType<typeof BoolWithAggregatesFilter>;
 }
 
 @InputType()
@@ -23263,6 +23348,10 @@ export class HarvestScalarWhereInput {
     type?: InstanceType<typeof EnumHarvestTypeFilter>;
     @Field(() => EnumHarvestStepFilter, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    notify?: InstanceType<typeof BoolFilter>;
 }
 
 @InputType()
@@ -23337,6 +23426,10 @@ export class HarvestUncheckedCreateWithoutCreatedByInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput>;
@@ -23369,6 +23462,10 @@ export class HarvestUncheckedCreateWithoutHarvestTransactionItemsInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput>;
@@ -23398,6 +23495,10 @@ export class HarvestUncheckedCreateWithoutHarvestTransactionsInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput)
     harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput>;
@@ -23425,6 +23526,10 @@ export class HarvestUncheckedCreateWithoutPortfolioInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput>;
@@ -23457,6 +23562,10 @@ export class HarvestUncheckedCreateInput {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {nullable:true})
     step?: `${HarvestStep}`;
+    @Field(() => Date, {nullable:true})
+    afterWashRevertDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    notify?: boolean;
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput>;
@@ -23523,6 +23632,10 @@ export class HarvestUncheckedUpdateManyWithoutCreatedByInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -23583,6 +23696,10 @@ export class HarvestUncheckedUpdateManyWithoutPortfolioInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -23608,6 +23725,10 @@ export class HarvestUncheckedUpdateManyInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -23631,6 +23752,10 @@ export class HarvestUncheckedUpdateWithoutCreatedByInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput>;
@@ -23662,6 +23787,10 @@ export class HarvestUncheckedUpdateWithoutHarvestTransactionItemsInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput>;
@@ -23690,6 +23819,10 @@ export class HarvestUncheckedUpdateWithoutHarvestTransactionsInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput)
     harvestTransactionItems?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput>;
@@ -23716,6 +23849,10 @@ export class HarvestUncheckedUpdateWithoutPortfolioInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput>;
@@ -23747,6 +23884,10 @@ export class HarvestUncheckedUpdateInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
     @Type(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput)
     harvestTransactions?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput>;
@@ -23774,6 +23915,10 @@ export class HarvestUpdateManyMutationInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -23967,6 +24112,10 @@ export class HarvestUpdateWithoutCreatedByInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestsNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestsNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestsNestedInput>;
@@ -23997,6 +24146,10 @@ export class HarvestUpdateWithoutHarvestTransactionItemsInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
     @Type(() => UserUpdateOneRequiredWithoutHarvestNestedInput)
     createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutHarvestNestedInput>;
@@ -24027,6 +24180,10 @@ export class HarvestUpdateWithoutHarvestTransactionsInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
     @Type(() => UserUpdateOneRequiredWithoutHarvestNestedInput)
     createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutHarvestNestedInput>;
@@ -24057,6 +24214,10 @@ export class HarvestUpdateWithoutPortfolioInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
     @Type(() => UserUpdateOneRequiredWithoutHarvestNestedInput)
     createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutHarvestNestedInput>;
@@ -24087,6 +24248,10 @@ export class HarvestUpdateInput {
     type?: InstanceType<typeof EnumHarvestTypeFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestStepFieldUpdateOperationsInput, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
     @Type(() => UserUpdateOneRequiredWithoutHarvestNestedInput)
     createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutHarvestNestedInput>;
@@ -24185,6 +24350,10 @@ export class HarvestWhereUniqueInput {
     type?: InstanceType<typeof EnumHarvestTypeFilter>;
     @Field(() => EnumHarvestStepFilter, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    notify?: InstanceType<typeof BoolFilter>;
     @Field(() => UserScalarRelationFilter, {nullable:true})
     @Type(() => UserScalarRelationFilter)
     createdBy?: InstanceType<typeof UserScalarRelationFilter>;
@@ -24231,6 +24400,10 @@ export class HarvestWhereInput {
     type?: InstanceType<typeof EnumHarvestTypeFilter>;
     @Field(() => EnumHarvestStepFilter, {nullable:true})
     step?: InstanceType<typeof EnumHarvestStepFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    afterWashRevertDate?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    notify?: InstanceType<typeof BoolFilter>;
     @Field(() => UserScalarRelationFilter, {nullable:true})
     @Type(() => UserScalarRelationFilter)
     createdBy?: InstanceType<typeof UserScalarRelationFilter>;
@@ -24267,6 +24440,16 @@ export class Harvest {
     type!: `${HarvestType}`;
     @Field(() => HarvestStep, {defaultValue:'CONFIGURE',nullable:false})
     step!: `${HarvestStep}`;
+    /**
+     * Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
+     */
+    @Field(() => Date, {description:'Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true',nullable:false})
+    afterWashRevertDate!: Date;
+    /**
+     * should notify be performed
+     */
+    @Field(() => Boolean, {defaultValue:true,description:'should notify be performed',nullable:false})
+    notify!: boolean;
     @Field(() => User, {nullable:false})
     createdBy?: InstanceType<typeof User>;
     @Field(() => Portfolio, {nullable:false})
@@ -24457,11 +24640,7 @@ export class HarvestTransactionCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: true;
     @Field(() => Boolean, {nullable:true})
-    revertDate?: true;
-    @Field(() => Boolean, {nullable:true})
     revert?: true;
-    @Field(() => Boolean, {nullable:true})
-    notify?: true;
     @Field(() => Boolean, {nullable:true})
     harvestTransactionItemId?: true;
     @Field(() => Boolean, {nullable:true})
@@ -24489,11 +24668,7 @@ export class HarvestTransactionCountAggregate {
     @Field(() => Int, {nullable:false})
     counterTransaction!: number;
     @Field(() => Int, {nullable:false})
-    revertDate!: number;
-    @Field(() => Int, {nullable:false})
     revert!: number;
-    @Field(() => Int, {nullable:false})
-    notify!: number;
     @Field(() => Int, {nullable:false})
     harvestTransactionItemId!: number;
     @Field(() => Int, {nullable:false})
@@ -24521,11 +24696,7 @@ export class HarvestTransactionCountOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     counterTransaction?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    revertDate?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
     revert?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
-    notify?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     harvestTransactionItemId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -24557,12 +24728,8 @@ export class HarvestTransactionCreateManyHarvestInput {
     portfolioId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -24594,12 +24761,8 @@ export class HarvestTransactionCreateManyPortfolioInput {
     harvestId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -24624,12 +24787,8 @@ export class HarvestTransactionCreateManyInput {
     portfolioId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -24794,12 +24953,8 @@ export class HarvestTransactionCreateWithoutHarvestTransactionItemInput {
     updatedAt?: Date | string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionInput>;
@@ -24827,12 +24982,8 @@ export class HarvestTransactionCreateWithoutHarvestInput {
     updatedAt?: Date | string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionInput>;
@@ -24860,12 +25011,8 @@ export class HarvestTransactionCreateWithoutPortfolioInput {
     updatedAt?: Date | string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => HarvestCreateNestedOneWithoutHarvestTransactionsInput, {nullable:false})
     @Type(() => HarvestCreateNestedOneWithoutHarvestTransactionsInput)
     harvest!: InstanceType<typeof HarvestCreateNestedOneWithoutHarvestTransactionsInput>;
@@ -24893,12 +25040,8 @@ export class HarvestTransactionCreateWithoutReplacementTransactionItemInput {
     updatedAt?: Date | string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionInput>;
@@ -24926,12 +25069,8 @@ export class HarvestTransactionCreateWithoutRevertHarvestTransactionItemInput {
     updatedAt?: Date | string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionInput>;
@@ -24959,12 +25098,8 @@ export class HarvestTransactionCreateWithoutRevertReplacementTransactionItemInpu
     updatedAt?: Date | string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionInput>;
@@ -24992,12 +25127,8 @@ export class HarvestTransactionCreateInput {
     updatedAt?: Date | string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutHarvestTransactionInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutHarvestTransactionInput>;
@@ -25055,12 +25186,8 @@ export class HarvestTransactionGroupBy {
     portfolioId!: string;
     @Field(() => Boolean, {nullable:false})
     counterTransaction!: boolean;
-    @Field(() => Date, {nullable:false})
-    revertDate!: Date | string;
     @Field(() => Boolean, {nullable:false})
     revert!: boolean;
-    @Field(() => Boolean, {nullable:false})
-    notify!: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -25102,11 +25229,7 @@ export class HarvestTransactionMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: true;
     @Field(() => Boolean, {nullable:true})
-    revertDate?: true;
-    @Field(() => Boolean, {nullable:true})
     revert?: true;
-    @Field(() => Boolean, {nullable:true})
-    notify?: true;
     @Field(() => Boolean, {nullable:true})
     harvestTransactionItemId?: true;
     @Field(() => Boolean, {nullable:true})
@@ -25131,12 +25254,8 @@ export class HarvestTransactionMaxAggregate {
     portfolioId?: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:true})
     harvestTransactionItemId?: string;
     @Field(() => String, {nullable:true})
@@ -25162,11 +25281,7 @@ export class HarvestTransactionMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     counterTransaction?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    revertDate?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
     revert?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
-    notify?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     harvestTransactionItemId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -25192,11 +25307,7 @@ export class HarvestTransactionMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: true;
     @Field(() => Boolean, {nullable:true})
-    revertDate?: true;
-    @Field(() => Boolean, {nullable:true})
     revert?: true;
-    @Field(() => Boolean, {nullable:true})
-    notify?: true;
     @Field(() => Boolean, {nullable:true})
     harvestTransactionItemId?: true;
     @Field(() => Boolean, {nullable:true})
@@ -25221,12 +25332,8 @@ export class HarvestTransactionMinAggregate {
     portfolioId?: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:true})
     harvestTransactionItemId?: string;
     @Field(() => String, {nullable:true})
@@ -25252,11 +25359,7 @@ export class HarvestTransactionMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     counterTransaction?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    revertDate?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
     revert?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
-    notify?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     harvestTransactionItemId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -25296,11 +25399,7 @@ export class HarvestTransactionOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     counterTransaction?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    revertDate?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
     revert?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
-    notify?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     harvestTransactionItemId?: `${SortOrder}`;
     @Field(() => SortOrderInput, {nullable:true})
@@ -25332,11 +25431,7 @@ export class HarvestTransactionOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     counterTransaction?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    revertDate?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
     revert?: `${SortOrder}`;
-    @Field(() => SortOrder, {nullable:true})
-    notify?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     harvestTransactionItemId?: `${SortOrder}`;
     @Field(() => SortOrderInput, {nullable:true})
@@ -25385,12 +25480,8 @@ export class HarvestTransactionScalarWhereWithAggregatesInput {
     portfolioId?: InstanceType<typeof UuidWithAggregatesFilter>;
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolWithAggregatesFilter>;
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeWithAggregatesFilter>;
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     revert?: InstanceType<typeof BoolWithAggregatesFilter>;
-    @Field(() => BoolWithAggregatesFilter, {nullable:true})
-    notify?: InstanceType<typeof BoolWithAggregatesFilter>;
     @Field(() => UuidWithAggregatesFilter, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof UuidWithAggregatesFilter>;
     @Field(() => UuidNullableWithAggregatesFilter, {nullable:true})
@@ -25421,12 +25512,8 @@ export class HarvestTransactionScalarWhereInput {
     portfolioId?: InstanceType<typeof UuidFilter>;
     @Field(() => BoolFilter, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFilter>;
-    @Field(() => DateTimeFilter, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFilter>;
     @Field(() => BoolFilter, {nullable:true})
     revert?: InstanceType<typeof BoolFilter>;
-    @Field(() => BoolFilter, {nullable:true})
-    notify?: InstanceType<typeof BoolFilter>;
     @Field(() => UuidFilter, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof UuidFilter>;
     @Field(() => UuidNullableFilter, {nullable:true})
@@ -25535,12 +25622,8 @@ export class HarvestTransactionUncheckedCreateWithoutHarvestTransactionItemInput
     portfolioId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:true})
     replacementTransactionItemId?: string;
     @Field(() => String, {nullable:true})
@@ -25561,12 +25644,8 @@ export class HarvestTransactionUncheckedCreateWithoutHarvestInput {
     portfolioId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -25589,12 +25668,8 @@ export class HarvestTransactionUncheckedCreateWithoutPortfolioInput {
     harvestId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -25619,12 +25694,8 @@ export class HarvestTransactionUncheckedCreateWithoutReplacementTransactionItemI
     portfolioId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -25647,12 +25718,8 @@ export class HarvestTransactionUncheckedCreateWithoutRevertHarvestTransactionIte
     portfolioId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -25675,12 +25742,8 @@ export class HarvestTransactionUncheckedCreateWithoutRevertReplacementTransactio
     portfolioId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -25703,12 +25766,8 @@ export class HarvestTransactionUncheckedCreateInput {
     portfolioId!: string;
     @Field(() => Boolean, {nullable:true})
     counterTransaction?: boolean;
-    @Field(() => Date, {nullable:true})
-    revertDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     revert?: boolean;
-    @Field(() => Boolean, {nullable:true})
-    notify?: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -25768,12 +25827,8 @@ export class HarvestTransactionUncheckedUpdateManyWithoutHarvestInput {
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -25833,12 +25888,8 @@ export class HarvestTransactionUncheckedUpdateManyWithoutPortfolioInput {
     harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -25863,12 +25914,8 @@ export class HarvestTransactionUncheckedUpdateManyInput {
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -25993,12 +26040,8 @@ export class HarvestTransactionUncheckedUpdateWithoutHarvestTransactionItemInput
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
     replacementTransactionItemId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -26019,12 +26062,8 @@ export class HarvestTransactionUncheckedUpdateWithoutHarvestInput {
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -26047,12 +26086,8 @@ export class HarvestTransactionUncheckedUpdateWithoutPortfolioInput {
     harvestId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -26077,12 +26112,8 @@ export class HarvestTransactionUncheckedUpdateWithoutReplacementTransactionItemI
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -26105,12 +26136,8 @@ export class HarvestTransactionUncheckedUpdateWithoutRevertHarvestTransactionIte
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -26133,12 +26160,8 @@ export class HarvestTransactionUncheckedUpdateWithoutRevertReplacementTransactio
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -26161,12 +26184,8 @@ export class HarvestTransactionUncheckedUpdateInput {
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
@@ -26187,12 +26206,8 @@ export class HarvestTransactionUpdateManyMutationInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -26459,12 +26474,8 @@ export class HarvestTransactionUpdateWithoutHarvestTransactionItemInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput>;
@@ -26492,12 +26503,8 @@ export class HarvestTransactionUpdateWithoutHarvestInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput>;
@@ -26525,12 +26532,8 @@ export class HarvestTransactionUpdateWithoutPortfolioInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput, {nullable:true})
     @Type(() => HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput)
     harvest?: InstanceType<typeof HarvestUpdateOneRequiredWithoutHarvestTransactionsNestedInput>;
@@ -26558,12 +26561,8 @@ export class HarvestTransactionUpdateWithoutReplacementTransactionItemInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput>;
@@ -26591,12 +26590,8 @@ export class HarvestTransactionUpdateWithoutRevertHarvestTransactionItemInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput>;
@@ -26624,12 +26619,8 @@ export class HarvestTransactionUpdateWithoutRevertReplacementTransactionItemInpu
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput>;
@@ -26657,12 +26648,8 @@ export class HarvestTransactionUpdateInput {
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     revert?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutHarvestTransactionNestedInput>;
@@ -26789,12 +26776,8 @@ export class HarvestTransactionWhereUniqueInput {
     portfolioId?: InstanceType<typeof UuidFilter>;
     @Field(() => BoolFilter, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFilter>;
-    @Field(() => DateTimeFilter, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFilter>;
     @Field(() => BoolFilter, {nullable:true})
     revert?: InstanceType<typeof BoolFilter>;
-    @Field(() => BoolFilter, {nullable:true})
-    notify?: InstanceType<typeof BoolFilter>;
     @Field(() => PortfolioScalarRelationFilter, {nullable:true})
     @Type(() => PortfolioScalarRelationFilter)
     portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
@@ -26835,12 +26818,8 @@ export class HarvestTransactionWhereInput {
     portfolioId?: InstanceType<typeof UuidFilter>;
     @Field(() => BoolFilter, {nullable:true})
     counterTransaction?: InstanceType<typeof BoolFilter>;
-    @Field(() => DateTimeFilter, {nullable:true})
-    revertDate?: InstanceType<typeof DateTimeFilter>;
     @Field(() => BoolFilter, {nullable:true})
     revert?: InstanceType<typeof BoolFilter>;
-    @Field(() => BoolFilter, {nullable:true})
-    notify?: InstanceType<typeof BoolFilter>;
     @Field(() => UuidFilter, {nullable:true})
     harvestTransactionItemId?: InstanceType<typeof UuidFilter>;
     @Field(() => UuidNullableFilter, {nullable:true})
@@ -26870,9 +26849,9 @@ export class HarvestTransactionWhereInput {
 }
 
 /**
- * Represent the logical unit of a harvest transactiont whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy
+ * Represent the logical unit of a harvest transaction whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy
  */
-@ObjectType({description:'Represent the logical unit of a harvest transactiont whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy'})
+@ObjectType({description:'Represent the logical unit of a harvest transaction whose entry point is a sale of a security. It can possibly have a replacement buy and then a revert after the wash sale window for the sale / sale + buy'})
 export class HarvestTransaction {
     @Field(() => ID, {nullable:false})
     id!: string;
@@ -26890,20 +26869,10 @@ export class HarvestTransaction {
     @Field(() => Boolean, {defaultValue:false,description:'Is this transaction part of counter group of transactions for harvest (i.e. selling a gain to counter the loss that was selected)',nullable:false})
     counterTransaction!: boolean;
     /**
-     * Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
-     */
-    @Field(() => Date, {description:'Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true',nullable:false})
-    revertDate!: Date;
-    /**
      * should revert transactions be performed
      */
     @Field(() => Boolean, {defaultValue:true,description:'should revert transactions be performed',nullable:false})
     revert!: boolean;
-    /**
-     * Should we notify post wash window? No date is no notify
-     */
-    @Field(() => Boolean, {defaultValue:true,description:'Should we notify post wash window? No date is no notify',nullable:false})
-    notify!: boolean;
     @Field(() => String, {nullable:false})
     harvestTransactionItemId!: string;
     @Field(() => String, {nullable:true})
@@ -44008,6 +43977,8 @@ export class PortfolioCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     notificationFrequency?: true;
     @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: true;
+    @Field(() => Boolean, {nullable:true})
     _all?: true;
 }
 
@@ -44040,6 +44011,8 @@ export class PortfolioCountAggregate {
     @Field(() => Int, {nullable:false})
     notificationFrequency!: number;
     @Field(() => Int, {nullable:false})
+    endOfYearTaxOpportunityNotification!: number;
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }
 
@@ -44071,6 +44044,8 @@ export class PortfolioCountOrderByAggregateInput {
     harvestTickerBucketLowerLimitShort?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notificationFrequency?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    endOfYearTaxOpportunityNotification?: `${SortOrder}`;
 }
 
 @ObjectType()
@@ -44152,6 +44127,8 @@ export class PortfolioCreateManyCreatedByInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
 }
 
 @InputType()
@@ -44194,6 +44171,8 @@ export class PortfolioCreateManyInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
 }
 
 @InputType()
@@ -44582,6 +44561,8 @@ export class PortfolioCreateWithoutAccountsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
@@ -44664,6 +44645,8 @@ export class PortfolioCreateWithoutAuthConnectionsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -44746,6 +44729,8 @@ export class PortfolioCreateWithoutCreatedByInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -44828,6 +44813,8 @@ export class PortfolioCreateWithoutFilesInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -44910,6 +44897,8 @@ export class PortfolioCreateWithoutHarvestTransactionItemInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -44992,6 +44981,8 @@ export class PortfolioCreateWithoutHarvestTransactionInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45074,6 +45065,8 @@ export class PortfolioCreateWithoutHarvestsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45156,6 +45149,8 @@ export class PortfolioCreateWithoutLogInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45238,6 +45233,8 @@ export class PortfolioCreateWithoutLotChangeLogInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45320,6 +45317,8 @@ export class PortfolioCreateWithoutLotTransactionBatchInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45402,6 +45401,8 @@ export class PortfolioCreateWithoutLotsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45484,6 +45485,8 @@ export class PortfolioCreateWithoutPositionsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45566,6 +45569,8 @@ export class PortfolioCreateWithoutRealizedPAndLInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45648,6 +45653,8 @@ export class PortfolioCreateWithoutTransactionsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45730,6 +45737,8 @@ export class PortfolioCreateWithoutUsersOnPortfoliosInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45812,6 +45821,8 @@ export class PortfolioCreateInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
@@ -45921,6 +45932,8 @@ export class PortfolioGroupBy {
     harvestTickerBucketLowerLimitShort!: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:false})
     notificationFrequency!: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:false})
+    endOfYearTaxOpportunityNotification!: boolean;
     @Field(() => PortfolioCountAggregate, {nullable:true})
     _count?: InstanceType<typeof PortfolioCountAggregate>;
     @Field(() => PortfolioAvgAggregate, {nullable:true})
@@ -45974,6 +45987,8 @@ export class PortfolioMaxAggregateInput {
     harvestTickerBucketLowerLimitShort?: true;
     @Field(() => Boolean, {nullable:true})
     notificationFrequency?: true;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: true;
 }
 
 @ObjectType()
@@ -46004,6 +46019,8 @@ export class PortfolioMaxAggregate {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
 }
 
 @InputType()
@@ -46034,6 +46051,8 @@ export class PortfolioMaxOrderByAggregateInput {
     harvestTickerBucketLowerLimitShort?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notificationFrequency?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    endOfYearTaxOpportunityNotification?: `${SortOrder}`;
 }
 
 @InputType()
@@ -46064,6 +46083,8 @@ export class PortfolioMinAggregateInput {
     harvestTickerBucketLowerLimitShort?: true;
     @Field(() => Boolean, {nullable:true})
     notificationFrequency?: true;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: true;
 }
 
 @ObjectType()
@@ -46094,6 +46115,8 @@ export class PortfolioMinAggregate {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
 }
 
 @InputType()
@@ -46124,6 +46147,8 @@ export class PortfolioMinOrderByAggregateInput {
     harvestTickerBucketLowerLimitShort?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notificationFrequency?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    endOfYearTaxOpportunityNotification?: `${SortOrder}`;
 }
 
 @InputType()
@@ -46160,6 +46185,8 @@ export class PortfolioOrderByWithAggregationInput {
     harvestTickerBucketLowerLimitShort?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notificationFrequency?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    endOfYearTaxOpportunityNotification?: `${SortOrder}`;
     @Field(() => PortfolioCountOrderByAggregateInput, {nullable:true})
     @Type(() => PortfolioCountOrderByAggregateInput)
     _count?: InstanceType<typeof PortfolioCountOrderByAggregateInput>;
@@ -46205,6 +46232,8 @@ export class PortfolioOrderByWithRelationInput {
     harvestTickerBucketLowerLimitShort?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notificationFrequency?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    endOfYearTaxOpportunityNotification?: `${SortOrder}`;
     @Field(() => AccountOrderByRelationAggregateInput, {nullable:true})
     @Type(() => AccountOrderByRelationAggregateInput)
     accounts?: InstanceType<typeof AccountOrderByRelationAggregateInput>;
@@ -46305,6 +46334,8 @@ export class PortfolioScalarWhereWithAggregatesInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalWithAggregatesFilter>;
     @Field(() => EnumHarvestNotificationFrequencyWithAggregatesFilter, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyWithAggregatesFilter>;
+    @Field(() => BoolWithAggregatesFilter, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolWithAggregatesFilter>;
 }
 
 @InputType()
@@ -46350,6 +46381,8 @@ export class PortfolioScalarWhereInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFilter>;
     @Field(() => EnumHarvestNotificationFrequencyFilter, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFilter>;
 }
 
 @InputType()
@@ -46462,6 +46495,8 @@ export class PortfolioUncheckedCreateWithoutAccountsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => UsersOnPortfoliosUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUncheckedCreateNestedManyWithoutPortfolioInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -46543,6 +46578,8 @@ export class PortfolioUncheckedCreateWithoutAuthConnectionsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -46622,6 +46659,8 @@ export class PortfolioUncheckedCreateWithoutCreatedByInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -46706,6 +46745,8 @@ export class PortfolioUncheckedCreateWithoutFilesInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -46787,6 +46828,8 @@ export class PortfolioUncheckedCreateWithoutHarvestTransactionItemInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -46868,6 +46911,8 @@ export class PortfolioUncheckedCreateWithoutHarvestTransactionInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -46949,6 +46994,8 @@ export class PortfolioUncheckedCreateWithoutHarvestsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47030,6 +47077,8 @@ export class PortfolioUncheckedCreateWithoutLogInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47111,6 +47160,8 @@ export class PortfolioUncheckedCreateWithoutLotChangeLogInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47192,6 +47243,8 @@ export class PortfolioUncheckedCreateWithoutLotTransactionBatchInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47273,6 +47326,8 @@ export class PortfolioUncheckedCreateWithoutLotsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47354,6 +47409,8 @@ export class PortfolioUncheckedCreateWithoutPositionsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47435,6 +47492,8 @@ export class PortfolioUncheckedCreateWithoutRealizedPAndLInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47516,6 +47575,8 @@ export class PortfolioUncheckedCreateWithoutTransactionsInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47597,6 +47658,8 @@ export class PortfolioUncheckedCreateWithoutUsersOnPortfoliosInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47678,6 +47741,8 @@ export class PortfolioUncheckedCreateInput {
     harvestTickerBucketLowerLimitShort?: Decimal;
     @Field(() => HarvestNotificationFrequency, {nullable:true})
     notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
     @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -47791,6 +47856,8 @@ export class PortfolioUncheckedUpdateManyWithoutCreatedByInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -47827,6 +47894,8 @@ export class PortfolioUncheckedUpdateManyInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -47863,6 +47932,8 @@ export class PortfolioUncheckedUpdateWithoutAccountsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UsersOnPortfoliosUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUncheckedUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -47938,6 +48009,8 @@ export class PortfolioUncheckedUpdateWithoutAuthConnectionsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48011,6 +48084,8 @@ export class PortfolioUncheckedUpdateWithoutCreatedByInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48089,6 +48164,8 @@ export class PortfolioUncheckedUpdateWithoutFilesInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48164,6 +48241,8 @@ export class PortfolioUncheckedUpdateWithoutHarvestTransactionItemInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48239,6 +48318,8 @@ export class PortfolioUncheckedUpdateWithoutHarvestTransactionInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48314,6 +48395,8 @@ export class PortfolioUncheckedUpdateWithoutHarvestsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48389,6 +48472,8 @@ export class PortfolioUncheckedUpdateWithoutLogInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48464,6 +48549,8 @@ export class PortfolioUncheckedUpdateWithoutLotChangeLogInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48539,6 +48626,8 @@ export class PortfolioUncheckedUpdateWithoutLotTransactionBatchInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48614,6 +48703,8 @@ export class PortfolioUncheckedUpdateWithoutLotsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48689,6 +48780,8 @@ export class PortfolioUncheckedUpdateWithoutPositionsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48764,6 +48857,8 @@ export class PortfolioUncheckedUpdateWithoutRealizedPAndLInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48839,6 +48934,8 @@ export class PortfolioUncheckedUpdateWithoutTransactionsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48914,6 +49011,8 @@ export class PortfolioUncheckedUpdateWithoutUsersOnPortfoliosInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -48989,6 +49088,8 @@ export class PortfolioUncheckedUpdateInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -49065,6 +49166,8 @@ export class PortfolioUpdateManyMutationInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -49562,6 +49665,8 @@ export class PortfolioUpdateWithoutAccountsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
     usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
@@ -49638,6 +49743,8 @@ export class PortfolioUpdateWithoutAuthConnectionsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -49714,6 +49821,8 @@ export class PortfolioUpdateWithoutCreatedByInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -49790,6 +49899,8 @@ export class PortfolioUpdateWithoutFilesInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -49866,6 +49977,8 @@ export class PortfolioUpdateWithoutHarvestTransactionItemInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -49942,6 +50055,8 @@ export class PortfolioUpdateWithoutHarvestTransactionInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50018,6 +50133,8 @@ export class PortfolioUpdateWithoutHarvestsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50094,6 +50211,8 @@ export class PortfolioUpdateWithoutLogInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50170,6 +50289,8 @@ export class PortfolioUpdateWithoutLotChangeLogInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50246,6 +50367,8 @@ export class PortfolioUpdateWithoutLotTransactionBatchInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50322,6 +50445,8 @@ export class PortfolioUpdateWithoutLotsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50398,6 +50523,8 @@ export class PortfolioUpdateWithoutPositionsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50474,6 +50601,8 @@ export class PortfolioUpdateWithoutRealizedPAndLInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50550,6 +50679,8 @@ export class PortfolioUpdateWithoutTransactionsInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50626,6 +50757,8 @@ export class PortfolioUpdateWithoutUsersOnPortfoliosInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50702,6 +50835,8 @@ export class PortfolioUpdateInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
     @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
@@ -50987,6 +51122,8 @@ export class PortfolioWhereUniqueInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFilter>;
     @Field(() => EnumHarvestNotificationFrequencyFilter, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFilter>;
     @Field(() => AccountListRelationFilter, {nullable:true})
     @Type(() => AccountListRelationFilter)
     accounts?: InstanceType<typeof AccountListRelationFilter>;
@@ -51077,6 +51214,8 @@ export class PortfolioWhereInput {
     harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFilter>;
     @Field(() => EnumHarvestNotificationFrequencyFilter, {nullable:true})
     notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFilter>;
     @Field(() => AccountListRelationFilter, {nullable:true})
     @Type(() => AccountListRelationFilter)
     accounts?: InstanceType<typeof AccountListRelationFilter>;
@@ -51173,6 +51312,8 @@ export class Portfolio {
     harvestTickerBucketLowerLimitShort!: Decimal;
     @Field(() => HarvestNotificationFrequency, {defaultValue:'WEEKLY',nullable:false})
     notificationFrequency!: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {defaultValue:true,nullable:false})
+    endOfYearTaxOpportunityNotification!: boolean;
     @Field(() => [Account], {nullable:true})
     accounts?: Array<Account>;
     @Field(() => [UsersOnPortfolios], {nullable:true})

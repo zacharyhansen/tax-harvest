@@ -117,7 +117,7 @@ export function HarvestingOpportunityCard({
             </div>
           ) : null}
           <Button
-            disabled={isHarvested}
+            disabled={isHarvested || isHarvesting}
             onClick={() =>
               toast.promise(
                 createHarvest({
@@ -139,7 +139,6 @@ export function HarvestingOpportunityCard({
                 }
               )
             }
-            loading={isHarvesting}
           >
             <Wheat className="mr-2 size-4" />{' '}
             {isHarvested ? 'Harvested' : 'Add to Harvests'}
