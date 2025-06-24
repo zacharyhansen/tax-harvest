@@ -7,10 +7,8 @@ import {
   TaxGain,
 } from '~/generated/gql';
 import NoOpportunities from './no-opportunities';
-import { CostBasisPairCard } from './api-cost-basis-pair-card';
 import { ArrowUpCircle, TrendingDown } from 'lucide-react';
 import { HarvestingOpportunityCard } from './harvesting-opportunity-card';
-import { SeePaymentPlans } from '../settings/payment/see-payment-plans';
 import { Button } from '@repo/ui/components/button';
 import Link from 'next/link';
 import { TypedRoutes } from '~/lib/routes';

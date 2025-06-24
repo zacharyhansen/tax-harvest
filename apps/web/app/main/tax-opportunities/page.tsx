@@ -127,7 +127,7 @@ export default function TaxOpportunitiesPage() {
 
       {/* Portfolio Status */}
       <motion.div
-        className="bg-background top-16 z-10 mb-8 flex flex-col items-start md:sticky"
+        className="bg-background top-16 z-20 mb-8 flex flex-col items-start md:sticky"
         variants={itemVariants}
       >
         <div className="bg-muted/70 w-full overflow-hidden rounded-xl border-0">

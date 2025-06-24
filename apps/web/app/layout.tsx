@@ -1,15 +1,8 @@
 import { ClerkLoaded, ClerkProvider } from '@clerk/nextjs';
 import { cn } from '@repo/ui/utils';
-import { Inter } from 'next/font/google';
-import NextTopLoader from 'nextjs-toploader';
 import type { Metadata } from 'next';
 import './globals.css';
 import { clientEnvironment } from '~/lib/env/clientEnvironment';
-
-const inter = Inter({
-  display: 'swap',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -82,9 +75,15 @@ export default async function LocaleLayout({
   return (
     <html
       lang="en"
-      className={cn(inter.className, 'max-h-screen overflow-y-hidden')}
+      className="max-h-screen overflow-y-hidden"
       suppressHydrationWarning={true}
     >
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Geist+Mono:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
