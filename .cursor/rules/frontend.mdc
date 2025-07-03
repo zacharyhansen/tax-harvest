@@ -1,0 +1,20 @@
+---
+description: 
+globs: apps/web/**/*.tsx,packages/ui/**/*.tsx
+alwaysApply: false
+---
+---
+description: Frontend Rules
+globs: 
+alwaysApply: false
+---
+
+- Use the components @repo/ui/components to build forms always
+- As an example
+
+import {
+  ComboboxField,
+  InputField,
+  SwitchField,
+  TextareaField,
+} from '@repo/ui/form-builder';
