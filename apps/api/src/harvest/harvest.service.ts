@@ -194,6 +194,88 @@ export class HarvestService {
     return date
   }
 
+  /**
+   * Calculates 2 stock trading days (effectively 16 hours of active trading time) from the given date.
+   * Skips weekends (Saturday, Sunday) and US market holidays.
+   * 
+   * @param fromDate - The starting date
+   * @returns The date that represents 2 trading days after the given date
+   */
+  calculateTwoTradingDaysFrom(fromDate: Date): Date {
+    // US Market holidays for 2024-2026 (covers most use cases)
+    const marketHolidays = new Set([
+      // 2024 holidays
+      '2024-01-01', // New Year's Day
+      '2024-01-15', // Martin Luther King Jr. Day
+      '2024-02-19', // Presidents' Day
+      '2024-03-29', // Good Friday
+      '2024-05-27', // Memorial Day
+      '2024-06-19', // Juneteenth
+      '2024-07-04', // Independence Day
+      '2024-09-02', // Labor Day
+      '2024-11-28', // Thanksgiving Day
+      '2024-12-25', // Christmas Day
+
+      // 2025 holidays
+      '2025-01-01', // New Year's Day
+      '2025-01-20', // Martin Luther King Jr. Day
+      '2025-02-17', // Presidents' Day
+      '2025-04-18', // Good Friday
+      '2025-05-26', // Memorial Day
+      '2025-06-19', // Juneteenth
+      '2025-07-04', // Independence Day
+      '2025-09-01', // Labor Day
+      '2025-11-27', // Thanksgiving Day
+      '2025-12-25', // Christmas Day
+
+      // 2026 holidays (common dates, may need updating based on actual calendar)
+      '2026-01-01', // New Year's Day
+      '2026-01-19', // Martin Luther King Jr. Day (3rd Monday in January)
+      '2026-02-16', // Presidents' Day (3rd Monday in February)
+      '2026-04-03', // Good Friday (varies based on Easter)
+      '2026-05-25', // Memorial Day (last Monday in May)
+      '2026-06-19', // Juneteenth
+      '2026-07-04', // Independence Day (observed on 7/3 if falls on Saturday)
+      '2026-09-07', // Labor Day (1st Monday in September)
+      '2026-11-26', // Thanksgiving Day (4th Thursday in November)
+      '2026-12-25', // Christmas Day
+    ])
+
+    const isMarketHoliday = (date: Date): boolean => {
+      const dateString = date.toISOString().split('T')[0]
+      return marketHolidays.has(dateString)
+    }
+
+    const isWeekend = (date: Date): boolean => {
+      const dayOfWeek = date.getDay()
+      return dayOfWeek === 0 || dayOfWeek === 6 // Sunday or Saturday
+    }
+
+    const isTradingDay = (date: Date): boolean => {
+      return !isWeekend(date) && !isMarketHoliday(date)
+    }
+
+    let currentDate = new Date(fromDate)
+    let tradingDaysCount = 0
+
+    // Move to the next day to start counting from the day after the input date
+    currentDate.setDate(currentDate.getDate() + 1)
+
+    // Keep adding days until we've found 2 trading days
+    while (tradingDaysCount < 2) {
+      if (isTradingDay(currentDate)) {
+        tradingDaysCount++
+      }
+
+      // If we haven't reached 2 trading days yet, move to the next day
+      if (tradingDaysCount < 2) {
+        currentDate.setDate(currentDate.getDate() + 1)
+      }
+    }
+
+    return currentDate
+  }
+
   async finalizeHarvest({
     harvestId,
     select,
