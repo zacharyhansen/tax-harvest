@@ -28,7 +28,7 @@ import InputField from '@repo/ui/form-builder/fields/input.field';
 
 import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
 import { DollarSign, Plus, Upload, X } from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import {
@@ -83,6 +83,8 @@ const accountFormSchema = z.object({
 export function AddAccountButton({ ...props }: ButtonProps) {
   const client = useApolloClient();
   const [files, setFiles] = useState<File[]>([]);
+  const [isUploadComplete, setIsUploadComplete] = useState(false);
+  const [areAnimationsComplete, setAreAnimationsComplete] = useState(false);
 
   const onFileReject = useCallback((file: File, message: string) => {
     toast(message, {
@@ -92,6 +94,25 @@ export function AddAccountButton({ ...props }: ButtonProps) {
   const stepper = useStepper();
 
   const [createFiles] = useInitAccountFileUploadMutation();
+
+  // Check if both upload and animations are complete, then proceed
+  useEffect(() => {
+    if (isUploadComplete && areAnimationsComplete) {
+      stepper.goTo('complete');
+    }
+  }, [isUploadComplete, areAnimationsComplete, stepper]);
+
+  // Reset completion states when dialog opens or stepper changes
+  useEffect(() => {
+    if (stepper.current?.id !== 'analyze') {
+      setIsUploadComplete(false);
+      setAreAnimationsComplete(false);
+    }
+  }, [stepper.current?.id]);
+
+  const handleAnimationsComplete = useCallback(() => {
+    setAreAnimationsComplete(true);
+  }, []);
 
   const { form } = useStandardForm<z.infer<typeof accountFormSchema>>({
     defaultValues: {
@@ -103,7 +124,7 @@ export function AddAccountButton({ ...props }: ButtonProps) {
       accountName: 'My First Account',
     },
     resolver: zodResolver(accountFormSchema),
-    handleSubmit: () => {},
+    handleSubmit: () => { },
   });
 
   const { onUpload } = useUploadFiles({
@@ -133,7 +154,7 @@ export function AddAccountButton({ ...props }: ButtonProps) {
           stepper.goTo('upload');
         },
         onCompleted: () => {
-          stepper.goTo('complete');
+          setIsUploadComplete(true);
         },
       });
     },
@@ -284,7 +305,7 @@ export function AddAccountButton({ ...props }: ButtonProps) {
             </FormProvider>
           ))}
           {stepper.when('analyze', _step => (
-            <AnalyzeStep />
+            <AnalyzeStep onAnimationsComplete={handleAnimationsComplete} />
           ))}
           {stepper.when('complete', _step => (
             <CompleteStep />
