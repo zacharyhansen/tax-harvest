@@ -11,11 +11,12 @@ import { Calendar } from './calendar';
 import { Label } from './label';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
-export type DatePickerProps = Omit<CalendarProps, 'selected'> &
+export type DatePickerProps = Omit<CalendarProps, 'selected' | 'onSelect' | 'mode'> &
   BaseInputPropsType & {
     label?: React.ReactNode;
     value?: Date;
-    onChange: (value: Date) => void;
+    onChange: (value: Date | undefined) => void;
+    mode?: 'single';
   };
 
 export function DatePicker({
@@ -53,13 +54,11 @@ export function DatePicker({
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
-          mode={mode}
-          // @ts-expect-error this is always going to be date for now
-          onSelect={currentValue => {
-            onChange(currentValue === value ? '' : currentValue);
+          mode="single"
+          onSelect={(currentValue) => {
+            onChange(currentValue === value ? undefined : currentValue);
             setOpen(false);
           }}
-          // @ts-expect-error this is always going to be date for now
           selected={value}
           // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus

@@ -92,7 +92,7 @@ export default function ActionsPage() {
               label="Date"
               mode="single"
               value={date}
-              onChange={date => setDate(date)}
+              onChange={date => date && setDate(date)}
               required
             />
             <Button

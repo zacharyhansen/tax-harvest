@@ -9,7 +9,7 @@ import { usePlaidLink } from 'react-plaid-link'
 
 import { usePlaidSetAccessTokenAndSyncAccountsMutation } from '~/generated/gql'
 
-import plaidIcon from '../../public/icons/plaid.svg'
+// Import removed - using public asset path instead
 
 type PlaidLinkProps = {
   token: string
@@ -35,9 +35,9 @@ export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
               })),
               institution: metaData.institution
                 ? {
-                    institution_id: metaData.institution.institution_id,
-                    name: metaData.institution.name,
-                  }
+                  institution_id: metaData.institution.institution_id,
+                  name: metaData.institution.name,
+                }
                 : undefined,
               link_session_id: metaData.link_session_id,
               transfer_status: metaData.transfer_status,
@@ -75,7 +75,7 @@ export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
         open()
       }}
       disabled={!ready}
-      iconLeft={<Image src={plaidIcon} alt="Plaid" width={24} height={24} />}
+      iconLeft={<Image src="/icons/plaid.svg" alt="Plaid" width={24} height={24} />}
     >
       Connect
     </Button>

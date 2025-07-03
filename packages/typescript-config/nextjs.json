@@ -8,6 +8,8 @@
     "moduleResolution": "bundler",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "jsx": "preserve",
-    "noEmit": true
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   }
 }

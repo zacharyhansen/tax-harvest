@@ -40,10 +40,8 @@ export default function Complete({ harvestId }: HarvestSuccessProps) {
     false,
   )
 
-  const notify = data?.harvest.harvestTransactions?.reduce(
-    (acc, curr) => acc || !!curr.notify,
-    false,
-  )
+  // Note: notify field was removed from HarvestTransaction schema
+  const notify = false // Defaulting to false since notify property no longer exists
 
   return (
     <div className="flex items-center justify-center rounded-3xl bg-linear-to-br from-green-50 to-green-200 p-4 py-24 dark:from-green-800">

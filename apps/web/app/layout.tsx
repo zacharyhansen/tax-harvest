@@ -73,18 +73,20 @@ export default async function LocaleLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className="max-h-screen overflow-y-hidden"
-      suppressHydrationWarning={true}
-    >
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Geist+Mono:wght@100..900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang="en"
+        className="max-h-screen overflow-y-hidden"
+        suppressHydrationWarning={true}
+      >
+        <head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Geist+Mono:wght@100..900&display=swap"
+            rel="stylesheet"
+          />
+        </head>
+        <body>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }

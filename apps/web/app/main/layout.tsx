@@ -7,7 +7,6 @@ import {
   SignedOut,
   UserButton,
   useUser,
-  ClerkProvider,
 } from '@clerk/nextjs';
 import {
   Breadcrumb,
@@ -47,7 +46,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <>
       <NextTopLoader color="#faa700" showSpinner={false} />
       <ApolloProviderWrapper>
         <SignedIn>
@@ -66,7 +65,7 @@ export default function MainLayout({
           <RedirectToSignIn />
         </SignedOut>
       </ApolloProviderWrapper>
-    </ClerkProvider>
+    </>
   );
 }
 

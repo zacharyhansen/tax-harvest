@@ -62,14 +62,14 @@ function Calendar({
           buttonVariants({
             className:
               "absolute right-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
-            variant: "outline-solid",
+            variant: "outline",
           }),
         ),
         button_previous: cn(
           buttonVariants({
             className:
               "absolute left-0 h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
-            variant: "outline-solid",
+            variant: "outline",
           }),
         ),
         caption: "flex justify-center pt-1 relative items-center",
@@ -140,16 +140,16 @@ function Calendar({
                   (_, index) => {
                     const isBefore = startMonth
                       ? differenceInCalendarDays(
-                          new Date(displayYears.from + index, 12, 31),
-                          startMonth,
-                        ) < 0
+                        new Date(displayYears.from + index, 12, 31),
+                        startMonth,
+                      ) < 0
                       : false;
 
                     const isAfter = endMonth
                       ? differenceInCalendarDays(
-                          new Date(displayYears.from + index, 0, 0),
-                          endMonth,
-                        ) > 0
+                        new Date(displayYears.from + index, 0, 0),
+                        endMonth,
+                      ) > 0
                       : false;
 
                     const isDisabled = isBefore || isAfter;
@@ -159,8 +159,8 @@ function Calendar({
                         className={cn(
                           "text-foreground h-7 w-full text-sm font-normal",
                           displayYears.from + index ===
-                            new Date().getFullYear() &&
-                            "bg-accent text-accent-foreground font-medium",
+                          new Date().getFullYear() &&
+                          "bg-accent text-accent-foreground font-medium",
                         )}
                         variant="ghost"
                         onClick={() => {
@@ -281,9 +281,8 @@ function Calendar({
                 disabled={isPreviousDisabled}
                 aria-label={
                   navView === "years"
-                    ? `Go to the previous ${
-                        displayYears.to - displayYears.from + 1
-                      } years`
+                    ? `Go to the previous ${displayYears.to - displayYears.from + 1
+                    } years`
                     : labelPrevious(previousMonth)
                 }
                 onClick={handlePreviousClick}
@@ -299,9 +298,8 @@ function Calendar({
                 disabled={isNextDisabled}
                 aria-label={
                   navView === "years"
-                    ? `Go to the next ${
-                        displayYears.to - displayYears.from + 1
-                      } years`
+                    ? `Go to the next ${displayYears.to - displayYears.from + 1
+                    } years`
                     : labelNext(nextMonth)
                 }
                 onClick={handleNextClick}

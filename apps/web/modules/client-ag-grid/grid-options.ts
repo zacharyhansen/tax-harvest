@@ -53,6 +53,11 @@ export const themeBalhamGridOptions: GridOptions = {
   theme: customThemeBalham,
 };
 
+export const themeQuartzGridOptions: GridOptions = {
+  ...baseGridOptions,
+  theme: customThemeQuartz,
+};
+
 export const formGridOptions: GridOptions = {
   ...baseGridOptions,
   theme: customThemeForm,
