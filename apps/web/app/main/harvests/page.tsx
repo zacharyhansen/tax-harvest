@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useHarvestsAndTransactionsQuery } from '~/generated/gql';
 import { LoadingPage } from '~/modules/utility-components';
 import {
@@ -46,13 +45,11 @@ const cardVariants = {
 };
 
 export default function HarvestsPage() {
-  const router = useRouter();
   const { data, loading } = useHarvestsAndTransactionsQuery({
     variables: {
       where: {
-        date: {
-          gte: new Date(new Date().setHours(0, 0, 0, 0)),
-          lte: new Date(new Date().setHours(23, 59, 59, 999)),
+        recommendationExpiresDate: {
+          gte: new Date(new Date().setHours(23, 59, 59, 999)),
         },
       },
     },
@@ -87,7 +84,7 @@ export default function HarvestsPage() {
               >
                 <Info className="text-muted-foreground h-5 w-5" />
               </motion.div>
-              <CardTitle className="text-lg">No Harvests Today</CardTitle>
+              <CardTitle className="text-lg">No Open Harvests</CardTitle>
             </CardHeader>
             <CardContent>
               <motion.p
@@ -100,7 +97,9 @@ export default function HarvestsPage() {
                 <Link href={TypedRoutes.taxOpportunities()}>
                   <Button variant="link">Tax Loss Harvesting</Button>
                 </Link>
-                to see harvest opportunities.
+                to see harvest opportunities. You can also check out the Wash
+                Window Harvests tab to see harvests that are considered
+                executed.
               </motion.p>
             </CardContent>
           </Card>

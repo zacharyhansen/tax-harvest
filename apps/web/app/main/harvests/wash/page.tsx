@@ -17,9 +17,11 @@ export default function WashHarvestsPage() {
   const { data, loading } = useHarvestsAndTransactionsQuery({
     variables: {
       where: {
-        date: {
+        afterWashRevertDate: {
+          gte: new Date(new Date().setHours(23, 59, 59, 999)),
+        },
+        recommendationExpiresDate: {
           lte: new Date(new Date().setHours(23, 59, 59, 999)),
-          gte: new Date(new Date().setDate(new Date().getDate() - 32)),
         },
       },
     },

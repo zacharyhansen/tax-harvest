@@ -19,6 +19,12 @@ const defaultFormatter = new Intl.DateTimeFormat(undefined, {
   year: 'numeric',
 })
 
+export const withMonthAndDayFormatter = new Intl.DateTimeFormat(undefined, {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+})
+
 export function formatDate(
   date: string | Date | null | undefined | number,
   formatter = defaultFormatter,
@@ -26,8 +32,8 @@ export function formatDate(
   return date == null
     ? null
     : formatter.format(
-        typeof date === 'number' ? new Date(date) : parseDate(date),
-      )
+      typeof date === 'number' ? new Date(date) : parseDate(date),
+    )
 }
 
 const pad = (n: number) => String(n).padStart(2, '0')

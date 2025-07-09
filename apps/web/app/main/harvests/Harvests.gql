@@ -8,6 +8,7 @@ fragment HarvestTableItem on Harvest {
   label
   afterWashRevertDate
   notify
+  recommendationExpiresDate
   createdBy {
     id
     # eslint-disable-next-line @graphql-eslint/known-fragment-names
@@ -75,6 +76,12 @@ fragment HarvestSingleItem on Harvest {
 
 query HarvestSingle($id: String!) {
   harvest(id: $id) {
+    ...HarvestSingleItem
+  }
+}
+
+mutation UpdateHarvestSingle($id: String!, $data: HarvestUpdateInput!) {
+  updateHarvest(id: $id, data: $data) {
     ...HarvestSingleItem
   }
 }

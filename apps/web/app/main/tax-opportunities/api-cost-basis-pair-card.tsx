@@ -50,30 +50,48 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
   return (
     <Card
       className={cn(
-        'bg-background relative overflow-hidden border shadow-sm',
-        isHarvested && [
-          // 'before:bg-background/50 before:absolute before:inset-0 before:z-0',
-          '[&_*]:opacity-80',
-        ]
+        'bg-background group relative overflow-hidden border shadow-sm',
+        isHarvested && ['[&_.card-content]:opacity-80']
       )}
     >
-      <div className="pointer-events-auto relative z-10 flex justify-between border-b p-4">
+      {isHarvested && harvestItem.sourceLot.harvestId && (
+        <div className="floating-button absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <Button
+            variant="destructive"
+            className="shadow-lg transition-transform duration-200"
+            onClick={() => {
+              toast.promise(
+                deleteHarvests({
+                  variables: {
+                    ids: [harvestItem.sourceLot.harvestId!],
+                  },
+                }),
+                {
+                  loading: 'Removing from harvest...',
+                  success: 'Harvest removed successfully',
+                  error: 'Failed to remove from harvest',
+                }
+              );
+            }}
+            loading={isDeleting}
+          >
+            <Trash2 className="mr-2 size-4" />
+            Undo this harvest
+          </Button>
+        </div>
+      )}
+      <div className="card-content pointer-events-auto relative z-10 flex justify-between border-b p-4">
         <div>
           <h3 className={cn('font-semibold')}>
             Cost Basis Reset Strategy - Matched Pair
           </h3>
-          <p
-            className={cn(
-              'text-(--color-text-secondary) mt-1 text-sm',
-              isHarvested && 'opacity-50'
-            )}
-          >
+          <p className="text-(--color-text-secondary) mt-1 text-sm">
             Pair these trades to reset your cost basis with minimal tax impact
           </p>
         </div>
       </div>
 
-      <div className="divide-border pointer-events-auto relative z-10 grid gap-0 divide-x md:grid-cols-2">
+      <div className="card-content divide-border pointer-events-auto relative z-10 grid gap-0 divide-x md:grid-cols-2">
         {/* Gain Position */}
         <LotOrderCard
           assetSymbol={harvestItem.sourceLot.symbol ?? ''}
@@ -100,39 +118,8 @@ export function CostBasisPairCard({ harvestItem }: CostBasisPairCardProps) {
           ))}
         </div>
       </div>
-      <CardFooter className="pointer-events-auto relative z-10 flex items-center justify-center border-t pt-4">
+      <CardFooter className="card-content pointer-events-auto relative z-10 flex items-center justify-center border-t pt-4">
         <div className="flex w-full justify-center gap-2">
-          {isHarvested && harvestItem.sourceLot.harvestId ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => {
-                    toast.promise(
-                      deleteHarvests({
-                        variables: {
-                          ids: [harvestItem.sourceLot.harvestId!],
-                        },
-                      }),
-                      {
-                        loading: 'Removing from harvest...',
-                        success: 'Harvest removed successfully',
-                        error: 'Failed to remove from harvest',
-                      }
-                    );
-                  }}
-                  loading={isDeleting}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Undo this harvest</p>
-              </TooltipContent>
-            </Tooltip>
-          ) : null}
-
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button

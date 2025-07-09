@@ -3,8 +3,8 @@ import { ThemeProvider } from '@repo/ui/providers/theme-provider';
 import {
   ArrowRight,
   BarChart3,
-  Bot,
   Shield,
+  Tractor,
   TrendingUp,
   Zap,
 } from 'lucide-react';
@@ -17,13 +17,13 @@ export default function LandingPage() {
         <div className="relative min-h-screen">
           {/* Background with overlay */}
           <div className="absolute inset-0 bg-[url('/images/coverImage.jpg')] bg-cover bg-center bg-no-repeat" />
-          <div className="absolute inset-0 bg-black/50" />{' '}
+          <div className="absolute inset-0 bg-black/50" />
           {/* Dark overlay for better text readability */}
           <div className="container relative mx-auto flex min-h-screen flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
             {/* Logo */}
             <Link href="/en" className="mb-12">
               <div className="flex items-center text-2xl font-bold text-white">
-                <Bot className="mr-2 h-8 w-8 text-yellow-500" />
+                <Tractor className="mr-2 h-8 w-8 text-yellow-500" />
                 TaxHarvest.AI
               </div>
             </Link>

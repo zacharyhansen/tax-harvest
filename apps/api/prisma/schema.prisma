@@ -116,20 +116,22 @@ enum HarvestStep {
 }
 
 model Harvest {
-  id                  String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @default(now()) @updatedAt
-  label               String
-  createdById         String
-  portfolioId         String      @db.Uuid
-  amount              Decimal     @db.Decimal(14, 4)
-  date                DateTime    @default(now())
-  type                HarvestType
-  step                HarvestStep @default(CONFIGURE)
-  /// Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
-  afterWashRevertDate DateTime    @default(now())
+  id                        String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt                 DateTime    @default(now())
+  updatedAt                 DateTime    @default(now()) @updatedAt
+  label                     String
+  createdById               String
+  portfolioId               String      @db.Uuid
+  amount                    Decimal     @db.Decimal(14, 4)
+  date                      DateTime    @default(now())
+  type                      HarvestType
+  step                      HarvestStep @default(CONFIGURE)
+  /// Date to revert is possible after wash period - its the date of the revert if revert is true and notify is noify is true
+  afterWashRevertDate       DateTime    @default(now())
+  /// Date to lock in the recommendation 
+  recommendationExpiresDate DateTime    @default(now())
   /// should notify be performed
-  notify              Boolean     @default(true)
+  notify                    Boolean     @default(true)
 
   createdBy               User                     @relation(fields: [createdById], references: [id], onDelete: Cascade)
   portfolio               Portfolio                @relation(fields: [portfolioId], references: [id])

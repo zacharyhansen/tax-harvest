@@ -4560,7 +4560,7 @@ export enum Graph {
 export type Harvest = {
   __typename?: 'Harvest';
   _count: HarvestCount;
-  /** Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true */
+  /** Date to revert is possible after wash period - its the date of the revert if revert is true and notify is noify is true */
   afterWashRevertDate: Scalars['DateTime']['output'];
   amount: Scalars['Decimal']['output'];
   createdAt: Scalars['DateTime']['output'];
@@ -4575,6 +4575,8 @@ export type Harvest = {
   notify: Scalars['Boolean']['output'];
   portfolio: Portfolio;
   portfolioId: Scalars['String']['output'];
+  /** Date to lock in the recommendation  */
+  recommendationExpiresDate: Scalars['DateTime']['output'];
   step: HarvestStep;
   type: HarvestType;
   updatedAt: Scalars['DateTime']['output'];
@@ -4603,6 +4605,7 @@ export type HarvestCountAggregate = {
   label: Scalars['Int']['output'];
   notify: Scalars['Int']['output'];
   portfolioId: Scalars['Int']['output'];
+  recommendationExpiresDate: Scalars['Int']['output'];
   step: Scalars['Int']['output'];
   type: Scalars['Int']['output'];
   updatedAt: Scalars['Int']['output'];
@@ -4617,6 +4620,7 @@ export type HarvestCreateManyCreatedByInput = {
   label: Scalars['String']['input'];
   notify?: InputMaybe<Scalars['Boolean']['input']>;
   portfolioId: Scalars['String']['input'];
+  recommendationExpiresDate?: InputMaybe<Scalars['DateTime']['input']>;
   step?: InputMaybe<HarvestStep>;
   type: HarvestType;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -4636,6 +4640,7 @@ export type HarvestCreateManyPortfolioInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   label: Scalars['String']['input'];
   notify?: InputMaybe<Scalars['Boolean']['input']>;
+  recommendationExpiresDate?: InputMaybe<Scalars['DateTime']['input']>;
   step?: InputMaybe<HarvestStep>;
   type: HarvestType;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -4703,6 +4708,7 @@ export type HarvestCreateWithoutCreatedByInput = {
   label: Scalars['String']['input'];
   notify?: InputMaybe<Scalars['Boolean']['input']>;
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput;
+  recommendationExpiresDate?: InputMaybe<Scalars['DateTime']['input']>;
   step?: InputMaybe<HarvestStep>;
   type: HarvestType;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -4719,6 +4725,7 @@ export type HarvestCreateWithoutHarvestTransactionItemsInput = {
   label: Scalars['String']['input'];
   notify?: InputMaybe<Scalars['Boolean']['input']>;
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput;
+  recommendationExpiresDate?: InputMaybe<Scalars['DateTime']['input']>;
   step?: InputMaybe<HarvestStep>;
   type: HarvestType;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -4735,6 +4742,7 @@ export type HarvestCreateWithoutHarvestTransactionsInput = {
   label: Scalars['String']['input'];
   notify?: InputMaybe<Scalars['Boolean']['input']>;
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput;
+  recommendationExpiresDate?: InputMaybe<Scalars['DateTime']['input']>;
   step?: InputMaybe<HarvestStep>;
   type: HarvestType;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -4751,6 +4759,7 @@ export type HarvestCreateWithoutPortfolioInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   label: Scalars['String']['input'];
   notify?: InputMaybe<Scalars['Boolean']['input']>;
+  recommendationExpiresDate?: InputMaybe<Scalars['DateTime']['input']>;
   step?: InputMaybe<HarvestStep>;
   type: HarvestType;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -4792,6 +4801,7 @@ export type HarvestMaxAggregate = {
   label?: Maybe<Scalars['String']['output']>;
   notify?: Maybe<Scalars['Boolean']['output']>;
   portfolioId?: Maybe<Scalars['String']['output']>;
+  recommendationExpiresDate?: Maybe<Scalars['DateTime']['output']>;
   step?: Maybe<HarvestStep>;
   type?: Maybe<HarvestType>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -4808,6 +4818,7 @@ export type HarvestMinAggregate = {
   label?: Maybe<Scalars['String']['output']>;
   notify?: Maybe<Scalars['Boolean']['output']>;
   portfolioId?: Maybe<Scalars['String']['output']>;
+  recommendationExpiresDate?: Maybe<Scalars['DateTime']['output']>;
   step?: Maybe<HarvestStep>;
   type?: Maybe<HarvestType>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -4857,6 +4868,7 @@ export type HarvestScalarWhereInput = {
   label?: InputMaybe<StringFilter>;
   notify?: InputMaybe<BoolFilter>;
   portfolioId?: InputMaybe<UuidFilter>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFilter>;
   step?: InputMaybe<EnumHarvestStepFilter>;
   type?: InputMaybe<EnumHarvestTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -6413,6 +6425,7 @@ export type HarvestUpdateInput = {
   label?: InputMaybe<StringFieldUpdateOperationsInput>;
   notify?: InputMaybe<BoolFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestsNestedInput>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   step?: InputMaybe<EnumHarvestStepFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumHarvestTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6426,6 +6439,7 @@ export type HarvestUpdateManyMutationInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   label?: InputMaybe<StringFieldUpdateOperationsInput>;
   notify?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   step?: InputMaybe<EnumHarvestStepFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumHarvestTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6516,6 +6530,7 @@ export type HarvestUpdateWithoutCreatedByInput = {
   label?: InputMaybe<StringFieldUpdateOperationsInput>;
   notify?: InputMaybe<BoolFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestsNestedInput>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   step?: InputMaybe<EnumHarvestStepFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumHarvestTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6532,6 +6547,7 @@ export type HarvestUpdateWithoutHarvestTransactionItemsInput = {
   label?: InputMaybe<StringFieldUpdateOperationsInput>;
   notify?: InputMaybe<BoolFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestsNestedInput>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   step?: InputMaybe<EnumHarvestStepFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumHarvestTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6548,6 +6564,7 @@ export type HarvestUpdateWithoutHarvestTransactionsInput = {
   label?: InputMaybe<StringFieldUpdateOperationsInput>;
   notify?: InputMaybe<BoolFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutHarvestsNestedInput>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   step?: InputMaybe<EnumHarvestStepFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumHarvestTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6564,6 +6581,7 @@ export type HarvestUpdateWithoutPortfolioInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   label?: InputMaybe<StringFieldUpdateOperationsInput>;
   notify?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   step?: InputMaybe<EnumHarvestStepFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumHarvestTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6610,6 +6628,7 @@ export type HarvestWhereInput = {
   notify?: InputMaybe<BoolFilter>;
   portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
   portfolioId?: InputMaybe<UuidFilter>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFilter>;
   step?: InputMaybe<EnumHarvestStepFilter>;
   type?: InputMaybe<EnumHarvestTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -6632,6 +6651,7 @@ export type HarvestWhereUniqueInput = {
   notify?: InputMaybe<BoolFilter>;
   portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
   portfolioId?: InputMaybe<UuidFilter>;
+  recommendationExpiresDate?: InputMaybe<DateTimeFilter>;
   step?: InputMaybe<EnumHarvestStepFilter>;
   type?: InputMaybe<EnumHarvestTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -15324,14 +15344,14 @@ export type LotTransactionBatchQueryVariables = Exact<{
 
 export type LotTransactionBatchQuery = { __typename?: 'Query', lotTransactionBatch?: { __typename?: 'LotTransactionBatch', id: string, createdAt: any, updatedAt: any, authConnectionId: string, positionsBefore?: any | null, positionsAfter?: any | null, holdingsPayload?: any | null, lotTupleMap?: any | null, initialLots?: any | null, newTransactions?: any | null, newBuys?: any | null, newSells?: any | null, lotChangeLog?: Array<{ __typename?: 'LotChangeLog', id: string, createdAt: any, lotId?: string | null, accountId: string, portfolioId: string, lotBefore?: any | null, lotAfter?: any | null, operationType: OperationType, source?: string | null, processed: boolean, quantityChange?: string | null, lotTransactionBatchId: string, lot?: { __typename?: 'Lot', id: string, remainingQty: string, price: string, acquiredDate: any, assetSymbol: string, account: { __typename?: 'Account', id: string, name?: string | null } } | null }> | null } | null };
 
-export type HarvestTableItemFragment = { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
+export type HarvestTableItemFragment = { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, recommendationExpiresDate: any, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
 
 export type HarvestsQueryVariables = Exact<{
   where?: InputMaybe<HarvestWhereInput>;
 }>;
 
 
-export type HarvestsQuery = { __typename?: 'Query', harvests: Array<{ __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
+export type HarvestsQuery = { __typename?: 'Query', harvests: Array<{ __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, recommendationExpiresDate: any, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
 
 export type HarvestTransactionItemTableItemFragment = { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string };
 
@@ -15342,16 +15362,24 @@ export type HarvestsAndTransactionsQueryVariables = Exact<{
 }>;
 
 
-export type HarvestsAndTransactionsQuery = { __typename?: 'Query', harvests: Array<{ __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
+export type HarvestsAndTransactionsQuery = { __typename?: 'Query', harvests: Array<{ __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, recommendationExpiresDate: any, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } }> };
 
-export type HarvestSingleItemFragment = { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
+export type HarvestSingleItemFragment = { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, recommendationExpiresDate: any, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
 
 export type HarvestSingleQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type HarvestSingleQuery = { __typename?: 'Query', harvest: { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } } };
+export type HarvestSingleQuery = { __typename?: 'Query', harvest: { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, recommendationExpiresDate: any, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } } };
+
+export type UpdateHarvestSingleMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  data: HarvestUpdateInput;
+}>;
+
+
+export type UpdateHarvestSingleMutation = { __typename?: 'Mutation', updateHarvest: { __typename?: 'Harvest', id: string, date: any, type: HarvestType, step: HarvestStep, createdAt: any, amount: string, label: string, afterWashRevertDate: any, notify: boolean, recommendationExpiresDate: any, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, orderType: OrderType, assetSymbol: string, quantity: string, price: string, lotId?: string | null, completedDate?: any | null, lotAcquiredDate: any, lotPricePaid: string, lotPriceAtHarvest: string } | null }> | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } } };
 
 export type AccountSummaryFragment = { __typename?: 'Account', id: string, uploadedPositions: boolean, setRealizedValues: boolean, name?: string | null, type: string, subType?: string | null, accountValueTotal?: string | null, skipSetup: boolean };
 
@@ -15811,6 +15839,7 @@ export const HarvestTableItemFragmentDoc = gql`
   label
   afterWashRevertDate
   notify
+  recommendationExpiresDate
   createdBy {
     id
     ...UserItem
@@ -16783,6 +16812,40 @@ export type HarvestSingleQueryHookResult = ReturnType<typeof useHarvestSingleQue
 export type HarvestSingleLazyQueryHookResult = ReturnType<typeof useHarvestSingleLazyQuery>;
 export type HarvestSingleSuspenseQueryHookResult = ReturnType<typeof useHarvestSingleSuspenseQuery>;
 export type HarvestSingleQueryResult = Apollo.QueryResult<HarvestSingleQuery, HarvestSingleQueryVariables>;
+export const UpdateHarvestSingleDocument = gql`
+    mutation UpdateHarvestSingle($id: String!, $data: HarvestUpdateInput!) {
+  updateHarvest(id: $id, data: $data) {
+    ...HarvestSingleItem
+  }
+}
+    ${HarvestSingleItemFragmentDoc}`;
+export type UpdateHarvestSingleMutationFn = Apollo.MutationFunction<UpdateHarvestSingleMutation, UpdateHarvestSingleMutationVariables>;
+
+/**
+ * __useUpdateHarvestSingleMutation__
+ *
+ * To run a mutation, you first call `useUpdateHarvestSingleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateHarvestSingleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateHarvestSingleMutation, { data, loading, error }] = useUpdateHarvestSingleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateHarvestSingleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateHarvestSingleMutation, UpdateHarvestSingleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateHarvestSingleMutation, UpdateHarvestSingleMutationVariables>(UpdateHarvestSingleDocument, options);
+      }
+export type UpdateHarvestSingleMutationHookResult = ReturnType<typeof useUpdateHarvestSingleMutation>;
+export type UpdateHarvestSingleMutationResult = Apollo.MutationResult<UpdateHarvestSingleMutation>;
+export type UpdateHarvestSingleMutationOptions = Apollo.BaseMutationOptions<UpdateHarvestSingleMutation, UpdateHarvestSingleMutationVariables>;
 export const PortfolioSummaryDocument = gql`
     query PortfolioSummary {
   portfolioSummary {

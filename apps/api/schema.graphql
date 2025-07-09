@@ -4574,7 +4574,7 @@ type Harvest {
   _count: HarvestCount!
 
   """
-  Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
+  Date to revert is possible after wash period - its the date of the revert if revert is true and notify is noify is true
   """
   afterWashRevertDate: DateTime!
   amount: Decimal!
@@ -4591,6 +4591,9 @@ type Harvest {
   notify: Boolean!
   portfolio: Portfolio!
   portfolioId: String!
+
+  """Date to lock in the recommendation """
+  recommendationExpiresDate: DateTime!
   step: HarvestStep!
   type: HarvestType!
   updatedAt: DateTime!
@@ -4616,6 +4619,7 @@ type HarvestCountAggregate {
   label: Int!
   notify: Int!
   portfolioId: Int!
+  recommendationExpiresDate: Int!
   step: Int!
   type: Int!
   updatedAt: Int!
@@ -4630,6 +4634,7 @@ input HarvestCreateManyCreatedByInput {
   label: String!
   notify: Boolean
   portfolioId: String!
+  recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType!
   updatedAt: DateTime
@@ -4649,6 +4654,7 @@ input HarvestCreateManyPortfolioInput {
   id: String
   label: String!
   notify: Boolean
+  recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType!
   updatedAt: DateTime
@@ -4716,6 +4722,7 @@ input HarvestCreateWithoutCreatedByInput {
   label: String!
   notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
+  recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType!
   updatedAt: DateTime
@@ -4732,6 +4739,7 @@ input HarvestCreateWithoutHarvestTransactionItemsInput {
   label: String!
   notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
+  recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType!
   updatedAt: DateTime
@@ -4748,6 +4756,7 @@ input HarvestCreateWithoutHarvestTransactionsInput {
   label: String!
   notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
+  recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType!
   updatedAt: DateTime
@@ -4764,6 +4773,7 @@ input HarvestCreateWithoutPortfolioInput {
   id: String
   label: String!
   notify: Boolean
+  recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType!
   updatedAt: DateTime
@@ -4804,6 +4814,7 @@ type HarvestMaxAggregate {
   label: String
   notify: Boolean
   portfolioId: String
+  recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType
   updatedAt: DateTime
@@ -4819,6 +4830,7 @@ type HarvestMinAggregate {
   label: String
   notify: Boolean
   portfolioId: String
+  recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType
   updatedAt: DateTime
@@ -4868,6 +4880,7 @@ input HarvestScalarWhereInput {
   label: StringFilter
   notify: BoolFilter
   portfolioId: UuidFilter
+  recommendationExpiresDate: DateTimeFilter
   step: EnumHarvestStepFilter
   type: EnumHarvestTypeFilter
   updatedAt: DateTimeFilter
@@ -6419,6 +6432,7 @@ input HarvestUpdateInput {
   label: StringFieldUpdateOperationsInput
   notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
+  recommendationExpiresDate: DateTimeFieldUpdateOperationsInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6432,6 +6446,7 @@ input HarvestUpdateManyMutationInput {
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
   notify: BoolFieldUpdateOperationsInput
+  recommendationExpiresDate: DateTimeFieldUpdateOperationsInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6522,6 +6537,7 @@ input HarvestUpdateWithoutCreatedByInput {
   label: StringFieldUpdateOperationsInput
   notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
+  recommendationExpiresDate: DateTimeFieldUpdateOperationsInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6538,6 +6554,7 @@ input HarvestUpdateWithoutHarvestTransactionItemsInput {
   label: StringFieldUpdateOperationsInput
   notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
+  recommendationExpiresDate: DateTimeFieldUpdateOperationsInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6554,6 +6571,7 @@ input HarvestUpdateWithoutHarvestTransactionsInput {
   label: StringFieldUpdateOperationsInput
   notify: BoolFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutHarvestsNestedInput
+  recommendationExpiresDate: DateTimeFieldUpdateOperationsInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6570,6 +6588,7 @@ input HarvestUpdateWithoutPortfolioInput {
   id: StringFieldUpdateOperationsInput
   label: StringFieldUpdateOperationsInput
   notify: BoolFieldUpdateOperationsInput
+  recommendationExpiresDate: DateTimeFieldUpdateOperationsInput
   step: EnumHarvestStepFieldUpdateOperationsInput
   type: EnumHarvestTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
@@ -6616,6 +6635,7 @@ input HarvestWhereInput {
   notify: BoolFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
+  recommendationExpiresDate: DateTimeFilter
   step: EnumHarvestStepFilter
   type: EnumHarvestTypeFilter
   updatedAt: DateTimeFilter
@@ -6638,6 +6658,7 @@ input HarvestWhereUniqueInput {
   notify: BoolFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
+  recommendationExpiresDate: DateTimeFilter
   step: EnumHarvestStepFilter
   type: EnumHarvestTypeFilter
   updatedAt: DateTimeFilter
