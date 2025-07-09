@@ -168,7 +168,7 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
             Manage your portfolio settings and preferences.
           </p>
         </div>
-        <Card className="w-full max-w-2xl">
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Attributes</CardTitle>
           </CardHeader>

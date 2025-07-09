@@ -1,22 +1,28 @@
-import type { ButtonProps } from '@repo/ui/components/button'
-import type { PlaidLinkOnSuccess, PlaidLinkOptions } from 'react-plaid-link'
-import { Alert } from '@repo/ui/components/alert'
-import { Button } from '@repo/ui/components/button'
-import { toast } from '@repo/ui/components/toast-sonner'
-import Image from 'next/image'
-import { useCallback } from 'react'
-import { usePlaidLink } from 'react-plaid-link'
+import type { ButtonProps } from '@repo/ui/components/button';
+import type {
+  PlaidLinkOnSuccess,
+  PlaidLinkOptions,
+  PlaidLinkOnExit,
+  PlaidLinkError,
+} from 'react-plaid-link';
+import { Alert } from '@repo/ui/components/alert';
+import { Button } from '@repo/ui/components/button';
+import { toast } from '@repo/ui/components/toast-sonner';
+import Image from 'next/image';
+import { useCallback } from 'react';
+import { usePlaidLink } from 'react-plaid-link';
+import { ApolloError } from '@apollo/client';
 
-import { usePlaidSetAccessTokenAndSyncAccountsMutation } from '~/generated/gql'
+import { usePlaidSetAccessTokenAndSyncAccountsMutation } from '~/generated/gql';
 
-import plaidIcon from '../../public/icons/plaid.svg'
+import plaidIcon from '../../public/icons/plaid.svg';
 
 type PlaidLinkProps = {
-  token: string
-} & ButtonProps
+  token: string;
+} & ButtonProps;
 
 export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
-  const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation()
+  const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation();
 
   const onSuccess: PlaidLinkOnSuccess = useCallback<PlaidLinkOnSuccess>(
     (public_token, metaData) => {
@@ -44,40 +50,71 @@ export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
             },
             publicToken: public_token,
           },
+        }).catch((error: ApolloError) => {
+          console.error('Plaid sync error:', error);
+          throw new Error(error.message || 'Failed to sync accounts');
         }),
         {
-          error: 'Accounts failed to sync',
+          error: error => `Failed to sync accounts: ${error.message}`,
           loading: 'We are syncing your account and transaction data',
           success: 'Sync complete',
-        },
-      )
+        }
+      );
     },
-    [mutate],
-  )
+    [mutate]
+  );
+
+  const onExit: PlaidLinkOnExit = useCallback(
+    (error: PlaidLinkError | null, metadata) => {
+      if (error) {
+        console.error('Plaid Link error:', error);
+        toast.error(
+          `Connection error: ${error.error_message || error.error_code}`
+        );
+      } else if (metadata.status === 'requires_credentials') {
+        toast.error('Please enter valid credentials');
+      } else if (metadata.status === 'requires_questions') {
+        toast.error('Please answer all security questions');
+      } else if (metadata.status === 'requires_selections') {
+        toast.error('Please select all required options');
+      } else if (metadata.status === 'institution_not_found') {
+        toast.error('Institution not found');
+      } else if (metadata.status !== 'complete') {
+        toast.error('Connection process incomplete');
+      }
+    },
+    []
+  );
 
   const config: PlaidLinkOptions = {
     onSuccess,
+    onExit,
     token,
-    // onExit
-    // onEvent
-  }
+  };
 
-  const { error, open, ready } = usePlaidLink(config)
+  const { error, open, ready } = usePlaidLink(config);
 
   if (error) {
-    return <Alert variant="destructive">{JSON.stringify(error)}</Alert>
+    console.error('Plaid Link setup error:', error);
+    return (
+      <Alert variant="destructive">
+        Failed to initialize Plaid connection:{' '}
+        {error.message || JSON.stringify(error)}
+      </Alert>
+    );
   }
 
   return (
     <Button
       {...buttonProps}
-      onClick={() => {
-        open()
+      onClick={e => {
+        e.stopPropagation();
+        open();
       }}
       disabled={!ready}
       iconLeft={<Image src={plaidIcon} alt="Plaid" width={24} height={24} />}
     >
       Connect
     </Button>
-  )
+  );
 }
