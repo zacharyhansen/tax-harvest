@@ -26,7 +26,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 
   const ctx = useMemo(
     () => ({
-      portfolio: data?.portfolioAuthed,
+      portfolio: data?.portfolioAuthed ?? '',
       reload: async () => {
         setReloading(true);
         await session?.reload();
@@ -41,13 +41,20 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     return <LoadingScreen />;
   }
 
-  if (error || !ctx?.portfolio) {
+  if (error && !ctx?.portfolio) {
     return (
-      <ErrorPage message="Unable to load portfolio">
-        <SidebarProvider>
-          <PortfolioSwitcher />
-        </SidebarProvider>
-      </ErrorPage>
+      <PortfolioContext.Provider
+        // @ts-expect-error we throw an error if nots not defined
+        value={ctx}
+      >
+        <ErrorPage message="Unable to load portfolio. Please switch to a different portfolio.">
+          <div className="flex h-full w-full items-center justify-center p-4">
+            <SidebarProvider>
+              <PortfolioSwitcher />
+            </SidebarProvider>
+          </div>
+        </ErrorPage>
+      </PortfolioContext.Provider>
     );
   }
 
@@ -56,7 +63,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       // @ts-expect-error we throw an error if nots not defined
       value={ctx}
     >
-      {children}
+      {ctx.portfolio ? children : <LoadingScreen />}
     </PortfolioContext.Provider>
   );
 }

@@ -21,7 +21,7 @@ export function ErrorPage({
           <CircleAlert className="inline" />
           <p>{title ?? 'Error'}</p>
         </div>
-        <div className="text-sm text-gray-600">
+        <div className="text-muted-foreground text-sm">
           {message ?? 'Something went wrong. Please try again later.'}
         </div>
         {children}
