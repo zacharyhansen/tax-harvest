@@ -26,9 +26,14 @@ const ANIMATION_STEPS = [
   },
 ];
 
-export function AnalyzeStep() {
+interface AnalyzeStepProps {
+  onAnimationsComplete?: () => void;
+}
+
+export function AnalyzeStep({ onAnimationsComplete }: AnalyzeStepProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [startTime] = useState(Date.now());
+  const [animationsCompleted, setAnimationsCompleted] = useState(false);
 
   // Calculate the cumulative duration at each step
   const stepTimings = useMemo(() => {
@@ -47,13 +52,18 @@ export function AnalyzeStep() {
       const currentStepIndex = stepTimings.findIndex(
         timing => elapsedTime < timing
       );
-      setCurrentStep(
-        currentStepIndex === -1 ? ANIMATION_STEPS.length - 1 : currentStepIndex
-      );
+      const newCurrentStep = currentStepIndex === -1 ? ANIMATION_STEPS.length - 1 : currentStepIndex;
+      setCurrentStep(newCurrentStep);
+
+      // Check if all animations are complete
+      if (currentStepIndex === -1 && !animationsCompleted) {
+        setAnimationsCompleted(true);
+        onAnimationsComplete?.();
+      }
     }, 100); // Update frequently for smooth transitions
 
     return () => clearInterval(interval);
-  }, [startTime, stepTimings]);
+  }, [startTime, stepTimings, animationsCompleted, onAnimationsComplete]);
 
   return (
     <div className="p-8">
@@ -77,33 +87,31 @@ export function AnalyzeStep() {
                 duration: 0.3,
                 ease: 'easeOut',
               }}
-              className={`flex items-center gap-4 rounded-lg border p-4 ${
-                isActive
+              className={`flex items-center gap-4 rounded-lg border p-4 ${isActive
                   ? 'border-blue-600'
                   : isCompleted
                     ? 'border-green-600'
                     : isPending
                       ? 'border-muted'
                       : 'border-muted'
-              } `}
+                } `}
             >
               {/* Icon with Animation */}
               <motion.div
-                className={`relative rounded-full p-3 ${
-                  isActive
+                className={`relative rounded-full p-3 ${isActive
                     ? 'bg-blue-600/20'
                     : isCompleted
                       ? 'bg-green-600/20'
                       : 'bg-muted'
-                } `}
+                  } `}
                 animate={
                   isActive
                     ? {
-                        scale: [1, 1.1, 1],
-                      }
+                      scale: [1, 1.1, 1],
+                    }
                     : {
-                        scale: 1,
-                      }
+                      scale: 1,
+                    }
                 }
                 transition={{
                   repeat: isActive ? Infinity : 0,
@@ -133,13 +141,12 @@ export function AnalyzeStep() {
                       exit={{ scale: 0, opacity: 0 }}
                     >
                       <step.icon
-                        className={`size-6 ${
-                          isCompleted
+                        className={`size-6 ${isCompleted
                             ? 'text-green-500'
                             : isPending
                               ? 'text-gray-500'
                               : 'text-blue-500'
-                        } `}
+                          } `}
                       />
                     </motion.div>
                   )}
