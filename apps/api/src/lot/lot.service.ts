@@ -107,7 +107,10 @@ export class LotService {
         ])
         .where('Account.portfolioId', '=', portfolioId)
         // remove tax advantaged accounts
-        .where('Account.subType', 'not in', [...taxAdvantadedSubTypes])
+        .where(eb => eb.or([
+          eb('Account.subType', 'not in', [...taxAdvantadedSubTypes]),
+          eb('Account.subType', 'is', null),
+        ]))
         // Filter out fractional shares
         .where('LotCurrent.remainingQty', '>=', '1')
         .groupBy([...LotService.lotCurrentFields, 'Harvest.id'])

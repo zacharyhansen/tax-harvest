@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useHarvestsAndTransactionsQuery } from '~/generated/gql';
 import { LoadingPage } from '~/modules/utility-components';
 import {
@@ -46,7 +45,6 @@ const cardVariants = {
 };
 
 export default function HarvestsPage() {
-  const router = useRouter();
   const { data, loading } = useHarvestsAndTransactionsQuery({
     variables: {
       where: {
