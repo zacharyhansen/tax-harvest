@@ -459,6 +459,7 @@ export enum HarvestScalarFieldEnum {
     type = "type",
     step = "step",
     afterWashRevertDate = "afterWashRevertDate",
+    recommendationExpiresDate = "recommendationExpiresDate",
     notify = "notify"
 }
 
@@ -22475,6 +22476,8 @@ export class HarvestCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     afterWashRevertDate?: true;
     @Field(() => Boolean, {nullable:true})
+    recommendationExpiresDate?: true;
+    @Field(() => Boolean, {nullable:true})
     notify?: true;
     @Field(() => Boolean, {nullable:true})
     _all?: true;
@@ -22505,6 +22508,8 @@ export class HarvestCountAggregate {
     @Field(() => Int, {nullable:false})
     afterWashRevertDate!: number;
     @Field(() => Int, {nullable:false})
+    recommendationExpiresDate!: number;
+    @Field(() => Int, {nullable:false})
     notify!: number;
     @Field(() => Int, {nullable:false})
     _all!: number;
@@ -22534,6 +22539,8 @@ export class HarvestCountOrderByAggregateInput {
     step?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    recommendationExpiresDate?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notify?: `${SortOrder}`;
 }
@@ -22579,6 +22586,8 @@ export class HarvestCreateManyCreatedByInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
 }
@@ -22616,6 +22625,8 @@ export class HarvestCreateManyPortfolioInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
 }
@@ -22646,6 +22657,8 @@ export class HarvestCreateManyInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
 }
@@ -22770,6 +22783,8 @@ export class HarvestCreateWithoutCreatedByInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => PortfolioCreateNestedOneWithoutHarvestsInput, {nullable:false})
@@ -22805,6 +22820,8 @@ export class HarvestCreateWithoutHarvestTransactionItemsInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
@@ -22840,6 +22857,8 @@ export class HarvestCreateWithoutHarvestTransactionsInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
@@ -22875,6 +22894,8 @@ export class HarvestCreateWithoutPortfolioInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
@@ -22910,6 +22931,8 @@ export class HarvestCreateInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => UserCreateNestedOneWithoutHarvestInput, {nullable:false})
@@ -22984,6 +23007,8 @@ export class HarvestGroupBy {
     step!: `${HarvestStep}`;
     @Field(() => Date, {nullable:false})
     afterWashRevertDate!: Date | string;
+    @Field(() => Date, {nullable:false})
+    recommendationExpiresDate!: Date | string;
     @Field(() => Boolean, {nullable:false})
     notify!: boolean;
     @Field(() => HarvestCountAggregate, {nullable:true})
@@ -23036,6 +23061,8 @@ export class HarvestMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     afterWashRevertDate?: true;
     @Field(() => Boolean, {nullable:true})
+    recommendationExpiresDate?: true;
+    @Field(() => Boolean, {nullable:true})
     notify?: true;
 }
 
@@ -23063,6 +23090,8 @@ export class HarvestMaxAggregate {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
 }
@@ -23092,6 +23121,8 @@ export class HarvestMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     afterWashRevertDate?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
+    recommendationExpiresDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
     notify?: `${SortOrder}`;
 }
 
@@ -23120,6 +23151,8 @@ export class HarvestMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     afterWashRevertDate?: true;
     @Field(() => Boolean, {nullable:true})
+    recommendationExpiresDate?: true;
+    @Field(() => Boolean, {nullable:true})
     notify?: true;
 }
 
@@ -23147,6 +23180,8 @@ export class HarvestMinAggregate {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
 }
@@ -23175,6 +23210,8 @@ export class HarvestMinOrderByAggregateInput {
     step?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    recommendationExpiresDate?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notify?: `${SortOrder}`;
 }
@@ -23209,6 +23246,8 @@ export class HarvestOrderByWithAggregationInput {
     step?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    recommendationExpiresDate?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notify?: `${SortOrder}`;
     @Field(() => HarvestCountOrderByAggregateInput, {nullable:true})
@@ -23252,6 +23291,8 @@ export class HarvestOrderByWithRelationInput {
     step?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     afterWashRevertDate?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    recommendationExpiresDate?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     notify?: `${SortOrder}`;
     @Field(() => UserOrderByWithRelationInput, {nullable:true})
@@ -23312,6 +23353,8 @@ export class HarvestScalarWhereWithAggregatesInput {
     step?: InstanceType<typeof EnumHarvestStepWithAggregatesFilter>;
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeWithAggregatesFilter>;
+    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeWithAggregatesFilter>;
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     notify?: InstanceType<typeof BoolWithAggregatesFilter>;
 }
@@ -23350,6 +23393,8 @@ export class HarvestScalarWhereInput {
     step?: InstanceType<typeof EnumHarvestStepFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFilter>;
     @Field(() => BoolFilter, {nullable:true})
     notify?: InstanceType<typeof BoolFilter>;
 }
@@ -23428,6 +23473,8 @@ export class HarvestUncheckedCreateWithoutCreatedByInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
@@ -23464,6 +23511,8 @@ export class HarvestUncheckedCreateWithoutHarvestTransactionItemsInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
@@ -23497,6 +23546,8 @@ export class HarvestUncheckedCreateWithoutHarvestTransactionsInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
@@ -23528,6 +23579,8 @@ export class HarvestUncheckedCreateWithoutPortfolioInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
@@ -23564,6 +23617,8 @@ export class HarvestUncheckedCreateInput {
     step?: `${HarvestStep}`;
     @Field(() => Date, {nullable:true})
     afterWashRevertDate?: Date | string;
+    @Field(() => Date, {nullable:true})
+    recommendationExpiresDate?: Date | string;
     @Field(() => Boolean, {nullable:true})
     notify?: boolean;
     @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutHarvestInput, {nullable:true})
@@ -23634,6 +23689,8 @@ export class HarvestUncheckedUpdateManyWithoutCreatedByInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
@@ -23698,6 +23755,8 @@ export class HarvestUncheckedUpdateManyWithoutPortfolioInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
@@ -23727,6 +23786,8 @@ export class HarvestUncheckedUpdateManyInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
@@ -23754,6 +23815,8 @@ export class HarvestUncheckedUpdateWithoutCreatedByInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
@@ -23789,6 +23852,8 @@ export class HarvestUncheckedUpdateWithoutHarvestTransactionItemsInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
@@ -23821,6 +23886,8 @@ export class HarvestUncheckedUpdateWithoutHarvestTransactionsInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
@@ -23851,6 +23918,8 @@ export class HarvestUncheckedUpdateWithoutPortfolioInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
@@ -23886,6 +23955,8 @@ export class HarvestUncheckedUpdateInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => HarvestTransactionUncheckedUpdateManyWithoutHarvestNestedInput, {nullable:true})
@@ -23917,6 +23988,8 @@ export class HarvestUpdateManyMutationInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
 }
@@ -24114,6 +24187,8 @@ export class HarvestUpdateWithoutCreatedByInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutHarvestsNestedInput, {nullable:true})
@@ -24148,6 +24223,8 @@ export class HarvestUpdateWithoutHarvestTransactionItemsInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
@@ -24182,6 +24259,8 @@ export class HarvestUpdateWithoutHarvestTransactionsInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
@@ -24216,6 +24295,8 @@ export class HarvestUpdateWithoutPortfolioInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
@@ -24250,6 +24331,8 @@ export class HarvestUpdateInput {
     step?: InstanceType<typeof EnumHarvestStepFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     notify?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
     @Field(() => UserUpdateOneRequiredWithoutHarvestNestedInput, {nullable:true})
@@ -24352,6 +24435,8 @@ export class HarvestWhereUniqueInput {
     step?: InstanceType<typeof EnumHarvestStepFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFilter>;
     @Field(() => BoolFilter, {nullable:true})
     notify?: InstanceType<typeof BoolFilter>;
     @Field(() => UserScalarRelationFilter, {nullable:true})
@@ -24402,6 +24487,8 @@ export class HarvestWhereInput {
     step?: InstanceType<typeof EnumHarvestStepFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     afterWashRevertDate?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    recommendationExpiresDate?: InstanceType<typeof DateTimeFilter>;
     @Field(() => BoolFilter, {nullable:true})
     notify?: InstanceType<typeof BoolFilter>;
     @Field(() => UserScalarRelationFilter, {nullable:true})
@@ -24441,10 +24528,15 @@ export class Harvest {
     @Field(() => HarvestStep, {defaultValue:'CONFIGURE',nullable:false})
     step!: `${HarvestStep}`;
     /**
-     * Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true
+     * Date to revert is possible after wash period - its the date of the revert if revert is true and notify is noify is true
      */
-    @Field(() => Date, {description:'Date to revert is possible after wash period - its the date of the revert iif revert is true and notify is noify is true',nullable:false})
+    @Field(() => Date, {description:'Date to revert is possible after wash period - its the date of the revert if revert is true and notify is noify is true',nullable:false})
     afterWashRevertDate!: Date;
+    /**
+     * Date to lock in the recommendation 
+     */
+    @Field(() => Date, {description:'Date to lock in the recommendation ',nullable:false})
+    recommendationExpiresDate!: Date;
     /**
      * should notify be performed
      */

@@ -9,6 +9,7 @@ import {
 import Decimal from 'decimal.js'
 
 import { LotService } from '../lot/lot.service'
+import { PolygonService } from '../polygon/polygon.service'
 import { DirectedHarvestLot } from '../portfolio/portfolio.dto'
 import { PrismaService } from '../prisma/prisma.service'
 
@@ -17,6 +18,7 @@ export class HarvestService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly lotService: LotService,
+    private readonly polygonService: PolygonService,
   ) { }
 
   async createHarvest({
@@ -104,6 +106,7 @@ export class HarvestService {
             .absoluteValue()
             .toString(),
           createdById,
+          recommendationExpiresDate: await this.polygonService.marketDaysFromNow(2),
           date,
           portfolioId,
           type: harvestType,

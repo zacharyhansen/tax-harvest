@@ -14,12 +14,12 @@ export default function HarvestsLayout({
   const tabs = [
     {
       value: 'overview',
-      label: "Today's",
+      label: 'Open Harvests',
       href: '/main/harvests',
     },
     {
       value: 'wash',
-      label: 'Wash Window Harvests',
+      label: 'Executed Wash Window Harvests',
       href: '/main/harvests/wash',
     },
     {

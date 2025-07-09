@@ -1,17 +1,11 @@
 'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@repo/ui/components/card';
+import { Card, CardContent } from '@repo/ui/components/card';
 import {
   useDeleteHarvestsMutation,
-  useUpdateHarvestMutation,
   type HarvestSingleItemFragment,
   HarvestsAndTransactionsDocument,
+  useUpdateHarvestSingleMutation,
 } from '~/generated/gql';
 import { Switch } from '@repo/ui/components/switch';
 import { formatDate, withMonthAndDayFormatter } from '~/modules/utils';
@@ -56,7 +50,7 @@ export function HarvestCard({
 }: {
   harvest: HarvestSingleItemFragment;
 }) {
-  const [updateHarvest] = useUpdateHarvestMutation();
+  const [updateHarvest] = useUpdateHarvestSingleMutation();
   const [deleteHarvest] = useDeleteHarvestsMutation({
     refetchQueries: [HarvestsAndTransactionsDocument],
     awaitRefetchQueries: true,
@@ -64,13 +58,16 @@ export function HarvestCard({
   const [showNotificationDialog, setShowNotificationDialog] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const progressStep = 2; // TODO: Calculate progress step
-  const remainingMs = 0; // TODO: Calculate remaining ms
+  const progressStep =
+    new Date(harvest.afterWashRevertDate) < new Date()
+      ? 2
+      : new Date(harvest.recommendationExpiresDate) < new Date()
+        ? 1
+        : 0;
   const markedSoldAt = harvest.date;
   const expiresAt = harvest.afterWashRevertDate;
   const repurchaseDate = harvest.afterWashRevertDate;
   const hasExpired = new Date(expiresAt) < new Date();
-  const remainingTime = `${Math.ceil((new Date(repurchaseDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days`;
   const taxSavings = Number(harvest.amount);
 
   function getStrategyDescription(
@@ -243,7 +240,7 @@ export function HarvestCard({
                     <div
                       className="absolute h-0.5 bg-yellow-500 transition-all duration-300"
                       style={{
-                        width: `${(progressStep / 2) * 100}%`,
+                        width: `${(progressStep + 1 / 2) * 100}%`,
                       }}
                     />
                   </div>
@@ -305,15 +302,11 @@ export function HarvestCard({
                     <div className="font-medium">
                       Recommendation {hasExpired ? 'Expired' : 'Expires'}
                     </div>
-                    <div
-                      className={`${hasExpired ? 'text-muted-foreground' : 'text-yellow-500'} font-medium`}
-                    >
-                      {hasExpired
-                        ? formatDate(
-                            new Date(expiresAt),
-                            withMonthAndDayFormatter
-                          )
-                        : remainingTime}
+                    <div className="text-muted-foreground">
+                      {formatDate(
+                        new Date(harvest.recommendationExpiresDate),
+                        withMonthAndDayFormatter
+                      )}
                     </div>
                   </div>
                   <div className="text-right">

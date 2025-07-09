@@ -67,7 +67,7 @@ export class PolygonService {
     @Inject('POLYGON_CLIENT') private polygonClient: IRestClient,
     private readonly configService: ConfigService,
     private readonly db: Database,
-  ) {}
+  ) { }
 
   async ingestHourly({ from, to }: { from: Date, to: Date }) {
     return Promise.all(
@@ -86,6 +86,43 @@ export class PolygonService {
         }),
       ),
     )
+  }
+
+  async marketDaysFromNow(days: number) {
+    const holidays = await this.polygonClient.reference.marketHolidays()
+    const holidayDates = new Set(
+      holidays
+        .filter(holiday => holiday.date)
+        .map(holiday => holiday.date!.split('T')[0]),
+    )
+
+    const startDate = new Date()
+    let tradingDaysFound = 0
+    let daysToAdd = 0
+
+    while (tradingDaysFound < days) {
+      daysToAdd++
+      const currentDate = new Date(startDate)
+      currentDate.setDate(startDate.getDate() + daysToAdd)
+
+      // Skip weekends
+      const dayOfWeek = currentDate.getDay()
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        continue
+      }
+
+      // Skip holidays
+      const dateString = currentDate.toISOString().split('T')[0]
+      if (holidayDates.has(dateString)) {
+        continue
+      }
+
+      tradingDaysFound++
+    }
+
+    const resultDate = new Date(startDate)
+    resultDate.setDate(startDate.getDate() + daysToAdd)
+    return resultDate
   }
 
   /**
@@ -264,8 +301,7 @@ export class PolygonService {
    */
   async processAsset(asset: string) {
     return fetch(
-      `${
-        this.polygonBaseURL
+      `${this.polygonBaseURL
       }/v3/reference/tickers/${asset}?${new URLSearchParams({
         apiKey: this.configService.get<string>('POLYGON_API_KEY') ?? '',
       })}`,

@@ -183,6 +183,7 @@ export interface Harvest {
   label: string;
   notify: Generated<boolean>;
   portfolioId: string;
+  recommendationExpiresDate: Generated<Timestamp>;
   step: Generated<"COMPLETE" | "CONFIGURE" | "REVIEW">;
   type: "CAPTURE_GAINS_TAX_FREE" | "REDUCE_COST_BASIS" | "REDUCE_TAXES" | "SELL";
   updatedAt: Generated<Timestamp>;

@@ -2194,6 +2194,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Harvest.recommendationExpiresDate",
+          "name": "recommendationExpiresDate",
+          "columnName": "recommendationExpiresDate",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Portfolio",
           "type": "Portfolio",
           "isRequired": true,

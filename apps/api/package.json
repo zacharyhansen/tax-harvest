@@ -78,7 +78,7 @@
     "@nestjs/platform-fastify": "11.0.7",
     "@nestjs/schedule": "^4.1.1",
     "@nestjs/swagger": "^7.4.2",
-    "@polygon.io/client-js": "^7.3.2",
+    "@polygon.io/client-js": "^7.4.0",
     "@prisma/client": "6.9.0",
     "@sendgrid/mail": "^8.1.5",
     "apollo-server-errors": "^3.3.1",
