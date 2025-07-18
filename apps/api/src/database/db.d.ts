@@ -229,7 +229,7 @@ export interface Log {
   portfolioId: string;
   responseStatus: number | null;
   source: "ETRADE_ACCESS" | "ETRADE_REQUEST" | "LOCAL" | "PLAID" | null;
-  type: "AUTH" | "EXTERNAL_SYNC" | "PLAID_TRX_MERGE" | "PLAID_WEBHOOK";
+  type: "AUTH" | "EXTERNAL_SYNC" | "PLAID_TRX_MERGE" | "PLAID_TRX_MERGE_ERROR" | "PLAID_TRX_MERGE_SUCCESS" | "PLAID_WEBHOOK";
 }
 
 export interface Lot {
@@ -303,6 +303,7 @@ export interface LotCurrent {
 export interface LotTransactionBatch {
   authConnectionId: string;
   createdAt: Generated<Timestamp>;
+  deletedLots: Json | null;
   holdingsPayload: Json | null;
   id: Generated<string>;
   initialLots: Json | null;
@@ -313,6 +314,7 @@ export interface LotTransactionBatch {
   portfolioId: string;
   positionsAfter: Json | null;
   positionsBefore: Json | null;
+  realizedProfitAndLoss: Numeric | null;
   updatedAt: Generated<Timestamp>;
 }
 

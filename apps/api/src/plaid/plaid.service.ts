@@ -448,6 +448,8 @@ export class PlaidService {
       })
 
     let lotResults: LotChange[] = []
+    let realizedProfitAndLoss = new Decimal(0)
+
     try {
       await this.prismaService
         .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
@@ -488,6 +490,16 @@ export class PlaidService {
           ).lotChanges
         },
       )
+
+      const totalSaleDollars = newSells.reduce((acc, sell) => {
+        return acc.plus(sell.amount ?? 0)
+      }, new Decimal(0))
+
+      const totalSaleCostBasis = lotResults.reduce((acc, lot) => {
+        return acc.plus(lot.quantityChange.mul(lot.price))
+      }, new Decimal(0))
+
+      realizedProfitAndLoss = totalSaleDollars.minus(totalSaleCostBasis)
     }
     catch (error) {
       console.error(error)
@@ -499,7 +511,7 @@ export class PlaidService {
             data: error as InputJsonValue,
             description: `Trx merge failed with error: ${JSON.stringify(error)}`,
             source: AuthSource.PLAID,
-            type: LogType.PLAID_TRX_MERGE,
+            type: LogType.PLAID_TRX_MERGE_ERROR,
             portfolioId: authConnection.portfolioId,
           },
         })
@@ -521,6 +533,13 @@ export class PlaidService {
             newTransactions,
             newBuys,
             newSells,
+            realizedProfitAndLoss,
+            // Store lots that were completely sold (zero quantity remaining)
+            deletedLots: JSON.parse(JSON.stringify(
+              lotResults.filter(result =>
+                result.upsert.remainingQty === new Decimal(0),
+              ),
+            )),
           },
         })
 
@@ -530,8 +549,13 @@ export class PlaidService {
           },
         )
 
+        // Only upsert lots that have remaining quantity
+        const lotsToUpsert = lotUpsertResults.filter(
+          upsert => upsert.remainingQty !== new Decimal(0),
+        )
+
         await Promise.all(
-          lotUpsertResults.map(upsert =>
+          lotsToUpsert.map(upsert =>
             trx.lot.upsert({
               where: {
                 id: upsert.id,
@@ -570,12 +594,13 @@ export class PlaidService {
               data: JSON.parse(JSON.stringify({ lotResults })),
               description: 'Trx merge results',
               source: AuthSource.PLAID,
-              type: LogType.PLAID_TRX_MERGE,
+              type: LogType.PLAID_TRX_MERGE_SUCCESS,
               portfolioId: authConnection.portfolioId,
             },
           }),
           trx.lotChangeLog.createMany({
             data: lotUpsertResults.map((upsert, index) => {
+              const isZeroQuantity = upsert.remainingQty === new Decimal(0)
               return {
                 lotTransactionBatchId: lotTransactionBatch.id,
                 lotId: upsert.id,
@@ -589,7 +614,9 @@ export class PlaidService {
                 lotAfter: JSON.parse(JSON.stringify(upsert)),
                 operationType: lotResults[index].isNewBuy
                   ? OperationType.create
-                  : OperationType.update,
+                  : isZeroQuantity
+                    ? OperationType.delete
+                    : OperationType.update,
               }
             }),
           }),

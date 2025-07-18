@@ -155,7 +155,9 @@ export enum LogType {
     EXTERNAL_SYNC = "EXTERNAL_SYNC",
     AUTH = "AUTH",
     PLAID_WEBHOOK = "PLAID_WEBHOOK",
-    PLAID_TRX_MERGE = "PLAID_TRX_MERGE"
+    PLAID_TRX_MERGE = "PLAID_TRX_MERGE",
+    PLAID_TRX_MERGE_SUCCESS = "PLAID_TRX_MERGE_SUCCESS",
+    PLAID_TRX_MERGE_ERROR = "PLAID_TRX_MERGE_ERROR"
 }
 
 export enum JsonNullValueInput {
@@ -349,7 +351,9 @@ export enum LotTransactionBatchScalarFieldEnum {
     initialLots = "initialLots",
     newTransactions = "newTransactions",
     newBuys = "newBuys",
-    newSells = "newSells"
+    newSells = "newSells",
+    realizedProfitAndLoss = "realizedProfitAndLoss",
+    deletedLots = "deletedLots"
 }
 
 export enum LotChangeLogScalarFieldEnum {
@@ -42021,6 +42025,10 @@ export class UpsertOneLotChangeLogArgs {
 export class AggregateLotTransactionBatch {
     @Field(() => LotTransactionBatchCountAggregate, {nullable:true})
     _count?: InstanceType<typeof LotTransactionBatchCountAggregate>;
+    @Field(() => LotTransactionBatchAvgAggregate, {nullable:true})
+    _avg?: InstanceType<typeof LotTransactionBatchAvgAggregate>;
+    @Field(() => LotTransactionBatchSumAggregate, {nullable:true})
+    _sum?: InstanceType<typeof LotTransactionBatchSumAggregate>;
     @Field(() => LotTransactionBatchMinAggregate, {nullable:true})
     _min?: InstanceType<typeof LotTransactionBatchMinAggregate>;
     @Field(() => LotTransactionBatchMaxAggregate, {nullable:true})
@@ -42065,8 +42073,10 @@ export class FindFirstLotTransactionBatchOrThrowArgs {
     @Type(() => LotTransactionBatchWhereInput)
     where?: InstanceType<typeof LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchOrderByWithRelationInput], {nullable:true})
+    @Type(() => LotTransactionBatchOrderByWithRelationInput)
     orderBy?: Array<LotTransactionBatchOrderByWithRelationInput>;
     @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
     cursor?: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
     @Field(() => Int, {nullable:true})
     take?: number;
@@ -42082,8 +42092,10 @@ export class FindFirstLotTransactionBatchArgs {
     @Type(() => LotTransactionBatchWhereInput)
     where?: InstanceType<typeof LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchOrderByWithRelationInput], {nullable:true})
+    @Type(() => LotTransactionBatchOrderByWithRelationInput)
     orderBy?: Array<LotTransactionBatchOrderByWithRelationInput>;
     @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
     cursor?: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
     @Field(() => Int, {nullable:true})
     take?: number;
@@ -42099,8 +42111,10 @@ export class FindManyLotTransactionBatchArgs {
     @Type(() => LotTransactionBatchWhereInput)
     where?: InstanceType<typeof LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchOrderByWithRelationInput], {nullable:true})
+    @Type(() => LotTransactionBatchOrderByWithRelationInput)
     orderBy?: Array<LotTransactionBatchOrderByWithRelationInput>;
     @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
     cursor?: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
     @Field(() => Int, {nullable:true})
     take?: number;
@@ -42130,19 +42144,48 @@ export class LotTransactionBatchAggregateArgs {
     @Type(() => LotTransactionBatchWhereInput)
     where?: InstanceType<typeof LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchOrderByWithRelationInput], {nullable:true})
+    @Type(() => LotTransactionBatchOrderByWithRelationInput)
     orderBy?: Array<LotTransactionBatchOrderByWithRelationInput>;
     @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
     cursor?: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
     skip?: number;
     @Field(() => LotTransactionBatchCountAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchCountAggregateInput)
     _count?: InstanceType<typeof LotTransactionBatchCountAggregateInput>;
+    @Field(() => LotTransactionBatchAvgAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchAvgAggregateInput)
+    _avg?: InstanceType<typeof LotTransactionBatchAvgAggregateInput>;
+    @Field(() => LotTransactionBatchSumAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchSumAggregateInput)
+    _sum?: InstanceType<typeof LotTransactionBatchSumAggregateInput>;
     @Field(() => LotTransactionBatchMinAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchMinAggregateInput)
     _min?: InstanceType<typeof LotTransactionBatchMinAggregateInput>;
     @Field(() => LotTransactionBatchMaxAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchMaxAggregateInput)
     _max?: InstanceType<typeof LotTransactionBatchMaxAggregateInput>;
+}
+
+@InputType()
+export class LotTransactionBatchAvgAggregateInput {
+    @Field(() => Boolean, {nullable:true})
+    realizedProfitAndLoss?: true;
+}
+
+@ObjectType()
+export class LotTransactionBatchAvgAggregate {
+    @Field(() => GraphQLDecimal, {nullable:true})
+    realizedProfitAndLoss?: Decimal;
+}
+
+@InputType()
+export class LotTransactionBatchAvgOrderByAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    realizedProfitAndLoss?: `${SortOrder}`;
 }
 
 @InputType()
@@ -42173,6 +42216,10 @@ export class LotTransactionBatchCountAggregateInput {
     newBuys?: true;
     @Field(() => Boolean, {nullable:true})
     newSells?: true;
+    @Field(() => Boolean, {nullable:true})
+    realizedProfitAndLoss?: true;
+    @Field(() => Boolean, {nullable:true})
+    deletedLots?: true;
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }
@@ -42206,6 +42253,10 @@ export class LotTransactionBatchCountAggregate {
     @Field(() => Int, {nullable:false})
     newSells!: number;
     @Field(() => Int, {nullable:false})
+    realizedProfitAndLoss!: number;
+    @Field(() => Int, {nullable:false})
+    deletedLots!: number;
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }
 
@@ -42237,6 +42288,10 @@ export class LotTransactionBatchCountOrderByAggregateInput {
     newBuys?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     newSells?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    realizedProfitAndLoss?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    deletedLots?: `${SortOrder}`;
 }
 
 @ObjectType()
@@ -42280,6 +42335,12 @@ export class LotTransactionBatchCreateManyAuthConnectionInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -42317,6 +42378,12 @@ export class LotTransactionBatchCreateManyPortfolioInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -42347,6 +42414,12 @@ export class LotTransactionBatchCreateManyInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -42448,6 +42521,12 @@ export class LotTransactionBatchCreateWithoutAuthConnectionInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput>;
@@ -42480,6 +42559,12 @@ export class LotTransactionBatchCreateWithoutLotChangeLogInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
     @Type(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput)
     authConnection!: InstanceType<typeof AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput>;
@@ -42512,6 +42597,12 @@ export class LotTransactionBatchCreateWithoutPortfolioInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
     @Type(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput)
     authConnection!: InstanceType<typeof AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput>;
@@ -42544,6 +42635,12 @@ export class LotTransactionBatchCreateInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
     @Type(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput)
     authConnection!: InstanceType<typeof AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput>;
@@ -42561,20 +42658,31 @@ export class LotTransactionBatchGroupByArgs {
     @Type(() => LotTransactionBatchWhereInput)
     where?: InstanceType<typeof LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchOrderByWithAggregationInput], {nullable:true})
+    @Type(() => LotTransactionBatchOrderByWithAggregationInput)
     orderBy?: Array<LotTransactionBatchOrderByWithAggregationInput>;
     @Field(() => [LotTransactionBatchScalarFieldEnum], {nullable:false})
     by!: Array<`${LotTransactionBatchScalarFieldEnum}`>;
     @Field(() => LotTransactionBatchScalarWhereWithAggregatesInput, {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereWithAggregatesInput)
     having?: InstanceType<typeof LotTransactionBatchScalarWhereWithAggregatesInput>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
     skip?: number;
     @Field(() => LotTransactionBatchCountAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchCountAggregateInput)
     _count?: InstanceType<typeof LotTransactionBatchCountAggregateInput>;
+    @Field(() => LotTransactionBatchAvgAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchAvgAggregateInput)
+    _avg?: InstanceType<typeof LotTransactionBatchAvgAggregateInput>;
+    @Field(() => LotTransactionBatchSumAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchSumAggregateInput)
+    _sum?: InstanceType<typeof LotTransactionBatchSumAggregateInput>;
     @Field(() => LotTransactionBatchMinAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchMinAggregateInput)
     _min?: InstanceType<typeof LotTransactionBatchMinAggregateInput>;
     @Field(() => LotTransactionBatchMaxAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchMaxAggregateInput)
     _max?: InstanceType<typeof LotTransactionBatchMaxAggregateInput>;
 }
 
@@ -42606,8 +42714,16 @@ export class LotTransactionBatchGroupBy {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotTransactionBatchCountAggregate, {nullable:true})
     _count?: InstanceType<typeof LotTransactionBatchCountAggregate>;
+    @Field(() => LotTransactionBatchAvgAggregate, {nullable:true})
+    _avg?: InstanceType<typeof LotTransactionBatchAvgAggregate>;
+    @Field(() => LotTransactionBatchSumAggregate, {nullable:true})
+    _sum?: InstanceType<typeof LotTransactionBatchSumAggregate>;
     @Field(() => LotTransactionBatchMinAggregate, {nullable:true})
     _min?: InstanceType<typeof LotTransactionBatchMinAggregate>;
     @Field(() => LotTransactionBatchMaxAggregate, {nullable:true})
@@ -42617,10 +42733,13 @@ export class LotTransactionBatchGroupBy {
 @InputType()
 export class LotTransactionBatchListRelationFilter {
     @Field(() => LotTransactionBatchWhereInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     every?: InstanceType<typeof LotTransactionBatchWhereInput>;
     @Field(() => LotTransactionBatchWhereInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     some?: InstanceType<typeof LotTransactionBatchWhereInput>;
     @Field(() => LotTransactionBatchWhereInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     none?: InstanceType<typeof LotTransactionBatchWhereInput>;
 }
 
@@ -42636,6 +42755,8 @@ export class LotTransactionBatchMaxAggregateInput {
     authConnectionId?: true;
     @Field(() => Boolean, {nullable:true})
     portfolioId?: true;
+    @Field(() => Boolean, {nullable:true})
+    realizedProfitAndLoss?: true;
 }
 
 @ObjectType()
@@ -42650,6 +42771,8 @@ export class LotTransactionBatchMaxAggregate {
     authConnectionId?: string;
     @Field(() => String, {nullable:true})
     portfolioId?: string;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    realizedProfitAndLoss?: Decimal;
 }
 
 @InputType()
@@ -42664,6 +42787,8 @@ export class LotTransactionBatchMaxOrderByAggregateInput {
     authConnectionId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    realizedProfitAndLoss?: `${SortOrder}`;
 }
 
 @InputType()
@@ -42678,6 +42803,8 @@ export class LotTransactionBatchMinAggregateInput {
     authConnectionId?: true;
     @Field(() => Boolean, {nullable:true})
     portfolioId?: true;
+    @Field(() => Boolean, {nullable:true})
+    realizedProfitAndLoss?: true;
 }
 
 @ObjectType()
@@ -42692,6 +42819,8 @@ export class LotTransactionBatchMinAggregate {
     authConnectionId?: string;
     @Field(() => String, {nullable:true})
     portfolioId?: string;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    realizedProfitAndLoss?: Decimal;
 }
 
 @InputType()
@@ -42706,6 +42835,8 @@ export class LotTransactionBatchMinOrderByAggregateInput {
     authConnectionId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    realizedProfitAndLoss?: `${SortOrder}`;
 }
 
 @InputType()
@@ -42742,12 +42873,26 @@ export class LotTransactionBatchOrderByWithAggregationInput {
     newBuys?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrderInput, {nullable:true})
     newSells?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    @Type(() => SortOrderInput)
+    realizedProfitAndLoss?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    deletedLots?: InstanceType<typeof SortOrderInput>;
     @Field(() => LotTransactionBatchCountOrderByAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchCountOrderByAggregateInput)
     _count?: InstanceType<typeof LotTransactionBatchCountOrderByAggregateInput>;
+    @Field(() => LotTransactionBatchAvgOrderByAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchAvgOrderByAggregateInput)
+    _avg?: InstanceType<typeof LotTransactionBatchAvgOrderByAggregateInput>;
     @Field(() => LotTransactionBatchMaxOrderByAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchMaxOrderByAggregateInput)
     _max?: InstanceType<typeof LotTransactionBatchMaxOrderByAggregateInput>;
     @Field(() => LotTransactionBatchMinOrderByAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchMinOrderByAggregateInput)
     _min?: InstanceType<typeof LotTransactionBatchMinOrderByAggregateInput>;
+    @Field(() => LotTransactionBatchSumOrderByAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchSumOrderByAggregateInput)
+    _sum?: InstanceType<typeof LotTransactionBatchSumOrderByAggregateInput>;
 }
 
 @InputType()
@@ -42778,6 +42923,11 @@ export class LotTransactionBatchOrderByWithRelationInput {
     newBuys?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrderInput, {nullable:true})
     newSells?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    @Type(() => SortOrderInput)
+    realizedProfitAndLoss?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    deletedLots?: InstanceType<typeof SortOrderInput>;
     @Field(() => AuthConnectionOrderByWithRelationInput, {nullable:true})
     @Type(() => AuthConnectionOrderByWithRelationInput)
     authConnection?: InstanceType<typeof AuthConnectionOrderByWithRelationInput>;
@@ -42792,18 +42942,23 @@ export class LotTransactionBatchOrderByWithRelationInput {
 @InputType()
 export class LotTransactionBatchScalarRelationFilter {
     @Field(() => LotTransactionBatchWhereInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     is?: InstanceType<typeof LotTransactionBatchWhereInput>;
     @Field(() => LotTransactionBatchWhereInput, {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     isNot?: InstanceType<typeof LotTransactionBatchWhereInput>;
 }
 
 @InputType()
 export class LotTransactionBatchScalarWhereWithAggregatesInput {
     @Field(() => [LotTransactionBatchScalarWhereWithAggregatesInput], {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereWithAggregatesInput)
     AND?: Array<LotTransactionBatchScalarWhereWithAggregatesInput>;
     @Field(() => [LotTransactionBatchScalarWhereWithAggregatesInput], {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereWithAggregatesInput)
     OR?: Array<LotTransactionBatchScalarWhereWithAggregatesInput>;
     @Field(() => [LotTransactionBatchScalarWhereWithAggregatesInput], {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereWithAggregatesInput)
     NOT?: Array<LotTransactionBatchScalarWhereWithAggregatesInput>;
     @Field(() => UuidWithAggregatesFilter, {nullable:true})
     id?: InstanceType<typeof UuidWithAggregatesFilter>;
@@ -42831,15 +42986,23 @@ export class LotTransactionBatchScalarWhereWithAggregatesInput {
     newBuys?: InstanceType<typeof JsonNullableWithAggregatesFilter>;
     @Field(() => JsonNullableWithAggregatesFilter, {nullable:true})
     newSells?: InstanceType<typeof JsonNullableWithAggregatesFilter>;
+    @Field(() => DecimalNullableWithAggregatesFilter, {nullable:true})
+    @Type(() => DecimalNullableWithAggregatesFilter)
+    realizedProfitAndLoss?: InstanceType<typeof DecimalNullableWithAggregatesFilter>;
+    @Field(() => JsonNullableWithAggregatesFilter, {nullable:true})
+    deletedLots?: InstanceType<typeof JsonNullableWithAggregatesFilter>;
 }
 
 @InputType()
 export class LotTransactionBatchScalarWhereInput {
     @Field(() => [LotTransactionBatchScalarWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereInput)
     AND?: Array<LotTransactionBatchScalarWhereInput>;
     @Field(() => [LotTransactionBatchScalarWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereInput)
     OR?: Array<LotTransactionBatchScalarWhereInput>;
     @Field(() => [LotTransactionBatchScalarWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereInput)
     NOT?: Array<LotTransactionBatchScalarWhereInput>;
     @Field(() => UuidFilter, {nullable:true})
     id?: InstanceType<typeof UuidFilter>;
@@ -42867,6 +43030,29 @@ export class LotTransactionBatchScalarWhereInput {
     newBuys?: InstanceType<typeof JsonNullableFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
     newSells?: InstanceType<typeof JsonNullableFilter>;
+    @Field(() => DecimalNullableFilter, {nullable:true})
+    @Type(() => DecimalNullableFilter)
+    realizedProfitAndLoss?: InstanceType<typeof DecimalNullableFilter>;
+    @Field(() => JsonNullableFilter, {nullable:true})
+    deletedLots?: InstanceType<typeof JsonNullableFilter>;
+}
+
+@InputType()
+export class LotTransactionBatchSumAggregateInput {
+    @Field(() => Boolean, {nullable:true})
+    realizedProfitAndLoss?: true;
+}
+
+@ObjectType()
+export class LotTransactionBatchSumAggregate {
+    @Field(() => GraphQLDecimal, {nullable:true})
+    realizedProfitAndLoss?: Decimal;
+}
+
+@InputType()
+export class LotTransactionBatchSumOrderByAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    realizedProfitAndLoss?: `${SortOrder}`;
 }
 
 @InputType()
@@ -42927,6 +43113,12 @@ export class LotTransactionBatchUncheckedCreateWithoutAuthConnectionInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput>;
@@ -42960,6 +43152,12 @@ export class LotTransactionBatchUncheckedCreateWithoutLotChangeLogInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -42988,6 +43186,12 @@ export class LotTransactionBatchUncheckedCreateWithoutPortfolioInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput>;
@@ -43021,6 +43225,12 @@ export class LotTransactionBatchUncheckedCreateInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput>;
@@ -43089,6 +43299,11 @@ export class LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -43154,6 +43369,11 @@ export class LotTransactionBatchUncheckedUpdateManyWithoutPortfolioInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -43184,6 +43404,11 @@ export class LotTransactionBatchUncheckedUpdateManyInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -43212,6 +43437,11 @@ export class LotTransactionBatchUncheckedUpdateWithoutAuthConnectionInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput>;
@@ -43245,6 +43475,11 @@ export class LotTransactionBatchUncheckedUpdateWithoutLotChangeLogInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -43273,6 +43508,11 @@ export class LotTransactionBatchUncheckedUpdateWithoutPortfolioInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput>;
@@ -43306,6 +43546,11 @@ export class LotTransactionBatchUncheckedUpdateInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput>;
@@ -43335,6 +43580,11 @@ export class LotTransactionBatchUpdateManyMutationInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
 }
 
 @InputType()
@@ -43504,6 +43754,11 @@ export class LotTransactionBatchUpdateWithoutAuthConnectionInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput>;
@@ -43536,6 +43791,11 @@ export class LotTransactionBatchUpdateWithoutLotChangeLogInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
     authConnection?: InstanceType<typeof AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
@@ -43568,6 +43828,11 @@ export class LotTransactionBatchUpdateWithoutPortfolioInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
     authConnection?: InstanceType<typeof AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
@@ -43600,6 +43865,11 @@ export class LotTransactionBatchUpdateInput {
     newBuys?: any;
     @Field(() => GraphQLJSON, {nullable:true})
     newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
     @Field(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
     authConnection?: InstanceType<typeof AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
@@ -43655,10 +43925,13 @@ export class LotTransactionBatchWhereUniqueInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => [LotTransactionBatchWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     AND?: Array<LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     OR?: Array<LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     NOT?: Array<LotTransactionBatchWhereInput>;
     @Field(() => DateTimeFilter, {nullable:true})
     createdAt?: InstanceType<typeof DateTimeFilter>;
@@ -43684,6 +43957,11 @@ export class LotTransactionBatchWhereUniqueInput {
     newBuys?: InstanceType<typeof JsonNullableFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
     newSells?: InstanceType<typeof JsonNullableFilter>;
+    @Field(() => DecimalNullableFilter, {nullable:true})
+    @Type(() => DecimalNullableFilter)
+    realizedProfitAndLoss?: InstanceType<typeof DecimalNullableFilter>;
+    @Field(() => JsonNullableFilter, {nullable:true})
+    deletedLots?: InstanceType<typeof JsonNullableFilter>;
     @Field(() => AuthConnectionScalarRelationFilter, {nullable:true})
     @Type(() => AuthConnectionScalarRelationFilter)
     authConnection?: InstanceType<typeof AuthConnectionScalarRelationFilter>;
@@ -43698,10 +43976,13 @@ export class LotTransactionBatchWhereUniqueInput {
 @InputType()
 export class LotTransactionBatchWhereInput {
     @Field(() => [LotTransactionBatchWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     AND?: Array<LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     OR?: Array<LotTransactionBatchWhereInput>;
     @Field(() => [LotTransactionBatchWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereInput)
     NOT?: Array<LotTransactionBatchWhereInput>;
     @Field(() => UuidFilter, {nullable:true})
     id?: InstanceType<typeof UuidFilter>;
@@ -43729,6 +44010,11 @@ export class LotTransactionBatchWhereInput {
     newBuys?: InstanceType<typeof JsonNullableFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
     newSells?: InstanceType<typeof JsonNullableFilter>;
+    @Field(() => DecimalNullableFilter, {nullable:true})
+    @Type(() => DecimalNullableFilter)
+    realizedProfitAndLoss?: InstanceType<typeof DecimalNullableFilter>;
+    @Field(() => JsonNullableFilter, {nullable:true})
+    deletedLots?: InstanceType<typeof JsonNullableFilter>;
     @Field(() => AuthConnectionScalarRelationFilter, {nullable:true})
     @Type(() => AuthConnectionScalarRelationFilter)
     authConnection?: InstanceType<typeof AuthConnectionScalarRelationFilter>;
@@ -43792,6 +44078,13 @@ export class LotTransactionBatch {
      */
     @Field(() => GraphQLJSON, {description:'New sells for the transaction batch',nullable:true})
     newSells!: any | null;
+    /**
+     * Realized profit and loss for the transaction batch
+     */
+    @Field(() => GraphQLDecimal, {description:'Realized profit and loss for the transaction batch',nullable:true})
+    realizedProfitAndLoss!: Decimal | null;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots!: any | null;
     @Field(() => AuthConnection, {nullable:false})
     authConnection?: InstanceType<typeof AuthConnection>;
     @Field(() => [LotChangeLog], {nullable:true})

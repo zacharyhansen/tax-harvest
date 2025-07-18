@@ -4154,6 +4154,34 @@
           "maxLength": null
         },
         {
+          "id": "public.LotTransactionBatch.deletedLots",
+          "name": "deletedLots",
+          "columnName": "deletedLots",
+          "type": "jsonb",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotTransactionBatch.realizedProfitAndLoss",
+          "name": "realizedProfitAndLoss",
+          "columnName": "realizedProfitAndLoss",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "AuthConnection",
           "type": "AuthConnection",
           "isRequired": true,
@@ -7316,6 +7344,12 @@
         },
         {
           "name": "PLAID_TRX_MERGE"
+        },
+        {
+          "name": "PLAID_TRX_MERGE_ERROR"
+        },
+        {
+          "name": "PLAID_TRX_MERGE_SUCCESS"
         },
         {
           "name": "PLAID_WEBHOOK"

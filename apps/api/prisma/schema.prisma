@@ -340,27 +340,30 @@ model Transaction {
 }
 
 model LotTransactionBatch {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now()) @updatedAt
-  authConnectionId String   @db.Uuid
-  portfolioId      String   @db.Uuid
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now()) @updatedAt
+  authConnectionId      String   @db.Uuid
+  portfolioId           String   @db.Uuid
   /// Snapshot of positions before the transaction batch
-  positionsBefore  Json?
+  positionsBefore       Json?    @db.JsonB
   /// Snapshot of positions after the transaction batch
-  positionsAfter   Json?
+  positionsAfter        Json?    @db.JsonB
   /// Plaid holdings payload for the transaction batch
-  holdingsPayload  Json?
+  holdingsPayload       Json?    @db.JsonB
   /// Map of lot tuples for the transaction batch
-  lotTupleMap      Json?
+  lotTupleMap           Json?    @db.JsonB
   /// Initial lots for the transaction batch
-  initialLots      Json?
+  initialLots           Json?    @db.JsonB
   /// New transactions for the transaction batch
-  newTransactions  Json?
+  newTransactions       Json?    @db.JsonB
   /// New buys for the transaction batch
-  newBuys          Json?
+  newBuys               Json?    @db.JsonB
   /// New sells for the transaction batch
-  newSells         Json?
+  newSells              Json?    @db.JsonB
+  /// Realized profit and loss for the transaction batch
+  realizedProfitAndLoss Decimal? @db.Decimal(14, 4)
+  deletedLots           Json?    @db.JsonB
 
   authConnection AuthConnection @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
   lotChangeLog   LotChangeLog[]
@@ -774,6 +777,8 @@ enum LogType {
   AUTH
   PLAID_WEBHOOK
   PLAID_TRX_MERGE
+  PLAID_TRX_MERGE_SUCCESS
+  PLAID_TRX_MERGE_ERROR
 }
 
 model Log {

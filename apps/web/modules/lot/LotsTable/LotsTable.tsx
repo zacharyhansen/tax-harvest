@@ -218,7 +218,7 @@ export default function LotsTable() {
             totalQuantity += qty;
             totalPaid += (Number(row.original.price) || 0) * qty;
           });
-          return Format.money(totalPaid / totalQuantity, 4);
+          return Format.money(totalPaid / totalQuantity, 2);
         },
         totalGainPct: (_columnId, leafRows) => {
           let totalGain = 0;

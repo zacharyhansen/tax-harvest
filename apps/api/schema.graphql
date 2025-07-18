@@ -6875,6 +6875,8 @@ enum LogType {
   AUTH
   EXTERNAL_SYNC
   PLAID_TRX_MERGE
+  PLAID_TRX_MERGE_ERROR
+  PLAID_TRX_MERGE_SUCCESS
   PLAID_WEBHOOK
 }
 
@@ -8318,6 +8320,7 @@ type LotTransactionBatch {
   authConnection: AuthConnection!
   authConnectionId: String!
   createdAt: DateTime!
+  deletedLots: JSON
 
   """Plaid holdings payload for the transaction batch"""
   holdingsPayload: JSON
@@ -8346,7 +8349,14 @@ type LotTransactionBatch {
 
   """Snapshot of positions before the transaction batch"""
   positionsBefore: JSON
+
+  """Realized profit and loss for the transaction batch"""
+  realizedProfitAndLoss: Decimal
   updatedAt: DateTime!
+}
+
+type LotTransactionBatchAvgAggregate {
+  realizedProfitAndLoss: Decimal
 }
 
 type LotTransactionBatchCount {
@@ -8357,6 +8367,7 @@ type LotTransactionBatchCountAggregate {
   _all: Int!
   authConnectionId: Int!
   createdAt: Int!
+  deletedLots: Int!
   holdingsPayload: Int!
   id: Int!
   initialLots: Int!
@@ -8367,11 +8378,13 @@ type LotTransactionBatchCountAggregate {
   portfolioId: Int!
   positionsAfter: Int!
   positionsBefore: Int!
+  realizedProfitAndLoss: Int!
   updatedAt: Int!
 }
 
 input LotTransactionBatchCreateManyAuthConnectionInput {
   createdAt: DateTime
+  deletedLots: JSON
   holdingsPayload: JSON
   id: String
   initialLots: JSON
@@ -8382,6 +8395,7 @@ input LotTransactionBatchCreateManyAuthConnectionInput {
   portfolioId: String!
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
 
@@ -8393,6 +8407,7 @@ input LotTransactionBatchCreateManyAuthConnectionInputEnvelope {
 input LotTransactionBatchCreateManyPortfolioInput {
   authConnectionId: String!
   createdAt: DateTime
+  deletedLots: JSON
   holdingsPayload: JSON
   id: String
   initialLots: JSON
@@ -8402,6 +8417,7 @@ input LotTransactionBatchCreateManyPortfolioInput {
   newTransactions: JSON
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
 
@@ -8447,6 +8463,7 @@ input LotTransactionBatchCreateOrConnectWithoutPortfolioInput {
 
 input LotTransactionBatchCreateWithoutAuthConnectionInput {
   createdAt: DateTime
+  deletedLots: JSON
   holdingsPayload: JSON
   id: String
   initialLots: JSON
@@ -8458,12 +8475,14 @@ input LotTransactionBatchCreateWithoutAuthConnectionInput {
   portfolio: PortfolioCreateNestedOneWithoutLotTransactionBatchInput!
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
 
 input LotTransactionBatchCreateWithoutLotChangeLogInput {
   authConnection: AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput!
   createdAt: DateTime
+  deletedLots: JSON
   holdingsPayload: JSON
   id: String
   initialLots: JSON
@@ -8474,12 +8493,14 @@ input LotTransactionBatchCreateWithoutLotChangeLogInput {
   portfolio: PortfolioCreateNestedOneWithoutLotTransactionBatchInput!
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
 
 input LotTransactionBatchCreateWithoutPortfolioInput {
   authConnection: AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput!
   createdAt: DateTime
+  deletedLots: JSON
   holdingsPayload: JSON
   id: String
   initialLots: JSON
@@ -8490,6 +8511,7 @@ input LotTransactionBatchCreateWithoutPortfolioInput {
   newTransactions: JSON
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
 
@@ -8504,6 +8526,7 @@ type LotTransactionBatchMaxAggregate {
   createdAt: DateTime
   id: String
   portfolioId: String
+  realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
 
@@ -8512,6 +8535,7 @@ type LotTransactionBatchMinAggregate {
   createdAt: DateTime
   id: String
   portfolioId: String
+  realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
 
@@ -8530,6 +8554,7 @@ input LotTransactionBatchScalarWhereInput {
   OR: [LotTransactionBatchScalarWhereInput!]
   authConnectionId: UuidFilter
   createdAt: DateTimeFilter
+  deletedLots: JsonNullableFilter
   holdingsPayload: JsonNullableFilter
   id: UuidFilter
   initialLots: JsonNullableFilter
@@ -8540,11 +8565,17 @@ input LotTransactionBatchScalarWhereInput {
   portfolioId: UuidFilter
   positionsAfter: JsonNullableFilter
   positionsBefore: JsonNullableFilter
+  realizedProfitAndLoss: DecimalNullableFilter
   updatedAt: DateTimeFilter
+}
+
+type LotTransactionBatchSumAggregate {
+  realizedProfitAndLoss: Decimal
 }
 
 input LotTransactionBatchUpdateManyMutationInput {
   createdAt: DateTimeFieldUpdateOperationsInput
+  deletedLots: JSON
   holdingsPayload: JSON
   id: StringFieldUpdateOperationsInput
   initialLots: JSON
@@ -8554,6 +8585,7 @@ input LotTransactionBatchUpdateManyMutationInput {
   newTransactions: JSON
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: NullableDecimalFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -8620,6 +8652,7 @@ input LotTransactionBatchUpdateWithWhereUniqueWithoutPortfolioInput {
 
 input LotTransactionBatchUpdateWithoutAuthConnectionInput {
   createdAt: DateTimeFieldUpdateOperationsInput
+  deletedLots: JSON
   holdingsPayload: JSON
   id: StringFieldUpdateOperationsInput
   initialLots: JSON
@@ -8631,12 +8664,14 @@ input LotTransactionBatchUpdateWithoutAuthConnectionInput {
   portfolio: PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: NullableDecimalFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
 input LotTransactionBatchUpdateWithoutLotChangeLogInput {
   authConnection: AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  deletedLots: JSON
   holdingsPayload: JSON
   id: StringFieldUpdateOperationsInput
   initialLots: JSON
@@ -8647,12 +8682,14 @@ input LotTransactionBatchUpdateWithoutLotChangeLogInput {
   portfolio: PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: NullableDecimalFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
 input LotTransactionBatchUpdateWithoutPortfolioInput {
   authConnection: AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
+  deletedLots: JSON
   holdingsPayload: JSON
   id: StringFieldUpdateOperationsInput
   initialLots: JSON
@@ -8663,6 +8700,7 @@ input LotTransactionBatchUpdateWithoutPortfolioInput {
   newTransactions: JSON
   positionsAfter: JSON
   positionsBefore: JSON
+  realizedProfitAndLoss: NullableDecimalFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -8691,6 +8729,7 @@ input LotTransactionBatchWhereInput {
   authConnection: AuthConnectionScalarRelationFilter
   authConnectionId: UuidFilter
   createdAt: DateTimeFilter
+  deletedLots: JsonNullableFilter
   holdingsPayload: JsonNullableFilter
   id: UuidFilter
   initialLots: JsonNullableFilter
@@ -8703,6 +8742,7 @@ input LotTransactionBatchWhereInput {
   portfolioId: UuidFilter
   positionsAfter: JsonNullableFilter
   positionsBefore: JsonNullableFilter
+  realizedProfitAndLoss: DecimalNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -8713,6 +8753,7 @@ input LotTransactionBatchWhereUniqueInput {
   authConnection: AuthConnectionScalarRelationFilter
   authConnectionId: UuidFilter
   createdAt: DateTimeFilter
+  deletedLots: JsonNullableFilter
   holdingsPayload: JsonNullableFilter
   id: String
   initialLots: JsonNullableFilter
@@ -8725,6 +8766,7 @@ input LotTransactionBatchWhereUniqueInput {
   portfolioId: UuidFilter
   positionsAfter: JsonNullableFilter
   positionsBefore: JsonNullableFilter
+  realizedProfitAndLoss: DecimalNullableFilter
   updatedAt: DateTimeFilter
 }
 

@@ -1,0 +1,50 @@
+'use client';
+
+import { Button } from '@repo/ui/components/button';
+import { useRouter } from 'next/navigation';
+import { CompleteStep } from '~/modules/account/add-account/complete.step';
+import { useApolloClient } from '@apollo/client';
+import { PortfolioSummaryDocument } from '~/generated/gql';
+
+export default function CompletePage() {
+  const router = useRouter();
+  const client = useApolloClient();
+
+  const handleComplete = () => {
+    client.refetchQueries({
+      include: [PortfolioSummaryDocument],
+    });
+  };
+
+  return (
+    <div className="mx-auto w-full max-w-4xl">
+      <div className="rounded-lg border bg-card">
+        <div className="border-b p-6">
+          <h1 className="text-2xl font-semibold">Complete</h1>
+          <p className="text-muted-foreground mt-1">
+            Your account is ready to go!
+          </p>
+        </div>
+        
+        <CompleteStep />
+        
+        <div className="flex justify-end gap-2 border-t p-6">
+          <Button 
+            variant="outline" 
+            onClick={() => router.push('/onboarding/analyze')}
+          >
+            Back
+          </Button>
+          <Button 
+            onClick={() => {
+              handleComplete();
+              router.push('/onboarding/plaid');
+            }}
+          >
+            Connect Plaid
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
