@@ -60,31 +60,65 @@ describe('csvService', () => {
     expect(records_3).toEqual(lotRecordsFromEtradePortfolioDownload_3)
   })
 
-  it('should transform etrade lot records', () => {
-    const records = service.etradeTransformCSVRecords({
-      records: lotRecordsFromEtradePortfolioDownload,
-    })
-    expect(
-      records.map(r => ({
-        ...r,
-        price: r.price.toFixed(4),
-        remainingQty: r.remainingQty.toFixed(4),
-        acquiredDate: r.acquiredDate.toISOString(),
-      })),
-    ).toEqual(transformedLotRecordsFromEtradePortfolioDownload)
+  describe('etradeTransformCSVRecords', () => {
+    it('should transform valid etrade lot records with dates', () => {
+      const records = service.etradeTransformCSVRecords({
+        records: lotRecordsFromEtradePortfolioDownload,
+      })
+      expect(
+        records.map(r => ({
+          ...r,
+          price: r.price.toFixed(4),
+          remainingQty: r.remainingQty.toFixed(4),
+          acquiredDate: r.acquiredDate.toISOString(),
+        })),
+      ).toEqual(transformedLotRecordsFromEtradePortfolioDownload)
 
-    const records_3 = service.etradeTransformCSVRecords({
-      records: lotRecordsFromEtradePortfolioDownload_3,
+      const records_3 = service.etradeTransformCSVRecords({
+        records: lotRecordsFromEtradePortfolioDownload_3,
+      })
+
+      expect(
+        records_3.map(r => ({
+          ...r,
+          price: r.price.toFixed(4),
+          remainingQty: r.remainingQty.toFixed(4),
+          acquiredDate: r.acquiredDate.toISOString(),
+        })),
+      ).toEqual(transformedLotRecordsFromEtradePortfolioDownload_3)
     })
 
-    expect(
-      records_3.map(r => ({
-        ...r,
-        price: r.price.toFixed(4),
-        remainingQty: r.remainingQty.toFixed(4),
-        acquiredDate: r.acquiredDate.toISOString(),
-      })),
-    ).toEqual(transformedLotRecordsFromEtradePortfolioDownload_3)
+    it('should throw error when no dates are found in records', () => {
+      const invalidRecords = [
+        {
+          'Symbol': 'ABNB',
+          'Last Price $': '139.1601',
+          'Change $': '-0.14',
+          'Change %': '-0.10',
+          'Quantity': '20.0000',
+          'Price Paid $': '124.74',
+          'Day\'s Gain $': '-2.7980',
+          'Total Gain $': '288.4020',
+          'Total Gain %': '11.5601',
+          'Value $': '2783.2020',
+        },
+        {
+          'Symbol': 'AMD',
+          'Last Price $': '157.595',
+          'Change $': '-2.81',
+          'Change %': '-1.75',
+          'Quantity': '175.0000',
+          'Price Paid $': '102.888',
+          'Day\'s Gain $': '-492.6250',
+          'Total Gain $': '9573.7278',
+          'Total Gain %': '53.1714',
+          'Value $': '27579.1250',
+        },
+      ]
+
+      expect(() => service.etradeTransformCSVRecords({ records: invalidRecords }))
+        .toThrow('Invalid CSV format: No lot dates found in the Symbol column. Please ensure you have expanded the lot details before downloading the CSV.')
+    })
   })
 
   it('should work end to end', async () => {

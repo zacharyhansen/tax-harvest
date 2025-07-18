@@ -94,6 +94,5 @@
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
-  "typescript.tsserver.log": "verbose"
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

@@ -1,12 +1,11 @@
 import { readFileSync } from 'node:fs'
 import { AccountInstitution, PrismaClient } from '@prisma/client'
-
 import { copycat } from '@snaplet/copycat'
-import { createSeedClient } from '@snaplet/seed'
-
+import { createSeedClient, PortfolioRoleEnum } from '@snaplet/seed'
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
-
-import { exampleLots } from './utils'
+import { allGainLots } from './examples/allgain'
+import { allLossLots } from './examples/allloss'
+import { exampleLots } from './examples/basic'
 
 const prisma = new PrismaClient()
 
@@ -38,6 +37,23 @@ async function main() {
 
   await runSqlFile('prisma/seed/insert-assets.sql')
 
+  const { User: additionalUsers } = await seed.User(() => [
+    {
+      email: 'tbolus17@gmail.com',
+      id: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
+      name: '(seed) Troy Bolus',
+    },
+  ])
+
+  const UsersOnPortfolios = additionalUsers.map(user => ({
+    userId: user.id,
+    role: 'ADMIN' as PortfolioRoleEnum,
+  })).concat([{
+    role: 'ADMIN' as PortfolioRoleEnum,
+    userId: mainUserId,
+  }],
+  )
+
   const { User, Portfolio } = await seed.User(() => [
     {
       email: 'zachary.r.hansen@gmail.com',
@@ -52,13 +68,7 @@ async function main() {
             name: 'Roth Example',
             id: context => copycat.uuid(context.seed),
             createdById: mainUserId,
-            UsersOnPortfolios: () => [
-              {
-                role: 'ADMIN',
-                userId: mainUserId,
-                createdById: mainUserId,
-              },
-            ],
+            UsersOnPortfolios: () => UsersOnPortfolios,
             Account: () => [
               {
                 type: 'investment',
@@ -91,13 +101,7 @@ async function main() {
             name: 'Realized Loss Example',
             id: context => copycat.uuid(context.seed),
             createdById: mainUserId,
-            UsersOnPortfolios: () => [
-              {
-                role: 'ADMIN',
-                userId: mainUserId,
-                createdById: mainUserId,
-              },
-            ],
+            UsersOnPortfolios: () => UsersOnPortfolios,
             Account: () => [
               {
                 type: 'investment',
@@ -110,7 +114,7 @@ async function main() {
                 skipSetup: true,
                 RealizedPAndL: () => [
                   {
-                    shortTerm: '-3000',
+                    shortTerm: -3000,
                     year: new Date().getFullYear(),
                   },
                 ],
@@ -126,13 +130,7 @@ async function main() {
             name: 'Realized Gain Example',
             id: context => copycat.uuid(context.seed),
             createdById: mainUserId,
-            UsersOnPortfolios: () => [
-              {
-                role: 'ADMIN',
-                userId: mainUserId,
-                createdById: mainUserId,
-              },
-            ],
+            UsersOnPortfolios: () => UsersOnPortfolios,
             Account: () => [
               {
                 type: 'investment',
@@ -145,7 +143,7 @@ async function main() {
                 skipSetup: true,
                 RealizedPAndL: () => [
                   {
-                    shortTerm: '10000',
+                    shortTerm: 10000,
                     year: new Date().getFullYear(),
                   },
                 ],
@@ -161,13 +159,7 @@ async function main() {
             name: 'Neutral Example',
             id: context => copycat.uuid(context.seed),
             createdById: mainUserId,
-            UsersOnPortfolios: () => [
-              {
-                role: 'ADMIN',
-                userId: mainUserId,
-                createdById: mainUserId,
-              },
-            ],
+            UsersOnPortfolios: () => UsersOnPortfolios,
             Account: () => [
               {
                 type: 'investment',
@@ -181,7 +173,7 @@ async function main() {
                 skipSetup: true,
                 RealizedPAndL: () => [
                   {
-                    shortTerm: '300',
+                    shortTerm: 300,
                     year: new Date().getFullYear(),
                   },
                 ],
@@ -189,22 +181,15 @@ async function main() {
             ],
           },
         },
-      ],
-    },
-    {
-      email: 'tbolus17@gmail.com',
-      id: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
-      name: '(seed) Troy Bolus',
-      AuthConnection: () => [
         {
           source: 'LOCAL',
           type: 'OAUTH_1',
           externalId: context => copycat.uuid(context.seed),
           Portfolio: {
-            name: 'Ignore this one',
+            name: 'All Gain Example',
             id: context => copycat.uuid(context.seed),
-            createdById: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
-            UsersOnPortfolios: () => [],
+            createdById: mainUserId,
+            UsersOnPortfolios: () => UsersOnPortfolios,
             Account: () => [
               {
                 type: 'investment',
@@ -212,12 +197,43 @@ async function main() {
                 provider: 'ETRADE',
                 subType: 'investment',
                 institution: AccountInstitution.BROKERAGE,
-                createdById: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
-                Lot: () => exampleLots,
+                createdById: mainUserId,
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                Lot: () => allGainLots,
                 skipSetup: true,
                 RealizedPAndL: () => [
                   {
-                    shortTerm: '-3000',
+                    shortTerm: 300,
+                    year: new Date().getFullYear(),
+                  },
+                ],
+              },
+            ],
+          },
+        },
+        {
+          source: 'LOCAL',
+          type: 'OAUTH_1',
+          externalId: context => copycat.uuid(context.seed),
+          Portfolio: {
+            name: 'All Loss Example',
+            id: context => copycat.uuid(context.seed),
+            createdById: mainUserId,
+            UsersOnPortfolios: () => UsersOnPortfolios,
+            Account: () => [
+              {
+                type: 'investment',
+                name: 'Etrade Example',
+                provider: 'ETRADE',
+                subType: 'investment',
+                institution: AccountInstitution.BROKERAGE,
+                createdById: mainUserId,
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                Lot: () => allLossLots,
+                skipSetup: true,
+                RealizedPAndL: () => [
+                  {
+                    shortTerm: -300,
                     year: new Date().getFullYear(),
                   },
                 ],

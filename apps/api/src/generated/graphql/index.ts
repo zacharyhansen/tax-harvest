@@ -157,7 +157,8 @@ export enum LogType {
     PLAID_WEBHOOK = "PLAID_WEBHOOK",
     PLAID_TRX_MERGE = "PLAID_TRX_MERGE",
     PLAID_TRX_MERGE_SUCCESS = "PLAID_TRX_MERGE_SUCCESS",
-    PLAID_TRX_MERGE_ERROR = "PLAID_TRX_MERGE_ERROR"
+    PLAID_TRX_MERGE_ERROR = "PLAID_TRX_MERGE_ERROR",
+    SUBSET_HYBRID_CALCULATION = "SUBSET_HYBRID_CALCULATION"
 }
 
 export enum JsonNullValueInput {
@@ -62988,7 +62989,7 @@ export class DeleteManyTransactionArgs {
 export class DeleteOneTransactionArgs {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
 }
 
 @ArgsType()
@@ -63001,7 +63002,7 @@ export class FindFirstTransactionOrThrowArgs {
     orderBy?: Array<TransactionOrderByWithRelationInput>;
     @Field(() => TransactionWhereUniqueInput, {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    cursor?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    cursor?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -63020,7 +63021,7 @@ export class FindFirstTransactionArgs {
     orderBy?: Array<TransactionOrderByWithRelationInput>;
     @Field(() => TransactionWhereUniqueInput, {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    cursor?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    cursor?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -63039,7 +63040,7 @@ export class FindManyTransactionArgs {
     orderBy?: Array<TransactionOrderByWithRelationInput>;
     @Field(() => TransactionWhereUniqueInput, {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    cursor?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    cursor?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -63052,14 +63053,14 @@ export class FindManyTransactionArgs {
 export class FindUniqueTransactionOrThrowArgs {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
 }
 
 @ArgsType()
 export class FindUniqueTransactionArgs {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
 }
 
 @InputType()
@@ -63080,7 +63081,7 @@ export class TransactionAggregateArgs {
     orderBy?: Array<TransactionOrderByWithRelationInput>;
     @Field(() => TransactionWhereUniqueInput, {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    cursor?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    cursor?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -63592,7 +63593,7 @@ export class TransactionCreateNestedManyWithoutAccountInput {
     createMany?: InstanceType<typeof TransactionCreateManyAccountInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
 }
 
 @InputType()
@@ -63608,7 +63609,7 @@ export class TransactionCreateNestedManyWithoutAssetInput {
     createMany?: InstanceType<typeof TransactionCreateManyAssetInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
 }
 
 @InputType()
@@ -63624,7 +63625,7 @@ export class TransactionCreateNestedManyWithoutPortfolioInput {
     createMany?: InstanceType<typeof TransactionCreateManyPortfolioInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
 }
 
 @InputType()
@@ -63637,14 +63638,14 @@ export class TransactionCreateNestedOneWithoutLotChangeLogInput {
     connectOrCreate?: InstanceType<typeof TransactionCreateOrConnectWithoutLotChangeLogInput>;
     @Field(() => TransactionWhereUniqueInput, {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    connect?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
 }
 
 @InputType()
 export class TransactionCreateOrConnectWithoutAccountInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionCreateWithoutAccountInput, {nullable:false})
     @Type(() => TransactionCreateWithoutAccountInput)
     create!: InstanceType<typeof TransactionCreateWithoutAccountInput>;
@@ -63654,7 +63655,7 @@ export class TransactionCreateOrConnectWithoutAccountInput {
 export class TransactionCreateOrConnectWithoutAssetInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionCreateWithoutAssetInput, {nullable:false})
     @Type(() => TransactionCreateWithoutAssetInput)
     create!: InstanceType<typeof TransactionCreateWithoutAssetInput>;
@@ -63664,7 +63665,7 @@ export class TransactionCreateOrConnectWithoutAssetInput {
 export class TransactionCreateOrConnectWithoutLotChangeLogInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionCreateWithoutLotChangeLogInput, {nullable:false})
     @Type(() => TransactionCreateWithoutLotChangeLogInput)
     create!: InstanceType<typeof TransactionCreateWithoutLotChangeLogInput>;
@@ -63674,7 +63675,7 @@ export class TransactionCreateOrConnectWithoutLotChangeLogInput {
 export class TransactionCreateOrConnectWithoutPortfolioInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionCreateWithoutPortfolioInput, {nullable:false})
     @Type(() => TransactionCreateWithoutPortfolioInput)
     create!: InstanceType<typeof TransactionCreateWithoutPortfolioInput>;
@@ -64785,7 +64786,7 @@ export class TransactionUncheckedCreateNestedManyWithoutAccountInput {
     createMany?: InstanceType<typeof TransactionCreateManyAccountInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
 }
 
 @InputType()
@@ -64801,7 +64802,7 @@ export class TransactionUncheckedCreateNestedManyWithoutAssetInput {
     createMany?: InstanceType<typeof TransactionCreateManyAssetInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
 }
 
 @InputType()
@@ -64817,7 +64818,7 @@ export class TransactionUncheckedCreateNestedManyWithoutPortfolioInput {
     createMany?: InstanceType<typeof TransactionCreateManyPortfolioInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
 }
 
 @InputType()
@@ -65152,16 +65153,16 @@ export class TransactionUncheckedUpdateManyWithoutAccountNestedInput {
     createMany?: InstanceType<typeof TransactionCreateManyAccountInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionUpdateWithWhereUniqueWithoutAccountInput], {nullable:true})
     @Type(() => TransactionUpdateWithWhereUniqueWithoutAccountInput)
     update?: Array<TransactionUpdateWithWhereUniqueWithoutAccountInput>;
@@ -65245,16 +65246,16 @@ export class TransactionUncheckedUpdateManyWithoutAssetNestedInput {
     createMany?: InstanceType<typeof TransactionCreateManyAssetInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionUpdateWithWhereUniqueWithoutAssetInput], {nullable:true})
     @Type(() => TransactionUpdateWithWhereUniqueWithoutAssetInput)
     update?: Array<TransactionUpdateWithWhereUniqueWithoutAssetInput>;
@@ -65338,16 +65339,16 @@ export class TransactionUncheckedUpdateManyWithoutPortfolioNestedInput {
     createMany?: InstanceType<typeof TransactionCreateManyPortfolioInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionUpdateWithWhereUniqueWithoutPortfolioInput], {nullable:true})
     @Type(() => TransactionUpdateWithWhereUniqueWithoutPortfolioInput)
     update?: Array<TransactionUpdateWithWhereUniqueWithoutPortfolioInput>;
@@ -65867,16 +65868,16 @@ export class TransactionUpdateManyWithoutAccountNestedInput {
     createMany?: InstanceType<typeof TransactionCreateManyAccountInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionUpdateWithWhereUniqueWithoutAccountInput], {nullable:true})
     @Type(() => TransactionUpdateWithWhereUniqueWithoutAccountInput)
     update?: Array<TransactionUpdateWithWhereUniqueWithoutAccountInput>;
@@ -65904,16 +65905,16 @@ export class TransactionUpdateManyWithoutAssetNestedInput {
     createMany?: InstanceType<typeof TransactionCreateManyAssetInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionUpdateWithWhereUniqueWithoutAssetInput], {nullable:true})
     @Type(() => TransactionUpdateWithWhereUniqueWithoutAssetInput)
     update?: Array<TransactionUpdateWithWhereUniqueWithoutAssetInput>;
@@ -65941,16 +65942,16 @@ export class TransactionUpdateManyWithoutPortfolioNestedInput {
     createMany?: InstanceType<typeof TransactionCreateManyPortfolioInputEnvelope>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    set?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionWhereUniqueInput], {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>>;
     @Field(() => [TransactionUpdateWithWhereUniqueWithoutPortfolioInput], {nullable:true})
     @Type(() => TransactionUpdateWithWhereUniqueWithoutPortfolioInput)
     update?: Array<TransactionUpdateWithWhereUniqueWithoutPortfolioInput>;
@@ -65981,7 +65982,7 @@ export class TransactionUpdateOneWithoutLotChangeLogNestedInput {
     delete?: InstanceType<typeof TransactionWhereInput>;
     @Field(() => TransactionWhereUniqueInput, {nullable:true})
     @Type(() => TransactionWhereUniqueInput)
-    connect?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    connect?: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionUpdateToOneWithWhereWithoutLotChangeLogInput, {nullable:true})
     @Type(() => TransactionUpdateToOneWithWhereWithoutLotChangeLogInput)
     update?: InstanceType<typeof TransactionUpdateToOneWithWhereWithoutLotChangeLogInput>;
@@ -66001,7 +66002,7 @@ export class TransactionUpdateToOneWithWhereWithoutLotChangeLogInput {
 export class TransactionUpdateWithWhereUniqueWithoutAccountInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionUpdateWithoutAccountInput, {nullable:false})
     @Type(() => TransactionUpdateWithoutAccountInput)
     data!: InstanceType<typeof TransactionUpdateWithoutAccountInput>;
@@ -66011,7 +66012,7 @@ export class TransactionUpdateWithWhereUniqueWithoutAccountInput {
 export class TransactionUpdateWithWhereUniqueWithoutAssetInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionUpdateWithoutAssetInput, {nullable:false})
     @Type(() => TransactionUpdateWithoutAssetInput)
     data!: InstanceType<typeof TransactionUpdateWithoutAssetInput>;
@@ -66021,7 +66022,7 @@ export class TransactionUpdateWithWhereUniqueWithoutAssetInput {
 export class TransactionUpdateWithWhereUniqueWithoutPortfolioInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionUpdateWithoutPortfolioInput, {nullable:false})
     @Type(() => TransactionUpdateWithoutPortfolioInput)
     data!: InstanceType<typeof TransactionUpdateWithoutPortfolioInput>;
@@ -66339,7 +66340,7 @@ export class TransactionUpdateInput {
 export class TransactionUpsertWithWhereUniqueWithoutAccountInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionUpdateWithoutAccountInput, {nullable:false})
     @Type(() => TransactionUpdateWithoutAccountInput)
     update!: InstanceType<typeof TransactionUpdateWithoutAccountInput>;
@@ -66352,7 +66353,7 @@ export class TransactionUpsertWithWhereUniqueWithoutAccountInput {
 export class TransactionUpsertWithWhereUniqueWithoutAssetInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionUpdateWithoutAssetInput, {nullable:false})
     @Type(() => TransactionUpdateWithoutAssetInput)
     update!: InstanceType<typeof TransactionUpdateWithoutAssetInput>;
@@ -66365,7 +66366,7 @@ export class TransactionUpsertWithWhereUniqueWithoutAssetInput {
 export class TransactionUpsertWithWhereUniqueWithoutPortfolioInput {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionUpdateWithoutPortfolioInput, {nullable:false})
     @Type(() => TransactionUpdateWithoutPortfolioInput)
     update!: InstanceType<typeof TransactionUpdateWithoutPortfolioInput>;
@@ -66391,6 +66392,8 @@ export class TransactionUpsertWithoutLotChangeLogInput {
 export class TransactionWhereUniqueInput {
     @Field(() => String, {nullable:true})
     id?: string;
+    @Field(() => String, {nullable:true})
+    externalId?: string;
     @Field(() => TransactionAccountIdExternalIdCompoundUniqueInput, {nullable:true})
     @Type(() => TransactionAccountIdExternalIdCompoundUniqueInput)
     accountId_externalId?: InstanceType<typeof TransactionAccountIdExternalIdCompoundUniqueInput>;
@@ -66407,8 +66410,6 @@ export class TransactionWhereUniqueInput {
     createdAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFilter>;
-    @Field(() => StringFilter, {nullable:true})
-    externalId?: InstanceType<typeof StringFilter>;
     @Field(() => UuidFilter, {nullable:true})
     accountId?: InstanceType<typeof UuidFilter>;
     @Field(() => StringNullableFilter, {nullable:true})
@@ -66559,7 +66560,10 @@ export class Transaction {
     createdAt!: Date;
     @Field(() => Date, {nullable:false})
     updatedAt!: Date;
-    @Field(() => String, {nullable:false})
+    /**
+     * PLaid investment_transaction_id
+     */
+    @Field(() => String, {description:'PLaid investment_transaction_id',nullable:false})
     externalId!: string;
     @Field(() => String, {nullable:false})
     accountId!: string;
@@ -66634,14 +66638,14 @@ export class UpdateOneTransactionArgs {
     data!: InstanceType<typeof TransactionUpdateInput>;
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
 }
 
 @ArgsType()
 export class UpsertOneTransactionArgs {
     @Field(() => TransactionWhereUniqueInput, {nullable:false})
     @Type(() => TransactionWhereUniqueInput)
-    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'accountId_externalId'>;
+    where!: Prisma.AtLeast<TransactionWhereUniqueInput, 'id' | 'externalId' | 'accountId_externalId'>;
     @Field(() => TransactionCreateInput, {nullable:false})
     @Type(() => TransactionCreateInput)
     create!: InstanceType<typeof TransactionCreateInput>;

@@ -23,6 +23,7 @@ import { z } from 'zod';
 import { FileType, useInitAccountFileUploadMutation } from '~/generated/gql';
 import { useUploadFiles } from '~/modules/fileUpload/useUploadFiles';
 import { zodNumber } from '~/modules/utils/zod-utils';
+import { CSVUploadHelper } from '~/modules/fileUpload/CSVUploadHelper';
 
 const accountFormSchema = z.object({
   deferredLoss: zodNumber,
@@ -63,6 +64,13 @@ export default function UploadPage() {
       toast.error('Error uploading files');
     },
     onFileUploaded: async files => {
+      form.trigger();
+      if (Object.keys(form.formState.errors).length > 0) {
+        toast.error('Please fill out all fields');
+        return;
+      }
+      const { deferredLoss, dividend, longTerm, shortTerm, accountName } =
+        accountFormSchema.parse(form.getValues());
       await createFiles({
         variables: {
           fileData: files.map(file => ({
@@ -72,11 +80,11 @@ export default function UploadPage() {
             fileType: FileType.EtradeLots,
           })),
           accountData: {
-            name: form.getValues('accountName'),
-            deferredLoss: form.getValues('deferredLoss'),
-            dividend: form.getValues('dividend'),
-            longTerm: form.getValues('longTerm'),
-            shortTerm: form.getValues('shortTerm'),
+            name: accountName,
+            deferredLoss,
+            dividend,
+            longTerm,
+            shortTerm,
           },
         },
         onError: () => {
@@ -98,21 +106,27 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
-      <div className="rounded-lg border bg-card">
+    <div className="mx-auto max-h-screen w-full max-w-4xl overflow-y-auto">
+      <div className="bg-card rounded-lg border">
         <div className="border-b p-6">
-          <h1 className="text-2xl font-semibold">Upload Portfolio</h1>
+          <h1 className="text-2xl font-semibold">Upload Positions</h1>
           <p className="text-muted-foreground mt-1">
-            Upload your portfolio CSV file to automatically capture your tax lots
+            Upload your portfolio CSV file to automatically capture your tax
+            lots
           </p>
         </div>
-        
+
         <FormProvider {...form}>
           <div className="p-8">
             <div className="mb-6">
               <h2 className="mb-3 text-lg font-semibold">
-                Upload Portfolio CSV
+                Upload Positions CSV
               </h2>
+
+              <div className="mb-4">
+                <CSVUploadHelper />
+              </div>
+
               <FileUpload
                 maxFiles={2}
                 maxSize={5 * 1024 * 1024}
@@ -136,11 +150,7 @@ export default function UploadPage() {
                     </p>
                   </div>
                   <FileUploadTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mt-2 w-fit"
-                    >
+                    <Button variant="outline" size="sm" className="mt-2 w-fit">
                       Browse files
                     </Button>
                   </FileUploadTrigger>
@@ -151,11 +161,7 @@ export default function UploadPage() {
                       <FileUploadItemPreview />
                       <FileUploadItemMetadata />
                       <FileUploadItemDelete asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="size-7"
-                        >
+                        <Button variant="ghost" size="icon" className="size-7">
                           <X />
                         </Button>
                       </FileUploadItemDelete>
@@ -165,12 +171,8 @@ export default function UploadPage() {
               </FileUpload>
             </div>
 
-            <InputField
-              name="accountName"
-              label="Account Name"
-              type="text"
-            />
-            
+            <InputField name="accountName" label="Account Name" type="text" />
+
             <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <InputField
@@ -211,9 +213,9 @@ export default function UploadPage() {
             </div>
           </div>
         </FormProvider>
-        
+
         <div className="flex justify-end gap-2 border-t p-6">
-          <Button variant="outline" onClick={() => router.push('/')}>
+          <Button variant="outline" onClick={() => router.back()}>
             Cancel
           </Button>
           <Button onClick={handleNext} disabled={files.length === 0}>

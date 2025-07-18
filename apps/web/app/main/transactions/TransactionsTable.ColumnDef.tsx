@@ -1,18 +1,33 @@
-'use client'
+'use client';
 
-import type { ColumnDef } from '@tanstack/react-table'
-import type { TransactionTableItemFragment } from '~/generated/gql'
-import DataTable from '@repo/ui/components/dataTable/dataTable'
+import type { ColumnDef } from '@tanstack/react-table';
+import type { TransactionTableItemFragment } from '~/generated/gql';
+import DataTable from '@repo/ui/components/dataTable/dataTable';
 
-import { createColumnHelper } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table';
+import { Badge } from '@repo/ui/components/badge';
 
-const columnHelper = createColumnHelper<TransactionTableItemFragment>()
+const columnHelper = createColumnHelper<TransactionTableItemFragment>();
 
 const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
   columnHelper.accessor('transactionDate', {
     cell: DataTable.DateCell,
     header: ({ column }) => (
       <DataTable.BasicHeader column={column} title="Date" />
+    ),
+    size: 90,
+  }),
+  columnHelper.accessor('appliedToLots', {
+    cell: props => (
+      <Badge
+        variant={props.row.getValue('appliedToLots') ? 'secondary' : 'default'}
+        className="text-xs"
+      >
+        {props.row.getValue('appliedToLots') ? 'Yes' : 'No'}
+      </Badge>
+    ),
+    header: ({ column }) => (
+      <DataTable.BasicHeader column={column} title="Applied?" />
     ),
     size: 90,
   }),
@@ -53,7 +68,7 @@ const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
         <div className="flex space-x-2">
           <span className="truncate font-medium">{row.getValue('memo')}</span>
         </div>
-      )
+      );
     },
     header: ({ column }) => (
       <DataTable.BasicHeader column={column} title="Description" />
@@ -97,6 +112,6 @@ const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
     ),
     size: 90,
   }),
-]
+];
 
-export default columns
+export default columns;

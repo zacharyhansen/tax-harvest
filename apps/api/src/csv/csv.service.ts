@@ -45,6 +45,17 @@ export class CsvService {
     price: Decimal
     remainingQty: Decimal
   }[] {
+    // Check if any records contain dates
+    const hasDateRecords = records.some((record) => {
+      // Check if the Symbol field contains a valid date
+      const possibleDate = new Date(record.Symbol)
+      return !Number.isNaN(possibleDate.getTime()) && /^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(record.Symbol)
+    })
+
+    if (!hasDateRecords) {
+      throw new Error('Invalid CSV format: No lot dates found in the Symbol column. Please ensure you have expanded the lot details before downloading the CSV.')
+    }
+
     const transformedRecords = []
     let currentTicker = ''
     for (const record of records) {

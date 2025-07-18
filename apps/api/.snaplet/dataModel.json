@@ -6065,6 +6065,13 @@
             "externalId"
           ],
           "nullNotDistinct": false
+        },
+        {
+          "name": "Transaction_externalId_key",
+          "fields": [
+            "externalId"
+          ],
+          "nullNotDistinct": false
         }
       ]
     },
@@ -7353,6 +7360,9 @@
         },
         {
           "name": "PLAID_WEBHOOK"
+        },
+        {
+          "name": "SUBSET_HYBRID_CALCULATION"
         }
       ]
     },

@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { useCallback } from 'react';
 import { usePlaidLink } from 'react-plaid-link';
 import { ApolloError } from '@apollo/client';
+import { useRouter } from 'next/navigation';
 
 import { usePlaidSetAccessTokenAndSyncAccountsMutation } from '~/generated/gql';
 
@@ -19,9 +20,11 @@ import plaidIcon from '../../public/icons/plaid.svg';
 
 type PlaidLinkProps = {
   token: string;
+  redirectTo?: string;
 } & ButtonProps;
 
-export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
+export default function PlaidLink({ token, redirectTo, ...buttonProps }: PlaidLinkProps) {
+  const router = redirectTo ? useRouter() : null;
   const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation();
 
   const onSuccess: PlaidLinkOnSuccess = useCallback<PlaidLinkOnSuccess>(
@@ -50,6 +53,11 @@ export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
             },
             publicToken: public_token,
           },
+        }).then(() => {
+          // Redirect after successful sync if redirectTo is provided
+          if (redirectTo && router) {
+            router.push(redirectTo);
+          }
         }).catch((error: ApolloError) => {
           console.error('Plaid sync error:', error);
           throw new Error(error.message || 'Failed to sync accounts');
@@ -57,11 +65,11 @@ export default function PlaidLink({ token, ...buttonProps }: PlaidLinkProps) {
         {
           error: error => `Failed to sync accounts: ${error.message}`,
           loading: 'We are syncing your account and transaction data',
-          success: 'Sync complete',
+          success: redirectTo ? 'Sync complete! Redirecting...' : 'Sync complete',
         }
       );
     },
-    [mutate]
+    [mutate, redirectTo, router]
   );
 
   const onExit: PlaidLinkOnExit = useCallback(

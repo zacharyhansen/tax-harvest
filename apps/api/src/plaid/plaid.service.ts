@@ -10,6 +10,7 @@ import {
   LogType,
   Lot,
   OperationType,
+  Position,
   Prisma,
   Transaction,
   User,
@@ -33,6 +34,17 @@ import { PlaidLinkOnSuccessMetadata, PlaidWebhook } from './plaid.dto'
 import { taxAdvantadedSubTypes } from './plaid.utils'
 
 const plaidTransactionsPerPage = 500
+
+interface ResolvedLotChangeResults {
+  realizedProfitAndLoss: Decimal
+  lotUpserts: LotChange[]
+  lotDeletes: LotChange[]
+  newBuys: Transaction[]
+  newSells: Transaction[]
+  newTransactions: Transaction[]
+  lotTupleMap: Map<string, LotData[]>
+  intitialLotMap: Map<string, Lot>
+}
 
 @Injectable()
 export class PlaidService {
@@ -436,70 +448,41 @@ export class PlaidService {
         }),
     ])
 
-    const intitialLotMap = new Map<string, Lot>()
-    for (const lot of initialLots) {
-      intitialLotMap.set(lot.id, lot)
+    let resolvedResults: ResolvedLotChangeResults = {
+      realizedProfitAndLoss: new Decimal(0),
+      lotUpserts: [],
+      lotDeletes: [],
+      newBuys: [],
+      newSells: [],
+      newTransactions: [],
+      lotTupleMap: new Map<string, LotData[]>(),
+      intitialLotMap: new Map<string, Lot>(),
     }
 
-    const { lotTupleMap, newBuys, newSells, newTransactions }
-      = PlaidService.lotDataMapFromLotsAndTransactions({
-        lots: initialLots,
-        transactions,
+    const resolveInput = {
+      finalPositions,
+      transactions,
+      initialLots,
+      authConnection,
+    }
+
+    await this.prismaService
+      .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+      .log
+      .create({
+        data: {
+          data: JSON.parse(
+            JSON.stringify(resolveInput),
+          ),
+          description: 'Attempting trx merge',
+          source: AuthSource.PLAID,
+          type: LogType.PLAID_TRX_MERGE,
+          portfolioId: authConnection.portfolioId,
+        },
       })
 
-    let lotResults: LotChange[] = []
-    let realizedProfitAndLoss = new Decimal(0)
-
     try {
-      await this.prismaService
-        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
-        .log
-        .create({
-          data: {
-            data: JSON.parse(
-              JSON.stringify({
-                lotTupleMap: Array.from(lotTupleMap.entries()),
-                initialLots,
-                newTransactions,
-                finalPositions,
-              }),
-            ),
-            description: 'Attempting trx merge with lotTupleMap',
-            source: AuthSource.PLAID,
-            type: LogType.PLAID_TRX_MERGE,
-            portfolioId: authConnection.portfolioId,
-          },
-        })
-      lotResults = Array.from(lotTupleMap.entries()).flatMap(
-        ([symbol, lotTuples]) => {
-          const position = finalPositions.find(p => p.assetSymbol === symbol)
-          const targetQuantity = position?.quantity
-            ? position.quantity
-            : undefined
-          const targetValue = position?.costTotal
-            ? position.costTotal
-            : undefined
-          return findLotChangeSets(
-            {
-              lotsData: lotTuples,
-              targetQuantity,
-              targetValue,
-              symbol,
-            },
-            authConnection.portfolioId,
-          ).lotChanges
-        },
-      )
-
-      const totalSaleDollars = newSells.reduce((acc, sell) => {
-        return acc.plus(sell.amount ?? 0)
-      }, new Decimal(0))
-
-      const totalSaleCostBasis = lotResults.reduce((acc, lot) => {
-        return acc.plus(lot.quantityChange.mul(lot.price))
-      }, new Decimal(0))
-
-      realizedProfitAndLoss = totalSaleDollars.minus(totalSaleCostBasis)
+      resolvedResults = PlaidService.resolveLotChanges(resolveInput)
     }
     catch (error) {
       console.error(error)
@@ -508,7 +491,12 @@ export class PlaidService {
         .log
         .create({
           data: {
-            data: error as InputJsonValue,
+            data: {
+              error: error as InputJsonValue,
+              input: JSON.parse(
+                JSON.stringify(resolveInput),
+              ),
+            },
             description: `Trx merge failed with error: ${JSON.stringify(error)}`,
             source: AuthSource.PLAID,
             type: LogType.PLAID_TRX_MERGE_ERROR,
@@ -517,6 +505,8 @@ export class PlaidService {
         })
       throw error
     }
+
+    const { realizedProfitAndLoss, lotUpserts, lotDeletes, newBuys, newSells, newTransactions, lotTupleMap, intitialLotMap } = resolvedResults
 
     await this.prismaService
       .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
@@ -536,26 +526,14 @@ export class PlaidService {
             realizedProfitAndLoss,
             // Store lots that were completely sold (zero quantity remaining)
             deletedLots: JSON.parse(JSON.stringify(
-              lotResults.filter(result =>
-                result.upsert.remainingQty === new Decimal(0),
-              ),
+              lotDeletes,
             )),
           },
         })
 
-        const lotUpsertResults: Prisma.LotCreateInput[] = lotResults.map(
-          (assetResult) => {
-            return assetResult.upsert
-          },
-        )
-
-        // Only upsert lots that have remaining quantity
-        const lotsToUpsert = lotUpsertResults.filter(
-          upsert => upsert.remainingQty !== new Decimal(0),
-        )
-
+        // Upsert lots that have remaining quantity
         await Promise.all(
-          lotsToUpsert.map(upsert =>
+          lotUpserts.map(({ upsert }) =>
             trx.lot.upsert({
               where: {
                 id: upsert.id,
@@ -565,6 +543,17 @@ export class PlaidService {
             }),
           ),
         )
+
+        // Delete lots that have no remaining quantity
+        await Promise.all([
+          trx.lot.deleteMany({
+            where: {
+              id: {
+                in: lotDeletes.map(({ upsert }) => upsert.id ?? ''),
+              },
+            },
+          }),
+        ])
 
         await Promise.all([
           // update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
@@ -591,7 +580,7 @@ export class PlaidService {
           }),
           trx.log.create({
             data: {
-              data: JSON.parse(JSON.stringify({ lotResults })),
+              data: JSON.parse(JSON.stringify({ lotTupleMap })),
               description: 'Trx merge results',
               source: AuthSource.PLAID,
               type: LogType.PLAID_TRX_MERGE_SUCCESS,
@@ -599,11 +588,18 @@ export class PlaidService {
             },
           }),
           trx.lotChangeLog.createMany({
-            data: lotUpsertResults.map((upsert, index) => {
-              const isZeroQuantity = upsert.remainingQty === new Decimal(0)
+            data: [...lotUpserts, ...lotDeletes].map(({ upsert, isNewBuy }) => {
+              const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0)
+              const operationType = isNewBuy
+                ? OperationType.create
+                : isZeroQuantity
+                  ? OperationType.delete
+                  : OperationType.update
               return {
                 lotTransactionBatchId: lotTransactionBatch.id,
-                lotId: upsert.id,
+                lotId: operationType === OperationType.delete
+                  ? undefined
+                  : upsert.id,
                 quantityChange: (
                   intitialLotMap.get(upsert.id ?? '')?.remainingQty
                   ?? new Decimal(0)
@@ -612,16 +608,94 @@ export class PlaidService {
                 portfolioId: authConnection.portfolioId,
                 lotBefore: intitialLotMap.get(upsert.id ?? ''),
                 lotAfter: JSON.parse(JSON.stringify(upsert)),
-                operationType: lotResults[index].isNewBuy
-                  ? OperationType.create
-                  : isZeroQuantity
-                    ? OperationType.delete
-                    : OperationType.update,
+                operationType,
               }
             }),
           }),
         ])
       })
+  }
+
+  static resolveLotChanges({
+    finalPositions,
+    transactions,
+    initialLots,
+    authConnection,
+  }: {
+    finalPositions: Position[]
+    transactions: Transaction[]
+    initialLots: Lot[]
+    authConnection: AuthConnection
+  }): ResolvedLotChangeResults {
+    const intitialLotMap = new Map<string, Lot>()
+    for (const lot of initialLots) {
+      intitialLotMap.set(lot.id, lot)
+    }
+
+    const { lotTupleMap, newBuys, newSells, newTransactions }
+      = PlaidService.lotDataMapFromLotsAndTransactions({
+        lots: initialLots,
+        transactions,
+      })
+
+    // Attempt to generate the change set for each asset
+    const lotResults = ((Array.from(lotTupleMap.entries()).map(
+      ([symbol, lotTuples]) => {
+        const position = finalPositions.find(p => p.assetSymbol === symbol)
+        const targetQuantity = position?.quantity
+          ? position.quantity
+          : undefined
+        const targetValue = position?.costTotal
+          ? position.costTotal
+          : undefined
+
+        const changeAlgoParams = {
+          lotsData: lotTuples,
+          targetQuantity,
+          targetValue,
+          symbol,
+        }
+        return findLotChangeSets(changeAlgoParams, authConnection.portfolioId).lotChanges
+      },
+    ))).flat()
+
+    // Calculate the realized profit and loss - we dont need to actually know per share - just total sold and total cost basis
+
+    // Total Sale Dollars
+    const totalSaleDollars = newSells.reduce((acc, sell) => {
+      return acc.plus(sell.amount ?? 0)
+    }, new Decimal(0))
+
+    // Total Sale Cost Basis
+    const totalSaleCostBasis = lotResults.reduce((acc, lot) => {
+      return acc.plus(lot.quantityChange.mul(lot.price))
+    }, new Decimal(0))
+
+    const realizedProfitAndLoss = totalSaleDollars.minus(totalSaleCostBasis)
+
+    /**
+     * Need to return a few things:
+     * 1. realizedProfitAndLoss - so we can adjust realized P&L
+     * 2. LotUpserts - so we can upsert the lots
+     * 3. LotDeletes - (Those lots that are completely sold)
+     * 4. lotTupleMap - this is just for logging purposes
+     * 5. newTransactions - so we can mark them as applied to lots
+     */
+
+    return {
+      realizedProfitAndLoss,
+      lotUpserts: lotResults.filter(result =>
+        (result.upsert.remainingQty as Decimal).gt(0),
+      ),
+      lotDeletes: lotResults.filter(result =>
+        (result.upsert.remainingQty as Decimal).lte(0),
+      ),
+      newBuys,
+      newSells,
+      newTransactions,
+      lotTupleMap,
+      intitialLotMap,
+    }
   }
 
   static lotDataMapFromLotsAndTransactions({

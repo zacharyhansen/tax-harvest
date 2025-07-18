@@ -1,20 +1,19 @@
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-
 import { Test, TestingModule } from '@nestjs/testing'
-
-import { AuthSource, AuthType } from '@prisma/client'
+import {
+  AuthSource,
+  AuthType,
+} from '@prisma/client'
 import Decimal from 'decimal.js'
 import { AccountBase, Security } from 'plaid'
-
+import { beforeEach, describe, expect, it } from 'vitest'
 import { AppModule } from '~/app/app.module'
 import { CsvService } from '~/csv/csv.service'
-
 import { findLotChangeSets, LotChange } from './lot-application'
 import { PlaidService } from './plaid.service'
 
 describe('plaidService', () => {
-  let _service: PlaidService
   let csvService: CsvService
 
   beforeEach(async () => {
@@ -22,7 +21,6 @@ describe('plaidService', () => {
       imports: [AppModule],
     }).compile()
 
-    _service = moduleFixture.get<PlaidService>(PlaidService)
     csvService = moduleFixture.get<CsvService>(CsvService)
   })
 

@@ -37,6 +37,7 @@ import LoadingScreen from './loading';
 import { ModuleRegistry } from 'ag-grid-community';
 import { AllCommunityModule } from 'ag-grid-community';
 import NextTopLoader from 'nextjs-toploader';
+import { TrendingUp, Shield, FileSpreadsheet, Building2 } from 'lucide-react';
 
 // Ag grid register
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -150,56 +151,97 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
 
   if (data?.portfolioSummary.setUpStatus === SetUpStatus.NoAccounts) {
     return (
-      <div className="bg-background flex min-h-screen flex-col items-center justify-center p-4 md:p-8">
-        <motion.div
-          className="container mx-auto flex max-w-5xl flex-col items-center gap-4 text-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.div className="space-y-4" variants={itemVariants}>
-            <motion.h1
-              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
-              variants={itemVariants}
-            >
-              Welcome to Tax Harvest.AI{' '}
-            </motion.h1>
-            <motion.p
-              className="text-muted-foreground mx-auto max-w-[700px] md:text-xl"
-              variants={itemVariants}
-            >
-              Let's get started with setting up your account.
-            </motion.p>
+      <motion.div
+        className="container mx-auto flex max-h-screen max-w-6xl flex-col items-center gap-8 overflow-y-auto px-4 py-8 md:py-16"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div className="space-y-6 text-center" variants={itemVariants}>
+          <motion.div
+            className="bg-primary/10 mx-auto flex h-20 w-20 items-center justify-center rounded-full"
+            variants={itemVariants}
+          >
+            <TrendingUp className="text-primary h-10 w-10" />
           </motion.div>
 
-          <motion.div className="mt-8" variants={itemVariants}>
-            <motion.div
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              <AddAccountButton size="lg" />
-            </motion.div>
+          <motion.h1
+            className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl"
+            variants={itemVariants}
+          >
+            Turn Your Investments Into Tax Savings
+          </motion.h1>
+
+          <motion.p
+            className="text-muted-foreground mx-auto max-w-[800px] text-lg md:text-xl"
+            variants={itemVariants}
+          >
+            Tax-loss harvesting can save you thousands of dollars annually.
+            Start by uploading your portfolio to discover hidden opportunities
+            in your investments.
+          </motion.p>
+        </motion.div>
+
+        <motion.div
+          className="flex flex-col items-center gap-4"
+          variants={itemVariants}
+        >
+          <motion.div
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+          >
+            <AddAccountButton size="lg" className="px-8 py-6 text-lg" />
+          </motion.div>
+
+          <motion.p
+            className="text-muted-foreground text-center text-sm"
+            variants={itemVariants}
+          >
+            Get started in under 5 minutes • Bank-level security • Cancel
+            anytime
+          </motion.p>
+        </motion.div>
+        <motion.div
+          className="grid w-full max-w-4xl gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+          variants={itemVariants}
+        >
+          <motion.div
+            className="bg-card flex flex-col items-center gap-3 rounded-lg border p-4 sm:p-6"
+            variants={itemVariants}
+          >
+            <FileSpreadsheet className="text-primary h-8 w-8" />
+            <h3 className="font-semibold">Upload Your Portfolio</h3>
+            <p className="text-muted-foreground text-center text-sm">
+              Provide a snapshot of your positions and year-to-date profit &
+              loss
+            </p>
           </motion.div>
 
           <motion.div
-            className="relative aspect-[16/9] w-full max-w-3xl overflow-hidden rounded-lg"
-            variants={imageVariants}
-            whileHover={{
-              scale: 1.02,
-              transition: { duration: 0.3 },
-            }}
+            className="bg-card flex flex-col items-center gap-3 rounded-lg border p-4 sm:p-6"
+            variants={itemVariants}
           >
-            <Image
-              src="/images/moneyToPill.png"
-              alt="Welcome illustration"
-              fill
-              className="max-h-[50vh] object-contain"
-              priority
-            />
+            <Building2 className="text-primary h-8 w-8" />
+            <h3 className="font-semibold">Connect Securely</h3>
+            <p className="text-muted-foreground text-center text-sm">
+              Link your brokerage accounts for automatic opportunity detection
+            </p>
+          </motion.div>
+
+          <motion.div
+            className="bg-card flex flex-col items-center gap-3 rounded-lg border p-4 sm:col-span-2 sm:p-6 lg:col-span-1"
+            variants={itemVariants}
+          >
+            <Shield className="text-primary h-8 w-8" />
+            <h3 className="font-semibold">Save Automatically</h3>
+            <p className="text-muted-foreground text-center text-sm">
+              We'll continuously monitor and alert you to tax-saving
+              opportunities
+            </p>
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     );
   }
 

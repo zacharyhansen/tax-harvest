@@ -54,6 +54,7 @@ query FiniteHarvest {
       unrealized {
         gainTotal
         lossTotal
+        total
       }
       includingCurrentHarvest {
         realized {

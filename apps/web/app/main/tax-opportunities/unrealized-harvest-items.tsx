@@ -89,6 +89,9 @@ export default function UnrealizedHarvestItems({
         ))}
     </div>
   ) : (
-    <NoOpportunities />
+    <NoOpportunities
+      realizedPAndL={finiteHarvest.summary.realized.gainTotal}
+      unrealizedPAndL={finiteHarvest.summary.unrealized.total}
+    />
   );
 }

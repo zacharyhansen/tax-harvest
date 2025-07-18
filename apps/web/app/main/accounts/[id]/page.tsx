@@ -86,7 +86,7 @@ function AccountForm({ account }: { account: AccountItemFragment }) {
   >({
     defaultValues: {
       deferredLoss: Number(account._realizedProfitAndLoss.deferredLoss),
-      description: account.description,
+      description: account.description ?? '',
       dividend: Number(account._realizedProfitAndLoss.dividend),
       longTerm: Number(account._realizedProfitAndLoss.longTerm),
       shortTerm: Number(account._realizedProfitAndLoss.shortTerm),

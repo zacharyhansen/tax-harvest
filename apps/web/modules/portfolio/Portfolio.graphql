@@ -4,6 +4,8 @@ fragment PortfolioItem on Portfolio {
   harvestCycleWeeks
   createdAt
   createdById
+  endOfYearTaxOpportunityNotification
+  notificationFrequency
 }
 
 fragment PortfolioDetailItem on Portfolio {
@@ -14,8 +16,6 @@ fragment PortfolioDetailItem on Portfolio {
   harvestTickerBucketLowerLimitLong
   harvestTickerBucketLowerLimitShort
   minimumLotPAndL
-  endOfYearTaxOpportunityNotification
-  notificationFrequency
   accounts {
     name
     id

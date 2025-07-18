@@ -6878,6 +6878,7 @@ enum LogType {
   PLAID_TRX_MERGE_ERROR
   PLAID_TRX_MERGE_SUCCESS
   PLAID_WEBHOOK
+  SUBSET_HYBRID_CALCULATION
 }
 
 input LogUpdateManyMutationInput {
@@ -13193,6 +13194,8 @@ type Transaction {
   description: String
   detailsURI: String
   displaySymbol: String
+
+  """PLaid investment_transaction_id"""
   externalId: String!
   fee: Decimal
 
@@ -13919,7 +13922,7 @@ input TransactionWhereUniqueInput {
   description: StringNullableFilter
   detailsURI: StringNullableFilter
   displaySymbol: StringNullableFilter
-  externalId: StringFilter
+  externalId: String
   fee: DecimalNullableFilter
   id: String
   lotChangeLog: LotChangeLogListRelationFilter

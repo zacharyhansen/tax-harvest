@@ -937,6 +937,67 @@ describe('sell transaction allocation strategies', () => {
           },
         ])
       })
+
+      it('should return empty array if no target quantity or value is provided', () => {
+        const result = findLotChangeSets({
+          time: false,
+          lotsData: [
+            {
+              quantity: D(13),
+              price: D(156.7),
+              lotId: '3ac041ea-5e10-48f5-850b-7993f121f75c',
+              accountId: '539b4211-ef02-462b-8133-9e62538746bb',
+              acquiredDate: new Date('2024-04-22T00:00:00.000Z'),
+              isNewBuy: true,
+            },
+            {
+              quantity: D(13),
+              price: D(156.7),
+              lotId: '341a85b5-08ec-4517-94e7-ba7e6e7b77c7',
+              accountId: '539b4211-ef02-462b-8133-9e62538746bb',
+              acquiredDate: new Date('2024-04-22T00:00:00.000Z'),
+              isNewBuy: true,
+            },
+            {
+              quantity: D(13),
+              price: D(156.7),
+              lotId: '25788b6c-2d62-41a7-8e32-717223c6a2ed',
+              accountId: '539b4211-ef02-462b-8133-9e62538746bb',
+              acquiredDate: new Date('2024-04-22T00:00:00.000Z'),
+              isNewBuy: true,
+            },
+            {
+              quantity: D(13),
+              price: D(156.7),
+              lotId: '7fbdff4b-d2c9-4809-a6b4-bc38a59a18e6',
+              accountId: '539b4211-ef02-462b-8133-9e62538746bb',
+              acquiredDate: new Date('2024-04-22T00:00:00.000Z'),
+              isNewBuy: true,
+            },
+            {
+              quantity: D(13),
+              price: D(156.7),
+              lotId: '22bbcde6-d1c3-4d41-bb75-36838f909bc0',
+              accountId: '539b4211-ef02-462b-8133-9e62538746bb',
+              acquiredDate: new Date('2024-04-22T00:00:00.000Z'),
+              isNewBuy: true,
+            },
+            {
+              quantity: D(13),
+              price: D(156.7),
+              lotId: 'ed1d8b1b-15a9-4199-8e88-315101fe895d',
+              accountId: '539b4211-ef02-462b-8133-9e62538746bb',
+              acquiredDate: new Date('2024-04-22T00:00:00.000Z'),
+              isNewBuy: true,
+            },
+          ],
+          targetQuantity: undefined,
+          targetValue: undefined,
+          symbol: 'GOOGL',
+        }, 'test-portfolio')
+
+        expect(result.lotChanges.length).toBe(0)
+      })
     })
   })
 })

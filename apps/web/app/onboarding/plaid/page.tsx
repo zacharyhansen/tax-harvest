@@ -3,7 +3,9 @@
 import { Button } from '@repo/ui/components/button';
 import { Shield, LineChart, Lock, Building2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import PlaidConnectButton from '~/modules/plaid/PlaidConnectButton';
+import { usePlaidLinkTokenQuery } from '~/generated/gql';
+import PlaidLink from '~/modules/plaid/PlaidLink';
+import { LoadingIcon } from '~/modules/utility-components';
 
 const features = [
   {
@@ -30,6 +32,7 @@ const features = [
 
 export default function PlaidPage() {
   const router = useRouter();
+  const { data } = usePlaidLinkTokenQuery();
 
   return (
     <div className="mx-auto w-full max-w-4xl">
@@ -57,7 +60,17 @@ export default function PlaidPage() {
             ))}
           </div>
 
-          <PlaidConnectButton size="lg" variant="default" className="w-full" />
+          {data?.linkToken ? (
+            <PlaidLink
+              token={data.linkToken}
+              redirectTo="/main/home"
+              size="lg"
+              variant="default"
+              className="w-full"
+            />
+          ) : (
+            <LoadingIcon className="mx-auto my-4" />
+          )}
         </div>
 
         <div className="flex justify-between gap-2 border-t p-6">
@@ -67,7 +80,7 @@ export default function PlaidPage() {
           >
             Back
           </Button>
-          <Button variant="outline" onClick={() => router.push('/')}>
+          <Button variant="outline" onClick={() => router.push('/main/home')}>
             Skip for now
           </Button>
         </div>

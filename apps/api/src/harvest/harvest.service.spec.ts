@@ -1,10 +1,9 @@
 import { ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
-
-import { DatabaseModule } from '~/database/database.module'
-import { LotModule } from '~/lot/lot.module'
-
-import { PrismaModule } from '../prisma/prisma.module'
+import { Database } from '~/database/database'
+import { LotService } from '~/lot/lot.service'
+import { PolygonService } from '~/polygon/polygon.service'
+import { PrismaService } from '~/prisma/prisma.service'
 import { HarvestService } from './harvest.service'
 
 describe('harvestService', () => {
@@ -16,14 +15,23 @@ describe('harvestService', () => {
         HarvestService,
         {
           provide: ConfigService,
-          useValue: new Map(), // Mock ConfigService directly
+          useValue: { get: vi.fn() }, // A minimal mock
         },
-      ],
-      imports: [PrismaModule, LotModule, DatabaseModule],
-      exports: [
         {
-          provide: ConfigService,
-          useValue: new Map(), // Mock ConfigService directly
+          provide: PolygonService,
+          useValue: { someMethod: vi.fn() }, // Mock PolygonService
+        },
+        {
+          provide: Database,
+          useValue: { query: vi.fn() }, // Mock DB if needed
+        },
+        {
+          provide: PrismaService,
+          useValue: { query: vi.fn() }, // Mock DB if needed
+        },
+        {
+          provide: LotService,
+          useValue: { query: vi.fn() }, // Mock DB if needed
         },
       ],
     }).compile()

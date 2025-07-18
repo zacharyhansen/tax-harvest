@@ -308,7 +308,8 @@ model Transaction {
   id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @default(now()) @updatedAt
-  externalId         String
+  /// PLaid investment_transaction_id
+  externalId         String    @unique
   accountId          String    @db.Uuid
   securityType       String?
   type               String?
@@ -779,6 +780,7 @@ enum LogType {
   PLAID_TRX_MERGE
   PLAID_TRX_MERGE_SUCCESS
   PLAID_TRX_MERGE_ERROR
+  SUBSET_HYBRID_CALCULATION
 }
 
 model Log {

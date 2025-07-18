@@ -675,10 +675,14 @@ export class PortfolioService {
         for (const sourceLot of sourceLots) {
           harvest.targetUnrealized = new Decimal(sourceLot.gainTotal).mul(-1)
           harvest.process()
-          unrealizedHarvestMatchResults.push({
-            sourceLot,
-            matchedLotOrders: harvest.allOrders,
-          })
+
+          // Only add the harvest if we have orders to process otherwise its a no op
+          if (harvest.allOrders.length > 0) {
+            unrealizedHarvestMatchResults.push({
+              sourceLot,
+              matchedLotOrders: harvest.allOrders,
+            })
+          }
         }
 
         return {

@@ -9,9 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@repo/ui/components/card';
-import { Label } from '@repo/ui/components/label';
-import { RadioGroup, RadioGroupItem } from '@repo/ui/components/radio-group';
-import { Switch } from '@repo/ui/components/switch';
 import { Protect } from '@clerk/nextjs';
 import { SeePaymentPlans } from '../payment/see-payment-plans';
 import {
@@ -118,33 +115,37 @@ const NotificationForm = ({
                   label="End of year tax opportunities"
                   description="Receive emails about tax opportunities at the end of the year"
                 />
-                <RadioGroupField
-                  name="notificationFrequency"
-                  label="Opportunity Frequency"
-                  description="How often would you like to receive tax opportunity notifications?"
-                  options={[
-                    {
-                      label: 'Daily',
-                      value: HarvestNotificationFrequency.Daily,
-                    },
-                    {
-                      label: 'Weekly',
-                      value: HarvestNotificationFrequency.Weekly,
-                    },
-                    {
-                      label: 'Monthly',
-                      value: HarvestNotificationFrequency.Monthly,
-                    },
-                    {
-                      label: 'Quarterly',
-                      value: HarvestNotificationFrequency.Quarterly,
-                    },
-                    {
-                      label: 'Off',
-                      value: HarvestNotificationFrequency.Never,
-                    },
-                  ]}
-                />
+                <Card>
+                  <CardContent className="pt-2">
+                    <RadioGroupField
+                      name="notificationFrequency"
+                      label="Real-time Opportunity Frequency"
+                      description="How often would you like to receive tax opportunity notifications?"
+                      options={[
+                        {
+                          label: 'Daily',
+                          value: HarvestNotificationFrequency.Daily,
+                        },
+                        {
+                          label: 'Weekly',
+                          value: HarvestNotificationFrequency.Weekly,
+                        },
+                        {
+                          label: 'Monthly',
+                          value: HarvestNotificationFrequency.Monthly,
+                        },
+                        {
+                          label: 'Quarterly',
+                          value: HarvestNotificationFrequency.Quarterly,
+                        },
+                        {
+                          label: 'Off',
+                          value: HarvestNotificationFrequency.Never,
+                        },
+                      ]}
+                    />
+                  </CardContent>
+                </Card>
               </CardContent>
               <CardFooter>
                 <Button

@@ -6869,7 +6869,10 @@ export enum LogType {
   Auth = 'AUTH',
   ExternalSync = 'EXTERNAL_SYNC',
   PlaidTrxMerge = 'PLAID_TRX_MERGE',
-  PlaidWebhook = 'PLAID_WEBHOOK'
+  PlaidTrxMergeError = 'PLAID_TRX_MERGE_ERROR',
+  PlaidTrxMergeSuccess = 'PLAID_TRX_MERGE_SUCCESS',
+  PlaidWebhook = 'PLAID_WEBHOOK',
+  SubsetHybridCalculation = 'SUBSET_HYBRID_CALCULATION'
 }
 
 export type LogUpdateManyMutationInput = {
@@ -8321,6 +8324,7 @@ export type LotTransactionBatch = {
   authConnection: AuthConnection;
   authConnectionId: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
+  deletedLots?: Maybe<Scalars['JSON']['output']>;
   /** Plaid holdings payload for the transaction batch */
   holdingsPayload?: Maybe<Scalars['JSON']['output']>;
   id: Scalars['ID']['output'];
@@ -8341,7 +8345,14 @@ export type LotTransactionBatch = {
   positionsAfter?: Maybe<Scalars['JSON']['output']>;
   /** Snapshot of positions before the transaction batch */
   positionsBefore?: Maybe<Scalars['JSON']['output']>;
+  /** Realized profit and loss for the transaction batch */
+  realizedProfitAndLoss?: Maybe<Scalars['Decimal']['output']>;
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type LotTransactionBatchAvgAggregate = {
+  __typename?: 'LotTransactionBatchAvgAggregate';
+  realizedProfitAndLoss?: Maybe<Scalars['Decimal']['output']>;
 };
 
 export type LotTransactionBatchCount = {
@@ -8354,6 +8365,7 @@ export type LotTransactionBatchCountAggregate = {
   _all: Scalars['Int']['output'];
   authConnectionId: Scalars['Int']['output'];
   createdAt: Scalars['Int']['output'];
+  deletedLots: Scalars['Int']['output'];
   holdingsPayload: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   initialLots: Scalars['Int']['output'];
@@ -8364,11 +8376,13 @@ export type LotTransactionBatchCountAggregate = {
   portfolioId: Scalars['Int']['output'];
   positionsAfter: Scalars['Int']['output'];
   positionsBefore: Scalars['Int']['output'];
+  realizedProfitAndLoss: Scalars['Int']['output'];
   updatedAt: Scalars['Int']['output'];
 };
 
 export type LotTransactionBatchCreateManyAuthConnectionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8379,6 +8393,7 @@ export type LotTransactionBatchCreateManyAuthConnectionInput = {
   portfolioId: Scalars['String']['input'];
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<Scalars['Decimal']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
@@ -8390,6 +8405,7 @@ export type LotTransactionBatchCreateManyAuthConnectionInputEnvelope = {
 export type LotTransactionBatchCreateManyPortfolioInput = {
   authConnectionId: Scalars['String']['input'];
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8399,6 +8415,7 @@ export type LotTransactionBatchCreateManyPortfolioInput = {
   newTransactions?: InputMaybe<Scalars['JSON']['input']>;
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<Scalars['Decimal']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
@@ -8444,6 +8461,7 @@ export type LotTransactionBatchCreateOrConnectWithoutPortfolioInput = {
 
 export type LotTransactionBatchCreateWithoutAuthConnectionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8455,12 +8473,14 @@ export type LotTransactionBatchCreateWithoutAuthConnectionInput = {
   portfolio: PortfolioCreateNestedOneWithoutLotTransactionBatchInput;
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<Scalars['Decimal']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type LotTransactionBatchCreateWithoutLotChangeLogInput = {
   authConnection: AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8471,12 +8491,14 @@ export type LotTransactionBatchCreateWithoutLotChangeLogInput = {
   portfolio: PortfolioCreateNestedOneWithoutLotTransactionBatchInput;
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<Scalars['Decimal']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type LotTransactionBatchCreateWithoutPortfolioInput = {
   authConnection: AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput;
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8487,6 +8509,7 @@ export type LotTransactionBatchCreateWithoutPortfolioInput = {
   newTransactions?: InputMaybe<Scalars['JSON']['input']>;
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<Scalars['Decimal']['input']>;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
@@ -8502,6 +8525,7 @@ export type LotTransactionBatchMaxAggregate = {
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   portfolioId?: Maybe<Scalars['String']['output']>;
+  realizedProfitAndLoss?: Maybe<Scalars['Decimal']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -8511,6 +8535,7 @@ export type LotTransactionBatchMinAggregate = {
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   portfolioId?: Maybe<Scalars['String']['output']>;
+  realizedProfitAndLoss?: Maybe<Scalars['Decimal']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -8529,6 +8554,7 @@ export type LotTransactionBatchScalarWhereInput = {
   OR?: InputMaybe<Array<LotTransactionBatchScalarWhereInput>>;
   authConnectionId?: InputMaybe<UuidFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  deletedLots?: InputMaybe<JsonNullableFilter>;
   holdingsPayload?: InputMaybe<JsonNullableFilter>;
   id?: InputMaybe<UuidFilter>;
   initialLots?: InputMaybe<JsonNullableFilter>;
@@ -8539,11 +8565,18 @@ export type LotTransactionBatchScalarWhereInput = {
   portfolioId?: InputMaybe<UuidFilter>;
   positionsAfter?: InputMaybe<JsonNullableFilter>;
   positionsBefore?: InputMaybe<JsonNullableFilter>;
+  realizedProfitAndLoss?: InputMaybe<DecimalNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type LotTransactionBatchSumAggregate = {
+  __typename?: 'LotTransactionBatchSumAggregate';
+  realizedProfitAndLoss?: Maybe<Scalars['Decimal']['output']>;
 };
 
 export type LotTransactionBatchUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8553,6 +8586,7 @@ export type LotTransactionBatchUpdateManyMutationInput = {
   newTransactions?: InputMaybe<Scalars['JSON']['input']>;
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -8619,6 +8653,7 @@ export type LotTransactionBatchUpdateWithWhereUniqueWithoutPortfolioInput = {
 
 export type LotTransactionBatchUpdateWithoutAuthConnectionInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8630,12 +8665,14 @@ export type LotTransactionBatchUpdateWithoutAuthConnectionInput = {
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type LotTransactionBatchUpdateWithoutLotChangeLogInput = {
   authConnection?: InputMaybe<AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8646,12 +8683,14 @@ export type LotTransactionBatchUpdateWithoutLotChangeLogInput = {
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type LotTransactionBatchUpdateWithoutPortfolioInput = {
   authConnection?: InputMaybe<AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  deletedLots?: InputMaybe<Scalars['JSON']['input']>;
   holdingsPayload?: InputMaybe<Scalars['JSON']['input']>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   initialLots?: InputMaybe<Scalars['JSON']['input']>;
@@ -8662,6 +8701,7 @@ export type LotTransactionBatchUpdateWithoutPortfolioInput = {
   newTransactions?: InputMaybe<Scalars['JSON']['input']>;
   positionsAfter?: InputMaybe<Scalars['JSON']['input']>;
   positionsBefore?: InputMaybe<Scalars['JSON']['input']>;
+  realizedProfitAndLoss?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -8690,6 +8730,7 @@ export type LotTransactionBatchWhereInput = {
   authConnection?: InputMaybe<AuthConnectionScalarRelationFilter>;
   authConnectionId?: InputMaybe<UuidFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  deletedLots?: InputMaybe<JsonNullableFilter>;
   holdingsPayload?: InputMaybe<JsonNullableFilter>;
   id?: InputMaybe<UuidFilter>;
   initialLots?: InputMaybe<JsonNullableFilter>;
@@ -8702,6 +8743,7 @@ export type LotTransactionBatchWhereInput = {
   portfolioId?: InputMaybe<UuidFilter>;
   positionsAfter?: InputMaybe<JsonNullableFilter>;
   positionsBefore?: InputMaybe<JsonNullableFilter>;
+  realizedProfitAndLoss?: InputMaybe<DecimalNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -8712,6 +8754,7 @@ export type LotTransactionBatchWhereUniqueInput = {
   authConnection?: InputMaybe<AuthConnectionScalarRelationFilter>;
   authConnectionId?: InputMaybe<UuidFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  deletedLots?: InputMaybe<JsonNullableFilter>;
   holdingsPayload?: InputMaybe<JsonNullableFilter>;
   id?: InputMaybe<Scalars['String']['input']>;
   initialLots?: InputMaybe<JsonNullableFilter>;
@@ -8724,6 +8767,7 @@ export type LotTransactionBatchWhereUniqueInput = {
   portfolioId?: InputMaybe<UuidFilter>;
   positionsAfter?: InputMaybe<JsonNullableFilter>;
   positionsBefore?: InputMaybe<JsonNullableFilter>;
+  realizedProfitAndLoss?: InputMaybe<DecimalNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -13379,6 +13423,7 @@ export type Transaction = {
   description?: Maybe<Scalars['String']['output']>;
   detailsURI?: Maybe<Scalars['String']['output']>;
   displaySymbol?: Maybe<Scalars['String']['output']>;
+  /** PLaid investment_transaction_id */
   externalId: Scalars['String']['output'];
   fee?: Maybe<Scalars['Decimal']['output']>;
   /** Internal transaction identifier */
@@ -14110,7 +14155,7 @@ export type TransactionWhereUniqueInput = {
   description?: InputMaybe<StringNullableFilter>;
   detailsURI?: InputMaybe<StringNullableFilter>;
   displaySymbol?: InputMaybe<StringNullableFilter>;
-  externalId?: InputMaybe<StringFilter>;
+  externalId?: InputMaybe<Scalars['String']['input']>;
   fee?: InputMaybe<DecimalNullableFilter>;
   id?: InputMaybe<Scalars['String']['input']>;
   lotChangeLog?: InputMaybe<LotChangeLogListRelationFilter>;
@@ -15436,7 +15481,7 @@ export type UpdatePortfolioMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePortfolioMutation = { __typename?: 'Mutation', updatePortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
+export type UpdatePortfolioMutation = { __typename?: 'Mutation', updatePortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type PortfolioNotificationSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -15460,7 +15505,7 @@ export type UnrealizedHarvestItemFragment = { __typename?: 'UnrealizedHarvestMat
 export type FiniteHarvestQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FiniteHarvestQuery = { __typename?: 'Query', finiteHarvest: { __typename?: 'FiniteHarvestResult', harvestType: HarvestType, totalHarvestLots: number, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number }, includingCurrentHarvest: { __typename?: 'PortfolioSummaryIncludingHarvest', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } }, lotsCurrent?: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestId?: string | null }> | null, unrealizedHarvestMatchResults?: Array<{ __typename?: 'UnrealizedHarvestMatchResult', sourceLot: { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestId?: string | null }, matchedLotOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any, lastPrice: string }> }> | null } };
+export type FiniteHarvestQuery = { __typename?: 'Query', finiteHarvest: { __typename?: 'FiniteHarvestResult', harvestType: HarvestType, totalHarvestLots: number, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, total: number }, includingCurrentHarvest: { __typename?: 'PortfolioSummaryIncludingHarvest', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } }, lotsCurrent?: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestId?: string | null }> | null, unrealizedHarvestMatchResults?: Array<{ __typename?: 'UnrealizedHarvestMatchResult', sourceLot: { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestId?: string | null }, matchedLotOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any, lastPrice: string }> }> | null } };
 
 export type DeleteHarvestsMutationVariables = Exact<{
   ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
@@ -15471,14 +15516,14 @@ export type DeleteHarvestsMutation = { __typename?: 'Mutation', deleteHarvests: 
 
 export type AccountTransactionItemFragment = { __typename?: 'Account', id: string, name?: string | null, authConnection?: { __typename?: 'AuthConnection', id: string, source: AuthSource } | null };
 
-export type TransactionTableItemFragment = { __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, account: { __typename?: 'Account', id: string, name?: string | null, authConnection?: { __typename?: 'AuthConnection', id: string, source: AuthSource } | null } };
+export type TransactionTableItemFragment = { __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, appliedToLots: boolean, account: { __typename?: 'Account', id: string, name?: string | null, authConnection?: { __typename?: 'AuthConnection', id: string, source: AuthSource } | null } };
 
 export type TransactionsQueryVariables = Exact<{
   where?: InputMaybe<TransactionWhereInput>;
 }>;
 
 
-export type TransactionsQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, account: { __typename?: 'Account', id: string, name?: string | null, authConnection?: { __typename?: 'AuthConnection', id: string, source: AuthSource } | null } }> };
+export type TransactionsQuery = { __typename?: 'Query', transactions: Array<{ __typename?: 'Transaction', id: string, quantity?: string | null, type?: string | null, description?: string | null, assetSymbol: string, settlementDate?: any | null, securityType?: string | null, displaySymbol?: string | null, amount?: string | null, externalId: string, fee?: string | null, memo?: string | null, price?: string | null, subtype?: string | null, transactionDate?: any | null, appliedToLots: boolean, account: { __typename?: 'Account', id: string, name?: string | null, authConnection?: { __typename?: 'AuthConnection', id: string, source: AuthSource } | null } }> };
 
 export type UserItemFragment = { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string };
 
@@ -15635,38 +15680,38 @@ export type PortfolioLotsQueryVariables = Exact<{
 
 export type PortfolioLotsQuery = { __typename?: 'Query', lots: Array<{ __typename?: 'Lot', id: string, acquiredDate: any, costTotal?: string | null, price: string, remainingQty: string, assetSymbol: string, totalCostForGainPct?: string | null, asset: { __typename?: 'Asset', symbol: string, lastPrice: string }, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } }> };
 
-export type PortfolioItemFragment = { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string };
+export type PortfolioItemFragment = { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency };
 
-export type PortfolioDetailItemFragment = { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null };
+export type PortfolioDetailItemFragment = { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null };
 
 export type PortfoliosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PortfoliosQuery = { __typename?: 'Query', portfolios: Array<{ __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string }> };
+export type PortfoliosQuery = { __typename?: 'Query', portfolios: Array<{ __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency }> };
 
 export type CreatePortfolioMutationVariables = Exact<{
   portfolioInsertObject: PortfolioCreateInput;
 }>;
 
 
-export type CreatePortfolioMutation = { __typename?: 'Mutation', createPortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
+export type CreatePortfolioMutation = { __typename?: 'Mutation', createPortfolio: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type PortfolioAuthedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PortfolioAuthedQuery = { __typename?: 'Query', portfolioAuthed: { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string } };
+export type PortfolioAuthedQuery = { __typename?: 'Query', portfolioAuthed: { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency } };
 
 export type PortfolioDetailAuthedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PortfolioDetailAuthedQuery = { __typename?: 'Query', portfolioAuthed: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
+export type PortfolioDetailAuthedQuery = { __typename?: 'Query', portfolioAuthed: { __typename?: 'Portfolio', harvestShareDollarThreshold: string, harvestTickerBucketDollarSizeLong: string, harvestTickerBucketDollarSizeShort: string, harvestTickerBucketLowerLimitLong: string, harvestTickerBucketLowerLimitShort: string, minimumLotPAndL: string, id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency, accounts?: Array<{ __typename?: 'Account', name?: string | null, id: string }> | null, usersOnPortfolios?: Array<{ __typename?: 'UsersOnPortfolios', role: PortfolioRole, user: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null } }> | null } };
 
 export type SwitchPortfolioMutationVariables = Exact<{
   porfolioId: Scalars['String']['input'];
 }>;
 
 
-export type SwitchPortfolioMutation = { __typename?: 'Mutation', switchPortfolio: { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string } };
+export type SwitchPortfolioMutation = { __typename?: 'Mutation', switchPortfolio: { __typename?: 'Portfolio', id: string, name: string, harvestCycleWeeks: number, createdAt: any, createdById: string, endOfYearTaxOpportunityNotification: boolean, notificationFrequency: HarvestNotificationFrequency } };
 
 export type PositionItemFragment = { __typename?: 'Position', change?: string | null, changePCT?: string | null, commissionDay?: string | null, commissionTotal?: string | null, costPerShare?: string | null, costTotal?: string | null, dateAcquired?: any | null, dateExpiration?: any | null, externalId?: string | null, feesDay?: string | null, feesOther?: string | null, gainDay?: string | null, gainTotal?: string | null, gainTotalPCT?: string | null, id: string, marketValue?: string | null, pricePaid?: string | null, quantity: string, quoteStatus?: string | null, assetSymbol: string, type?: string | null, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } };
 
@@ -16014,6 +16059,7 @@ export const TransactionTableItemFragmentDoc = gql`
   price
   subtype
   transactionDate
+  appliedToLots
   account {
     id
     ...AccountTransactionItem
@@ -16144,6 +16190,8 @@ export const PortfolioItemFragmentDoc = gql`
   harvestCycleWeeks
   createdAt
   createdById
+  endOfYearTaxOpportunityNotification
+  notificationFrequency
 }
     `;
 export const PortfolioDetailItemFragmentDoc = gql`
@@ -16155,8 +16203,6 @@ export const PortfolioDetailItemFragmentDoc = gql`
   harvestTickerBucketLowerLimitLong
   harvestTickerBucketLowerLimitShort
   minimumLotPAndL
-  endOfYearTaxOpportunityNotification
-  notificationFrequency
   accounts {
     name
     id
@@ -17297,6 +17343,7 @@ export const FiniteHarvestDocument = gql`
       unrealized {
         gainTotal
         lossTotal
+        total
       }
       includingCurrentHarvest {
         realized {

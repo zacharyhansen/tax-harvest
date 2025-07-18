@@ -229,7 +229,7 @@ export interface Log {
   portfolioId: string;
   responseStatus: number | null;
   source: "ETRADE_ACCESS" | "ETRADE_REQUEST" | "LOCAL" | "PLAID" | null;
-  type: "AUTH" | "EXTERNAL_SYNC" | "PLAID_TRX_MERGE" | "PLAID_TRX_MERGE_ERROR" | "PLAID_TRX_MERGE_SUCCESS" | "PLAID_WEBHOOK";
+  type: "AUTH" | "EXTERNAL_SYNC" | "PLAID_TRX_MERGE" | "PLAID_TRX_MERGE_ERROR" | "PLAID_TRX_MERGE_SUCCESS" | "PLAID_WEBHOOK" | "SUBSET_HYBRID_CALCULATION";
 }
 
 export interface Lot {
