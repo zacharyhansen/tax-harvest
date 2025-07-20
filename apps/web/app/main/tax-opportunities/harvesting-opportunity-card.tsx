@@ -2,14 +2,12 @@ import type { FiniteHarvestLotItemFragment } from '~/generated/gql';
 import { Button } from '@repo/ui/components/button';
 import { cn } from '@repo/ui/utils';
 import { Decimal } from 'decimal.js';
-import { Wheat, CheckCircle2, Trash, Trash2 } from 'lucide-react';
+import { Wheat } from 'lucide-react';
 import {
-  FiniteHarvestDocument,
   HarvestEvalResultDocument,
   HarvestType,
   HarvestsAndTransactionsDocument,
   useCreateHarvestMutation,
-  useDeleteHarvestsMutation,
 } from '~/generated/gql';
 import { clientEnvironment } from '~/lib/env/clientEnvironment';
 import { Format, MoneyUtil } from '~/modules/utils';

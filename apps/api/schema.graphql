@@ -4794,6 +4794,9 @@ type HarvestEvalResult {
 
   """Total number of harvest lots if user is paying"""
   totalHarvestLots: Float!
+
+  """List of unique asset symbols in portfolio"""
+  uniqueAssetSymbols: [String!]!
 }
 
 input HarvestListRelationFilter {

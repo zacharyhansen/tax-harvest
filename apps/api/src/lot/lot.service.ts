@@ -130,7 +130,7 @@ export class LotService {
         query = query.where('LotCurrent.id', 'not in', excludeLotIds)
       }
 
-      if (exludeAssetSymbols) {
+      if (exludeAssetSymbols && exludeAssetSymbols.length > 0) {
         query = query.where('LotCurrent.symbol', 'not in', exludeAssetSymbols)
       }
 

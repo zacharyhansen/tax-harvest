@@ -142,6 +142,7 @@ fragment HarvestEvalResultFragment on HarvestEvalResult {
     }
   }
   totalHarvestLots
+  uniqueAssetSymbols
 }
 
 query HarvestEvalResult($filters: HarvestEvalFilters) {

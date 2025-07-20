@@ -248,6 +248,9 @@ export class HarvestEvalResult {
 
   @Field(() => Number, { description: 'Total number of harvest lots if user is paying' })
   totalHarvestLots: number
+
+  @Field(() => [String], { description: 'List of unique asset symbols in portfolio' })
+  uniqueAssetSymbols: string[]
 }
 
 @InputType()

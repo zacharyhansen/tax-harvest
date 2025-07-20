@@ -13,49 +13,22 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@repo/ui/components/tooltip';
-import { Button } from '@repo/ui/components/button';
 import { cn } from '@repo/ui/utils';
-import { BarChart3, ChevronDown, Info, Filter } from 'lucide-react';
-import {
-  HarvestType,
-  useHarvestEvalResultQuery,
-  type HarvestEvalResultFragmentFragment,
-} from '~/generated/gql';
+import { BarChart3, ChevronDown, Info } from 'lucide-react';
+import { HarvestType, useHarvestEvalResultQuery } from '~/generated/gql';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { Format, MoneyUtil } from '~/modules/utils';
-import {
-  Tabs,
-  TabsTrigger,
-  TabsList,
-  TabsContent,
-} from '@repo/ui/components/tabs';
-import RealizedHarvestItems from './realized-harvest-items';
-import { HarvestEvalPairCard } from './harvest-eval-pair-card';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@repo/ui/components/collapsible';
-import { useState, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import NoOpportunities from './no-opportunities';
+import { useState, useCallback } from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { OpenHarvestsBanner } from './open-harvests-banner';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider } from 'react-hook-form';
-import { z } from 'zod';
-import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
-import InputField from '@repo/ui/form-builder/fields/input.field';
-import ComboboxMultiField from '@repo/ui/form-builder/fields/combobox-multi.field';
-
-const filterFormSchema = z.object({
-  minPAndL: z.number().optional(),
-  excludeAssetSymbols: z.array(z.string()).optional(),
-  purchaseDateBefore: z.string().optional(),
-  purchaseDateAfter: z.string().optional(),
-});
-
-type FilterFormData = z.infer<typeof filterFormSchema>;
+import { FilterForm, type FilterFormData } from './filter-form';
+import { HarvestContent } from './harvest-content';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -77,323 +50,83 @@ const itemVariants = {
   },
 };
 
-interface FilterFormProps {
-  availableSymbols: string[];
-  onFiltersSubmit: (filters: FilterFormData) => void;
-  initialValues: FilterFormData;
-  hasActiveFilters: boolean;
-  onClearFilters: () => void;
-}
-
-function FilterForm({
-  availableSymbols,
-  onFiltersSubmit,
-  initialValues,
-  hasActiveFilters,
-  onClearFilters,
-}: FilterFormProps) {
-  const [showFilters, setShowFilters] = useState(false);
-
-  const symbolOptions = availableSymbols.map(symbol => ({
-    label: symbol,
-    value: symbol,
-  }));
-
-  const { form, handleSubmit } = useStandardForm<FilterFormData>({
-    defaultValues: initialValues,
-    resolver: zodResolver(filterFormSchema),
-    handleSubmit: data => {
-      onFiltersSubmit(data);
-      setShowFilters(false);
-    },
-  });
-
-  return (
-    <motion.div variants={itemVariants}>
-      <div className="mb-4 flex items-center justify-between">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2"
-        >
-          <Filter className="size-4" />
-          Filters
-          {hasActiveFilters && (
-            <span className="bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs">
-              {Object.values(initialValues).filter(Boolean).length}
-            </span>
-          )}
-        </Button>
-
-        {hasActiveFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClearFilters}
-            className="text-muted-foreground hover:text-foreground"
-          >
-            Clear all filters
-          </Button>
-        )}
-      </div>
-
-      <Collapsible open={showFilters} onOpenChange={setShowFilters}>
-        <CollapsibleContent>
-          <Card>
-            <CardContent className="p-4">
-              <FormProvider {...form}>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <InputField
-                      name="minPAndL"
-                      label="Min P&L ($)"
-                      type="number"
-                      placeholder="e.g. 100"
-                      description="Minimum dollar amount for profit or loss"
-                    />
-
-                    <ComboboxMultiField
-                      name="excludeAssetSymbols"
-                      label="Exclude Symbols"
-                      options={symbolOptions}
-                      placeholder="Select symbols to exclude"
-                      description="Asset symbols to exclude from results"
-                    />
-
-                    <InputField
-                      name="purchaseDateBefore"
-                      label="Purchased Before"
-                      type="date"
-                      description="Only include lots purchased before this date"
-                    />
-
-                    <InputField
-                      name="purchaseDateAfter"
-                      label="Purchased After"
-                      type="date"
-                      description="Only include lots purchased after this date"
-                    />
-                  </div>
-
-                  <div className="flex justify-end gap-2 pt-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setShowFilters(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button type="submit">Apply Filters</Button>
-                  </div>
-                </form>
-              </FormProvider>
-            </CardContent>
-          </Card>
-        </CollapsibleContent>
-      </Collapsible>
-    </motion.div>
-  );
-}
-
-interface HarvestContentProps {
-  harvestEvalResult: HarvestEvalResultFragmentFragment;
-}
-
-function HarvestContent({ harvestEvalResult }: HarvestContentProps) {
-  const { harvestType, lotsCurrent } = harvestEvalResult;
-
-  switch (harvestType) {
-    case HarvestType.NoOpportunityEmpty:
-    case HarvestType.NoOpportunityGains:
-    case HarvestType.NoOpportunityLosses:
-      return (
-        <NoOpportunities
-          realizedPAndL={harvestEvalResult.summary.realized.gainTotal}
-          unrealizedPAndL={harvestEvalResult.summary.unrealized.total}
-        />
-      );
-
-    case HarvestType.ReduceCostBasis:
-      return (
-        <motion.div className="space-y-4" variants={itemVariants}>
-          <div className="mb-6">
-            <h2 className="mb-2 text-xl font-semibold">
-              Cost Basis Reset Opportunities
-            </h2>
-            <p className="text-muted-foreground">
-              Pair gains and losses to reset your cost basis with minimal tax
-              impact
-            </p>
-          </div>
-          {harvestEvalResult.matchedItems?.map(item => (
-            <HarvestEvalPairCard key={item.id} harvestMatchItem={item} />
-          ))}
-        </motion.div>
-      );
-
-    case HarvestType.ReduceTaxes:
-    case HarvestType.CaptureGainsTaxFree:
-      if (harvestEvalResult.matchedItems?.length) {
-        return (
-          <motion.div variants={itemVariants}>
-            <Tabs defaultValue="realized">
-              <TabsList>
-                <TabsTrigger value="realized">Realized Positions</TabsTrigger>
-                <TabsTrigger value="unrealized">
-                  Unrealized Harvesting Opportunities
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="unrealized" className="space-y-4">
-                <TabsContent value="realized" className="space-y-8">
-                  <RealizedHarvestItems
-                    finiteHarvest={{
-                      summary: harvestEvalResult.summary,
-                      harvestType: harvestEvalResult.harvestType,
-                      totalHarvestLots: harvestEvalResult.totalHarvestLots || 0,
-                      lotsCurrent: lotsCurrent,
-                    }}
-                  />
-                </TabsContent>
-                <div className="mb-6">
-                  <h2 className="mb-2 text-xl font-semibold">
-                    Cost Basis Reset Opportunities
-                  </h2>
-                  <p className="text-muted-foreground">
-                    Pair gains and losses to reset your cost basis with minimal
-                    tax impact
-                  </p>
-                </div>
-                {harvestEvalResult.matchedItems?.map(item => (
-                  <HarvestEvalPairCard key={item.id} harvestMatchItem={item} />
-                ))}
-              </TabsContent>
-            </Tabs>
-          </motion.div>
-        );
-      }
-      return (
-        <motion.div variants={itemVariants}>
-          <RealizedHarvestItems
-            finiteHarvest={{
-              summary: harvestEvalResult.summary,
-              harvestType: harvestEvalResult.harvestType,
-              totalHarvestLots: harvestEvalResult.totalHarvestLots || 0,
-              lotsCurrent: lotsCurrent,
-            }}
-          />
-        </motion.div>
-      );
-
-    default:
-      return null;
-  }
-}
-
 export default function TaxOpportunitiesPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState<FilterFormData>({
+    minPAndL: searchParams.get('minPAndL')
+      ? Number(searchParams.get('minPAndL'))
+      : 0,
+    excludeAssetSymbols: searchParams.get('excludeSymbols')
+      ? searchParams.get('excludeSymbols')?.split(',').filter(Boolean)
+      : [],
+    purchaseDateBefore: searchParams.get('purchaseDateBefore')
+      ? new Date(searchParams.get('purchaseDateBefore')!)
+      : null,
+    purchaseDateAfter: searchParams.get('purchaseDateAfter')
+      ? new Date(searchParams.get('purchaseDateAfter')!)
+      : null,
+  });
+  const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Parse filters from URL
-  const filters = useMemo(() => {
-    const result: FilterFormData = {};
-    const minPAndL = searchParams.get('minPAndL');
-    const excludeSymbols = searchParams.get('excludeSymbols');
-    const purchaseDateBefore = searchParams.get('purchaseDateBefore');
-    const purchaseDateAfter = searchParams.get('purchaseDateAfter');
-
-    if (minPAndL) result.minPAndL = Number(minPAndL);
-    if (excludeSymbols)
-      result.excludeAssetSymbols = excludeSymbols.split(',').filter(Boolean);
-    if (purchaseDateBefore) result.purchaseDateBefore = purchaseDateBefore;
-    if (purchaseDateAfter) result.purchaseDateAfter = purchaseDateAfter;
-
-    return result;
-  }, [searchParams]);
-
-  // Convert filters to GraphQL format
-  const graphqlFilters = useMemo(() => {
-    const hasFilters = Object.values(filters).some(
-      value =>
-        value !== undefined &&
-        value !== null &&
-        (!Array.isArray(value) || value.length > 0)
-    );
-
-    if (!hasFilters) return undefined;
-
-    return {
-      minPAndL: filters.minPAndL,
-      excludeAssetSymbols: filters.excludeAssetSymbols,
-      purchaseDateBefore: filters.purchaseDateBefore
-        ? new Date(filters.purchaseDateBefore)
-        : undefined,
-      purchaseDateAfter: filters.purchaseDateAfter
-        ? new Date(filters.purchaseDateAfter)
-        : undefined,
-    };
-  }, [filters]);
-
-  const { data, error, loading } = useHarvestEvalResultQuery({
-    variables: { filters: graphqlFilters },
+  const { data, error, loading, refetch } = useHarvestEvalResultQuery({
+    variables: { filters: searchQuery },
   });
 
   // Update URL when filters change
   const handleFiltersSubmit = (newFilters: FilterFormData) => {
     const params = new URLSearchParams();
+    setSearchQuery(newFilters);
 
-    if (newFilters.minPAndL)
+    if (newFilters.minPAndL) {
       params.set('minPAndL', newFilters.minPAndL.toString());
-    if (newFilters.excludeAssetSymbols?.length)
+    }
+
+    if (newFilters.excludeAssetSymbols?.length) {
       params.set('excludeSymbols', newFilters.excludeAssetSymbols.join(','));
-    if (newFilters.purchaseDateBefore)
-      params.set('purchaseDateBefore', newFilters.purchaseDateBefore);
-    if (newFilters.purchaseDateAfter)
-      params.set('purchaseDateAfter', newFilters.purchaseDateAfter);
+    }
+
+    if (newFilters.purchaseDateBefore) {
+      params.set(
+        'purchaseDateBefore',
+        newFilters.purchaseDateBefore.toISOString()
+      );
+    }
+
+    if (newFilters.purchaseDateAfter) {
+      params.set(
+        'purchaseDateAfter',
+        newFilters.purchaseDateAfter.toISOString()
+      );
+    }
 
     const queryString = params.toString();
-    router.push(queryString ? `?${queryString}` : '/main/tax-opportunities');
+    router.replace(
+      queryString ? `?${queryString}` : '/main/tax-opportunities',
+      { scroll: false }
+    );
   };
 
   const clearAllFilters = () => {
-    router.push('/main/tax-opportunities');
+    setSearchQuery({
+      minPAndL: 0,
+      excludeAssetSymbols: [],
+      purchaseDateBefore: null,
+      purchaseDateAfter: null,
+    });
+    router.replace(pathname, { scroll: false });
   };
 
-  const hasActiveFilters = Object.values(filters).some(
-    value =>
-      value !== undefined &&
-      value !== null &&
-      (!Array.isArray(value) || value.length > 0)
-  );
-
-  // Get unique asset symbols for the exclude filter
-  const availableSymbols = useMemo(() => {
-    if (!data?.harvestEvalResult) return [];
-
-    const symbols = new Set<string>();
-
-    // From lotsCurrent
-    data.harvestEvalResult.lotsCurrent?.forEach(lot => {
-      symbols.add(lot.symbol);
-    });
-
-    // From matchedItems
-    data.harvestEvalResult.matchedItems?.forEach(item => {
-      item.pairs.forEach(pair => {
-        pair.sourceLots.forEach(lot => symbols.add(lot.symbol));
-        pair.matchedLots.forEach(lot => symbols.add(lot.symbol));
-      });
-    });
-
-    return Array.from(symbols).sort();
-  }, [data]);
+  const numberOfActiveFilters: number = Object.values(searchQuery).filter(
+    value => value && (!Array.isArray(value) || value.length > 0)
+  ).length;
 
   if (error) {
     return <ErrorPage />;
   }
 
-  if (loading || !data) {
+  if (!data) {
     return <LoadingPage />;
   }
 
@@ -771,16 +504,20 @@ export default function TaxOpportunitiesPage() {
 
       {/* Filters Section */}
       <FilterForm
-        availableSymbols={availableSymbols}
         onFiltersSubmit={handleFiltersSubmit}
-        initialValues={filters}
-        hasActiveFilters={hasActiveFilters}
+        initialValues={searchQuery}
+        numberOfActiveFilters={numberOfActiveFilters}
         onClearFilters={clearAllFilters}
+        uniqueAssetSymbols={harvestEvalResult.uniqueAssetSymbols}
       />
 
-      <AnimatePresence>
-        <HarvestContent harvestEvalResult={harvestEvalResult} />
-      </AnimatePresence>
+      {loading ? (
+        <LoadingPage />
+      ) : (
+        <AnimatePresence>
+          <HarvestContent harvestEvalResult={harvestEvalResult} />
+        </AnimatePresence>
+      )}
     </motion.div>
   );
 }

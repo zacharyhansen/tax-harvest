@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import {
   useCreateHarvestMutation,
   HarvestType,
@@ -69,7 +69,6 @@ export function HarvestEvalPairCard({
       Math.abs(selectedMatch.matchedHarvestPAndL)
     ) * 0.35; // Tax savings on the offset amount
 
-  console.log({ selectedMatch, selectedMatchIndex, harvestMatchItem });
   return (
     <Card
       className={cn(
@@ -307,14 +306,7 @@ function LotCard({
 }) {
   const moneyClass = MoneyUtil.colored(pAndL);
   const isGain = pAndL > 0;
-  // console.log({
-  //   assetSymbol,
-  //   pAndL,
-  //   shares,
-  //   totalShares,
-  //   costBasisPerShare,
-  //   currentPricePerShare,
-  // });
+
   return (
     <div className="space-y-3">
       <div className="flex items-start justify-between">

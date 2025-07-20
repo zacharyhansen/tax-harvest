@@ -583,6 +583,16 @@ export class PortfolioService {
     }
   }
 
+  async getUniqueAssetSymbols({
+    portfolioId,
+  }: {
+    portfolioId: string
+  }): Promise<string[]> {
+    const lots = await this.lotService.lotCurrent({ portfolioId })
+    const uniqueSymbols = [...new Set(lots.map(lot => lot.symbol))]
+    return uniqueSymbols.sort()
+  }
+
   async harvestEval({
     portfolioId,
     filters,
@@ -605,7 +615,7 @@ export class PortfolioService {
         },
       })
 
-    const [summary, lots] = await Promise.all([
+    const [summary, lots, uniqueAssetSymbols] = await Promise.all([
       this.summary({
         id: portfolioId,
       }),
@@ -616,6 +626,7 @@ export class PortfolioService {
         purchaseDateBefore: filters?.purchaseDateBefore,
         purchaseDateAfter: filters?.purchaseDateAfter,
       }),
+      this.getUniqueAssetSymbols({ portfolioId }),
       this.prismaService
         .$extends(PrismaService.forPortfolio(portfolioId))
         .portfolio
@@ -628,9 +639,9 @@ export class PortfolioService {
 
     const harvestType
       = this.harvestType({
-        realizedGainTotal: summary.realized.gainTotal,
-        unrealizedGainTotal: summary.unrealized.gainTotal,
-        unrealizedLossTotal: summary.unrealized.lossTotal,
+        realizedGainTotal: summary.includingCurrentHarvest.realized.gainTotal,
+        unrealizedGainTotal: summary.includingCurrentHarvest.unrealized.gainTotal,
+        unrealizedLossTotal: summary.includingCurrentHarvest.unrealized.lossTotal,
       })
 
     switch (harvestType) {
@@ -641,6 +652,7 @@ export class PortfolioService {
           harvestType,
           summary,
           totalHarvestLots: 0,
+          uniqueAssetSymbols,
         }
       }
       case HarvestType.REDUCE_COST_BASIS: {
@@ -694,6 +706,7 @@ export class PortfolioService {
           harvestType,
           summary,
           totalHarvestLots: 0,
+          uniqueAssetSymbols,
         }
       }
       case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
@@ -726,6 +739,7 @@ export class PortfolioService {
           lotsCurrent: availableDirectedLots,
           harvestType,
           totalHarvestLots: availableDirectedLots.length,
+          uniqueAssetSymbols,
         }
       }
     }
@@ -734,6 +748,7 @@ export class PortfolioService {
       harvestType,
       summary,
       totalHarvestLots: 0,
+      uniqueAssetSymbols,
     }
   }
 
