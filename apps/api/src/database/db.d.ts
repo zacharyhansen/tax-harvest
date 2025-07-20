@@ -185,7 +185,7 @@ export interface Harvest {
   portfolioId: string;
   recommendationExpiresDate: Generated<Timestamp>;
   step: Generated<"COMPLETE" | "CONFIGURE" | "REVIEW">;
-  type: "CAPTURE_GAINS_TAX_FREE" | "REDUCE_COST_BASIS" | "REDUCE_TAXES" | "SELL";
+  type: "CAPTURE_GAINS_TAX_FREE" | "NO_OPPORTUNITY_EMPTY" | "NO_OPPORTUNITY_GAINS" | "NO_OPPORTUNITY_LOSSES" | "REDUCE_COST_BASIS" | "REDUCE_TAXES" | "SELL";
   updatedAt: Generated<Timestamp>;
 }
 

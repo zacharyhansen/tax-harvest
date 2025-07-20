@@ -7,7 +7,7 @@ import { Portfolio, PortfolioRole, Prisma, PrismaClient } from '@prisma/client'
 import Decimal from 'decimal.js'
 
 import { sql } from 'kysely'
-import { LotCurrent, LotValueType } from '~/lot/lot.dto'
+import { HarvestLotCurrent, LotCurrent, LotValueType } from '~/lot/lot.dto'
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils'
 import { AccountService } from '../account/account.service'
 import { ClerkService } from '../clerk/clerk.service'
@@ -20,6 +20,7 @@ import { UserService } from '../user/user.service'
 import {
   DirectedHarvestLot,
   FiniteHarvestResult,
+  HarvestEvalResult,
   HarvestLotOrder,
   HarvestResult,
   PortfolioSummary,
@@ -405,7 +406,7 @@ export class PortfolioService {
     for (const lot of lots) {
       accountIds.add(lot.accountId)
       lotCounts.add(lot.id)
-      // console.log(lot.currentHarvestQty, lot.dollarPerSharePnL)
+
       totals.realizedDollarChangeFromCurrentHarvest = totals.realizedDollarChangeFromCurrentHarvest.plus(
         new Decimal(lot.dollarPerSharePnL)
           .mul(new Decimal(lot.currentHarvestQty)),
@@ -580,6 +581,369 @@ export class PortfolioService {
       realizedOrders: harvest.realizedOrders,
       unrealizedOrders: harvest.unrealizedOrders,
     }
+  }
+
+  async harvestEval({
+    portfolioId,
+    filters,
+  }: {
+    portfolioId: string
+    filters?: {
+      minPAndL?: number
+      excludeLotIds?: string[]
+      exludeAssetSymbols?: string[]
+      purchaseDateBefore?: Date
+      purchaseDateAfter?: Date
+    }
+  }): Promise<HarvestEvalResult> {
+    const portfolio = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .portfolio
+      .findUniqueOrThrow({
+        where: {
+          id: portfolioId,
+        },
+      })
+
+    const [summary, lots] = await Promise.all([
+      this.summary({
+        id: portfolioId,
+      }),
+      this.lotService.lotCurrent({
+        portfolioId,
+        excludeLotIds: filters?.excludeLotIds,
+        exludeAssetSymbols: filters?.exludeAssetSymbols,
+        purchaseDateBefore: filters?.purchaseDateBefore,
+        purchaseDateAfter: filters?.purchaseDateAfter,
+      }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .portfolio
+        .findUniqueOrThrow({
+          where: {
+            id: portfolioId,
+          },
+        }),
+    ])
+
+    const harvestType
+      = this.harvestType({
+        realizedGainTotal: summary.realized.gainTotal,
+        unrealizedGainTotal: summary.unrealized.gainTotal,
+        unrealizedLossTotal: summary.unrealized.lossTotal,
+      })
+
+    switch (harvestType) {
+      case HarvestType.NO_OPPORTUNITY_EMPTY:
+      case HarvestType.NO_OPPORTUNITY_GAINS:
+      case HarvestType.NO_OPPORTUNITY_LOSSES: {
+        return {
+          harvestType,
+          summary,
+          totalHarvestLots: 0,
+        }
+      }
+      case HarvestType.REDUCE_COST_BASIS: {
+        // Goal is to match lots - all we need to do is orgnaize them into source (limiting side) and potential matches
+        const sourceLots: LotCurrent[] = []
+        const matchingLots: LotCurrent[] = []
+
+        // Organize the lots depending on the unrealized gain and loss
+        for (const lot of lots) {
+          if (Math.abs(summary.unrealized.gainTotal) > Math.abs(summary.unrealized.lossTotal)) {
+            // more gain than loss so losers are the source
+            if (new Decimal(lot.availableQty).greaterThan(0)) {
+              if (Number(lot.gainTotal) < 0) {
+                sourceLots.push(lot)
+              }
+              else {
+                matchingLots.push(lot)
+              }
+            }
+          }
+          else {
+            // more loss than gain so winners are the source
+            if (new Decimal(lot.availableQty).greaterThan(0)) {
+              if (Number(lot.gainTotal) > 0) {
+                sourceLots.push(lot)
+              }
+              else {
+                matchingLots.push(lot)
+              }
+            }
+          }
+        }
+
+        const matchedItems = PortfolioService.matchLots({
+          sourceLots: sourceLots.map(lot => [lot]),
+          matchingLots: matchingLots.map(lot => [lot]),
+          resultFilters: {
+            minPAndL: filters?.minPAndL,
+            maxPercentageDifference: Number(this.configService.get('MATCH_PERCENTAGE_DIFFERENCE')!),
+          },
+        })
+
+        return {
+          matchedItems: matchedItems.map(pairs => ({
+            id: pairs[0].sourceLots.map(lot => lot.id).join('-'),
+            pairs,
+          })).sort((a, b) => {
+            const aNetPnL = Math.abs(a.pairs[0].sourceHarvestPAndL)
+            const bNetPnL = Math.abs(b.pairs[0].sourceHarvestPAndL)
+            return bNetPnL - aNetPnL
+          }),
+          harvestType,
+          summary,
+          totalHarvestLots: 0,
+        }
+      }
+      case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
+      case HarvestType.CAPTURE_GAINS_TAX_FREE: {
+        // High realized gain or loss so we want to reduce that numberas much as possible by selling the opposite side
+        const directedLots = await this.lotService.lotCurrent({
+          portfolioId,
+          lotValueType:
+            HarvestType.REDUCE_TAXES === harvestType
+              ? LotValueType.LOSS
+              : LotValueType.GAIN,
+          minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
+          excludeLotIds: filters?.excludeLotIds,
+          exludeAssetSymbols: filters?.exludeAssetSymbols,
+          purchaseDateBefore: filters?.purchaseDateBefore,
+          purchaseDateAfter: filters?.purchaseDateAfter,
+        })
+
+        return {
+          summary,
+          lotsCurrent: directedLots,
+          harvestType,
+          totalHarvestLots: directedLots.length,
+        }
+      }
+    }
+
+    return {
+      harvestType,
+      summary,
+      totalHarvestLots: 0,
+    }
+  }
+
+  // Optimization problem for getting source lots P&L as close to the matched lots P&L as possible
+  static matchLots({
+    sourceLots,
+    matchingLots,
+    resultFilters,
+  }: {
+    sourceLots: LotCurrent[][]
+    matchingLots: LotCurrent[][]
+    resultFilters?: {
+      minPAndL?: number
+      maxPercentageDifference?: number
+    }
+  }): { sourceLots: HarvestLotCurrent[], sourceHarvestPAndL: number, matchedHarvestPAndL: number, matchedLots: HarvestLotCurrent[] }[][] {
+    const results: { sourceLots: HarvestLotCurrent[], sourceHarvestPAndL: number, matchedHarvestPAndL: number, matchedLots: HarvestLotCurrent[] }[][] = []
+
+    // Pre-filter source lots based on minPAndL constraint for efficiency
+    const filteredSourceLots = resultFilters?.minPAndL
+      ? sourceLots.filter((sourceRow) => {
+        const sourceTotalPnL = sourceRow.reduce((sum, lot) => {
+          const pnlPerShare = new Decimal(lot.dollarPerSharePnL)
+          const lotPnL = pnlPerShare.mul(lot.availableQty)
+          return sum.plus(lotPnL)
+        }, new Decimal(0))
+        return sourceTotalPnL.abs().greaterThanOrEqualTo(resultFilters.minPAndL!)
+      })
+      : sourceLots
+
+    for (const sourceRow of filteredSourceLots) {
+      const sourceRowResults: { sourceLots: HarvestLotCurrent[], sourceHarvestPAndL: number, matchedHarvestPAndL: number, matchedLots: HarvestLotCurrent[] }[] = []
+
+      // Calculate total P&L for this source row using available shares
+      const sourceTotalPnL = sourceRow.reduce((sum, lot) => {
+        const pnlPerShare = new Decimal(lot.dollarPerSharePnL)
+        const lotPnL = pnlPerShare.mul(lot.availableQty)
+        return sum.plus(lotPnL)
+      }, new Decimal(0))
+
+      // Target P&L is the opposite of source P&L
+      const targetPnL = sourceTotalPnL.negated()
+
+      // Evaluate each matching lot row separately and record all combinations
+      for (const matchingRow of matchingLots) {
+        // Calculate total P&L for this matching row using available shares
+        const matchingTotalPnL = matchingRow.reduce((sum, lot) => {
+          const pnlPerShare = new Decimal(lot.dollarPerSharePnL)
+          const lotPnL = pnlPerShare.mul(lot.availableQty)
+          return sum.plus(lotPnL)
+        }, new Decimal(0))
+
+        if (matchingTotalPnL.equals(0))
+          continue
+
+        let optimizedSourceLots: HarvestLotCurrent[]
+        let optimizedMatchingLots: HarvestLotCurrent[]
+
+        // Strategy: Use whole number shares and choose the scenario that gets closest to target P&L
+        // Scenario A: Adjust matching lot shares to match source P&L (using whole shares)
+        // Scenario B: Adjust source lot shares to match what matching lots can provide (using whole shares)
+
+        if (matchingTotalPnL.abs().greaterThanOrEqualTo(targetPnL.abs())) {
+          // Scenario A: Matching lots have enough P&L capacity, calculate whole shares needed
+          optimizedSourceLots = sourceRow.map(lot => ({
+            ...lot,
+            harvestQuantity: lot.availableQty.toString(),
+            harvestPAndL: new Decimal(lot.dollarPerSharePnL).mul(lot.availableQty).toNumber(),
+          }))
+
+          // Calculate how many whole shares we need from matching lots to get close to target P&L
+          let remainingTargetPnL = targetPnL.abs()
+          optimizedMatchingLots = matchingRow.map((lot) => {
+            const pnlPerShare = new Decimal(lot.dollarPerSharePnL).abs()
+
+            if (remainingTargetPnL.equals(0) || pnlPerShare.equals(0) || new Decimal(lot.availableQty).equals(0)) {
+              return {
+                ...lot,
+                harvestQuantity: '0',
+                harvestPAndL: 0,
+              }
+            }
+
+            // Calculate ideal shares needed, then round to nearest whole number
+            const idealShares = remainingTargetPnL.dividedBy(pnlPerShare)
+            const wholeShares = new Decimal(Math.round(idealShares.toNumber()))
+            const actualShares = Decimal.min(wholeShares, lot.availableQty)
+            const actualPnL = actualShares.mul(new Decimal(lot.dollarPerSharePnL))
+
+            // Update remaining target for next lot
+            remainingTargetPnL = remainingTargetPnL.minus(actualPnL.abs())
+            if (remainingTargetPnL.lessThan(0))
+              remainingTargetPnL = new Decimal(0)
+
+            return {
+              ...lot,
+              harvestQuantity: actualShares.toString(),
+              harvestPAndL: actualPnL.toNumber(),
+            }
+          })
+        }
+        else {
+          // Scenario B: Use all available shares from matching lots, adjust source lots to whole shares
+          optimizedMatchingLots = matchingRow.map(lot => ({
+            ...lot,
+            harvestQuantity: lot.availableQty.toString(),
+            harvestPAndL: new Decimal(lot.dollarPerSharePnL).mul(lot.availableQty).toNumber(),
+          }))
+
+          // Calculate how many whole shares we need from source lots to match available matching P&L
+          let remainingMatchingPnL = matchingTotalPnL.abs()
+          optimizedSourceLots = sourceRow.map((lot) => {
+            const pnlPerShare = new Decimal(lot.dollarPerSharePnL).abs()
+
+            if (remainingMatchingPnL.equals(0) || pnlPerShare.equals(0) || new Decimal(lot.availableQty).equals(0)) {
+              return {
+                ...lot,
+                harvestQuantity: '0',
+                harvestPAndL: 0,
+              }
+            }
+
+            // Calculate ideal shares needed, then round to nearest whole number
+            const idealShares = remainingMatchingPnL.dividedBy(pnlPerShare)
+            const wholeShares = new Decimal(Math.round(idealShares.toNumber()))
+            const actualShares = Decimal.min(wholeShares, lot.availableQty)
+            const actualPnL = actualShares.mul(new Decimal(lot.dollarPerSharePnL))
+
+            // Update remaining target for next lot
+            remainingMatchingPnL = remainingMatchingPnL.minus(actualPnL.abs())
+            if (remainingMatchingPnL.lessThan(0))
+              remainingMatchingPnL = new Decimal(0)
+
+            return {
+              ...lot,
+              harvestQuantity: actualShares.toString(),
+              harvestPAndL: actualPnL.toNumber(),
+            }
+          })
+        }
+
+        // Calculate P&L totals for this combination
+        const sourceHarvestPAndL = optimizedSourceLots.reduce((sum, lot) => sum + lot.harvestPAndL, 0)
+        const matchedHarvestPAndL = optimizedMatchingLots.reduce((sum, lot) => sum + lot.harvestPAndL, 0)
+
+        // Filter out results with zero harvest quantities - no point in returning lots with 0 shares to harvest
+        const hasNonZeroHarvestQuantities = optimizedSourceLots.every(lot => Number(lot.harvestQuantity) > 0)
+          && optimizedMatchingLots.every(lot => Number(lot.harvestQuantity) > 0)
+
+        // Apply minPAndL filter to matched results - only add if both source and matched meet minimum
+        const meetsMinPAndL = !resultFilters?.minPAndL || (
+          Math.abs(sourceHarvestPAndL) >= resultFilters.minPAndL
+          && Math.abs(matchedHarvestPAndL) >= resultFilters.minPAndL
+        )
+
+        // Apply maxPercentageDifference filter
+        const meetsPercentageDifference = !resultFilters?.maxPercentageDifference || (() => {
+          const diff = Math.abs(Math.abs(sourceHarvestPAndL) - Math.abs(matchedHarvestPAndL))
+          const maxValue = Math.max(Math.abs(sourceHarvestPAndL), Math.abs(matchedHarvestPAndL))
+
+          // Avoid division by zero - if both values are zero, consider them as matching (0% difference)
+          if (maxValue === 0)
+            return true
+
+          const percentageDiff = (diff / maxValue) * 100
+          return percentageDiff <= resultFilters.maxPercentageDifference
+        })()
+
+        if (hasNonZeroHarvestQuantities && meetsMinPAndL && meetsPercentageDifference) {
+          sourceRowResults.push({
+            sourceLots: optimizedSourceLots,
+            sourceHarvestPAndL,
+            matchedHarvestPAndL,
+            matchedLots: optimizedMatchingLots,
+          })
+        }
+      }
+
+      // Add source row results to main results if any combinations found
+      if (sourceRowResults.length > 0) {
+        // sort by net P&L
+        results.push(sourceRowResults.sort((a, b) => {
+          const aNetPnL = Math.abs(a.sourceHarvestPAndL)
+          const bNetPnL = Math.abs(b.sourceHarvestPAndL)
+          return bNetPnL - aNetPnL
+        }))
+      }
+    }
+
+    return results
+  }
+
+  harvestType({
+    realizedGainTotal,
+    unrealizedGainTotal,
+    unrealizedLossTotal,
+  }: {
+    realizedGainTotal: number
+    unrealizedGainTotal: number
+    unrealizedLossTotal: number
+  }): HarvestType {
+    const combined = Math.abs(unrealizedGainTotal) + Math.abs(unrealizedLossTotal) + Math.abs(realizedGainTotal)
+    if (combined === 0) {
+      return HarvestType.NO_OPPORTUNITY_EMPTY
+    }
+    else if (unrealizedGainTotal <= 0 && realizedGainTotal <= 0) {
+      return HarvestType.NO_OPPORTUNITY_LOSSES
+    }
+    else if (unrealizedLossTotal >= 0 && realizedGainTotal >= 0) {
+      return HarvestType.NO_OPPORTUNITY_GAINS
+    }
+
+    return Math.abs(realizedGainTotal)
+      <= Math.abs(this.configService.get('NUETRAL_HARVEST_THRESHOLD')!)
+      ? HarvestType.REDUCE_COST_BASIS
+      : realizedGainTotal > 0
+        ? HarvestType.REDUCE_TAXES
+        : HarvestType.CAPTURE_GAINS_TAX_FREE
   }
 
   async finiteHarvest({

@@ -13,7 +13,26 @@ fragment FiniteHarvestLotItem on LotCurrent {
   dollarPerSharePnL
   taxGain
   currentHarvestQty
-  harvestId
+}
+
+fragment HarvestLotItem on HarvestLotCurrent {
+  id
+  accountId
+  remainingQty
+  acquiredDate
+  price
+  symbol
+  lastPrice
+  costBasis
+  value
+  gainTotal
+  gainTotalPct
+  dollarPerSharePnL
+  taxGain
+  currentHarvestQty
+  harvestQuantity
+  harvestPAndL
+  availableQty
 }
 
 fragment MatchedLotOrderItem on HarvestLotOrder {
@@ -32,6 +51,7 @@ fragment MatchedLotOrderItem on HarvestLotOrder {
   acquiredDate
   lastPrice
 }
+
 fragment UnrealizedHarvestItem on UnrealizedHarvestMatchResult {
   sourceLot {
     id
@@ -78,4 +98,53 @@ query FiniteHarvest {
 
 mutation DeleteHarvests($ids: [String!]!) {
   deleteHarvests(ids: $ids)
+}
+
+fragment HarvestEvalResultFragment on HarvestEvalResult {
+  harvestType
+  summary {
+    realized {
+      gainTotal
+    }
+    unrealized {
+      gainTotal
+      lossTotal
+      total
+    }
+    includingCurrentHarvest {
+      realized {
+        gainTotal
+      }
+      unrealized {
+        gainTotal
+        lossTotal
+      }
+    }
+  }
+  lotsCurrent {
+    id
+    ...FiniteHarvestLotItem
+  }
+  matchedItems {
+    id
+    pairs {
+      sourceHarvestPAndL
+      matchedHarvestPAndL
+      sourceLots {
+        id
+        ...HarvestLotItem
+      }
+      matchedLots {
+        id
+        ...HarvestLotItem
+      }
+    }
+  }
+  totalHarvestLots
+}
+
+query HarvestEvalResult($filters: HarvestEvalFilters) {
+  harvestEvalResult(filters: $filters) {
+    ...HarvestEvalResultFragment
+  }
 }

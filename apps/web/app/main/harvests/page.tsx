@@ -1,6 +1,6 @@
 'use client';
 
-import { useHarvestsAndTransactionsQuery } from '~/generated/gql';
+import { useOpenHarvests } from '~/modules/hooks/use-open-harvests';
 import { LoadingPage } from '~/modules/utility-components';
 import {
   Card,
@@ -45,20 +45,13 @@ const cardVariants = {
 };
 
 export default function HarvestsPage() {
-  const { data, loading } = useHarvestsAndTransactionsQuery({
-    variables: {
-      where: {
-        recommendationExpiresDate: {
-          gte: new Date(new Date().setHours(23, 59, 59, 999)),
-        },
-      },
-    },
-  });
+  const { harvests, loading, hasOpenHarvests } = useOpenHarvests();
+  
   if (loading) {
-    <LoadingPage />;
+    return <LoadingPage />;
   }
 
-  if (!data?.harvests.length) {
+  if (!hasOpenHarvests) {
     return (
       <div className="flex grow flex-col gap-4 pt-4">
         <motion.div
@@ -116,7 +109,7 @@ export default function HarvestsPage() {
       animate="show"
     >
       <AnimatePresence>
-        {data?.harvests?.map((harvest, index) => (
+        {harvests.map((harvest) => (
           <motion.div key={harvest.id} variants={cardVariants} layout>
             <HarvestCard harvest={harvest} />
           </motion.div>

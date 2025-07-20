@@ -156,7 +156,7 @@ async function main() {
           type: 'OAUTH_1',
           externalId: context => copycat.uuid(context.seed),
           Portfolio: {
-            name: 'Neutral Example',
+            name: 'Neutral Loss Limiter Example',
             id: context => copycat.uuid(context.seed),
             createdById: mainUserId,
             UsersOnPortfolios: () => UsersOnPortfolios,
@@ -170,6 +170,39 @@ async function main() {
                 createdById: mainUserId,
                 // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
                 Lot: () => exampleLots,
+                skipSetup: true,
+                RealizedPAndL: () => [
+                  {
+                    shortTerm: 300,
+                    year: new Date().getFullYear(),
+                  },
+                ],
+              },
+            ],
+          },
+        },
+        {
+          source: 'LOCAL',
+          type: 'OAUTH_1',
+          externalId: context => copycat.uuid(context.seed),
+          Portfolio: {
+            name: 'Neutral Gain Limiter Example',
+            id: context => copycat.uuid(context.seed),
+            createdById: mainUserId,
+            UsersOnPortfolios: () => UsersOnPortfolios,
+            Account: () => [
+              {
+                type: 'investment',
+                name: 'Etrade Example',
+                provider: 'ETRADE',
+                subType: 'investment',
+                institution: AccountInstitution.BROKERAGE,
+                createdById: mainUserId,
+                // portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
+                Lot: () => exampleLots.map(lot => ({
+                  ...lot,
+                  price: lot.price * 1.8,
+                })),
                 skipSetup: true,
                 RealizedPAndL: () => [
                   {

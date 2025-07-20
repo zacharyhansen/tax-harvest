@@ -6,7 +6,6 @@ import {
   HarvestType,
   TaxGain,
 } from '~/generated/gql';
-import NoOpportunities from './no-opportunities';
 import { ArrowUpCircle, TrendingDown } from 'lucide-react';
 import { HarvestingOpportunityCard } from './harvesting-opportunity-card';
 import { Button } from '@repo/ui/components/button';
@@ -38,7 +37,7 @@ export default function RealizedHarvestItems({
 }: {
   finiteHarvest: FiniteHarvestQuery['finiteHarvest'];
 }) {
-  return finiteHarvest?.lotsCurrent?.length ? (
+  return (
     <div className="space-y-6">
       <div className="flex flex-col space-y-2">
         <div className="flex items-center space-x-2">
@@ -71,7 +70,8 @@ export default function RealizedHarvestItems({
         ))}
 
         {/* Blurred teaser card */}
-        {finiteHarvest.totalHarvestLots > finiteHarvest?.lotsCurrent.length &&
+        {finiteHarvest.totalHarvestLots >
+          (finiteHarvest?.lotsCurrent?.length ?? 0) &&
           [1, 2, 3].map(i => (
             <Link href={TypedRoutes.settingsPayment()}>
               <div key={i} className="relative rounded-lg">
@@ -96,7 +96,5 @@ export default function RealizedHarvestItems({
           ))}
       </div>
     </div>
-  ) : (
-    <NoOpportunities />
   );
 }

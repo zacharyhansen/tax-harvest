@@ -7330,6 +7330,15 @@
           "name": "CAPTURE_GAINS_TAX_FREE"
         },
         {
+          "name": "NO_OPPORTUNITY_EMPTY"
+        },
+        {
+          "name": "NO_OPPORTUNITY_GAINS"
+        },
+        {
+          "name": "NO_OPPORTUNITY_LOSSES"
+        },
+        {
           "name": "REDUCE_COST_BASIS"
         },
         {

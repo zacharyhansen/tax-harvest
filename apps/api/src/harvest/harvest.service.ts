@@ -64,19 +64,19 @@ export class HarvestService {
 
             const replacementHarvestTransactionItem: Omit<Prisma.HarvestTransactionItemCreateManyInput, 'harvestId'>
               = {
-              assetSymbol: 'AAPL',
-              orderType: OrderType.BUY,
-              price: replacementAsset.lastPrice,
-              quantity:
+                assetSymbol: 'AAPL',
+                orderType: OrderType.BUY,
+                price: replacementAsset.lastPrice,
+                quantity:
                 saleValue
                   .div(replacementAsset.lastPrice)
                   .floor()
                   .toNumber() || 0,
-              portfolioId,
-              lotAcquiredDate: lot.acquiredDate,
-              lotPricePaid: lot.price,
-              lotPriceAtHarvest: lot.lastPrice,
-            }
+                portfolioId,
+                lotAcquiredDate: lot.acquiredDate,
+                lotPricePaid: lot.price,
+                lotPriceAtHarvest: lot.lastPrice,
+              }
 
             return {
               ...lot,

@@ -6,7 +6,6 @@ import {
   OrderType,
   type FiniteHarvestQuery,
 } from '~/generated/gql';
-import NoOpportunities from './no-opportunities';
 import { CostBasisPairCard } from './api-cost-basis-pair-card';
 import Link from 'next/link';
 import { TypedRoutes } from '~/lib/routes';
@@ -61,7 +60,7 @@ export default function UnrealizedHarvestItems({
 }) {
   const items = finiteHarvest.unrealizedHarvestMatchResults ?? [];
 
-  return items?.length ? (
+  return (
     <div className="flex flex-col gap-4">
       {items.map(item => (
         <CostBasisPairCard key={item.sourceLot.id} harvestItem={item} />
@@ -88,10 +87,5 @@ export default function UnrealizedHarvestItems({
           </Link>
         ))}
     </div>
-  ) : (
-    <NoOpportunities
-      realizedPAndL={finiteHarvest.summary.realized.gainTotal}
-      unrealizedPAndL={finiteHarvest.summary.unrealized.total}
-    />
   );
 }

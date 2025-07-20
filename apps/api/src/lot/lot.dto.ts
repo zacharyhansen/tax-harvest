@@ -26,17 +26,14 @@ export class LotCurrent {
   @Field()
   accountId: string
 
-  @Field()
+  @Field({ description: 'How many shares from this lot are available to be harvested. Importantly this is the actual amount we know from plaid exists at the current time.' })
   remainingQty: string
 
-  @Field({ description: 'How many shares from this lot are in todays current harvest.' })
+  @Field({ description: 'How many shares from this lot are in "in flight" harvests.' })
   currentHarvestQty: string
 
-  @Field({
-    description: 'The ID of the harvest that is currently being processed for this lot.',
-    nullable: true,
-  })
-  harvestId?: string
+  @Field({ description: 'How many shares from this lot are available to be harvested.' })
+  availableQty: string
 
   @Field(() => Date)
   acquiredDate: Date
@@ -67,4 +64,13 @@ export class LotCurrent {
 
   @Field(() => TaxGain)
   taxGain: TaxGain
+}
+
+@ObjectType({ description: 'GQL object for the lot fields returned in harvest API\'s' })
+export class HarvestLotCurrent extends LotCurrent {
+  @Field({ description: 'How many shares from this lot are we going to harvest.' })
+  harvestQuantity: string
+
+  @Field(() => Number, { description: 'The P&L of the harvest for this lot (depending on the number of shares we will harvest).' })
+  harvestPAndL: number
 }

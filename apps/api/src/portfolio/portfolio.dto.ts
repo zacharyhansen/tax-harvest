@@ -6,7 +6,7 @@ import {
 } from '@nestjs/graphql'
 import { OrderType as PrismaOrderType } from '@prisma/client'
 
-import { LotCurrent, TaxGain } from '~/lot/lot.dto'
+import { HarvestLotCurrent, LotCurrent, TaxGain } from '~/lot/lot.dto'
 import { HarvestType, OrderType } from '../generated/graphql'
 
 export enum SetUpStatus {
@@ -208,6 +208,48 @@ export class FiniteHarvestResult {
   unrealizedHarvestMatchResults?: UnrealizedHarvestMatchResult[]
 }
 
+@ObjectType()
+export class HarvestMatchPair {
+  @Field(() => [HarvestLotCurrent])
+  sourceLots: HarvestLotCurrent[]
+
+  @Field(() => [HarvestLotCurrent])
+  matchedLots: HarvestLotCurrent[]
+
+  @Field(() => Number)
+  sourceHarvestPAndL: number
+
+  @Field(() => Number)
+  matchedHarvestPAndL: number
+}
+
+@ObjectType()
+export class HarvestMatchItem {
+  @Field()
+  id: string
+
+  @Field(() => [HarvestMatchPair])
+  pairs: HarvestMatchPair[]
+}
+
+@ObjectType()
+export class HarvestEvalResult {
+  @Field(() => PortfolioSummary)
+  summary: PortfolioSummary
+
+  @Field(() => HarvestType)
+  harvestType: HarvestType
+
+  @Field(() => [LotCurrent], { nullable: true })
+  lotsCurrent?: LotCurrent[]
+
+  @Field(() => [HarvestMatchItem], { nullable: true })
+  matchedItems?: HarvestMatchItem[]
+
+  @Field(() => Number, { description: 'Total number of harvest lots if user is paying' })
+  totalHarvestLots: number
+}
+
 @InputType()
 export class DirectedHarvestLot {
   @Field(() => String)
@@ -218,4 +260,19 @@ export class DirectedHarvestLot {
 
   @Field(() => Boolean, { nullable: true })
   counterTransaction?: boolean
+}
+
+@InputType()
+export class HarvestEvalFilters {
+  @Field(() => Number, { nullable: true })
+  minPAndL?: number
+
+  @Field(() => [String], { nullable: true })
+  excludeAssetSymbols?: string[]
+
+  @Field(() => Date, { nullable: true })
+  purchaseDateBefore?: Date
+
+  @Field(() => Date, { nullable: true })
+  purchaseDateAfter?: Date
 }

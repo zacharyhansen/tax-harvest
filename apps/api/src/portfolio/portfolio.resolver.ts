@@ -14,6 +14,8 @@ import { PrismaSelect } from '../utilities/prisma/prisma-select'
 import {
   DirectedHarvestLot,
   FiniteHarvestResult,
+  HarvestEvalFilters,
+  HarvestEvalResult,
   HarvestResult,
   PortfolioSummary,
 } from './portfolio.dto'
@@ -187,6 +189,32 @@ export class PortfolioResolver {
       portfolioId: metadata.portfolioId,
       targetRealized,
       targetUnrealized,
+    })
+  }
+
+  @Query(() => HarvestEvalResult, {
+    description: 'Evaluate harvesting for portfolio,',
+    name: 'harvestEvalResult',
+  })
+  async harvestEvalResult(
+    @ClerkContext()
+    { metadata }: ClerkClaims,
+    @Args('filters', {
+      nullable: true,
+      type: () => HarvestEvalFilters,
+    })
+    filters?: HarvestEvalFilters,
+  ): Promise<HarvestEvalResult> {
+    return this.portfolioService.harvestEval({
+      portfolioId: metadata.portfolioId,
+      filters: filters
+        ? {
+            minPAndL: filters.minPAndL,
+            exludeAssetSymbols: filters.excludeAssetSymbols,
+            purchaseDateBefore: filters.purchaseDateBefore,
+            purchaseDateAfter: filters.purchaseDateAfter,
+          }
+        : undefined,
     })
   }
 }

@@ -707,11 +707,11 @@ export class PlaidService {
     transactions: Transaction[]
     useTestLotId?: boolean
   }): {
-    lotTupleMap: Map<string, LotData[]>
-    newBuys: Transaction[]
-    newSells: Transaction[]
-    newTransactions: Transaction[]
-  } {
+      lotTupleMap: Map<string, LotData[]>
+      newBuys: Transaction[]
+      newSells: Transaction[]
+      newTransactions: Transaction[]
+    } {
     const lotTupleMap = new Map<string, LotData[]>()
     const newTransactions = transactions.filter(trx => !trx.appliedToLots)
     const newBuys = newTransactions.filter(
@@ -921,11 +921,11 @@ export class PlaidService {
       secret: this.configService.get('PLAID_SECRET_KEY'),
       start_date: mostRecentTransaction?.transactionDate
         ? new Intl.DateTimeFormat('en-CA').format(
-          mostRecentTransaction.transactionDate,
-        )
+            mostRecentTransaction.transactionDate,
+          )
         : new Intl.DateTimeFormat('en-CA').format(
-          startDate ?? new Date().setFullYear(end_date.getFullYear() - 2),
-        ),
+            startDate ?? new Date().setFullYear(end_date.getFullYear() - 2),
+          ),
     })
 
     this.logger.log(
@@ -1139,8 +1139,8 @@ export class PlaidService {
     return securities.map((security) => {
       const symbol
         = security.ticker_symbol
-        ?? security.name
-        ?? security.market_identifier_code
+          ?? security.name
+          ?? security.market_identifier_code
       // Only upsert minimum here - polygon should be source of other data
       const input: Prisma.AssetCreateInput = {
         plaid_security_id: security.security_id,

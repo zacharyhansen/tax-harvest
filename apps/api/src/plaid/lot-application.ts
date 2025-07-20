@@ -104,8 +104,8 @@ export function findLotChangeSets(
   params: FindSubsetHybridArgs,
   portfolioId: string,
 ): {
-  lotChanges: LotChange[]
-} {
+    lotChanges: LotChange[]
+  } {
   if (params.targetQuantity === undefined && params.targetValue === undefined) {
     return { lotChanges: [] }
   }

@@ -83,11 +83,19 @@ export class LotService {
      * The minimum total P&L for the lot as an absolute value - should be used in conjuction with lotValueType
      */
     minTotalPAndL,
+    excludeLotIds,
+    exludeAssetSymbols,
+    purchaseDateBefore,
+    purchaseDateAfter,
   }: {
     portfolioId: string
     lotIds?: string[]
     lotValueType?: LotValueType
     minTotalPAndL?: Decimal
+    excludeLotIds?: string[]
+    exludeAssetSymbols?: string[]
+    purchaseDateBefore?: Date
+    purchaseDateAfter?: Date
   }): Promise<LotCurrent[]> {
     return this.db.transaction().execute(async (trx) => {
       await sql`SELECT set_config('app.current_portfolio_id', ${portfolioId}::text, TRUE)`.execute(
@@ -101,9 +109,7 @@ export class LotService {
         .leftJoin('Harvest', 'Harvest.id', 'HarvestTransaction.harvestId')
         .select([
           ...LotService.lotCurrentFields,
-          'Harvest.id as harvestId',
-          // Add coalesce to handle null case when there are no harvest transactions
-          sql<string>`COALESCE(SUM(CASE WHEN DATE("Harvest"."date") = CURRENT_DATE THEN "HarvestTransactionItem"."quantity" ELSE 0 END), 0)`.as('currentHarvestQty'),
+          sql<string>`COALESCE(SUM(CASE WHEN DATE("Harvest"."recommendationExpiresDate") >= CURRENT_DATE THEN "HarvestTransactionItem"."quantity" ELSE 0 END), 0)`.as('currentHarvestQty'),
         ])
         .where('Account.portfolioId', '=', portfolioId)
         // remove tax advantaged accounts
@@ -113,11 +119,27 @@ export class LotService {
         ]))
         // Filter out fractional shares
         .where('LotCurrent.remainingQty', '>=', '1')
-        .groupBy([...LotService.lotCurrentFields, 'Harvest.id'])
+        .groupBy([...LotService.lotCurrentFields])
       // Order is important  here - biggest winners at top, biggest losers at bottom by per share $
 
       if (lotIds) {
         query = query.where('LotCurrent.id', 'in', lotIds)
+      }
+
+      if (excludeLotIds) {
+        query = query.where('LotCurrent.id', 'not in', excludeLotIds)
+      }
+
+      if (exludeAssetSymbols) {
+        query = query.where('LotCurrent.symbol', 'not in', exludeAssetSymbols)
+      }
+
+      if (purchaseDateBefore) {
+        query = query.where('LotCurrent.acquiredDate', '<', purchaseDateBefore)
+      }
+
+      if (purchaseDateAfter) {
+        query = query.where('LotCurrent.acquiredDate', '>', purchaseDateAfter)
       }
 
       if (lotValueType === LotValueType.GAIN) {
@@ -141,11 +163,13 @@ export class LotService {
         }
       }
 
-      const results = await query.orderBy('dollarPerSharePnL', 'desc').execute() as unknown as Promise<
+      const results = await query.orderBy('dollarPerSharePnL', 'desc').execute() as unknown as
         LotCurrent[]
-      >
 
-      return results
+      return results.map(result => ({
+        ...result,
+        availableQty: new Decimal(result.remainingQty).minus(new Decimal(result.currentHarvestQty)).toString(),
+      }))
     })
   }
 

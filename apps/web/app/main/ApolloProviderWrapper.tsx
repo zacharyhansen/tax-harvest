@@ -1,39 +1,45 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 import {
   ApolloClient,
   ApolloLink,
   ApolloProvider,
   HttpLink,
   InMemoryCache,
-} from '@apollo/client'
-import { setContext } from '@apollo/client/link/context'
-import { useAuth } from '@clerk/nextjs'
-import { useMemo } from 'react'
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { useAuth } from '@clerk/nextjs';
+import { useMemo } from 'react';
 
 const httpLink = new HttpLink({
   credentials: 'include',
-  uri: (operation) => {
-    return `${process.env.NEXT_PUBLIC_CORE_SERVER_URL}/graphql?${operation.operationName}`
+  uri: operation => {
+    return `${process.env.NEXT_PUBLIC_CORE_SERVER_URL}/graphql?${operation.operationName}`;
   },
-})
+});
 
 function ApolloProviderWrapper({ children }: { children: ReactNode }) {
-  const { getToken, isLoaded } = useAuth()
+  const { getToken, isLoaded } = useAuth();
 
   const client = useMemo(() => {
     const authMiddleware = setContext(async (operation, { headers }) => {
-      const token = await getToken()
+      const token = await getToken();
 
       return {
         headers: {
           ...headers,
           authorization: `Bearer ${token}`,
         },
-      }
-    })
+      };
+    });
 
     return new ApolloClient({
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        typePolicies: {
+          HarvestLotCurrent: {
+            keyFields: ['id', 'harvestQuantity'],
+          },
+        },
+      }),
       credentials: 'include',
       defaultOptions: {
         watchQuery: {
@@ -44,15 +50,15 @@ function ApolloProviderWrapper({ children }: { children: ReactNode }) {
       name: 'react-web-client',
       queryDeduplication: false,
       version: '1.3',
-    })
-  }, [getToken])
+    });
+  }, [getToken]);
 
   return (
     <ApolloProvider client={client}>
       {/* Dont render children till the auth is loaded so the Bearer token can be properly attached */}
       {isLoaded ? children : null}
     </ApolloProvider>
-  )
+  );
 }
 
-export default ApolloProviderWrapper
+export default ApolloProviderWrapper;

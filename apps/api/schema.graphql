@@ -4779,10 +4779,62 @@ input HarvestCreateWithoutPortfolioInput {
   updatedAt: DateTime
 }
 
+input HarvestEvalFilters {
+  excludeAssetSymbols: [String!]
+  minPAndL: Float
+  purchaseDateAfter: DateTime
+  purchaseDateBefore: DateTime
+}
+
+type HarvestEvalResult {
+  harvestType: HarvestType!
+  lotsCurrent: [LotCurrent!]
+  matchedItems: [HarvestMatchItem!]
+  summary: PortfolioSummary!
+
+  """Total number of harvest lots if user is paying"""
+  totalHarvestLots: Float!
+}
+
 input HarvestListRelationFilter {
   every: HarvestWhereInput
   none: HarvestWhereInput
   some: HarvestWhereInput
+}
+
+"""GQL object for the lot fields returned in harvest API's"""
+type HarvestLotCurrent {
+  accountId: String!
+  acquiredDate: DateTime!
+
+  """How many shares from this lot are available to be harvested."""
+  availableQty: String!
+  costBasis: String!
+
+  """How many shares from this lot are in "in flight" harvests."""
+  currentHarvestQty: String!
+  dollarPerSharePnL: String!
+  gainTotal: String!
+  gainTotalPct: String!
+
+  """
+  The P&L of the harvest for this lot (depending on the number of shares we will harvest).
+  """
+  harvestPAndL: Float!
+
+  """How many shares from this lot are we going to harvest."""
+  harvestQuantity: String!
+  id: String!
+  lastPrice: String!
+  price: String!
+
+  """
+  How many shares from this lot are available to be harvested. Importantly this is the actual amount we know from plaid exists at the current time.
+  """
+  remainingQty: String!
+  symbol: String!
+  taxGain: TaxGain!
+  value: String!
 }
 
 type HarvestLotOrder {
@@ -4802,6 +4854,18 @@ type HarvestLotOrder {
   quantity: String!
   taxGain: TaxGain!
   valueTotal: String!
+}
+
+type HarvestMatchItem {
+  id: String!
+  pairs: [HarvestMatchPair!]!
+}
+
+type HarvestMatchPair {
+  matchedHarvestPAndL: Float!
+  matchedLots: [HarvestLotCurrent!]!
+  sourceHarvestPAndL: Float!
+  sourceLots: [HarvestLotCurrent!]!
 }
 
 type HarvestMaxAggregate {
@@ -6415,6 +6479,9 @@ input HarvestTransactionWhereUniqueInput {
 
 enum HarvestType {
   CAPTURE_GAINS_TAX_FREE
+  NO_OPPORTUNITY_EMPTY
+  NO_OPPORTUNITY_GAINS
+  NO_OPPORTUNITY_LOSSES
   REDUCE_COST_BASIS
   REDUCE_TAXES
   SELL
@@ -8146,19 +8213,23 @@ input LotCreateWithoutPositionInput {
 type LotCurrent {
   accountId: String!
   acquiredDate: DateTime!
+
+  """How many shares from this lot are available to be harvested."""
+  availableQty: String!
   costBasis: String!
 
-  """How many shares from this lot are in todays current harvest."""
+  """How many shares from this lot are in "in flight" harvests."""
   currentHarvestQty: String!
   dollarPerSharePnL: String!
   gainTotal: String!
   gainTotalPct: String!
-
-  """The ID of the harvest that is currently being processed for this lot."""
-  harvestId: String
   id: String!
   lastPrice: String!
   price: String!
+
+  """
+  How many shares from this lot are available to be harvested. Importantly this is the actual amount we know from plaid exists at the current time.
+  """
   remainingQty: String!
   symbol: String!
   taxGain: TaxGain!
@@ -12732,6 +12803,9 @@ type Query {
 
   """Evaluate harvesting for portfolio,"""
   harvestEval: HarvestResult!
+
+  """Evaluate harvesting for portfolio,"""
+  harvestEvalResult(filters: HarvestEvalFilters): HarvestEvalResult!
 
   """Get Harvests"""
   harvests(where: HarvestWhereInput): [Harvest!]!
