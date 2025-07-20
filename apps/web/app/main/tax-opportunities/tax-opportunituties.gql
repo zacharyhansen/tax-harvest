@@ -13,6 +13,7 @@ fragment FiniteHarvestLotItem on LotCurrent {
   dollarPerSharePnL
   taxGain
   currentHarvestQty
+  availableQty
 }
 
 fragment HarvestLotItem on HarvestLotCurrent {

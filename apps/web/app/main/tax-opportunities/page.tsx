@@ -29,7 +29,6 @@ import {
   TabsList,
   TabsContent,
 } from '@repo/ui/components/tabs';
-import UnrealizedHarvestItems from './unrealized-harvest-items';
 import RealizedHarvestItems from './realized-harvest-items';
 import { HarvestEvalPairCard } from './harvest-eval-pair-card';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -256,15 +255,18 @@ function HarvestContent({ harvestEvalResult }: HarvestContentProps) {
                     }}
                   />
                 </TabsContent>
-                <UnrealizedHarvestItems
-                  finiteHarvest={{
-                    lotsCurrent,
-                    harvestType,
-                    totalHarvestLots: harvestEvalResult.totalHarvestLots || 0,
-                    summary: harvestEvalResult.summary,
-                    unrealizedHarvestMatchResults: [],
-                  }}
-                />
+                <div className="mb-6">
+                  <h2 className="mb-2 text-xl font-semibold">
+                    Cost Basis Reset Opportunities
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Pair gains and losses to reset your cost basis with minimal
+                    tax impact
+                  </p>
+                </div>
+                {harvestEvalResult.matchedItems?.map(item => (
+                  <HarvestEvalPairCard key={item.id} harvestMatchItem={item} />
+                ))}
               </TabsContent>
             </Tabs>
           </motion.div>

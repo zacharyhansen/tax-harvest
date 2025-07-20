@@ -24,12 +24,12 @@ const dummyLot: FiniteHarvestLotItemFragment = {
   costBasis: '18000',
   gainTotal: '-1000',
   dollarPerSharePnL: '-10',
-  harvestId: null,
   accountId: 'dummy-account',
   value: '17000',
   gainTotalPct: '-5.56',
   taxGain: TaxGain.Short,
   __typename: 'LotCurrent',
+  availableQty: '100',
 };
 
 export default function RealizedHarvestItems({

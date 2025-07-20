@@ -648,28 +648,27 @@ export class PortfolioService {
         const sourceLots: LotCurrent[] = []
         const matchingLots: LotCurrent[] = []
 
+        // Filter lots to only include those with available quantity > 0
+        const availableLots = lots.filter(lot => new Decimal(lot.availableQty).greaterThan(0))
+
         // Organize the lots depending on the unrealized gain and loss
-        for (const lot of lots) {
+        for (const lot of availableLots) {
           if (Math.abs(summary.unrealized.gainTotal) > Math.abs(summary.unrealized.lossTotal)) {
             // more gain than loss so losers are the source
-            if (new Decimal(lot.availableQty).greaterThan(0)) {
-              if (Number(lot.gainTotal) < 0) {
-                sourceLots.push(lot)
-              }
-              else {
-                matchingLots.push(lot)
-              }
+            if (Number(lot.gainTotal) < 0) {
+              sourceLots.push(lot)
+            }
+            else {
+              matchingLots.push(lot)
             }
           }
           else {
             // more loss than gain so winners are the source
-            if (new Decimal(lot.availableQty).greaterThan(0)) {
-              if (Number(lot.gainTotal) > 0) {
-                sourceLots.push(lot)
-              }
-              else {
-                matchingLots.push(lot)
-              }
+            if (Number(lot.gainTotal) > 0) {
+              sourceLots.push(lot)
+            }
+            else {
+              matchingLots.push(lot)
             }
           }
         }
@@ -713,11 +712,20 @@ export class PortfolioService {
           purchaseDateAfter: filters?.purchaseDateAfter,
         })
 
+        // Filter to only include lots with available quantity > 0
+        const availableDirectedLots = directedLots
+          .filter(lot => new Decimal(lot.availableQty).greaterThan(0))
+          .sort((a, b) => {
+            const aPnL = new Decimal(a.dollarPerSharePnL).mul(a.availableQty).abs()
+            const bPnL = new Decimal(b.dollarPerSharePnL).mul(b.availableQty).abs()
+            return bPnL.minus(aPnL).toNumber()
+          })
+
         return {
           summary,
-          lotsCurrent: directedLots,
+          lotsCurrent: availableDirectedLots,
           harvestType,
-          totalHarvestLots: directedLots.length,
+          totalHarvestLots: availableDirectedLots.length,
         }
       }
     }
@@ -992,28 +1000,27 @@ export class PortfolioService {
         const sourceLots: LotCurrent[] = []
         const matchingLots: LotCurrent[] = []
 
+        // Filter lots to only include those with available quantity > 0
+        const availableLots = lots.filter(lot => new Decimal(lot.availableQty).greaterThan(0))
+
         // Organize the lots depending on the unrealized gain and loss
-        for (const lot of lots) {
+        for (const lot of availableLots) {
           if (summary.unrealized.gainTotal > summary.unrealized.lossTotal) {
             // more gain than loss so losers are the source
-            if (lot.remainingQty > '0') {
-              if (Number(lot.gainTotal) < 0) {
-                sourceLots.push(lot)
-              }
-              else {
-                matchingLots.push(lot)
-              }
+            if (Number(lot.gainTotal) < 0) {
+              sourceLots.push(lot)
+            }
+            else {
+              matchingLots.push(lot)
             }
           }
           else {
             // more loss than gain so winners are the source
-            if (lot.remainingQty > '0') {
-              if (Number(lot.gainTotal) > 0) {
-                sourceLots.push(lot)
-              }
-              else {
-                matchingLots.push(lot)
-              }
+            if (Number(lot.gainTotal) > 0) {
+              sourceLots.push(lot)
+            }
+            else {
+              matchingLots.push(lot)
             }
           }
         }
@@ -1068,11 +1075,14 @@ export class PortfolioService {
           minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
         })
 
+        // Filter to only include lots with available quantity > 0
+        const availableDirectedLots = directedLots.filter(lot => new Decimal(lot.availableQty).greaterThan(0))
+
         return {
           summary,
-          lotsCurrent: directedLots,
+          lotsCurrent: availableDirectedLots,
           harvestType,
-          totalHarvestLots: directedLots.length,
+          totalHarvestLots: availableDirectedLots.length,
         }
       }
     }

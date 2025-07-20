@@ -5,7 +5,9 @@ import { Decimal } from 'decimal.js';
 import { Wheat, CheckCircle2, Trash, Trash2 } from 'lucide-react';
 import {
   FiniteHarvestDocument,
+  HarvestEvalResultDocument,
   HarvestType,
+  HarvestsAndTransactionsDocument,
   useCreateHarvestMutation,
   useDeleteHarvestsMutation,
 } from '~/generated/gql';
@@ -26,22 +28,22 @@ export function HarvestingOpportunityCard({
   netPosition,
 }: HarvestingOpportunityCardProps) {
   const [createHarvest, { loading: isHarvesting }] = useCreateHarvestMutation({
-    refetchQueries: [FiniteHarvestDocument],
+    refetchQueries: [
+      HarvestEvalResultDocument,
+      HarvestsAndTransactionsDocument,
+    ],
     awaitRefetchQueries: true,
   });
-  const [deleteHarvests, { loading: isDeleting }] = useDeleteHarvestsMutation({
-    refetchQueries: [FiniteHarvestDocument],
-    awaitRefetchQueries: true,
-  });
+
   // Determine if this is a gain position by comparing current value to cost basis
   const costBasis = new Decimal(lot.costBasis ?? 0);
   const currentValue = new Decimal(lot.lastPrice ?? 0).mul(
-    lot.remainingQty ?? 0
+    lot.availableQty ?? 0
   );
   const purchaseDate = lot.acquiredDate
     ? new Date(lot.acquiredDate).toLocaleDateString()
     : 'Unknown';
-  const quantity = new Decimal(lot.remainingQty);
+  const quantity = new Decimal(lot.availableQty);
   const sellQuantity = Math.min(
     new Decimal(netPosition).abs().div(lot.dollarPerSharePnL).abs().toNumber(),
     quantity.toNumber()
@@ -51,21 +53,16 @@ export function HarvestingOpportunityCard({
   );
   const colorClass = MoneyUtil.colored(taxSavings.toNumber());
 
-  const isHarvested =
-    parseInt(lot.currentHarvestQty) === parseInt(lot.remainingQty);
-
   return (
     <div
       className={cn(
-        'bg-muted mb-2 overflow-hidden rounded-lg border shadow-md transition-all duration-300',
-        isHarvested && 'bg-accent border-accent animate-in fade-in zoom-in-95'
+        'bg-muted mb-2 overflow-hidden rounded-lg border shadow-md transition-all duration-300'
       )}
     >
       {/* Header row */}
       <div
         className={cn(
-          'bg-muted flex items-center justify-between px-4 py-3 transition-colors duration-300',
-          isHarvested && 'bg-accent'
+          'bg-muted flex items-center justify-between px-4 py-3 transition-colors duration-300'
         )}
       >
         <div className="flex items-center gap-3">
@@ -91,33 +88,8 @@ export function HarvestingOpportunityCard({
         </div>
 
         <div className="flex items-center gap-2">
-          {isHarvested && lot.harvestId ? (
-            <div className="flex items-center gap-2">
-              <Button
-                variant="destructive"
-                size="icon"
-                loading={isDeleting}
-                onClick={() => {
-                  toast.promise(
-                    deleteHarvests({
-                      variables: {
-                        ids: [lot.harvestId!],
-                      },
-                    }),
-                    {
-                      loading: 'Removing from harvest...',
-                      success: 'Harvest removed successfully',
-                      error: 'Failed to remove from harvest',
-                    }
-                  );
-                }}
-              >
-                <Trash2 className="size-4" />
-              </Button>
-            </div>
-          ) : null}
           <Button
-            disabled={isHarvested || isHarvesting}
+            disabled={isHarvesting}
             onClick={() =>
               toast.promise(
                 createHarvest({
@@ -140,8 +112,7 @@ export function HarvestingOpportunityCard({
               )
             }
           >
-            <Wheat className="mr-2 size-4" />{' '}
-            {isHarvested ? 'Harvested' : 'Add to Harvests'}
+            <Wheat className="mr-2 size-4" /> Add to Harvests
           </Button>
         </div>
       </div>
