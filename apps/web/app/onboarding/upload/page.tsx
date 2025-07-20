@@ -90,7 +90,11 @@ export default function UploadPage() {
         onError: () => {
           toast.error('Failed to create account');
         },
-        onCompleted: () => {
+        onCompleted: (data) => {
+          // Store the account ID in localStorage for later use in Plaid linking
+          if (data?.initAccountFileUpload?.accountId) {
+            localStorage.setItem('onboardingAccountId', data.initAccountFileUpload.accountId);
+          }
           router.push('/onboarding/analyze');
         },
       });

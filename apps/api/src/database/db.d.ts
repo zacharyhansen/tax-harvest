@@ -148,6 +148,7 @@ export interface AuthConnection {
   id: Generated<string>;
   isSyncing: Generated<boolean>;
   lastTransactionSyncedAtPlaid: Timestamp | null;
+  plaidInstitutionId: string | null;
   portfolioId: string;
   secret: string | null;
   source: "ETRADE_ACCESS" | "ETRADE_REQUEST" | "LOCAL" | "PLAID";

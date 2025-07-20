@@ -203,6 +203,7 @@ model HarvestTransactionItem {
 }
 
 // Account ------------------------------------------------------------------------------------------------------------------------------
+/// Unless unconnected, these are always plaid accounts
 model Account {
   /// Internal account identifier
   id               String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -212,7 +213,7 @@ model Account {
   provider         AccountProvider     @default(UNCONNECTED)
   /// The auth connection the account has been provided from 
   authConnectionId String?             @db.Uuid
-  /// The unique id in the external system for the account (only unique in combination with provider)
+  /// The unique id in the external system for the account
   externalId       String?
   name             String?
   plaidAccountMask String?
@@ -283,7 +284,8 @@ model Account {
   lots           Lot[]
   files          File[]
 
-  @@unique([provider, externalId])
+  /// This attempts to ensure user doesnt link the same account twice (i.e. same plaid account mask)
+  @@unique([authConnectionId, plaidAccountMask, type])
   @@index([authConnectionId])
   @@index([portfolioId])
 }
@@ -708,7 +710,7 @@ enum AuthType {
   PLAID_LINK
 }
 
-/// An authorized connection to some external system
+/// An authorized connection to some external system (pretty much one ot one to a plaid Link/item)
 model AuthConnection {
   /// Internal identifier
   id                           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -736,6 +738,8 @@ model AuthConnection {
   syncedAt                     DateTime?
   /// When was the last transaction sync Plaid
   lastTransactionSyncedAtPlaid DateTime?
+  /// Plaid institution id
+  plaidInstitutionId           String?
 
   // Oauth Fields -------
   /// @HideField({ output: true, input: true })
@@ -750,7 +754,9 @@ model AuthConnection {
   accounts            Account[]
   lotTransactionBatch LotTransactionBatch[]
 
-  @@unique([source, userId, portfolioId, externalId])
+  /// Only one link per user per portfolio per source (importantly a user can only have 1 plaid link per portfolio in a given institution)
+  /// We must enforce this else transactions lots etc. will be duplicated in portfolios from plaid (trx ids change depending on the plaid link)
+  @@unique([source, userId, portfolioId, plaidInstitutionId])
   @@index([portfolioId])
   @@index([externalId])
 }

@@ -22,7 +22,7 @@ export class FileService {
     portfolioId,
   }: {
     data: Prisma.FileCreateManyInput[]
-    select: Prisma.FileSelect
+    select?: Prisma.FileSelect
     portfolioId: string
   }) {
     const createdFiles = await this.prismaService
@@ -79,7 +79,7 @@ export class FileService {
   }: {
     accountCreateInput: Prisma.AccountCreateInput
     fileData: InitFileUploadPayload[]
-    select: Prisma.FileSelect
+    select?: Prisma.FileSelect
     portfolioId: string
     userId: string
   }) {
@@ -89,7 +89,7 @@ export class FileService {
       .create({
         data: accountCreateInput,
       })
-    return this.createAndProcessFiles({
+    const files = await this.createAndProcessFiles({
       data: fileData.map(file => ({
         ...file,
         uploadedBy: userId,
@@ -99,5 +99,6 @@ export class FileService {
       select,
       portfolioId,
     })
+    return { files, accountId: account.id }
   }
 }

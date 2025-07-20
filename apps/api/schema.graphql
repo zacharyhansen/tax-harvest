@@ -2,6 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Unless unconnected, these are always plaid accounts"""
 type Account {
   _count: AccountCount!
   _realizedProfitAndLoss(year: Float): RealizedPAndL!
@@ -35,9 +36,7 @@ type Account {
   equityRegt: Decimal
   equityRegtPercent: Decimal
 
-  """
-  The unique id in the external system for the account (only unique in combination with provider)
-  """
+  """The unique id in the external system for the account"""
   externalId: String
   files: [File!]
   fundsWithheldFromPurchasingPower: Decimal
@@ -93,6 +92,12 @@ type Account {
   type: String!
   updatedAt: DateTime!
   uploadedPositions: Boolean!
+}
+
+input AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput {
+  authConnectionId: String!
+  plaidAccountMask: String!
+  type: String!
 }
 
 type AccountAvgAggregate {
@@ -1039,11 +1044,6 @@ enum AccountProvider {
   UNCONNECTED
 }
 
-input AccountProviderExternalIdCompoundUniqueInput {
-  externalId: String!
-  provider: AccountProvider!
-}
-
 input AccountScalarRelationFilter {
   is: AccountWhereInput
   isNot: AccountWhereInput
@@ -1905,6 +1905,7 @@ input AccountWhereUniqueInput {
   accountValueTotal: DecimalNullableFilter
   authConnection: AuthConnectionNullableScalarRelationFilter
   authConnectionId: UuidNullableFilter
+  authConnectionId_plaidAccountMask_type: AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput
   balanceAccount: DecimalNullableFilter
   balanceMoneyMarket: DecimalNullableFilter
   balanceShortAdjustment: DecimalNullableFilter
@@ -1946,7 +1947,6 @@ input AccountWhereUniqueInput {
   portfolioId: UuidFilter
   positions: PositionListRelationFilter
   provider: EnumAccountProviderFilter
-  provider_externalId: AccountProviderExternalIdCompoundUniqueInput
   raw: JsonNullableFilter
   realizedPAndL: RealizedPAndLListRelationFilter
   setRealizedValues: BoolFilter
@@ -3281,7 +3281,9 @@ input AssetWhereUniqueInput {
   vectorGraphs: VectorGraphListRelationFilter
 }
 
-"""An authorized connection to some external system"""
+"""
+An authorized connection to some external system (pretty much one ot one to a plaid Link/item)
+"""
 type AuthConnection {
   _count: AuthConnectionCount!
   accounts: [Account!]
@@ -3306,6 +3308,9 @@ type AuthConnection {
   """When was the last transaction sync Plaid"""
   lastTransactionSyncedAtPlaid: DateTime
   lotTransactionBatch: [LotTransactionBatch!]
+
+  """Plaid institution id"""
+  plaidInstitutionId: String
   portfolio: Portfolio!
 
   """The portfolio this provider belongs to"""
@@ -3346,6 +3351,7 @@ type AuthConnectionCountAggregate {
   id: Int!
   isSyncing: Int!
   lastTransactionSyncedAtPlaid: Int!
+  plaidInstitutionId: Int!
   portfolioId: Int!
   source: Int!
   syncedAt: Int!
@@ -3362,6 +3368,7 @@ input AuthConnectionCreateManyPortfolioInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
+  plaidInstitutionId: String
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
@@ -3382,6 +3389,7 @@ input AuthConnectionCreateManyUserInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
+  plaidInstitutionId: String
   portfolioId: String!
   source: AuthSource!
   syncedAt: DateTime
@@ -3449,6 +3457,7 @@ input AuthConnectionCreateWithoutAccountsInput {
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput
+  plaidInstitutionId: String
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
   source: AuthSource!
   syncedAt: DateTime
@@ -3466,6 +3475,7 @@ input AuthConnectionCreateWithoutLotTransactionBatchInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
+  plaidInstitutionId: String
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
   source: AuthSource!
   syncedAt: DateTime
@@ -3484,6 +3494,7 @@ input AuthConnectionCreateWithoutPortfolioInput {
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput
+  plaidInstitutionId: String
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
@@ -3501,6 +3512,7 @@ input AuthConnectionCreateWithoutUserInput {
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput
+  plaidInstitutionId: String
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
   source: AuthSource!
   syncedAt: DateTime
@@ -3534,6 +3546,9 @@ type AuthConnectionExt {
   """When was the last transaction sync Plaid"""
   lastTransactionSyncedAtPlaid: DateTime
   lotTransactionBatch: [LotTransactionBatch!]
+
+  """Plaid institution id"""
+  plaidInstitutionId: String
   portfolio: Portfolio!
 
   """The portfolio this provider belongs to"""
@@ -3574,6 +3589,7 @@ type AuthConnectionMaxAggregate {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
+  plaidInstitutionId: String
   portfolioId: String
   source: AuthSource
   syncedAt: DateTime
@@ -3590,6 +3606,7 @@ type AuthConnectionMinAggregate {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
+  plaidInstitutionId: String
   portfolioId: String
   source: AuthSource
   syncedAt: DateTime
@@ -3619,6 +3636,7 @@ input AuthConnectionScalarWhereInput {
   id: UuidFilter
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
+  plaidInstitutionId: StringNullableFilter
   portfolioId: UuidFilter
   source: EnumAuthSourceFilter
   syncedAt: DateTimeNullableFilter
@@ -3628,8 +3646,8 @@ input AuthConnectionScalarWhereInput {
   verificationUrl: StringNullableFilter
 }
 
-input AuthConnectionSourceUserIdPortfolioIdExternalIdCompoundUniqueInput {
-  externalId: String!
+input AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput {
+  plaidInstitutionId: String!
   portfolioId: String!
   source: AuthSource!
   userId: String!
@@ -3642,6 +3660,7 @@ input AuthConnectionUpdateManyMutationInput {
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
+  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
   type: EnumAuthTypeFieldUpdateOperationsInput
@@ -3733,6 +3752,7 @@ input AuthConnectionUpdateWithoutAccountsInput {
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput
+  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -3750,6 +3770,7 @@ input AuthConnectionUpdateWithoutLotTransactionBatchInput {
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
+  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -3768,6 +3789,7 @@ input AuthConnectionUpdateWithoutPortfolioInput {
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput
+  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
   type: EnumAuthTypeFieldUpdateOperationsInput
@@ -3785,6 +3807,7 @@ input AuthConnectionUpdateWithoutUserInput {
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput
+  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -3829,6 +3852,7 @@ input AuthConnectionWhereInput {
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
   lotTransactionBatch: LotTransactionBatchListRelationFilter
+  plaidInstitutionId: StringNullableFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   source: EnumAuthSourceFilter
@@ -3852,10 +3876,11 @@ input AuthConnectionWhereUniqueInput {
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
   lotTransactionBatch: LotTransactionBatchListRelationFilter
+  plaidInstitutionId: StringNullableFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   source: EnumAuthSourceFilter
-  source_userId_portfolioId_externalId: AuthConnectionSourceUserIdPortfolioIdExternalIdCompoundUniqueInput
+  source_userId_portfolioId_plaidInstitutionId: AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput
   syncedAt: DateTimeNullableFilter
   type: EnumAuthTypeFilter
   updatedAt: DateTimeFilter
@@ -6743,6 +6768,11 @@ input InitAccountFileUploadPayload {
   shortTerm: Float!
 }
 
+type InitAccountFileUploadResponse {
+  accountId: String!
+  files: [File!]!
+}
+
 input InitFileUploadPayload {
   displayName: String!
   fileType: FileType!
@@ -9448,7 +9478,7 @@ type Mutation {
 
   """Finalize harvest for review"""
   finalizeHarvest(id: String): Harvest!
-  initAccountFileUpload(accountData: InitAccountFileUploadPayload!, fileData: [InitFileUploadPayload!]!): [File!]!
+  initAccountFileUpload(accountData: InitAccountFileUploadPayload!, fileData: [InitFileUploadPayload!]!): InitAccountFileUploadResponse!
 
   """Invite User to Platform"""
   inviteUsersToPlatform(emails: [String!]!): Boolean!
@@ -9459,7 +9489,7 @@ type Mutation {
   sendWashSaleNotificationsForDate(date: DateTime!): Boolean!
 
   """Set up plaid auth connection and create accounts from syncing plaid"""
-  setAccessTokenAndSyncAccounts(metaData: PlaidLinkOnSuccessMetadata!, publicToken: String!): [Account!]!
+  setAccessTokenAndSyncAccounts(existingAccountId: String, metaData: PlaidLinkOnSuccessMetadata!, publicToken: String!): [Account!]!
 
   """Log the user into a different portfolio"""
   switchPortfolio(porfolioId: String!): Portfolio!

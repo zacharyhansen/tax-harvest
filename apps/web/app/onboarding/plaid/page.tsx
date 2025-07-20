@@ -3,6 +3,7 @@
 import { Button } from '@repo/ui/components/button';
 import { Shield, LineChart, Lock, Building2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { usePlaidLinkTokenQuery } from '~/generated/gql';
 import PlaidLink from '~/modules/plaid/PlaidLink';
 import { LoadingIcon } from '~/modules/utility-components';
@@ -33,6 +34,13 @@ const features = [
 export default function PlaidPage() {
   const router = useRouter();
   const { data } = usePlaidLinkTokenQuery();
+  const [existingAccountId, setExistingAccountId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Get the account ID from localStorage that was set during upload
+    const accountId = localStorage.getItem('onboardingAccountId');
+    setExistingAccountId(accountId);
+  }, []);
 
   return (
     <div className="mx-auto w-full max-w-4xl">
@@ -64,6 +72,7 @@ export default function PlaidPage() {
             <PlaidLink
               token={data.linkToken}
               redirectTo="/main/home"
+              existingAccountId={existingAccountId || undefined}
               size="lg"
               variant="default"
               className="w-full"

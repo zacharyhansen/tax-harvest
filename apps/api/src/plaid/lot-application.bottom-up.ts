@@ -19,6 +19,15 @@ export function findAllMatchingSubsetsBottomUp({
   epsilonQty?: Decimal
   time?: boolean
 }): LotData[][] {
+  const startTime = Date.now()
+  const timeoutMs = 60000 // 60 seconds
+
+  const checkTimeout = () => {
+    if (Date.now() - startTime > timeoutMs) {
+      throw new Error('findAllMatchingSubsetsBottomUp timed out after 60 seconds')
+    }
+  }
+
   if (time) {
     console.time('findAllMatchingSubsetsBottomUp:total')
   }
@@ -75,6 +84,8 @@ export function findAllMatchingSubsetsBottomUp({
     console.time('findAllMatchingSubsetsBottomUp:mainLoop')
   }
   for (let i = 0; i < tuples.length; i++) {
+    checkTimeout() // Check timeout at start of each iteration
+    
     const { quantity: _, price: val } = tuples[i]
     dp[i + 1] = new Map()
 
@@ -99,6 +110,7 @@ export function findAllMatchingSubsetsBottomUp({
           reducedQty.lte(currentQuantity);
           reducedQty = reducedQty.plus(1)
         ) {
+          checkTimeout() // Check timeout in inner loop
           const newQty = currQty.minus(reducedQty)
           const newVal = currVal.minus(reducedQty.mul(val))
 

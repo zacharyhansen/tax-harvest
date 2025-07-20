@@ -8,6 +8,9 @@ import { useLogQuery } from '~/generated/gql'
 import { TypedRoutes } from '~/lib/routes'
 import { PageWrapper } from '~/modules/layout'
 import { ErrorPage, LoadingPage } from '~/modules/utility-components'
+import { PlaidTrxMergeLogView } from './plaid-trx-merge-view'
+import { PlaidTrxMergeSuccessLogView } from './plaid-trx-merge-success-view'
+import { ExternalSyncLogView } from './external-sync-log-view'
 
 export default function LogPage(props: {
   params: Promise<typeof TypedRoutes.log.params>
@@ -52,12 +55,20 @@ export default function LogPage(props: {
         </div>
       )}
     >
-      <ReactJsonView
-        src={data?.log?.data}
-        theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
-        displayDataTypes={false}
-        indentWidth={6}
-      />
+      {data?.log?.type === 'PLAID_TRX_MERGE' ? (
+        <PlaidTrxMergeLogView data={data.log.data} />
+      ) : data?.log?.type === 'PLAID_TRX_MERGE_SUCCESS' ? (
+        <PlaidTrxMergeSuccessLogView data={data.log.data} />
+      ) : data?.log?.type === 'EXTERNAL_SYNC' && data?.log?.description === '/investmentsTransactionsGet' ? (
+        <ExternalSyncLogView data={data.log.data} />
+      ) : (
+        <ReactJsonView
+          src={data?.log?.data}
+          theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
+          displayDataTypes={false}
+          indentWidth={6}
+        />
+      )}
     </PageWrapper>
   )
 }

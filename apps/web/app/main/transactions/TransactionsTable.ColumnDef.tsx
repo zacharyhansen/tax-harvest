@@ -76,7 +76,7 @@ const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
     meta: {
       searchable: true,
     },
-    size: 500,
+    size: 300,
   }),
   columnHelper.accessor('assetSymbol', {
     cell: DataTable.BadgeCell,
@@ -111,6 +111,13 @@ const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
       <DataTable.BasicHeader column={column} title="Fee" />
     ),
     size: 90,
+  }),
+  columnHelper.accessor('externalId', {
+    cell: DataTable.BadgeCell,
+    header: ({ column }) => (
+      <DataTable.BasicHeader column={column} title="External ID" />
+    ),
+    size: 300,
   }),
 ];
 

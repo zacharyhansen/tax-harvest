@@ -66,12 +66,21 @@ class SignedUrlsForDownloadPayload {
   downloadUrls: string[]
 }
 
+@ObjectType()
+class InitAccountFileUploadResponse {
+  @Field(() => [File])
+  files: File[]
+
+  @Field(() => String)
+  accountId: string
+}
+
 @Resolver()
 export class FileResolver {
   constructor(
     private readonly googleStorageService: GoogleStorageService,
     private readonly fileService: FileService,
-  ) {}
+  ) { }
 
   @Mutation(() => [File], {
     name: 'createFiles',
@@ -93,7 +102,7 @@ export class FileResolver {
     })
   }
 
-  @Mutation(() => [File], {
+  @Mutation(() => InitAccountFileUploadResponse, {
     name: 'initAccountFileUpload',
   })
   async initAccountFileUpload(
@@ -105,10 +114,8 @@ export class FileResolver {
     fileData: InitFileUploadPayload[],
     @Args('accountData', { type: () => InitAccountFileUploadPayload })
     accountData: InitAccountFileUploadPayload,
-  ): Promise<File[]> {
-    const { select } = new PrismaSelect<Prisma.FileSelect>(info).value
-
-    return this.fileService.initAccountFileUpload({
+  ): Promise<InitAccountFileUploadResponse> {
+    const result = await this.fileService.initAccountFileUpload({
       accountCreateInput: {
         name: accountData.name,
         description: accountData.description,
@@ -126,10 +133,10 @@ export class FileResolver {
         },
       },
       fileData,
-      select,
       portfolioId: clerkContext.metadata.portfolioId,
       userId: clerkContext.sub,
     })
+    return result
   }
 
   @Query(() => SignedUrlsForUploadPayload, {

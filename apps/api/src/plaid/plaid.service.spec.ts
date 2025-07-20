@@ -89,6 +89,7 @@ describe('plaidService', () => {
         lastTransactionSyncedAtPlaid: new Date(),
         token: null,
         verifier: null,
+        plaidInstitutionId: 'test-institution-id',
       }
 
       // Prepare data using PlaidService

@@ -498,6 +498,7 @@ export enum AuthConnectionScalarFieldEnum {
     authedAt = "authedAt",
     syncedAt = "syncedAt",
     lastTransactionSyncedAtPlaid = "lastTransactionSyncedAtPlaid",
+    plaidInstitutionId = "plaidInstitutionId",
     token = "token",
     secret = "secret",
     verifier = "verifier"
@@ -667,7 +668,7 @@ export class AccountAggregateArgs {
     orderBy?: Array<AccountOrderByWithRelationInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    cursor?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    cursor?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -687,6 +688,16 @@ export class AccountAggregateArgs {
     @Field(() => AccountMaxAggregateInput, {nullable:true})
     @Type(() => AccountMaxAggregateInput)
     _max?: InstanceType<typeof AccountMaxAggregateInput>;
+}
+
+@InputType()
+export class AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput {
+    @Field(() => String, {nullable:false})
+    authConnectionId!: string;
+    @Field(() => String, {nullable:false})
+    plaidAccountMask!: string;
+    @Field(() => String, {nullable:false})
+    type!: string;
 }
 
 @InputType()
@@ -1705,7 +1716,7 @@ export class AccountCreateNestedManyWithoutAuthConnectionInput {
     createMany?: InstanceType<typeof AccountCreateManyAuthConnectionInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
 }
 
 @InputType()
@@ -1721,7 +1732,7 @@ export class AccountCreateNestedManyWithoutCreatedByInput {
     createMany?: InstanceType<typeof AccountCreateManyCreatedByInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
 }
 
 @InputType()
@@ -1737,7 +1748,7 @@ export class AccountCreateNestedManyWithoutPortfolioInput {
     createMany?: InstanceType<typeof AccountCreateManyPortfolioInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
 }
 
 @InputType()
@@ -1750,7 +1761,7 @@ export class AccountCreateNestedOneWithoutFilesInput {
     connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutFilesInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @InputType()
@@ -1763,7 +1774,7 @@ export class AccountCreateNestedOneWithoutLotsInput {
     connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutLotsInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @InputType()
@@ -1776,7 +1787,7 @@ export class AccountCreateNestedOneWithoutPositionsInput {
     connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutPositionsInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @InputType()
@@ -1789,7 +1800,7 @@ export class AccountCreateNestedOneWithoutRealizedPAndLInput {
     connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutRealizedPAndLInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @InputType()
@@ -1802,14 +1813,14 @@ export class AccountCreateNestedOneWithoutTransactionsInput {
     connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutTransactionsInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @InputType()
 export class AccountCreateOrConnectWithoutAuthConnectionInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateWithoutAuthConnectionInput, {nullable:false})
     @Type(() => AccountCreateWithoutAuthConnectionInput)
     create!: InstanceType<typeof AccountCreateWithoutAuthConnectionInput>;
@@ -1819,7 +1830,7 @@ export class AccountCreateOrConnectWithoutAuthConnectionInput {
 export class AccountCreateOrConnectWithoutCreatedByInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateWithoutCreatedByInput, {nullable:false})
     @Type(() => AccountCreateWithoutCreatedByInput)
     create!: InstanceType<typeof AccountCreateWithoutCreatedByInput>;
@@ -1829,7 +1840,7 @@ export class AccountCreateOrConnectWithoutCreatedByInput {
 export class AccountCreateOrConnectWithoutFilesInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateWithoutFilesInput, {nullable:false})
     @Type(() => AccountCreateWithoutFilesInput)
     create!: InstanceType<typeof AccountCreateWithoutFilesInput>;
@@ -1839,7 +1850,7 @@ export class AccountCreateOrConnectWithoutFilesInput {
 export class AccountCreateOrConnectWithoutLotsInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateWithoutLotsInput, {nullable:false})
     @Type(() => AccountCreateWithoutLotsInput)
     create!: InstanceType<typeof AccountCreateWithoutLotsInput>;
@@ -1849,7 +1860,7 @@ export class AccountCreateOrConnectWithoutLotsInput {
 export class AccountCreateOrConnectWithoutPortfolioInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateWithoutPortfolioInput, {nullable:false})
     @Type(() => AccountCreateWithoutPortfolioInput)
     create!: InstanceType<typeof AccountCreateWithoutPortfolioInput>;
@@ -1859,7 +1870,7 @@ export class AccountCreateOrConnectWithoutPortfolioInput {
 export class AccountCreateOrConnectWithoutPositionsInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateWithoutPositionsInput, {nullable:false})
     @Type(() => AccountCreateWithoutPositionsInput)
     create!: InstanceType<typeof AccountCreateWithoutPositionsInput>;
@@ -1869,7 +1880,7 @@ export class AccountCreateOrConnectWithoutPositionsInput {
 export class AccountCreateOrConnectWithoutRealizedPAndLInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateWithoutRealizedPAndLInput, {nullable:false})
     @Type(() => AccountCreateWithoutRealizedPAndLInput)
     create!: InstanceType<typeof AccountCreateWithoutRealizedPAndLInput>;
@@ -1879,7 +1890,7 @@ export class AccountCreateOrConnectWithoutRealizedPAndLInput {
 export class AccountCreateOrConnectWithoutTransactionsInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateWithoutTransactionsInput, {nullable:false})
     @Type(() => AccountCreateWithoutTransactionsInput)
     create!: InstanceType<typeof AccountCreateWithoutTransactionsInput>;
@@ -4234,14 +4245,6 @@ export class AccountOrderByWithRelationInput {
 }
 
 @InputType()
-export class AccountProviderExternalIdCompoundUniqueInput {
-    @Field(() => AccountProvider, {nullable:false})
-    provider!: `${AccountProvider}`;
-    @Field(() => String, {nullable:false})
-    externalId!: string;
-}
-
-@InputType()
 export class AccountScalarRelationFilter {
     @Field(() => AccountWhereInput, {nullable:true})
     @Type(() => AccountWhereInput)
@@ -4646,7 +4649,7 @@ export class AccountUncheckedCreateNestedManyWithoutAuthConnectionInput {
     createMany?: InstanceType<typeof AccountCreateManyAuthConnectionInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
 }
 
 @InputType()
@@ -4662,7 +4665,7 @@ export class AccountUncheckedCreateNestedManyWithoutCreatedByInput {
     createMany?: InstanceType<typeof AccountCreateManyCreatedByInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
 }
 
 @InputType()
@@ -4678,7 +4681,7 @@ export class AccountUncheckedCreateNestedManyWithoutPortfolioInput {
     createMany?: InstanceType<typeof AccountCreateManyPortfolioInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
 }
 
 @InputType()
@@ -6035,16 +6038,16 @@ export class AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput {
     createMany?: InstanceType<typeof AccountCreateManyAuthConnectionInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountUpdateWithWhereUniqueWithoutAuthConnectionInput], {nullable:true})
     @Type(() => AccountUpdateWithWhereUniqueWithoutAuthConnectionInput)
     update?: Array<AccountUpdateWithWhereUniqueWithoutAuthConnectionInput>;
@@ -6186,16 +6189,16 @@ export class AccountUncheckedUpdateManyWithoutCreatedByNestedInput {
     createMany?: InstanceType<typeof AccountCreateManyCreatedByInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountUpdateWithWhereUniqueWithoutCreatedByInput], {nullable:true})
     @Type(() => AccountUpdateWithWhereUniqueWithoutCreatedByInput)
     update?: Array<AccountUpdateWithWhereUniqueWithoutCreatedByInput>;
@@ -6337,16 +6340,16 @@ export class AccountUncheckedUpdateManyWithoutPortfolioNestedInput {
     createMany?: InstanceType<typeof AccountCreateManyPortfolioInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountUpdateWithWhereUniqueWithoutPortfolioInput], {nullable:true})
     @Type(() => AccountUpdateWithWhereUniqueWithoutPortfolioInput)
     update?: Array<AccountUpdateWithWhereUniqueWithoutPortfolioInput>;
@@ -7902,16 +7905,16 @@ export class AccountUpdateManyWithoutAuthConnectionNestedInput {
     createMany?: InstanceType<typeof AccountCreateManyAuthConnectionInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountUpdateWithWhereUniqueWithoutAuthConnectionInput], {nullable:true})
     @Type(() => AccountUpdateWithWhereUniqueWithoutAuthConnectionInput)
     update?: Array<AccountUpdateWithWhereUniqueWithoutAuthConnectionInput>;
@@ -7939,16 +7942,16 @@ export class AccountUpdateManyWithoutCreatedByNestedInput {
     createMany?: InstanceType<typeof AccountCreateManyCreatedByInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountUpdateWithWhereUniqueWithoutCreatedByInput], {nullable:true})
     @Type(() => AccountUpdateWithWhereUniqueWithoutCreatedByInput)
     update?: Array<AccountUpdateWithWhereUniqueWithoutCreatedByInput>;
@@ -7976,16 +7979,16 @@ export class AccountUpdateManyWithoutPortfolioNestedInput {
     createMany?: InstanceType<typeof AccountCreateManyPortfolioInputEnvelope>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    set?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountWhereUniqueInput], {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>>;
     @Field(() => [AccountUpdateWithWhereUniqueWithoutPortfolioInput], {nullable:true})
     @Type(() => AccountUpdateWithWhereUniqueWithoutPortfolioInput)
     update?: Array<AccountUpdateWithWhereUniqueWithoutPortfolioInput>;
@@ -8010,7 +8013,7 @@ export class AccountUpdateOneRequiredWithoutFilesNestedInput {
     upsert?: InstanceType<typeof AccountUpsertWithoutFilesInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateToOneWithWhereWithoutFilesInput, {nullable:true})
     @Type(() => AccountUpdateToOneWithWhereWithoutFilesInput)
     update?: InstanceType<typeof AccountUpdateToOneWithWhereWithoutFilesInput>;
@@ -8029,7 +8032,7 @@ export class AccountUpdateOneRequiredWithoutLotsNestedInput {
     upsert?: InstanceType<typeof AccountUpsertWithoutLotsInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateToOneWithWhereWithoutLotsInput, {nullable:true})
     @Type(() => AccountUpdateToOneWithWhereWithoutLotsInput)
     update?: InstanceType<typeof AccountUpdateToOneWithWhereWithoutLotsInput>;
@@ -8048,7 +8051,7 @@ export class AccountUpdateOneRequiredWithoutPositionsNestedInput {
     upsert?: InstanceType<typeof AccountUpsertWithoutPositionsInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateToOneWithWhereWithoutPositionsInput, {nullable:true})
     @Type(() => AccountUpdateToOneWithWhereWithoutPositionsInput)
     update?: InstanceType<typeof AccountUpdateToOneWithWhereWithoutPositionsInput>;
@@ -8067,7 +8070,7 @@ export class AccountUpdateOneRequiredWithoutRealizedPAndLNestedInput {
     upsert?: InstanceType<typeof AccountUpsertWithoutRealizedPAndLInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateToOneWithWhereWithoutRealizedPAndLInput, {nullable:true})
     @Type(() => AccountUpdateToOneWithWhereWithoutRealizedPAndLInput)
     update?: InstanceType<typeof AccountUpdateToOneWithWhereWithoutRealizedPAndLInput>;
@@ -8086,7 +8089,7 @@ export class AccountUpdateOneRequiredWithoutTransactionsNestedInput {
     upsert?: InstanceType<typeof AccountUpsertWithoutTransactionsInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateToOneWithWhereWithoutTransactionsInput, {nullable:true})
     @Type(() => AccountUpdateToOneWithWhereWithoutTransactionsInput)
     update?: InstanceType<typeof AccountUpdateToOneWithWhereWithoutTransactionsInput>;
@@ -8146,7 +8149,7 @@ export class AccountUpdateToOneWithWhereWithoutTransactionsInput {
 export class AccountUpdateWithWhereUniqueWithoutAuthConnectionInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateWithoutAuthConnectionInput, {nullable:false})
     @Type(() => AccountUpdateWithoutAuthConnectionInput)
     data!: InstanceType<typeof AccountUpdateWithoutAuthConnectionInput>;
@@ -8156,7 +8159,7 @@ export class AccountUpdateWithWhereUniqueWithoutAuthConnectionInput {
 export class AccountUpdateWithWhereUniqueWithoutCreatedByInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateWithoutCreatedByInput, {nullable:false})
     @Type(() => AccountUpdateWithoutCreatedByInput)
     data!: InstanceType<typeof AccountUpdateWithoutCreatedByInput>;
@@ -8166,7 +8169,7 @@ export class AccountUpdateWithWhereUniqueWithoutCreatedByInput {
 export class AccountUpdateWithWhereUniqueWithoutPortfolioInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateWithoutPortfolioInput, {nullable:false})
     @Type(() => AccountUpdateWithoutPortfolioInput)
     data!: InstanceType<typeof AccountUpdateWithoutPortfolioInput>;
@@ -9358,7 +9361,7 @@ export class AccountUpdateInput {
 export class AccountUpsertWithWhereUniqueWithoutAuthConnectionInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateWithoutAuthConnectionInput, {nullable:false})
     @Type(() => AccountUpdateWithoutAuthConnectionInput)
     update!: InstanceType<typeof AccountUpdateWithoutAuthConnectionInput>;
@@ -9371,7 +9374,7 @@ export class AccountUpsertWithWhereUniqueWithoutAuthConnectionInput {
 export class AccountUpsertWithWhereUniqueWithoutCreatedByInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateWithoutCreatedByInput, {nullable:false})
     @Type(() => AccountUpdateWithoutCreatedByInput)
     update!: InstanceType<typeof AccountUpdateWithoutCreatedByInput>;
@@ -9384,7 +9387,7 @@ export class AccountUpsertWithWhereUniqueWithoutCreatedByInput {
 export class AccountUpsertWithWhereUniqueWithoutPortfolioInput {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountUpdateWithoutPortfolioInput, {nullable:false})
     @Type(() => AccountUpdateWithoutPortfolioInput)
     update!: InstanceType<typeof AccountUpdateWithoutPortfolioInput>;
@@ -9462,9 +9465,9 @@ export class AccountUpsertWithoutTransactionsInput {
 export class AccountWhereUniqueInput {
     @Field(() => String, {nullable:true})
     id?: string;
-    @Field(() => AccountProviderExternalIdCompoundUniqueInput, {nullable:true})
-    @Type(() => AccountProviderExternalIdCompoundUniqueInput)
-    provider_externalId?: InstanceType<typeof AccountProviderExternalIdCompoundUniqueInput>;
+    @Field(() => AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput, {nullable:true})
+    @Type(() => AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput)
+    authConnectionId_plaidAccountMask_type?: InstanceType<typeof AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput>;
     @Field(() => [AccountWhereInput], {nullable:true})
     @Type(() => AccountWhereInput)
     AND?: Array<AccountWhereInput>;
@@ -9759,7 +9762,10 @@ export class AccountWhereInput {
     files?: InstanceType<typeof FileListRelationFilter>;
 }
 
-@ObjectType()
+/**
+ * Unless unconnected, these are always plaid accounts
+ */
+@ObjectType({description:'Unless unconnected, these are always plaid accounts'})
 export class Account {
     /**
      * Internal account identifier
@@ -9781,9 +9787,9 @@ export class Account {
     @Field(() => String, {description:'The auth connection the account has been provided from ',nullable:true})
     authConnectionId!: string | null;
     /**
-     * The unique id in the external system for the account (only unique in combination with provider)
+     * The unique id in the external system for the account
      */
-    @Field(() => String, {description:'The unique id in the external system for the account (only unique in combination with provider)',nullable:true})
+    @Field(() => String, {description:'The unique id in the external system for the account',nullable:true})
     externalId!: string | null;
     @Field(() => String, {nullable:true})
     name!: string | null;
@@ -9958,7 +9964,7 @@ export class DeleteManyAccountArgs {
 export class DeleteOneAccountArgs {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @ArgsType()
@@ -9971,7 +9977,7 @@ export class FindFirstAccountOrThrowArgs {
     orderBy?: Array<AccountOrderByWithRelationInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    cursor?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    cursor?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -9990,7 +9996,7 @@ export class FindFirstAccountArgs {
     orderBy?: Array<AccountOrderByWithRelationInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    cursor?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    cursor?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -10009,7 +10015,7 @@ export class FindManyAccountArgs {
     orderBy?: Array<AccountOrderByWithRelationInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:true})
     @Type(() => AccountWhereUniqueInput)
-    cursor?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    cursor?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -10022,14 +10028,14 @@ export class FindManyAccountArgs {
 export class FindUniqueAccountOrThrowArgs {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @ArgsType()
 export class FindUniqueAccountArgs {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @ArgsType()
@@ -10051,14 +10057,14 @@ export class UpdateOneAccountArgs {
     data!: InstanceType<typeof AccountUpdateInput>;
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
 }
 
 @ArgsType()
 export class UpsertOneAccountArgs {
     @Field(() => AccountWhereUniqueInput, {nullable:false})
     @Type(() => AccountWhereUniqueInput)
-    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'provider_externalId'>;
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
     @Field(() => AccountCreateInput, {nullable:false})
     @Type(() => AccountCreateInput)
     create!: InstanceType<typeof AccountCreateInput>;
@@ -18164,7 +18170,7 @@ export class AuthConnectionAggregateArgs {
     @Field(() => [AuthConnectionOrderByWithRelationInput], {nullable:true})
     orderBy?: Array<AuthConnectionOrderByWithRelationInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    cursor?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -18205,6 +18211,8 @@ export class AuthConnectionCountAggregateInput {
     syncedAt?: true;
     @Field(() => Boolean, {nullable:true})
     lastTransactionSyncedAtPlaid?: true;
+    @Field(() => Boolean, {nullable:true})
+    plaidInstitutionId?: true;
     @HideField()
     token?: true;
     @HideField()
@@ -18243,6 +18251,8 @@ export class AuthConnectionCountAggregate {
     syncedAt!: number;
     @Field(() => Int, {nullable:false})
     lastTransactionSyncedAtPlaid!: number;
+    @Field(() => Int, {nullable:false})
+    plaidInstitutionId!: number;
     @HideField()
     token!: number;
     @HideField()
@@ -18281,6 +18291,8 @@ export class AuthConnectionCountOrderByAggregateInput {
     syncedAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     lastTransactionSyncedAtPlaid?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    plaidInstitutionId?: `${SortOrder}`;
     @HideField()
     token?: `${SortOrder}`;
     @HideField()
@@ -18332,6 +18344,8 @@ export class AuthConnectionCreateManyPortfolioInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18375,6 +18389,8 @@ export class AuthConnectionCreateManyUserInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18411,6 +18427,8 @@ export class AuthConnectionCreateManyInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18432,7 +18450,7 @@ export class AuthConnectionCreateNestedManyWithoutPortfolioInput {
     createMany?: InstanceType<typeof AuthConnectionCreateManyPortfolioInputEnvelope>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
 }
 
 @InputType()
@@ -18448,7 +18466,7 @@ export class AuthConnectionCreateNestedManyWithoutUserInput {
     createMany?: InstanceType<typeof AuthConnectionCreateManyUserInputEnvelope>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
 }
 
 @InputType()
@@ -18461,7 +18479,7 @@ export class AuthConnectionCreateNestedOneWithoutAccountsInput {
     connectOrCreate?: InstanceType<typeof AuthConnectionCreateOrConnectWithoutAccountsInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
 }
 
 @InputType()
@@ -18474,14 +18492,14 @@ export class AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput {
     connectOrCreate?: InstanceType<typeof AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
 }
 
 @InputType()
 export class AuthConnectionCreateOrConnectWithoutAccountsInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionCreateWithoutAccountsInput, {nullable:false})
     @Type(() => AuthConnectionCreateWithoutAccountsInput)
     create!: InstanceType<typeof AuthConnectionCreateWithoutAccountsInput>;
@@ -18491,7 +18509,7 @@ export class AuthConnectionCreateOrConnectWithoutAccountsInput {
 export class AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionCreateWithoutLotTransactionBatchInput, {nullable:false})
     @Type(() => AuthConnectionCreateWithoutLotTransactionBatchInput)
     create!: InstanceType<typeof AuthConnectionCreateWithoutLotTransactionBatchInput>;
@@ -18501,7 +18519,7 @@ export class AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput {
 export class AuthConnectionCreateOrConnectWithoutPortfolioInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionCreateWithoutPortfolioInput, {nullable:false})
     @Type(() => AuthConnectionCreateWithoutPortfolioInput)
     create!: InstanceType<typeof AuthConnectionCreateWithoutPortfolioInput>;
@@ -18511,7 +18529,7 @@ export class AuthConnectionCreateOrConnectWithoutPortfolioInput {
 export class AuthConnectionCreateOrConnectWithoutUserInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionCreateWithoutUserInput, {nullable:false})
     @Type(() => AuthConnectionCreateWithoutUserInput)
     create!: InstanceType<typeof AuthConnectionCreateWithoutUserInput>;
@@ -18541,6 +18559,8 @@ export class AuthConnectionCreateWithoutAccountsInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18582,6 +18602,8 @@ export class AuthConnectionCreateWithoutLotTransactionBatchInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18623,6 +18645,8 @@ export class AuthConnectionCreateWithoutPortfolioInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18664,6 +18688,8 @@ export class AuthConnectionCreateWithoutUserInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18705,6 +18731,8 @@ export class AuthConnectionCreateInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18776,6 +18804,8 @@ export class AuthConnectionGroupBy {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18828,6 +18858,8 @@ export class AuthConnectionMaxAggregateInput {
     syncedAt?: true;
     @Field(() => Boolean, {nullable:true})
     lastTransactionSyncedAtPlaid?: true;
+    @Field(() => Boolean, {nullable:true})
+    plaidInstitutionId?: true;
     @HideField()
     token?: true;
     @HideField()
@@ -18864,6 +18896,8 @@ export class AuthConnectionMaxAggregate {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -18900,6 +18934,8 @@ export class AuthConnectionMaxOrderByAggregateInput {
     syncedAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     lastTransactionSyncedAtPlaid?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    plaidInstitutionId?: `${SortOrder}`;
     @HideField()
     token?: `${SortOrder}`;
     @HideField()
@@ -18936,6 +18972,8 @@ export class AuthConnectionMinAggregateInput {
     syncedAt?: true;
     @Field(() => Boolean, {nullable:true})
     lastTransactionSyncedAtPlaid?: true;
+    @Field(() => Boolean, {nullable:true})
+    plaidInstitutionId?: true;
     @HideField()
     token?: true;
     @HideField()
@@ -18972,6 +19010,8 @@ export class AuthConnectionMinAggregate {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -19008,6 +19048,8 @@ export class AuthConnectionMinOrderByAggregateInput {
     syncedAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     lastTransactionSyncedAtPlaid?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    plaidInstitutionId?: `${SortOrder}`;
     @HideField()
     token?: `${SortOrder}`;
     @HideField()
@@ -19058,6 +19100,8 @@ export class AuthConnectionOrderByWithAggregationInput {
     syncedAt?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrderInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof SortOrderInput>;
     @HideField()
     token?: InstanceType<typeof SortOrderInput>;
     @HideField()
@@ -19100,6 +19144,8 @@ export class AuthConnectionOrderByWithRelationInput {
     syncedAt?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrderInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof SortOrderInput>;
     @HideField()
     token?: InstanceType<typeof SortOrderInput>;
     @HideField()
@@ -19162,6 +19208,8 @@ export class AuthConnectionScalarWhereWithAggregatesInput {
     syncedAt?: InstanceType<typeof DateTimeNullableWithAggregatesFilter>;
     @Field(() => DateTimeNullableWithAggregatesFilter, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof DateTimeNullableWithAggregatesFilter>;
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof StringNullableWithAggregatesFilter>;
     @HideField()
     token?: InstanceType<typeof StringNullableWithAggregatesFilter>;
     @HideField()
@@ -19204,6 +19252,8 @@ export class AuthConnectionScalarWhereInput {
     syncedAt?: InstanceType<typeof DateTimeNullableFilter>;
     @Field(() => DateTimeNullableFilter, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof DateTimeNullableFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof StringNullableFilter>;
     @HideField()
     token?: InstanceType<typeof StringNullableFilter>;
     @HideField()
@@ -19213,7 +19263,7 @@ export class AuthConnectionScalarWhereInput {
 }
 
 @InputType()
-export class AuthConnectionSourceUserIdPortfolioIdExternalIdCompoundUniqueInput {
+export class AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput {
     @Field(() => AuthSource, {nullable:false})
     source!: `${AuthSource}`;
     @Field(() => String, {nullable:false})
@@ -19221,7 +19271,7 @@ export class AuthConnectionSourceUserIdPortfolioIdExternalIdCompoundUniqueInput 
     @Field(() => String, {nullable:false})
     portfolioId!: string;
     @Field(() => String, {nullable:false})
-    externalId!: string;
+    plaidInstitutionId!: string;
 }
 
 @InputType()
@@ -19237,7 +19287,7 @@ export class AuthConnectionUncheckedCreateNestedManyWithoutPortfolioInput {
     createMany?: InstanceType<typeof AuthConnectionCreateManyPortfolioInputEnvelope>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
 }
 
 @InputType()
@@ -19253,7 +19303,7 @@ export class AuthConnectionUncheckedCreateNestedManyWithoutUserInput {
     createMany?: InstanceType<typeof AuthConnectionCreateManyUserInputEnvelope>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
 }
 
 @InputType()
@@ -19284,6 +19334,8 @@ export class AuthConnectionUncheckedCreateWithoutAccountsInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -19323,6 +19375,8 @@ export class AuthConnectionUncheckedCreateWithoutLotTransactionBatchInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -19360,6 +19414,8 @@ export class AuthConnectionUncheckedCreateWithoutPortfolioInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -19400,6 +19456,8 @@ export class AuthConnectionUncheckedCreateWithoutUserInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -19442,6 +19500,8 @@ export class AuthConnectionUncheckedCreateInput {
     syncedAt?: Date | string;
     @Field(() => Date, {nullable:true})
     lastTransactionSyncedAtPlaid?: Date | string;
+    @Field(() => String, {nullable:true})
+    plaidInstitutionId?: string;
     @HideField()
     token?: string;
     @HideField()
@@ -19472,16 +19532,16 @@ export class AuthConnectionUncheckedUpdateManyWithoutPortfolioNestedInput {
     createMany?: InstanceType<typeof AuthConnectionCreateManyPortfolioInputEnvelope>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    set?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput], {nullable:true})
     @Type(() => AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput)
     update?: Array<AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput>;
@@ -19519,6 +19579,8 @@ export class AuthConnectionUncheckedUpdateManyWithoutPortfolioInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19543,16 +19605,16 @@ export class AuthConnectionUncheckedUpdateManyWithoutUserNestedInput {
     createMany?: InstanceType<typeof AuthConnectionCreateManyUserInputEnvelope>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    set?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionUpdateWithWhereUniqueWithoutUserInput], {nullable:true})
     @Type(() => AuthConnectionUpdateWithWhereUniqueWithoutUserInput)
     update?: Array<AuthConnectionUpdateWithWhereUniqueWithoutUserInput>;
@@ -19590,6 +19652,8 @@ export class AuthConnectionUncheckedUpdateManyWithoutUserInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19626,6 +19690,8 @@ export class AuthConnectionUncheckedUpdateManyInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19662,6 +19728,8 @@ export class AuthConnectionUncheckedUpdateWithoutAccountsInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19701,6 +19769,8 @@ export class AuthConnectionUncheckedUpdateWithoutLotTransactionBatchInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19738,6 +19808,8 @@ export class AuthConnectionUncheckedUpdateWithoutPortfolioInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19778,6 +19850,8 @@ export class AuthConnectionUncheckedUpdateWithoutUserInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19820,6 +19894,8 @@ export class AuthConnectionUncheckedUpdateInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19858,6 +19934,8 @@ export class AuthConnectionUpdateManyMutationInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -19902,16 +19980,16 @@ export class AuthConnectionUpdateManyWithoutPortfolioNestedInput {
     createMany?: InstanceType<typeof AuthConnectionCreateManyPortfolioInputEnvelope>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    set?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput], {nullable:true})
     @Type(() => AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput)
     update?: Array<AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput>;
@@ -19939,16 +20017,16 @@ export class AuthConnectionUpdateManyWithoutUserNestedInput {
     createMany?: InstanceType<typeof AuthConnectionCreateManyUserInputEnvelope>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    set?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    disconnect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    delete?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionWhereUniqueInput], {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>>;
+    connect?: Array<Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>>;
     @Field(() => [AuthConnectionUpdateWithWhereUniqueWithoutUserInput], {nullable:true})
     @Type(() => AuthConnectionUpdateWithWhereUniqueWithoutUserInput)
     update?: Array<AuthConnectionUpdateWithWhereUniqueWithoutUserInput>;
@@ -19973,7 +20051,7 @@ export class AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInpu
     upsert?: InstanceType<typeof AuthConnectionUpsertWithoutLotTransactionBatchInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput)
     update?: InstanceType<typeof AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput>;
@@ -19998,7 +20076,7 @@ export class AuthConnectionUpdateOneWithoutAccountsNestedInput {
     delete?: InstanceType<typeof AuthConnectionWhereInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
     @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionUpdateToOneWithWhereWithoutAccountsInput, {nullable:true})
     @Type(() => AuthConnectionUpdateToOneWithWhereWithoutAccountsInput)
     update?: InstanceType<typeof AuthConnectionUpdateToOneWithWhereWithoutAccountsInput>;
@@ -20028,7 +20106,7 @@ export class AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput {
 export class AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionUpdateWithoutPortfolioInput, {nullable:false})
     @Type(() => AuthConnectionUpdateWithoutPortfolioInput)
     data!: InstanceType<typeof AuthConnectionUpdateWithoutPortfolioInput>;
@@ -20038,7 +20116,7 @@ export class AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput {
 export class AuthConnectionUpdateWithWhereUniqueWithoutUserInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionUpdateWithoutUserInput, {nullable:false})
     @Type(() => AuthConnectionUpdateWithoutUserInput)
     data!: InstanceType<typeof AuthConnectionUpdateWithoutUserInput>;
@@ -20068,6 +20146,8 @@ export class AuthConnectionUpdateWithoutAccountsInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -20109,6 +20189,8 @@ export class AuthConnectionUpdateWithoutLotTransactionBatchInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -20150,6 +20232,8 @@ export class AuthConnectionUpdateWithoutPortfolioInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -20191,6 +20275,8 @@ export class AuthConnectionUpdateWithoutUserInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -20232,6 +20318,8 @@ export class AuthConnectionUpdateInput {
     syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
     @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
@@ -20256,7 +20344,7 @@ export class AuthConnectionUpdateInput {
 export class AuthConnectionUpsertWithWhereUniqueWithoutPortfolioInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionUpdateWithoutPortfolioInput, {nullable:false})
     @Type(() => AuthConnectionUpdateWithoutPortfolioInput)
     update!: InstanceType<typeof AuthConnectionUpdateWithoutPortfolioInput>;
@@ -20269,7 +20357,7 @@ export class AuthConnectionUpsertWithWhereUniqueWithoutPortfolioInput {
 export class AuthConnectionUpsertWithWhereUniqueWithoutUserInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionUpdateWithoutUserInput, {nullable:false})
     @Type(() => AuthConnectionUpdateWithoutUserInput)
     update!: InstanceType<typeof AuthConnectionUpdateWithoutUserInput>;
@@ -20310,8 +20398,8 @@ export class AuthConnectionWhereUniqueInput {
     id?: string;
     @Field(() => String, {nullable:true})
     externalId?: string;
-    @Field(() => AuthConnectionSourceUserIdPortfolioIdExternalIdCompoundUniqueInput, {nullable:true})
-    source_userId_portfolioId_externalId?: InstanceType<typeof AuthConnectionSourceUserIdPortfolioIdExternalIdCompoundUniqueInput>;
+    @Field(() => AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput, {nullable:true})
+    source_userId_portfolioId_plaidInstitutionId?: InstanceType<typeof AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput>;
     @Field(() => [AuthConnectionWhereInput], {nullable:true})
     AND?: Array<AuthConnectionWhereInput>;
     @Field(() => [AuthConnectionWhereInput], {nullable:true})
@@ -20340,6 +20428,8 @@ export class AuthConnectionWhereUniqueInput {
     syncedAt?: InstanceType<typeof DateTimeNullableFilter>;
     @Field(() => DateTimeNullableFilter, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof DateTimeNullableFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof StringNullableFilter>;
     @HideField()
     token?: InstanceType<typeof StringNullableFilter>;
     @HideField()
@@ -20394,6 +20484,8 @@ export class AuthConnectionWhereInput {
     syncedAt?: InstanceType<typeof DateTimeNullableFilter>;
     @Field(() => DateTimeNullableFilter, {nullable:true})
     lastTransactionSyncedAtPlaid?: InstanceType<typeof DateTimeNullableFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    plaidInstitutionId?: InstanceType<typeof StringNullableFilter>;
     @HideField()
     token?: InstanceType<typeof StringNullableFilter>;
     @HideField()
@@ -20415,9 +20507,9 @@ export class AuthConnectionWhereInput {
 }
 
 /**
- * An authorized connection to some external system
+ * An authorized connection to some external system (pretty much one ot one to a plaid Link/item)
  */
-@ObjectType({description:'An authorized connection to some external system'})
+@ObjectType({description:'An authorized connection to some external system (pretty much one ot one to a plaid Link/item)'})
 export class AuthConnection {
     /**
      * Internal identifier
@@ -20484,6 +20576,11 @@ export class AuthConnection {
      */
     @Field(() => Date, {description:'When was the last transaction sync Plaid',nullable:true})
     lastTransactionSyncedAtPlaid!: Date | null;
+    /**
+     * Plaid institution id
+     */
+    @Field(() => String, {description:'Plaid institution id',nullable:true})
+    plaidInstitutionId!: string | null;
     @HideField()
     token!: string | null;
     @HideField()
@@ -20531,7 +20628,7 @@ export class DeleteManyAuthConnectionArgs {
 export class DeleteOneAuthConnectionArgs {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
 }
 
 @ArgsType()
@@ -20542,7 +20639,7 @@ export class FindFirstAuthConnectionOrThrowArgs {
     @Field(() => [AuthConnectionOrderByWithRelationInput], {nullable:true})
     orderBy?: Array<AuthConnectionOrderByWithRelationInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    cursor?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -20559,7 +20656,7 @@ export class FindFirstAuthConnectionArgs {
     @Field(() => [AuthConnectionOrderByWithRelationInput], {nullable:true})
     orderBy?: Array<AuthConnectionOrderByWithRelationInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    cursor?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -20576,7 +20673,7 @@ export class FindManyAuthConnectionArgs {
     @Field(() => [AuthConnectionOrderByWithRelationInput], {nullable:true})
     orderBy?: Array<AuthConnectionOrderByWithRelationInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
-    cursor?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    cursor?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -20589,14 +20686,14 @@ export class FindManyAuthConnectionArgs {
 export class FindUniqueAuthConnectionOrThrowArgs {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
 }
 
 @ArgsType()
 export class FindUniqueAuthConnectionArgs {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
 }
 
 @ArgsType()
@@ -20618,14 +20715,14 @@ export class UpdateOneAuthConnectionArgs {
     data!: InstanceType<typeof AuthConnectionUpdateInput>;
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
 }
 
 @ArgsType()
 export class UpsertOneAuthConnectionArgs {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_externalId'>;
+    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
     @Field(() => AuthConnectionCreateInput, {nullable:false})
     @Type(() => AuthConnectionCreateInput)
     create!: InstanceType<typeof AuthConnectionCreateInput>;

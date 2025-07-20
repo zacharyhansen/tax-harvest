@@ -21,9 +21,15 @@ import plaidIcon from '../../public/icons/plaid.svg';
 type PlaidLinkProps = {
   token: string;
   redirectTo?: string;
+  existingAccountId?: string;
 } & ButtonProps;
 
-export default function PlaidLink({ token, redirectTo, ...buttonProps }: PlaidLinkProps) {
+export default function PlaidLink({
+  token,
+  redirectTo,
+  existingAccountId,
+  ...buttonProps
+}: PlaidLinkProps) {
   const router = redirectTo ? useRouter() : null;
   const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation();
 
@@ -52,24 +58,34 @@ export default function PlaidLink({ token, redirectTo, ...buttonProps }: PlaidLi
               transfer_status: metaData.transfer_status,
             },
             publicToken: public_token,
+            existingAccountId,
           },
-        }).then(() => {
-          // Redirect after successful sync if redirectTo is provided
-          if (redirectTo && router) {
-            router.push(redirectTo);
-          }
-        }).catch((error: ApolloError) => {
-          console.error('Plaid sync error:', error);
-          throw new Error(error.message || 'Failed to sync accounts');
-        }),
+        })
+          .then(() => {
+            // Clean up the stored account ID since linking is complete
+            if (existingAccountId) {
+              localStorage.removeItem('onboardingAccountId');
+            }
+            // Redirect after successful sync if redirectTo is provided
+            if (redirectTo && router) {
+              router.push(redirectTo);
+            }
+          })
+          .catch((error: ApolloError) => {
+            console.error('Plaid sync error:', error);
+            throw new Error(error.message || 'Failed to sync accounts');
+          }),
         {
           error: error => `Failed to sync accounts: ${error.message}`,
-          loading: 'We are syncing your account and transaction data',
-          success: redirectTo ? 'Sync complete! Redirecting...' : 'Sync complete',
+          loading:
+            'We are syncing your account and transaction data, this may take a moment',
+          success: redirectTo
+            ? 'Sync complete! Redirecting...'
+            : 'Sync complete',
         }
       );
     },
-    [mutate, redirectTo, router]
+    [mutate, redirectTo, router, existingAccountId]
   );
 
   const onExit: PlaidLinkOnExit = useCallback(

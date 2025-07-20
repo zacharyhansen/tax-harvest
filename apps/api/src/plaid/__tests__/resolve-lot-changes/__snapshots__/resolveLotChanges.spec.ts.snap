@@ -1,0 +1,80 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`plaidService.resolveLotChanges > test case: simple-sell > should resolve lot changes correctly 1`] = `
+{
+  "lotDeletes": [],
+  "lotTupleMapSymbols": [
+    "AAPL",
+  ],
+  "lotUpserts": [
+    {
+      "accountId": "acc-1",
+      "acquiredDate": "2023-01-01T00:00:00.000Z",
+      "isNewBuy": false,
+      "lotId": "lot-1",
+      "price": "100",
+      "quantity": "30",
+      "quantityChange": "5",
+      "quantityFinal": "25",
+      "symbol": "AAPL",
+      "upsert": {
+        "account": {
+          "connect": {
+            "id": "acc-1",
+          },
+        },
+        "acquiredDate": "2023-01-01T00:00:00.000Z",
+        "asset": {
+          "connect": {
+            "symbol": "AAPL",
+          },
+        },
+        "id": "lot-1",
+        "portfolio": {
+          "connect": {
+            "id": "test-portfolio",
+          },
+        },
+        "price": "100",
+        "remainingQty": "25",
+      },
+    },
+    {
+      "accountId": "acc-1",
+      "acquiredDate": "2023-06-01T00:00:00.000Z",
+      "isNewBuy": false,
+      "lotId": "lot-2",
+      "price": "200",
+      "quantity": "30",
+      "quantityChange": "5",
+      "quantityFinal": "25",
+      "symbol": "AAPL",
+      "upsert": {
+        "account": {
+          "connect": {
+            "id": "acc-1",
+          },
+        },
+        "acquiredDate": "2023-06-01T00:00:00.000Z",
+        "asset": {
+          "connect": {
+            "symbol": "AAPL",
+          },
+        },
+        "id": "lot-2",
+        "portfolio": {
+          "connect": {
+            "id": "test-portfolio",
+          },
+        },
+        "price": "200",
+        "remainingQty": "25",
+      },
+    },
+  ],
+  "newBuysCount": 0,
+  "newSellsCount": 1,
+  "newTransactionsCount": 1,
+  "realizedProfitAndLoss": "1000",
+}
+`;

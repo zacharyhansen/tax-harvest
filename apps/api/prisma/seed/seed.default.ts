@@ -45,6 +45,13 @@ async function main() {
     },
   ])
 
+  await seed.Asset(() => [
+    {
+      symbol: 'UNKNOWN',
+      active: true,
+    },
+  ])
+
   const UsersOnPortfolios = additionalUsers.map(user => ({
     userId: user.id,
     role: 'ADMIN' as PortfolioRoleEnum,

@@ -5,10 +5,12 @@ query PlaidLinkToken {
 mutation PlaidSetAccessTokenAndSyncAccounts(
   $publicToken: String!
   $metaData: PlaidLinkOnSuccessMetadata!
+  $existingAccountId: String
 ) {
   setAccessTokenAndSyncAccounts(
     publicToken: $publicToken
     metaData: $metaData
+    existingAccountId: $existingAccountId
   ) {
     id
   }

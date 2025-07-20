@@ -54,6 +54,11 @@ export class PlaidResolver {
       type: () => PlaidLinkOnSuccessMetadata,
     })
     metaData: PlaidLinkOnSuccessMetadata,
+    @Args('existingAccountId', {
+      nullable: true,
+      type: () => String,
+    })
+    existingAccountId?: string,
   ) {
     const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value
 
@@ -62,6 +67,7 @@ export class PlaidResolver {
       portfolioId: currentUser.metadata.portfolioId,
       publicToken,
       userId: currentUser.sub,
+      existingAccountId,
     })
 
     return this.prismaService.$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId)).account.findMany({

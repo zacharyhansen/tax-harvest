@@ -3622,8 +3622,7 @@ export type AuthConnectionScalarWhereInput = {
   verificationUrl?: InputMaybe<StringNullableFilter>;
 };
 
-export type AuthConnectionSourceUserIdPortfolioIdExternalIdCompoundUniqueInput = {
-  externalId: Scalars['String']['input'];
+export type AuthConnectionSourceUserIdPortfolioIdCompoundUniqueInput = {
   portfolioId: Scalars['String']['input'];
   source: AuthSource;
   userId: Scalars['String']['input'];
@@ -3849,7 +3848,7 @@ export type AuthConnectionWhereUniqueInput = {
   portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
   portfolioId?: InputMaybe<UuidFilter>;
   source?: InputMaybe<EnumAuthSourceFilter>;
-  source_userId_portfolioId_externalId?: InputMaybe<AuthConnectionSourceUserIdPortfolioIdExternalIdCompoundUniqueInput>;
+  source_userId_portfolioId?: InputMaybe<AuthConnectionSourceUserIdPortfolioIdCompoundUniqueInput>;
   syncedAt?: InputMaybe<DateTimeNullableFilter>;
   type?: InputMaybe<EnumAuthTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -6729,6 +6728,12 @@ export type InitAccountFileUploadPayload = {
   shortTerm: Scalars['Float']['input'];
 };
 
+export type InitAccountFileUploadResponse = {
+  __typename?: 'InitAccountFileUploadResponse';
+  accountId: Scalars['String']['output'];
+  files: Array<File>;
+};
+
 export type InitFileUploadPayload = {
   displayName: Scalars['String']['input'];
   fileType: FileType;
@@ -9431,7 +9436,7 @@ export type Mutation = {
   deleteHarvests: Scalars['Boolean']['output'];
   /** Finalize harvest for review */
   finalizeHarvest: Harvest;
-  initAccountFileUpload: Array<File>;
+  initAccountFileUpload: InitAccountFileUploadResponse;
   /** Invite User to Platform */
   inviteUsersToPlatform: Scalars['Boolean']['output'];
   /** Remove User from Portfolio */
@@ -9538,6 +9543,7 @@ export type MutationSendWashSaleNotificationsForDateArgs = {
 
 
 export type MutationSetAccessTokenAndSyncAccountsArgs = {
+  existingAccountId?: InputMaybe<Scalars['String']['input']>;
   metaData: PlaidLinkOnSuccessMetadata;
   publicToken: Scalars['String']['input'];
 };
@@ -15637,6 +15643,7 @@ export type PlaidLinkTokenQuery = { __typename?: 'Query', linkToken: string };
 export type PlaidSetAccessTokenAndSyncAccountsMutationVariables = Exact<{
   publicToken: Scalars['String']['input'];
   metaData: PlaidLinkOnSuccessMetadata;
+  existingAccountId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -15678,7 +15685,7 @@ export type InitAccountFileUploadMutationVariables = Exact<{
 }>;
 
 
-export type InitAccountFileUploadMutation = { __typename?: 'Mutation', initAccountFileUpload: Array<{ __typename?: 'File', id: string, accountId: string, displayName: string, gcpFilename: string, type: string }> };
+export type InitAccountFileUploadMutation = { __typename?: 'Mutation', initAccountFileUpload: { __typename?: 'InitAccountFileUploadResponse', accountId: string, files: Array<{ __typename?: 'File', id: string, accountId: string, displayName: string, gcpFilename: string, type: string }> } };
 
 export type HarvestLotOrderItemFragment = { __typename?: 'HarvestLotOrder', accountId: string, costBasis: string, gainTotal: string, id: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any };
 
@@ -17816,8 +17823,12 @@ export type PlaidLinkTokenLazyQueryHookResult = ReturnType<typeof usePlaidLinkTo
 export type PlaidLinkTokenSuspenseQueryHookResult = ReturnType<typeof usePlaidLinkTokenSuspenseQuery>;
 export type PlaidLinkTokenQueryResult = Apollo.QueryResult<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>;
 export const PlaidSetAccessTokenAndSyncAccountsDocument = gql`
-    mutation PlaidSetAccessTokenAndSyncAccounts($publicToken: String!, $metaData: PlaidLinkOnSuccessMetadata!) {
-  setAccessTokenAndSyncAccounts(publicToken: $publicToken, metaData: $metaData) {
+    mutation PlaidSetAccessTokenAndSyncAccounts($publicToken: String!, $metaData: PlaidLinkOnSuccessMetadata!, $existingAccountId: String) {
+  setAccessTokenAndSyncAccounts(
+    publicToken: $publicToken
+    metaData: $metaData
+    existingAccountId: $existingAccountId
+  ) {
     id
   }
 }
@@ -17839,6 +17850,7 @@ export type PlaidSetAccessTokenAndSyncAccountsMutationFn = Apollo.MutationFuncti
  *   variables: {
  *      publicToken: // value for 'publicToken'
  *      metaData: // value for 'metaData'
+ *      existingAccountId: // value for 'existingAccountId'
  *   },
  * });
  */
@@ -17999,8 +18011,10 @@ export type CreateFilesMutationOptions = Apollo.BaseMutationOptions<CreateFilesM
 export const InitAccountFileUploadDocument = gql`
     mutation InitAccountFileUpload($fileData: [InitFileUploadPayload!]!, $accountData: InitAccountFileUploadPayload!) {
   initAccountFileUpload(fileData: $fileData, accountData: $accountData) {
-    id
-    ...FileItem
+    accountId
+    files {
+      ...FileItem
+    }
   }
 }
     ${FileItemFragmentDoc}`;

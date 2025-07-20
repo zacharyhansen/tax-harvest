@@ -783,10 +783,11 @@
           "nullNotDistinct": false
         },
         {
-          "name": "Account_provider_externalId_key",
+          "name": "Account_authConnectionId_plaidAccountMask_type_key",
           "fields": [
-            "externalId",
-            "provider"
+            "authConnectionId",
+            "plaidAccountMask",
+            "type"
           ],
           "nullNotDistinct": false
         }
@@ -1723,6 +1724,20 @@
           "maxLength": null
         },
         {
+          "id": "public.AuthConnection.plaidInstitutionId",
+          "name": "plaidInstitutionId",
+          "columnName": "plaidInstitutionId",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Portfolio",
           "type": "Portfolio",
           "isRequired": true,
@@ -1803,9 +1818,9 @@
           "nullNotDistinct": false
         },
         {
-          "name": "AuthConnection_source_userId_portfolioId_externalId_key",
+          "name": "AuthConnection_source_userId_portfolioId_plaidInstitutionId_key",
           "fields": [
-            "externalId",
+            "plaidInstitutionId",
             "portfolioId",
             "source",
             "userId"

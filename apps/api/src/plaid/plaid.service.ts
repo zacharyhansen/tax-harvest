@@ -24,6 +24,7 @@ import {
   Holding,
   InvestmentsHoldingsGetResponse,
   InvestmentsTransactionsGetResponse,
+  LinkTokenCreateRequest,
   PlaidApi,
   Products,
   Security,
@@ -76,11 +77,26 @@ export class PlaidService {
   }) {
     const user = await this.assertUserIsCreatedInPlaid({ userId, portfolioId })
 
-    const response = await this.client.linkTokenCreate({
+    // We want to open plaid link as update if user already has one for portfolio
+    const existingAuthConnection = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .authConnection
+      .findUnique({
+        where: {
+          source_userId_portfolioId_plaidInstitutionId: {
+            userId,
+            portfolioId,
+            source: AuthSource.PLAID,
+            plaidInstitutionId: '',
+          },
+        },
+      })
+
+    const baseLinkTokenCreate: LinkTokenCreateRequest = {
       client_id: this.configService.get('PLAID_CLIENT_ID'),
       client_name: 'TaxHarvest',
       country_codes: [CountryCode.Us],
-      // enable_multi_item_link: true,
+      enable_multi_item_link: true,
       language: 'en',
       products: [Products.Investments],
       // redirect_uri: `${this.configService.get('CLIENT_ORIGIN')}${this.configService.get('CLIENT_HOME_PAGE_PATH')}`,
@@ -93,7 +109,17 @@ export class PlaidService {
       },
       // user_token: user.plaidUserToken!,
       webhook: `${this.configService.get<string>('ORIGIN')}/plaid/webhook`,
-    })
+    }
+
+    if (existingAuthConnection?.secret) {
+      this.logger.log(`Updating existing plaid link. existingAuthConnectionId: ${existingAuthConnection.id}`)
+      baseLinkTokenCreate.access_token = existingAuthConnection.secret
+      baseLinkTokenCreate.update = {
+        account_selection_enabled: true,
+      }
+    }
+
+    const response = await this.client.linkTokenCreate(baseLinkTokenCreate)
 
     return response
   }
@@ -111,11 +137,13 @@ export class PlaidService {
     portfolioId,
     publicToken,
     userId,
+    existingAccountId,
   }: {
     userId: string
     publicToken: string
     portfolioId: string
     metaData: PlaidLinkOnSuccessMetadata
+    existingAccountId?: string
   }): Promise<Account[]> {
     const existingAccounts = await this.prismaService
       .$extends(PrismaService.forPortfolio(portfolioId))
@@ -125,23 +153,14 @@ export class PlaidService {
           authConnection: true,
         },
         where: {
-          AND: [
-            {
-              portfolioId: {
-                equals: portfolioId,
-              },
+          OR: metaData.accounts.map(account => ({
+            plaidAccountMask: {
+              equals: account.mask,
             },
-            {
-              OR: metaData.accounts.map(account => ({
-                plaidAccountMask: {
-                  equals: account.mask,
-                },
-                name: {
-                  equals: account.name,
-                },
-              })),
+            name: {
+              equals: account.name,
             },
-          ],
+          })),
         },
       })
 
@@ -197,6 +216,7 @@ export class PlaidService {
       secret: accessToken,
       source: AuthSource.PLAID,
       type: AuthType.PLAID_LINK,
+      plaidInstitutionId: metaData.institution?.institution_id,
       user: {
         connect: {
           id: userId,
@@ -211,100 +231,28 @@ export class PlaidService {
         create: payload,
         update: payload,
         where: {
-          source_userId_portfolioId_externalId: {
-            externalId: itemId,
+          source_userId_portfolioId_plaidInstitutionId: {
             portfolioId,
             source: AuthSource.PLAID,
             userId,
+            plaidInstitutionId: metaData.institution?.institution_id ?? '',
           },
         },
       })
 
-    // Transfer existing accounts to new link before sync and clean up old link
-    if (existingAccounts.length > 0) {
-      await this.prismaService
-        .$extends(PrismaService.forPortfolio(portfolioId))
-        .$transaction(async (trx) => {
-          // Move accounts to new link to persist their data
-          await trx.account.updateMany({
-            data: {
-              authConnectionId: plaidAuthConnection.id,
-            },
-            where: {
-              id: {
-                in: existingAccounts.map(a => a.id),
-              },
-            },
-          })
-          // Update accounts so that external id is set up correctly for upserts
-          let plaidAccounts = [...metaData.accounts]
-          await Promise.all(
-            existingAccounts.map((account) => {
-              const plaidAccount = plaidAccounts.find(
-                ma =>
-                  ma.mask === account.plaidAccountMask
-                  && ma.name === account.name,
-              )
-
-              if (!plaidAccount) {
-                throw new Error(
-                  `'Unable to locate plaid account for an existing account when it should exist - mask: ${account.plaidAccountMask}  name: ${account.name}`,
-                )
-              }
-              // remove for next selection in case of duplicates (should never happen but we will fail FK contraints if so)
-              plaidAccounts = plaidAccounts.filter(
-                a => a.id !== plaidAccount.id,
-              )
-
-              return trx.account.update({
-                data: {
-                  externalId: plaidAccount.id,
-                },
-                where: {
-                  id: account.id,
-                },
-              })
-            }),
-          )
-
-          // Delete the plaid connections in plaid
-          await Promise.all(
-            [...existingAuthConnections.values()].map(auth =>
-              this.client
-                .itemRemove({
-                  access_token: auth?.secret ?? '',
-                  client_id: this.configService.get('PLAID_CLIENT_ID'),
-                  secret: this.configService.get('PLAID_SECRET_KEY'),
-                })
-                .catch((error: unknown) => {
-                  this.logger.error(error)
-                  throw new Error(error as string)
-                }),
-            ),
-          )
-
-          // Delete our records of it
-          await trx.authConnection.deleteMany({
-            where: {
-              id: {
-                // @ts-expect-error - this should exist
-                in: [...existingAuthConnections.keys()],
-              },
-            },
-          })
-        })
-    }
-
     return this.syncPlaidItem({
       plaidAuthConnection,
+      existingAccountId,
     })
   }
 
   async syncPlaidItem({
     plaidAuthConnection,
+    existingAccountId,
   }: {
     plaidAuthConnection: AuthConnection
     asReversableOperations?: boolean
+    existingAccountId?: string
   }): Promise<Account[]> {
     this.logger.log('Syncing Plaid item: ', plaidAuthConnection.id)
     if (plaidAuthConnection.type !== AuthType.PLAID_LINK) {
@@ -339,9 +287,10 @@ export class PlaidService {
 
     // Set up create of positions
     const [accounts] = await Promise.all([
-      this.assertPlaidAccountsExist({
+      this.resetPlaidAccounts({
         plaidAccounts: plaidResponse.data.accounts,
         plaidAuthConnection,
+        existingAccountId,
       }),
       this.assertPlaidSecuritiesExist({
         securities: plaidResponse.data.securities,
@@ -588,7 +537,7 @@ export class PlaidService {
             },
           }),
           trx.lotChangeLog.createMany({
-            data: [...lotUpserts, ...lotDeletes].map(({ upsert, isNewBuy }) => {
+            data: lotUpserts.map(({ upsert, isNewBuy }) => {
               const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0)
               const operationType = isNewBuy
                 ? OperationType.create
@@ -600,6 +549,28 @@ export class PlaidService {
                 lotId: operationType === OperationType.delete
                   ? undefined
                   : upsert.id,
+                quantityChange: (
+                  intitialLotMap.get(upsert.id ?? '')?.remainingQty
+                  ?? new Decimal(0)
+                ).minus(upsert.remainingQty as Decimal),
+                accountId: upsert.account.connect?.id ?? '',
+                portfolioId: authConnection.portfolioId,
+                lotBefore: intitialLotMap.get(upsert.id ?? ''),
+                lotAfter: JSON.parse(JSON.stringify(upsert)),
+                operationType,
+              }
+            }),
+          }),
+          trx.lotChangeLog.createMany({
+            data: lotDeletes.map(({ upsert, isNewBuy }) => {
+              const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0)
+              const operationType = isNewBuy
+                ? OperationType.create
+                : isZeroQuantity
+                  ? OperationType.delete
+                  : OperationType.update
+              return {
+                lotTransactionBatchId: lotTransactionBatch.id,
                 quantityChange: (
                   intitialLotMap.get(upsert.id ?? '')?.remainingQty
                   ?? new Decimal(0)
@@ -637,6 +608,8 @@ export class PlaidService {
         lots: initialLots,
         transactions,
       })
+
+    // console.log({ lotTupleMap, newBuys, newSells })
 
     // Attempt to generate the change set for each asset
     const lotResults = ((Array.from(lotTupleMap.entries()).map(
@@ -707,11 +680,11 @@ export class PlaidService {
     transactions: Transaction[]
     useTestLotId?: boolean
   }): {
-      lotTupleMap: Map<string, LotData[]>
-      newBuys: Transaction[]
-      newSells: Transaction[]
-      newTransactions: Transaction[]
-    } {
+    lotTupleMap: Map<string, LotData[]>
+    newBuys: Transaction[]
+    newSells: Transaction[]
+    newTransactions: Transaction[]
+  } {
     const lotTupleMap = new Map<string, LotData[]>()
     const newTransactions = transactions.filter(trx => !trx.appliedToLots)
     const newBuys = newTransactions.filter(
@@ -921,11 +894,11 @@ export class PlaidService {
       secret: this.configService.get('PLAID_SECRET_KEY'),
       start_date: mostRecentTransaction?.transactionDate
         ? new Intl.DateTimeFormat('en-CA').format(
-            mostRecentTransaction.transactionDate,
-          )
+          mostRecentTransaction.transactionDate,
+        )
         : new Intl.DateTimeFormat('en-CA').format(
-            startDate ?? new Date().setFullYear(end_date.getFullYear() - 2),
-          ),
+          startDate ?? new Date().setFullYear(end_date.getFullYear() - 2),
+        ),
     })
 
     this.logger.log(
@@ -935,10 +908,16 @@ export class PlaidService {
 
     // Set up the upsert
     const [accounts] = await Promise.all([
-      this.assertPlaidAccountsExist({
-        plaidAccounts: plaidResponse.data.accounts,
-        plaidAuthConnection,
-      }),
+      this.prismaService
+        .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+        .account
+        .findMany({
+          where: {
+            externalId: {
+              in: plaidResponse.data.accounts.map(a => a.account_id ?? ''),
+            },
+          },
+        }),
       this.assertPlaidSecuritiesExist({
         securities: plaidResponse.data.securities,
         portfolioId: plaidAuthConnection.portfolioId,
@@ -979,7 +958,7 @@ export class PlaidService {
       PlaidService.convertPlaidTransactions({
         investmentsTransactionsGetResponse: plaidResponse.data,
         accounts,
-        portfolioId: plaidAuthConnection.portfolioId,
+        plaidAuthConnection,
       }).map((input) => {
         return this.prismaService
           .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
@@ -991,8 +970,10 @@ export class PlaidService {
               accountId_externalId: {
                 accountId: accounts.find(
                   a =>
-                    a.externalId
-                    === input.account.connect?.provider_externalId?.externalId,
+                    a.plaidAccountMask
+                    === input.account.connect?.authConnectionId_plaidAccountMask_type?.plaidAccountMask
+                    && a.type
+                    === input.account.connect?.authConnectionId_plaidAccountMask_type?.type,
                 )!.id,
                 externalId: input.externalId,
               },
@@ -1046,32 +1027,63 @@ export class PlaidService {
     )
   }
 
-  async assertPlaidAccountsExist({
+  async resetPlaidAccounts({
     plaidAccounts,
     plaidAuthConnection,
+    existingAccountId,
   }: {
     plaidAccounts: AccountBase[]
     plaidAuthConnection: AuthConnection
-  }) {
+    existingAccountId?: string
+  }): Promise<Account[]> {
+    const accounts = PlaidService.convertPlaidAccounts({
+      plaidAccounts,
+      plaidAuthConnection,
+    })
     return this.prismaService
       .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
-      .$transaction(
-        PlaidService.convertPlaidAccounts({
-          plaidAccounts,
-          plaidAuthConnection,
-        }).map((input) => {
-          return this.prismaService.account.upsert({
-            create: input,
-            update: input,
+      .$transaction(async (trx) => {
+        /// Need to delete all existing accounts first to avoid conflicts (user is effectively re-linking/replacing these accounts)
+        for (const input of accounts) {
+          await trx.account.delete({
             where: {
-              provider_externalId: {
-                externalId: input.externalId!,
-                provider: AccountProvider.PLAID,
+              authConnectionId_plaidAccountMask_type: {
+                authConnectionId: plaidAuthConnection.id,
+                plaidAccountMask: input.plaidAccountMask ?? '',
+                type: input.type ?? '',
               },
             },
           })
-        }),
-      )
+        }
+
+        const upsertedAccounts = []
+        for (let i = 0; i < accounts.length; i++) {
+          const input = accounts[i]
+          // Not pretty but we want to tie the account created in the upload file step to once of the linekd ones
+          if (existingAccountId && i === 0) {
+            const account = await trx.account.update({
+              where: { id: existingAccountId },
+              data: input,
+            })
+            upsertedAccounts.push(account)
+          }
+          else {
+            const account = await trx.account.upsert({
+              create: input,
+              update: input,
+              where: {
+                authConnectionId_plaidAccountMask_type: {
+                  authConnectionId: plaidAuthConnection.id,
+                  plaidAccountMask: input.plaidAccountMask ?? '',
+                  type: input.type ?? '',
+                },
+              },
+            })
+            upsertedAccounts.push(account)
+          }
+        }
+        return upsertedAccounts
+      })
   }
 
   private async handleHoldingsUpdate(webhookData: PlaidWebhook): Promise<void> {
@@ -1139,8 +1151,8 @@ export class PlaidService {
     return securities.map((security) => {
       const symbol
         = security.ticker_symbol
-          ?? security.name
-          ?? security.market_identifier_code
+        ?? security.name
+        ?? security.market_identifier_code
       // Only upsert minimum here - polygon should be source of other data
       const input: Prisma.AssetCreateInput = {
         plaid_security_id: security.security_id,
@@ -1195,11 +1207,11 @@ export class PlaidService {
   static convertPlaidTransactions({
     investmentsTransactionsGetResponse,
     accounts,
-    portfolioId,
+    plaidAuthConnection,
   }: {
     investmentsTransactionsGetResponse: InvestmentsTransactionsGetResponse
     accounts: (Account | Prisma.AccountCreateInput)[]
-    portfolioId: string
+    plaidAuthConnection: AuthConnection
   }): Prisma.TransactionCreateInput[] {
     const securityMap = new Map<string, string>()
     for (const security of investmentsTransactionsGetResponse.securities) {
@@ -1208,12 +1220,13 @@ export class PlaidService {
         security.ticker_symbol ?? 'UNKNOWN',
       )
     }
-    return investmentsTransactionsGetResponse.investment_transactions.map(
+
+    const output = investmentsTransactionsGetResponse.investment_transactions.map(
       (transaction) => {
         const account = accounts.find(
           a => a.externalId === transaction.account_id,
         )
-        if (!account) {
+        if (!account || !account.plaidAccountMask || !account.type) {
           throw new Error(
             'convertPlaidTransactions: Could not find account from upsert.',
           )
@@ -1222,15 +1235,20 @@ export class PlaidService {
         const input: Prisma.TransactionCreateInput = {
           account: {
             connect: {
-              provider_externalId: {
-                externalId: transaction.account_id,
-                provider: AccountProvider.PLAID,
+              authConnectionId_plaidAccountMask_type: {
+                authConnectionId: plaidAuthConnection.id,
+                plaidAccountMask: account.plaidAccountMask,
+                type: account.type,
               },
+              // provider_externalId: {
+              //   externalId: transaction.account_id,
+              //   provider: AccountProvider.PLAID,
+              // },
             },
           },
           portfolio: {
             connect: {
-              id: portfolioId,
+              id: plaidAuthConnection.portfolioId,
             },
           },
           amount: transaction.amount,
@@ -1261,6 +1279,8 @@ export class PlaidService {
         return input
       },
     )
+
+    return output
   }
 
   static convertPlaidHoldings({

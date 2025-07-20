@@ -19,6 +19,52 @@ global:
             pathType: Prefix
             service: web
 
+secrets:
+  externalSecrets:
+    - name: database
+      target: database
+      data:
+        - secretKey: DATABASE_URL
+          remoteKey: PROD_DATABASE_URL
+        - secretKey: DATABASE_URL_MIGRATION
+          remoteKey: PROD_DATABASE_URL_MIGRATION
+    - name: clerk
+      target: clerk
+      data:
+        - secretKey: CLERK_SECRET_KEY
+          remoteKey: PROD_CLERK_SECRET_KEY
+        - secretKey: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+          remoteKey: PROD_CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+    - name: stripe
+      target: stripe
+      data:
+        - secretKey: STRIPE_SECRET_KEY
+          remoteKey: PROD_STRIPE_SECRET_KEY
+    - name: etrade
+      target: etrade
+      data:
+        - secretKey: ETRADE_API_KEY
+          remoteKey: PROD_ETRADE_API_KEY
+        - secretKey: ETRADE_API_SECRET
+          remoteKey: PROD_ETRADE_API_SECRET
+    - name: polygon
+      target: polygon
+      data:
+        - secretKey: POLYGON_API_KEY
+          remoteKey: PROD_POLYGON_API_KEY
+    - name: plaid
+      target: plaid
+      data:
+        - secretKey: PLAID_SECRET_KEY
+          remoteKey: PROD_PLAID_SECRET_KEY
+        - secretKey: PLAID_CLIENT_ID
+          remoteKey: PROD_PLAID_CLIENT_ID
+    - name: sendgrid
+      target: sendgrid
+      data:
+        - secretKey: SENDGRID_API_KEY
+          remoteKey: PROD_SENDGRID_API_KEY
+
 argocd:
   enabled: true
   ingress:
