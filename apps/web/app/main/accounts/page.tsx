@@ -1,52 +1,30 @@
 'use client'
 
-import type { ColDef } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
-import dynamic from 'next/dynamic'
+import { Building2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useMemo } from 'react'
 
-import { useAccountsQuery } from '~/generated/gql'
+import { 
+  usePlaidAuthConnectionsQuery, 
+  usePlaidLinkTokenQuery 
+} from '~/generated/gql'
 import { TypedRoutes } from '~/lib/routes'
 import { NoAccounts } from '~/modules/account'
 import { PageWrapper } from '~/modules/layout'
-import { ErrorPage, LoadingPage } from '~/modules/utility-components'
-
-const AgGridWrapper = dynamic(
-  () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
-  {
-    ssr: false,
-  },
-)
+import { InstitutionCard } from '~/modules/plaid'
+import PlaidLink from '~/modules/plaid/PlaidLink'
+import { ErrorPage, LoadingPage, LoadingIcon } from '~/modules/utility-components'
 
 export default function AccountPage() {
   const router = useRouter()
-  const { data, error, loading } = useAccountsQuery()
+  const { data: linkTokenData } = usePlaidLinkTokenQuery()
+  const { data: authConnectionsData, loading: authConnectionsLoading, error } = 
+    usePlaidAuthConnectionsQuery()
 
-  const columnDefs: ColDef[] = useMemo(() => {
-    return [
-      {
-        headerName: 'Name',
-        field: 'name',
-        flex: 1,
-      },
-      {
-        headerName: 'Cash For Investment',
-        field: 'cashAvailableForInvestment',
-        cellDataType: 'usd',
-      },
-      {
-        headerName: 'Account Value',
-        field: 'accountValueTotal',
-        cellDataType: 'usd',
-      },
-      { headerName: 'Type', field: 'type' },
-      { headerName: 'Updated At', field: 'updatedAt', cellDataType: 'date' },
-      // { headerName: 'Owner', field: 'createdBy', cellRenderer: UserCell },
-    ] satisfies ColDef[]
-  }, [])
+  const handleAccountClick = (accountId: string) => {
+    router.push(TypedRoutes.account({ id: accountId }))
+  }
 
-  if (loading) {
+  if (authConnectionsLoading) {
     return <LoadingPage />
   }
 
@@ -56,23 +34,73 @@ export default function AccountPage() {
     )
   }
 
-  if (!data?.accounts.length) {
+  const hasConnections =
+    authConnectionsData?.plaidAuthConnections &&
+    authConnectionsData.plaidAuthConnections.length > 0
+
+  if (!hasConnections) {
     return <NoAccounts />
   }
 
   return (
     <PageWrapper>
-      <AgGridWrapper>
-        <AgGridReact
-          columnDefs={columnDefs}
-          rowData={data.accounts}
-          onRowClicked={(row) => {
-            if (row.data) {
-              router.push(TypedRoutes.account({ id: row.data.id }))
-            }
-          }}
-        />
-      </AgGridWrapper>
+      <div className="mx-auto w-full max-w-4xl">
+        <div className="bg-card rounded-lg border">
+          <div className="border-b p-6">
+            <h1 className="text-2xl font-semibold">Your Accounts</h1>
+            <p className="text-muted-foreground mt-1">
+              Manage your connected financial institutions and accounts
+            </p>
+          </div>
+
+          <div className="p-8">
+            <div className="space-y-6">
+              <div>
+                <h2 className="mb-4 text-lg font-semibold">
+                  Connected Institutions
+                </h2>
+                <div className="space-y-4">
+                  {authConnectionsData.plaidAuthConnections.map(
+                    authConnection => (
+                      <InstitutionCard
+                        key={authConnection.id}
+                        authConnection={authConnection}
+                        onAccountClick={handleAccountClick}
+                        redirectTo="/main/accounts"
+                      />
+                    )
+                  )}
+                </div>
+              </div>
+
+              {/* Link New Institution Button */}
+              <div className="mt-8 border-t pt-8">
+                <div className="text-center">
+                  <h3 className="mb-2 text-base font-medium">
+                    Need to connect a different institution?
+                  </h3>
+                  <p className="text-muted-foreground mb-4 text-sm">
+                    Link accounts from another bank or brokerage
+                  </p>
+                  {linkTokenData?.linkToken ? (
+                    <PlaidLink
+                      token={linkTokenData.linkToken}
+                      redirectTo="/main/accounts"
+                      size="lg"
+                      variant="default"
+                      iconLeft={<Building2 className="h-5 w-5" />}
+                    >
+                      Link New Institution
+                    </PlaidLink>
+                  ) : (
+                    <LoadingIcon className="mx-auto my-4" />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </PageWrapper>
   )
 }

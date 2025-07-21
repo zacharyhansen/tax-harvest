@@ -167,17 +167,18 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
   //   header: "Day's P/L",
   //   size: 110,
   // }),
-  columnHelper.accessor('account.name', {
+  columnHelper.accessor('account', {
     cell: ({ getValue }) => {
       const account = getValue<{
         name?: string;
         externalId?: string;
       }>();
+      console.log('account', account);
       return (
         <span>{account.name ?? Format.hideNumbers(account.externalId)}</span>
       );
     },
-    header: 'Account Name',
+    header: 'Account',
     size: 310,
   }),
 ];

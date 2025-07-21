@@ -1,119 +1,102 @@
-import { Badge } from '@repo/ui/components/badge'
-import DataCard from '@repo/ui/components/dataCard'
-import { cn } from '@repo/ui/utils'
-import { TrendingDown, TrendingUp, Wheat } from 'lucide-react'
+import { Badge } from '@repo/ui/components/badge';
+import DataCard from '@repo/ui/components/dataCard';
+import { TrendingDown, TrendingUp, Wheat } from 'lucide-react';
 
-import { usePortfolioSummaryQuery } from '~/generated/gql'
-import { LoadingPage } from '~/modules/utility-components'
-import { Format, MoneyUtil } from '~/modules/utils'
+import { usePortfolioSummaryQuery } from '~/generated/gql';
+import { LoadingPage } from '~/modules/utility-components';
+import { Format, MoneyUtil } from '~/modules/utils';
 
+/**
+ * Displays portfolio summary cards showing harvest potential, realized P&L, gains and losses
+ * @returns Portfolio summary cards component
+ */
 export default function HarvestSummaryCards() {
-  const { data, loading } = usePortfolioSummaryQuery()
+  const { data, loading } = usePortfolioSummaryQuery();
 
   if (!data && loading) {
-    return <LoadingPage message="Retrieving your portfolio information" />
+    return <LoadingPage message="Retrieving your portfolio information" />;
   }
 
+  const getAmountColor = (amount: number | undefined) => {
+    const direction = MoneyUtil.amountDirection(amount);
+    return direction === 'positive'
+      ? 'text-green-600'
+      : direction === 'negative'
+        ? 'text-red-600'
+        : '';
+  };
+
+  const realizedDirection = MoneyUtil.amountDirection(
+    data?.portfolioSummary.realized.gainTotal
+  );
+
   return (
-    <div className="mb-8 flex flex-col gap-2 md:flex-row">
+    <div className="mb-4 grid grid-cols-1 gap-2 md:grid-cols-4">
       <DataCard
         loading={loading}
-        data={(
-          <p
-            className={cn({
-              'text-green-600':
-                MoneyUtil.amountDirection(
-                  data?.portfolioSummary.harvest.total,
-                ) === 'positive',
-            })}
-          >
+        data={
+          <p className={getAmountColor(data?.portfolioSummary.harvest.total)}>
             {Format.money(data?.portfolioSummary.harvest.total)}
           </p>
-        )}
+        }
         title="The Harvest"
         icon={<Wheat className="text-primary" />}
-        description="The total dollar amount that can be harvested across accounts in this portfolio."
+        description="Total harvestable amount"
       />
+
       <DataCard
         loading={loading}
-        data={(
+        data={
           <p
-            className={cn({
-              'text-green-600':
-                MoneyUtil.amountDirection(
-                  data?.portfolioSummary.realized.gainTotal,
-                ) === 'positive',
-              'text-red-600':
-                MoneyUtil.amountDirection(
-                  data?.portfolioSummary.realized.gainTotal,
-                ) === 'negative',
-            })}
+            className={getAmountColor(
+              data?.portfolioSummary.realized.gainTotal
+            )}
           >
             {Format.money(data?.portfolioSummary.realized.gainTotal)}
           </p>
-        )}
-        title="Calender Year P & L"
-        icon={
-          MoneyUtil.amountDirection(
-            data?.portfolioSummary.realized.gainTotal,
-          ) !== 'negative'
-            ? (
-                <TrendingUp className="text-green-600" />
-              )
-            : (
-                <TrendingDown className="text-red-600" />
-              )
         }
-        description="Year to date realized profit"
-      >
-        <Badge variant="secondary" className="mt-4 flex w-full justify-center">
-          <p>REALIZED</p>
-        </Badge>
-      </DataCard>
+        title="Calendar Year P&L"
+        icon={
+          realizedDirection !== 'negative' ? (
+            <TrendingUp className="text-green-600" />
+          ) : (
+            <TrendingDown className="text-red-600" />
+          )
+        }
+        description="Realized profit / loss"
+      ></DataCard>
+
       <DataCard
         loading={loading}
-        data={(
+        data={
           <p
-            className={cn({
-              'text-green-600':
-                MoneyUtil.amountDirection(
-                  data?.portfolioSummary.unrealized.gainTotal,
-                ) === 'positive',
-            })}
+            className={getAmountColor(
+              data?.portfolioSummary.unrealized.gainTotal
+            )}
           >
             {Format.money(data?.portfolioSummary.unrealized.gainTotal)}
           </p>
-        )}
-        title="The Gains"
+        }
+        title="Unrealized Gains"
         icon={<TrendingUp className="text-green-600" />}
-        description="Total gains across the portfolio"
-      >
-        <Badge variant="secondary" className="mt-4 flex w-full justify-center">
-          <p>UNREALIZED</p>
-        </Badge>
-      </DataCard>
+        description="Total unrealized gains"
+      ></DataCard>
+
       <DataCard
         loading={loading}
-        data={(
+        data={
           <p
-            className={cn({
-              'text-red-600':
-                MoneyUtil.amountDirection(
-                  data?.portfolioSummary.unrealized.lossTotal,
-                ) === 'negative',
-            })}
+            className={getAmountColor(
+              data?.portfolioSummary.unrealized.lossTotal
+            )}
           >
             {Format.money(data?.portfolioSummary.unrealized.lossTotal)}
           </p>
-        )}
-        title="The Losses"
+        }
+        title="Unrealized Losses"
         icon={<TrendingDown className="text-red-600" />}
-        description="Total losses across the porfolio"
-      >
-        <Badge variant="secondary" className="mt-4 flex w-full justify-center">
-          <p>UNREALIZED</p>
-        </Badge>
-      </DataCard>
+        description="Total unrealized losses"
+      ></DataCard>
     </div>
-  )
+  );
 }

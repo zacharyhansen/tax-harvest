@@ -31,6 +31,36 @@ const columns: ColumnDef<TransactionTableItemFragment, never>[] = [
     ),
     size: 90,
   }),
+  columnHelper.accessor('account.name', {
+    cell: ({ getValue }) => (
+      <Badge
+        className={`text-xs ${
+          [
+            'bg-blue-500',
+            'bg-green-500',
+            'bg-yellow-500',
+            'bg-purple-500',
+            'bg-pink-500',
+          ][
+            Math.abs(
+              (getValue() as string)
+                .split('')
+                .reduce((acc, char) => acc + char.charCodeAt(0), 0)
+            ) % 5
+          ]
+        }`}
+      >
+        {getValue()}
+      </Badge>
+    ),
+    header: ({ column }) => (
+      <DataTable.BasicHeader column={column} title="Account" />
+    ),
+    meta: {
+      searchable: true,
+    },
+    size: 150,
+  }),
   columnHelper.accessor('account.authConnection.source', {
     cell: DataTable.BadgeCell,
     header: ({ column }) => (

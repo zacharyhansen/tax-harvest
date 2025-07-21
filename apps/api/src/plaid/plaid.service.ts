@@ -1037,7 +1037,6 @@ export class PlaidService {
       plaidAccounts,
       plaidAuthConnection,
     })
-    console.log('accounts', accounts)
     return this.prismaService
       .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
       .$transaction(async (trx) => {
@@ -1082,7 +1081,6 @@ export class PlaidService {
             upsertedAccounts.push(account)
           }
         }
-        console.log('upsertedAccounts', upsertedAccounts)
         return upsertedAccounts
       })
   }
