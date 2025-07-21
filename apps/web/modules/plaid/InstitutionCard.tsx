@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@repo/ui/components/card';
-import { Building2, Plus, Calendar, RefreshCw } from 'lucide-react';
+import { Building2, Plus, Calendar, RefreshCw, ChevronRight } from 'lucide-react';
 import {
   usePlaidLinkTokenQuery,
   usePlaidInstitutionQuery,
@@ -137,15 +137,19 @@ export function InstitutionCard({
         {authConnection.accounts?.map(account => (
           <div
             key={account.id}
-            className={`flex items-center justify-between px-6 py-3 transition-colors ${
-              onAccountClick ? 'hover:bg-muted/10 cursor-pointer' : ''
+            className={`group flex items-center justify-between px-6 py-3 transition-all duration-200 ${
+              onAccountClick 
+                ? 'hover:bg-muted/20 hover:shadow-sm cursor-pointer border-l-4 border-l-transparent hover:border-l-primary/50' 
+                : ''
             }`}
             onClick={() => handleAccountClick(account.id)}
           >
             <div className="flex items-center gap-2">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">{account.name}</span>
+                  <span className="text-sm font-medium group-hover:text-primary transition-colors">
+                    {account.name}
+                  </span>
                   {account.plaidAccountMask && (
                     <span className="text-muted-foreground text-xs">
                       •••• {account.plaidAccountMask}
@@ -160,16 +164,21 @@ export function InstitutionCard({
               </div>
             </div>
 
-            <div className="text-right">
-              {account.accountValueTotal != null && (
-                <span className="text-sm font-semibold">
-                  {Format.money(account.accountValueTotal)}
-                </span>
-              )}
-              {account.status && account.status !== 'ACTIVE' && (
-                <div className="text-muted-foreground text-xs">
-                  {account.status}
-                </div>
+            <div className="flex items-center gap-2">
+              <div className="text-right">
+                {account.accountValueTotal != null && (
+                  <span className="text-sm font-semibold">
+                    {Format.money(account.accountValueTotal)}
+                  </span>
+                )}
+                {account.status && account.status !== 'ACTIVE' && (
+                  <div className="text-muted-foreground text-xs">
+                    {account.status}
+                  </div>
+                )}
+              </div>
+              {onAccountClick && (
+                <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
               )}
             </div>
           </div>
