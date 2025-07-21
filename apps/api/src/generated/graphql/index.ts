@@ -357,7 +357,8 @@ export enum LotTransactionBatchScalarFieldEnum {
     newBuys = "newBuys",
     newSells = "newSells",
     realizedProfitAndLoss = "realizedProfitAndLoss",
-    deletedLots = "deletedLots"
+    deletedLots = "deletedLots",
+    logTrxMergeId = "logTrxMergeId"
 }
 
 export enum LotChangeLogScalarFieldEnum {
@@ -32063,6 +32064,12 @@ export class LogCountOrderByAggregateInput {
     portfolioId?: `${SortOrder}`;
 }
 
+@ObjectType()
+export class LogCount {
+    @Field(() => Int, {nullable:false})
+    LotTransactionBatch?: number;
+}
+
 @InputType()
 export class LogCreateManyPortfolioInputEnvelope {
     @Field(() => [LogCreateManyPortfolioInput], {nullable:false})
@@ -32074,8 +32081,8 @@ export class LogCreateManyPortfolioInputEnvelope {
 
 @InputType()
 export class LogCreateManyPortfolioInput {
-    @Field(() => Int, {nullable:true})
-    id?: number;
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
     @Field(() => LogType, {nullable:false})
     type!: `${LogType}`;
     @Field(() => Date, {nullable:true})
@@ -32092,8 +32099,8 @@ export class LogCreateManyPortfolioInput {
 
 @InputType()
 export class LogCreateManyInput {
-    @Field(() => Int, {nullable:true})
-    id?: number;
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
     @Field(() => LogType, {nullable:false})
     type!: `${LogType}`;
     @Field(() => Date, {nullable:true})
@@ -32127,6 +32134,29 @@ export class LogCreateNestedManyWithoutPortfolioInput {
 }
 
 @InputType()
+export class LogCreateNestedOneWithoutLotTransactionBatchInput {
+    @Field(() => LogCreateWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogCreateWithoutLotTransactionBatchInput)
+    create?: InstanceType<typeof LogCreateWithoutLotTransactionBatchInput>;
+    @Field(() => LogCreateOrConnectWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogCreateOrConnectWithoutLotTransactionBatchInput)
+    connectOrCreate?: InstanceType<typeof LogCreateOrConnectWithoutLotTransactionBatchInput>;
+    @Field(() => LogWhereUniqueInput, {nullable:true})
+    @Type(() => LogWhereUniqueInput)
+    connect?: Prisma.AtLeast<LogWhereUniqueInput, 'id'>;
+}
+
+@InputType()
+export class LogCreateOrConnectWithoutLotTransactionBatchInput {
+    @Field(() => LogWhereUniqueInput, {nullable:false})
+    @Type(() => LogWhereUniqueInput)
+    where!: Prisma.AtLeast<LogWhereUniqueInput, 'id'>;
+    @Field(() => LogCreateWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => LogCreateWithoutLotTransactionBatchInput)
+    create!: InstanceType<typeof LogCreateWithoutLotTransactionBatchInput>;
+}
+
+@InputType()
 export class LogCreateOrConnectWithoutPortfolioInput {
     @Field(() => LogWhereUniqueInput, {nullable:false})
     @Type(() => LogWhereUniqueInput)
@@ -32137,23 +32167,9 @@ export class LogCreateOrConnectWithoutPortfolioInput {
 }
 
 @InputType()
-export class LogCreateWithoutPortfolioInput {
-    @Field(() => LogType, {nullable:false})
-    type!: `${LogType}`;
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
-    @Field(() => AuthSource, {nullable:true})
-    source?: `${AuthSource}`;
+export class LogCreateWithoutLotTransactionBatchInput {
     @Field(() => String, {nullable:true})
-    description?: string;
-    @Field(() => Int, {nullable:true})
-    responseStatus?: number;
-    @Field(() => GraphQLJSON, {nullable:false})
-    data!: any;
-}
-
-@InputType()
-export class LogCreateInput {
+    id?: bigint | number;
     @Field(() => LogType, {nullable:false})
     type!: `${LogType}`;
     @Field(() => Date, {nullable:true})
@@ -32169,6 +32185,51 @@ export class LogCreateInput {
     @Field(() => PortfolioCreateNestedOneWithoutLogInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutLogInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutLogInput>;
+}
+
+@InputType()
+export class LogCreateWithoutPortfolioInput {
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
+    @Field(() => LogType, {nullable:false})
+    type!: `${LogType}`;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => AuthSource, {nullable:true})
+    source?: `${AuthSource}`;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => Int, {nullable:true})
+    responseStatus?: number;
+    @Field(() => GraphQLJSON, {nullable:false})
+    data!: any;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput>;
+}
+
+@InputType()
+export class LogCreateInput {
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
+    @Field(() => LogType, {nullable:false})
+    type!: `${LogType}`;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => AuthSource, {nullable:true})
+    source?: `${AuthSource}`;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => Int, {nullable:true})
+    responseStatus?: number;
+    @Field(() => GraphQLJSON, {nullable:false})
+    data!: any;
+    @Field(() => PortfolioCreateNestedOneWithoutLogInput, {nullable:false})
+    @Type(() => PortfolioCreateNestedOneWithoutLogInput)
+    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutLogInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput>;
 }
 
 @ArgsType()
@@ -32200,8 +32261,8 @@ export class LogGroupByArgs {
 
 @ObjectType()
 export class LogGroupBy {
-    @Field(() => Int, {nullable:false})
-    id!: number;
+    @Field(() => String, {nullable:false})
+    id!: bigint | number;
     @Field(() => LogType, {nullable:false})
     type!: `${LogType}`;
     @Field(() => Date, {nullable:false})
@@ -32258,8 +32319,8 @@ export class LogMaxAggregateInput {
 
 @ObjectType()
 export class LogMaxAggregate {
-    @Field(() => Int, {nullable:true})
-    id?: number;
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
     @Field(() => LogType, {nullable:true})
     type?: `${LogType}`;
     @Field(() => Date, {nullable:true})
@@ -32312,8 +32373,8 @@ export class LogMinAggregateInput {
 
 @ObjectType()
 export class LogMinAggregate {
-    @Field(() => Int, {nullable:true})
-    id?: number;
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
     @Field(() => LogType, {nullable:true})
     type?: `${LogType}`;
     @Field(() => Date, {nullable:true})
@@ -32344,6 +32405,14 @@ export class LogMinOrderByAggregateInput {
     responseStatus?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
+}
+
+@InputType()
+export class LogNullableScalarRelationFilter {
+    @Field(() => LogWhereInput, {nullable:true})
+    is?: InstanceType<typeof LogWhereInput>;
+    @Field(() => LogWhereInput, {nullable:true})
+    isNot?: InstanceType<typeof LogWhereInput>;
 }
 
 @InputType()
@@ -32403,6 +32472,9 @@ export class LogOrderByWithRelationInput {
     @Field(() => PortfolioOrderByWithRelationInput, {nullable:true})
     @Type(() => PortfolioOrderByWithRelationInput)
     portfolio?: InstanceType<typeof PortfolioOrderByWithRelationInput>;
+    @Field(() => LotTransactionBatchOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchOrderByRelationAggregateInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchOrderByRelationAggregateInput>;
 }
 
 @InputType()
@@ -32413,8 +32485,8 @@ export class LogScalarWhereWithAggregatesInput {
     OR?: Array<LogScalarWhereWithAggregatesInput>;
     @Field(() => [LogScalarWhereWithAggregatesInput], {nullable:true})
     NOT?: Array<LogScalarWhereWithAggregatesInput>;
-    @Field(() => IntWithAggregatesFilter, {nullable:true})
-    id?: InstanceType<typeof IntWithAggregatesFilter>;
+    @Field(() => BigIntWithAggregatesFilter, {nullable:true})
+    id?: InstanceType<typeof BigIntWithAggregatesFilter>;
     @Field(() => EnumLogTypeWithAggregatesFilter, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeWithAggregatesFilter>;
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
@@ -32440,8 +32512,8 @@ export class LogScalarWhereInput {
     OR?: Array<LogScalarWhereInput>;
     @Field(() => [LogScalarWhereInput], {nullable:true})
     NOT?: Array<LogScalarWhereInput>;
-    @Field(() => IntFilter, {nullable:true})
-    id?: InstanceType<typeof IntFilter>;
+    @Field(() => BigIntFilter, {nullable:true})
+    id?: InstanceType<typeof BigIntFilter>;
     @Field(() => EnumLogTypeFilter, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
@@ -32469,8 +32541,8 @@ export class LogSumAggregateInput {
 
 @ObjectType()
 export class LogSumAggregate {
-    @Field(() => Int, {nullable:true})
-    id?: number;
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
     @Field(() => Int, {nullable:true})
     responseStatus?: number;
 }
@@ -32500,27 +32572,9 @@ export class LogUncheckedCreateNestedManyWithoutPortfolioInput {
 }
 
 @InputType()
-export class LogUncheckedCreateWithoutPortfolioInput {
-    @Field(() => Int, {nullable:true})
-    id?: number;
-    @Field(() => LogType, {nullable:false})
-    type!: `${LogType}`;
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
-    @Field(() => AuthSource, {nullable:true})
-    source?: `${AuthSource}`;
+export class LogUncheckedCreateWithoutLotTransactionBatchInput {
     @Field(() => String, {nullable:true})
-    description?: string;
-    @Field(() => Int, {nullable:true})
-    responseStatus?: number;
-    @Field(() => GraphQLJSON, {nullable:false})
-    data!: any;
-}
-
-@InputType()
-export class LogUncheckedCreateInput {
-    @Field(() => Int, {nullable:true})
-    id?: number;
+    id?: bigint | number;
     @Field(() => LogType, {nullable:false})
     type!: `${LogType}`;
     @Field(() => Date, {nullable:true})
@@ -32535,6 +32589,50 @@ export class LogUncheckedCreateInput {
     data!: any;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
+}
+
+@InputType()
+export class LogUncheckedCreateWithoutPortfolioInput {
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
+    @Field(() => LogType, {nullable:false})
+    type!: `${LogType}`;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => AuthSource, {nullable:true})
+    source?: `${AuthSource}`;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => Int, {nullable:true})
+    responseStatus?: number;
+    @Field(() => GraphQLJSON, {nullable:false})
+    data!: any;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutLogTrxMergeInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutLogTrxMergeInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutLogTrxMergeInput>;
+}
+
+@InputType()
+export class LogUncheckedCreateInput {
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
+    @Field(() => LogType, {nullable:false})
+    type!: `${LogType}`;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => AuthSource, {nullable:true})
+    source?: `${AuthSource}`;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => Int, {nullable:true})
+    responseStatus?: number;
+    @Field(() => GraphQLJSON, {nullable:false})
+    data!: any;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutLogTrxMergeInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutLogTrxMergeInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutLogTrxMergeInput>;
 }
 
 @InputType()
@@ -32576,8 +32674,8 @@ export class LogUncheckedUpdateManyWithoutPortfolioNestedInput {
 
 @InputType()
 export class LogUncheckedUpdateManyWithoutPortfolioInput {
-    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
-    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
     @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -32594,8 +32692,28 @@ export class LogUncheckedUpdateManyWithoutPortfolioInput {
 
 @InputType()
 export class LogUncheckedUpdateManyInput {
-    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
-    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
+    @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAuthSourceFieldUpdateOperationsInput, {nullable:true})
+    source?: InstanceType<typeof NullableEnumAuthSourceFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
+    responseStatus?: InstanceType<typeof NullableIntFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    data?: any;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class LogUncheckedUpdateWithoutLotTransactionBatchInput {
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
     @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -32614,8 +32732,8 @@ export class LogUncheckedUpdateManyInput {
 
 @InputType()
 export class LogUncheckedUpdateWithoutPortfolioInput {
-    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
-    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
     @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -32628,12 +32746,15 @@ export class LogUncheckedUpdateWithoutPortfolioInput {
     responseStatus?: InstanceType<typeof NullableIntFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     data?: any;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutLogTrxMergeNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutLogTrxMergeNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutLogTrxMergeNestedInput>;
 }
 
 @InputType()
 export class LogUncheckedUpdateInput {
-    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
-    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
     @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -32648,10 +32769,15 @@ export class LogUncheckedUpdateInput {
     data?: any;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutLogTrxMergeNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutLogTrxMergeNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutLogTrxMergeNestedInput>;
 }
 
 @InputType()
 export class LogUpdateManyMutationInput {
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
     @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -32714,6 +32840,41 @@ export class LogUpdateManyWithoutPortfolioNestedInput {
 }
 
 @InputType()
+export class LogUpdateOneWithoutLotTransactionBatchNestedInput {
+    @Field(() => LogCreateWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogCreateWithoutLotTransactionBatchInput)
+    create?: InstanceType<typeof LogCreateWithoutLotTransactionBatchInput>;
+    @Field(() => LogCreateOrConnectWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogCreateOrConnectWithoutLotTransactionBatchInput)
+    connectOrCreate?: InstanceType<typeof LogCreateOrConnectWithoutLotTransactionBatchInput>;
+    @Field(() => LogUpsertWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogUpsertWithoutLotTransactionBatchInput)
+    upsert?: InstanceType<typeof LogUpsertWithoutLotTransactionBatchInput>;
+    @Field(() => LogWhereInput, {nullable:true})
+    @Type(() => LogWhereInput)
+    disconnect?: InstanceType<typeof LogWhereInput>;
+    @Field(() => LogWhereInput, {nullable:true})
+    @Type(() => LogWhereInput)
+    delete?: InstanceType<typeof LogWhereInput>;
+    @Field(() => LogWhereUniqueInput, {nullable:true})
+    @Type(() => LogWhereUniqueInput)
+    connect?: Prisma.AtLeast<LogWhereUniqueInput, 'id'>;
+    @Field(() => LogUpdateToOneWithWhereWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogUpdateToOneWithWhereWithoutLotTransactionBatchInput)
+    update?: InstanceType<typeof LogUpdateToOneWithWhereWithoutLotTransactionBatchInput>;
+}
+
+@InputType()
+export class LogUpdateToOneWithWhereWithoutLotTransactionBatchInput {
+    @Field(() => LogWhereInput, {nullable:true})
+    @Type(() => LogWhereInput)
+    where?: InstanceType<typeof LogWhereInput>;
+    @Field(() => LogUpdateWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => LogUpdateWithoutLotTransactionBatchInput)
+    data!: InstanceType<typeof LogUpdateWithoutLotTransactionBatchInput>;
+}
+
+@InputType()
 export class LogUpdateWithWhereUniqueWithoutPortfolioInput {
     @Field(() => LogWhereUniqueInput, {nullable:false})
     @Type(() => LogWhereUniqueInput)
@@ -32724,23 +32885,9 @@ export class LogUpdateWithWhereUniqueWithoutPortfolioInput {
 }
 
 @InputType()
-export class LogUpdateWithoutPortfolioInput {
-    @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
-    type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableEnumAuthSourceFieldUpdateOperationsInput, {nullable:true})
-    source?: InstanceType<typeof NullableEnumAuthSourceFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
-    responseStatus?: InstanceType<typeof NullableIntFieldUpdateOperationsInput>;
-    @Field(() => GraphQLJSON, {nullable:true})
-    data?: any;
-}
-
-@InputType()
-export class LogUpdateInput {
+export class LogUpdateWithoutLotTransactionBatchInput {
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
     @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -32759,6 +32906,51 @@ export class LogUpdateInput {
 }
 
 @InputType()
+export class LogUpdateWithoutPortfolioInput {
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
+    @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAuthSourceFieldUpdateOperationsInput, {nullable:true})
+    source?: InstanceType<typeof NullableEnumAuthSourceFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
+    responseStatus?: InstanceType<typeof NullableIntFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    data?: any;
+    @Field(() => LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput>;
+}
+
+@InputType()
+export class LogUpdateInput {
+    @Field(() => BigIntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof BigIntFieldUpdateOperationsInput>;
+    @Field(() => EnumLogTypeFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof EnumLogTypeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAuthSourceFieldUpdateOperationsInput, {nullable:true})
+    source?: InstanceType<typeof NullableEnumAuthSourceFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
+    responseStatus?: InstanceType<typeof NullableIntFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    data?: any;
+    @Field(() => PortfolioUpdateOneRequiredWithoutLogNestedInput, {nullable:true})
+    @Type(() => PortfolioUpdateOneRequiredWithoutLogNestedInput)
+    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutLogNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput>;
+}
+
+@InputType()
 export class LogUpsertWithWhereUniqueWithoutPortfolioInput {
     @Field(() => LogWhereUniqueInput, {nullable:false})
     @Type(() => LogWhereUniqueInput)
@@ -32772,9 +32964,22 @@ export class LogUpsertWithWhereUniqueWithoutPortfolioInput {
 }
 
 @InputType()
+export class LogUpsertWithoutLotTransactionBatchInput {
+    @Field(() => LogUpdateWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => LogUpdateWithoutLotTransactionBatchInput)
+    update!: InstanceType<typeof LogUpdateWithoutLotTransactionBatchInput>;
+    @Field(() => LogCreateWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => LogCreateWithoutLotTransactionBatchInput)
+    create!: InstanceType<typeof LogCreateWithoutLotTransactionBatchInput>;
+    @Field(() => LogWhereInput, {nullable:true})
+    @Type(() => LogWhereInput)
+    where?: InstanceType<typeof LogWhereInput>;
+}
+
+@InputType()
 export class LogWhereUniqueInput {
-    @Field(() => Int, {nullable:true})
-    id?: number;
+    @Field(() => String, {nullable:true})
+    id?: bigint | number;
     @Field(() => [LogWhereInput], {nullable:true})
     AND?: Array<LogWhereInput>;
     @Field(() => [LogWhereInput], {nullable:true})
@@ -32799,6 +33004,9 @@ export class LogWhereUniqueInput {
     @Field(() => PortfolioScalarRelationFilter, {nullable:true})
     @Type(() => PortfolioScalarRelationFilter)
     portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
+    @Field(() => LotTransactionBatchListRelationFilter, {nullable:true})
+    @Type(() => LotTransactionBatchListRelationFilter)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchListRelationFilter>;
 }
 
 @InputType()
@@ -32809,8 +33017,8 @@ export class LogWhereInput {
     OR?: Array<LogWhereInput>;
     @Field(() => [LogWhereInput], {nullable:true})
     NOT?: Array<LogWhereInput>;
-    @Field(() => IntFilter, {nullable:true})
-    id?: InstanceType<typeof IntFilter>;
+    @Field(() => BigIntFilter, {nullable:true})
+    id?: InstanceType<typeof BigIntFilter>;
     @Field(() => EnumLogTypeFilter, {nullable:true})
     type?: InstanceType<typeof EnumLogTypeFilter>;
     @Field(() => DateTimeFilter, {nullable:true})
@@ -32829,12 +33037,15 @@ export class LogWhereInput {
     @Field(() => PortfolioScalarRelationFilter, {nullable:true})
     @Type(() => PortfolioScalarRelationFilter)
     portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
+    @Field(() => LotTransactionBatchListRelationFilter, {nullable:true})
+    @Type(() => LotTransactionBatchListRelationFilter)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchListRelationFilter>;
 }
 
 @ObjectType()
 export class Log {
     @Field(() => ID, {nullable:false})
-    id!: number;
+    id!: bigint;
     @Field(() => LogType, {nullable:false})
     type!: `${LogType}`;
     @Field(() => Date, {nullable:false})
@@ -32851,6 +33062,10 @@ export class Log {
     portfolioId!: string;
     @Field(() => Portfolio, {nullable:false})
     portfolio?: InstanceType<typeof Portfolio>;
+    @Field(() => [LotTransactionBatch], {nullable:true})
+    LotTransactionBatch?: Array<LotTransactionBatch>;
+    @Field(() => LogCount, {nullable:false})
+    _count?: InstanceType<typeof LogCount>;
 }
 
 @ArgsType()
@@ -42728,18 +42943,24 @@ export class LotTransactionBatchAggregateArgs {
 export class LotTransactionBatchAvgAggregateInput {
     @Field(() => Boolean, {nullable:true})
     realizedProfitAndLoss?: true;
+    @Field(() => Boolean, {nullable:true})
+    logTrxMergeId?: true;
 }
 
 @ObjectType()
 export class LotTransactionBatchAvgAggregate {
     @Field(() => GraphQLDecimal, {nullable:true})
     realizedProfitAndLoss?: Decimal;
+    @Field(() => Float, {nullable:true})
+    logTrxMergeId?: number;
 }
 
 @InputType()
 export class LotTransactionBatchAvgOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     realizedProfitAndLoss?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    logTrxMergeId?: `${SortOrder}`;
 }
 
 @InputType()
@@ -42774,6 +42995,8 @@ export class LotTransactionBatchCountAggregateInput {
     realizedProfitAndLoss?: true;
     @Field(() => Boolean, {nullable:true})
     deletedLots?: true;
+    @Field(() => Boolean, {nullable:true})
+    logTrxMergeId?: true;
     @Field(() => Boolean, {nullable:true})
     _all?: true;
 }
@@ -42811,6 +43034,8 @@ export class LotTransactionBatchCountAggregate {
     @Field(() => Int, {nullable:false})
     deletedLots!: number;
     @Field(() => Int, {nullable:false})
+    logTrxMergeId!: number;
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }
 
@@ -42846,6 +43071,8 @@ export class LotTransactionBatchCountOrderByAggregateInput {
     realizedProfitAndLoss?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     deletedLots?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    logTrxMergeId?: `${SortOrder}`;
 }
 
 @ObjectType()
@@ -42871,6 +43098,53 @@ export class LotTransactionBatchCreateManyAccountInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsBefore?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsAfter?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    holdingsPayload?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    lotTupleMap?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    initialLots?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newTransactions?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newBuys?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
+}
+
+@InputType()
+export class LotTransactionBatchCreateManyLogTrxMergeInputEnvelope {
+    @Field(() => [LotTransactionBatchCreateManyLogTrxMergeInput], {nullable:false})
+    @Type(() => LotTransactionBatchCreateManyLogTrxMergeInput)
+    data!: Array<LotTransactionBatchCreateManyLogTrxMergeInput>;
+    @Field(() => Boolean, {nullable:true})
+    skipDuplicates?: boolean;
+}
+
+@InputType()
+export class LotTransactionBatchCreateManyLogTrxMergeInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    accountId!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -42938,6 +43212,8 @@ export class LotTransactionBatchCreateManyPortfolioInput {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
 }
 
 @InputType()
@@ -42974,6 +43250,8 @@ export class LotTransactionBatchCreateManyInput {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
 }
 
 @InputType()
@@ -42987,6 +43265,22 @@ export class LotTransactionBatchCreateNestedManyWithoutAccountInput {
     @Field(() => LotTransactionBatchCreateManyAccountInputEnvelope, {nullable:true})
     @Type(() => LotTransactionBatchCreateManyAccountInputEnvelope)
     createMany?: InstanceType<typeof LotTransactionBatchCreateManyAccountInputEnvelope>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+}
+
+@InputType()
+export class LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput {
+    @Field(() => [LotTransactionBatchCreateWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateWithoutLogTrxMergeInput)
+    create?: Array<LotTransactionBatchCreateWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput)
+    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput>;
+    @Field(() => LotTransactionBatchCreateManyLogTrxMergeInputEnvelope, {nullable:true})
+    @Type(() => LotTransactionBatchCreateManyLogTrxMergeInputEnvelope)
+    createMany?: InstanceType<typeof LotTransactionBatchCreateManyLogTrxMergeInputEnvelope>;
     @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
@@ -43029,6 +43323,16 @@ export class LotTransactionBatchCreateOrConnectWithoutAccountInput {
     @Field(() => LotTransactionBatchCreateWithoutAccountInput, {nullable:false})
     @Type(() => LotTransactionBatchCreateWithoutAccountInput)
     create!: InstanceType<typeof LotTransactionBatchCreateWithoutAccountInput>;
+}
+
+@InputType()
+export class LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput {
+    @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:false})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    where!: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
+    @Field(() => LotTransactionBatchCreateWithoutLogTrxMergeInput, {nullable:false})
+    @Type(() => LotTransactionBatchCreateWithoutLogTrxMergeInput)
+    create!: InstanceType<typeof LotTransactionBatchCreateWithoutLogTrxMergeInput>;
 }
 
 @InputType()
@@ -43087,6 +43391,50 @@ export class LotTransactionBatchCreateWithoutAccountInput {
     @Field(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutLotTransactionBatchInput>;
+    @Field(() => LogCreateNestedOneWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogCreateNestedOneWithoutLotTransactionBatchInput)
+    logTrxMerge?: InstanceType<typeof LogCreateNestedOneWithoutLotTransactionBatchInput>;
+}
+
+@InputType()
+export class LotTransactionBatchCreateWithoutLogTrxMergeInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsBefore?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsAfter?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    holdingsPayload?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    lotTupleMap?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    initialLots?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newTransactions?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newBuys?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
+    @Field(() => AccountCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => AccountCreateNestedOneWithoutLotTransactionBatchInput)
+    account!: InstanceType<typeof AccountCreateNestedOneWithoutLotTransactionBatchInput>;
+    @Field(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput)
+    lotChangeLog?: InstanceType<typeof LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput>;
+    @Field(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput)
+    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutLotTransactionBatchInput>;
 }
 
 @InputType()
@@ -43125,6 +43473,9 @@ export class LotTransactionBatchCreateWithoutLotChangeLogInput {
     @Field(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutLotTransactionBatchInput>;
+    @Field(() => LogCreateNestedOneWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogCreateNestedOneWithoutLotTransactionBatchInput)
+    logTrxMerge?: InstanceType<typeof LogCreateNestedOneWithoutLotTransactionBatchInput>;
 }
 
 @InputType()
@@ -43163,6 +43514,9 @@ export class LotTransactionBatchCreateWithoutPortfolioInput {
     @Field(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput>;
+    @Field(() => LogCreateNestedOneWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogCreateNestedOneWithoutLotTransactionBatchInput)
+    logTrxMerge?: InstanceType<typeof LogCreateNestedOneWithoutLotTransactionBatchInput>;
 }
 
 @InputType()
@@ -43204,6 +43558,9 @@ export class LotTransactionBatchCreateInput {
     @Field(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutLotTransactionBatchInput>;
+    @Field(() => LogCreateNestedOneWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LogCreateNestedOneWithoutLotTransactionBatchInput)
+    logTrxMerge?: InstanceType<typeof LogCreateNestedOneWithoutLotTransactionBatchInput>;
 }
 
 @ArgsType()
@@ -43272,6 +43629,8 @@ export class LotTransactionBatchGroupBy {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
     @Field(() => LotTransactionBatchCountAggregate, {nullable:true})
     _count?: InstanceType<typeof LotTransactionBatchCountAggregate>;
     @Field(() => LotTransactionBatchAvgAggregate, {nullable:true})
@@ -43311,6 +43670,8 @@ export class LotTransactionBatchMaxAggregateInput {
     portfolioId?: true;
     @Field(() => Boolean, {nullable:true})
     realizedProfitAndLoss?: true;
+    @Field(() => Boolean, {nullable:true})
+    logTrxMergeId?: true;
 }
 
 @ObjectType()
@@ -43327,6 +43688,8 @@ export class LotTransactionBatchMaxAggregate {
     portfolioId?: string;
     @Field(() => GraphQLDecimal, {nullable:true})
     realizedProfitAndLoss?: Decimal;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
 }
 
 @InputType()
@@ -43343,6 +43706,8 @@ export class LotTransactionBatchMaxOrderByAggregateInput {
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     realizedProfitAndLoss?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    logTrxMergeId?: `${SortOrder}`;
 }
 
 @InputType()
@@ -43359,6 +43724,8 @@ export class LotTransactionBatchMinAggregateInput {
     portfolioId?: true;
     @Field(() => Boolean, {nullable:true})
     realizedProfitAndLoss?: true;
+    @Field(() => Boolean, {nullable:true})
+    logTrxMergeId?: true;
 }
 
 @ObjectType()
@@ -43375,6 +43742,8 @@ export class LotTransactionBatchMinAggregate {
     portfolioId?: string;
     @Field(() => GraphQLDecimal, {nullable:true})
     realizedProfitAndLoss?: Decimal;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
 }
 
 @InputType()
@@ -43391,6 +43760,8 @@ export class LotTransactionBatchMinOrderByAggregateInput {
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     realizedProfitAndLoss?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    logTrxMergeId?: `${SortOrder}`;
 }
 
 @InputType()
@@ -43432,6 +43803,8 @@ export class LotTransactionBatchOrderByWithAggregationInput {
     realizedProfitAndLoss?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrderInput, {nullable:true})
     deletedLots?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof SortOrderInput>;
     @Field(() => LotTransactionBatchCountOrderByAggregateInput, {nullable:true})
     @Type(() => LotTransactionBatchCountOrderByAggregateInput)
     _count?: InstanceType<typeof LotTransactionBatchCountOrderByAggregateInput>;
@@ -43482,6 +43855,8 @@ export class LotTransactionBatchOrderByWithRelationInput {
     realizedProfitAndLoss?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrderInput, {nullable:true})
     deletedLots?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof SortOrderInput>;
     @Field(() => AccountOrderByWithRelationInput, {nullable:true})
     @Type(() => AccountOrderByWithRelationInput)
     account?: InstanceType<typeof AccountOrderByWithRelationInput>;
@@ -43491,6 +43866,9 @@ export class LotTransactionBatchOrderByWithRelationInput {
     @Field(() => PortfolioOrderByWithRelationInput, {nullable:true})
     @Type(() => PortfolioOrderByWithRelationInput)
     portfolio?: InstanceType<typeof PortfolioOrderByWithRelationInput>;
+    @Field(() => LogOrderByWithRelationInput, {nullable:true})
+    @Type(() => LogOrderByWithRelationInput)
+    logTrxMerge?: InstanceType<typeof LogOrderByWithRelationInput>;
 }
 
 @InputType()
@@ -43545,6 +43923,8 @@ export class LotTransactionBatchScalarWhereWithAggregatesInput {
     realizedProfitAndLoss?: InstanceType<typeof DecimalNullableWithAggregatesFilter>;
     @Field(() => JsonNullableWithAggregatesFilter, {nullable:true})
     deletedLots?: InstanceType<typeof JsonNullableWithAggregatesFilter>;
+    @Field(() => BigIntNullableWithAggregatesFilter, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof BigIntNullableWithAggregatesFilter>;
 }
 
 @InputType()
@@ -43589,24 +43969,32 @@ export class LotTransactionBatchScalarWhereInput {
     realizedProfitAndLoss?: InstanceType<typeof DecimalNullableFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
     deletedLots?: InstanceType<typeof JsonNullableFilter>;
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof BigIntNullableFilter>;
 }
 
 @InputType()
 export class LotTransactionBatchSumAggregateInput {
     @Field(() => Boolean, {nullable:true})
     realizedProfitAndLoss?: true;
+    @Field(() => Boolean, {nullable:true})
+    logTrxMergeId?: true;
 }
 
 @ObjectType()
 export class LotTransactionBatchSumAggregate {
     @Field(() => GraphQLDecimal, {nullable:true})
     realizedProfitAndLoss?: Decimal;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
 }
 
 @InputType()
 export class LotTransactionBatchSumOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     realizedProfitAndLoss?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    logTrxMergeId?: `${SortOrder}`;
 }
 
 @InputType()
@@ -43620,6 +44008,22 @@ export class LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput {
     @Field(() => LotTransactionBatchCreateManyAccountInputEnvelope, {nullable:true})
     @Type(() => LotTransactionBatchCreateManyAccountInputEnvelope)
     createMany?: InstanceType<typeof LotTransactionBatchCreateManyAccountInputEnvelope>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+}
+
+@InputType()
+export class LotTransactionBatchUncheckedCreateNestedManyWithoutLogTrxMergeInput {
+    @Field(() => [LotTransactionBatchCreateWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateWithoutLogTrxMergeInput)
+    create?: Array<LotTransactionBatchCreateWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput)
+    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput>;
+    @Field(() => LotTransactionBatchCreateManyLogTrxMergeInputEnvelope, {nullable:true})
+    @Type(() => LotTransactionBatchCreateManyLogTrxMergeInputEnvelope)
+    createMany?: InstanceType<typeof LotTransactionBatchCreateManyLogTrxMergeInputEnvelope>;
     @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
@@ -43649,6 +44053,47 @@ export class LotTransactionBatchUncheckedCreateWithoutAccountInput {
     createdAt?: Date | string;
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsBefore?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsAfter?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    holdingsPayload?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    lotTupleMap?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    initialLots?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newTransactions?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newBuys?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newSells?: any;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    realizedProfitAndLoss?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
+    @Field(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput)
+    lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput>;
+}
+
+@InputType()
+export class LotTransactionBatchUncheckedCreateWithoutLogTrxMergeInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    accountId!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43712,6 +44157,8 @@ export class LotTransactionBatchUncheckedCreateWithoutLotChangeLogInput {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
 }
 
 @InputType()
@@ -43746,6 +44193,8 @@ export class LotTransactionBatchUncheckedCreateWithoutPortfolioInput {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
     @Field(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput>;
@@ -43785,6 +44234,8 @@ export class LotTransactionBatchUncheckedCreateInput {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId?: bigint | number;
     @Field(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedCreateNestedManyWithoutLotTransactionBatchInput>;
@@ -43835,6 +44286,80 @@ export class LotTransactionBatchUncheckedUpdateManyWithoutAccountInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsBefore?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsAfter?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    holdingsPayload?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    lotTupleMap?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    initialLots?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newTransactions?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newBuys?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
+    @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof NullableBigIntFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class LotTransactionBatchUncheckedUpdateManyWithoutLogTrxMergeNestedInput {
+    @Field(() => [LotTransactionBatchCreateWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateWithoutLogTrxMergeInput)
+    create?: Array<LotTransactionBatchCreateWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput)
+    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput)
+    upsert?: Array<LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput>;
+    @Field(() => LotTransactionBatchCreateManyLogTrxMergeInputEnvelope, {nullable:true})
+    @Type(() => LotTransactionBatchCreateManyLogTrxMergeInputEnvelope)
+    createMany?: InstanceType<typeof LotTransactionBatchCreateManyLogTrxMergeInputEnvelope>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    set?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    disconnect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    delete?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+    @Field(() => [LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput)
+    update?: Array<LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput)
+    updateMany?: Array<LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchScalarWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereInput)
+    deleteMany?: Array<LotTransactionBatchScalarWhereInput>;
+}
+
+@InputType()
+export class LotTransactionBatchUncheckedUpdateManyWithoutLogTrxMergeInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    accountId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43928,6 +44453,8 @@ export class LotTransactionBatchUncheckedUpdateManyWithoutPortfolioInput {
     realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof NullableBigIntFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -43963,6 +44490,8 @@ export class LotTransactionBatchUncheckedUpdateManyInput {
     realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof NullableBigIntFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -43973,6 +44502,46 @@ export class LotTransactionBatchUncheckedUpdateWithoutAccountInput {
     createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsBefore?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsAfter?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    holdingsPayload?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    lotTupleMap?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    initialLots?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newTransactions?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newBuys?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
+    @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof NullableBigIntFieldUpdateOperationsInput>;
+    @Field(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput)
+    lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput>;
+}
+
+@InputType()
+export class LotTransactionBatchUncheckedUpdateWithoutLogTrxMergeInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    accountId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -44034,6 +44603,8 @@ export class LotTransactionBatchUncheckedUpdateWithoutLotChangeLogInput {
     realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof NullableBigIntFieldUpdateOperationsInput>;
 }
 
 @InputType()
@@ -44067,6 +44638,8 @@ export class LotTransactionBatchUncheckedUpdateWithoutPortfolioInput {
     realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof NullableBigIntFieldUpdateOperationsInput>;
     @Field(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput>;
@@ -44105,6 +44678,8 @@ export class LotTransactionBatchUncheckedUpdateInput {
     realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
+    @Field(() => NullableBigIntFieldUpdateOperationsInput, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof NullableBigIntFieldUpdateOperationsInput>;
     @Field(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedUpdateManyWithoutLotTransactionBatchNestedInput>;
@@ -44143,6 +44718,16 @@ export class LotTransactionBatchUpdateManyMutationInput {
 
 @InputType()
 export class LotTransactionBatchUpdateManyWithWhereWithoutAccountInput {
+    @Field(() => LotTransactionBatchScalarWhereInput, {nullable:false})
+    @Type(() => LotTransactionBatchScalarWhereInput)
+    where!: InstanceType<typeof LotTransactionBatchScalarWhereInput>;
+    @Field(() => LotTransactionBatchUpdateManyMutationInput, {nullable:false})
+    @Type(() => LotTransactionBatchUpdateManyMutationInput)
+    data!: InstanceType<typeof LotTransactionBatchUpdateManyMutationInput>;
+}
+
+@InputType()
+export class LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput {
     @Field(() => LotTransactionBatchScalarWhereInput, {nullable:false})
     @Type(() => LotTransactionBatchScalarWhereInput)
     where!: InstanceType<typeof LotTransactionBatchScalarWhereInput>;
@@ -44193,6 +44778,43 @@ export class LotTransactionBatchUpdateManyWithoutAccountNestedInput {
     @Field(() => [LotTransactionBatchUpdateManyWithWhereWithoutAccountInput], {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithWhereWithoutAccountInput)
     updateMany?: Array<LotTransactionBatchUpdateManyWithWhereWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchScalarWhereInput], {nullable:true})
+    @Type(() => LotTransactionBatchScalarWhereInput)
+    deleteMany?: Array<LotTransactionBatchScalarWhereInput>;
+}
+
+@InputType()
+export class LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput {
+    @Field(() => [LotTransactionBatchCreateWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateWithoutLogTrxMergeInput)
+    create?: Array<LotTransactionBatchCreateWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput)
+    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput)
+    upsert?: Array<LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput>;
+    @Field(() => LotTransactionBatchCreateManyLogTrxMergeInputEnvelope, {nullable:true})
+    @Type(() => LotTransactionBatchCreateManyLogTrxMergeInputEnvelope)
+    createMany?: InstanceType<typeof LotTransactionBatchCreateManyLogTrxMergeInputEnvelope>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    set?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    disconnect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    delete?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+    @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
+    @Field(() => [LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput)
+    update?: Array<LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput>;
+    @Field(() => [LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput)
+    updateMany?: Array<LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput>;
     @Field(() => [LotTransactionBatchScalarWhereInput], {nullable:true})
     @Type(() => LotTransactionBatchScalarWhereInput)
     deleteMany?: Array<LotTransactionBatchScalarWhereInput>;
@@ -44275,6 +44897,16 @@ export class LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput {
 }
 
 @InputType()
+export class LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput {
+    @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:false})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    where!: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
+    @Field(() => LotTransactionBatchUpdateWithoutLogTrxMergeInput, {nullable:false})
+    @Type(() => LotTransactionBatchUpdateWithoutLogTrxMergeInput)
+    data!: InstanceType<typeof LotTransactionBatchUpdateWithoutLogTrxMergeInput>;
+}
+
+@InputType()
 export class LotTransactionBatchUpdateWithWhereUniqueWithoutPortfolioInput {
     @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:false})
     @Type(() => LotTransactionBatchWhereUniqueInput)
@@ -44319,6 +44951,49 @@ export class LotTransactionBatchUpdateWithoutAccountInput {
     @Field(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
+    @Field(() => LogUpdateOneWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => LogUpdateOneWithoutLotTransactionBatchNestedInput)
+    logTrxMerge?: InstanceType<typeof LogUpdateOneWithoutLotTransactionBatchNestedInput>;
+}
+
+@InputType()
+export class LotTransactionBatchUpdateWithoutLogTrxMergeInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsBefore?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    positionsAfter?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    holdingsPayload?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    lotTupleMap?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    initialLots?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newTransactions?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newBuys?: any;
+    @Field(() => GraphQLJSON, {nullable:true})
+    newSells?: any;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    deletedLots?: any;
+    @Field(() => AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
+    account?: InstanceType<typeof AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
+    @Field(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput)
+    lotChangeLog?: InstanceType<typeof LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput>;
+    @Field(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
+    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
 }
 
 @InputType()
@@ -44356,6 +45031,9 @@ export class LotTransactionBatchUpdateWithoutLotChangeLogInput {
     @Field(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
+    @Field(() => LogUpdateOneWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => LogUpdateOneWithoutLotTransactionBatchNestedInput)
+    logTrxMerge?: InstanceType<typeof LogUpdateOneWithoutLotTransactionBatchNestedInput>;
 }
 
 @InputType()
@@ -44393,6 +45071,9 @@ export class LotTransactionBatchUpdateWithoutPortfolioInput {
     @Field(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput>;
+    @Field(() => LogUpdateOneWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => LogUpdateOneWithoutLotTransactionBatchNestedInput)
+    logTrxMerge?: InstanceType<typeof LogUpdateOneWithoutLotTransactionBatchNestedInput>;
 }
 
 @InputType()
@@ -44433,6 +45114,9 @@ export class LotTransactionBatchUpdateInput {
     @Field(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
+    @Field(() => LogUpdateOneWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => LogUpdateOneWithoutLotTransactionBatchNestedInput)
+    logTrxMerge?: InstanceType<typeof LogUpdateOneWithoutLotTransactionBatchNestedInput>;
 }
 
 @InputType()
@@ -44446,6 +45130,19 @@ export class LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput {
     @Field(() => LotTransactionBatchCreateWithoutAccountInput, {nullable:false})
     @Type(() => LotTransactionBatchCreateWithoutAccountInput)
     create!: InstanceType<typeof LotTransactionBatchCreateWithoutAccountInput>;
+}
+
+@InputType()
+export class LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput {
+    @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:false})
+    @Type(() => LotTransactionBatchWhereUniqueInput)
+    where!: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
+    @Field(() => LotTransactionBatchUpdateWithoutLogTrxMergeInput, {nullable:false})
+    @Type(() => LotTransactionBatchUpdateWithoutLogTrxMergeInput)
+    update!: InstanceType<typeof LotTransactionBatchUpdateWithoutLogTrxMergeInput>;
+    @Field(() => LotTransactionBatchCreateWithoutLogTrxMergeInput, {nullable:false})
+    @Type(() => LotTransactionBatchCreateWithoutLogTrxMergeInput)
+    create!: InstanceType<typeof LotTransactionBatchCreateWithoutLogTrxMergeInput>;
 }
 
 @InputType()
@@ -44516,6 +45213,8 @@ export class LotTransactionBatchWhereUniqueInput {
     realizedProfitAndLoss?: InstanceType<typeof DecimalNullableFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
     deletedLots?: InstanceType<typeof JsonNullableFilter>;
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof BigIntNullableFilter>;
     @Field(() => AccountScalarRelationFilter, {nullable:true})
     @Type(() => AccountScalarRelationFilter)
     account?: InstanceType<typeof AccountScalarRelationFilter>;
@@ -44525,6 +45224,9 @@ export class LotTransactionBatchWhereUniqueInput {
     @Field(() => PortfolioScalarRelationFilter, {nullable:true})
     @Type(() => PortfolioScalarRelationFilter)
     portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
+    @Field(() => LogNullableScalarRelationFilter, {nullable:true})
+    @Type(() => LogNullableScalarRelationFilter)
+    logTrxMerge?: InstanceType<typeof LogNullableScalarRelationFilter>;
 }
 
 @InputType()
@@ -44569,6 +45271,8 @@ export class LotTransactionBatchWhereInput {
     realizedProfitAndLoss?: InstanceType<typeof DecimalNullableFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
     deletedLots?: InstanceType<typeof JsonNullableFilter>;
+    @Field(() => BigIntNullableFilter, {nullable:true})
+    logTrxMergeId?: InstanceType<typeof BigIntNullableFilter>;
     @Field(() => AccountScalarRelationFilter, {nullable:true})
     @Type(() => AccountScalarRelationFilter)
     account?: InstanceType<typeof AccountScalarRelationFilter>;
@@ -44578,6 +45282,9 @@ export class LotTransactionBatchWhereInput {
     @Field(() => PortfolioScalarRelationFilter, {nullable:true})
     @Type(() => PortfolioScalarRelationFilter)
     portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
+    @Field(() => LogNullableScalarRelationFilter, {nullable:true})
+    @Type(() => LogNullableScalarRelationFilter)
+    logTrxMerge?: InstanceType<typeof LogNullableScalarRelationFilter>;
 }
 
 @ObjectType()
@@ -44639,12 +45346,16 @@ export class LotTransactionBatch {
     realizedProfitAndLoss!: Decimal | null;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots!: any | null;
+    @Field(() => String, {nullable:true})
+    logTrxMergeId!: bigint | null;
     @Field(() => Account, {nullable:false})
     account?: InstanceType<typeof Account>;
     @Field(() => [LotChangeLog], {nullable:true})
     lotChangeLog?: Array<LotChangeLog>;
     @Field(() => Portfolio, {nullable:false})
     portfolio?: InstanceType<typeof Portfolio>;
+    @Field(() => Log, {nullable:true})
+    logTrxMerge?: InstanceType<typeof Log> | null;
     @Field(() => LotTransactionBatchCount, {nullable:false})
     _count?: InstanceType<typeof LotTransactionBatchCount>;
 }
@@ -58929,6 +59640,120 @@ export class AffectedRows {
 }
 
 @InputType()
+export class BigIntFieldUpdateOperationsInput {
+    @Field(() => String, {nullable:true})
+    set?: bigint | number;
+    @Field(() => String, {nullable:true})
+    increment?: bigint | number;
+    @Field(() => String, {nullable:true})
+    decrement?: bigint | number;
+    @Field(() => String, {nullable:true})
+    multiply?: bigint | number;
+    @Field(() => String, {nullable:true})
+    divide?: bigint | number;
+}
+
+@InputType()
+export class BigIntFilter {
+    @Field(() => String, {nullable:true})
+    equals?: bigint | number;
+    @Field(() => [String], {nullable:true})
+    in?: Array<bigint> | Array<number>;
+    @Field(() => [String], {nullable:true})
+    notIn?: Array<bigint> | Array<number>;
+    @Field(() => String, {nullable:true})
+    lt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    lte?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gte?: bigint | number;
+    @Field(() => NestedBigIntFilter, {nullable:true})
+    not?: InstanceType<typeof NestedBigIntFilter>;
+}
+
+@InputType()
+export class BigIntNullableFilter {
+    @Field(() => String, {nullable:true})
+    equals?: bigint | number;
+    @Field(() => [String], {nullable:true})
+    in?: Array<bigint> | Array<number>;
+    @Field(() => [String], {nullable:true})
+    notIn?: Array<bigint> | Array<number>;
+    @Field(() => String, {nullable:true})
+    lt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    lte?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gte?: bigint | number;
+    @Field(() => NestedBigIntNullableFilter, {nullable:true})
+    not?: InstanceType<typeof NestedBigIntNullableFilter>;
+}
+
+@InputType()
+export class BigIntNullableWithAggregatesFilter {
+    @Field(() => String, {nullable:true})
+    equals?: bigint | number;
+    @Field(() => [String], {nullable:true})
+    in?: Array<bigint> | Array<number>;
+    @Field(() => [String], {nullable:true})
+    notIn?: Array<bigint> | Array<number>;
+    @Field(() => String, {nullable:true})
+    lt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    lte?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gte?: bigint | number;
+    @Field(() => NestedBigIntNullableWithAggregatesFilter, {nullable:true})
+    not?: InstanceType<typeof NestedBigIntNullableWithAggregatesFilter>;
+    @Field(() => NestedIntNullableFilter, {nullable:true})
+    _count?: InstanceType<typeof NestedIntNullableFilter>;
+    @Field(() => NestedFloatNullableFilter, {nullable:true})
+    _avg?: InstanceType<typeof NestedFloatNullableFilter>;
+    @Field(() => NestedBigIntNullableFilter, {nullable:true})
+    _sum?: InstanceType<typeof NestedBigIntNullableFilter>;
+    @Field(() => NestedBigIntNullableFilter, {nullable:true})
+    _min?: InstanceType<typeof NestedBigIntNullableFilter>;
+    @Field(() => NestedBigIntNullableFilter, {nullable:true})
+    _max?: InstanceType<typeof NestedBigIntNullableFilter>;
+}
+
+@InputType()
+export class BigIntWithAggregatesFilter {
+    @Field(() => String, {nullable:true})
+    equals?: bigint | number;
+    @Field(() => [String], {nullable:true})
+    in?: Array<bigint> | Array<number>;
+    @Field(() => [String], {nullable:true})
+    notIn?: Array<bigint> | Array<number>;
+    @Field(() => String, {nullable:true})
+    lt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    lte?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gte?: bigint | number;
+    @Field(() => NestedBigIntWithAggregatesFilter, {nullable:true})
+    not?: InstanceType<typeof NestedBigIntWithAggregatesFilter>;
+    @Field(() => NestedIntFilter, {nullable:true})
+    _count?: InstanceType<typeof NestedIntFilter>;
+    @Field(() => NestedFloatFilter, {nullable:true})
+    _avg?: InstanceType<typeof NestedFloatFilter>;
+    @Field(() => NestedBigIntFilter, {nullable:true})
+    _sum?: InstanceType<typeof NestedBigIntFilter>;
+    @Field(() => NestedBigIntFilter, {nullable:true})
+    _min?: InstanceType<typeof NestedBigIntFilter>;
+    @Field(() => NestedBigIntFilter, {nullable:true})
+    _max?: InstanceType<typeof NestedBigIntFilter>;
+}
+
+@InputType()
 export class BoolFieldUpdateOperationsInput {
     @Field(() => Boolean, {nullable:true})
     set?: boolean;
@@ -60196,6 +61021,106 @@ export class JsonWithAggregatesFilter {
     _min?: InstanceType<typeof NestedJsonFilter>;
     @Field(() => NestedJsonFilter, {nullable:true})
     _max?: InstanceType<typeof NestedJsonFilter>;
+}
+
+@InputType()
+export class NestedBigIntFilter {
+    @Field(() => String, {nullable:true})
+    equals?: bigint | number;
+    @Field(() => [String], {nullable:true})
+    in?: Array<bigint> | Array<number>;
+    @Field(() => [String], {nullable:true})
+    notIn?: Array<bigint> | Array<number>;
+    @Field(() => String, {nullable:true})
+    lt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    lte?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gte?: bigint | number;
+    @Field(() => NestedBigIntFilter, {nullable:true})
+    not?: InstanceType<typeof NestedBigIntFilter>;
+}
+
+@InputType()
+export class NestedBigIntNullableFilter {
+    @Field(() => String, {nullable:true})
+    equals?: bigint | number;
+    @Field(() => [String], {nullable:true})
+    in?: Array<bigint> | Array<number>;
+    @Field(() => [String], {nullable:true})
+    notIn?: Array<bigint> | Array<number>;
+    @Field(() => String, {nullable:true})
+    lt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    lte?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gte?: bigint | number;
+    @Field(() => NestedBigIntNullableFilter, {nullable:true})
+    not?: InstanceType<typeof NestedBigIntNullableFilter>;
+}
+
+@InputType()
+export class NestedBigIntNullableWithAggregatesFilter {
+    @Field(() => String, {nullable:true})
+    equals?: bigint | number;
+    @Field(() => [String], {nullable:true})
+    in?: Array<bigint> | Array<number>;
+    @Field(() => [String], {nullable:true})
+    notIn?: Array<bigint> | Array<number>;
+    @Field(() => String, {nullable:true})
+    lt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    lte?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gte?: bigint | number;
+    @Field(() => NestedBigIntNullableWithAggregatesFilter, {nullable:true})
+    not?: InstanceType<typeof NestedBigIntNullableWithAggregatesFilter>;
+    @Field(() => NestedIntNullableFilter, {nullable:true})
+    _count?: InstanceType<typeof NestedIntNullableFilter>;
+    @Field(() => NestedFloatNullableFilter, {nullable:true})
+    _avg?: InstanceType<typeof NestedFloatNullableFilter>;
+    @Field(() => NestedBigIntNullableFilter, {nullable:true})
+    _sum?: InstanceType<typeof NestedBigIntNullableFilter>;
+    @Field(() => NestedBigIntNullableFilter, {nullable:true})
+    _min?: InstanceType<typeof NestedBigIntNullableFilter>;
+    @Field(() => NestedBigIntNullableFilter, {nullable:true})
+    _max?: InstanceType<typeof NestedBigIntNullableFilter>;
+}
+
+@InputType()
+export class NestedBigIntWithAggregatesFilter {
+    @Field(() => String, {nullable:true})
+    equals?: bigint | number;
+    @Field(() => [String], {nullable:true})
+    in?: Array<bigint> | Array<number>;
+    @Field(() => [String], {nullable:true})
+    notIn?: Array<bigint> | Array<number>;
+    @Field(() => String, {nullable:true})
+    lt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    lte?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gt?: bigint | number;
+    @Field(() => String, {nullable:true})
+    gte?: bigint | number;
+    @Field(() => NestedBigIntWithAggregatesFilter, {nullable:true})
+    not?: InstanceType<typeof NestedBigIntWithAggregatesFilter>;
+    @Field(() => NestedIntFilter, {nullable:true})
+    _count?: InstanceType<typeof NestedIntFilter>;
+    @Field(() => NestedFloatFilter, {nullable:true})
+    _avg?: InstanceType<typeof NestedFloatFilter>;
+    @Field(() => NestedBigIntFilter, {nullable:true})
+    _sum?: InstanceType<typeof NestedBigIntFilter>;
+    @Field(() => NestedBigIntFilter, {nullable:true})
+    _min?: InstanceType<typeof NestedBigIntFilter>;
+    @Field(() => NestedBigIntFilter, {nullable:true})
+    _max?: InstanceType<typeof NestedBigIntFilter>;
 }
 
 @InputType()
@@ -61478,6 +62403,20 @@ export class NestedUuidWithAggregatesFilter {
     _min?: InstanceType<typeof NestedStringFilter>;
     @Field(() => NestedStringFilter, {nullable:true})
     _max?: InstanceType<typeof NestedStringFilter>;
+}
+
+@InputType()
+export class NullableBigIntFieldUpdateOperationsInput {
+    @Field(() => String, {nullable:true})
+    set?: bigint | number;
+    @Field(() => String, {nullable:true})
+    increment?: bigint | number;
+    @Field(() => String, {nullable:true})
+    decrement?: bigint | number;
+    @Field(() => String, {nullable:true})
+    multiply?: bigint | number;
+    @Field(() => String, {nullable:true})
+    divide?: bigint | number;
 }
 
 @InputType()

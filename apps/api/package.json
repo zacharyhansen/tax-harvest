@@ -44,7 +44,8 @@
     "postmigrate": "pnpm codegen",
     "migrate:create": "dotenv -e .env.local.migration -- prisma migrate dev --create-only --name",
     "seed": "dotenv -e .env.local.migration -- prisma db seed",
-    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma"
+    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
+    "prisma:reset": "dotenv -e .env.local.migration -- prisma migrate reset"
   },
   "@snaplet/seed": {
     "config": "seed.client.ts"

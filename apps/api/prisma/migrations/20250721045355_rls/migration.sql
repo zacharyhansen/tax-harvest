@@ -5,10 +5,16 @@ CREATE EXTENSION IF NOT EXISTS "vector";
 CREATE TYPE "PlaidLinkStatus" AS ENUM ('NONE', 'CREATED', 'SESSION_FINISHED', 'SYNCED');
 
 -- CreateEnum
-CREATE TYPE "HarvestType" AS ENUM ('SELL', 'REDUCE_COST_BASIS', 'REDUCE_TAXES', 'CAPTURE_GAINS_TAX_FREE');
+CREATE TYPE "HarvestNotificationFrequency" AS ENUM ('DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'NEVER');
+
+-- CreateEnum
+CREATE TYPE "HarvestType" AS ENUM ('SELL', 'REDUCE_COST_BASIS', 'REDUCE_TAXES', 'CAPTURE_GAINS_TAX_FREE', 'NO_OPPORTUNITY_GAINS', 'NO_OPPORTUNITY_LOSSES', 'NO_OPPORTUNITY_EMPTY');
 
 -- CreateEnum
 CREATE TYPE "HarvestStep" AS ENUM ('CONFIGURE', 'REVIEW', 'COMPLETE');
+
+-- CreateEnum
+CREATE TYPE "OperationType" AS ENUM ('create', 'update', 'delete');
 
 -- CreateEnum
 CREATE TYPE "TaxGain" AS ENUM ('LONG', 'SHORT');
@@ -38,7 +44,7 @@ CREATE TYPE "AuthType" AS ENUM ('OAUTH_1', 'PLAID_LINK');
 CREATE TYPE "FileType" AS ENUM ('ETRADE_LOTS');
 
 -- CreateEnum
-CREATE TYPE "LogType" AS ENUM ('EXTERNAL_SYNC', 'AUTH');
+CREATE TYPE "LogType" AS ENUM ('EXTERNAL_SYNC', 'AUTH', 'PLAID_WEBHOOK', 'PLAID_TRX_MERGE', 'PLAID_TRX_MERGE_SUCCESS', 'PLAID_TRX_MERGE_ERROR', 'SUBSET_HYBRID_CALCULATION');
 
 -- CreateEnum
 CREATE TYPE "OrderType" AS ENUM ('BUY', 'SELL', 'SELL_TO_CLOSE', 'SELL_TO_OPEN', 'BUY_TO_CLOSE', 'BUY_TO_OPEN');
@@ -53,7 +59,7 @@ CREATE TYPE "AccountInstitution" AS ENUM ('BROKERAGE', 'GLOBALTRADING', 'NONUS',
 CREATE TYPE "AccountMode" AS ENUM ('CASH', 'MARGIN', 'CHECKING', 'IRA', 'SAVINGS', 'CD');
 
 -- CreateEnum
-CREATE TYPE "AccountProvider" AS ENUM ('ETRADE', 'PLAID', 'SYSTEM');
+CREATE TYPE "AccountProvider" AS ENUM ('ETRADE', 'PLAID', 'SYSTEM', 'UNCONNECTED');
 
 -- CreateEnum
 CREATE TYPE "AccountStatus" AS ENUM ('ACTIVE', 'CLOSED');
@@ -83,14 +89,17 @@ CREATE TABLE "Portfolio" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "createdById" TEXT,
+    "createdById" TEXT NOT NULL,
     "name" TEXT NOT NULL DEFAULT 'Main',
     "harvestCycleWeeks" INTEGER NOT NULL DEFAULT 4,
+    "minimumLotPAndL" DECIMAL(14,2) NOT NULL DEFAULT 100,
     "harvestShareDollarThreshold" DECIMAL(14,2) NOT NULL DEFAULT 0.01,
     "harvestTickerBucketDollarSizeLong" DECIMAL(14,2) NOT NULL DEFAULT 1500,
     "harvestTickerBucketLowerLimitLong" DECIMAL(14,2) NOT NULL DEFAULT 0.01,
     "harvestTickerBucketDollarSizeShort" DECIMAL(14,2) NOT NULL DEFAULT 1000,
     "harvestTickerBucketLowerLimitShort" DECIMAL(14,2) NOT NULL DEFAULT 0.01,
+    "notificationFrequency" "HarvestNotificationFrequency" NOT NULL DEFAULT 'WEEKLY',
+    "endOfYearTaxOpportunityNotification" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Portfolio_pkey" PRIMARY KEY ("id")
 );
@@ -107,6 +116,9 @@ CREATE TABLE "Harvest" (
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "type" "HarvestType" NOT NULL,
     "step" "HarvestStep" NOT NULL DEFAULT 'CONFIGURE',
+    "afterWashRevertDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "recommendationExpiresDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "notify" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Harvest_pkey" PRIMARY KEY ("id")
 );
@@ -117,10 +129,9 @@ CREATE TABLE "HarvestTransaction" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "harvestId" UUID NOT NULL,
+    "portfolioId" UUID NOT NULL,
     "counterTransaction" BOOLEAN NOT NULL DEFAULT false,
-    "revertDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "revert" BOOLEAN NOT NULL DEFAULT true,
-    "notify" BOOLEAN NOT NULL DEFAULT true,
     "harvestTransactionItemId" UUID NOT NULL,
     "replacementTransactionItemId" UUID,
     "revertHarvestTransactionItemId" UUID,
@@ -132,14 +143,20 @@ CREATE TABLE "HarvestTransaction" (
 -- CreateTable
 CREATE TABLE "HarvestTransactionItem" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "portfolioId" UUID NOT NULL,
+    "harvestId" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "orderType" "OrderType" NOT NULL,
     "assetSymbol" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completedDate" TIMESTAMP(3),
-    "lotId" UUID,
     "quantity" DECIMAL(14,4) NOT NULL,
     "price" DECIMAL(14,4) NOT NULL,
+    "lotId" UUID,
+    "lotAcquiredDate" TIMESTAMP(3) NOT NULL,
+    "lotPricePaid" DECIMAL(14,4) NOT NULL,
+    "lotPriceAtHarvest" DECIMAL(14,4) NOT NULL,
 
     CONSTRAINT "HarvestTransactionItem_pkey" PRIMARY KEY ("id")
 );
@@ -149,25 +166,26 @@ CREATE TABLE "Account" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "provider" "AccountProvider" NOT NULL DEFAULT 'SYSTEM',
-    "authConnectionId" UUID NOT NULL,
+    "provider" "AccountProvider" NOT NULL DEFAULT 'UNCONNECTED',
+    "authConnectionId" UUID,
     "externalId" TEXT,
-    "plaidAccountName" TEXT,
+    "name" TEXT,
     "plaidAccountMask" TEXT,
     "key" TEXT,
     "createdById" TEXT NOT NULL,
-    "displayName" TEXT NOT NULL DEFAULT 'New Account',
     "description" TEXT,
-    "institution" "AccountInstitution" NOT NULL,
-    "type" TEXT NOT NULL DEFAULT 'Unknown',
+    "institution" "AccountInstitution",
+    "type" TEXT NOT NULL DEFAULT 'Unconnected',
     "subType" TEXT,
     "mode" "AccountMode",
     "status" "AccountStatus" NOT NULL DEFAULT 'ACTIVE',
     "portfolioId" UUID NOT NULL,
     "closedDate" TIMESTAMP(3),
     "optionLevel" "OptionLevel",
+    "lotSeededDate" TIMESTAMP(3),
     "uploadedPositions" BOOLEAN NOT NULL DEFAULT false,
     "setRealizedValues" BOOLEAN NOT NULL DEFAULT false,
+    "skipSetup" BOOLEAN NOT NULL DEFAULT false,
     "liveURL" TEXT,
     "liveURLCreated" TIMESTAMP(3),
     "cashForOpenOrders" DECIMAL(14,4),
@@ -206,6 +224,7 @@ CREATE TABLE "RealizedPAndL" (
     "longTerm" DECIMAL(14,4) NOT NULL DEFAULT 0,
     "dividend" DECIMAL(14,4) NOT NULL DEFAULT 0,
     "deferredLoss" DECIMAL(14,4) NOT NULL DEFAULT 0,
+    "portfolioId" UUID NOT NULL,
 
     CONSTRAINT "RealizedPAndL_pkey" PRIMARY KEY ("id")
 );
@@ -235,8 +254,51 @@ CREATE TABLE "Transaction" (
     "fee" DECIMAL(14,4),
     "displaySymbol" TEXT,
     "detailsURI" TEXT,
+    "appliedToLots" BOOLEAN NOT NULL DEFAULT false,
+    "portfolioId" UUID NOT NULL,
 
     CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "LotTransactionBatch" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "accountId" UUID NOT NULL,
+    "portfolioId" UUID NOT NULL,
+    "positionsBefore" JSONB,
+    "positionsAfter" JSONB,
+    "holdingsPayload" JSONB,
+    "lotTupleMap" JSONB,
+    "initialLots" JSONB,
+    "newTransactions" JSONB,
+    "newBuys" JSONB,
+    "newSells" JSONB,
+    "realizedProfitAndLoss" DECIMAL(14,4),
+    "deletedLots" JSONB,
+    "logTrxMergeId" BIGINT,
+
+    CONSTRAINT "LotTransactionBatch_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "LotChangeLog" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "operationType" "OperationType" NOT NULL,
+    "lotId" UUID,
+    "accountId" UUID NOT NULL,
+    "portfolioId" UUID NOT NULL,
+    "lotBefore" JSONB,
+    "lotAfter" JSONB,
+    "quantityChange" DECIMAL(14,4),
+    "source" TEXT,
+    "processed" BOOLEAN NOT NULL DEFAULT false,
+    "lotTransactionBatchId" UUID NOT NULL,
+    "transactionId" UUID,
+
+    CONSTRAINT "LotChangeLog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -245,6 +307,7 @@ CREATE TABLE "Position" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "accountId" UUID NOT NULL,
+    "portfolioId" UUID NOT NULL,
     "externalId" TEXT,
     "dateAcquired" TIMESTAMP(3),
     "dateExpiration" TIMESTAMP(3),
@@ -276,11 +339,14 @@ CREATE TABLE "Lot" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "positionId" UUID,
     "accountId" UUID NOT NULL,
+    "portfolioId" UUID NOT NULL,
     "assetSymbol" TEXT NOT NULL,
     "externalId" TEXT,
     "excludeFromHarvest" INTEGER NOT NULL DEFAULT 0,
     "fileId" UUID,
-    "price" DECIMAL(14,4),
+    "remainingQty" DECIMAL(14,4) NOT NULL,
+    "price" DECIMAL(14,4) NOT NULL,
+    "acquiredDate" TIMESTAMP(3) NOT NULL,
     "gainDay" DECIMAL(14,4),
     "gainDayPct" DECIMAL(14,4),
     "marketValue" DECIMAL(14,4),
@@ -288,10 +354,8 @@ CREATE TABLE "Lot" (
     "totalCostForGainPct" DECIMAL(14,4),
     "gainTotal" DECIMAL(14,4),
     "originalQty" DECIMAL(14,4),
-    "remainingQty" DECIMAL(14,4),
     "availableQty" DECIMAL(14,4),
     "orderNo" DECIMAL(14,4),
-    "acquiredDate" TIMESTAMP(3),
     "exchangeRate" DECIMAL(14,4),
     "settlementCurrency" TEXT DEFAULT 'USD',
     "paymentCurrency" TEXT DEFAULT 'USD',
@@ -422,6 +486,8 @@ CREATE TABLE "AuthConnection" (
     "isSyncing" BOOLEAN NOT NULL DEFAULT false,
     "authedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "syncedAt" TIMESTAMP(3),
+    "lastTransactionSyncedAtPlaid" TIMESTAMP(3),
+    "plaidInstitutionId" TEXT,
     "token" TEXT,
     "secret" TEXT,
     "verifier" TEXT,
@@ -440,19 +506,21 @@ CREATE TABLE "File" (
     "accountId" UUID NOT NULL,
     "displayName" TEXT NOT NULL,
     "fileType" "FileType" NOT NULL DEFAULT 'ETRADE_LOTS',
+    "portfolioId" UUID NOT NULL,
 
     CONSTRAINT "File_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Log" (
-    "id" SERIAL NOT NULL,
+    "id" BIGSERIAL NOT NULL,
     "type" "LogType" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "source" "AuthSource",
     "description" TEXT,
     "responseStatus" INTEGER,
     "data" JSONB NOT NULL,
+    "portfolioId" UUID NOT NULL,
 
     CONSTRAINT "Log_pkey" PRIMARY KEY ("id")
 );
@@ -460,11 +528,16 @@ CREATE TABLE "Log" (
 -- CreateTable
 CREATE TABLE "_AssetToUser" (
     "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_AssetToUser_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_stripeCustomerId_key" ON "User"("stripeCustomerId");
+
+-- CreateIndex
+CREATE INDEX "Harvest_portfolioId_afterWashRevertDate_idx" ON "Harvest"("portfolioId", "afterWashRevertDate");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "HarvestTransaction_harvestTransactionItemId_key" ON "HarvestTransaction"("harvestTransactionItemId");
@@ -479,16 +552,49 @@ CREATE UNIQUE INDEX "HarvestTransaction_revertHarvestTransactionItemId_key" ON "
 CREATE UNIQUE INDEX "HarvestTransaction_revertReplacementTransactionItemId_key" ON "HarvestTransaction"("revertReplacementTransactionItemId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Account_provider_externalId_key" ON "Account"("provider", "externalId");
+CREATE INDEX "HarvestTransaction_portfolioId_idx" ON "HarvestTransaction"("portfolioId");
+
+-- CreateIndex
+CREATE INDEX "HarvestTransaction_harvestId_idx" ON "HarvestTransaction"("harvestId");
+
+-- CreateIndex
+CREATE INDEX "HarvestTransactionItem_lotId_idx" ON "HarvestTransactionItem"("lotId");
+
+-- CreateIndex
+CREATE INDEX "Account_authConnectionId_idx" ON "Account"("authConnectionId");
+
+-- CreateIndex
+CREATE INDEX "Account_portfolioId_idx" ON "Account"("portfolioId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Account_authConnectionId_plaidAccountMask_type_key" ON "Account"("authConnectionId", "plaidAccountMask", "type");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "RealizedPAndL_accountId_year_key" ON "RealizedPAndL"("accountId", "year");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Transaction_externalId_key" ON "Transaction"("externalId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Transaction_accountId_externalId_key" ON "Transaction"("accountId", "externalId");
 
 -- CreateIndex
+CREATE INDEX "LotTransactionBatch_portfolioId_createdAt_idx" ON "LotTransactionBatch"("portfolioId", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "LotChangeLog_portfolioId_lotTransactionBatchId_idx" ON "LotChangeLog"("portfolioId", "lotTransactionBatchId");
+
+-- CreateIndex
+CREATE INDEX "LotChangeLog_portfolioId_transactionId_idx" ON "LotChangeLog"("portfolioId", "transactionId");
+
+-- CreateIndex
+CREATE INDEX "Position_accountId_idx" ON "Position"("accountId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Position_accountId_externalId_key" ON "Position"("accountId", "externalId");
+
+-- CreateIndex
+CREATE INDEX "Lot_accountId_idx" ON "Lot"("accountId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Lot_positionId_externalId_key" ON "Lot"("positionId", "externalId");
@@ -503,22 +609,34 @@ CREATE UNIQUE INDEX "PriceHourlyVector_assetSymbol_startDate_vectorWindow_key" O
 CREATE UNIQUE INDEX "VectorGraph_assetSymbol_type_priceHourlyVectorId_key" ON "VectorGraph"("assetSymbol", "type", "priceHourlyVectorId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "AuthConnection_source_userId_portfolioId_externalId_key" ON "AuthConnection"("source", "userId", "portfolioId", "externalId");
+CREATE UNIQUE INDEX "AuthConnection_externalId_key" ON "AuthConnection"("externalId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_AssetToUser_AB_unique" ON "_AssetToUser"("A", "B");
+CREATE INDEX "AuthConnection_portfolioId_idx" ON "AuthConnection"("portfolioId");
+
+-- CreateIndex
+CREATE INDEX "AuthConnection_externalId_idx" ON "AuthConnection"("externalId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "AuthConnection_source_userId_portfolioId_plaidInstitutionId_key" ON "AuthConnection"("source", "userId", "portfolioId", "plaidInstitutionId");
+
+-- CreateIndex
+CREATE INDEX "Log_portfolioId_type_idx" ON "Log"("portfolioId", "type");
 
 -- CreateIndex
 CREATE INDEX "_AssetToUser_B_index" ON "_AssetToUser"("B");
 
 -- AddForeignKey
-ALTER TABLE "Portfolio" ADD CONSTRAINT "Portfolio_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Portfolio" ADD CONSTRAINT "Portfolio_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Harvest" ADD CONSTRAINT "Harvest_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Harvest" ADD CONSTRAINT "Harvest_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "HarvestTransaction" ADD CONSTRAINT "HarvestTransaction_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "HarvestTransaction" ADD CONSTRAINT "HarvestTransaction_harvestId_fkey" FOREIGN KEY ("harvestId") REFERENCES "Harvest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -536,6 +654,12 @@ ALTER TABLE "HarvestTransaction" ADD CONSTRAINT "HarvestTransaction_revertHarves
 ALTER TABLE "HarvestTransaction" ADD CONSTRAINT "HarvestTransaction_revertReplacementTransactionItemId_fkey" FOREIGN KEY ("revertReplacementTransactionItemId") REFERENCES "HarvestTransactionItem"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "HarvestTransactionItem" ADD CONSTRAINT "HarvestTransactionItem_harvestId_fkey" FOREIGN KEY ("harvestId") REFERENCES "Harvest"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "HarvestTransactionItem" ADD CONSTRAINT "HarvestTransactionItem_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "HarvestTransactionItem" ADD CONSTRAINT "HarvestTransactionItem_assetSymbol_fkey" FOREIGN KEY ("assetSymbol") REFERENCES "Asset"("symbol") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -551,7 +675,13 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_authConnectionId_fkey" FOREIGN KEY
 ALTER TABLE "Account" ADD CONSTRAINT "Account_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "RealizedPAndL" ADD CONSTRAINT "RealizedPAndL_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "RealizedPAndL" ADD CONSTRAINT "RealizedPAndL_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_assetSymbol_fkey" FOREIGN KEY ("assetSymbol") REFERENCES "Asset"("symbol") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -560,10 +690,34 @@ ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_assetSymbol_fkey" FOREIGN 
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "LotTransactionBatch" ADD CONSTRAINT "LotTransactionBatch_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LotTransactionBatch" ADD CONSTRAINT "LotTransactionBatch_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LotTransactionBatch" ADD CONSTRAINT "LotTransactionBatch_logTrxMergeId_fkey" FOREIGN KEY ("logTrxMergeId") REFERENCES "Log"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LotChangeLog" ADD CONSTRAINT "LotChangeLog_lotTransactionBatchId_fkey" FOREIGN KEY ("lotTransactionBatchId") REFERENCES "LotTransactionBatch"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LotChangeLog" ADD CONSTRAINT "LotChangeLog_transactionId_fkey" FOREIGN KEY ("transactionId") REFERENCES "Transaction"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LotChangeLog" ADD CONSTRAINT "LotChangeLog_lotId_fkey" FOREIGN KEY ("lotId") REFERENCES "Lot"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LotChangeLog" ADD CONSTRAINT "LotChangeLog_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Position" ADD CONSTRAINT "Position_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Position" ADD CONSTRAINT "Position_assetSymbol_fkey" FOREIGN KEY ("assetSymbol") REFERENCES "Asset"("symbol") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Position" ADD CONSTRAINT "Position_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Lot" ADD CONSTRAINT "Lot_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "File"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -576,6 +730,9 @@ ALTER TABLE "Lot" ADD CONSTRAINT "Lot_positionId_fkey" FOREIGN KEY ("positionId"
 
 -- AddForeignKey
 ALTER TABLE "Lot" ADD CONSTRAINT "Lot_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Lot" ADD CONSTRAINT "Lot_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UsersOnPortfolios" ADD CONSTRAINT "UsersOnPortfolios_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -606,6 +763,12 @@ ALTER TABLE "AuthConnection" ADD CONSTRAINT "AuthConnection_portfolioId_fkey" FO
 
 -- AddForeignKey
 ALTER TABLE "File" ADD CONSTRAINT "File_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "File" ADD CONSTRAINT "File_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Log" ADD CONSTRAINT "Log_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_AssetToUser" ADD CONSTRAINT "_AssetToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Asset"("symbol") ON DELETE CASCADE ON UPDATE CASCADE;

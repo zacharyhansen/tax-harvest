@@ -376,7 +376,7 @@ export class PlaidService {
       portfolioId,
     }
 
-    await this.prismaService
+    const logTrxMerge = await this.prismaService
       .$extends(PrismaService.forPortfolio(portfolioId))
       .log
       .create({
@@ -438,6 +438,7 @@ export class PlaidService {
             deletedLots: JSON.parse(JSON.stringify(
               lotDeletes,
             )),
+            logTrxMergeId: logTrxMerge.id,
           },
         })
 

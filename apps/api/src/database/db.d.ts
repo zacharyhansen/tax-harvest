@@ -17,6 +17,8 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
+export type Int8 = ColumnType<string, bigint | number | string>;
+
 export type Json = JsonValue;
 
 export type JsonArray = JsonValue[];
@@ -226,7 +228,7 @@ export interface Log {
   createdAt: Generated<Timestamp>;
   data: Json;
   description: string | null;
-  id: Generated<number>;
+  id: Generated<Int8>;
   portfolioId: string;
   responseStatus: number | null;
   source: "ETRADE_ACCESS" | "ETRADE_REQUEST" | "LOCAL" | "PLAID" | null;
@@ -308,6 +310,7 @@ export interface LotTransactionBatch {
   holdingsPayload: Json | null;
   id: Generated<string>;
   initialLots: Json | null;
+  logTrxMergeId: Int8 | null;
   lotTupleMap: Json | null;
   newBuys: Json | null;
   newSells: Json | null;

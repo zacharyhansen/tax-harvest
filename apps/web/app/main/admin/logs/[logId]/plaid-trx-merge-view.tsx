@@ -58,6 +58,71 @@ interface Position {
   marketValue?: string;
 }
 
+interface LotChangeLog {
+  id: string;
+  createdAt: string;
+  operationType: string;
+  lotId?: string;
+  accountId: string;
+  portfolioId: string;
+  lotBefore?: any;
+  lotAfter?: any;
+  quantityChange?: string;
+  source?: string;
+  processed: boolean;
+  transactionId?: string;
+  lot?: {
+    id: string;
+    assetSymbol: string;
+    remainingQty: string;
+    price: string;
+    acquiredDate: string;
+    marketValue?: string;
+    costTotal?: string;
+    gainTotal?: string;
+    originalQty?: string;
+    availableQty?: string;
+  };
+  transaction?: {
+    id: string;
+    externalId: string;
+    type?: string;
+    subtype?: string;
+    transactionDate?: string;
+    description?: string;
+    assetSymbol: string;
+    quantity?: string;
+    price?: string;
+    amount?: string;
+    fee?: string;
+  };
+}
+
+interface LotTransactionBatch {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  accountId: string;
+  portfolioId: string;
+  positionsBefore?: any;
+  positionsAfter?: any;
+  holdingsPayload?: any;
+  lotTupleMap?: any;
+  initialLots?: any;
+  newTransactions?: any;
+  newBuys?: any;
+  newSells?: any;
+  realizedProfitAndLoss?: string;
+  deletedLots?: any;
+  lotChangeLog: LotChangeLog[];
+  account: {
+    id: string;
+    name?: string;
+    type: string;
+    externalId?: string;
+  };
+}
+
 interface PlaidTrxMergeData {
   initialLots?: Lot[];
   transactions?: Transaction[];
@@ -67,10 +132,13 @@ interface PlaidTrxMergeData {
 
 interface PlaidTrxMergeLogViewProps {
   data: any;
+  LotTransactionBatch?: LotTransactionBatch[];
 }
 
-export function PlaidTrxMergeLogView({ data }: PlaidTrxMergeLogViewProps) {
+
+export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMergeLogViewProps) {
   const typedData = data as PlaidTrxMergeData;
+  const lotBatches = LotTransactionBatch || [];
 
   return (
     <LogViewerLayout data={data}>
@@ -314,6 +382,250 @@ export function PlaidTrxMergeLogView({ data }: PlaidTrxMergeLogViewProps) {
                 </div>
               ))}
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Lot Transaction Batches */}
+      {lotBatches && lotBatches.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Lot Transaction Batches ({lotBatches.length})</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {lotBatches.map((batch, batchIndex) => (
+              <div key={batch.id} className="border rounded-lg p-4 space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="font-semibold">Batch {batchIndex + 1}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      ID: {batch.id}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Account: {batch.account.name || batch.account.type} ({batch.account.externalId})
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Created</p>
+                    <p className="text-sm font-mono">
+                      {new Date(batch.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Batch Summary */}
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-4 bg-muted/50 p-3 rounded">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Lot Changes</p>
+                    <p className="font-medium">{batch.lotChangeLog.length}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Realized P&L</p>
+                    <p className="font-medium font-mono">
+                      {batch.realizedProfitAndLoss ? Format.money(batch.realizedProfitAndLoss) : 'N/A'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">New Transactions</p>
+                    <p className="font-medium">
+                      {batch.newTransactions ? (() => {
+                        try {
+                          return JSON.parse(batch.newTransactions).length;
+                        } catch {
+                          return 'Invalid';
+                        }
+                      })() : 0}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Processed</p>
+                    <p className="font-medium">
+                      {batch.lotChangeLog.filter(log => log.processed).length} / {batch.lotChangeLog.length}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Lot Change Log */}
+                {batch.lotChangeLog && batch.lotChangeLog.length > 0 && (
+                  <div className="space-y-3">
+                    <h5 className="font-medium">Lot Change Log ({batch.lotChangeLog.length})</h5>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="p-2 text-left">Operation</th>
+                            <th className="p-2 text-left">Asset</th>
+                            <th className="p-2 text-left">Quantity Change</th>
+                            <th className="p-2 text-left">Source</th>
+                            <th className="p-2 text-left">Processed</th>
+                            <th className="p-2 text-left">Lot Details</th>
+                            <th className="p-2 text-left">Transaction</th>
+                            <th className="p-2 text-left">Created</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {batch.lotChangeLog.map((changeLog, logIndex) => (
+                            <tr key={changeLog.id} className="border-b">
+                              <td className="p-2">
+                                <Badge
+                                  variant={
+                                    changeLog.operationType === 'create'
+                                      ? 'default'
+                                      : changeLog.operationType === 'update'
+                                      ? 'secondary'
+                                      : 'destructive'
+                                  }
+                                >
+                                  {changeLog.operationType.toUpperCase()}
+                                </Badge>
+                              </td>
+                              <td className="p-2 font-mono">
+                                {changeLog.lot?.assetSymbol || changeLog.transaction?.assetSymbol || 'N/A'}
+                              </td>
+                              <td className="p-2 font-mono">
+                                {changeLog.quantityChange || 'N/A'}
+                              </td>
+                              <td className="p-2">{changeLog.source || 'N/A'}</td>
+                              <td className="p-2">
+                                <Badge variant={changeLog.processed ? 'default' : 'secondary'}>
+                                  {changeLog.processed ? 'Yes' : 'No'}
+                                </Badge>
+                              </td>
+                              <td className="p-2">
+                                {changeLog.lot && (
+                                  <div className="space-y-1">
+                                    <p className="text-xs">
+                                      <span className="text-muted-foreground">Remaining:</span>{' '}
+                                      {changeLog.lot.remainingQty}
+                                    </p>
+                                    <p className="text-xs">
+                                      <span className="text-muted-foreground">Price:</span>{' '}
+                                      {Format.money(changeLog.lot.price)}
+                                    </p>
+                                    <p className="text-xs">
+                                      <span className="text-muted-foreground">Acquired:</span>{' '}
+                                      {new Date(changeLog.lot.acquiredDate).toLocaleDateString()}
+                                    </p>
+                                  </div>
+                                )}
+                              </td>
+                              <td className="p-2">
+                                {changeLog.transaction && (
+                                  <div className="space-y-1">
+                                    <p className="text-xs">
+                                      <span className="text-muted-foreground">Type:</span>{' '}
+                                      {changeLog.transaction.type}
+                                    </p>
+                                    <p className="text-xs">
+                                      <span className="text-muted-foreground">Qty:</span>{' '}
+                                      {changeLog.transaction.quantity || 'N/A'}
+                                    </p>
+                                    <p className="text-xs">
+                                      <span className="text-muted-foreground">Price:</span>{' '}
+                                      {changeLog.transaction.price ? Format.money(changeLog.transaction.price) : 'N/A'}
+                                    </p>
+                                  </div>
+                                )}
+                              </td>
+                              <td className="p-2 text-xs">
+                                {new Date(changeLog.createdAt).toLocaleString()}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Additional Batch Data */}
+                {(batch.newBuys || batch.newSells || batch.deletedLots) && (
+                  <div className="space-y-3">
+                    <h5 className="font-medium">Additional Batch Data</h5>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                      {batch.newBuys && (() => {
+                        try {
+                          const buys = JSON.parse(batch.newBuys);
+                          return (
+                            <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded">
+                              <p className="text-sm font-medium text-green-700 dark:text-green-300">
+                                New Buys ({buys.length})
+                              </p>
+                              <pre className="text-xs mt-2 overflow-auto max-h-32">
+                                {JSON.stringify(buys, null, 2)}
+                              </pre>
+                            </div>
+                          );
+                        } catch {
+                          return (
+                            <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded">
+                              <p className="text-sm font-medium text-green-700 dark:text-green-300">
+                                New Buys (Invalid JSON)
+                              </p>
+                              <pre className="text-xs mt-2 overflow-auto max-h-32">
+                                {batch.newBuys}
+                              </pre>
+                            </div>
+                          );
+                        }
+                      })()}
+                      {batch.newSells && (() => {
+                        try {
+                          const sells = JSON.parse(batch.newSells);
+                          return (
+                            <div className="bg-red-50 dark:bg-red-950/20 p-3 rounded">
+                              <p className="text-sm font-medium text-red-700 dark:text-red-300">
+                                New Sells ({sells.length})
+                              </p>
+                              <pre className="text-xs mt-2 overflow-auto max-h-32">
+                                {JSON.stringify(sells, null, 2)}
+                              </pre>
+                            </div>
+                          );
+                        } catch {
+                          return (
+                            <div className="bg-red-50 dark:bg-red-950/20 p-3 rounded">
+                              <p className="text-sm font-medium text-red-700 dark:text-red-300">
+                                New Sells (Invalid JSON)
+                              </p>
+                              <pre className="text-xs mt-2 overflow-auto max-h-32">
+                                {batch.newSells}
+                              </pre>
+                            </div>
+                          );
+                        }
+                      })()}
+                      {batch.deletedLots && (() => {
+                        try {
+                          const lots = JSON.parse(batch.deletedLots);
+                          return (
+                            <div className="bg-yellow-50 dark:bg-yellow-950/20 p-3 rounded">
+                              <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">
+                                Deleted Lots ({lots.length})
+                              </p>
+                              <pre className="text-xs mt-2 overflow-auto max-h-32">
+                                {JSON.stringify(lots, null, 2)}
+                              </pre>
+                            </div>
+                          );
+                        } catch {
+                          return (
+                            <div className="bg-yellow-50 dark:bg-yellow-950/20 p-3 rounded">
+                              <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">
+                                Deleted Lots (Invalid JSON)
+                              </p>
+                              <pre className="text-xs mt-2 overflow-auto max-h-32">
+                                {batch.deletedLots}
+                              </pre>
+                            </div>
+                          );
+                        }
+                      })()}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </CardContent>
         </Card>
       )}

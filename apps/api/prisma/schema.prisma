@@ -371,10 +371,12 @@ model LotTransactionBatch {
   /// Realized profit and loss for the transaction batch
   realizedProfitAndLoss Decimal? @db.Decimal(14, 4)
   deletedLots           Json?    @db.JsonB
+  logTrxMergeId         BigInt?  @db.BigInt
 
   account      Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
   lotChangeLog LotChangeLog[]
   portfolio    Portfolio      @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  logTrxMerge  Log?           @relation(fields: [logTrxMergeId], references: [id], onDelete: Cascade)
 
   @@index([portfolioId, createdAt(sort: Desc)])
 }
@@ -794,7 +796,7 @@ enum LogType {
 }
 
 model Log {
-  id             Int         @id @default(autoincrement())
+  id             BigInt      @id @default(autoincrement())
   type           LogType
   createdAt      DateTime    @default(now())
   source         AuthSource?
@@ -803,7 +805,8 @@ model Log {
   data           Json
   portfolioId    String      @db.Uuid
 
-  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  portfolio           Portfolio             @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  LotTransactionBatch LotTransactionBatch[]
 
   @@index([portfolioId, type])
 }

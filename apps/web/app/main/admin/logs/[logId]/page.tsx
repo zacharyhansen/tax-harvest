@@ -56,7 +56,10 @@ export default function LogPage(props: {
       )}
     >
       {data?.log?.type === 'PLAID_TRX_MERGE' ? (
-        <PlaidTrxMergeLogView data={data.log.data} />
+        <PlaidTrxMergeLogView 
+          data={data.log.data} 
+          LotTransactionBatch={data.log.LotTransactionBatch}
+        />
       ) : data?.log?.type === 'PLAID_TRX_MERGE_SUCCESS' ? (
         <PlaidTrxMergeSuccessLogView data={data.log.data} />
       ) : data?.log?.type === 'EXTERNAL_SYNC' && data?.log?.description === '/investmentsTransactionsGet' ? (
