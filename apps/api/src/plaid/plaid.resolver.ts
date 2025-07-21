@@ -104,4 +104,33 @@ export class PlaidResolver {
   ) {
     return this.plaidService.getInstitution(institutionId)
   }
+
+  /**
+   * Process CSV accounts by applying new transactions for each account
+   * @param currentUser - Current authenticated user context
+   * @param accountIds - Array of account IDs that have CSV data to process
+   * @returns Promise<boolean> - Returns true when processing is complete
+   * @example
+   * mutation {
+   *   processCsvAccounts(accountIds: ["account1", "account2"])
+   * }
+   */
+  @Mutation(() => Boolean, {
+    description: 'Process CSV accounts by applying new transactions for each account',
+    name: 'processCsvAccounts',
+  })
+  async processCsvAccounts(
+    @ClerkContext()
+    currentUser: ClerkClaims,
+    @Args('accountIds', { type: () => [String] })
+    accountIds: string[],
+  ): Promise<boolean> {
+    for (const accountId of accountIds) {
+      await this.plaidService.applyNewTransactions({
+        accountId,
+        portfolioId: currentUser.metadata.portfolioId,
+      })
+    }
+    return true
+  }
 }

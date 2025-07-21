@@ -31,7 +31,6 @@ import { StripeModule } from '~/stripe/stripe.module'
 import { TransactionModule } from '~/transaction/transaction.module'
 import { UserModule } from '~/user/user.module'
 import { VectorGraphModule } from '~/vector-graph/vector-graph.module'
-
 import { errorFormatPlugin } from '../plugins/error-format'
 
 @Module({
@@ -80,4 +79,4 @@ import { errorFormatPlugin } from '../plugins/error-format'
   ],
   providers: [{ provide: APP_GUARD, useClass: ClerkGuard }],
 })
-export class AppModule {}
+export class AppModule { }

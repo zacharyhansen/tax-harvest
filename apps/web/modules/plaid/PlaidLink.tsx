@@ -21,16 +21,18 @@ import plaidIcon from '../../public/icons/plaid.svg';
 type PlaidLinkProps = {
   token: string;
   redirectTo?: string;
+  accountMappingUrl?: string;
   existingAccountId?: string;
 } & ButtonProps;
 
 export default function PlaidLink({
   token,
   redirectTo,
+  accountMappingUrl,
   existingAccountId,
   ...buttonProps
 }: PlaidLinkProps) {
-  const router = redirectTo ? useRouter() : null;
+  const router = (redirectTo || accountMappingUrl) ? useRouter() : null;
   const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation();
 
   const onSuccess: PlaidLinkOnSuccess = useCallback<PlaidLinkOnSuccess>(
@@ -61,14 +63,23 @@ export default function PlaidLink({
             existingAccountId,
           },
         })
-          .then(() => {
+          .then((result) => {
+            const accounts = result.data?.setAccessTokenAndSyncAccounts || [];
+            
             // Clean up the stored account ID since linking is complete
             if (existingAccountId) {
               localStorage.removeItem('onboardingAccountId');
             }
-            // Redirect after successful sync if redirectTo is provided
-            if (redirectTo && router) {
-              router.push(redirectTo);
+            
+            // Handle redirect logic based on number of accounts
+            if (router) {
+              if (accounts.length > 1 && accountMappingUrl) {
+                // Multiple accounts - redirect to mapping page
+                router.push(accountMappingUrl);
+              } else if (redirectTo) {
+                // Single account or no mapping URL - use normal redirect
+                router.push(redirectTo);
+              }
             }
           })
           .catch((error: ApolloError) => {
@@ -85,7 +96,7 @@ export default function PlaidLink({
         }
       );
     },
-    [mutate, redirectTo, router, existingAccountId]
+    [mutate, redirectTo, accountMappingUrl, router, existingAccountId]
   );
 
   const onExit: PlaidLinkOnExit = useCallback(

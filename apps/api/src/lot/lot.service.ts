@@ -17,7 +17,7 @@ export class LotService {
     private readonly db: Database,
   ) { }
 
-  upsertLotsForAccount({
+  resetLotsForAccount({
     lotSeededDate,
     accountId,
     lots,

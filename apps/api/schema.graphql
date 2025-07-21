@@ -11,7 +11,7 @@ type Account {
   authConnection: AuthConnection
 
   """The auth connection the account has been provided from """
-  authConnectionId: String
+  authConnectionId: bigint
   balanceAccount: Decimal
   balanceMoneyMarket: Decimal
   balanceShortAdjustment: Decimal
@@ -30,15 +30,15 @@ type Account {
   createdBy: User!
 
   """Who created the model"""
-  createdById: String!
+  createdById: bigint!
 
   """The description of the account"""
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
 
   """The unique id in the external system for the account"""
-  externalId: String
+  externalId: bigint
   files: [File!]
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
@@ -48,8 +48,8 @@ type Account {
 
   """What institution does this account fall under"""
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
 
   """
@@ -64,15 +64,15 @@ type Account {
 
   """The mode of the account"""
   mode: AccountMode
-  name: String
+  name: bigint
 
   """Option level for the account"""
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: Portfolio!
 
   """Which portfolio does this account belong to"""
-  portfolioId: String!
+  portfolioId: bigint!
   positions: [Position!]
 
   """
@@ -86,19 +86,19 @@ type Account {
 
   """Is this account archived"""
   status: AccountStatus!
-  subType: String
+  subType: bigint
   transactions: [Transaction!]
 
   """The type of account"""
-  type: String!
+  type: bigint!
   updatedAt: DateTime!
   uploadedPositions: Boolean!
 }
 
 input AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput {
-  authConnectionId: String!
-  plaidAccountMask: String!
-  type: String!
+  authConnectionId: bigint!
+  plaidAccountMask: bigint!
+  type: bigint!
 }
 
 type AccountAvgAggregate {
@@ -200,17 +200,17 @@ input AccountCreateInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -219,9 +219,9 @@ input AccountCreateInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -230,9 +230,9 @@ input AccountCreateInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -252,17 +252,17 @@ input AccountCreateManyAuthConnectionInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  createdById: String!
-  description: String
+  createdById: bigint!
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   marginBuyingPower: Decimal
@@ -270,16 +270,16 @@ input AccountCreateManyAuthConnectionInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   provider: AccountProvider
   raw: JSON
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
-  type: String
+  subType: bigint
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -291,7 +291,7 @@ input AccountCreateManyAuthConnectionInputEnvelope {
 
 input AccountCreateManyCreatedByInput {
   accountValueTotal: Decimal
-  authConnectionId: String
+  authConnectionId: bigint
   balanceAccount: Decimal
   balanceMoneyMarket: Decimal
   balanceShortAdjustment: Decimal
@@ -305,16 +305,16 @@ input AccountCreateManyCreatedByInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   marginBuyingPower: Decimal
@@ -322,16 +322,16 @@ input AccountCreateManyCreatedByInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   provider: AccountProvider
   raw: JSON
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
-  type: String
+  subType: bigint
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -343,7 +343,7 @@ input AccountCreateManyCreatedByInputEnvelope {
 
 input AccountCreateManyPortfolioInput {
   accountValueTotal: Decimal
-  authConnectionId: String
+  authConnectionId: bigint
   balanceAccount: Decimal
   balanceMoneyMarket: Decimal
   balanceShortAdjustment: Decimal
@@ -357,17 +357,17 @@ input AccountCreateManyPortfolioInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  createdById: String!
-  description: String
+  createdById: bigint!
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   marginBuyingPower: Decimal
@@ -375,16 +375,16 @@ input AccountCreateManyPortfolioInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   provider: AccountProvider
   raw: JSON
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
-  type: String
+  subType: bigint
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -512,17 +512,17 @@ input AccountCreateWithoutAuthConnectionInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -531,9 +531,9 @@ input AccountCreateWithoutAuthConnectionInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -542,9 +542,9 @@ input AccountCreateWithoutAuthConnectionInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -566,17 +566,17 @@ input AccountCreateWithoutCreatedByInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -585,9 +585,9 @@ input AccountCreateWithoutCreatedByInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -596,9 +596,9 @@ input AccountCreateWithoutCreatedByInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -620,16 +620,16 @@ input AccountCreateWithoutFilesInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -638,9 +638,9 @@ input AccountCreateWithoutFilesInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -649,9 +649,9 @@ input AccountCreateWithoutFilesInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -672,17 +672,17 @@ input AccountCreateWithoutLotTransactionBatchInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -691,9 +691,9 @@ input AccountCreateWithoutLotTransactionBatchInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -702,9 +702,9 @@ input AccountCreateWithoutLotTransactionBatchInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -726,17 +726,17 @@ input AccountCreateWithoutLotsInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   marginBuyingPower: Decimal
@@ -744,9 +744,9 @@ input AccountCreateWithoutLotsInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -755,9 +755,9 @@ input AccountCreateWithoutLotsInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -779,17 +779,17 @@ input AccountCreateWithoutPortfolioInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -798,9 +798,9 @@ input AccountCreateWithoutPortfolioInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -808,9 +808,9 @@ input AccountCreateWithoutPortfolioInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -832,17 +832,17 @@ input AccountCreateWithoutPositionsInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -851,9 +851,9 @@ input AccountCreateWithoutPositionsInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   provider: AccountProvider
   raw: JSON
@@ -861,9 +861,9 @@ input AccountCreateWithoutPositionsInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -885,17 +885,17 @@ input AccountCreateWithoutRealizedPAndLInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -904,9 +904,9 @@ input AccountCreateWithoutRealizedPAndLInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -914,9 +914,9 @@ input AccountCreateWithoutRealizedPAndLInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
+  subType: bigint
   transactions: TransactionCreateNestedManyWithoutAccountInput
-  type: String
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -938,17 +938,17 @@ input AccountCreateWithoutTransactionsInput {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  description: String
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   files: FileCreateNestedManyWithoutAccountInput
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   lots: LotCreateNestedManyWithoutAccountInput
@@ -957,9 +957,9 @@ input AccountCreateWithoutTransactionsInput {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
+  plaidAccountMask: bigint
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -968,8 +968,8 @@ input AccountCreateWithoutTransactionsInput {
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
-  type: String
+  subType: bigint
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -1008,7 +1008,7 @@ input AccountListRelationFilter {
 
 type AccountMaxAggregate {
   accountValueTotal: Decimal
-  authConnectionId: String
+  authConnectionId: bigint
   balanceAccount: Decimal
   balanceMoneyMarket: Decimal
   balanceShortAdjustment: Decimal
@@ -1022,17 +1022,17 @@ type AccountMaxAggregate {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  createdById: String
-  description: String
+  createdById: bigint
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   marginBuyingPower: Decimal
@@ -1040,23 +1040,23 @@ type AccountMaxAggregate {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
-  portfolioId: String
+  plaidAccountMask: bigint
+  portfolioId: bigint
   provider: AccountProvider
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
-  type: String
+  subType: bigint
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
 
 type AccountMinAggregate {
   accountValueTotal: Decimal
-  authConnectionId: String
+  authConnectionId: bigint
   balanceAccount: Decimal
   balanceMoneyMarket: Decimal
   balanceShortAdjustment: Decimal
@@ -1070,17 +1070,17 @@ type AccountMinAggregate {
   cashUnsettledForInvestment: Decimal
   closedDate: DateTime
   createdAt: DateTime
-  createdById: String
-  description: String
+  createdById: bigint
+  description: bigint
   equityRegt: Decimal
   equityRegtPercent: Decimal
-  externalId: String
+  externalId: bigint
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
-  id: String
+  id: bigint
   institution: AccountInstitution
-  key: String
-  liveURL: String
+  key: bigint
+  liveURL: bigint
   liveURLCreated: DateTime
   lotSeededDate: DateTime
   marginBuyingPower: Decimal
@@ -1088,16 +1088,16 @@ type AccountMinAggregate {
   marginOpenOrderReserveDT: Decimal
   marketValueTotal: Decimal
   mode: AccountMode
-  name: String
+  name: bigint
   optionLevel: OptionLevel
-  plaidAccountMask: String
-  portfolioId: String
+  plaidAccountMask: bigint
+  portfolioId: bigint
   provider: AccountProvider
   setRealizedValues: Boolean
   skipSetup: Boolean
   status: AccountStatus
-  subType: String
-  type: String
+  subType: bigint
+  type: bigint
   updatedAt: DateTime
   uploadedPositions: Boolean
 }
@@ -2087,7 +2087,7 @@ input AccountWhereUniqueInput {
   files: FileListRelationFilter
   fundsWithheldFromPurchasingPower: DecimalNullableFilter
   fundsWithheldFromWithdrawal: DecimalNullableFilter
-  id: String
+  id: bigint
   institution: EnumAccountInstitutionNullableFilter
   key: StringNullableFilter
   liveURL: StringNullableFilter
@@ -2123,16 +2123,16 @@ type Asset {
   active: Boolean!
   assetClass: AssetClass!
   assetType: AssetType
-  assetTypeCode: String
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  assetTypeCode: bigint
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
+  description: bigint
   favoritedBy: [User!]
   harvestTransactionItems: [HarvestTransactionItem!]
-  homepageUrl: String
-  iconUrl: String
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal!
   lastHigh: Decimal!
   lastLow: Decimal!
@@ -2143,24 +2143,24 @@ type Asset {
   lastVolumeWeighted: Decimal!
   listDate: DateTime
   locale: AssetLocale!
-  logoUrl: String
+  logoUrl: bigint
   lots: [Lot!]
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
+  name: bigint
+  plaid_security_id: bigint
   positions: [Position!]
   priceHourly: [PriceHourly!]
   priceHourlyVectors: [PriceHourlyVector!]
-  primaryExchange: String
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
+  sicCode: bigint
+  sicDescription: bigint
   symbol: ID!
   todaysChange: Decimal!
   todaysChangePerc: Decimal!
   totalEmployees: Int
   transactions: [Transaction!]
-  type: String!
+  type: bigint!
   vectorGraphs: [VectorGraph!]
 }
 
@@ -2318,14 +2318,14 @@ input AssetCreateWithoutFavoritedByInput {
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
+  description: bigint
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutAssetInput
-  homepageUrl: String
-  iconUrl: String
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2336,24 +2336,24 @@ input AssetCreateWithoutFavoritedByInput {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
+  name: bigint
+  plaid_security_id: bigint
   positions: PositionCreateNestedManyWithoutAssetInput
   priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
   priceHourlyVectors: PriceHourlyVectorCreateNestedManyWithoutAssetInput
-  primaryExchange: String
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String!
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint!
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
   transactions: TransactionCreateNestedManyWithoutAssetInput
-  type: String
+  type: bigint
   vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
 }
 
@@ -2361,14 +2361,14 @@ input AssetCreateWithoutHarvestTransactionItemsInput {
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
+  description: bigint
   favoritedBy: UserCreateNestedManyWithoutFavoritesInput
-  homepageUrl: String
-  iconUrl: String
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2379,24 +2379,24 @@ input AssetCreateWithoutHarvestTransactionItemsInput {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
+  name: bigint
+  plaid_security_id: bigint
   positions: PositionCreateNestedManyWithoutAssetInput
   priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
   priceHourlyVectors: PriceHourlyVectorCreateNestedManyWithoutAssetInput
-  primaryExchange: String
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String!
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint!
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
   transactions: TransactionCreateNestedManyWithoutAssetInput
-  type: String
+  type: bigint
   vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
 }
 
@@ -2404,15 +2404,15 @@ input AssetCreateWithoutLotsInput {
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
+  description: bigint
   favoritedBy: UserCreateNestedManyWithoutFavoritesInput
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutAssetInput
-  homepageUrl: String
-  iconUrl: String
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2423,23 +2423,23 @@ input AssetCreateWithoutLotsInput {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
+  name: bigint
+  plaid_security_id: bigint
   positions: PositionCreateNestedManyWithoutAssetInput
   priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
   priceHourlyVectors: PriceHourlyVectorCreateNestedManyWithoutAssetInput
-  primaryExchange: String
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String!
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint!
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
   transactions: TransactionCreateNestedManyWithoutAssetInput
-  type: String
+  type: bigint
   vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
 }
 
@@ -2447,15 +2447,15 @@ input AssetCreateWithoutPositionsInput {
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
+  description: bigint
   favoritedBy: UserCreateNestedManyWithoutFavoritesInput
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutAssetInput
-  homepageUrl: String
-  iconUrl: String
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2466,23 +2466,23 @@ input AssetCreateWithoutPositionsInput {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
+  name: bigint
+  plaid_security_id: bigint
   priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
   priceHourlyVectors: PriceHourlyVectorCreateNestedManyWithoutAssetInput
-  primaryExchange: String
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String!
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint!
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
   transactions: TransactionCreateNestedManyWithoutAssetInput
-  type: String
+  type: bigint
   vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
 }
 
@@ -2490,15 +2490,15 @@ input AssetCreateWithoutPriceHourlyVectorsInput {
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
+  description: bigint
   favoritedBy: UserCreateNestedManyWithoutFavoritesInput
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutAssetInput
-  homepageUrl: String
-  iconUrl: String
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2509,23 +2509,23 @@ input AssetCreateWithoutPriceHourlyVectorsInput {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
+  name: bigint
+  plaid_security_id: bigint
   positions: PositionCreateNestedManyWithoutAssetInput
   priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
-  primaryExchange: String
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String!
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint!
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
   transactions: TransactionCreateNestedManyWithoutAssetInput
-  type: String
+  type: bigint
   vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
 }
 
@@ -2533,15 +2533,15 @@ input AssetCreateWithoutTransactionsInput {
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
+  description: bigint
   favoritedBy: UserCreateNestedManyWithoutFavoritesInput
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutAssetInput
-  homepageUrl: String
-  iconUrl: String
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2552,23 +2552,23 @@ input AssetCreateWithoutTransactionsInput {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
+  name: bigint
+  plaid_security_id: bigint
   positions: PositionCreateNestedManyWithoutAssetInput
   priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
   priceHourlyVectors: PriceHourlyVectorCreateNestedManyWithoutAssetInput
-  primaryExchange: String
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String!
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint!
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
-  type: String
+  type: bigint
   vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
 }
 
@@ -2576,15 +2576,15 @@ input AssetCreateWithoutVectorGraphsInput {
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
+  description: bigint
   favoritedBy: UserCreateNestedManyWithoutFavoritesInput
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutAssetInput
-  homepageUrl: String
-  iconUrl: String
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2595,24 +2595,24 @@ input AssetCreateWithoutVectorGraphsInput {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
+  name: bigint
+  plaid_security_id: bigint
   positions: PositionCreateNestedManyWithoutAssetInput
   priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
   priceHourlyVectors: PriceHourlyVectorCreateNestedManyWithoutAssetInput
-  primaryExchange: String
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String!
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint!
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
   transactions: TransactionCreateNestedManyWithoutAssetInput
-  type: String
+  type: bigint
 }
 
 input AssetListRelationFilter {
@@ -2629,14 +2629,14 @@ enum AssetLocale {
 type AssetMaxAggregate {
   active: Boolean
   assetClass: AssetClass
-  assetTypeCode: String
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  assetTypeCode: bigint
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
-  homepageUrl: String
-  iconUrl: String
+  description: bigint
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2647,32 +2647,32 @@ type AssetMaxAggregate {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
-  primaryExchange: String
+  name: bigint
+  plaid_security_id: bigint
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
-  type: String
+  type: bigint
 }
 
 type AssetMinAggregate {
   active: Boolean
   assetClass: AssetClass
-  assetTypeCode: String
-  cik: String
-  compositeFigi: String
-  currencyName: String
+  assetTypeCode: bigint
+  cik: bigint
+  compositeFigi: bigint
+  currencyName: bigint
   delistedDate: DateTime
-  description: String
-  homepageUrl: String
-  iconUrl: String
+  description: bigint
+  homepageUrl: bigint
+  iconUrl: bigint
   lastClose: Decimal
   lastHigh: Decimal
   lastLow: Decimal
@@ -2683,19 +2683,19 @@ type AssetMinAggregate {
   lastVolumeWeighted: Decimal
   listDate: DateTime
   locale: AssetLocale
-  logoUrl: String
+  logoUrl: bigint
   marketCap: Decimal
-  name: String
-  plaid_security_id: String
-  primaryExchange: String
+  name: bigint
+  plaid_security_id: bigint
+  primaryExchange: bigint
   shareClassSharesOutstanding: Decimal
-  sicCode: String
-  sicDescription: String
-  symbol: String
+  sicCode: bigint
+  sicDescription: bigint
+  symbol: bigint
   todaysChange: Decimal
   todaysChangePerc: Decimal
   totalEmployees: Int
-  type: String
+  type: bigint
 }
 
 input AssetScalarRelationFilter {
@@ -2762,7 +2762,7 @@ type AssetType {
   assetClass: AssetClass!
   assets: [Asset!]
   code: ID!
-  description: String!
+  description: bigint!
   locale: AssetLocale!
 }
 
@@ -2791,22 +2791,22 @@ input AssetTypeCreateOrConnectWithoutAssetsInput {
 
 input AssetTypeCreateWithoutAssetsInput {
   assetClass: AssetClass!
-  code: String!
-  description: String!
+  code: bigint!
+  description: bigint!
   locale: AssetLocale!
 }
 
 type AssetTypeMaxAggregate {
   assetClass: AssetClass
-  code: String
-  description: String
+  code: bigint
+  description: bigint
   locale: AssetLocale
 }
 
 type AssetTypeMinAggregate {
   assetClass: AssetClass
-  code: String
-  description: String
+  code: bigint
+  description: bigint
   locale: AssetLocale
 }
 
@@ -2860,7 +2860,7 @@ input AssetTypeWhereUniqueInput {
   OR: [AssetTypeWhereInput!]
   assetClass: EnumAssetClassFilter
   assets: AssetListRelationFilter
-  code: String
+  code: bigint
   description: StringFilter
   locale: EnumAssetLocaleFilter
 }
@@ -3423,7 +3423,7 @@ input AssetWhereUniqueInput {
   lots: LotListRelationFilter
   marketCap: DecimalNullableFilter
   name: StringNullableFilter
-  plaid_security_id: String
+  plaid_security_id: bigint
   positions: PositionListRelationFilter
   priceHourly: PriceHourlyListRelationFilter
   priceHourlyVectors: PriceHourlyVectorListRelationFilter
@@ -3431,7 +3431,7 @@ input AssetWhereUniqueInput {
   shareClassSharesOutstanding: DecimalNullableFilter
   sicCode: StringNullableFilter
   sicDescription: StringNullableFilter
-  symbol: String
+  symbol: bigint
   todaysChange: DecimalFilter
   todaysChangePerc: DecimalFilter
   totalEmployees: IntNullableFilter
@@ -3456,7 +3456,7 @@ type AuthConnection {
   createdAt: DateTime!
 
   """PLAID -> Plaid Item id, ETRADE -> random UUID since they dont have one"""
-  externalId: String!
+  externalId: bigint!
 
   """Internal identifier"""
   id: ID!
@@ -3468,11 +3468,11 @@ type AuthConnection {
   lastTransactionSyncedAtPlaid: DateTime
 
   """Plaid institution id"""
-  plaidInstitutionId: String
+  plaidInstitutionId: bigint
   portfolio: Portfolio!
 
   """The portfolio this provider belongs to"""
-  portfolioId: String!
+  portfolioId: bigint!
 
   """Source of the auth"""
   source: AuthSource!
@@ -3488,12 +3488,12 @@ type AuthConnection {
   user: User!
 
   """User this provider pertains to"""
-  userId: String!
+  userId: bigint!
 
   """
   Used for etrade to store the url where the user can get their verifier code (valid for 5 minutes)
   """
-  verificationUrl: String
+  verificationUrl: bigint
 }
 
 type AuthConnectionCount {
@@ -3521,17 +3521,17 @@ type AuthConnectionCountAggregate {
 input AuthConnectionCreateManyPortfolioInput {
   authedAt: DateTime
   createdAt: DateTime
-  externalId: String!
-  id: String
+  externalId: bigint!
+  id: bigint
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitutionId: bigint
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
   updatedAt: DateTime
-  userId: String!
-  verificationUrl: String
+  userId: bigint!
+  verificationUrl: bigint
 }
 
 input AuthConnectionCreateManyPortfolioInputEnvelope {
@@ -3542,17 +3542,17 @@ input AuthConnectionCreateManyPortfolioInputEnvelope {
 input AuthConnectionCreateManyUserInput {
   authedAt: DateTime
   createdAt: DateTime
-  externalId: String!
-  id: String
+  externalId: bigint!
+  id: bigint
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
-  portfolioId: String!
+  plaidInstitutionId: bigint
+  portfolioId: bigint!
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
   updatedAt: DateTime
-  verificationUrl: String
+  verificationUrl: bigint
 }
 
 input AuthConnectionCreateManyUserInputEnvelope {
@@ -3598,52 +3598,52 @@ input AuthConnectionCreateOrConnectWithoutUserInput {
 input AuthConnectionCreateWithoutAccountsInput {
   authedAt: DateTime
   createdAt: DateTime
-  externalId: String!
-  id: String
+  externalId: bigint!
+  id: bigint
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitutionId: bigint
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
   updatedAt: DateTime
   user: UserCreateNestedOneWithoutAuthConnectionsInput!
-  verificationUrl: String
+  verificationUrl: bigint
 }
 
 input AuthConnectionCreateWithoutPortfolioInput {
   accounts: AccountCreateNestedManyWithoutAuthConnectionInput
   authedAt: DateTime
   createdAt: DateTime
-  externalId: String!
-  id: String
+  externalId: bigint!
+  id: bigint
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitutionId: bigint
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
   updatedAt: DateTime
   user: UserCreateNestedOneWithoutAuthConnectionsInput!
-  verificationUrl: String
+  verificationUrl: bigint
 }
 
 input AuthConnectionCreateWithoutUserInput {
   accounts: AccountCreateNestedManyWithoutAuthConnectionInput
   authedAt: DateTime
   createdAt: DateTime
-  externalId: String!
-  id: String
+  externalId: bigint!
+  id: bigint
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitutionId: bigint
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
   updatedAt: DateTime
-  verificationUrl: String
+  verificationUrl: bigint
 }
 
 type AuthConnectionExt {
@@ -3660,7 +3660,7 @@ type AuthConnectionExt {
   createdAt: DateTime!
 
   """PLAID -> Plaid Item id, ETRADE -> random UUID since they dont have one"""
-  externalId: String!
+  externalId: bigint!
 
   """Internal identifier"""
   id: ID!
@@ -3672,11 +3672,11 @@ type AuthConnectionExt {
   lastTransactionSyncedAtPlaid: DateTime
 
   """Plaid institution id"""
-  plaidInstitutionId: String
+  plaidInstitutionId: bigint
   portfolio: Portfolio!
 
   """The portfolio this provider belongs to"""
-  portfolioId: String!
+  portfolioId: bigint!
 
   """Source of the auth"""
   source: AuthSource!
@@ -3692,12 +3692,12 @@ type AuthConnectionExt {
   user: User!
 
   """User this provider pertains to"""
-  userId: String!
+  userId: bigint!
 
   """
   Used for etrade to store the url where the user can get their verifier code (valid for 5 minutes)
   """
-  verificationUrl: String
+  verificationUrl: bigint
 }
 
 input AuthConnectionListRelationFilter {
@@ -3709,35 +3709,35 @@ input AuthConnectionListRelationFilter {
 type AuthConnectionMaxAggregate {
   authedAt: DateTime
   createdAt: DateTime
-  externalId: String
-  id: String
+  externalId: bigint
+  id: bigint
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
-  portfolioId: String
+  plaidInstitutionId: bigint
+  portfolioId: bigint
   source: AuthSource
   syncedAt: DateTime
   type: AuthType
   updatedAt: DateTime
-  userId: String
-  verificationUrl: String
+  userId: bigint
+  verificationUrl: bigint
 }
 
 type AuthConnectionMinAggregate {
   authedAt: DateTime
   createdAt: DateTime
-  externalId: String
-  id: String
+  externalId: bigint
+  id: bigint
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
-  portfolioId: String
+  plaidInstitutionId: bigint
+  portfolioId: bigint
   source: AuthSource
   syncedAt: DateTime
   type: AuthType
   updatedAt: DateTime
-  userId: String
-  verificationUrl: String
+  userId: bigint
+  verificationUrl: bigint
 }
 
 input AuthConnectionNullableScalarRelationFilter {
@@ -3766,10 +3766,10 @@ input AuthConnectionScalarWhereInput {
 }
 
 input AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput {
-  plaidInstitutionId: String!
-  portfolioId: String!
+  plaidInstitutionId: bigint!
+  portfolioId: bigint!
   source: AuthSource!
-  userId: String!
+  userId: bigint!
 }
 
 input AuthConnectionUpdateManyMutationInput {
@@ -3949,8 +3949,8 @@ input AuthConnectionWhereUniqueInput {
   accounts: AccountListRelationFilter
   authedAt: DateTimeFilter
   createdAt: DateTimeFilter
-  externalId: String
-  id: String
+  externalId: bigint
+  id: bigint
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
   plaidInstitutionId: StringNullableFilter
@@ -3984,6 +3984,36 @@ enum AuthSource {
 enum AuthType {
   OAUTH_1
   PLAID_LINK
+}
+
+input BigIntFieldUpdateOperationsInput {
+  decrement: bigint
+  divide: bigint
+  increment: bigint
+  multiply: bigint
+  set: bigint
+}
+
+input BigIntFilter {
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
+  not: NestedBigIntFilter
+  notIn: [bigint!]
+}
+
+input BigIntNullableFilter {
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
+  not: NestedBigIntNullableFilter
+  notIn: [bigint!]
 }
 
 input BoolFieldUpdateOperationsInput {
@@ -4061,7 +4091,7 @@ input DecimalNullableFilter {
 
 input DirectedHarvestLot {
   counterTransaction: Boolean
-  lotId: String!
+  lotId: bigint!
   quantity: Float!
 }
 
@@ -4272,18 +4302,18 @@ input EnumVectorWindowFilter {
 type File {
   _count: FileCount!
   account: Account!
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime!
-  displayName: String!
+  displayName: bigint!
   fileType: FileType!
-  gcpFilename: String!
+  gcpFilename: bigint!
   id: ID!
   lots: [Lot!]
   portfolio: Portfolio!
-  portfolioId: String!
-  type: String!
+  portfolioId: bigint!
+  type: bigint!
   updatedAt: DateTime!
-  uploadedBy: String!
+  uploadedBy: bigint!
 }
 
 type FileCount {
@@ -4306,14 +4336,14 @@ type FileCountAggregate {
 
 input FileCreateManyAccountInput {
   createdAt: DateTime
-  displayName: String!
+  displayName: bigint!
   fileType: FileType
-  gcpFilename: String!
-  id: String
-  portfolioId: String!
-  type: String!
+  gcpFilename: bigint!
+  id: bigint
+  portfolioId: bigint!
+  type: bigint!
   updatedAt: DateTime
-  uploadedBy: String!
+  uploadedBy: bigint!
 }
 
 input FileCreateManyAccountInputEnvelope {
@@ -4322,28 +4352,28 @@ input FileCreateManyAccountInputEnvelope {
 }
 
 input FileCreateManyInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  displayName: String!
+  displayName: bigint!
   fileType: FileType
-  gcpFilename: String!
-  id: String
-  portfolioId: String!
-  type: String!
+  gcpFilename: bigint!
+  id: bigint
+  portfolioId: bigint!
+  type: bigint!
   updatedAt: DateTime
-  uploadedBy: String!
+  uploadedBy: bigint!
 }
 
 input FileCreateManyPortfolioInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  displayName: String!
+  displayName: bigint!
   fileType: FileType
-  gcpFilename: String!
-  id: String
-  type: String!
+  gcpFilename: bigint!
+  id: bigint
+  type: bigint!
   updatedAt: DateTime
-  uploadedBy: String!
+  uploadedBy: bigint!
 }
 
 input FileCreateManyPortfolioInputEnvelope {
@@ -4388,41 +4418,41 @@ input FileCreateOrConnectWithoutPortfolioInput {
 
 input FileCreateWithoutAccountInput {
   createdAt: DateTime
-  displayName: String!
+  displayName: bigint!
   fileType: FileType
-  gcpFilename: String!
-  id: String
+  gcpFilename: bigint!
+  id: bigint
   lots: LotCreateNestedManyWithoutFileInput
   portfolio: PortfolioCreateNestedOneWithoutFilesInput!
-  type: String!
+  type: bigint!
   updatedAt: DateTime
-  uploadedBy: String!
+  uploadedBy: bigint!
 }
 
 input FileCreateWithoutLotsInput {
   account: AccountCreateNestedOneWithoutFilesInput!
   createdAt: DateTime
-  displayName: String!
+  displayName: bigint!
   fileType: FileType
-  gcpFilename: String!
-  id: String
+  gcpFilename: bigint!
+  id: bigint
   portfolio: PortfolioCreateNestedOneWithoutFilesInput!
-  type: String!
+  type: bigint!
   updatedAt: DateTime
-  uploadedBy: String!
+  uploadedBy: bigint!
 }
 
 input FileCreateWithoutPortfolioInput {
   account: AccountCreateNestedOneWithoutFilesInput!
   createdAt: DateTime
-  displayName: String!
+  displayName: bigint!
   fileType: FileType
-  gcpFilename: String!
-  id: String
+  gcpFilename: bigint!
+  id: bigint
   lots: LotCreateNestedManyWithoutFileInput
-  type: String!
+  type: bigint!
   updatedAt: DateTime
-  uploadedBy: String!
+  uploadedBy: bigint!
 }
 
 input FileListRelationFilter {
@@ -4432,29 +4462,29 @@ input FileListRelationFilter {
 }
 
 type FileMaxAggregate {
-  accountId: String
+  accountId: bigint
   createdAt: DateTime
-  displayName: String
+  displayName: bigint
   fileType: FileType
-  gcpFilename: String
-  id: String
-  portfolioId: String
-  type: String
+  gcpFilename: bigint
+  id: bigint
+  portfolioId: bigint
+  type: bigint
   updatedAt: DateTime
-  uploadedBy: String
+  uploadedBy: bigint
 }
 
 type FileMinAggregate {
-  accountId: String
+  accountId: bigint
   createdAt: DateTime
-  displayName: String
+  displayName: bigint
   fileType: FileType
-  gcpFilename: String
-  id: String
-  portfolioId: String
-  type: String
+  gcpFilename: bigint
+  id: bigint
+  portfolioId: bigint
+  type: bigint
   updatedAt: DateTime
-  uploadedBy: String
+  uploadedBy: bigint
 }
 
 input FileNullableScalarRelationFilter {
@@ -4642,7 +4672,7 @@ input FileWhereUniqueInput {
   displayName: StringFilter
   fileType: EnumFileTypeFilter
   gcpFilename: StringFilter
-  id: String
+  id: bigint
   lots: LotListRelationFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
@@ -4662,9 +4692,9 @@ type FiniteHarvestResult {
 }
 
 input GCPUploadFile {
-  displayName: String!
-  fileName: String!
-  type: String!
+  displayName: bigint!
+  fileName: bigint!
+  type: bigint!
 }
 
 enum Graph {
@@ -4682,17 +4712,17 @@ type Harvest {
   amount: Decimal!
   createdAt: DateTime!
   createdBy: User!
-  createdById: String!
+  createdById: bigint!
   date: DateTime!
   harvestTransactionItems: [HarvestTransactionItem!]
   harvestTransactions: [HarvestTransaction!]
   id: ID!
-  label: String!
+  label: bigint!
 
   """should notify be performed"""
   notify: Boolean!
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
 
   """Date to lock in the recommendation """
   recommendationExpiresDate: DateTime!
@@ -4732,10 +4762,10 @@ input HarvestCreateManyCreatedByInput {
   amount: Decimal!
   createdAt: DateTime
   date: DateTime
-  id: String
-  label: String!
+  id: bigint
+  label: bigint!
   notify: Boolean
-  portfolioId: String!
+  portfolioId: bigint!
   recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType!
@@ -4751,10 +4781,10 @@ input HarvestCreateManyPortfolioInput {
   afterWashRevertDate: DateTime
   amount: Decimal!
   createdAt: DateTime
-  createdById: String!
+  createdById: bigint!
   date: DateTime
-  id: String
-  label: String!
+  id: bigint
+  label: bigint!
   notify: Boolean
   recommendationExpiresDate: DateTime
   step: HarvestStep
@@ -4820,8 +4850,8 @@ input HarvestCreateWithoutCreatedByInput {
   date: DateTime
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutHarvestInput
   harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
-  id: String
-  label: String!
+  id: bigint
+  label: bigint!
   notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
   recommendationExpiresDate: DateTime
@@ -4837,8 +4867,8 @@ input HarvestCreateWithoutHarvestTransactionItemsInput {
   createdBy: UserCreateNestedOneWithoutHarvestInput!
   date: DateTime
   harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
-  id: String
-  label: String!
+  id: bigint
+  label: bigint!
   notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
   recommendationExpiresDate: DateTime
@@ -4854,8 +4884,8 @@ input HarvestCreateWithoutHarvestTransactionsInput {
   createdBy: UserCreateNestedOneWithoutHarvestInput!
   date: DateTime
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutHarvestInput
-  id: String
-  label: String!
+  id: bigint
+  label: bigint!
   notify: Boolean
   portfolio: PortfolioCreateNestedOneWithoutHarvestsInput!
   recommendationExpiresDate: DateTime
@@ -4872,8 +4902,8 @@ input HarvestCreateWithoutPortfolioInput {
   date: DateTime
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutHarvestInput
   harvestTransactions: HarvestTransactionCreateNestedManyWithoutHarvestInput
-  id: String
-  label: String!
+  id: bigint
+  label: bigint!
   notify: Boolean
   recommendationExpiresDate: DateTime
   step: HarvestStep
@@ -4882,7 +4912,7 @@ input HarvestCreateWithoutPortfolioInput {
 }
 
 input HarvestEvalFilters {
-  excludeAssetSymbols: [String!]
+  excludeAssetSymbols: [bigint!]
   minPAndL: Float
   purchaseDateAfter: DateTime
   purchaseDateBefore: DateTime
@@ -4898,7 +4928,7 @@ type HarvestEvalResult {
   totalHarvestLots: Float!
 
   """List of unique asset symbols in portfolio"""
-  uniqueAssetSymbols: [String!]!
+  uniqueAssetSymbols: [bigint!]!
 }
 
 input HarvestListRelationFilter {
@@ -4909,18 +4939,18 @@ input HarvestListRelationFilter {
 
 """GQL object for the lot fields returned in harvest API's"""
 type HarvestLotCurrent {
-  accountId: String!
+  accountId: bigint!
   acquiredDate: DateTime!
 
   """How many shares from this lot are available to be harvested."""
-  availableQty: String!
-  costBasis: String!
+  availableQty: bigint!
+  costBasis: bigint!
 
   """How many shares from this lot are in "in flight" harvests."""
-  currentHarvestQty: String!
-  dollarPerSharePnL: String!
-  gainTotal: String!
-  gainTotalPct: String!
+  currentHarvestQty: bigint!
+  dollarPerSharePnL: bigint!
+  gainTotal: bigint!
+  gainTotalPct: bigint!
 
   """
   The P&L of the harvest for this lot (depending on the number of shares we will harvest).
@@ -4928,41 +4958,41 @@ type HarvestLotCurrent {
   harvestPAndL: Float!
 
   """How many shares from this lot are we going to harvest."""
-  harvestQuantity: String!
-  id: String!
-  lastPrice: String!
-  price: String!
+  harvestQuantity: bigint!
+  id: bigint!
+  lastPrice: bigint!
+  price: bigint!
 
   """
   How many shares from this lot are available to be harvested. Importantly this is the actual amount we know from plaid exists at the current time.
   """
-  remainingQty: String!
-  symbol: String!
+  remainingQty: bigint!
+  symbol: bigint!
   taxGain: TaxGain!
-  value: String!
+  value: bigint!
 }
 
 type HarvestLotOrder {
-  accountId: String!
+  accountId: bigint!
   acquiredDate: DateTime!
-  assetSymbol: String!
-  costBasis: String!
-  dollarPerSharePnL: String!
-  gainTotal: String!
-  id: String!
-  lastPrice: String!
+  assetSymbol: bigint!
+  costBasis: bigint!
+  dollarPerSharePnL: bigint!
+  gainTotal: bigint!
+  id: bigint!
+  lastPrice: bigint!
 
   """Lot Id"""
-  lotId: String!
+  lotId: bigint!
   orderType: OrderType!
-  pricePaid: String!
-  quantity: String!
+  pricePaid: bigint!
+  quantity: bigint!
   taxGain: TaxGain!
-  valueTotal: String!
+  valueTotal: bigint!
 }
 
 type HarvestMatchItem {
-  id: String!
+  id: bigint!
   pairs: [HarvestMatchPair!]!
 }
 
@@ -4977,12 +5007,12 @@ type HarvestMaxAggregate {
   afterWashRevertDate: DateTime
   amount: Decimal
   createdAt: DateTime
-  createdById: String
+  createdById: bigint
   date: DateTime
-  id: String
-  label: String
+  id: bigint
+  label: bigint
   notify: Boolean
-  portfolioId: String
+  portfolioId: bigint
   recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType
@@ -4993,12 +5023,12 @@ type HarvestMinAggregate {
   afterWashRevertDate: DateTime
   amount: Decimal
   createdAt: DateTime
-  createdById: String
+  createdById: bigint
   date: DateTime
-  id: String
-  label: String
+  id: bigint
+  label: bigint
   notify: Boolean
-  portfolioId: String
+  portfolioId: bigint
   recommendationExpiresDate: DateTime
   step: HarvestStep
   type: HarvestType
@@ -5075,21 +5105,21 @@ type HarvestTransaction {
   counterTransaction: Boolean!
   createdAt: DateTime!
   harvest: Harvest!
-  harvestId: String!
+  harvestId: bigint!
   harvestTransactionItem: HarvestTransactionItem!
-  harvestTransactionItemId: String!
+  harvestTransactionItemId: bigint!
   id: ID!
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   replacementTransactionItem: HarvestTransactionItem
-  replacementTransactionItemId: String
+  replacementTransactionItemId: bigint
 
   """should revert transactions be performed"""
   revert: Boolean!
   revertHarvestTransactionItem: HarvestTransactionItem
-  revertHarvestTransactionItemId: String
+  revertHarvestTransactionItemId: bigint
   revertReplacementTransactionItem: HarvestTransactionItem
-  revertReplacementTransactionItemId: String
+  revertReplacementTransactionItemId: bigint
   updatedAt: DateTime!
 }
 
@@ -5111,13 +5141,13 @@ type HarvestTransactionCountAggregate {
 input HarvestTransactionCreateManyHarvestInput {
   counterTransaction: Boolean
   createdAt: DateTime
-  harvestTransactionItemId: String!
-  id: String
-  portfolioId: String!
-  replacementTransactionItemId: String
+  harvestTransactionItemId: bigint!
+  id: bigint
+  portfolioId: bigint!
+  replacementTransactionItemId: bigint
   revert: Boolean
-  revertHarvestTransactionItemId: String
-  revertReplacementTransactionItemId: String
+  revertHarvestTransactionItemId: bigint
+  revertReplacementTransactionItemId: bigint
   updatedAt: DateTime
 }
 
@@ -5129,13 +5159,13 @@ input HarvestTransactionCreateManyHarvestInputEnvelope {
 input HarvestTransactionCreateManyPortfolioInput {
   counterTransaction: Boolean
   createdAt: DateTime
-  harvestId: String!
-  harvestTransactionItemId: String!
-  id: String
-  replacementTransactionItemId: String
+  harvestId: bigint!
+  harvestTransactionItemId: bigint!
+  id: bigint
+  replacementTransactionItemId: bigint
   revert: Boolean
-  revertHarvestTransactionItemId: String
-  revertReplacementTransactionItemId: String
+  revertHarvestTransactionItemId: bigint
+  revertReplacementTransactionItemId: bigint
   updatedAt: DateTime
 }
 
@@ -5216,7 +5246,7 @@ input HarvestTransactionCreateWithoutHarvestInput {
   counterTransaction: Boolean
   createdAt: DateTime
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
-  id: String
+  id: bigint
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
@@ -5229,7 +5259,7 @@ input HarvestTransactionCreateWithoutHarvestTransactionItemInput {
   counterTransaction: Boolean
   createdAt: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
-  id: String
+  id: bigint
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
@@ -5243,7 +5273,7 @@ input HarvestTransactionCreateWithoutPortfolioInput {
   createdAt: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
-  id: String
+  id: bigint
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
   revertHarvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertHarvestTransactionInput
@@ -5256,7 +5286,7 @@ input HarvestTransactionCreateWithoutReplacementTransactionItemInput {
   createdAt: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
-  id: String
+  id: bigint
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   revert: Boolean
   revertHarvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutRevertHarvestTransactionInput
@@ -5269,7 +5299,7 @@ input HarvestTransactionCreateWithoutRevertHarvestTransactionItemInput {
   createdAt: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
-  id: String
+  id: bigint
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
@@ -5282,7 +5312,7 @@ input HarvestTransactionCreateWithoutRevertReplacementTransactionItemInput {
   createdAt: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionsInput!
   harvestTransactionItem: HarvestTransactionItemCreateNestedOneWithoutHarvestTransactionInput!
-  id: String
+  id: bigint
   portfolio: PortfolioCreateNestedOneWithoutHarvestTransactionInput!
   replacementTransactionItem: HarvestTransactionItemCreateNestedOneWithoutReplacementTransactionInput
   revert: Boolean
@@ -5292,24 +5322,24 @@ input HarvestTransactionCreateWithoutRevertReplacementTransactionItemInput {
 
 type HarvestTransactionItem {
   asset: Asset!
-  assetSymbol: String!
+  assetSymbol: bigint!
   completedDate: DateTime
   createdAt: DateTime!
 
   """The date of the harvest transtion item is assumed to be executed"""
   date: DateTime!
   harvest: Harvest!
-  harvestId: String!
+  harvestId: bigint!
   harvestTransaction: HarvestTransaction
   id: ID!
   lotAcquiredDate: DateTime!
-  lotId: String
+  lotId: bigint
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
   lotSold: Lot
   orderType: OrderType!
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   price: Decimal!
   quantity: Decimal!
   replacementTransaction: HarvestTransaction
@@ -5348,14 +5378,14 @@ input HarvestTransactionItemCreateManyAssetInput {
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
-  harvestId: String!
-  id: String
+  harvestId: bigint!
+  id: bigint
   lotAcquiredDate: DateTime!
-  lotId: String
+  lotId: bigint
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
   orderType: OrderType!
-  portfolioId: String!
+  portfolioId: bigint!
   price: Decimal!
   quantity: Decimal!
   updatedAt: DateTime
@@ -5367,17 +5397,17 @@ input HarvestTransactionItemCreateManyAssetInputEnvelope {
 }
 
 input HarvestTransactionItemCreateManyHarvestInput {
-  assetSymbol: String!
+  assetSymbol: bigint!
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
-  lotId: String
+  lotId: bigint
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
   orderType: OrderType!
-  portfolioId: String!
+  portfolioId: bigint!
   price: Decimal!
   quantity: Decimal!
   updatedAt: DateTime
@@ -5389,17 +5419,17 @@ input HarvestTransactionItemCreateManyHarvestInputEnvelope {
 }
 
 input HarvestTransactionItemCreateManyLotSoldInput {
-  assetSymbol: String!
+  assetSymbol: bigint!
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
-  harvestId: String!
-  id: String
+  harvestId: bigint!
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
   orderType: OrderType!
-  portfolioId: String!
+  portfolioId: bigint!
   price: Decimal!
   quantity: Decimal!
   updatedAt: DateTime
@@ -5411,14 +5441,14 @@ input HarvestTransactionItemCreateManyLotSoldInputEnvelope {
 }
 
 input HarvestTransactionItemCreateManyPortfolioInput {
-  assetSymbol: String!
+  assetSymbol: bigint!
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
-  harvestId: String!
-  id: String
+  harvestId: bigint!
+  id: bigint
   lotAcquiredDate: DateTime!
-  lotId: String
+  lotId: bigint
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
   orderType: OrderType!
@@ -5530,7 +5560,7 @@ input HarvestTransactionItemCreateWithoutAssetInput {
   date: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
@@ -5551,7 +5581,7 @@ input HarvestTransactionItemCreateWithoutHarvestInput {
   createdAt: DateTime
   date: DateTime
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
@@ -5572,7 +5602,7 @@ input HarvestTransactionItemCreateWithoutHarvestTransactionInput {
   createdAt: DateTime
   date: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
@@ -5594,7 +5624,7 @@ input HarvestTransactionItemCreateWithoutLotSoldInput {
   date: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
@@ -5615,7 +5645,7 @@ input HarvestTransactionItemCreateWithoutPortfolioInput {
   date: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
@@ -5636,7 +5666,7 @@ input HarvestTransactionItemCreateWithoutReplacementTransactionInput {
   date: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
@@ -5657,7 +5687,7 @@ input HarvestTransactionItemCreateWithoutRevertHarvestTransactionInput {
   date: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
@@ -5678,7 +5708,7 @@ input HarvestTransactionItemCreateWithoutRevertReplacementTransactionInput {
   date: DateTime
   harvest: HarvestCreateNestedOneWithoutHarvestTransactionItemsInput!
   harvestTransaction: HarvestTransactionCreateNestedOneWithoutHarvestTransactionItemInput
-  id: String
+  id: bigint
   lotAcquiredDate: DateTime!
   lotPriceAtHarvest: Decimal!
   lotPricePaid: Decimal!
@@ -5699,36 +5729,36 @@ input HarvestTransactionItemListRelationFilter {
 }
 
 type HarvestTransactionItemMaxAggregate {
-  assetSymbol: String
+  assetSymbol: bigint
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
-  harvestId: String
-  id: String
+  harvestId: bigint
+  id: bigint
   lotAcquiredDate: DateTime
-  lotId: String
+  lotId: bigint
   lotPriceAtHarvest: Decimal
   lotPricePaid: Decimal
   orderType: OrderType
-  portfolioId: String
+  portfolioId: bigint
   price: Decimal
   quantity: Decimal
   updatedAt: DateTime
 }
 
 type HarvestTransactionItemMinAggregate {
-  assetSymbol: String
+  assetSymbol: bigint
   completedDate: DateTime
   createdAt: DateTime
   date: DateTime
-  harvestId: String
-  id: String
+  harvestId: bigint
+  id: bigint
   lotAcquiredDate: DateTime
-  lotId: String
+  lotId: bigint
   lotPriceAtHarvest: Decimal
   lotPricePaid: Decimal
   orderType: OrderType
-  portfolioId: String
+  portfolioId: bigint
   price: Decimal
   quantity: Decimal
   updatedAt: DateTime
@@ -6219,7 +6249,7 @@ input HarvestTransactionItemWhereUniqueInput {
   harvest: HarvestScalarRelationFilter
   harvestId: UuidFilter
   harvestTransaction: HarvestTransactionNullableScalarRelationFilter
-  id: String
+  id: bigint
   lotAcquiredDate: DateTimeFilter
   lotId: UuidNullableFilter
   lotPriceAtHarvest: DecimalFilter
@@ -6245,28 +6275,28 @@ input HarvestTransactionListRelationFilter {
 type HarvestTransactionMaxAggregate {
   counterTransaction: Boolean
   createdAt: DateTime
-  harvestId: String
-  harvestTransactionItemId: String
-  id: String
-  portfolioId: String
-  replacementTransactionItemId: String
+  harvestId: bigint
+  harvestTransactionItemId: bigint
+  id: bigint
+  portfolioId: bigint
+  replacementTransactionItemId: bigint
   revert: Boolean
-  revertHarvestTransactionItemId: String
-  revertReplacementTransactionItemId: String
+  revertHarvestTransactionItemId: bigint
+  revertReplacementTransactionItemId: bigint
   updatedAt: DateTime
 }
 
 type HarvestTransactionMinAggregate {
   counterTransaction: Boolean
   createdAt: DateTime
-  harvestId: String
-  harvestTransactionItemId: String
-  id: String
-  portfolioId: String
-  replacementTransactionItemId: String
+  harvestId: bigint
+  harvestTransactionItemId: bigint
+  id: bigint
+  portfolioId: bigint
+  replacementTransactionItemId: bigint
   revert: Boolean
-  revertHarvestTransactionItemId: String
-  revertReplacementTransactionItemId: String
+  revertHarvestTransactionItemId: bigint
+  revertReplacementTransactionItemId: bigint
   updatedAt: DateTime
 }
 
@@ -6568,17 +6598,17 @@ input HarvestTransactionWhereUniqueInput {
   harvest: HarvestScalarRelationFilter
   harvestId: UuidFilter
   harvestTransactionItem: HarvestTransactionItemScalarRelationFilter
-  harvestTransactionItemId: String
-  id: String
+  harvestTransactionItemId: bigint
+  id: bigint
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   replacementTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
-  replacementTransactionItemId: String
+  replacementTransactionItemId: bigint
   revert: BoolFilter
   revertHarvestTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
-  revertHarvestTransactionItemId: String
+  revertHarvestTransactionItemId: bigint
   revertReplacementTransactionItem: HarvestTransactionItemNullableScalarRelationFilter
-  revertReplacementTransactionItemId: String
+  revertReplacementTransactionItemId: bigint
   updatedAt: DateTimeFilter
 }
 
@@ -6825,7 +6855,7 @@ input HarvestWhereUniqueInput {
   date: DateTimeFilter
   harvestTransactionItems: HarvestTransactionItemListRelationFilter
   harvestTransactions: HarvestTransactionListRelationFilter
-  id: String
+  id: bigint
   label: StringFilter
   notify: BoolFilter
   portfolio: PortfolioScalarRelationFilter
@@ -6838,23 +6868,23 @@ input HarvestWhereUniqueInput {
 
 input InitAccountFileUploadPayload {
   deferredLoss: Float!
-  description: String
+  description: bigint
   dividend: Float!
   longTerm: Float!
-  name: String!
+  name: bigint!
   shortTerm: Float!
 }
 
 type InitAccountFileUploadResponse {
-  accountId: String!
+  accountId: bigint!
   files: [File!]!
 }
 
 input InitFileUploadPayload {
-  displayName: String!
+  displayName: bigint!
   fileType: FileType!
-  gcpFilename: String!
-  type: String!
+  gcpFilename: bigint!
+  type: bigint!
 }
 
 input IntFieldUpdateOperationsInput {
@@ -6903,10 +6933,10 @@ input JsonFilter {
   lte: JSON
   mode: QueryMode
   not: JSON
-  path: [String!]
-  string_contains: String
-  string_ends_with: String
-  string_starts_with: String
+  path: [bigint!]
+  string_contains: bigint
+  string_ends_with: bigint
+  string_starts_with: bigint
 }
 
 input JsonNullableFilter {
@@ -6920,10 +6950,10 @@ input JsonNullableFilter {
   lte: JSON
   mode: QueryMode
   not: JSON
-  path: [String!]
-  string_contains: String
-  string_ends_with: String
-  string_starts_with: String
+  path: [bigint!]
+  string_contains: bigint
+  string_ends_with: bigint
+  string_starts_with: bigint
 }
 
 input JsonNullableListFilter {
@@ -6935,12 +6965,14 @@ input JsonNullableListFilter {
 }
 
 type Log {
+  LotTransactionBatch: [LotTransactionBatch!]
+  _count: LogCount!
   createdAt: DateTime!
   data: JSON!
-  description: String
+  description: bigint
   id: ID!
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   responseStatus: Int
   source: AuthSource
   type: LogType!
@@ -6949,6 +6981,10 @@ type Log {
 type LogAvgAggregate {
   id: Float
   responseStatus: Float
+}
+
+type LogCount {
+  LotTransactionBatch: Int!
 }
 
 type LogCountAggregate {
@@ -6966,8 +7002,8 @@ type LogCountAggregate {
 input LogCreateManyPortfolioInput {
   createdAt: DateTime
   data: JSON!
-  description: String
-  id: Int
+  description: bigint
+  id: bigint
   responseStatus: Int
   source: AuthSource
   type: LogType!
@@ -6985,15 +7021,39 @@ input LogCreateNestedManyWithoutPortfolioInput {
   createMany: LogCreateManyPortfolioInputEnvelope
 }
 
+input LogCreateNestedOneWithoutLotTransactionBatchInput {
+  connect: LogWhereUniqueInput
+  connectOrCreate: LogCreateOrConnectWithoutLotTransactionBatchInput
+  create: LogCreateWithoutLotTransactionBatchInput
+}
+
+input LogCreateOrConnectWithoutLotTransactionBatchInput {
+  create: LogCreateWithoutLotTransactionBatchInput!
+  where: LogWhereUniqueInput!
+}
+
 input LogCreateOrConnectWithoutPortfolioInput {
   create: LogCreateWithoutPortfolioInput!
   where: LogWhereUniqueInput!
 }
 
-input LogCreateWithoutPortfolioInput {
+input LogCreateWithoutLotTransactionBatchInput {
   createdAt: DateTime
   data: JSON!
-  description: String
+  description: bigint
+  id: bigint
+  portfolio: PortfolioCreateNestedOneWithoutLogInput!
+  responseStatus: Int
+  source: AuthSource
+  type: LogType!
+}
+
+input LogCreateWithoutPortfolioInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput
+  createdAt: DateTime
+  data: JSON!
+  description: bigint
+  id: bigint
   responseStatus: Int
   source: AuthSource
   type: LogType!
@@ -7007,9 +7067,9 @@ input LogListRelationFilter {
 
 type LogMaxAggregate {
   createdAt: DateTime
-  description: String
-  id: Int
-  portfolioId: String
+  description: bigint
+  id: bigint
+  portfolioId: bigint
   responseStatus: Int
   source: AuthSource
   type: LogType
@@ -7017,12 +7077,17 @@ type LogMaxAggregate {
 
 type LogMinAggregate {
   createdAt: DateTime
-  description: String
-  id: Int
-  portfolioId: String
+  description: bigint
+  id: bigint
+  portfolioId: bigint
   responseStatus: Int
   source: AuthSource
   type: LogType
+}
+
+input LogNullableScalarRelationFilter {
+  is: LogWhereInput
+  isNot: LogWhereInput
 }
 
 input LogOrderByRelationAggregateInput {
@@ -7036,7 +7101,7 @@ input LogScalarWhereInput {
   createdAt: DateTimeFilter
   data: JsonFilter
   description: StringNullableFilter
-  id: IntFilter
+  id: BigIntFilter
   portfolioId: UuidFilter
   responseStatus: IntNullableFilter
   source: EnumAuthSourceNullableFilter
@@ -7044,7 +7109,7 @@ input LogScalarWhereInput {
 }
 
 type LogSumAggregate {
-  id: Int
+  id: bigint
   responseStatus: Int
 }
 
@@ -7062,6 +7127,7 @@ input LogUpdateManyMutationInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   data: JSON
   description: NullableStringFieldUpdateOperationsInput
+  id: BigIntFieldUpdateOperationsInput
   responseStatus: NullableIntFieldUpdateOperationsInput
   source: NullableEnumAuthSourceFieldUpdateOperationsInput
   type: EnumLogTypeFieldUpdateOperationsInput
@@ -7086,15 +7152,43 @@ input LogUpdateManyWithoutPortfolioNestedInput {
   upsert: [LogUpsertWithWhereUniqueWithoutPortfolioInput!]
 }
 
+input LogUpdateOneWithoutLotTransactionBatchNestedInput {
+  connect: LogWhereUniqueInput
+  connectOrCreate: LogCreateOrConnectWithoutLotTransactionBatchInput
+  create: LogCreateWithoutLotTransactionBatchInput
+  delete: LogWhereInput
+  disconnect: LogWhereInput
+  update: LogUpdateToOneWithWhereWithoutLotTransactionBatchInput
+  upsert: LogUpsertWithoutLotTransactionBatchInput
+}
+
+input LogUpdateToOneWithWhereWithoutLotTransactionBatchInput {
+  data: LogUpdateWithoutLotTransactionBatchInput!
+  where: LogWhereInput
+}
+
 input LogUpdateWithWhereUniqueWithoutPortfolioInput {
   data: LogUpdateWithoutPortfolioInput!
   where: LogWhereUniqueInput!
 }
 
-input LogUpdateWithoutPortfolioInput {
+input LogUpdateWithoutLotTransactionBatchInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   data: JSON
   description: NullableStringFieldUpdateOperationsInput
+  id: BigIntFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutLogNestedInput
+  responseStatus: NullableIntFieldUpdateOperationsInput
+  source: NullableEnumAuthSourceFieldUpdateOperationsInput
+  type: EnumLogTypeFieldUpdateOperationsInput
+}
+
+input LogUpdateWithoutPortfolioInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  data: JSON
+  description: NullableStringFieldUpdateOperationsInput
+  id: BigIntFieldUpdateOperationsInput
   responseStatus: NullableIntFieldUpdateOperationsInput
   source: NullableEnumAuthSourceFieldUpdateOperationsInput
   type: EnumLogTypeFieldUpdateOperationsInput
@@ -7106,14 +7200,21 @@ input LogUpsertWithWhereUniqueWithoutPortfolioInput {
   where: LogWhereUniqueInput!
 }
 
+input LogUpsertWithoutLotTransactionBatchInput {
+  create: LogCreateWithoutLotTransactionBatchInput!
+  update: LogUpdateWithoutLotTransactionBatchInput!
+  where: LogWhereInput
+}
+
 input LogWhereInput {
   AND: [LogWhereInput!]
+  LotTransactionBatch: LotTransactionBatchListRelationFilter
   NOT: [LogWhereInput!]
   OR: [LogWhereInput!]
   createdAt: DateTimeFilter
   data: JsonFilter
   description: StringNullableFilter
-  id: IntFilter
+  id: BigIntFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   responseStatus: IntNullableFilter
@@ -7123,12 +7224,13 @@ input LogWhereInput {
 
 input LogWhereUniqueInput {
   AND: [LogWhereInput!]
+  LotTransactionBatch: LotTransactionBatchListRelationFilter
   NOT: [LogWhereInput!]
   OR: [LogWhereInput!]
   createdAt: DateTimeFilter
   data: JsonFilter
   description: StringNullableFilter
-  id: Int
+  id: bigint
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   responseStatus: IntNullableFilter
@@ -7139,11 +7241,11 @@ input LogWhereUniqueInput {
 type Lot {
   _count: LotCount!
   account: Account!
-  accountId: String!
+  accountId: bigint!
   acquiredDate: DateTime!
   adjPrice: Decimal
   asset: Asset!
-  assetSymbol: String!
+  assetSymbol: bigint!
   availableQty: Decimal
   commPerShare: Decimal
   costTotal: Decimal
@@ -7152,12 +7254,12 @@ type Lot {
   excludeFromHarvest: Int!
 
   """The unique id in the external system for the lot (positionLotId)"""
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   file: File
 
   """The file this lot was created from if it was from ingestion"""
-  fileId: String
+  fileId: bigint
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
@@ -7170,18 +7272,18 @@ type Lot {
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
+  paymentCurrency: bigint
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   position: Position
-  positionId: String
+  positionId: bigint
 
   """The price paid per asset unit in the lot (share price paid)"""
   price: Decimal!
 
   """The quantity of the asset owned in the lot """
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -7213,23 +7315,23 @@ type LotAvgAggregate {
 }
 
 type LotChangeLog {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime!
   id: ID!
   lot: Lot
   lotAfter: JSON
   lotBefore: JSON
-  lotId: String
+  lotId: bigint
   lotTransactionBatch: LotTransactionBatch!
-  lotTransactionBatchId: String!
+  lotTransactionBatchId: bigint!
   operationType: OperationType!
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   processed: Boolean!
   quantityChange: Decimal
-  source: String
+  source: bigint
   transaction: Transaction
-  transactionId: String
+  transactionId: bigint
 }
 
 type LotChangeLogAvgAggregate {
@@ -7254,18 +7356,18 @@ type LotChangeLogCountAggregate {
 }
 
 input LotChangeLogCreateManyLotInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  id: String
+  id: bigint
   lotAfter: JSON
   lotBefore: JSON
-  lotTransactionBatchId: String!
+  lotTransactionBatchId: bigint!
   operationType: OperationType!
-  portfolioId: String!
+  portfolioId: bigint!
   processed: Boolean
   quantityChange: Decimal
-  source: String
-  transactionId: String
+  source: bigint
+  transactionId: bigint
 }
 
 input LotChangeLogCreateManyLotInputEnvelope {
@@ -7274,18 +7376,18 @@ input LotChangeLogCreateManyLotInputEnvelope {
 }
 
 input LotChangeLogCreateManyLotTransactionBatchInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  id: String
+  id: bigint
   lotAfter: JSON
   lotBefore: JSON
-  lotId: String
+  lotId: bigint
   operationType: OperationType!
-  portfolioId: String!
+  portfolioId: bigint!
   processed: Boolean
   quantityChange: Decimal
-  source: String
-  transactionId: String
+  source: bigint
+  transactionId: bigint
 }
 
 input LotChangeLogCreateManyLotTransactionBatchInputEnvelope {
@@ -7294,18 +7396,18 @@ input LotChangeLogCreateManyLotTransactionBatchInputEnvelope {
 }
 
 input LotChangeLogCreateManyPortfolioInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  id: String
+  id: bigint
   lotAfter: JSON
   lotBefore: JSON
-  lotId: String
-  lotTransactionBatchId: String!
+  lotId: bigint
+  lotTransactionBatchId: bigint!
   operationType: OperationType!
   processed: Boolean
   quantityChange: Decimal
-  source: String
-  transactionId: String
+  source: bigint
+  transactionId: bigint
 }
 
 input LotChangeLogCreateManyPortfolioInputEnvelope {
@@ -7314,18 +7416,18 @@ input LotChangeLogCreateManyPortfolioInputEnvelope {
 }
 
 input LotChangeLogCreateManyTransactionInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  id: String
+  id: bigint
   lotAfter: JSON
   lotBefore: JSON
-  lotId: String
-  lotTransactionBatchId: String!
+  lotId: bigint
+  lotTransactionBatchId: bigint!
   operationType: OperationType!
-  portfolioId: String!
+  portfolioId: bigint!
   processed: Boolean
   quantityChange: Decimal
-  source: String
+  source: bigint
 }
 
 input LotChangeLogCreateManyTransactionInputEnvelope {
@@ -7382,9 +7484,9 @@ input LotChangeLogCreateOrConnectWithoutTransactionInput {
 }
 
 input LotChangeLogCreateWithoutLotInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  id: String
+  id: bigint
   lotAfter: JSON
   lotBefore: JSON
   lotTransactionBatch: LotTransactionBatchCreateNestedOneWithoutLotChangeLogInput!
@@ -7392,14 +7494,14 @@ input LotChangeLogCreateWithoutLotInput {
   portfolio: PortfolioCreateNestedOneWithoutLotChangeLogInput!
   processed: Boolean
   quantityChange: Decimal
-  source: String
+  source: bigint
   transaction: TransactionCreateNestedOneWithoutLotChangeLogInput
 }
 
 input LotChangeLogCreateWithoutLotTransactionBatchInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  id: String
+  id: bigint
   lot: LotCreateNestedOneWithoutLotChangeLogInput
   lotAfter: JSON
   lotBefore: JSON
@@ -7407,14 +7509,14 @@ input LotChangeLogCreateWithoutLotTransactionBatchInput {
   portfolio: PortfolioCreateNestedOneWithoutLotChangeLogInput!
   processed: Boolean
   quantityChange: Decimal
-  source: String
+  source: bigint
   transaction: TransactionCreateNestedOneWithoutLotChangeLogInput
 }
 
 input LotChangeLogCreateWithoutPortfolioInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  id: String
+  id: bigint
   lot: LotCreateNestedOneWithoutLotChangeLogInput
   lotAfter: JSON
   lotBefore: JSON
@@ -7422,14 +7524,14 @@ input LotChangeLogCreateWithoutPortfolioInput {
   operationType: OperationType!
   processed: Boolean
   quantityChange: Decimal
-  source: String
+  source: bigint
   transaction: TransactionCreateNestedOneWithoutLotChangeLogInput
 }
 
 input LotChangeLogCreateWithoutTransactionInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
-  id: String
+  id: bigint
   lot: LotCreateNestedOneWithoutLotChangeLogInput
   lotAfter: JSON
   lotBefore: JSON
@@ -7438,7 +7540,7 @@ input LotChangeLogCreateWithoutTransactionInput {
   portfolio: PortfolioCreateNestedOneWithoutLotChangeLogInput!
   processed: Boolean
   quantityChange: Decimal
-  source: String
+  source: bigint
 }
 
 input LotChangeLogListRelationFilter {
@@ -7448,31 +7550,31 @@ input LotChangeLogListRelationFilter {
 }
 
 type LotChangeLogMaxAggregate {
-  accountId: String
+  accountId: bigint
   createdAt: DateTime
-  id: String
-  lotId: String
-  lotTransactionBatchId: String
+  id: bigint
+  lotId: bigint
+  lotTransactionBatchId: bigint
   operationType: OperationType
-  portfolioId: String
+  portfolioId: bigint
   processed: Boolean
   quantityChange: Decimal
-  source: String
-  transactionId: String
+  source: bigint
+  transactionId: bigint
 }
 
 type LotChangeLogMinAggregate {
-  accountId: String
+  accountId: bigint
   createdAt: DateTime
-  id: String
-  lotId: String
-  lotTransactionBatchId: String
+  id: bigint
+  lotId: bigint
+  lotTransactionBatchId: bigint
   operationType: OperationType
-  portfolioId: String
+  portfolioId: bigint
   processed: Boolean
   quantityChange: Decimal
-  source: String
-  transactionId: String
+  source: bigint
+  transactionId: bigint
 }
 
 input LotChangeLogScalarWhereInput {
@@ -7719,7 +7821,7 @@ input LotChangeLogWhereUniqueInput {
   OR: [LotChangeLogWhereInput!]
   accountId: UuidFilter
   createdAt: DateTimeFilter
-  id: String
+  id: bigint
   lot: LotNullableScalarRelationFilter
   lotAfter: JsonNullableFilter
   lotBefore: JsonNullableFilter
@@ -7781,32 +7883,32 @@ type LotCountAggregate {
 input LotCreateManyAccountInput {
   acquiredDate: DateTime!
   adjPrice: Decimal
-  assetSymbol: String!
+  assetSymbol: bigint!
   availableQty: Decimal
   commPerShare: Decimal
   costTotal: Decimal
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
-  fileId: String
+  fileId: bigint
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
-  portfolioId: String!
-  positionId: String
+  paymentCurrency: bigint
+  portfolioId: bigint!
+  positionId: bigint
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -7819,7 +7921,7 @@ input LotCreateManyAccountInputEnvelope {
 }
 
 input LotCreateManyAssetInput {
-  accountId: String!
+  accountId: bigint!
   acquiredDate: DateTime!
   adjPrice: Decimal
   availableQty: Decimal
@@ -7828,25 +7930,25 @@ input LotCreateManyAssetInput {
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
-  fileId: String
+  fileId: bigint
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
-  portfolioId: String!
-  positionId: String
+  paymentCurrency: bigint
+  portfolioId: bigint!
+  positionId: bigint
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -7859,34 +7961,34 @@ input LotCreateManyAssetInputEnvelope {
 }
 
 input LotCreateManyFileInput {
-  accountId: String!
+  accountId: bigint!
   acquiredDate: DateTime!
   adjPrice: Decimal
-  assetSymbol: String!
+  assetSymbol: bigint!
   availableQty: Decimal
   commPerShare: Decimal
   costTotal: Decimal
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
-  portfolioId: String!
-  positionId: String
+  paymentCurrency: bigint
+  portfolioId: bigint!
+  positionId: bigint
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -7899,34 +8001,34 @@ input LotCreateManyFileInputEnvelope {
 }
 
 input LotCreateManyPortfolioInput {
-  accountId: String!
+  accountId: bigint!
   acquiredDate: DateTime!
   adjPrice: Decimal
-  assetSymbol: String!
+  assetSymbol: bigint!
   availableQty: Decimal
   commPerShare: Decimal
   costTotal: Decimal
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
-  fileId: String
+  fileId: bigint
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
-  positionId: String
+  paymentCurrency: bigint
+  positionId: bigint
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -7939,34 +8041,34 @@ input LotCreateManyPortfolioInputEnvelope {
 }
 
 input LotCreateManyPositionInput {
-  accountId: String!
+  accountId: bigint!
   acquiredDate: DateTime!
   adjPrice: Decimal
-  assetSymbol: String!
+  assetSymbol: bigint!
   availableQty: Decimal
   commPerShare: Decimal
   costTotal: Decimal
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
-  fileId: String
+  fileId: bigint
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
-  portfolioId: String!
+  paymentCurrency: bigint
+  portfolioId: bigint!
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8070,14 +8172,14 @@ input LotCreateWithoutAccountInput {
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   file: FileCreateNestedOneWithoutLotsInput
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutLotSoldInput
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotChangeLog: LotChangeLogCreateNestedManyWithoutLotInput
@@ -8085,12 +8187,12 @@ input LotCreateWithoutAccountInput {
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutLotsInput!
   position: PositionCreateNestedOneWithoutLotsInput
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8107,14 +8209,14 @@ input LotCreateWithoutAssetInput {
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   file: FileCreateNestedOneWithoutLotsInput
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutLotSoldInput
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotChangeLog: LotChangeLogCreateNestedManyWithoutLotInput
@@ -8122,12 +8224,12 @@ input LotCreateWithoutAssetInput {
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutLotsInput!
   position: PositionCreateNestedOneWithoutLotsInput
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8145,13 +8247,13 @@ input LotCreateWithoutFileInput {
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutLotSoldInput
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotChangeLog: LotChangeLogCreateNestedManyWithoutLotInput
@@ -8159,12 +8261,12 @@ input LotCreateWithoutFileInput {
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutLotsInput!
   position: PositionCreateNestedOneWithoutLotsInput
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8182,13 +8284,13 @@ input LotCreateWithoutHarvestTransactionItemsInput {
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   file: FileCreateNestedOneWithoutLotsInput
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotChangeLog: LotChangeLogCreateNestedManyWithoutLotInput
@@ -8196,12 +8298,12 @@ input LotCreateWithoutHarvestTransactionItemsInput {
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutLotsInput!
   position: PositionCreateNestedOneWithoutLotsInput
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8219,26 +8321,26 @@ input LotCreateWithoutLotChangeLogInput {
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   file: FileCreateNestedOneWithoutLotsInput
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutLotSoldInput
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutLotsInput!
   position: PositionCreateNestedOneWithoutLotsInput
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8256,14 +8358,14 @@ input LotCreateWithoutPortfolioInput {
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   file: FileCreateNestedOneWithoutLotsInput
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutLotSoldInput
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotChangeLog: LotChangeLogCreateNestedManyWithoutLotInput
@@ -8271,11 +8373,11 @@ input LotCreateWithoutPortfolioInput {
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
+  paymentCurrency: bigint
   position: PositionCreateNestedOneWithoutLotsInput
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8293,14 +8395,14 @@ input LotCreateWithoutPositionInput {
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
   file: FileCreateNestedOneWithoutLotsInput
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
   harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutLotSoldInput
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotChangeLog: LotChangeLogCreateNestedManyWithoutLotInput
@@ -8308,11 +8410,11 @@ input LotCreateWithoutPositionInput {
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutLotsInput!
   price: Decimal!
   remainingQty: Decimal!
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8321,29 +8423,29 @@ input LotCreateWithoutPositionInput {
 
 """GQL object for the lot current database view"""
 type LotCurrent {
-  accountId: String!
+  accountId: bigint!
   acquiredDate: DateTime!
 
   """How many shares from this lot are available to be harvested."""
-  availableQty: String!
-  costBasis: String!
+  availableQty: bigint!
+  costBasis: bigint!
 
   """How many shares from this lot are in "in flight" harvests."""
-  currentHarvestQty: String!
-  dollarPerSharePnL: String!
-  gainTotal: String!
-  gainTotalPct: String!
-  id: String!
-  lastPrice: String!
-  price: String!
+  currentHarvestQty: bigint!
+  dollarPerSharePnL: bigint!
+  gainTotal: bigint!
+  gainTotalPct: bigint!
+  id: bigint!
+  lastPrice: bigint!
+  price: bigint!
 
   """
   How many shares from this lot are available to be harvested. Importantly this is the actual amount we know from plaid exists at the current time.
   """
-  remainingQty: String!
-  symbol: String!
+  remainingQty: bigint!
+  symbol: bigint!
   taxGain: TaxGain!
-  value: String!
+  value: bigint!
 }
 
 input LotListRelationFilter {
@@ -8353,35 +8455,35 @@ input LotListRelationFilter {
 }
 
 type LotMaxAggregate {
-  accountId: String
+  accountId: bigint
   acquiredDate: DateTime
   adjPrice: Decimal
-  assetSymbol: String
+  assetSymbol: bigint
   availableQty: Decimal
   commPerShare: Decimal
   costTotal: Decimal
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
-  fileId: String
+  fileId: bigint
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
-  portfolioId: String
-  positionId: String
+  paymentCurrency: bigint
+  portfolioId: bigint
+  positionId: bigint
   price: Decimal
   remainingQty: Decimal
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8389,35 +8491,35 @@ type LotMaxAggregate {
 }
 
 type LotMinAggregate {
-  accountId: String
+  accountId: bigint
   acquiredDate: DateTime
   adjPrice: Decimal
-  assetSymbol: String
+  assetSymbol: bigint
   availableQty: Decimal
   commPerShare: Decimal
   costTotal: Decimal
   createdAt: DateTime
   exchangeRate: Decimal
   excludeFromHarvest: Int
-  externalId: String
+  externalId: bigint
   feesPerShare: Decimal
-  fileId: String
+  fileId: bigint
   gainDay: Decimal
   gainDayPct: Decimal
   gainTotal: Decimal
-  id: String
+  id: bigint
   legNo: Int
   locationCode: Int
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
   originalQty: Decimal
-  paymentCurrency: String
-  portfolioId: String
-  positionId: String
+  paymentCurrency: bigint
+  portfolioId: bigint
+  positionId: bigint
   price: Decimal
   remainingQty: Decimal
-  settlementCurrency: String
+  settlementCurrency: bigint
   shortType: Int
   termCode: Int
   totalCostForGainPct: Decimal
@@ -8430,8 +8532,8 @@ input LotNullableScalarRelationFilter {
 }
 
 input LotPositionIdExternalIdCompoundUniqueInput {
-  externalId: String!
-  positionId: String!
+  externalId: bigint!
+  positionId: bigint!
 }
 
 input LotScalarWhereInput {
@@ -8500,7 +8602,7 @@ type LotSumAggregate {
 type LotTransactionBatch {
   _count: LotTransactionBatchCount!
   account: Account!
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime!
   deletedLots: JSON
 
@@ -8510,6 +8612,8 @@ type LotTransactionBatch {
 
   """Initial lots for the transaction batch"""
   initialLots: JSON
+  logTrxMerge: Log
+  logTrxMergeId: bigint
   lotChangeLog: [LotChangeLog!]
 
   """Map of lot tuples for the transaction batch"""
@@ -8524,7 +8628,7 @@ type LotTransactionBatch {
   """New transactions for the transaction batch"""
   newTransactions: JSON
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
 
   """Snapshot of positions after the transaction batch"""
   positionsAfter: JSON
@@ -8538,6 +8642,7 @@ type LotTransactionBatch {
 }
 
 type LotTransactionBatchAvgAggregate {
+  logTrxMergeId: Float
   realizedProfitAndLoss: Decimal
 }
 
@@ -8553,6 +8658,7 @@ type LotTransactionBatchCountAggregate {
   holdingsPayload: Int!
   id: Int!
   initialLots: Int!
+  logTrxMergeId: Int!
   lotTupleMap: Int!
   newBuys: Int!
   newSells: Int!
@@ -8568,13 +8674,14 @@ input LotTransactionBatchCreateManyAccountInput {
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
-  id: String
+  id: bigint
   initialLots: JSON
+  logTrxMergeId: bigint
   lotTupleMap: JSON
   newBuys: JSON
   newSells: JSON
   newTransactions: JSON
-  portfolioId: String!
+  portfolioId: bigint!
   positionsAfter: JSON
   positionsBefore: JSON
   realizedProfitAndLoss: Decimal
@@ -8586,13 +8693,37 @@ input LotTransactionBatchCreateManyAccountInputEnvelope {
   skipDuplicates: Boolean
 }
 
-input LotTransactionBatchCreateManyPortfolioInput {
-  accountId: String!
+input LotTransactionBatchCreateManyLogTrxMergeInput {
+  accountId: bigint!
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
-  id: String
+  id: bigint
   initialLots: JSON
+  lotTupleMap: JSON
+  newBuys: JSON
+  newSells: JSON
+  newTransactions: JSON
+  portfolioId: bigint!
+  positionsAfter: JSON
+  positionsBefore: JSON
+  realizedProfitAndLoss: Decimal
+  updatedAt: DateTime
+}
+
+input LotTransactionBatchCreateManyLogTrxMergeInputEnvelope {
+  data: [LotTransactionBatchCreateManyLogTrxMergeInput!]!
+  skipDuplicates: Boolean
+}
+
+input LotTransactionBatchCreateManyPortfolioInput {
+  accountId: bigint!
+  createdAt: DateTime
+  deletedLots: JSON
+  holdingsPayload: JSON
+  id: bigint
+  initialLots: JSON
+  logTrxMergeId: bigint
   lotTupleMap: JSON
   newBuys: JSON
   newSells: JSON
@@ -8615,6 +8746,13 @@ input LotTransactionBatchCreateNestedManyWithoutAccountInput {
   createMany: LotTransactionBatchCreateManyAccountInputEnvelope
 }
 
+input LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput {
+  connect: [LotTransactionBatchWhereUniqueInput!]
+  connectOrCreate: [LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput!]
+  create: [LotTransactionBatchCreateWithoutLogTrxMergeInput!]
+  createMany: LotTransactionBatchCreateManyLogTrxMergeInputEnvelope
+}
+
 input LotTransactionBatchCreateNestedManyWithoutPortfolioInput {
   connect: [LotTransactionBatchWhereUniqueInput!]
   connectOrCreate: [LotTransactionBatchCreateOrConnectWithoutPortfolioInput!]
@@ -8633,6 +8771,11 @@ input LotTransactionBatchCreateOrConnectWithoutAccountInput {
   where: LotTransactionBatchWhereUniqueInput!
 }
 
+input LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput {
+  create: LotTransactionBatchCreateWithoutLogTrxMergeInput!
+  where: LotTransactionBatchWhereUniqueInput!
+}
+
 input LotTransactionBatchCreateOrConnectWithoutLotChangeLogInput {
   create: LotTransactionBatchCreateWithoutLotChangeLogInput!
   where: LotTransactionBatchWhereUniqueInput!
@@ -8647,7 +8790,27 @@ input LotTransactionBatchCreateWithoutAccountInput {
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
-  id: String
+  id: bigint
+  initialLots: JSON
+  logTrxMerge: LogCreateNestedOneWithoutLotTransactionBatchInput
+  lotChangeLog: LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput
+  lotTupleMap: JSON
+  newBuys: JSON
+  newSells: JSON
+  newTransactions: JSON
+  portfolio: PortfolioCreateNestedOneWithoutLotTransactionBatchInput!
+  positionsAfter: JSON
+  positionsBefore: JSON
+  realizedProfitAndLoss: Decimal
+  updatedAt: DateTime
+}
+
+input LotTransactionBatchCreateWithoutLogTrxMergeInput {
+  account: AccountCreateNestedOneWithoutLotTransactionBatchInput!
+  createdAt: DateTime
+  deletedLots: JSON
+  holdingsPayload: JSON
+  id: bigint
   initialLots: JSON
   lotChangeLog: LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput
   lotTupleMap: JSON
@@ -8666,8 +8829,9 @@ input LotTransactionBatchCreateWithoutLotChangeLogInput {
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
-  id: String
+  id: bigint
   initialLots: JSON
+  logTrxMerge: LogCreateNestedOneWithoutLotTransactionBatchInput
   lotTupleMap: JSON
   newBuys: JSON
   newSells: JSON
@@ -8684,8 +8848,9 @@ input LotTransactionBatchCreateWithoutPortfolioInput {
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
-  id: String
+  id: bigint
   initialLots: JSON
+  logTrxMerge: LogCreateNestedOneWithoutLotTransactionBatchInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput
   lotTupleMap: JSON
   newBuys: JSON
@@ -8704,19 +8869,21 @@ input LotTransactionBatchListRelationFilter {
 }
 
 type LotTransactionBatchMaxAggregate {
-  accountId: String
+  accountId: bigint
   createdAt: DateTime
-  id: String
-  portfolioId: String
+  id: bigint
+  logTrxMergeId: bigint
+  portfolioId: bigint
   realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
 
 type LotTransactionBatchMinAggregate {
-  accountId: String
+  accountId: bigint
   createdAt: DateTime
-  id: String
-  portfolioId: String
+  id: bigint
+  logTrxMergeId: bigint
+  portfolioId: bigint
   realizedProfitAndLoss: Decimal
   updatedAt: DateTime
 }
@@ -8740,6 +8907,7 @@ input LotTransactionBatchScalarWhereInput {
   holdingsPayload: JsonNullableFilter
   id: UuidFilter
   initialLots: JsonNullableFilter
+  logTrxMergeId: BigIntNullableFilter
   lotTupleMap: JsonNullableFilter
   newBuys: JsonNullableFilter
   newSells: JsonNullableFilter
@@ -8752,6 +8920,7 @@ input LotTransactionBatchScalarWhereInput {
 }
 
 type LotTransactionBatchSumAggregate {
+  logTrxMergeId: bigint
   realizedProfitAndLoss: Decimal
 }
 
@@ -8776,6 +8945,11 @@ input LotTransactionBatchUpdateManyWithWhereWithoutAccountInput {
   where: LotTransactionBatchScalarWhereInput!
 }
 
+input LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput {
+  data: LotTransactionBatchUpdateManyMutationInput!
+  where: LotTransactionBatchScalarWhereInput!
+}
+
 input LotTransactionBatchUpdateManyWithWhereWithoutPortfolioInput {
   data: LotTransactionBatchUpdateManyMutationInput!
   where: LotTransactionBatchScalarWhereInput!
@@ -8793,6 +8967,20 @@ input LotTransactionBatchUpdateManyWithoutAccountNestedInput {
   update: [LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput!]
   updateMany: [LotTransactionBatchUpdateManyWithWhereWithoutAccountInput!]
   upsert: [LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput!]
+}
+
+input LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput {
+  connect: [LotTransactionBatchWhereUniqueInput!]
+  connectOrCreate: [LotTransactionBatchCreateOrConnectWithoutLogTrxMergeInput!]
+  create: [LotTransactionBatchCreateWithoutLogTrxMergeInput!]
+  createMany: LotTransactionBatchCreateManyLogTrxMergeInputEnvelope
+  delete: [LotTransactionBatchWhereUniqueInput!]
+  deleteMany: [LotTransactionBatchScalarWhereInput!]
+  disconnect: [LotTransactionBatchWhereUniqueInput!]
+  set: [LotTransactionBatchWhereUniqueInput!]
+  update: [LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput!]
+  updateMany: [LotTransactionBatchUpdateManyWithWhereWithoutLogTrxMergeInput!]
+  upsert: [LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput!]
 }
 
 input LotTransactionBatchUpdateManyWithoutPortfolioNestedInput {
@@ -8827,12 +9015,37 @@ input LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput {
   where: LotTransactionBatchWhereUniqueInput!
 }
 
+input LotTransactionBatchUpdateWithWhereUniqueWithoutLogTrxMergeInput {
+  data: LotTransactionBatchUpdateWithoutLogTrxMergeInput!
+  where: LotTransactionBatchWhereUniqueInput!
+}
+
 input LotTransactionBatchUpdateWithWhereUniqueWithoutPortfolioInput {
   data: LotTransactionBatchUpdateWithoutPortfolioInput!
   where: LotTransactionBatchWhereUniqueInput!
 }
 
 input LotTransactionBatchUpdateWithoutAccountInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  deletedLots: JSON
+  holdingsPayload: JSON
+  id: StringFieldUpdateOperationsInput
+  initialLots: JSON
+  logTrxMerge: LogUpdateOneWithoutLotTransactionBatchNestedInput
+  lotChangeLog: LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput
+  lotTupleMap: JSON
+  newBuys: JSON
+  newSells: JSON
+  newTransactions: JSON
+  portfolio: PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput
+  positionsAfter: JSON
+  positionsBefore: JSON
+  realizedProfitAndLoss: NullableDecimalFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotTransactionBatchUpdateWithoutLogTrxMergeInput {
+  account: AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8857,6 +9070,7 @@ input LotTransactionBatchUpdateWithoutLotChangeLogInput {
   holdingsPayload: JSON
   id: StringFieldUpdateOperationsInput
   initialLots: JSON
+  logTrxMerge: LogUpdateOneWithoutLotTransactionBatchNestedInput
   lotTupleMap: JSON
   newBuys: JSON
   newSells: JSON
@@ -8875,6 +9089,7 @@ input LotTransactionBatchUpdateWithoutPortfolioInput {
   holdingsPayload: JSON
   id: StringFieldUpdateOperationsInput
   initialLots: JSON
+  logTrxMerge: LogUpdateOneWithoutLotTransactionBatchNestedInput
   lotChangeLog: LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput
   lotTupleMap: JSON
   newBuys: JSON
@@ -8889,6 +9104,12 @@ input LotTransactionBatchUpdateWithoutPortfolioInput {
 input LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput {
   create: LotTransactionBatchCreateWithoutAccountInput!
   update: LotTransactionBatchUpdateWithoutAccountInput!
+  where: LotTransactionBatchWhereUniqueInput!
+}
+
+input LotTransactionBatchUpsertWithWhereUniqueWithoutLogTrxMergeInput {
+  create: LotTransactionBatchCreateWithoutLogTrxMergeInput!
+  update: LotTransactionBatchUpdateWithoutLogTrxMergeInput!
   where: LotTransactionBatchWhereUniqueInput!
 }
 
@@ -8915,6 +9136,8 @@ input LotTransactionBatchWhereInput {
   holdingsPayload: JsonNullableFilter
   id: UuidFilter
   initialLots: JsonNullableFilter
+  logTrxMerge: LogNullableScalarRelationFilter
+  logTrxMergeId: BigIntNullableFilter
   lotChangeLog: LotChangeLogListRelationFilter
   lotTupleMap: JsonNullableFilter
   newBuys: JsonNullableFilter
@@ -8937,8 +9160,10 @@ input LotTransactionBatchWhereUniqueInput {
   createdAt: DateTimeFilter
   deletedLots: JsonNullableFilter
   holdingsPayload: JsonNullableFilter
-  id: String
+  id: bigint
   initialLots: JsonNullableFilter
+  logTrxMerge: LogNullableScalarRelationFilter
+  logTrxMergeId: BigIntNullableFilter
   lotChangeLog: LotChangeLogListRelationFilter
   lotTupleMap: JsonNullableFilter
   newBuys: JsonNullableFilter
@@ -9509,7 +9734,7 @@ input LotWhereUniqueInput {
   gainDayPct: DecimalNullableFilter
   gainTotal: DecimalNullableFilter
   harvestTransactionItems: HarvestTransactionItemListRelationFilter
-  id: String
+  id: bigint
   legNo: IntNullableFilter
   locationCode: IntNullableFilter
   lotChangeLog: LotChangeLogListRelationFilter
@@ -9533,12 +9758,12 @@ input LotWhereUniqueInput {
 }
 
 type Mutation {
-  accessOauthConnection(authSource: AuthSource!, portfolioId: String!, verifier: String!): AuthConnectionExt!
+  accessOauthConnection(authSource: AuthSource!, portfolioId: bigint!, verifier: bigint!): AuthConnectionExt!
 
   """
   Add User to Portfolio. True if user added, False if user is invited as they do not exist
   """
-  addUserToPortfolio(email: String!): Boolean!
+  addUserToPortfolio(email: bigint!): Boolean!
 
   """Create a new connected account"""
   createAccountForPortfolio(accountCreateInput: AccountCreateInput!): Account!
@@ -9554,53 +9779,56 @@ type Mutation {
   deleteAccount(accountWhereUniqueInput: AccountWhereUniqueInput!): Account!
 
   """Delete an auth connection and all associated accounts and data"""
-  deleteAuthConnection(authConnectionId: String!): AuthConnection!
+  deleteAuthConnection(authConnectionId: bigint!): AuthConnection!
 
   """Delete multiple harvests by their IDs"""
-  deleteHarvests(ids: [String!]!): Boolean!
+  deleteHarvests(ids: [bigint!]!): Boolean!
 
   """Finalize harvest for review"""
-  finalizeHarvest(id: String): Harvest!
-  initAccountFileUpload(accountData: InitAccountFileUploadPayload!, fileData: [InitFileUploadPayload!]!): InitAccountFileUploadResponse!
+  finalizeHarvest(id: bigint): Harvest!
+  initAccountFileUpload(accountData: InitAccountFileUploadPayload, accountId: bigint, fileData: [InitFileUploadPayload!]!): InitAccountFileUploadResponse!
 
   """Invite User to Platform"""
-  inviteUsersToPlatform(emails: [String!]!): Boolean!
+  inviteUsersToPlatform(emails: [bigint!]!): Boolean!
+
+  """Process CSV accounts by applying new transactions for each account"""
+  processCsvAccounts(accountIds: [bigint!]!): Boolean!
 
   """Remove User from Portfolio"""
-  removeUserFromPortfolio(userId: String!): Boolean!
+  removeUserFromPortfolio(userId: bigint!): Boolean!
   sendNotificationsByFrequency(frequency: HarvestNotificationFrequency!): Boolean!
   sendWashSaleNotificationsForDate(date: DateTime!): Boolean!
 
   """Set up plaid auth connection and create accounts from syncing plaid"""
-  setAccessTokenAndSyncAccounts(existingAccountId: String, metaData: PlaidLinkOnSuccessMetadata!, publicToken: String!): [Account!]!
+  setAccessTokenAndSyncAccounts(existingAccountId: bigint, metaData: PlaidLinkOnSuccessMetadata!, publicToken: bigint!): [Account!]!
 
   """Log the user into a different portfolio"""
-  switchPortfolio(porfolioId: String!): Portfolio!
-  syncAuthConnection(id: String!): AuthConnectionExt!
+  switchPortfolio(porfolioId: bigint!): Portfolio!
+  syncAuthConnection(id: bigint!): AuthConnectionExt!
 
   """Update a connected account"""
   updateAccount(accountUpdateInput: AccountUpdateInput!, accountWhereUniqueInput: AccountWhereUniqueInput!): Account!
 
   """Update last price of every asset"""
-  updateAllAssetPrices: String!
+  updateAllAssetPrices: bigint!
 
   """Update a Harvest"""
-  updateHarvest(data: HarvestUpdateInput, id: String): Harvest!
+  updateHarvest(data: HarvestUpdateInput, id: bigint): Harvest!
 
   """Update a Harvest transaction"""
-  updateHarvestTransaction(data: HarvestTransactionUpdateInput, id: String): HarvestTransaction!
+  updateHarvestTransaction(data: HarvestTransactionUpdateInput, id: bigint): HarvestTransaction!
 
   """Update a HarvestTransactionItem"""
-  updateHarvestTransactionItem(data: HarvestTransactionItemUpdateInput, id: String): HarvestTransactionItem!
+  updateHarvestTransactionItem(data: HarvestTransactionItemUpdateInput, id: bigint): HarvestTransactionItem!
 
   """Pull hourly price data for all assets within the window."""
-  updateHourlyAssetPrices(from: DateTime!, to: DateTime!): String!
+  updateHourlyAssetPrices(from: DateTime!, to: DateTime!): bigint!
 
   """Update a portfolio"""
   updatePortfolio(data: PortfolioUpdateInput!): Portfolio!
 
   """Update RealizedPAndL"""
-  updateRealizedPAndL(id: String!, input: RealizedPAndLUpdateInput!): RealizedPAndL!
+  updateRealizedPAndL(id: bigint!, input: RealizedPAndLUpdateInput!): RealizedPAndL!
 
   """Update User"""
   updateUser(data: UserUpdateInput!): User!
@@ -9610,6 +9838,28 @@ type Mutation {
 
   """Update User Favorites"""
   updateUserFavorites(data: UserUpdateInput!): User!
+}
+
+input NestedBigIntFilter {
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
+  not: NestedBigIntFilter
+  notIn: [bigint!]
+}
+
+input NestedBigIntNullableFilter {
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
+  not: NestedBigIntNullableFilter
+  notIn: [bigint!]
 }
 
 input NestedBoolFilter {
@@ -9824,53 +10074,53 @@ input NestedIntNullableFilter {
 }
 
 input NestedStringFilter {
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
+  contains: bigint
+  endsWith: bigint
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
   not: NestedStringFilter
-  notIn: [String!]
-  startsWith: String
+  notIn: [bigint!]
+  startsWith: bigint
 }
 
 input NestedStringNullableFilter {
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
+  contains: bigint
+  endsWith: bigint
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
   not: NestedStringNullableFilter
-  notIn: [String!]
-  startsWith: String
+  notIn: [bigint!]
+  startsWith: bigint
 }
 
 input NestedUuidFilter {
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
   not: NestedUuidFilter
-  notIn: [String!]
+  notIn: [bigint!]
 }
 
 input NestedUuidNullableFilter {
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
   not: NestedUuidNullableFilter
-  notIn: [String!]
+  notIn: [bigint!]
 }
 
 input NullableDateTimeFieldUpdateOperationsInput {
@@ -9910,7 +10160,7 @@ input NullableIntFieldUpdateOperationsInput {
 }
 
 input NullableStringFieldUpdateOperationsInput {
-  set: String
+  set: bigint
 }
 
 enum OperationType {
@@ -9942,34 +10192,34 @@ input PaginationProps {
 }
 
 input PlaidAccount {
-  id: String!
-  mask: String!
-  name: String!
-  subtype: String
-  type: String!
-  verification_status: String
+  id: bigint!
+  mask: bigint!
+  name: bigint!
+  subtype: bigint
+  type: bigint!
+  verification_status: bigint
 }
 
 input PlaidInstitution {
-  institution_id: String!
-  name: String!
+  institution_id: bigint!
+  name: bigint!
 }
 
 type PlaidInstitutionInfo {
-  country_codes: [String!]!
-  institution_id: String!
-  logo: String
-  name: String!
-  primary_color: String
-  products: [String!]!
-  url: String
+  country_codes: [bigint!]!
+  institution_id: bigint!
+  logo: bigint
+  name: bigint!
+  primary_color: bigint
+  products: [bigint!]!
+  url: bigint
 }
 
 input PlaidLinkOnSuccessMetadata {
   accounts: [PlaidAccount!]!
   institution: PlaidInstitution
-  link_session_id: String!
-  transfer_status: String
+  link_session_id: bigint!
+  transfer_status: bigint
 }
 
 type PolygonStockData {
@@ -10004,7 +10254,7 @@ type Portfolio {
   authConnections: [AuthConnection!]
   createdAt: DateTime!
   createdBy: User!
-  createdById: String!
+  createdById: bigint!
   endOfYearTaxOpportunityNotification: Boolean!
   files: [File!]
 
@@ -10042,7 +10292,7 @@ type Portfolio {
 
   """Minimum p and l for a lot to be considered harvestable"""
   minimumLotPAndL: Decimal!
-  name: String!
+  name: bigint!
   notificationFrequency: HarvestNotificationFrequency!
   positions: [Position!]
   realizedPAndL: [RealizedPAndL!]
@@ -10112,13 +10362,13 @@ input PortfolioCreateInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10136,9 +10386,9 @@ input PortfolioCreateManyCreatedByInput {
   harvestTickerBucketDollarSizeShort: Decimal
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
-  id: String
+  id: bigint
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
 }
@@ -10189,6 +10439,12 @@ input PortfolioCreateNestedOneWithoutHarvestsInput {
   connect: PortfolioWhereUniqueInput
   connectOrCreate: PortfolioCreateOrConnectWithoutHarvestsInput
   create: PortfolioCreateWithoutHarvestsInput
+}
+
+input PortfolioCreateNestedOneWithoutLogInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutLogInput
+  create: PortfolioCreateWithoutLogInput
 }
 
 input PortfolioCreateNestedOneWithoutLotChangeLogInput {
@@ -10268,6 +10524,11 @@ input PortfolioCreateOrConnectWithoutHarvestsInput {
   where: PortfolioWhereUniqueInput!
 }
 
+input PortfolioCreateOrConnectWithoutLogInput {
+  create: PortfolioCreateWithoutLogInput!
+  where: PortfolioWhereUniqueInput!
+}
+
 input PortfolioCreateOrConnectWithoutLotChangeLogInput {
   create: PortfolioCreateWithoutLotChangeLogInput!
   where: PortfolioWhereUniqueInput!
@@ -10318,13 +10579,13 @@ input PortfolioCreateWithoutAccountsInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10348,13 +10609,13 @@ input PortfolioCreateWithoutAuthConnectionsInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10378,13 +10639,13 @@ input PortfolioCreateWithoutCreatedByInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10408,13 +10669,13 @@ input PortfolioCreateWithoutFilesInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10438,13 +10699,13 @@ input PortfolioCreateWithoutHarvestTransactionInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10468,13 +10729,13 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10498,13 +10759,43 @@ input PortfolioCreateWithoutHarvestsInput {
   harvestTickerBucketLowerLimitShort: Decimal
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
+  notificationFrequency: HarvestNotificationFrequency
+  positions: PositionCreateNestedManyWithoutPortfolioInput
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
+  transactions: TransactionCreateNestedManyWithoutPortfolioInput
+  updatedAt: DateTime
+  usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
+}
+
+input PortfolioCreateWithoutLogInput {
+  accounts: AccountCreateNestedManyWithoutPortfolioInput
+  authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
+  createdAt: DateTime
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
+  files: FileCreateNestedManyWithoutPortfolioInput
+  harvestCycleWeeks: Int
+  harvestShareDollarThreshold: Decimal
+  harvestTickerBucketDollarSizeLong: Decimal
+  harvestTickerBucketDollarSizeShort: Decimal
+  harvestTickerBucketLowerLimitLong: Decimal
+  harvestTickerBucketLowerLimitShort: Decimal
+  harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
+  harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
+  harvests: HarvestCreateNestedManyWithoutPortfolioInput
+  id: bigint
+  lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
+  lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
+  lots: LotCreateNestedManyWithoutPortfolioInput
+  minimumLotPAndL: Decimal
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10529,12 +10820,12 @@ input PortfolioCreateWithoutLotChangeLogInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10559,12 +10850,12 @@ input PortfolioCreateWithoutLotTransactionBatchInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10589,12 +10880,12 @@ input PortfolioCreateWithoutLotsInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10619,13 +10910,13 @@ input PortfolioCreateWithoutPositionsInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactions: TransactionCreateNestedManyWithoutPortfolioInput
@@ -10649,13 +10940,13 @@ input PortfolioCreateWithoutRealizedPAndLInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   transactions: TransactionCreateNestedManyWithoutPortfolioInput
@@ -10679,13 +10970,13 @@ input PortfolioCreateWithoutTransactionsInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10709,13 +11000,13 @@ input PortfolioCreateWithoutUsersOnPortfoliosInput {
   harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
   harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
   harvests: HarvestCreateNestedManyWithoutPortfolioInput
-  id: String
+  id: bigint
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -10731,7 +11022,7 @@ input PortfolioListRelationFilter {
 
 type PortfolioMaxAggregate {
   createdAt: DateTime
-  createdById: String
+  createdById: bigint
   endOfYearTaxOpportunityNotification: Boolean
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10739,16 +11030,16 @@ type PortfolioMaxAggregate {
   harvestTickerBucketDollarSizeShort: Decimal
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
-  id: String
+  id: bigint
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
 }
 
 type PortfolioMinAggregate {
   createdAt: DateTime
-  createdById: String
+  createdById: bigint
   endOfYearTaxOpportunityNotification: Boolean
   harvestCycleWeeks: Int
   harvestShareDollarThreshold: Decimal
@@ -10756,9 +11047,9 @@ type PortfolioMinAggregate {
   harvestTickerBucketDollarSizeShort: Decimal
   harvestTickerBucketLowerLimitLong: Decimal
   harvestTickerBucketLowerLimitShort: Decimal
-  id: String
+  id: bigint
   minimumLotPAndL: Decimal
-  name: String
+  name: bigint
   notificationFrequency: HarvestNotificationFrequency
   updatedAt: DateTime
 }
@@ -10947,6 +11238,14 @@ input PortfolioUpdateOneRequiredWithoutHarvestsNestedInput {
   upsert: PortfolioUpsertWithoutHarvestsInput
 }
 
+input PortfolioUpdateOneRequiredWithoutLogNestedInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutLogInput
+  create: PortfolioCreateWithoutLogInput
+  update: PortfolioUpdateToOneWithWhereWithoutLogInput
+  upsert: PortfolioUpsertWithoutLogInput
+}
+
 input PortfolioUpdateOneRequiredWithoutLotChangeLogNestedInput {
   connect: PortfolioWhereUniqueInput
   connectOrCreate: PortfolioCreateOrConnectWithoutLotChangeLogInput
@@ -11030,6 +11329,11 @@ input PortfolioUpdateToOneWithWhereWithoutHarvestTransactionItemInput {
 
 input PortfolioUpdateToOneWithWhereWithoutHarvestsInput {
   data: PortfolioUpdateWithoutHarvestsInput!
+  where: PortfolioWhereInput
+}
+
+input PortfolioUpdateToOneWithWhereWithoutLogInput {
+  data: PortfolioUpdateWithoutLogInput!
   where: PortfolioWhereInput
 }
 
@@ -11270,6 +11574,36 @@ input PortfolioUpdateWithoutHarvestsInput {
   harvestTransactionItem: HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput
   id: StringFieldUpdateOperationsInput
   log: LogUpdateManyWithoutPortfolioNestedInput
+  lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
+  lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
+  lots: LotUpdateManyWithoutPortfolioNestedInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
+  positions: PositionUpdateManyWithoutPortfolioNestedInput
+  realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
+  transactions: TransactionUpdateManyWithoutPortfolioNestedInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
+}
+
+input PortfolioUpdateWithoutLogInput {
+  accounts: AccountUpdateManyWithoutPortfolioNestedInput
+  authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutPortfolioNestedInput
+  harvestCycleWeeks: IntFieldUpdateOperationsInput
+  harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeShort: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
+  harvestTransaction: HarvestTransactionUpdateManyWithoutPortfolioNestedInput
+  harvestTransactionItem: HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput
+  harvests: HarvestUpdateManyWithoutPortfolioNestedInput
+  id: StringFieldUpdateOperationsInput
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -11535,6 +11869,12 @@ input PortfolioUpsertWithoutHarvestsInput {
   where: PortfolioWhereInput
 }
 
+input PortfolioUpsertWithoutLogInput {
+  create: PortfolioCreateWithoutLogInput!
+  update: PortfolioUpdateWithoutLogInput!
+  where: PortfolioWhereInput
+}
+
 input PortfolioUpsertWithoutLotChangeLogInput {
   create: PortfolioCreateWithoutLotChangeLogInput!
   update: PortfolioUpdateWithoutLotChangeLogInput!
@@ -11632,7 +11972,7 @@ input PortfolioWhereUniqueInput {
   harvestTransaction: HarvestTransactionListRelationFilter
   harvestTransactionItem: HarvestTransactionItemListRelationFilter
   harvests: HarvestListRelationFilter
-  id: String
+  id: bigint
   log: LogListRelationFilter
   lotChangeLog: LotChangeLogListRelationFilter
   lotTransactionBatch: LotTransactionBatchListRelationFilter
@@ -11655,9 +11995,9 @@ but user facing tables etc. and harvest calc's should roll up lots
 type Position {
   _count: PositionCount!
   account: Account!
-  accountId: String!
+  accountId: bigint!
   asset: Asset!
-  assetSymbol: String!
+  assetSymbol: bigint!
   change: Decimal
   changePCT: Decimal
   commissionDay: Decimal
@@ -11669,7 +12009,7 @@ type Position {
   dateExpiration: DateTime
 
   """The unique id in the external system for the position"""
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
@@ -11679,17 +12019,17 @@ type Position {
   lots: [Lot!]
   marketValue: Decimal
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   pricePaid: Decimal
   quantity: Decimal!
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime!
 }
 
 input PositionAccountIdExternalIdCompoundUniqueInput {
-  accountId: String!
-  externalId: String!
+  accountId: bigint!
+  externalId: bigint!
 }
 
 type PositionAvgAggregate {
@@ -11743,7 +12083,7 @@ type PositionCountAggregate {
 }
 
 input PositionCreateManyAccountInput {
-  assetSymbol: String!
+  assetSymbol: bigint!
   change: Decimal
   changePCT: Decimal
   commissionDay: Decimal
@@ -11753,19 +12093,19 @@ input PositionCreateManyAccountInput {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   marketValue: Decimal
-  portfolioId: String!
+  portfolioId: bigint!
   pricePaid: Decimal
   quantity: Decimal!
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -11775,7 +12115,7 @@ input PositionCreateManyAccountInputEnvelope {
 }
 
 input PositionCreateManyAssetInput {
-  accountId: String!
+  accountId: bigint!
   change: Decimal
   changePCT: Decimal
   commissionDay: Decimal
@@ -11785,19 +12125,19 @@ input PositionCreateManyAssetInput {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   marketValue: Decimal
-  portfolioId: String!
+  portfolioId: bigint!
   pricePaid: Decimal
   quantity: Decimal!
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -11807,8 +12147,8 @@ input PositionCreateManyAssetInputEnvelope {
 }
 
 input PositionCreateManyPortfolioInput {
-  accountId: String!
-  assetSymbol: String!
+  accountId: bigint!
+  assetSymbol: bigint!
   change: Decimal
   changePCT: Decimal
   commissionDay: Decimal
@@ -11818,18 +12158,18 @@ input PositionCreateManyPortfolioInput {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   marketValue: Decimal
   pricePaid: Decimal
   quantity: Decimal!
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -11896,20 +12236,20 @@ input PositionCreateWithoutAccountInput {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   lots: LotCreateNestedManyWithoutPositionInput
   marketValue: Decimal
   portfolio: PortfolioCreateNestedOneWithoutPositionsInput!
   pricePaid: Decimal
   quantity: Decimal!
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -11924,20 +12264,20 @@ input PositionCreateWithoutAssetInput {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   lots: LotCreateNestedManyWithoutPositionInput
   marketValue: Decimal
   portfolio: PortfolioCreateNestedOneWithoutPositionsInput!
   pricePaid: Decimal
   quantity: Decimal!
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -11953,19 +12293,19 @@ input PositionCreateWithoutLotsInput {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   marketValue: Decimal
   portfolio: PortfolioCreateNestedOneWithoutPositionsInput!
   pricePaid: Decimal
   quantity: Decimal!
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -11981,19 +12321,19 @@ input PositionCreateWithoutPortfolioInput {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   lots: LotCreateNestedManyWithoutPositionInput
   marketValue: Decimal
   pricePaid: Decimal
   quantity: Decimal!
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -12004,8 +12344,8 @@ input PositionListRelationFilter {
 }
 
 type PositionMaxAggregate {
-  accountId: String
-  assetSymbol: String
+  accountId: bigint
+  assetSymbol: bigint
   change: Decimal
   changePCT: Decimal
   commissionDay: Decimal
@@ -12015,25 +12355,25 @@ type PositionMaxAggregate {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   marketValue: Decimal
-  portfolioId: String
+  portfolioId: bigint
   pricePaid: Decimal
   quantity: Decimal
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
 type PositionMinAggregate {
-  accountId: String
-  assetSymbol: String
+  accountId: bigint
+  assetSymbol: bigint
   change: Decimal
   changePCT: Decimal
   commissionDay: Decimal
@@ -12043,19 +12383,19 @@ type PositionMinAggregate {
   createdAt: DateTime
   dateAcquired: DateTime
   dateExpiration: DateTime
-  externalId: String
+  externalId: bigint
   feesDay: Decimal
   feesOther: Decimal
   gainDay: Decimal
   gainTotal: Decimal
   gainTotalPCT: Decimal
-  id: String
+  id: bigint
   marketValue: Decimal
-  portfolioId: String
+  portfolioId: bigint
   pricePaid: Decimal
   quantity: Decimal
-  quoteStatus: String
-  type: String
+  quoteStatus: bigint
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -12419,7 +12759,7 @@ input PositionWhereUniqueInput {
   gainDay: DecimalNullableFilter
   gainTotal: DecimalNullableFilter
   gainTotalPCT: DecimalNullableFilter
-  id: String
+  id: bigint
   lots: LotListRelationFilter
   marketValue: DecimalNullableFilter
   portfolio: PortfolioScalarRelationFilter
@@ -12432,7 +12772,7 @@ input PositionWhereUniqueInput {
 }
 
 type PriceHourly {
-  assetSymbol: String!
+  assetSymbol: bigint!
   assset: Asset!
   close: Int!
   high: Int!
@@ -12445,7 +12785,7 @@ type PriceHourly {
 }
 
 input PriceHourlyAssetSymbolStartDateCompoundUniqueInput {
-  assetSymbol: String!
+  assetSymbol: bigint!
   startDate: DateTime!
 }
 
@@ -12518,7 +12858,7 @@ input PriceHourlyListRelationFilter {
 }
 
 type PriceHourlyMaxAggregate {
-  assetSymbol: String
+  assetSymbol: bigint
   close: Int
   high: Int
   low: Int
@@ -12530,7 +12870,7 @@ type PriceHourlyMaxAggregate {
 }
 
 type PriceHourlyMinAggregate {
-  assetSymbol: String
+  assetSymbol: bigint
   close: Int
   high: Int
   low: Int
@@ -12626,7 +12966,7 @@ type PriceHourlyVector {
 
   """Asset this vector is for"""
   asset: Asset!
-  assetSymbol: String!
+  assetSymbol: bigint!
   createdAt: DateTime!
   id: ID!
 
@@ -12644,7 +12984,7 @@ type PriceHourlyVector {
 }
 
 input PriceHourlyVectorAssetSymbolStartDateVectorWindowCompoundUniqueInput {
-  assetSymbol: String!
+  assetSymbol: bigint!
   startDate: DateTime!
   vectorWindow: VectorWindow!
 }
@@ -12665,7 +13005,7 @@ type PriceHourlyVectorCountAggregate {
 
 input PriceHourlyVectorCreateManyAssetInput {
   createdAt: DateTime
-  id: String
+  id: bigint
   startDate: DateTime!
   updatedAt: DateTime
   vectorWindow: VectorWindow!
@@ -12701,7 +13041,7 @@ input PriceHourlyVectorCreateOrConnectWithoutVectorGraphsInput {
 
 input PriceHourlyVectorCreateWithoutAssetInput {
   createdAt: DateTime
-  id: String
+  id: bigint
   startDate: DateTime!
   updatedAt: DateTime
   vectorGraphs: VectorGraphCreateNestedManyWithoutPriceHourlyVectorInput
@@ -12711,7 +13051,7 @@ input PriceHourlyVectorCreateWithoutAssetInput {
 input PriceHourlyVectorCreateWithoutVectorGraphsInput {
   asset: AssetCreateNestedOneWithoutPriceHourlyVectorsInput!
   createdAt: DateTime
-  id: String
+  id: bigint
   startDate: DateTime!
   updatedAt: DateTime
   vectorWindow: VectorWindow!
@@ -12724,18 +13064,18 @@ input PriceHourlyVectorListRelationFilter {
 }
 
 type PriceHourlyVectorMaxAggregate {
-  assetSymbol: String
+  assetSymbol: bigint
   createdAt: DateTime
-  id: String
+  id: bigint
   startDate: DateTime
   updatedAt: DateTime
   vectorWindow: VectorWindow
 }
 
 type PriceHourlyVectorMinAggregate {
-  assetSymbol: String
+  assetSymbol: bigint
   createdAt: DateTime
-  id: String
+  id: bigint
   startDate: DateTime
   updatedAt: DateTime
   vectorWindow: VectorWindow
@@ -12855,7 +13195,7 @@ input PriceHourlyVectorWhereUniqueInput {
   assetSymbol: StringFilter
   assetSymbol_startDate_vectorWindow: PriceHourlyVectorAssetSymbolStartDateVectorWindowCompoundUniqueInput
   createdAt: DateTimeFilter
-  id: String
+  id: bigint
   startDate: DateTimeFilter
   updatedAt: DateTimeFilter
   vectorGraphs: VectorGraphListRelationFilter
@@ -12897,21 +13237,21 @@ input PriceHourlyWhereUniqueInput {
 
 type Query {
   """Find a connected account by id"""
-  account(id: String!): Account!
+  account(id: bigint!): Account!
 
   """Get accounts"""
   accounts(where: AccountWhereInput): [Account!]!
-  authConnection(id: String!): AuthConnectionExt!
+  authConnection(id: bigint!): AuthConnectionExt!
 
   """Chart data for the past 3 months for a asset"""
-  chartThreeMonth(asset: String!): [PolygonStockData!]!
+  chartThreeMonth(asset: bigint!): [PolygonStockData!]!
 
   """Harvest within the directed params."""
   directedHarvest(lots: [DirectedHarvestLot!]!, targetRealized: Float!, targetUnrealized: Float!): HarvestResult!
   files(where: FileWhereInput): [File!]!
 
   """Find one user by email"""
-  findOneUserByEmail(email: String!): User!
+  findOneUserByEmail(email: bigint!): User!
 
   """New harvest endpoint that returns all orders and summary"""
   finiteHarvest: FiniteHarvestResult!
@@ -12920,13 +13260,13 @@ type Query {
   generateSignedUrlsForUpload(files: [GCPUploadFile!]!): SignedUrlsForUploadPayload!
 
   """Get file download url"""
-  genrerateSignedUrlsForDownload(gcpFileNames: [String!]!): SignedUrlsForDownloadPayload!
+  genrerateSignedUrlsForDownload(gcpFileNames: [bigint!]!): SignedUrlsForDownloadPayload!
 
   """Get a user"""
-  getUserPublic(id: String!): User!
+  getUserPublic(id: bigint!): User!
 
   """Get a Harvest"""
-  harvest(id: String): Harvest!
+  harvest(id: bigint): Harvest!
 
   """Evaluate harvesting for portfolio,"""
   harvestEval: HarvestResult!
@@ -12938,20 +13278,20 @@ type Query {
   harvests(where: HarvestWhereInput): [Harvest!]!
 
   """Get plaid link token for user"""
-  linkToken(authConnectionId: String): String!
+  linkToken(authConnectionId: bigint): bigint!
   log(logId: Int!): Log
   logs(orderBy: LogOrderByRelationAggregateInput, pagination: PaginationProps): [Log!]!
   logsCount: Int!
 
   """Lot current view"""
-  lotCurrent(lotIds: [String!], lotValueType: LotValueType, minTotalPAndL: Float): [LotCurrent!]!
-  lotTransactionBatch(lotTransactionBatchId: String!): LotTransactionBatch
+  lotCurrent(lotIds: [bigint!], lotValueType: LotValueType, minTotalPAndL: Float): [LotCurrent!]!
+  lotTransactionBatch(lotTransactionBatchId: bigint!): LotTransactionBatch
   lotTransactionBatches(orderBy: LotTransactionBatchOrderByRelationAggregateInput): [LotTransactionBatch!]!
   lots(includeTaxAdvantaged: Boolean, where: LotWhereInput): [Lot!]!
   plaidAuthConnections: [AuthConnection!]!
 
   """Get institution information from Plaid"""
-  plaidInstitution(institutionId: String!): PlaidInstitutionInfo!
+  plaidInstitution(institutionId: bigint!): PlaidInstitutionInfo!
 
   """Get authenticated portfolio"""
   portfolioAuthed: Portfolio!
@@ -12962,15 +13302,15 @@ type Query {
 
   """Get all portfolios for a user"""
   portfolios: [Portfolio!]!
-  products(active: String): [StripeProduct!]!
-  requestOauthConnection(authSource: AuthSource!, portfolioId: String!): AuthConnectionExt!
+  products(active: bigint): [StripeProduct!]!
+  requestOauthConnection(authSource: AuthSource!, portfolioId: bigint!): AuthConnectionExt!
 
   """Get accounts that need setup"""
   setupAccounts: [Account!]!
-  stripeSession(stripeCustomerId: String!, stripePriceId: String!): StripeSession!
+  stripeSession(stripeCustomerId: bigint!, stripePriceId: bigint!): StripeSession!
 
   """Find a connected transaction by id"""
-  transaction(id: String!): Transaction!
+  transaction(id: bigint!): Transaction!
 
   """Get transactions"""
   transactions(where: TransactionWhereInput): [Transaction!]!
@@ -12989,21 +13329,21 @@ enum QueryMode {
 
 type RealizedPAndL {
   account: Account!
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime!
   deferredLoss: Decimal!
   dividend: Decimal!
   id: ID!
   longTerm: Decimal!
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   shortTerm: Decimal!
   updatedAt: DateTime!
   year: Int!
 }
 
 input RealizedPAndLAccountIdYearCompoundUniqueInput {
-  accountId: String!
+  accountId: bigint!
   year: Int!
 }
 
@@ -13033,9 +13373,9 @@ input RealizedPAndLCreateManyAccountInput {
   createdAt: DateTime
   deferredLoss: Decimal
   dividend: Decimal
-  id: String
+  id: bigint
   longTerm: Decimal
-  portfolioId: String!
+  portfolioId: bigint!
   shortTerm: Decimal
   updatedAt: DateTime
   year: Int!
@@ -13047,11 +13387,11 @@ input RealizedPAndLCreateManyAccountInputEnvelope {
 }
 
 input RealizedPAndLCreateManyPortfolioInput {
-  accountId: String!
+  accountId: bigint!
   createdAt: DateTime
   deferredLoss: Decimal
   dividend: Decimal
-  id: String
+  id: bigint
   longTerm: Decimal
   shortTerm: Decimal
   updatedAt: DateTime
@@ -13091,7 +13431,7 @@ input RealizedPAndLCreateWithoutAccountInput {
   createdAt: DateTime
   deferredLoss: Decimal
   dividend: Decimal
-  id: String
+  id: bigint
   longTerm: Decimal
   portfolio: PortfolioCreateNestedOneWithoutRealizedPAndLInput!
   shortTerm: Decimal
@@ -13104,7 +13444,7 @@ input RealizedPAndLCreateWithoutPortfolioInput {
   createdAt: DateTime
   deferredLoss: Decimal
   dividend: Decimal
-  id: String
+  id: bigint
   longTerm: Decimal
   shortTerm: Decimal
   updatedAt: DateTime
@@ -13118,26 +13458,26 @@ input RealizedPAndLListRelationFilter {
 }
 
 type RealizedPAndLMaxAggregate {
-  accountId: String
+  accountId: bigint
   createdAt: DateTime
   deferredLoss: Decimal
   dividend: Decimal
-  id: String
+  id: bigint
   longTerm: Decimal
-  portfolioId: String
+  portfolioId: bigint
   shortTerm: Decimal
   updatedAt: DateTime
   year: Int
 }
 
 type RealizedPAndLMinAggregate {
-  accountId: String
+  accountId: bigint
   createdAt: DateTime
   deferredLoss: Decimal
   dividend: Decimal
-  id: String
+  id: bigint
   longTerm: Decimal
-  portfolioId: String
+  portfolioId: bigint
   shortTerm: Decimal
   updatedAt: DateTime
   year: Int
@@ -13303,7 +13643,7 @@ input RealizedPAndLWhereUniqueInput {
   createdAt: DateTimeFilter
   deferredLoss: DecimalFilter
   dividend: DecimalFilter
-  id: String
+  id: bigint
   longTerm: DecimalFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
@@ -13319,11 +13659,11 @@ enum SetUpStatus {
 }
 
 type SignedUrlsForDownloadPayload {
-  downloadUrls: [String!]!
+  downloadUrls: [bigint!]!
 }
 
 type SignedUrlsForUploadPayload {
-  uploadUrls: [String!]!
+  uploadUrls: [bigint!]!
 }
 
 enum SortOrder {
@@ -13332,53 +13672,53 @@ enum SortOrder {
 }
 
 input StringFieldUpdateOperationsInput {
-  set: String
+  set: bigint
 }
 
 input StringFilter {
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
+  contains: bigint
+  endsWith: bigint
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
   mode: QueryMode
   not: NestedStringFilter
-  notIn: [String!]
-  startsWith: String
+  notIn: [bigint!]
+  startsWith: bigint
 }
 
 input StringNullableFilter {
-  contains: String
-  endsWith: String
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
+  contains: bigint
+  endsWith: bigint
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
   mode: QueryMode
   not: NestedStringNullableFilter
-  notIn: [String!]
-  startsWith: String
+  notIn: [bigint!]
+  startsWith: bigint
 }
 
 type StripeMarketingFeature {
-  name: String
+  name: bigint
 }
 
 type StripeProduct {
   active: Boolean
-  description: String
-  id: String!
+  description: bigint
+  id: bigint!
   marketing_features: [StripeMarketingFeature!]!
 }
 
 type StripeSession {
-  client_secret: String
-  id: String!
+  client_secret: bigint
+  id: bigint!
 }
 
 enum TaxGain {
@@ -13389,43 +13729,43 @@ enum TaxGain {
 type Transaction {
   _count: TransactionCount!
   account: Account!
-  accountId: String!
+  accountId: bigint!
   amount: Decimal
   appliedToLots: Boolean!
   asset: Asset!
-  assetSymbol: String!
+  assetSymbol: bigint!
   createdAt: DateTime!
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
 
   """PLaid investment_transaction_id"""
-  externalId: String!
+  externalId: bigint!
   fee: Decimal
 
   """Internal transaction identifier"""
   id: ID!
   lotChangeLog: [LotChangeLog!]
-  memo: String
-  paymentCurrency: String
+  memo: bigint
+  paymentCurrency: bigint
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime!
 }
 
 input TransactionAccountIdExternalIdCompoundUniqueInput {
-  accountId: String!
-  externalId: String!
+  accountId: bigint!
+  externalId: bigint!
 }
 
 type TransactionAvgAggregate {
@@ -13471,27 +13811,27 @@ type TransactionCountAggregate {
 input TransactionCreateManyAccountInput {
   amount: Decimal
   appliedToLots: Boolean
-  assetSymbol: String!
+  assetSymbol: bigint!
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String!
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint!
   fee: Decimal
-  id: String
-  memo: String
-  paymentCurrency: String
-  portfolioId: String!
+  id: bigint
+  memo: bigint
+  paymentCurrency: bigint
+  portfolioId: bigint!
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -13501,29 +13841,29 @@ input TransactionCreateManyAccountInputEnvelope {
 }
 
 input TransactionCreateManyAssetInput {
-  accountId: String!
+  accountId: bigint!
   amount: Decimal
   appliedToLots: Boolean
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String!
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint!
   fee: Decimal
-  id: String
-  memo: String
-  paymentCurrency: String
-  portfolioId: String!
+  id: bigint
+  memo: bigint
+  paymentCurrency: bigint
+  portfolioId: bigint!
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -13533,29 +13873,29 @@ input TransactionCreateManyAssetInputEnvelope {
 }
 
 input TransactionCreateManyPortfolioInput {
-  accountId: String!
+  accountId: bigint!
   amount: Decimal
   appliedToLots: Boolean
-  assetSymbol: String!
+  assetSymbol: bigint!
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String!
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint!
   fee: Decimal
-  id: String
-  memo: String
-  paymentCurrency: String
+  id: bigint
+  memo: bigint
+  paymentCurrency: bigint
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -13616,26 +13956,26 @@ input TransactionCreateWithoutAccountInput {
   appliedToLots: Boolean
   asset: AssetCreateNestedOneWithoutTransactionsInput!
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String!
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint!
   fee: Decimal
-  id: String
+  id: bigint
   lotChangeLog: LotChangeLogCreateNestedManyWithoutTransactionInput
-  memo: String
-  paymentCurrency: String
+  memo: bigint
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutTransactionsInput!
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -13644,26 +13984,26 @@ input TransactionCreateWithoutAssetInput {
   amount: Decimal
   appliedToLots: Boolean
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String!
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint!
   fee: Decimal
-  id: String
+  id: bigint
   lotChangeLog: LotChangeLogCreateNestedManyWithoutTransactionInput
-  memo: String
-  paymentCurrency: String
+  memo: bigint
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutTransactionsInput!
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -13673,25 +14013,25 @@ input TransactionCreateWithoutLotChangeLogInput {
   appliedToLots: Boolean
   asset: AssetCreateNestedOneWithoutTransactionsInput!
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String!
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint!
   fee: Decimal
-  id: String
-  memo: String
-  paymentCurrency: String
+  id: bigint
+  memo: bigint
+  paymentCurrency: bigint
   portfolio: PortfolioCreateNestedOneWithoutTransactionsInput!
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -13701,25 +14041,25 @@ input TransactionCreateWithoutPortfolioInput {
   appliedToLots: Boolean
   asset: AssetCreateNestedOneWithoutTransactionsInput!
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String!
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint!
   fee: Decimal
-  id: String
+  id: bigint
   lotChangeLog: LotChangeLogCreateNestedManyWithoutTransactionInput
-  memo: String
-  paymentCurrency: String
+  memo: bigint
+  paymentCurrency: bigint
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -13730,58 +14070,58 @@ input TransactionListRelationFilter {
 }
 
 type TransactionMaxAggregate {
-  accountId: String
+  accountId: bigint
   amount: Decimal
   appliedToLots: Boolean
-  assetSymbol: String
+  assetSymbol: bigint
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint
   fee: Decimal
-  id: String
-  memo: String
-  paymentCurrency: String
-  portfolioId: String
+  id: bigint
+  memo: bigint
+  paymentCurrency: bigint
+  portfolioId: bigint
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
 type TransactionMinAggregate {
-  accountId: String
+  accountId: bigint
   amount: Decimal
   appliedToLots: Boolean
-  assetSymbol: String
+  assetSymbol: bigint
   createdAt: DateTime
-  datailsURI: String
-  description: String
-  detailsURI: String
-  displaySymbol: String
-  externalId: String
+  datailsURI: bigint
+  description: bigint
+  detailsURI: bigint
+  displaySymbol: bigint
+  externalId: bigint
   fee: Decimal
-  id: String
-  memo: String
-  paymentCurrency: String
-  portfolioId: String
+  id: bigint
+  memo: bigint
+  paymentCurrency: bigint
+  portfolioId: bigint
   postDate: DateTime
   price: Decimal
   quantity: Decimal
-  securityType: String
-  settlementCurrency: String
+  securityType: bigint
+  settlementCurrency: bigint
   settlementDate: DateTime
-  subtype: String
+  subtype: bigint
   transactionDate: DateTime
-  type: String
+  type: bigint
   updatedAt: DateTime
 }
 
@@ -14127,9 +14467,9 @@ input TransactionWhereUniqueInput {
   description: StringNullableFilter
   detailsURI: StringNullableFilter
   displaySymbol: StringNullableFilter
-  externalId: String
+  externalId: bigint
   fee: DecimalNullableFilter
-  id: String
+  id: bigint
   lotChangeLog: LotChangeLogListRelationFilter
   memo: StringNullableFilter
   paymentCurrency: StringNullableFilter
@@ -14160,19 +14500,19 @@ type User {
   _count: UserCount!
   authConnections: [AuthConnection!]
   createdAt: DateTime!
-  email: String
+  email: bigint
   favorites: [Asset!]
 
   """This is the clerk user id"""
   id: ID!
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
 
   """Stripe user id"""
-  stripeCustomerId: String!
+  stripeCustomerId: bigint!
   updatedAt: DateTime!
 }
 
@@ -14265,15 +14605,15 @@ input UserCreateWithoutAccountInput {
   UsersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutUserInput
   authConnections: AuthConnectionCreateNestedManyWithoutUserInput
   createdAt: DateTime
-  email: String
+  email: bigint
   favorites: AssetCreateNestedManyWithoutFavoritedByInput
-  id: String!
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
-  stripeCustomerId: String!
+  id: bigint!
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
+  stripeCustomerId: bigint!
   updatedAt: DateTime
 }
 
@@ -14283,15 +14623,15 @@ input UserCreateWithoutAuthConnectionsInput {
   Portfolio: PortfolioCreateNestedManyWithoutCreatedByInput
   UsersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutUserInput
   createdAt: DateTime
-  email: String
+  email: bigint
   favorites: AssetCreateNestedManyWithoutFavoritedByInput
-  id: String!
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
-  stripeCustomerId: String!
+  id: bigint!
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
+  stripeCustomerId: bigint!
   updatedAt: DateTime
 }
 
@@ -14302,14 +14642,14 @@ input UserCreateWithoutFavoritesInput {
   UsersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutUserInput
   authConnections: AuthConnectionCreateNestedManyWithoutUserInput
   createdAt: DateTime
-  email: String
-  id: String!
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
-  stripeCustomerId: String!
+  email: bigint
+  id: bigint!
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
+  stripeCustomerId: bigint!
   updatedAt: DateTime
 }
 
@@ -14319,15 +14659,15 @@ input UserCreateWithoutHarvestInput {
   UsersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutUserInput
   authConnections: AuthConnectionCreateNestedManyWithoutUserInput
   createdAt: DateTime
-  email: String
+  email: bigint
   favorites: AssetCreateNestedManyWithoutFavoritedByInput
-  id: String!
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
-  stripeCustomerId: String!
+  id: bigint!
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
+  stripeCustomerId: bigint!
   updatedAt: DateTime
 }
 
@@ -14337,15 +14677,15 @@ input UserCreateWithoutPortfolioInput {
   UsersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutUserInput
   authConnections: AuthConnectionCreateNestedManyWithoutUserInput
   createdAt: DateTime
-  email: String
+  email: bigint
   favorites: AssetCreateNestedManyWithoutFavoritedByInput
-  id: String!
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
-  stripeCustomerId: String!
+  id: bigint!
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
+  stripeCustomerId: bigint!
   updatedAt: DateTime
 }
 
@@ -14355,15 +14695,15 @@ input UserCreateWithoutUsersOnPortfoliosInput {
   Portfolio: PortfolioCreateNestedManyWithoutCreatedByInput
   authConnections: AuthConnectionCreateNestedManyWithoutUserInput
   createdAt: DateTime
-  email: String
+  email: bigint
   favorites: AssetCreateNestedManyWithoutFavoritedByInput
-  id: String!
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
-  stripeCustomerId: String!
+  id: bigint!
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
+  stripeCustomerId: bigint!
   updatedAt: DateTime
 }
 
@@ -14375,27 +14715,27 @@ input UserListRelationFilter {
 
 type UserMaxAggregate {
   createdAt: DateTime
-  email: String
-  id: String
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
-  stripeCustomerId: String
+  email: bigint
+  id: bigint
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
+  stripeCustomerId: bigint
   updatedAt: DateTime
 }
 
 type UserMinAggregate {
   createdAt: DateTime
-  email: String
-  id: String
-  name: String
-  phoneNumber: String
-  photo: String
-  plaidCustomerId: String
-  plaidUserToken: String
-  stripeCustomerId: String
+  email: bigint
+  id: bigint
+  name: bigint
+  phoneNumber: bigint
+  photo: bigint
+  plaidCustomerId: bigint
+  plaidUserToken: bigint
+  stripeCustomerId: bigint
   updatedAt: DateTime
 }
 
@@ -14718,24 +15058,24 @@ input UserWhereUniqueInput {
   createdAt: DateTimeFilter
   email: StringNullableFilter
   favorites: AssetListRelationFilter
-  id: String
+  id: bigint
   name: StringNullableFilter
   phoneNumber: StringNullableFilter
   photo: StringNullableFilter
   plaidCustomerId: StringNullableFilter
   plaidUserToken: StringNullableFilter
-  stripeCustomerId: String
+  stripeCustomerId: bigint
   updatedAt: DateTimeFilter
 }
 
 type UsersOnPortfolios {
   createdAt: DateTime!
   portfolio: Portfolio!
-  portfolioId: String!
+  portfolioId: bigint!
   role: PortfolioRole!
   updatedAt: DateTime!
   user: User!
-  userId: String!
+  userId: bigint!
 }
 
 type UsersOnPortfoliosCountAggregate {
@@ -14751,7 +15091,7 @@ input UsersOnPortfoliosCreateManyPortfolioInput {
   createdAt: DateTime
   role: PortfolioRole
   updatedAt: DateTime
-  userId: String!
+  userId: bigint!
 }
 
 input UsersOnPortfoliosCreateManyPortfolioInputEnvelope {
@@ -14761,7 +15101,7 @@ input UsersOnPortfoliosCreateManyPortfolioInputEnvelope {
 
 input UsersOnPortfoliosCreateManyUserInput {
   createdAt: DateTime
-  portfolioId: String!
+  portfolioId: bigint!
   role: PortfolioRole
   updatedAt: DateTime
 }
@@ -14817,18 +15157,18 @@ input UsersOnPortfoliosListRelationFilter {
 
 type UsersOnPortfoliosMaxAggregate {
   createdAt: DateTime
-  portfolioId: String
+  portfolioId: bigint
   role: PortfolioRole
   updatedAt: DateTime
-  userId: String
+  userId: bigint
 }
 
 type UsersOnPortfoliosMinAggregate {
   createdAt: DateTime
-  portfolioId: String
+  portfolioId: bigint
   role: PortfolioRole
   updatedAt: DateTime
-  userId: String
+  userId: bigint
 }
 
 input UsersOnPortfoliosScalarWhereInput {
@@ -14923,8 +15263,8 @@ input UsersOnPortfoliosUpsertWithWhereUniqueWithoutUserInput {
 }
 
 input UsersOnPortfoliosUserIdPortfolioIdCompoundUniqueInput {
-  portfolioId: String!
-  userId: String!
+  portfolioId: bigint!
+  userId: bigint!
 }
 
 input UsersOnPortfoliosWhereInput {
@@ -14955,44 +15295,44 @@ input UsersOnPortfoliosWhereUniqueInput {
 }
 
 input UuidFilter {
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
   mode: QueryMode
   not: NestedUuidFilter
-  notIn: [String!]
+  notIn: [bigint!]
 }
 
 input UuidNullableFilter {
-  equals: String
-  gt: String
-  gte: String
-  in: [String!]
-  lt: String
-  lte: String
+  equals: bigint
+  gt: bigint
+  gte: bigint
+  in: [bigint!]
+  lt: bigint
+  lte: bigint
   mode: QueryMode
   not: NestedUuidNullableFilter
-  notIn: [String!]
+  notIn: [bigint!]
 }
 
 type VectorGraph {
   asset: Asset!
-  assetSymbol: String!
+  assetSymbol: bigint!
   createdAt: DateTime!
   data: [JSON!]
   id: ID!
   priceHourlyVector: PriceHourlyVector!
-  priceHourlyVectorId: String!
+  priceHourlyVectorId: bigint!
   type: Graph!
   updatedAt: DateTime!
 }
 
 input VectorGraphAssetSymbolTypePriceHourlyVectorIdCompoundUniqueInput {
-  assetSymbol: String!
-  priceHourlyVectorId: String!
+  assetSymbol: bigint!
+  priceHourlyVectorId: bigint!
   type: Graph!
 }
 
@@ -15010,8 +15350,8 @@ type VectorGraphCountAggregate {
 input VectorGraphCreateManyAssetInput {
   createdAt: DateTime
   data: VectorGraphCreatedataInput
-  id: String
-  priceHourlyVectorId: String!
+  id: bigint
+  priceHourlyVectorId: bigint!
   type: Graph!
   updatedAt: DateTime
 }
@@ -15022,10 +15362,10 @@ input VectorGraphCreateManyAssetInputEnvelope {
 }
 
 input VectorGraphCreateManyPriceHourlyVectorInput {
-  assetSymbol: String!
+  assetSymbol: bigint!
   createdAt: DateTime
   data: VectorGraphCreatedataInput
-  id: String
+  id: bigint
   type: Graph!
   updatedAt: DateTime
 }
@@ -15062,7 +15402,7 @@ input VectorGraphCreateOrConnectWithoutPriceHourlyVectorInput {
 input VectorGraphCreateWithoutAssetInput {
   createdAt: DateTime
   data: VectorGraphCreatedataInput
-  id: String
+  id: bigint
   priceHourlyVector: PriceHourlyVectorCreateNestedOneWithoutVectorGraphsInput!
   type: Graph!
   updatedAt: DateTime
@@ -15072,7 +15412,7 @@ input VectorGraphCreateWithoutPriceHourlyVectorInput {
   asset: AssetCreateNestedOneWithoutVectorGraphsInput!
   createdAt: DateTime
   data: VectorGraphCreatedataInput
-  id: String
+  id: bigint
   type: Graph!
   updatedAt: DateTime
 }
@@ -15088,19 +15428,19 @@ input VectorGraphListRelationFilter {
 }
 
 type VectorGraphMaxAggregate {
-  assetSymbol: String
+  assetSymbol: bigint
   createdAt: DateTime
-  id: String
-  priceHourlyVectorId: String
+  id: bigint
+  priceHourlyVectorId: bigint
   type: Graph
   updatedAt: DateTime
 }
 
 type VectorGraphMinAggregate {
-  assetSymbol: String
+  assetSymbol: bigint
   createdAt: DateTime
-  id: String
-  priceHourlyVectorId: String
+  id: bigint
+  priceHourlyVectorId: bigint
   type: Graph
   updatedAt: DateTime
 }
@@ -15233,7 +15573,7 @@ input VectorGraphWhereUniqueInput {
   assetSymbol_type_priceHourlyVectorId: VectorGraphAssetSymbolTypePriceHourlyVectorIdCompoundUniqueInput
   createdAt: DateTimeFilter
   data: JsonNullableListFilter
-  id: String
+  id: bigint
   priceHourlyVector: PriceHourlyVectorScalarRelationFilter
   priceHourlyVectorId: UuidFilter
   type: EnumGraphFilter
@@ -15247,3 +15587,6 @@ enum VectorWindow {
   YEAR_1
   YEAR_2
 }
+
+"""BigInt custom scalar type"""
+scalar bigint

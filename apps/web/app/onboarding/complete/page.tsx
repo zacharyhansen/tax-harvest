@@ -2,9 +2,9 @@
 
 import { Button } from '@repo/ui/components/button';
 import { useRouter } from 'next/navigation';
-import { CompleteStep } from '~/modules/account/add-account/complete.step';
 import { useApolloClient } from '@apollo/client';
 import { PortfolioSummaryDocument } from '~/generated/gql';
+import { OnboardingCompleteStep } from '~/components/onboarding-complete-step';
 
 export default function CompletePage() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function CompletePage() {
           </p>
         </div>
         
-        <CompleteStep />
+        <OnboardingCompleteStep />
         
         <div className="flex justify-end gap-2 border-t p-6">
           <Button 

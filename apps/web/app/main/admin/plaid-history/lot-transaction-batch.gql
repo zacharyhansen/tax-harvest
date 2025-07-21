@@ -2,7 +2,6 @@ fragment LotTransactionBatch on LotTransactionBatch {
   id
   createdAt
   updatedAt
-  authConnectionId
 }
 
 query LotTransactionBatches {
@@ -16,7 +15,6 @@ fragment LotTransactionBatchDetails on LotTransactionBatch {
   id
   createdAt
   updatedAt
-  authConnectionId
   positionsBefore
   positionsAfter
   holdingsPayload

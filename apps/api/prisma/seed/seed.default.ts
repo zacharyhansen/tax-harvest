@@ -42,6 +42,7 @@ async function main() {
       email: 'tbolus17@gmail.com',
       id: 'user_2jc3EFHNwXHroVMzzuOemks0X0z',
       name: '(seed) Troy Bolus',
+      plaidUserToken: null,
     },
   ])
 
@@ -66,6 +67,7 @@ async function main() {
       email: 'zachary.r.hansen@gmail.com',
       id: mainUserId,
       name: '(seed) Zachary Hansen',
+      plaidUserToken: null,
       AuthConnection: () => [
         {
           source: 'LOCAL',

@@ -105,27 +105,28 @@ export default function AccountPage() {
                   </h2>
                   <div className="space-y-4">
                     {accountsData.accounts.map(account => (
-                      <div 
-                        key={account.id} 
-                        className="group rounded-lg border transition-all duration-200 hover:bg-muted/20 hover:shadow-sm cursor-pointer border-l-4 border-l-transparent hover:border-l-primary/50"
+                      <div
+                        key={account.id}
+                        className="hover:bg-muted/20 hover:border-l-primary/50 group cursor-pointer rounded-lg border border-l-4 border-l-transparent transition-all duration-200 hover:shadow-sm"
                         onClick={() => handleAccountClick(account.id)}
                       >
                         <div className="flex items-center justify-between p-4">
                           <div className="flex-1">
-                            <h3 className="font-medium group-hover:text-primary transition-colors">{account.name}</h3>
+                            <h3 className="group-hover:text-primary font-medium transition-colors">
+                              {account.name}
+                            </h3>
                             <p className="text-muted-foreground text-sm">
                               {account.type} •{' '}
                               {account.institution || 'Manual Entry'}
                             </p>
                           </div>
                           <div className="flex items-center gap-3">
-                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                            <ChevronRight className="text-muted-foreground group-hover:text-primary h-4 w-4 transition-colors" />
                             <DeleteAccountDialog
                               accountId={account.id}
                               accountName={
                                 account.name ?? account.externalId ?? 'Unnamed'
                               }
-                              onClick={(e) => e.stopPropagation()}
                             />
                           </div>
                         </div>

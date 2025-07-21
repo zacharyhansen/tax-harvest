@@ -5,6 +5,7 @@ import { Format, MoneyUtil } from '~/modules/utils';
 import { clientEnvironment } from '~/lib/env/clientEnvironment';
 import { Decimal } from 'decimal.js';
 import { cn } from '@repo/ui/utils';
+import NoOpportunities from '~/app/main/tax-opportunities/no-opportunities';
 
 export function CompleteStep() {
   const [taxSavings, setTaxSavings] = useState(0);
@@ -94,6 +95,20 @@ export function CompleteStep() {
             />
           </div>
         </div>
+      </div>
+    );
+  }
+
+  // Handle cases where there are no harvesting opportunities
+  if (data?.harvestEvalResult?.harvestType === HarvestType.NoOpportunityEmpty ||
+      data?.harvestEvalResult?.harvestType === HarvestType.NoOpportunityGains ||
+      data?.harvestEvalResult?.harvestType === HarvestType.NoOpportunityLosses) {
+    return (
+      <div className="p-8">
+        <NoOpportunities
+          realizedPAndL={data.harvestEvalResult.summary.realized.gainTotal}
+          unrealizedPAndL={data.harvestEvalResult.summary.unrealized.total}
+        />
       </div>
     );
   }

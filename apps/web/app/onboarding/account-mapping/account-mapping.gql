@@ -1,0 +1,19 @@
+query AccountMapping($where: AccountWhereInput) {
+  accounts(where: $where) {
+    id
+    name
+    plaidAccountMask
+    type
+    lotSeededDate
+    files {
+      id
+      displayName
+      createdAt
+      fileType
+    }
+  }
+}
+
+mutation ProcessCsvAccounts($accountIds: [String!]!) {
+  processCsvAccounts(accountIds: $accountIds)
+}

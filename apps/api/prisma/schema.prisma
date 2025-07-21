@@ -796,6 +796,7 @@ enum LogType {
 }
 
 model Log {
+  /// @FieldType('String')
   id             BigInt      @id @default(autoincrement())
   type           LogType
   createdAt      DateTime    @default(now())

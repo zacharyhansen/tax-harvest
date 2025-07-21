@@ -152,26 +152,39 @@ export class FileResolver {
     info: GraphQLResolveInfo,
     @Args('fileData', { type: () => [InitFileUploadPayload] })
     fileData: InitFileUploadPayload[],
-    @Args('accountData', { type: () => InitAccountFileUploadPayload })
-    accountData: InitAccountFileUploadPayload,
+    @Args('accountData', { type: () => InitAccountFileUploadPayload, nullable: true })
+    accountData?: InitAccountFileUploadPayload,
+    @Args('accountId', { type: () => String, nullable: true })
+    accountId?: string,
   ): Promise<InitAccountFileUploadResponse> {
+    if (!accountData && !accountId) {
+      throw new Error('Either accountData or accountId must be provided')
+    }
+
+    if (accountData && accountId) {
+      throw new Error('Only one of accountData or accountId can be provided')
+    }
+
     const result = await this.fileService.initAccountFileUpload({
-      accountCreateInput: {
-        name: accountData.name,
-        description: accountData.description,
-        createdBy: { connect: { id: clerkContext.sub } },
-        portfolio: { connect: { id: clerkContext.metadata.portfolioId } },
-        realizedPAndL: {
-          create: [{
-            deferredLoss: accountData.deferredLoss.toString(),
-            dividend: accountData.dividend.toString(),
-            longTerm: accountData.longTerm.toString(),
-            shortTerm: accountData.shortTerm.toString(),
-            year: new Date().getFullYear(),
-            portfolioId: clerkContext.metadata.portfolioId,
-          }],
-        },
-      },
+      accountCreateInput: accountData
+        ? {
+          name: accountData.name,
+          description: accountData.description,
+          createdBy: { connect: { id: clerkContext.sub } },
+          portfolio: { connect: { id: clerkContext.metadata.portfolioId } },
+          realizedPAndL: {
+            create: [{
+              deferredLoss: accountData.deferredLoss.toString(),
+              dividend: accountData.dividend.toString(),
+              longTerm: accountData.longTerm.toString(),
+              shortTerm: accountData.shortTerm.toString(),
+              year: new Date().getFullYear(),
+              portfolioId: clerkContext.metadata.portfolioId,
+            }],
+          },
+        }
+        : undefined,
+      accountId,
       fileData,
       portfolioId: clerkContext.metadata.portfolioId,
       userId: clerkContext.sub,

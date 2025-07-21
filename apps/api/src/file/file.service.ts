@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { Prisma } from '@prisma/client'
+import { Account, Prisma } from '@prisma/client'
 
 import { CsvService } from '../csv/csv.service'
 import { GoogleStorageService } from '../google-storage/google-storage.service'
@@ -77,7 +77,7 @@ export class FileService {
           }
         })
         .then(({ lots, lotSeededDate }) => {
-          return this.lotService.upsertLotsForAccount({
+          return this.lotService.resetLotsForAccount({
             accountId: file.accountId,
             lots: lots.map(
               lot =>
@@ -106,19 +106,38 @@ export class FileService {
     select,
     portfolioId,
     userId,
+    accountId,
   }: {
-    accountCreateInput: Prisma.AccountCreateInput
+    accountCreateInput?: Prisma.AccountCreateInput
     fileData: InitFileUploadPayload[]
     select?: Prisma.FileSelect
     portfolioId: string
     userId: string
+    accountId?: string
   }) {
-    const account = await this.prismaService
-      .$extends(PrismaService.forPortfolio(portfolioId))
-      .account
-      .create({
-        data: accountCreateInput,
-      })
+    let account: Account
+    if (accountId) {
+      account = await this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .account
+        .findUniqueOrThrow({
+          where: {
+            id: accountId,
+          },
+        })
+    }
+    else if (accountCreateInput) {
+      account = await this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .account
+        .create({
+          data: accountCreateInput,
+        })
+    }
+    else {
+      throw new Error('Either accountId or accountCreateInput must be provided')
+    }
+
     const files = await this.createAndProcessFiles({
       data: fileData.map(file => ({
         ...file,
@@ -129,6 +148,7 @@ export class FileService {
       select,
       portfolioId,
     })
+
     return { files, accountId: account.id }
   }
 }

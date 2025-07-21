@@ -14,10 +14,10 @@ export class LogsResolver {
   constructor(
     private readonly logsService: LogsService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   @Query(() => [Log], { nullable: false })
-  logs(
+  async logs(
     @ClerkContext()
     clerkContext: ClerkClaims,
     @Info()
@@ -29,9 +29,9 @@ export class LogsResolver {
       type: () => LogOrderByRelationAggregateInput,
     })
     orderBy?: Prisma.LogOrderByWithRelationInput,
-  ) {
+  ): Promise<Log[]> {
     const { select } = new PrismaSelect<Prisma.LogSelect>(info).value
-    return this.logsService.logs(clerkContext.metadata.portfolioId, {
+    const logs = await this.logsService.logs(clerkContext.metadata.portfolioId, {
       select,
       where: {
         portfolioId: clerkContext.metadata.portfolioId,
@@ -40,6 +40,12 @@ export class LogsResolver {
       take: pagination?.take,
       orderBy: orderBy ?? { id: 'desc' },
     })
+    // TODO: fix this
+    // @ts-expect-error cant get big int sclar to work
+    return logs.map(log => ({
+      ...log,
+      id: log.id.toString(),
+    }))
   }
 
   @Query(() => Int, { nullable: false })
@@ -60,8 +66,11 @@ export class LogsResolver {
     @ClerkContext()
     clerkContext: ClerkClaims,
   ) {
-    return this.prismaService.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId)).log.findUnique({
+    return this.prismaService.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId)).log.findUniqueOrThrow({
       where: { id: logId, portfolioId: clerkContext.metadata.portfolioId },
-    })
+    }).then(log => ({
+      ...log,
+      id: log?.id?.toString(),
+    }))
   }
 }

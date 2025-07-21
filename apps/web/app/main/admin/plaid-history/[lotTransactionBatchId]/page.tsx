@@ -1,40 +1,40 @@
-'use client'
+'use client';
 
-import type { ColDef } from 'ag-grid-community'
-import ReactJsonView from '@microlink/react-json-view'
+import type { ColDef } from 'ag-grid-community';
+import ReactJsonView from '@microlink/react-json-view';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@repo/ui/components/tabs'
-import { AgGridReact } from 'ag-grid-react'
-import { useTheme } from 'next-themes'
-import dynamic from 'next/dynamic'
-import { use, useMemo } from 'react'
+} from '@repo/ui/components/tabs';
+import { AgGridReact } from 'ag-grid-react';
+import { useTheme } from 'next-themes';
+import dynamic from 'next/dynamic';
+import { use, useMemo } from 'react';
 
-import { useLotTransactionBatchQuery } from '~/generated/gql'
-import { TypedRoutes } from '~/lib/routes'
-import { PageWrapper } from '~/modules/layout'
-import { ErrorPage, LoadingPage } from '~/modules/utility-components'
+import { useLotTransactionBatchQuery } from '~/generated/gql';
+import { TypedRoutes } from '~/lib/routes';
+import { PageWrapper } from '~/modules/layout';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 
 const AgGridWrapper = dynamic(
   () => import('~/modules/client-ag-grid/ag-grid-wrapper'),
   {
     ssr: false,
-  },
-)
+  }
+);
 
 export default function LotTransactionBatchPage(props: {
-  params: Promise<typeof TypedRoutes.lotTransactionBatch.params>
+  params: Promise<typeof TypedRoutes.lotTransactionBatch.params>;
 }) {
-  const params = use(props.params)
-  const theme = useTheme()
-  const safeParams = TypedRoutes.lotTransactionBatch.parse(params)
+  const params = use(props.params);
+  const theme = useTheme();
+  const safeParams = TypedRoutes.lotTransactionBatch.parse(params);
 
   const { data, error, loading } = useLotTransactionBatchQuery({
     variables: { lotTransactionBatchId: safeParams.lotTransactionBatchId },
-  })
+  });
 
   const columnDefs: ColDef[] = useMemo(
     () =>
@@ -88,29 +88,25 @@ export default function LotTransactionBatchPage(props: {
           field: 'operationType',
         },
       ] satisfies ColDef[],
-    [],
-  )
+    []
+  );
 
   if (error) {
-    return <ErrorPage message={JSON.stringify(error)} />
+    return <ErrorPage message={JSON.stringify(error)} />;
   }
 
   if (loading) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
   return (
     <PageWrapper
       title="Lot Transaction Batch Explorer"
-      description={(
+      description={
         <div className="grid grid-cols-2 gap-2">
           <div className="flex gap-2">
             <span className="font-bold">ID:</span>
             <span>{data?.lotTransactionBatch?.id}</span>
-          </div>
-          <div className="flex gap-2">
-            <span className="font-bold">Auth Connection ID:</span>
-            <span>{data?.lotTransactionBatch?.authConnectionId}</span>
           </div>
           <div className="flex gap-2">
             <span className="font-bold">Created At:</span>
@@ -121,7 +117,7 @@ export default function LotTransactionBatchPage(props: {
             <span>{data?.lotTransactionBatch?.updatedAt}</span>
           </div>
         </div>
-      )}
+      }
     >
       <Tabs defaultValue="LotChangeLog">
         <TabsList>
@@ -141,62 +137,54 @@ export default function LotTransactionBatchPage(props: {
           </AgGridWrapper>
         </TabsContent>
         <TabsContent value="lotTupleMap">
-          {data?.lotTransactionBatch?.lotTupleMap
-            ? (
-                <ReactJsonView
-                  src={data.lotTransactionBatch.lotTupleMap}
-                  theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
-                  displayDataTypes={false}
-                  indentWidth={6}
-                />
-              )
-            : (
-                <div>No lot tuple map</div>
-              )}
+          {data?.lotTransactionBatch?.lotTupleMap ? (
+            <ReactJsonView
+              src={data.lotTransactionBatch.lotTupleMap}
+              theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
+              displayDataTypes={false}
+              indentWidth={6}
+            />
+          ) : (
+            <div>No lot tuple map</div>
+          )}
         </TabsContent>
         <TabsContent value="initialLots">
-          {data?.lotTransactionBatch?.initialLots
-            ? (
-                <ReactJsonView
-                  src={data.lotTransactionBatch.initialLots}
-                  theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
-                  displayDataTypes={false}
-                  indentWidth={6}
-                />
-              )
-            : (
-                <div>No initial lots</div>
-              )}
+          {data?.lotTransactionBatch?.initialLots ? (
+            <ReactJsonView
+              src={data.lotTransactionBatch.initialLots}
+              theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
+              displayDataTypes={false}
+              indentWidth={6}
+            />
+          ) : (
+            <div>No initial lots</div>
+          )}
         </TabsContent>
         <TabsContent value="newTransactions">
-          {data?.lotTransactionBatch?.newTransactions
-            ? (
-                <ReactJsonView
-                  src={data.lotTransactionBatch.newTransactions}
-                  theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
-                  displayDataTypes={false}
-                  indentWidth={6}
-                />
-              )
-            : (
-                <div>No new transactions</div>
-              )}
+          {data?.lotTransactionBatch?.newTransactions ? (
+            <ReactJsonView
+              src={data.lotTransactionBatch.newTransactions}
+              theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
+              displayDataTypes={false}
+              indentWidth={6}
+            />
+          ) : (
+            <div>No new transactions</div>
+          )}
         </TabsContent>
         <TabsContent value="positionsAfter">
-          {data?.lotTransactionBatch?.positionsAfter
-            ? (
-                <ReactJsonView
-                  src={data.lotTransactionBatch.positionsAfter}
-                  theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
-                  displayDataTypes={false}
-                  indentWidth={6}
-                />
-              )
-            : (
-                <div>No positions after</div>
-              )}
+          {data?.lotTransactionBatch?.positionsAfter ? (
+            <ReactJsonView
+              src={data.lotTransactionBatch.positionsAfter}
+              theme={theme.theme === 'dark' ? 'ashes' : 'rjv-default'}
+              displayDataTypes={false}
+              indentWidth={6}
+            />
+          ) : (
+            <div>No positions after</div>
+          )}
         </TabsContent>
       </Tabs>
     </PageWrapper>
-  )
+  );
 }

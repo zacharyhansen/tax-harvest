@@ -83,9 +83,10 @@ export class PlaidService {
       client_id: this.configService.get('PLAID_CLIENT_ID'),
       client_name: 'TaxHarvest',
       country_codes: [CountryCode.Us],
-      // enable_multi_item_link: true,
+      enable_multi_item_link: !!user.plaidUserToken && user.plaidUserToken !== 'NOT_FOUND',
       language: 'en',
       products: [Products.Investments],
+      user_token: user.plaidUserToken && user.plaidUserToken !== 'NOT_FOUND' ? user.plaidUserToken : undefined,
       // redirect_uri: `${this.configService.get('CLIENT_ORIGIN')}${this.configService.get('CLIENT_HOME_PAGE_PATH')}`,
       secret: this.configService.get('PLAID_SECRET_KEY'),
       user: {
@@ -99,6 +100,8 @@ export class PlaidService {
     }
 
     if (authConnectionId) {
+      // update mode does not support multi item link
+      delete baseLinkTokenCreate.enable_multi_item_link
       // We want to open plaid link as update if user already has one for portfolio
       const existingAuthConnection = await this.prismaService
         .$extends(PrismaService.forPortfolio(portfolioId))
@@ -780,8 +783,8 @@ export class PlaidService {
         // so going to assume this never fails
         return {
           data: {
-            user_id: 'NOT FOUND',
-            user_token: 'NOT FOUND',
+            user_id: 'NOT_FOUND',
+            user_token: 'NOT_FOUND',
           },
         }
       })

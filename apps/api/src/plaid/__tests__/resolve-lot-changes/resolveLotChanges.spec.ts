@@ -104,17 +104,17 @@ describe('plaidService.resolveLotChanges', () => {
         finalPositions,
         transactions,
         initialLots,
-        authConnection,
+        portfolioId: authConnection.portfolioId,
       })
 
       // Log the result for inspection
-      console.log(`\nResults for ${testCaseName}:`)
-      console.log('Realized P&L:', result.realizedProfitAndLoss.toString())
-      console.log('Lot Upserts:', result.lotUpserts.length)
-      console.log('Lot Deletes:', result.lotDeletes.length)
-      console.log('New Buys:', result.newBuys.length)
-      console.log('New Sells:', result.newSells.length)
-      console.log('New Transactions:', result.newTransactions.length)
+      console.info(`\nResults for ${testCaseName}:`)
+      console.info('Realized P&L:', result.realizedProfitAndLoss.toString())
+      console.info('Lot Upserts:', result.lotUpserts.length)
+      console.info('Lot Deletes:', result.lotDeletes.length)
+      console.info('New Buys:', result.newBuys.length)
+      console.info('New Sells:', result.newSells.length)
+      console.info('New Transactions:', result.newTransactions.length)
 
       // Convert result to serializable format for snapshot testing
       const serializedResult = {

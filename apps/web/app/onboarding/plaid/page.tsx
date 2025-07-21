@@ -1,12 +1,7 @@
 'use client';
 
 import { Button } from '@repo/ui/components/button';
-import {
-  Shield,
-  LineChart,
-  Lock,
-  Building2,
-} from 'lucide-react';
+import { Shield, LineChart, Lock, Building2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
@@ -39,7 +34,6 @@ const features = [
     description: 'Disconnect anytime',
   },
 ];
-
 
 export default function PlaidPage() {
   const router = useRouter();
@@ -123,6 +117,7 @@ export default function PlaidPage() {
                     <PlaidLink
                       token={linkTokenData.linkToken}
                       redirectTo="/main/home"
+                      accountMappingUrl="/onboarding/account-mapping"
                       existingAccountId={existingAccountId || undefined}
                       size="lg"
                       variant="default"
@@ -141,6 +136,7 @@ export default function PlaidPage() {
             <PlaidLink
               token={linkTokenData.linkToken}
               redirectTo="/main/home"
+              accountMappingUrl="/onboarding/account-mapping"
               existingAccountId={existingAccountId || undefined}
               size="lg"
               variant="default"
