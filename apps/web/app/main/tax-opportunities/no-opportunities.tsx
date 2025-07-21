@@ -35,7 +35,7 @@ function getScenario(totalPnL: number): ScenarioType {
 const scenarios = {
   positive: {
     icon: TrendingUp,
-    title: 'Great Investment Performance!',
+    title: "You're doing great!",
     subtitle: 'No opportunities available right now',
     badgeText: 'Profitable Year',
     badgeVariant: 'default' as const,

@@ -19,7 +19,7 @@ export default function HarvestsLayout({
     },
     {
       value: 'wash',
-      label: 'Executed Wash Window Harvests',
+      label: 'Current Wash Window Harvests',
       href: '/main/harvests/wash',
     },
     {

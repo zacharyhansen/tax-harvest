@@ -2760,7 +2760,7 @@
     "id": "e8e9c9e9-97de-4ee2-a09a-9eaed8c6bd83",
     "type": "PLAID_LINK",
     "token": null,
-    "secret": "access-production-9f44131a-488e-4c0a-9a19-465ee7bd5544",
+    "secret": "fake-secret",
     "source": "PLAID",
     "userId": "user_2jFwy6JTTb43hqvtE5pxG2aywe7",
     "authedAt": "2025-07-20T17:00:06.391Z",

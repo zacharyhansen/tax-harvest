@@ -221,6 +221,25 @@ export class PlaidService {
       },
     }
 
+    // Remove old Plaid items if we have existing auth connections that will be replaced
+    if (existingAuthConnections.size > 0) {
+      const oldAuthConnectionsToRemove = [...existingAuthConnections.values()]
+        .filter(authConn => authConn && authConn.secret)
+      
+      for (const oldAuthConnection of oldAuthConnectionsToRemove) {
+        if (oldAuthConnection?.secret) {
+          try {
+            await this.removeItem(oldAuthConnection.secret)
+            this.logger.log(`Removed old Plaid item for auth connection: ${oldAuthConnection.id}`)
+          }
+          catch (error) {
+            this.logger.warn(`Failed to remove old Plaid item for auth connection ${oldAuthConnection.id}:`, error)
+            // Continue processing even if removal fails
+          }
+        }
+      }
+    }
+
     const plaidAuthConnection = await this.prismaService
       .$extends(PrismaService.forPortfolio(portfolioId))
       .authConnection
@@ -1333,6 +1352,29 @@ export class PlaidService {
       }
       return acc
     }, {})
+  }
+
+  /**
+   * Remove a Plaid item, invalidating the access token
+   * @param accessToken - The access token for the Item being removed
+   * @returns Promise that resolves when the item is successfully removed
+   * @example
+   * await plaidService.removeItem(authConnection.secret)
+   */
+  async removeItem(accessToken: string): Promise<void> {
+    try {
+      await this.client.itemRemove({
+        access_token: accessToken,
+        client_id: this.configService.get('PLAID_CLIENT_ID'),
+        secret: this.configService.get('PLAID_SECRET_KEY'),
+      })
+      
+      this.logger.log(`Successfully removed Plaid item with access token: ${accessToken.substring(0, 10)}...`)
+    }
+    catch (error) {
+      this.logger.error(`Failed to remove Plaid item:`, error)
+      throw error
+    }
   }
 
   /**

@@ -14,7 +14,7 @@ import ComboboxMultiField from '@repo/ui/form-builder/fields/combobox-multi.fiel
 import DatePickerField from '@repo/ui/form-builder/fields/date-picker.field';
 
 const filterFormSchema = z.object({
-  minPAndL: z.coerce.number().optional(),
+  minPAndL: z.coerce.number().min(0).optional(),
   excludeAssetSymbols: z.array(z.string()).optional(),
   purchaseDateBefore: z.date().nullable().optional(),
   purchaseDateAfter: z.date().nullable().optional(),
@@ -142,7 +142,7 @@ export function FilterForm({
                       <div>
                         <InputField
                           name="minPAndL"
-                          label="Min P&L ($)"
+                          label="Min Profit or Loss ($ Absolute Value)"
                           type="number"
                           placeholder="e.g. 100"
                           description="Minimum dollar amount for profit or loss"

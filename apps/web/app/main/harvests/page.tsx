@@ -46,7 +46,7 @@ const cardVariants = {
 
 export default function HarvestsPage() {
   const { harvests, loading, hasOpenHarvests } = useOpenHarvests();
-  
+
   if (loading) {
     return <LoadingPage />;
   }
@@ -88,7 +88,9 @@ export default function HarvestsPage() {
               >
                 You have no added harvests for today. Check out
                 <Link href={TypedRoutes.taxOpportunities()}>
-                  <Button variant="link">Tax Loss Harvesting</Button>
+                  <Button variant="link" className="m-0 p-0 px-1">
+                    Tax Opportuninties
+                  </Button>
                 </Link>
                 to see harvest opportunities. You can also check out the Wash
                 Window Harvests tab to see harvests that are considered
@@ -109,7 +111,7 @@ export default function HarvestsPage() {
       animate="show"
     >
       <AnimatePresence>
-        {harvests.map((harvest) => (
+        {harvests.map(harvest => (
           <motion.div key={harvest.id} variants={cardVariants} layout>
             <HarvestCard harvest={harvest} />
           </motion.div>
