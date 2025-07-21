@@ -16,6 +16,36 @@ export class FileService {
     private readonly lotService: LotService,
   ) { }
 
+  /**
+   * Find many files with optional filtering and selection
+   * @param where - Prisma where clause for filtering files
+   * @param select - Prisma select clause for field selection
+   * @param portfolioId - Portfolio ID for security filtering
+   * @returns Promise<File[]> - Array of files matching the criteria
+   * @example
+   * const accountFiles = await fileService.findMany({
+   *   where: { accountId: "account-123" },
+   *   portfolioId: "portfolio-456"
+   * })
+   */
+  async findMany({
+    where,
+    select,
+    portfolioId,
+  }: {
+    where?: Prisma.FileWhereInput
+    select?: Prisma.FileSelect
+    portfolioId: string
+  }) {
+    return this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .file
+      .findMany({
+        where,
+        select,
+      })
+  }
+
   async createAndProcessFiles({
     data,
     select,

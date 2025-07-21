@@ -346,7 +346,7 @@ export enum LotTransactionBatchScalarFieldEnum {
     id = "id",
     createdAt = "createdAt",
     updatedAt = "updatedAt",
-    authConnectionId = "authConnectionId",
+    accountId = "accountId",
     portfolioId = "portfolioId",
     positionsBefore = "positionsBefore",
     positionsAfter = "positionsAfter",
@@ -1136,6 +1136,8 @@ export class AccountCount {
     lots?: number;
     @Field(() => Int, {nullable:false})
     files?: number;
+    @Field(() => Int, {nullable:false})
+    LotTransactionBatch?: number;
 }
 
 @InputType()
@@ -1765,6 +1767,19 @@ export class AccountCreateNestedOneWithoutFilesInput {
 }
 
 @InputType()
+export class AccountCreateNestedOneWithoutLotTransactionBatchInput {
+    @Field(() => AccountCreateWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => AccountCreateWithoutLotTransactionBatchInput)
+    create?: InstanceType<typeof AccountCreateWithoutLotTransactionBatchInput>;
+    @Field(() => AccountCreateOrConnectWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => AccountCreateOrConnectWithoutLotTransactionBatchInput)
+    connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutLotTransactionBatchInput>;
+    @Field(() => AccountWhereUniqueInput, {nullable:true})
+    @Type(() => AccountWhereUniqueInput)
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
+}
+
+@InputType()
 export class AccountCreateNestedOneWithoutLotsInput {
     @Field(() => AccountCreateWithoutLotsInput, {nullable:true})
     @Type(() => AccountCreateWithoutLotsInput)
@@ -1844,6 +1859,16 @@ export class AccountCreateOrConnectWithoutFilesInput {
     @Field(() => AccountCreateWithoutFilesInput, {nullable:false})
     @Type(() => AccountCreateWithoutFilesInput)
     create!: InstanceType<typeof AccountCreateWithoutFilesInput>;
+}
+
+@InputType()
+export class AccountCreateOrConnectWithoutLotTransactionBatchInput {
+    @Field(() => AccountWhereUniqueInput, {nullable:false})
+    @Type(() => AccountWhereUniqueInput)
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
+    @Field(() => AccountCreateWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => AccountCreateWithoutLotTransactionBatchInput)
+    create!: InstanceType<typeof AccountCreateWithoutLotTransactionBatchInput>;
 }
 
 @InputType()
@@ -2044,6 +2069,9 @@ export class AccountCreateWithoutAuthConnectionInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2195,6 +2223,9 @@ export class AccountCreateWithoutCreatedByInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2345,6 +2376,162 @@ export class AccountCreateWithoutFilesInput {
     @Field(() => LotCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotCreateNestedManyWithoutAccountInput)
     lots?: InstanceType<typeof LotCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+}
+
+@InputType()
+export class AccountCreateWithoutLotTransactionBatchInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => AccountProvider, {nullable:true})
+    provider?: `${AccountProvider}`;
+    @Field(() => String, {nullable:true})
+    externalId?: string;
+    @Field(() => String, {nullable:true})
+    name?: string;
+    @Field(() => String, {nullable:true})
+    plaidAccountMask?: string;
+    @Field(() => String, {nullable:true})
+    key?: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => AccountInstitution, {nullable:true})
+    institution?: `${AccountInstitution}`;
+    @Field(() => String, {nullable:true})
+    type?: string;
+    @Field(() => String, {nullable:true})
+    subType?: string;
+    @Field(() => AccountMode, {nullable:true})
+    mode?: `${AccountMode}`;
+    @Field(() => AccountStatus, {nullable:true})
+    status?: `${AccountStatus}`;
+    @Field(() => Date, {nullable:true})
+    closedDate?: Date | string;
+    @Field(() => OptionLevel, {nullable:true})
+    optionLevel?: `${OptionLevel}`;
+    @Field(() => Date, {nullable:true})
+    lotSeededDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    uploadedPositions?: boolean;
+    @Field(() => Boolean, {nullable:true})
+    setRealizedValues?: boolean;
+    @Field(() => Boolean, {nullable:true})
+    skipSetup?: boolean;
+    @Field(() => String, {nullable:true})
+    liveURL?: string;
+    @Field(() => Date, {nullable:true})
+    liveURLCreated?: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashForOpenOrders?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceMoneyMarket?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    accountValueTotal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marketValueTotal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashAvailableForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashNet?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashBalance?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashSettledForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashUnsettledForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashBuyingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    fundsWithheldFromPurchasingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    fundsWithheldFromWithdrawal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginBuyingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginBuyingPowerDT?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceShortAdjustment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceAccount?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    equityRegt?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    equityRegtPercent?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashOpenOrderReserveDT?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginOpenOrderReserveDT?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    raw?: any;
+    @HideField()
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutAccountInput>;
+    @Field(() => AuthConnectionCreateNestedOneWithoutAccountsInput, {nullable:true})
+    @Type(() => AuthConnectionCreateNestedOneWithoutAccountsInput)
+    authConnection?: InstanceType<typeof AuthConnectionCreateNestedOneWithoutAccountsInput>;
+    @Field(() => PortfolioCreateNestedOneWithoutAccountsInput, {nullable:false})
+    @Type(() => PortfolioCreateNestedOneWithoutAccountsInput)
+    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutAccountsInput>;
+    @Field(() => PositionCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => PositionCreateNestedManyWithoutAccountInput)
+    positions?: InstanceType<typeof PositionCreateNestedManyWithoutAccountInput>;
+    @Field(() => TransactionCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => TransactionCreateNestedManyWithoutAccountInput)
+    transactions?: InstanceType<typeof TransactionCreateNestedManyWithoutAccountInput>;
+    @Field(() => RealizedPAndLCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => RealizedPAndLCreateNestedManyWithoutAccountInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotCreateNestedManyWithoutAccountInput)
+    lots?: InstanceType<typeof LotCreateNestedManyWithoutAccountInput>;
+    @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => FileCreateNestedManyWithoutAccountInput)
+    files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2495,6 +2682,9 @@ export class AccountCreateWithoutLotsInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2645,6 +2835,9 @@ export class AccountCreateWithoutPortfolioInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2795,6 +2988,9 @@ export class AccountCreateWithoutPositionsInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2945,6 +3141,9 @@ export class AccountCreateWithoutRealizedPAndLInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -3095,6 +3294,9 @@ export class AccountCreateWithoutTransactionsInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -3248,6 +3450,9 @@ export class AccountCreateInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
 }
 
 @ArgsType()
@@ -4242,6 +4447,9 @@ export class AccountOrderByWithRelationInput {
     @Field(() => FileOrderByRelationAggregateInput, {nullable:true})
     @Type(() => FileOrderByRelationAggregateInput)
     files?: InstanceType<typeof FileOrderByRelationAggregateInput>;
+    @Field(() => LotTransactionBatchOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => LotTransactionBatchOrderByRelationAggregateInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchOrderByRelationAggregateInput>;
 }
 
 @InputType()
@@ -4831,6 +5039,9 @@ export class AccountUncheckedCreateWithoutAuthConnectionInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -4980,6 +5191,9 @@ export class AccountUncheckedCreateWithoutCreatedByInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5128,6 +5342,160 @@ export class AccountUncheckedCreateWithoutFilesInput {
     @Field(() => LotUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotUncheckedCreateNestedManyWithoutAccountInput)
     lots?: InstanceType<typeof LotUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+}
+
+@InputType()
+export class AccountUncheckedCreateWithoutLotTransactionBatchInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => AccountProvider, {nullable:true})
+    provider?: `${AccountProvider}`;
+    @Field(() => String, {nullable:true})
+    authConnectionId?: string;
+    @Field(() => String, {nullable:true})
+    externalId?: string;
+    @Field(() => String, {nullable:true})
+    name?: string;
+    @Field(() => String, {nullable:true})
+    plaidAccountMask?: string;
+    @Field(() => String, {nullable:true})
+    key?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => AccountInstitution, {nullable:true})
+    institution?: `${AccountInstitution}`;
+    @Field(() => String, {nullable:true})
+    type?: string;
+    @Field(() => String, {nullable:true})
+    subType?: string;
+    @Field(() => AccountMode, {nullable:true})
+    mode?: `${AccountMode}`;
+    @Field(() => AccountStatus, {nullable:true})
+    status?: `${AccountStatus}`;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => Date, {nullable:true})
+    closedDate?: Date | string;
+    @Field(() => OptionLevel, {nullable:true})
+    optionLevel?: `${OptionLevel}`;
+    @Field(() => Date, {nullable:true})
+    lotSeededDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    uploadedPositions?: boolean;
+    @Field(() => Boolean, {nullable:true})
+    setRealizedValues?: boolean;
+    @Field(() => Boolean, {nullable:true})
+    skipSetup?: boolean;
+    @Field(() => String, {nullable:true})
+    liveURL?: string;
+    @Field(() => Date, {nullable:true})
+    liveURLCreated?: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashForOpenOrders?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceMoneyMarket?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    accountValueTotal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marketValueTotal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashAvailableForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashNet?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashBalance?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashSettledForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashUnsettledForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashBuyingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    fundsWithheldFromPurchasingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    fundsWithheldFromWithdrawal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginBuyingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginBuyingPowerDT?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceShortAdjustment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceAccount?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    equityRegt?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    equityRegtPercent?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashOpenOrderReserveDT?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginOpenOrderReserveDT?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    raw?: any;
+    @Field(() => PositionUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => PositionUncheckedCreateNestedManyWithoutAccountInput)
+    positions?: InstanceType<typeof PositionUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => TransactionUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => TransactionUncheckedCreateNestedManyWithoutAccountInput)
+    transactions?: InstanceType<typeof TransactionUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotUncheckedCreateNestedManyWithoutAccountInput)
+    lots?: InstanceType<typeof LotUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
+    files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5276,6 +5644,9 @@ export class AccountUncheckedCreateWithoutLotsInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5425,6 +5796,9 @@ export class AccountUncheckedCreateWithoutPortfolioInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5573,6 +5947,9 @@ export class AccountUncheckedCreateWithoutPositionsInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5721,6 +6098,9 @@ export class AccountUncheckedCreateWithoutRealizedPAndLInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5869,6 +6249,9 @@ export class AccountUncheckedCreateWithoutTransactionsInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -6020,6 +6403,9 @@ export class AccountUncheckedCreateInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -6718,6 +7104,9 @@ export class AccountUncheckedUpdateWithoutAuthConnectionInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -6847,6 +7236,9 @@ export class AccountUncheckedUpdateWithoutCreatedByInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -6975,6 +7367,140 @@ export class AccountUncheckedUpdateWithoutFilesInput {
     @Field(() => LotUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotUncheckedUpdateManyWithoutAccountNestedInput)
     lots?: InstanceType<typeof LotUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+}
+
+@InputType()
+export class AccountUncheckedUpdateWithoutLotTransactionBatchInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumAccountProviderFieldUpdateOperationsInput, {nullable:true})
+    provider?: InstanceType<typeof EnumAccountProviderFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    authConnectionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    externalId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    name?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidAccountMask?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    key?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAccountInstitutionFieldUpdateOperationsInput, {nullable:true})
+    institution?: InstanceType<typeof NullableEnumAccountInstitutionFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    subType?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAccountModeFieldUpdateOperationsInput, {nullable:true})
+    mode?: InstanceType<typeof NullableEnumAccountModeFieldUpdateOperationsInput>;
+    @Field(() => EnumAccountStatusFieldUpdateOperationsInput, {nullable:true})
+    status?: InstanceType<typeof EnumAccountStatusFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    closedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumOptionLevelFieldUpdateOperationsInput, {nullable:true})
+    optionLevel?: InstanceType<typeof NullableEnumOptionLevelFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    lotSeededDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    uploadedPositions?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    setRealizedValues?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    skipSetup?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    liveURL?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    liveURLCreated?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashForOpenOrders?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceMoneyMarket?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    accountValueTotal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marketValueTotal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashAvailableForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashNet?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashBalance?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashSettledForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashUnsettledForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashBuyingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    fundsWithheldFromPurchasingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    fundsWithheldFromWithdrawal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginBuyingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginBuyingPowerDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceShortAdjustment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceAccount?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    equityRegt?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    equityRegtPercent?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashOpenOrderReserveDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginOpenOrderReserveDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    raw?: any;
+    @Field(() => PositionUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => PositionUncheckedUpdateManyWithoutAccountNestedInput)
+    positions?: InstanceType<typeof PositionUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => TransactionUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => TransactionUncheckedUpdateManyWithoutAccountNestedInput)
+    transactions?: InstanceType<typeof TransactionUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotUncheckedUpdateManyWithoutAccountNestedInput)
+    lots?: InstanceType<typeof LotUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
+    files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7103,6 +7629,9 @@ export class AccountUncheckedUpdateWithoutLotsInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7232,6 +7761,9 @@ export class AccountUncheckedUpdateWithoutPortfolioInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7360,6 +7892,9 @@ export class AccountUncheckedUpdateWithoutPositionsInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7488,6 +8023,9 @@ export class AccountUncheckedUpdateWithoutRealizedPAndLInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7616,6 +8154,9 @@ export class AccountUncheckedUpdateWithoutTransactionsInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7747,6 +8288,9 @@ export class AccountUncheckedUpdateInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8020,6 +8564,25 @@ export class AccountUpdateOneRequiredWithoutFilesNestedInput {
 }
 
 @InputType()
+export class AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput {
+    @Field(() => AccountCreateWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => AccountCreateWithoutLotTransactionBatchInput)
+    create?: InstanceType<typeof AccountCreateWithoutLotTransactionBatchInput>;
+    @Field(() => AccountCreateOrConnectWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => AccountCreateOrConnectWithoutLotTransactionBatchInput)
+    connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutLotTransactionBatchInput>;
+    @Field(() => AccountUpsertWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => AccountUpsertWithoutLotTransactionBatchInput)
+    upsert?: InstanceType<typeof AccountUpsertWithoutLotTransactionBatchInput>;
+    @Field(() => AccountWhereUniqueInput, {nullable:true})
+    @Type(() => AccountWhereUniqueInput)
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
+    @Field(() => AccountUpdateToOneWithWhereWithoutLotTransactionBatchInput, {nullable:true})
+    @Type(() => AccountUpdateToOneWithWhereWithoutLotTransactionBatchInput)
+    update?: InstanceType<typeof AccountUpdateToOneWithWhereWithoutLotTransactionBatchInput>;
+}
+
+@InputType()
 export class AccountUpdateOneRequiredWithoutLotsNestedInput {
     @Field(() => AccountCreateWithoutLotsInput, {nullable:true})
     @Type(() => AccountCreateWithoutLotsInput)
@@ -8103,6 +8666,16 @@ export class AccountUpdateToOneWithWhereWithoutFilesInput {
     @Field(() => AccountUpdateWithoutFilesInput, {nullable:false})
     @Type(() => AccountUpdateWithoutFilesInput)
     data!: InstanceType<typeof AccountUpdateWithoutFilesInput>;
+}
+
+@InputType()
+export class AccountUpdateToOneWithWhereWithoutLotTransactionBatchInput {
+    @Field(() => AccountWhereInput, {nullable:true})
+    @Type(() => AccountWhereInput)
+    where?: InstanceType<typeof AccountWhereInput>;
+    @Field(() => AccountUpdateWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => AccountUpdateWithoutLotTransactionBatchInput)
+    data!: InstanceType<typeof AccountUpdateWithoutLotTransactionBatchInput>;
 }
 
 @InputType()
@@ -8304,6 +8877,9 @@ export class AccountUpdateWithoutAuthConnectionInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8435,6 +9011,9 @@ export class AccountUpdateWithoutCreatedByInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8566,6 +9145,143 @@ export class AccountUpdateWithoutFilesInput {
     @Field(() => LotUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotUpdateManyWithoutAccountNestedInput)
     lots?: InstanceType<typeof LotUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+}
+
+@InputType()
+export class AccountUpdateWithoutLotTransactionBatchInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumAccountProviderFieldUpdateOperationsInput, {nullable:true})
+    provider?: InstanceType<typeof EnumAccountProviderFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    externalId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    name?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidAccountMask?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    key?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAccountInstitutionFieldUpdateOperationsInput, {nullable:true})
+    institution?: InstanceType<typeof NullableEnumAccountInstitutionFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    subType?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAccountModeFieldUpdateOperationsInput, {nullable:true})
+    mode?: InstanceType<typeof NullableEnumAccountModeFieldUpdateOperationsInput>;
+    @Field(() => EnumAccountStatusFieldUpdateOperationsInput, {nullable:true})
+    status?: InstanceType<typeof EnumAccountStatusFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    closedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumOptionLevelFieldUpdateOperationsInput, {nullable:true})
+    optionLevel?: InstanceType<typeof NullableEnumOptionLevelFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    lotSeededDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    uploadedPositions?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    setRealizedValues?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    skipSetup?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    liveURL?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    liveURLCreated?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashForOpenOrders?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceMoneyMarket?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    accountValueTotal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marketValueTotal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashAvailableForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashNet?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashBalance?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashSettledForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashUnsettledForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashBuyingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    fundsWithheldFromPurchasingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    fundsWithheldFromWithdrawal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginBuyingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginBuyingPowerDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceShortAdjustment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceAccount?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    equityRegt?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    equityRegtPercent?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashOpenOrderReserveDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginOpenOrderReserveDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    raw?: any;
+    @Field(() => UserUpdateOneRequiredWithoutAccountNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutAccountNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutAccountNestedInput>;
+    @Field(() => AuthConnectionUpdateOneWithoutAccountsNestedInput, {nullable:true})
+    @Type(() => AuthConnectionUpdateOneWithoutAccountsNestedInput)
+    authConnection?: InstanceType<typeof AuthConnectionUpdateOneWithoutAccountsNestedInput>;
+    @Field(() => PortfolioUpdateOneRequiredWithoutAccountsNestedInput, {nullable:true})
+    @Type(() => PortfolioUpdateOneRequiredWithoutAccountsNestedInput)
+    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutAccountsNestedInput>;
+    @Field(() => PositionUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => PositionUpdateManyWithoutAccountNestedInput)
+    positions?: InstanceType<typeof PositionUpdateManyWithoutAccountNestedInput>;
+    @Field(() => TransactionUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => TransactionUpdateManyWithoutAccountNestedInput)
+    transactions?: InstanceType<typeof TransactionUpdateManyWithoutAccountNestedInput>;
+    @Field(() => RealizedPAndLUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => RealizedPAndLUpdateManyWithoutAccountNestedInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotUpdateManyWithoutAccountNestedInput)
+    lots?: InstanceType<typeof LotUpdateManyWithoutAccountNestedInput>;
+    @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => FileUpdateManyWithoutAccountNestedInput)
+    files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8697,6 +9413,9 @@ export class AccountUpdateWithoutLotsInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8828,6 +9547,9 @@ export class AccountUpdateWithoutPortfolioInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8959,6 +9681,9 @@ export class AccountUpdateWithoutPositionsInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9090,6 +9815,9 @@ export class AccountUpdateWithoutRealizedPAndLInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9221,6 +9949,9 @@ export class AccountUpdateWithoutTransactionsInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9355,6 +10086,9 @@ export class AccountUpdateInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9404,6 +10138,19 @@ export class AccountUpsertWithoutFilesInput {
     @Field(() => AccountCreateWithoutFilesInput, {nullable:false})
     @Type(() => AccountCreateWithoutFilesInput)
     create!: InstanceType<typeof AccountCreateWithoutFilesInput>;
+    @Field(() => AccountWhereInput, {nullable:true})
+    @Type(() => AccountWhereInput)
+    where?: InstanceType<typeof AccountWhereInput>;
+}
+
+@InputType()
+export class AccountUpsertWithoutLotTransactionBatchInput {
+    @Field(() => AccountUpdateWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => AccountUpdateWithoutLotTransactionBatchInput)
+    update!: InstanceType<typeof AccountUpdateWithoutLotTransactionBatchInput>;
+    @Field(() => AccountCreateWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => AccountCreateWithoutLotTransactionBatchInput)
+    create!: InstanceType<typeof AccountCreateWithoutLotTransactionBatchInput>;
     @Field(() => AccountWhereInput, {nullable:true})
     @Type(() => AccountWhereInput)
     where?: InstanceType<typeof AccountWhereInput>;
@@ -9611,6 +10358,9 @@ export class AccountWhereUniqueInput {
     @Field(() => FileListRelationFilter, {nullable:true})
     @Type(() => FileListRelationFilter)
     files?: InstanceType<typeof FileListRelationFilter>;
+    @Field(() => LotTransactionBatchListRelationFilter, {nullable:true})
+    @Type(() => LotTransactionBatchListRelationFilter)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchListRelationFilter>;
 }
 
 @InputType()
@@ -9760,6 +10510,9 @@ export class AccountWhereInput {
     @Field(() => FileListRelationFilter, {nullable:true})
     @Type(() => FileListRelationFilter)
     files?: InstanceType<typeof FileListRelationFilter>;
+    @Field(() => LotTransactionBatchListRelationFilter, {nullable:true})
+    @Type(() => LotTransactionBatchListRelationFilter)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchListRelationFilter>;
 }
 
 /**
@@ -9917,6 +10670,8 @@ export class Account {
     lots?: Array<Lot>;
     @Field(() => [File], {nullable:true})
     files?: Array<File>;
+    @Field(() => [LotTransactionBatch], {nullable:true})
+    LotTransactionBatch?: Array<LotTransactionBatch>;
     @Field(() => AccountCount, {nullable:false})
     _count?: InstanceType<typeof AccountCount>;
 }
@@ -18305,8 +19060,6 @@ export class AuthConnectionCountOrderByAggregateInput {
 export class AuthConnectionCount {
     @Field(() => Int, {nullable:false})
     accounts?: number;
-    @Field(() => Int, {nullable:false})
-    lotTransactionBatch?: number;
 }
 
 @InputType()
@@ -18483,19 +19236,6 @@ export class AuthConnectionCreateNestedOneWithoutAccountsInput {
 }
 
 @InputType()
-export class AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput {
-    @Field(() => AuthConnectionCreateWithoutLotTransactionBatchInput, {nullable:true})
-    @Type(() => AuthConnectionCreateWithoutLotTransactionBatchInput)
-    create?: InstanceType<typeof AuthConnectionCreateWithoutLotTransactionBatchInput>;
-    @Field(() => AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput, {nullable:true})
-    @Type(() => AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput)
-    connectOrCreate?: InstanceType<typeof AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput>;
-    @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
-    @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
-}
-
-@InputType()
 export class AuthConnectionCreateOrConnectWithoutAccountsInput {
     @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
     @Type(() => AuthConnectionWhereUniqueInput)
@@ -18503,16 +19243,6 @@ export class AuthConnectionCreateOrConnectWithoutAccountsInput {
     @Field(() => AuthConnectionCreateWithoutAccountsInput, {nullable:false})
     @Type(() => AuthConnectionCreateWithoutAccountsInput)
     create!: InstanceType<typeof AuthConnectionCreateWithoutAccountsInput>;
-}
-
-@InputType()
-export class AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput {
-    @Field(() => AuthConnectionWhereUniqueInput, {nullable:false})
-    @Type(() => AuthConnectionWhereUniqueInput)
-    where!: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
-    @Field(() => AuthConnectionCreateWithoutLotTransactionBatchInput, {nullable:false})
-    @Type(() => AuthConnectionCreateWithoutLotTransactionBatchInput)
-    create!: InstanceType<typeof AuthConnectionCreateWithoutLotTransactionBatchInput>;
 }
 
 @InputType()
@@ -18573,52 +19303,6 @@ export class AuthConnectionCreateWithoutAccountsInput {
     @Field(() => PortfolioCreateNestedOneWithoutAuthConnectionsInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutAuthConnectionsInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutAuthConnectionsInput>;
-    @Field(() => LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput>;
-}
-
-@InputType()
-export class AuthConnectionCreateWithoutLotTransactionBatchInput {
-    @Field(() => String, {nullable:true})
-    id?: string;
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
-    @Field(() => AuthSource, {nullable:false})
-    source!: `${AuthSource}`;
-    @Field(() => AuthType, {nullable:false})
-    type!: `${AuthType}`;
-    @Field(() => String, {nullable:true})
-    verificationUrl?: string;
-    @Field(() => String, {nullable:false})
-    externalId!: string;
-    @Field(() => Boolean, {nullable:true})
-    isSyncing?: boolean;
-    @Field(() => Date, {nullable:true})
-    authedAt?: Date | string;
-    @Field(() => Date, {nullable:true})
-    syncedAt?: Date | string;
-    @Field(() => Date, {nullable:true})
-    lastTransactionSyncedAtPlaid?: Date | string;
-    @Field(() => String, {nullable:true})
-    plaidInstitutionId?: string;
-    @HideField()
-    token?: string;
-    @HideField()
-    secret?: string;
-    @HideField()
-    verifier?: string;
-    @Field(() => UserCreateNestedOneWithoutAuthConnectionsInput, {nullable:false})
-    @Type(() => UserCreateNestedOneWithoutAuthConnectionsInput)
-    user!: InstanceType<typeof UserCreateNestedOneWithoutAuthConnectionsInput>;
-    @Field(() => PortfolioCreateNestedOneWithoutAuthConnectionsInput, {nullable:false})
-    @Type(() => PortfolioCreateNestedOneWithoutAuthConnectionsInput)
-    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutAuthConnectionsInput>;
-    @Field(() => AccountCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => AccountCreateNestedManyWithoutAuthConnectionInput)
-    accounts?: InstanceType<typeof AccountCreateNestedManyWithoutAuthConnectionInput>;
 }
 
 @InputType()
@@ -18659,9 +19343,6 @@ export class AuthConnectionCreateWithoutPortfolioInput {
     @Field(() => AccountCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutAuthConnectionInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput>;
 }
 
 @InputType()
@@ -18702,9 +19383,6 @@ export class AuthConnectionCreateWithoutUserInput {
     @Field(() => AccountCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutAuthConnectionInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput>;
 }
 
 @InputType()
@@ -18748,9 +19426,6 @@ export class AuthConnectionCreateInput {
     @Field(() => AccountCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
     @Type(() => AccountCreateNestedManyWithoutAuthConnectionInput)
     accounts?: InstanceType<typeof AccountCreateNestedManyWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput>;
 }
 
 @ArgsType()
@@ -19161,17 +19836,6 @@ export class AuthConnectionOrderByWithRelationInput {
     @Field(() => AccountOrderByRelationAggregateInput, {nullable:true})
     @Type(() => AccountOrderByRelationAggregateInput)
     accounts?: InstanceType<typeof AccountOrderByRelationAggregateInput>;
-    @Field(() => LotTransactionBatchOrderByRelationAggregateInput, {nullable:true})
-    @Type(() => LotTransactionBatchOrderByRelationAggregateInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchOrderByRelationAggregateInput>;
-}
-
-@InputType()
-export class AuthConnectionScalarRelationFilter {
-    @Field(() => AuthConnectionWhereInput, {nullable:true})
-    is?: InstanceType<typeof AuthConnectionWhereInput>;
-    @Field(() => AuthConnectionWhereInput, {nullable:true})
-    isNot?: InstanceType<typeof AuthConnectionWhereInput>;
 }
 
 @InputType()
@@ -19342,50 +20006,6 @@ export class AuthConnectionUncheckedCreateWithoutAccountsInput {
     secret?: string;
     @HideField()
     verifier?: string;
-    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput>;
-}
-
-@InputType()
-export class AuthConnectionUncheckedCreateWithoutLotTransactionBatchInput {
-    @Field(() => String, {nullable:true})
-    id?: string;
-    @Field(() => String, {nullable:false})
-    userId!: string;
-    @Field(() => String, {nullable:false})
-    portfolioId!: string;
-    @Field(() => Date, {nullable:true})
-    createdAt?: Date | string;
-    @Field(() => Date, {nullable:true})
-    updatedAt?: Date | string;
-    @Field(() => AuthSource, {nullable:false})
-    source!: `${AuthSource}`;
-    @Field(() => AuthType, {nullable:false})
-    type!: `${AuthType}`;
-    @Field(() => String, {nullable:true})
-    verificationUrl?: string;
-    @Field(() => String, {nullable:false})
-    externalId!: string;
-    @Field(() => Boolean, {nullable:true})
-    isSyncing?: boolean;
-    @Field(() => Date, {nullable:true})
-    authedAt?: Date | string;
-    @Field(() => Date, {nullable:true})
-    syncedAt?: Date | string;
-    @Field(() => Date, {nullable:true})
-    lastTransactionSyncedAtPlaid?: Date | string;
-    @Field(() => String, {nullable:true})
-    plaidInstitutionId?: string;
-    @HideField()
-    token?: string;
-    @HideField()
-    secret?: string;
-    @HideField()
-    verifier?: string;
-    @Field(() => AccountUncheckedCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => AccountUncheckedCreateNestedManyWithoutAuthConnectionInput)
-    accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutAuthConnectionInput>;
 }
 
 @InputType()
@@ -19425,9 +20045,6 @@ export class AuthConnectionUncheckedCreateWithoutPortfolioInput {
     @Field(() => AccountUncheckedCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutAuthConnectionInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput>;
 }
 
 @InputType()
@@ -19467,9 +20084,6 @@ export class AuthConnectionUncheckedCreateWithoutUserInput {
     @Field(() => AccountUncheckedCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutAuthConnectionInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput>;
 }
 
 @InputType()
@@ -19511,9 +20125,6 @@ export class AuthConnectionUncheckedCreateInput {
     @Field(() => AccountUncheckedCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
     @Type(() => AccountUncheckedCreateNestedManyWithoutAuthConnectionInput)
     accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput, {nullable:true})
-    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput>;
 }
 
 @InputType()
@@ -19736,50 +20347,6 @@ export class AuthConnectionUncheckedUpdateWithoutAccountsInput {
     secret?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
     @HideField()
     verifier?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput>;
-}
-
-@InputType()
-export class AuthConnectionUncheckedUpdateWithoutLotTransactionBatchInput {
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    userId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => EnumAuthSourceFieldUpdateOperationsInput, {nullable:true})
-    source?: InstanceType<typeof EnumAuthSourceFieldUpdateOperationsInput>;
-    @Field(() => EnumAuthTypeFieldUpdateOperationsInput, {nullable:true})
-    type?: InstanceType<typeof EnumAuthTypeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    verificationUrl?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    externalId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    isSyncing?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    authedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
-    syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
-    lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @HideField()
-    token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @HideField()
-    secret?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @HideField()
-    verifier?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @Field(() => AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput)
-    accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput>;
 }
 
 @InputType()
@@ -19819,9 +20386,6 @@ export class AuthConnectionUncheckedUpdateWithoutPortfolioInput {
     @Field(() => AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput>;
-    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput>;
 }
 
 @InputType()
@@ -19861,9 +20425,6 @@ export class AuthConnectionUncheckedUpdateWithoutUserInput {
     @Field(() => AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput>;
-    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput>;
 }
 
 @InputType()
@@ -19905,9 +20466,6 @@ export class AuthConnectionUncheckedUpdateInput {
     @Field(() => AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
     @Type(() => AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput)
     accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutAuthConnectionNestedInput>;
-    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput>;
 }
 
 @InputType()
@@ -20039,25 +20597,6 @@ export class AuthConnectionUpdateManyWithoutUserNestedInput {
 }
 
 @InputType()
-export class AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput {
-    @Field(() => AuthConnectionCreateWithoutLotTransactionBatchInput, {nullable:true})
-    @Type(() => AuthConnectionCreateWithoutLotTransactionBatchInput)
-    create?: InstanceType<typeof AuthConnectionCreateWithoutLotTransactionBatchInput>;
-    @Field(() => AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput, {nullable:true})
-    @Type(() => AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput)
-    connectOrCreate?: InstanceType<typeof AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput>;
-    @Field(() => AuthConnectionUpsertWithoutLotTransactionBatchInput, {nullable:true})
-    @Type(() => AuthConnectionUpsertWithoutLotTransactionBatchInput)
-    upsert?: InstanceType<typeof AuthConnectionUpsertWithoutLotTransactionBatchInput>;
-    @Field(() => AuthConnectionWhereUniqueInput, {nullable:true})
-    @Type(() => AuthConnectionWhereUniqueInput)
-    connect?: Prisma.AtLeast<AuthConnectionWhereUniqueInput, 'id' | 'externalId' | 'source_userId_portfolioId_plaidInstitutionId'>;
-    @Field(() => AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput, {nullable:true})
-    @Type(() => AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput)
-    update?: InstanceType<typeof AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput>;
-}
-
-@InputType()
 export class AuthConnectionUpdateOneWithoutAccountsNestedInput {
     @Field(() => AuthConnectionCreateWithoutAccountsInput, {nullable:true})
     @Type(() => AuthConnectionCreateWithoutAccountsInput)
@@ -20090,16 +20629,6 @@ export class AuthConnectionUpdateToOneWithWhereWithoutAccountsInput {
     @Field(() => AuthConnectionUpdateWithoutAccountsInput, {nullable:false})
     @Type(() => AuthConnectionUpdateWithoutAccountsInput)
     data!: InstanceType<typeof AuthConnectionUpdateWithoutAccountsInput>;
-}
-
-@InputType()
-export class AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput {
-    @Field(() => AuthConnectionWhereInput, {nullable:true})
-    @Type(() => AuthConnectionWhereInput)
-    where?: InstanceType<typeof AuthConnectionWhereInput>;
-    @Field(() => AuthConnectionUpdateWithoutLotTransactionBatchInput, {nullable:false})
-    @Type(() => AuthConnectionUpdateWithoutLotTransactionBatchInput)
-    data!: InstanceType<typeof AuthConnectionUpdateWithoutLotTransactionBatchInput>;
 }
 
 @InputType()
@@ -20160,52 +20689,6 @@ export class AuthConnectionUpdateWithoutAccountsInput {
     @Field(() => PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput>;
-    @Field(() => LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput>;
-}
-
-@InputType()
-export class AuthConnectionUpdateWithoutLotTransactionBatchInput {
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => EnumAuthSourceFieldUpdateOperationsInput, {nullable:true})
-    source?: InstanceType<typeof EnumAuthSourceFieldUpdateOperationsInput>;
-    @Field(() => EnumAuthTypeFieldUpdateOperationsInput, {nullable:true})
-    type?: InstanceType<typeof EnumAuthTypeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    verificationUrl?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    externalId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
-    isSyncing?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
-    authedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
-    syncedAt?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
-    lastTransactionSyncedAtPlaid?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
-    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
-    plaidInstitutionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @HideField()
-    token?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @HideField()
-    secret?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @HideField()
-    verifier?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
-    @Field(() => UserUpdateOneRequiredWithoutAuthConnectionsNestedInput, {nullable:true})
-    @Type(() => UserUpdateOneRequiredWithoutAuthConnectionsNestedInput)
-    user?: InstanceType<typeof UserUpdateOneRequiredWithoutAuthConnectionsNestedInput>;
-    @Field(() => PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput, {nullable:true})
-    @Type(() => PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput)
-    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput>;
-    @Field(() => AccountUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => AccountUpdateManyWithoutAuthConnectionNestedInput)
-    accounts?: InstanceType<typeof AccountUpdateManyWithoutAuthConnectionNestedInput>;
 }
 
 @InputType()
@@ -20246,9 +20729,6 @@ export class AuthConnectionUpdateWithoutPortfolioInput {
     @Field(() => AccountUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutAuthConnectionNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutAuthConnectionNestedInput>;
-    @Field(() => LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput>;
 }
 
 @InputType()
@@ -20289,9 +20769,6 @@ export class AuthConnectionUpdateWithoutUserInput {
     @Field(() => AccountUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutAuthConnectionNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutAuthConnectionNestedInput>;
-    @Field(() => LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput>;
 }
 
 @InputType()
@@ -20335,9 +20812,6 @@ export class AuthConnectionUpdateInput {
     @Field(() => AccountUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
     @Type(() => AccountUpdateManyWithoutAuthConnectionNestedInput)
     accounts?: InstanceType<typeof AccountUpdateManyWithoutAuthConnectionNestedInput>;
-    @Field(() => LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput, {nullable:true})
-    @Type(() => LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput>;
 }
 
 @InputType()
@@ -20374,19 +20848,6 @@ export class AuthConnectionUpsertWithoutAccountsInput {
     @Field(() => AuthConnectionCreateWithoutAccountsInput, {nullable:false})
     @Type(() => AuthConnectionCreateWithoutAccountsInput)
     create!: InstanceType<typeof AuthConnectionCreateWithoutAccountsInput>;
-    @Field(() => AuthConnectionWhereInput, {nullable:true})
-    @Type(() => AuthConnectionWhereInput)
-    where?: InstanceType<typeof AuthConnectionWhereInput>;
-}
-
-@InputType()
-export class AuthConnectionUpsertWithoutLotTransactionBatchInput {
-    @Field(() => AuthConnectionUpdateWithoutLotTransactionBatchInput, {nullable:false})
-    @Type(() => AuthConnectionUpdateWithoutLotTransactionBatchInput)
-    update!: InstanceType<typeof AuthConnectionUpdateWithoutLotTransactionBatchInput>;
-    @Field(() => AuthConnectionCreateWithoutLotTransactionBatchInput, {nullable:false})
-    @Type(() => AuthConnectionCreateWithoutLotTransactionBatchInput)
-    create!: InstanceType<typeof AuthConnectionCreateWithoutLotTransactionBatchInput>;
     @Field(() => AuthConnectionWhereInput, {nullable:true})
     @Type(() => AuthConnectionWhereInput)
     where?: InstanceType<typeof AuthConnectionWhereInput>;
@@ -20445,9 +20906,6 @@ export class AuthConnectionWhereUniqueInput {
     @Field(() => AccountListRelationFilter, {nullable:true})
     @Type(() => AccountListRelationFilter)
     accounts?: InstanceType<typeof AccountListRelationFilter>;
-    @Field(() => LotTransactionBatchListRelationFilter, {nullable:true})
-    @Type(() => LotTransactionBatchListRelationFilter)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchListRelationFilter>;
 }
 
 @InputType()
@@ -20501,9 +20959,6 @@ export class AuthConnectionWhereInput {
     @Field(() => AccountListRelationFilter, {nullable:true})
     @Type(() => AccountListRelationFilter)
     accounts?: InstanceType<typeof AccountListRelationFilter>;
-    @Field(() => LotTransactionBatchListRelationFilter, {nullable:true})
-    @Type(() => LotTransactionBatchListRelationFilter)
-    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchListRelationFilter>;
 }
 
 /**
@@ -20593,8 +21048,6 @@ export class AuthConnection {
     portfolio?: InstanceType<typeof Portfolio>;
     @Field(() => [Account], {nullable:true})
     accounts?: Array<Account>;
-    @Field(() => [LotTransactionBatch], {nullable:true})
-    lotTransactionBatch?: Array<LotTransactionBatch>;
     @Field(() => AuthConnectionCount, {nullable:false})
     _count?: InstanceType<typeof AuthConnectionCount>;
 }
@@ -42298,7 +42751,7 @@ export class LotTransactionBatchCountAggregateInput {
     @Field(() => Boolean, {nullable:true})
     updatedAt?: true;
     @Field(() => Boolean, {nullable:true})
-    authConnectionId?: true;
+    accountId?: true;
     @Field(() => Boolean, {nullable:true})
     portfolioId?: true;
     @Field(() => Boolean, {nullable:true})
@@ -42334,7 +42787,7 @@ export class LotTransactionBatchCountAggregate {
     @Field(() => Int, {nullable:false})
     updatedAt!: number;
     @Field(() => Int, {nullable:false})
-    authConnectionId!: number;
+    accountId!: number;
     @Field(() => Int, {nullable:false})
     portfolioId!: number;
     @Field(() => Int, {nullable:false})
@@ -42370,7 +42823,7 @@ export class LotTransactionBatchCountOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    authConnectionId?: `${SortOrder}`;
+    accountId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -42402,16 +42855,16 @@ export class LotTransactionBatchCount {
 }
 
 @InputType()
-export class LotTransactionBatchCreateManyAuthConnectionInputEnvelope {
-    @Field(() => [LotTransactionBatchCreateManyAuthConnectionInput], {nullable:false})
-    @Type(() => LotTransactionBatchCreateManyAuthConnectionInput)
-    data!: Array<LotTransactionBatchCreateManyAuthConnectionInput>;
+export class LotTransactionBatchCreateManyAccountInputEnvelope {
+    @Field(() => [LotTransactionBatchCreateManyAccountInput], {nullable:false})
+    @Type(() => LotTransactionBatchCreateManyAccountInput)
+    data!: Array<LotTransactionBatchCreateManyAccountInput>;
     @Field(() => Boolean, {nullable:true})
     skipDuplicates?: boolean;
 }
 
 @InputType()
-export class LotTransactionBatchCreateManyAuthConnectionInput {
+export class LotTransactionBatchCreateManyAccountInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => Date, {nullable:true})
@@ -42462,7 +42915,7 @@ export class LotTransactionBatchCreateManyPortfolioInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
     @Field(() => String, {nullable:false})
-    authConnectionId!: string;
+    accountId!: string;
     @Field(() => GraphQLJSON, {nullable:true})
     positionsBefore?: any;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -42496,7 +42949,7 @@ export class LotTransactionBatchCreateManyInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
     @Field(() => String, {nullable:false})
-    authConnectionId!: string;
+    accountId!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -42524,16 +42977,16 @@ export class LotTransactionBatchCreateManyInput {
 }
 
 @InputType()
-export class LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput {
-    @Field(() => [LotTransactionBatchCreateWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchCreateWithoutAuthConnectionInput)
-    create?: Array<LotTransactionBatchCreateWithoutAuthConnectionInput>;
-    @Field(() => [LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput)
-    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchCreateManyAuthConnectionInputEnvelope, {nullable:true})
-    @Type(() => LotTransactionBatchCreateManyAuthConnectionInputEnvelope)
-    createMany?: InstanceType<typeof LotTransactionBatchCreateManyAuthConnectionInputEnvelope>;
+export class LotTransactionBatchCreateNestedManyWithoutAccountInput {
+    @Field(() => [LotTransactionBatchCreateWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateWithoutAccountInput)
+    create?: Array<LotTransactionBatchCreateWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchCreateOrConnectWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateOrConnectWithoutAccountInput)
+    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateManyAccountInputEnvelope, {nullable:true})
+    @Type(() => LotTransactionBatchCreateManyAccountInputEnvelope)
+    createMany?: InstanceType<typeof LotTransactionBatchCreateManyAccountInputEnvelope>;
     @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
@@ -42569,13 +43022,13 @@ export class LotTransactionBatchCreateNestedOneWithoutLotChangeLogInput {
 }
 
 @InputType()
-export class LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput {
+export class LotTransactionBatchCreateOrConnectWithoutAccountInput {
     @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:false})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     where!: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
-    @Field(() => LotTransactionBatchCreateWithoutAuthConnectionInput, {nullable:false})
-    @Type(() => LotTransactionBatchCreateWithoutAuthConnectionInput)
-    create!: InstanceType<typeof LotTransactionBatchCreateWithoutAuthConnectionInput>;
+    @Field(() => LotTransactionBatchCreateWithoutAccountInput, {nullable:false})
+    @Type(() => LotTransactionBatchCreateWithoutAccountInput)
+    create!: InstanceType<typeof LotTransactionBatchCreateWithoutAccountInput>;
 }
 
 @InputType()
@@ -42599,7 +43052,7 @@ export class LotTransactionBatchCreateOrConnectWithoutPortfolioInput {
 }
 
 @InputType()
-export class LotTransactionBatchCreateWithoutAuthConnectionInput {
+export class LotTransactionBatchCreateWithoutAccountInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => Date, {nullable:true})
@@ -42666,9 +43119,9 @@ export class LotTransactionBatchCreateWithoutLotChangeLogInput {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
-    @Field(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
-    @Type(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput)
-    authConnection!: InstanceType<typeof AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput>;
+    @Field(() => AccountCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => AccountCreateNestedOneWithoutLotTransactionBatchInput)
+    account!: InstanceType<typeof AccountCreateNestedOneWithoutLotTransactionBatchInput>;
     @Field(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
     @Type(() => PortfolioCreateNestedOneWithoutLotTransactionBatchInput)
     portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutLotTransactionBatchInput>;
@@ -42704,9 +43157,9 @@ export class LotTransactionBatchCreateWithoutPortfolioInput {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
-    @Field(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
-    @Type(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput)
-    authConnection!: InstanceType<typeof AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput>;
+    @Field(() => AccountCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => AccountCreateNestedOneWithoutLotTransactionBatchInput)
+    account!: InstanceType<typeof AccountCreateNestedOneWithoutLotTransactionBatchInput>;
     @Field(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput>;
@@ -42742,9 +43195,9 @@ export class LotTransactionBatchCreateInput {
     realizedProfitAndLoss?: Decimal;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
-    @Field(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
-    @Type(() => AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput)
-    authConnection!: InstanceType<typeof AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput>;
+    @Field(() => AccountCreateNestedOneWithoutLotTransactionBatchInput, {nullable:false})
+    @Type(() => AccountCreateNestedOneWithoutLotTransactionBatchInput)
+    account!: InstanceType<typeof AccountCreateNestedOneWithoutLotTransactionBatchInput>;
     @Field(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput, {nullable:true})
     @Type(() => LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogCreateNestedManyWithoutLotTransactionBatchInput>;
@@ -42796,7 +43249,7 @@ export class LotTransactionBatchGroupBy {
     @Field(() => Date, {nullable:false})
     updatedAt!: Date | string;
     @Field(() => String, {nullable:false})
-    authConnectionId!: string;
+    accountId!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -42853,7 +43306,7 @@ export class LotTransactionBatchMaxAggregateInput {
     @Field(() => Boolean, {nullable:true})
     updatedAt?: true;
     @Field(() => Boolean, {nullable:true})
-    authConnectionId?: true;
+    accountId?: true;
     @Field(() => Boolean, {nullable:true})
     portfolioId?: true;
     @Field(() => Boolean, {nullable:true})
@@ -42869,7 +43322,7 @@ export class LotTransactionBatchMaxAggregate {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
     @Field(() => String, {nullable:true})
-    authConnectionId?: string;
+    accountId?: string;
     @Field(() => String, {nullable:true})
     portfolioId?: string;
     @Field(() => GraphQLDecimal, {nullable:true})
@@ -42885,7 +43338,7 @@ export class LotTransactionBatchMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    authConnectionId?: `${SortOrder}`;
+    accountId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -42901,7 +43354,7 @@ export class LotTransactionBatchMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     updatedAt?: true;
     @Field(() => Boolean, {nullable:true})
-    authConnectionId?: true;
+    accountId?: true;
     @Field(() => Boolean, {nullable:true})
     portfolioId?: true;
     @Field(() => Boolean, {nullable:true})
@@ -42917,7 +43370,7 @@ export class LotTransactionBatchMinAggregate {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
     @Field(() => String, {nullable:true})
-    authConnectionId?: string;
+    accountId?: string;
     @Field(() => String, {nullable:true})
     portfolioId?: string;
     @Field(() => GraphQLDecimal, {nullable:true})
@@ -42933,7 +43386,7 @@ export class LotTransactionBatchMinOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    authConnectionId?: `${SortOrder}`;
+    accountId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
@@ -42955,7 +43408,7 @@ export class LotTransactionBatchOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    authConnectionId?: `${SortOrder}`;
+    accountId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrderInput, {nullable:true})
@@ -43005,7 +43458,7 @@ export class LotTransactionBatchOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
-    authConnectionId?: `${SortOrder}`;
+    accountId?: `${SortOrder}`;
     @Field(() => SortOrder, {nullable:true})
     portfolioId?: `${SortOrder}`;
     @Field(() => SortOrderInput, {nullable:true})
@@ -43029,9 +43482,9 @@ export class LotTransactionBatchOrderByWithRelationInput {
     realizedProfitAndLoss?: InstanceType<typeof SortOrderInput>;
     @Field(() => SortOrderInput, {nullable:true})
     deletedLots?: InstanceType<typeof SortOrderInput>;
-    @Field(() => AuthConnectionOrderByWithRelationInput, {nullable:true})
-    @Type(() => AuthConnectionOrderByWithRelationInput)
-    authConnection?: InstanceType<typeof AuthConnectionOrderByWithRelationInput>;
+    @Field(() => AccountOrderByWithRelationInput, {nullable:true})
+    @Type(() => AccountOrderByWithRelationInput)
+    account?: InstanceType<typeof AccountOrderByWithRelationInput>;
     @Field(() => LotChangeLogOrderByRelationAggregateInput, {nullable:true})
     @Type(() => LotChangeLogOrderByRelationAggregateInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogOrderByRelationAggregateInput>;
@@ -43068,7 +43521,7 @@ export class LotTransactionBatchScalarWhereWithAggregatesInput {
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeWithAggregatesFilter>;
     @Field(() => UuidWithAggregatesFilter, {nullable:true})
-    authConnectionId?: InstanceType<typeof UuidWithAggregatesFilter>;
+    accountId?: InstanceType<typeof UuidWithAggregatesFilter>;
     @Field(() => UuidWithAggregatesFilter, {nullable:true})
     portfolioId?: InstanceType<typeof UuidWithAggregatesFilter>;
     @Field(() => JsonNullableWithAggregatesFilter, {nullable:true})
@@ -43112,7 +43565,7 @@ export class LotTransactionBatchScalarWhereInput {
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => UuidFilter, {nullable:true})
-    authConnectionId?: InstanceType<typeof UuidFilter>;
+    accountId?: InstanceType<typeof UuidFilter>;
     @Field(() => UuidFilter, {nullable:true})
     portfolioId?: InstanceType<typeof UuidFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
@@ -43157,16 +43610,16 @@ export class LotTransactionBatchSumOrderByAggregateInput {
 }
 
 @InputType()
-export class LotTransactionBatchUncheckedCreateNestedManyWithoutAuthConnectionInput {
-    @Field(() => [LotTransactionBatchCreateWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchCreateWithoutAuthConnectionInput)
-    create?: Array<LotTransactionBatchCreateWithoutAuthConnectionInput>;
-    @Field(() => [LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput)
-    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchCreateManyAuthConnectionInputEnvelope, {nullable:true})
-    @Type(() => LotTransactionBatchCreateManyAuthConnectionInputEnvelope)
-    createMany?: InstanceType<typeof LotTransactionBatchCreateManyAuthConnectionInputEnvelope>;
+export class LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput {
+    @Field(() => [LotTransactionBatchCreateWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateWithoutAccountInput)
+    create?: Array<LotTransactionBatchCreateWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchCreateOrConnectWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateOrConnectWithoutAccountInput)
+    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateManyAccountInputEnvelope, {nullable:true})
+    @Type(() => LotTransactionBatchCreateManyAccountInputEnvelope)
+    createMany?: InstanceType<typeof LotTransactionBatchCreateManyAccountInputEnvelope>;
     @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
@@ -43189,7 +43642,7 @@ export class LotTransactionBatchUncheckedCreateNestedManyWithoutPortfolioInput {
 }
 
 @InputType()
-export class LotTransactionBatchUncheckedCreateWithoutAuthConnectionInput {
+export class LotTransactionBatchUncheckedCreateWithoutAccountInput {
     @Field(() => String, {nullable:true})
     id?: string;
     @Field(() => Date, {nullable:true})
@@ -43234,7 +43687,7 @@ export class LotTransactionBatchUncheckedCreateWithoutLotChangeLogInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
     @Field(() => String, {nullable:false})
-    authConnectionId!: string;
+    accountId!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43270,7 +43723,7 @@ export class LotTransactionBatchUncheckedCreateWithoutPortfolioInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
     @Field(() => String, {nullable:false})
-    authConnectionId!: string;
+    accountId!: string;
     @Field(() => GraphQLJSON, {nullable:true})
     positionsBefore?: any;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43307,7 +43760,7 @@ export class LotTransactionBatchUncheckedCreateInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
     @Field(() => String, {nullable:false})
-    authConnectionId!: string;
+    accountId!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43338,19 +43791,19 @@ export class LotTransactionBatchUncheckedCreateInput {
 }
 
 @InputType()
-export class LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedInput {
-    @Field(() => [LotTransactionBatchCreateWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchCreateWithoutAuthConnectionInput)
-    create?: Array<LotTransactionBatchCreateWithoutAuthConnectionInput>;
-    @Field(() => [LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput)
-    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput>;
-    @Field(() => [LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput)
-    upsert?: Array<LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchCreateManyAuthConnectionInputEnvelope, {nullable:true})
-    @Type(() => LotTransactionBatchCreateManyAuthConnectionInputEnvelope)
-    createMany?: InstanceType<typeof LotTransactionBatchCreateManyAuthConnectionInputEnvelope>;
+export class LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput {
+    @Field(() => [LotTransactionBatchCreateWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateWithoutAccountInput)
+    create?: Array<LotTransactionBatchCreateWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchCreateOrConnectWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateOrConnectWithoutAccountInput)
+    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput)
+    upsert?: Array<LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateManyAccountInputEnvelope, {nullable:true})
+    @Type(() => LotTransactionBatchCreateManyAccountInputEnvelope)
+    createMany?: InstanceType<typeof LotTransactionBatchCreateManyAccountInputEnvelope>;
     @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     set?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
@@ -43363,19 +43816,19 @@ export class LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionNestedIn
     @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
-    @Field(() => [LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput)
-    update?: Array<LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput>;
-    @Field(() => [LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput)
-    updateMany?: Array<LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput>;
+    @Field(() => [LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput)
+    update?: Array<LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchUpdateManyWithWhereWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithWhereWithoutAccountInput)
+    updateMany?: Array<LotTransactionBatchUpdateManyWithWhereWithoutAccountInput>;
     @Field(() => [LotTransactionBatchScalarWhereInput], {nullable:true})
     @Type(() => LotTransactionBatchScalarWhereInput)
     deleteMany?: Array<LotTransactionBatchScalarWhereInput>;
 }
 
 @InputType()
-export class LotTransactionBatchUncheckedUpdateManyWithoutAuthConnectionInput {
+export class LotTransactionBatchUncheckedUpdateManyWithoutAccountInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -43453,7 +43906,7 @@ export class LotTransactionBatchUncheckedUpdateManyWithoutPortfolioInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    authConnectionId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    accountId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     positionsBefore?: any;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43486,7 +43939,7 @@ export class LotTransactionBatchUncheckedUpdateManyInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    authConnectionId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    accountId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43513,7 +43966,7 @@ export class LotTransactionBatchUncheckedUpdateManyInput {
 }
 
 @InputType()
-export class LotTransactionBatchUncheckedUpdateWithoutAuthConnectionInput {
+export class LotTransactionBatchUncheckedUpdateWithoutAccountInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -43557,7 +44010,7 @@ export class LotTransactionBatchUncheckedUpdateWithoutLotChangeLogInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    authConnectionId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    accountId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43592,7 +44045,7 @@ export class LotTransactionBatchUncheckedUpdateWithoutPortfolioInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    authConnectionId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    accountId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     positionsBefore?: any;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43628,7 +44081,7 @@ export class LotTransactionBatchUncheckedUpdateInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
-    authConnectionId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    accountId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
@@ -43689,7 +44142,7 @@ export class LotTransactionBatchUpdateManyMutationInput {
 }
 
 @InputType()
-export class LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput {
+export class LotTransactionBatchUpdateManyWithWhereWithoutAccountInput {
     @Field(() => LotTransactionBatchScalarWhereInput, {nullable:false})
     @Type(() => LotTransactionBatchScalarWhereInput)
     where!: InstanceType<typeof LotTransactionBatchScalarWhereInput>;
@@ -43709,19 +44162,19 @@ export class LotTransactionBatchUpdateManyWithWhereWithoutPortfolioInput {
 }
 
 @InputType()
-export class LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput {
-    @Field(() => [LotTransactionBatchCreateWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchCreateWithoutAuthConnectionInput)
-    create?: Array<LotTransactionBatchCreateWithoutAuthConnectionInput>;
-    @Field(() => [LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput)
-    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput>;
-    @Field(() => [LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput)
-    upsert?: Array<LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchCreateManyAuthConnectionInputEnvelope, {nullable:true})
-    @Type(() => LotTransactionBatchCreateManyAuthConnectionInputEnvelope)
-    createMany?: InstanceType<typeof LotTransactionBatchCreateManyAuthConnectionInputEnvelope>;
+export class LotTransactionBatchUpdateManyWithoutAccountNestedInput {
+    @Field(() => [LotTransactionBatchCreateWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateWithoutAccountInput)
+    create?: Array<LotTransactionBatchCreateWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchCreateOrConnectWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchCreateOrConnectWithoutAccountInput)
+    connectOrCreate?: Array<LotTransactionBatchCreateOrConnectWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput)
+    upsert?: Array<LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateManyAccountInputEnvelope, {nullable:true})
+    @Type(() => LotTransactionBatchCreateManyAccountInputEnvelope)
+    createMany?: InstanceType<typeof LotTransactionBatchCreateManyAccountInputEnvelope>;
     @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     set?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
@@ -43734,12 +44187,12 @@ export class LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput {
     @Field(() => [LotTransactionBatchWhereUniqueInput], {nullable:true})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     connect?: Array<Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>>;
-    @Field(() => [LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput)
-    update?: Array<LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput>;
-    @Field(() => [LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput], {nullable:true})
-    @Type(() => LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput)
-    updateMany?: Array<LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput>;
+    @Field(() => [LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput)
+    update?: Array<LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput>;
+    @Field(() => [LotTransactionBatchUpdateManyWithWhereWithoutAccountInput], {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithWhereWithoutAccountInput)
+    updateMany?: Array<LotTransactionBatchUpdateManyWithWhereWithoutAccountInput>;
     @Field(() => [LotTransactionBatchScalarWhereInput], {nullable:true})
     @Type(() => LotTransactionBatchScalarWhereInput)
     deleteMany?: Array<LotTransactionBatchScalarWhereInput>;
@@ -43812,13 +44265,13 @@ export class LotTransactionBatchUpdateToOneWithWhereWithoutLotChangeLogInput {
 }
 
 @InputType()
-export class LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput {
+export class LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput {
     @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:false})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     where!: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
-    @Field(() => LotTransactionBatchUpdateWithoutAuthConnectionInput, {nullable:false})
-    @Type(() => LotTransactionBatchUpdateWithoutAuthConnectionInput)
-    data!: InstanceType<typeof LotTransactionBatchUpdateWithoutAuthConnectionInput>;
+    @Field(() => LotTransactionBatchUpdateWithoutAccountInput, {nullable:false})
+    @Type(() => LotTransactionBatchUpdateWithoutAccountInput)
+    data!: InstanceType<typeof LotTransactionBatchUpdateWithoutAccountInput>;
 }
 
 @InputType()
@@ -43832,7 +44285,7 @@ export class LotTransactionBatchUpdateWithWhereUniqueWithoutPortfolioInput {
 }
 
 @InputType()
-export class LotTransactionBatchUpdateWithoutAuthConnectionInput {
+export class LotTransactionBatchUpdateWithoutAccountInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
@@ -43897,9 +44350,9 @@ export class LotTransactionBatchUpdateWithoutLotChangeLogInput {
     realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
-    @Field(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
-    @Type(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
-    authConnection?: InstanceType<typeof AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
+    @Field(() => AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
+    account?: InstanceType<typeof AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
     @Field(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
     portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
@@ -43934,9 +44387,9 @@ export class LotTransactionBatchUpdateWithoutPortfolioInput {
     realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
-    @Field(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
-    @Type(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
-    authConnection?: InstanceType<typeof AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
+    @Field(() => AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
+    account?: InstanceType<typeof AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
     @Field(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput>;
@@ -43971,9 +44424,9 @@ export class LotTransactionBatchUpdateInput {
     realizedProfitAndLoss?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots?: any;
-    @Field(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
-    @Type(() => AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
-    authConnection?: InstanceType<typeof AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
+    @Field(() => AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput, {nullable:true})
+    @Type(() => AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput)
+    account?: InstanceType<typeof AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput>;
     @Field(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput, {nullable:true})
     @Type(() => LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput)
     lotChangeLog?: InstanceType<typeof LotChangeLogUpdateManyWithoutLotTransactionBatchNestedInput>;
@@ -43983,16 +44436,16 @@ export class LotTransactionBatchUpdateInput {
 }
 
 @InputType()
-export class LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput {
+export class LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput {
     @Field(() => LotTransactionBatchWhereUniqueInput, {nullable:false})
     @Type(() => LotTransactionBatchWhereUniqueInput)
     where!: Prisma.AtLeast<LotTransactionBatchWhereUniqueInput, 'id'>;
-    @Field(() => LotTransactionBatchUpdateWithoutAuthConnectionInput, {nullable:false})
-    @Type(() => LotTransactionBatchUpdateWithoutAuthConnectionInput)
-    update!: InstanceType<typeof LotTransactionBatchUpdateWithoutAuthConnectionInput>;
-    @Field(() => LotTransactionBatchCreateWithoutAuthConnectionInput, {nullable:false})
-    @Type(() => LotTransactionBatchCreateWithoutAuthConnectionInput)
-    create!: InstanceType<typeof LotTransactionBatchCreateWithoutAuthConnectionInput>;
+    @Field(() => LotTransactionBatchUpdateWithoutAccountInput, {nullable:false})
+    @Type(() => LotTransactionBatchUpdateWithoutAccountInput)
+    update!: InstanceType<typeof LotTransactionBatchUpdateWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateWithoutAccountInput, {nullable:false})
+    @Type(() => LotTransactionBatchCreateWithoutAccountInput)
+    create!: InstanceType<typeof LotTransactionBatchCreateWithoutAccountInput>;
 }
 
 @InputType()
@@ -44039,7 +44492,7 @@ export class LotTransactionBatchWhereUniqueInput {
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => UuidFilter, {nullable:true})
-    authConnectionId?: InstanceType<typeof UuidFilter>;
+    accountId?: InstanceType<typeof UuidFilter>;
     @Field(() => UuidFilter, {nullable:true})
     portfolioId?: InstanceType<typeof UuidFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
@@ -44063,9 +44516,9 @@ export class LotTransactionBatchWhereUniqueInput {
     realizedProfitAndLoss?: InstanceType<typeof DecimalNullableFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
     deletedLots?: InstanceType<typeof JsonNullableFilter>;
-    @Field(() => AuthConnectionScalarRelationFilter, {nullable:true})
-    @Type(() => AuthConnectionScalarRelationFilter)
-    authConnection?: InstanceType<typeof AuthConnectionScalarRelationFilter>;
+    @Field(() => AccountScalarRelationFilter, {nullable:true})
+    @Type(() => AccountScalarRelationFilter)
+    account?: InstanceType<typeof AccountScalarRelationFilter>;
     @Field(() => LotChangeLogListRelationFilter, {nullable:true})
     @Type(() => LotChangeLogListRelationFilter)
     lotChangeLog?: InstanceType<typeof LotChangeLogListRelationFilter>;
@@ -44092,7 +44545,7 @@ export class LotTransactionBatchWhereInput {
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: InstanceType<typeof DateTimeFilter>;
     @Field(() => UuidFilter, {nullable:true})
-    authConnectionId?: InstanceType<typeof UuidFilter>;
+    accountId?: InstanceType<typeof UuidFilter>;
     @Field(() => UuidFilter, {nullable:true})
     portfolioId?: InstanceType<typeof UuidFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
@@ -44116,9 +44569,9 @@ export class LotTransactionBatchWhereInput {
     realizedProfitAndLoss?: InstanceType<typeof DecimalNullableFilter>;
     @Field(() => JsonNullableFilter, {nullable:true})
     deletedLots?: InstanceType<typeof JsonNullableFilter>;
-    @Field(() => AuthConnectionScalarRelationFilter, {nullable:true})
-    @Type(() => AuthConnectionScalarRelationFilter)
-    authConnection?: InstanceType<typeof AuthConnectionScalarRelationFilter>;
+    @Field(() => AccountScalarRelationFilter, {nullable:true})
+    @Type(() => AccountScalarRelationFilter)
+    account?: InstanceType<typeof AccountScalarRelationFilter>;
     @Field(() => LotChangeLogListRelationFilter, {nullable:true})
     @Type(() => LotChangeLogListRelationFilter)
     lotChangeLog?: InstanceType<typeof LotChangeLogListRelationFilter>;
@@ -44136,7 +44589,7 @@ export class LotTransactionBatch {
     @Field(() => Date, {nullable:false})
     updatedAt!: Date;
     @Field(() => String, {nullable:false})
-    authConnectionId!: string;
+    accountId!: string;
     @Field(() => String, {nullable:false})
     portfolioId!: string;
     /**
@@ -44186,8 +44639,8 @@ export class LotTransactionBatch {
     realizedProfitAndLoss!: Decimal | null;
     @Field(() => GraphQLJSON, {nullable:true})
     deletedLots!: any | null;
-    @Field(() => AuthConnection, {nullable:false})
-    authConnection?: InstanceType<typeof AuthConnection>;
+    @Field(() => Account, {nullable:false})
+    account?: InstanceType<typeof Account>;
     @Field(() => [LotChangeLog], {nullable:true})
     lotChangeLog?: Array<LotChangeLog>;
     @Field(() => Portfolio, {nullable:false})

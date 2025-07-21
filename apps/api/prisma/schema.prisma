@@ -275,14 +275,15 @@ model Account {
   raw                              Json?
 
   /// @HideField({ match: '@(Account)Create*Input' })
-  createdBy      User            @relation(fields: [createdById], references: [id], onDelete: Restrict)
-  authConnection AuthConnection? @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
-  portfolio      Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  positions      Position[]
-  transactions   Transaction[]
-  realizedPAndL  RealizedPAndL[]
-  lots           Lot[]
-  files          File[]
+  createdBy           User                  @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  authConnection      AuthConnection?       @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
+  portfolio           Portfolio             @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  positions           Position[]
+  transactions        Transaction[]
+  realizedPAndL       RealizedPAndL[]
+  lots                Lot[]
+  files               File[]
+  LotTransactionBatch LotTransactionBatch[]
 
   /// This attempts to ensure user doesnt link the same account twice (i.e. same plaid account mask)
   @@unique([authConnectionId, plaidAccountMask, type])
@@ -349,7 +350,7 @@ model LotTransactionBatch {
   id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt             DateTime @default(now())
   updatedAt             DateTime @default(now()) @updatedAt
-  authConnectionId      String   @db.Uuid
+  accountId             String   @db.Uuid
   portfolioId           String   @db.Uuid
   /// Snapshot of positions before the transaction batch
   positionsBefore       Json?    @db.JsonB
@@ -371,9 +372,9 @@ model LotTransactionBatch {
   realizedProfitAndLoss Decimal? @db.Decimal(14, 4)
   deletedLots           Json?    @db.JsonB
 
-  authConnection AuthConnection @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
-  lotChangeLog   LotChangeLog[]
-  portfolio      Portfolio      @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account      Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  lotChangeLog LotChangeLog[]
+  portfolio    Portfolio      @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
   @@index([portfolioId, createdAt(sort: Desc)])
 }
@@ -749,13 +750,13 @@ model AuthConnection {
   /// @HideField({ output: true, input: true })
   verifier String?
 
-  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  portfolio           Portfolio             @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  accounts            Account[]
-  lotTransactionBatch LotTransactionBatch[]
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  accounts  Account[]
 
   /// Only one link per user per portfolio per source (importantly a user can only have 1 plaid link per portfolio in a given institution)
   /// We must enforce this else transactions lots etc. will be duplicated in portfolios from plaid (trx ids change depending on the plaid link)
+  /// Essentially unique institution per user per portfolio
   @@unique([source, userId, portfolioId, plaidInstitutionId])
   @@index([portfolioId])
   @@index([externalId])

@@ -168,4 +168,19 @@ export class AuthConnectionResolver {
   _requiresReAuth(@Parent() { authedAt, source }: AuthConnection) {
     return this.authConnectionService.requiresReAuth(source, authedAt)
   }
+
+  @Mutation(() => AuthConnection, {
+    description: 'Delete an auth connection and all associated accounts and data',
+    name: 'deleteAuthConnection',
+  })
+  async deleteAuthConnection(
+    @Args('authConnectionId', { type: () => String })
+    authConnectionId: string,
+    @ClerkContext() { metadata }: ClerkClaims,
+  ): Promise<AuthConnection> {
+    return this.authConnectionService.deleteAuthConnection(
+      authConnectionId,
+      metadata.portfolioId,
+    )
+  }
 }

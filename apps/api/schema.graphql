@@ -4,6 +4,7 @@
 
 """Unless unconnected, these are always plaid accounts"""
 type Account {
+  LotTransactionBatch: [LotTransactionBatch!]
   _count: AccountCount!
   _realizedProfitAndLoss(year: Float): RealizedPAndL!
   accountValueTotal: Decimal
@@ -124,6 +125,7 @@ type AccountAvgAggregate {
 }
 
 type AccountCount {
+  LotTransactionBatch: Int!
   files: Int!
   lots: Int!
   positions: Int!
@@ -182,6 +184,7 @@ type AccountCountAggregate {
 }
 
 input AccountCreateInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -418,6 +421,12 @@ input AccountCreateNestedOneWithoutFilesInput {
   create: AccountCreateWithoutFilesInput
 }
 
+input AccountCreateNestedOneWithoutLotTransactionBatchInput {
+  connect: AccountWhereUniqueInput
+  connectOrCreate: AccountCreateOrConnectWithoutLotTransactionBatchInput
+  create: AccountCreateWithoutLotTransactionBatchInput
+}
+
 input AccountCreateNestedOneWithoutLotsInput {
   connect: AccountWhereUniqueInput
   connectOrCreate: AccountCreateOrConnectWithoutLotsInput
@@ -457,6 +466,11 @@ input AccountCreateOrConnectWithoutFilesInput {
   where: AccountWhereUniqueInput!
 }
 
+input AccountCreateOrConnectWithoutLotTransactionBatchInput {
+  create: AccountCreateWithoutLotTransactionBatchInput!
+  where: AccountWhereUniqueInput!
+}
+
 input AccountCreateOrConnectWithoutLotsInput {
   create: AccountCreateWithoutLotsInput!
   where: AccountWhereUniqueInput!
@@ -483,6 +497,7 @@ input AccountCreateOrConnectWithoutTransactionsInput {
 }
 
 input AccountCreateWithoutAuthConnectionInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   balanceAccount: Decimal
   balanceMoneyMarket: Decimal
@@ -535,6 +550,7 @@ input AccountCreateWithoutAuthConnectionInput {
 }
 
 input AccountCreateWithoutCreatedByInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -588,6 +604,7 @@ input AccountCreateWithoutCreatedByInput {
 }
 
 input AccountCreateWithoutFilesInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -639,7 +656,61 @@ input AccountCreateWithoutFilesInput {
   uploadedPositions: Boolean
 }
 
+input AccountCreateWithoutLotTransactionBatchInput {
+  accountValueTotal: Decimal
+  authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
+  balanceAccount: Decimal
+  balanceMoneyMarket: Decimal
+  balanceShortAdjustment: Decimal
+  cashAvailableForInvestment: Decimal
+  cashBalance: Decimal
+  cashBuyingPower: Decimal
+  cashForOpenOrders: Decimal
+  cashNet: Decimal
+  cashOpenOrderReserveDT: Decimal
+  cashSettledForInvestment: Decimal
+  cashUnsettledForInvestment: Decimal
+  closedDate: DateTime
+  createdAt: DateTime
+  description: String
+  equityRegt: Decimal
+  equityRegtPercent: Decimal
+  externalId: String
+  files: FileCreateNestedManyWithoutAccountInput
+  fundsWithheldFromPurchasingPower: Decimal
+  fundsWithheldFromWithdrawal: Decimal
+  id: String
+  institution: AccountInstitution
+  key: String
+  liveURL: String
+  liveURLCreated: DateTime
+  lotSeededDate: DateTime
+  lots: LotCreateNestedManyWithoutAccountInput
+  marginBuyingPower: Decimal
+  marginBuyingPowerDT: Decimal
+  marginOpenOrderReserveDT: Decimal
+  marketValueTotal: Decimal
+  mode: AccountMode
+  name: String
+  optionLevel: OptionLevel
+  plaidAccountMask: String
+  portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  positions: PositionCreateNestedManyWithoutAccountInput
+  provider: AccountProvider
+  raw: JSON
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutAccountInput
+  setRealizedValues: Boolean
+  skipSetup: Boolean
+  status: AccountStatus
+  subType: String
+  transactions: TransactionCreateNestedManyWithoutAccountInput
+  type: String
+  updatedAt: DateTime
+  uploadedPositions: Boolean
+}
+
 input AccountCreateWithoutLotsInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -692,6 +763,7 @@ input AccountCreateWithoutLotsInput {
 }
 
 input AccountCreateWithoutPortfolioInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -744,6 +816,7 @@ input AccountCreateWithoutPortfolioInput {
 }
 
 input AccountCreateWithoutPositionsInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -796,6 +869,7 @@ input AccountCreateWithoutPositionsInput {
 }
 
 input AccountCreateWithoutRealizedPAndLInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -848,6 +922,7 @@ input AccountCreateWithoutRealizedPAndLInput {
 }
 
 input AccountCreateWithoutTransactionsInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -1130,6 +1205,7 @@ type AccountSumAggregate {
 }
 
 input AccountUpdateInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1294,6 +1370,14 @@ input AccountUpdateOneRequiredWithoutFilesNestedInput {
   upsert: AccountUpsertWithoutFilesInput
 }
 
+input AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput {
+  connect: AccountWhereUniqueInput
+  connectOrCreate: AccountCreateOrConnectWithoutLotTransactionBatchInput
+  create: AccountCreateWithoutLotTransactionBatchInput
+  update: AccountUpdateToOneWithWhereWithoutLotTransactionBatchInput
+  upsert: AccountUpsertWithoutLotTransactionBatchInput
+}
+
 input AccountUpdateOneRequiredWithoutLotsNestedInput {
   connect: AccountWhereUniqueInput
   connectOrCreate: AccountCreateOrConnectWithoutLotsInput
@@ -1328,6 +1412,11 @@ input AccountUpdateOneRequiredWithoutTransactionsNestedInput {
 
 input AccountUpdateToOneWithWhereWithoutFilesInput {
   data: AccountUpdateWithoutFilesInput!
+  where: AccountWhereInput
+}
+
+input AccountUpdateToOneWithWhereWithoutLotTransactionBatchInput {
+  data: AccountUpdateWithoutLotTransactionBatchInput!
   where: AccountWhereInput
 }
 
@@ -1367,6 +1456,7 @@ input AccountUpdateWithWhereUniqueWithoutPortfolioInput {
 }
 
 input AccountUpdateWithoutAuthConnectionInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
   balanceMoneyMarket: NullableDecimalFieldUpdateOperationsInput
@@ -1420,6 +1510,7 @@ input AccountUpdateWithoutAuthConnectionInput {
 }
 
 input AccountUpdateWithoutCreatedByInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1473,6 +1564,7 @@ input AccountUpdateWithoutCreatedByInput {
 }
 
 input AccountUpdateWithoutFilesInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1525,7 +1617,62 @@ input AccountUpdateWithoutFilesInput {
   uploadedPositions: BoolFieldUpdateOperationsInput
 }
 
+input AccountUpdateWithoutLotTransactionBatchInput {
+  accountValueTotal: NullableDecimalFieldUpdateOperationsInput
+  authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
+  balanceAccount: NullableDecimalFieldUpdateOperationsInput
+  balanceMoneyMarket: NullableDecimalFieldUpdateOperationsInput
+  balanceShortAdjustment: NullableDecimalFieldUpdateOperationsInput
+  cashAvailableForInvestment: NullableDecimalFieldUpdateOperationsInput
+  cashBalance: NullableDecimalFieldUpdateOperationsInput
+  cashBuyingPower: NullableDecimalFieldUpdateOperationsInput
+  cashForOpenOrders: NullableDecimalFieldUpdateOperationsInput
+  cashNet: NullableDecimalFieldUpdateOperationsInput
+  cashOpenOrderReserveDT: NullableDecimalFieldUpdateOperationsInput
+  cashSettledForInvestment: NullableDecimalFieldUpdateOperationsInput
+  cashUnsettledForInvestment: NullableDecimalFieldUpdateOperationsInput
+  closedDate: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutAccountNestedInput
+  description: NullableStringFieldUpdateOperationsInput
+  equityRegt: NullableDecimalFieldUpdateOperationsInput
+  equityRegtPercent: NullableDecimalFieldUpdateOperationsInput
+  externalId: NullableStringFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutAccountNestedInput
+  fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
+  fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
+  key: NullableStringFieldUpdateOperationsInput
+  liveURL: NullableStringFieldUpdateOperationsInput
+  liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
+  lotSeededDate: NullableDateTimeFieldUpdateOperationsInput
+  lots: LotUpdateManyWithoutAccountNestedInput
+  marginBuyingPower: NullableDecimalFieldUpdateOperationsInput
+  marginBuyingPowerDT: NullableDecimalFieldUpdateOperationsInput
+  marginOpenOrderReserveDT: NullableDecimalFieldUpdateOperationsInput
+  marketValueTotal: NullableDecimalFieldUpdateOperationsInput
+  mode: NullableEnumAccountModeFieldUpdateOperationsInput
+  name: NullableStringFieldUpdateOperationsInput
+  optionLevel: NullableEnumOptionLevelFieldUpdateOperationsInput
+  plaidAccountMask: NullableStringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  positions: PositionUpdateManyWithoutAccountNestedInput
+  provider: EnumAccountProviderFieldUpdateOperationsInput
+  raw: JSON
+  realizedPAndL: RealizedPAndLUpdateManyWithoutAccountNestedInput
+  setRealizedValues: BoolFieldUpdateOperationsInput
+  skipSetup: BoolFieldUpdateOperationsInput
+  status: EnumAccountStatusFieldUpdateOperationsInput
+  subType: NullableStringFieldUpdateOperationsInput
+  transactions: TransactionUpdateManyWithoutAccountNestedInput
+  type: StringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  uploadedPositions: BoolFieldUpdateOperationsInput
+}
+
 input AccountUpdateWithoutLotsInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1579,6 +1726,7 @@ input AccountUpdateWithoutLotsInput {
 }
 
 input AccountUpdateWithoutPortfolioInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1632,6 +1780,7 @@ input AccountUpdateWithoutPortfolioInput {
 }
 
 input AccountUpdateWithoutPositionsInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1685,6 +1834,7 @@ input AccountUpdateWithoutPositionsInput {
 }
 
 input AccountUpdateWithoutRealizedPAndLInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1738,6 +1888,7 @@ input AccountUpdateWithoutRealizedPAndLInput {
 }
 
 input AccountUpdateWithoutTransactionsInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1814,6 +1965,12 @@ input AccountUpsertWithoutFilesInput {
   where: AccountWhereInput
 }
 
+input AccountUpsertWithoutLotTransactionBatchInput {
+  create: AccountCreateWithoutLotTransactionBatchInput!
+  update: AccountUpdateWithoutLotTransactionBatchInput!
+  where: AccountWhereInput
+}
+
 input AccountUpsertWithoutLotsInput {
   create: AccountCreateWithoutLotsInput!
   update: AccountUpdateWithoutLotsInput!
@@ -1840,6 +1997,7 @@ input AccountUpsertWithoutTransactionsInput {
 
 input AccountWhereInput {
   AND: [AccountWhereInput!]
+  LotTransactionBatch: LotTransactionBatchListRelationFilter
   NOT: [AccountWhereInput!]
   OR: [AccountWhereInput!]
   accountValueTotal: DecimalNullableFilter
@@ -1900,6 +2058,7 @@ input AccountWhereInput {
 
 input AccountWhereUniqueInput {
   AND: [AccountWhereInput!]
+  LotTransactionBatch: LotTransactionBatchListRelationFilter
   NOT: [AccountWhereInput!]
   OR: [AccountWhereInput!]
   accountValueTotal: DecimalNullableFilter
@@ -3307,7 +3466,6 @@ type AuthConnection {
 
   """When was the last transaction sync Plaid"""
   lastTransactionSyncedAtPlaid: DateTime
-  lotTransactionBatch: [LotTransactionBatch!]
 
   """Plaid institution id"""
   plaidInstitutionId: String
@@ -3340,7 +3498,6 @@ type AuthConnection {
 
 type AuthConnectionCount {
   accounts: Int!
-  lotTransactionBatch: Int!
 }
 
 type AuthConnectionCountAggregate {
@@ -3423,19 +3580,8 @@ input AuthConnectionCreateNestedOneWithoutAccountsInput {
   create: AuthConnectionCreateWithoutAccountsInput
 }
 
-input AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput {
-  connect: AuthConnectionWhereUniqueInput
-  connectOrCreate: AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput
-  create: AuthConnectionCreateWithoutLotTransactionBatchInput
-}
-
 input AuthConnectionCreateOrConnectWithoutAccountsInput {
   create: AuthConnectionCreateWithoutAccountsInput!
-  where: AuthConnectionWhereUniqueInput!
-}
-
-input AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput {
-  create: AuthConnectionCreateWithoutLotTransactionBatchInput!
   where: AuthConnectionWhereUniqueInput!
 }
 
@@ -3450,25 +3596,6 @@ input AuthConnectionCreateOrConnectWithoutUserInput {
 }
 
 input AuthConnectionCreateWithoutAccountsInput {
-  authedAt: DateTime
-  createdAt: DateTime
-  externalId: String!
-  id: String
-  isSyncing: Boolean
-  lastTransactionSyncedAtPlaid: DateTime
-  lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput
-  plaidInstitutionId: String
-  portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
-  source: AuthSource!
-  syncedAt: DateTime
-  type: AuthType!
-  updatedAt: DateTime
-  user: UserCreateNestedOneWithoutAuthConnectionsInput!
-  verificationUrl: String
-}
-
-input AuthConnectionCreateWithoutLotTransactionBatchInput {
-  accounts: AccountCreateNestedManyWithoutAuthConnectionInput
   authedAt: DateTime
   createdAt: DateTime
   externalId: String!
@@ -3493,7 +3620,6 @@ input AuthConnectionCreateWithoutPortfolioInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput
   plaidInstitutionId: String
   source: AuthSource!
   syncedAt: DateTime
@@ -3511,7 +3637,6 @@ input AuthConnectionCreateWithoutUserInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput
   plaidInstitutionId: String
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
   source: AuthSource!
@@ -3545,7 +3670,6 @@ type AuthConnectionExt {
 
   """When was the last transaction sync Plaid"""
   lastTransactionSyncedAtPlaid: DateTime
-  lotTransactionBatch: [LotTransactionBatch!]
 
   """Plaid institution id"""
   plaidInstitutionId: String
@@ -3617,11 +3741,6 @@ type AuthConnectionMinAggregate {
 }
 
 input AuthConnectionNullableScalarRelationFilter {
-  is: AuthConnectionWhereInput
-  isNot: AuthConnectionWhereInput
-}
-
-input AuthConnectionScalarRelationFilter {
   is: AuthConnectionWhereInput
   isNot: AuthConnectionWhereInput
 }
@@ -3706,14 +3825,6 @@ input AuthConnectionUpdateManyWithoutUserNestedInput {
   upsert: [AuthConnectionUpsertWithWhereUniqueWithoutUserInput!]
 }
 
-input AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput {
-  connect: AuthConnectionWhereUniqueInput
-  connectOrCreate: AuthConnectionCreateOrConnectWithoutLotTransactionBatchInput
-  create: AuthConnectionCreateWithoutLotTransactionBatchInput
-  update: AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput
-  upsert: AuthConnectionUpsertWithoutLotTransactionBatchInput
-}
-
 input AuthConnectionUpdateOneWithoutAccountsNestedInput {
   connect: AuthConnectionWhereUniqueInput
   connectOrCreate: AuthConnectionCreateOrConnectWithoutAccountsInput
@@ -3729,11 +3840,6 @@ input AuthConnectionUpdateToOneWithWhereWithoutAccountsInput {
   where: AuthConnectionWhereInput
 }
 
-input AuthConnectionUpdateToOneWithWhereWithoutLotTransactionBatchInput {
-  data: AuthConnectionUpdateWithoutLotTransactionBatchInput!
-  where: AuthConnectionWhereInput
-}
-
 input AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput {
   data: AuthConnectionUpdateWithoutPortfolioInput!
   where: AuthConnectionWhereUniqueInput!
@@ -3745,25 +3851,6 @@ input AuthConnectionUpdateWithWhereUniqueWithoutUserInput {
 }
 
 input AuthConnectionUpdateWithoutAccountsInput {
-  authedAt: DateTimeFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  externalId: StringFieldUpdateOperationsInput
-  id: StringFieldUpdateOperationsInput
-  isSyncing: BoolFieldUpdateOperationsInput
-  lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
-  lotTransactionBatch: LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput
-  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
-  portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
-  source: EnumAuthSourceFieldUpdateOperationsInput
-  syncedAt: NullableDateTimeFieldUpdateOperationsInput
-  type: EnumAuthTypeFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-  user: UserUpdateOneRequiredWithoutAuthConnectionsNestedInput
-  verificationUrl: NullableStringFieldUpdateOperationsInput
-}
-
-input AuthConnectionUpdateWithoutLotTransactionBatchInput {
-  accounts: AccountUpdateManyWithoutAuthConnectionNestedInput
   authedAt: DateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   externalId: StringFieldUpdateOperationsInput
@@ -3788,7 +3875,6 @@ input AuthConnectionUpdateWithoutPortfolioInput {
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
-  lotTransactionBatch: LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput
   plaidInstitutionId: NullableStringFieldUpdateOperationsInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
@@ -3806,7 +3892,6 @@ input AuthConnectionUpdateWithoutUserInput {
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
-  lotTransactionBatch: LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput
   plaidInstitutionId: NullableStringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
   source: EnumAuthSourceFieldUpdateOperationsInput
@@ -3834,12 +3919,6 @@ input AuthConnectionUpsertWithoutAccountsInput {
   where: AuthConnectionWhereInput
 }
 
-input AuthConnectionUpsertWithoutLotTransactionBatchInput {
-  create: AuthConnectionCreateWithoutLotTransactionBatchInput!
-  update: AuthConnectionUpdateWithoutLotTransactionBatchInput!
-  where: AuthConnectionWhereInput
-}
-
 input AuthConnectionWhereInput {
   AND: [AuthConnectionWhereInput!]
   NOT: [AuthConnectionWhereInput!]
@@ -3851,7 +3930,6 @@ input AuthConnectionWhereInput {
   id: UuidFilter
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
-  lotTransactionBatch: LotTransactionBatchListRelationFilter
   plaidInstitutionId: StringNullableFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
@@ -3875,7 +3953,6 @@ input AuthConnectionWhereUniqueInput {
   id: String
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
-  lotTransactionBatch: LotTransactionBatchListRelationFilter
   plaidInstitutionId: StringNullableFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
@@ -8422,8 +8499,8 @@ type LotSumAggregate {
 
 type LotTransactionBatch {
   _count: LotTransactionBatchCount!
-  authConnection: AuthConnection!
-  authConnectionId: String!
+  account: Account!
+  accountId: String!
   createdAt: DateTime!
   deletedLots: JSON
 
@@ -8470,7 +8547,7 @@ type LotTransactionBatchCount {
 
 type LotTransactionBatchCountAggregate {
   _all: Int!
-  authConnectionId: Int!
+  accountId: Int!
   createdAt: Int!
   deletedLots: Int!
   holdingsPayload: Int!
@@ -8487,7 +8564,7 @@ type LotTransactionBatchCountAggregate {
   updatedAt: Int!
 }
 
-input LotTransactionBatchCreateManyAuthConnectionInput {
+input LotTransactionBatchCreateManyAccountInput {
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8504,13 +8581,13 @@ input LotTransactionBatchCreateManyAuthConnectionInput {
   updatedAt: DateTime
 }
 
-input LotTransactionBatchCreateManyAuthConnectionInputEnvelope {
-  data: [LotTransactionBatchCreateManyAuthConnectionInput!]!
+input LotTransactionBatchCreateManyAccountInputEnvelope {
+  data: [LotTransactionBatchCreateManyAccountInput!]!
   skipDuplicates: Boolean
 }
 
 input LotTransactionBatchCreateManyPortfolioInput {
-  authConnectionId: String!
+  accountId: String!
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8531,11 +8608,11 @@ input LotTransactionBatchCreateManyPortfolioInputEnvelope {
   skipDuplicates: Boolean
 }
 
-input LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput {
+input LotTransactionBatchCreateNestedManyWithoutAccountInput {
   connect: [LotTransactionBatchWhereUniqueInput!]
-  connectOrCreate: [LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput!]
-  create: [LotTransactionBatchCreateWithoutAuthConnectionInput!]
-  createMany: LotTransactionBatchCreateManyAuthConnectionInputEnvelope
+  connectOrCreate: [LotTransactionBatchCreateOrConnectWithoutAccountInput!]
+  create: [LotTransactionBatchCreateWithoutAccountInput!]
+  createMany: LotTransactionBatchCreateManyAccountInputEnvelope
 }
 
 input LotTransactionBatchCreateNestedManyWithoutPortfolioInput {
@@ -8551,8 +8628,8 @@ input LotTransactionBatchCreateNestedOneWithoutLotChangeLogInput {
   create: LotTransactionBatchCreateWithoutLotChangeLogInput
 }
 
-input LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput {
-  create: LotTransactionBatchCreateWithoutAuthConnectionInput!
+input LotTransactionBatchCreateOrConnectWithoutAccountInput {
+  create: LotTransactionBatchCreateWithoutAccountInput!
   where: LotTransactionBatchWhereUniqueInput!
 }
 
@@ -8566,7 +8643,7 @@ input LotTransactionBatchCreateOrConnectWithoutPortfolioInput {
   where: LotTransactionBatchWhereUniqueInput!
 }
 
-input LotTransactionBatchCreateWithoutAuthConnectionInput {
+input LotTransactionBatchCreateWithoutAccountInput {
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8585,7 +8662,7 @@ input LotTransactionBatchCreateWithoutAuthConnectionInput {
 }
 
 input LotTransactionBatchCreateWithoutLotChangeLogInput {
-  authConnection: AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput!
+  account: AccountCreateNestedOneWithoutLotTransactionBatchInput!
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8603,7 +8680,7 @@ input LotTransactionBatchCreateWithoutLotChangeLogInput {
 }
 
 input LotTransactionBatchCreateWithoutPortfolioInput {
-  authConnection: AuthConnectionCreateNestedOneWithoutLotTransactionBatchInput!
+  account: AccountCreateNestedOneWithoutLotTransactionBatchInput!
   createdAt: DateTime
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8627,7 +8704,7 @@ input LotTransactionBatchListRelationFilter {
 }
 
 type LotTransactionBatchMaxAggregate {
-  authConnectionId: String
+  accountId: String
   createdAt: DateTime
   id: String
   portfolioId: String
@@ -8636,7 +8713,7 @@ type LotTransactionBatchMaxAggregate {
 }
 
 type LotTransactionBatchMinAggregate {
-  authConnectionId: String
+  accountId: String
   createdAt: DateTime
   id: String
   portfolioId: String
@@ -8657,7 +8734,7 @@ input LotTransactionBatchScalarWhereInput {
   AND: [LotTransactionBatchScalarWhereInput!]
   NOT: [LotTransactionBatchScalarWhereInput!]
   OR: [LotTransactionBatchScalarWhereInput!]
-  authConnectionId: UuidFilter
+  accountId: UuidFilter
   createdAt: DateTimeFilter
   deletedLots: JsonNullableFilter
   holdingsPayload: JsonNullableFilter
@@ -8694,7 +8771,7 @@ input LotTransactionBatchUpdateManyMutationInput {
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
-input LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput {
+input LotTransactionBatchUpdateManyWithWhereWithoutAccountInput {
   data: LotTransactionBatchUpdateManyMutationInput!
   where: LotTransactionBatchScalarWhereInput!
 }
@@ -8704,18 +8781,18 @@ input LotTransactionBatchUpdateManyWithWhereWithoutPortfolioInput {
   where: LotTransactionBatchScalarWhereInput!
 }
 
-input LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput {
+input LotTransactionBatchUpdateManyWithoutAccountNestedInput {
   connect: [LotTransactionBatchWhereUniqueInput!]
-  connectOrCreate: [LotTransactionBatchCreateOrConnectWithoutAuthConnectionInput!]
-  create: [LotTransactionBatchCreateWithoutAuthConnectionInput!]
-  createMany: LotTransactionBatchCreateManyAuthConnectionInputEnvelope
+  connectOrCreate: [LotTransactionBatchCreateOrConnectWithoutAccountInput!]
+  create: [LotTransactionBatchCreateWithoutAccountInput!]
+  createMany: LotTransactionBatchCreateManyAccountInputEnvelope
   delete: [LotTransactionBatchWhereUniqueInput!]
   deleteMany: [LotTransactionBatchScalarWhereInput!]
   disconnect: [LotTransactionBatchWhereUniqueInput!]
   set: [LotTransactionBatchWhereUniqueInput!]
-  update: [LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput!]
-  updateMany: [LotTransactionBatchUpdateManyWithWhereWithoutAuthConnectionInput!]
-  upsert: [LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput!]
+  update: [LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput!]
+  updateMany: [LotTransactionBatchUpdateManyWithWhereWithoutAccountInput!]
+  upsert: [LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput!]
 }
 
 input LotTransactionBatchUpdateManyWithoutPortfolioNestedInput {
@@ -8745,8 +8822,8 @@ input LotTransactionBatchUpdateToOneWithWhereWithoutLotChangeLogInput {
   where: LotTransactionBatchWhereInput
 }
 
-input LotTransactionBatchUpdateWithWhereUniqueWithoutAuthConnectionInput {
-  data: LotTransactionBatchUpdateWithoutAuthConnectionInput!
+input LotTransactionBatchUpdateWithWhereUniqueWithoutAccountInput {
+  data: LotTransactionBatchUpdateWithoutAccountInput!
   where: LotTransactionBatchWhereUniqueInput!
 }
 
@@ -8755,7 +8832,7 @@ input LotTransactionBatchUpdateWithWhereUniqueWithoutPortfolioInput {
   where: LotTransactionBatchWhereUniqueInput!
 }
 
-input LotTransactionBatchUpdateWithoutAuthConnectionInput {
+input LotTransactionBatchUpdateWithoutAccountInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8774,7 +8851,7 @@ input LotTransactionBatchUpdateWithoutAuthConnectionInput {
 }
 
 input LotTransactionBatchUpdateWithoutLotChangeLogInput {
-  authConnection: AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput
+  account: AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8792,7 +8869,7 @@ input LotTransactionBatchUpdateWithoutLotChangeLogInput {
 }
 
 input LotTransactionBatchUpdateWithoutPortfolioInput {
-  authConnection: AuthConnectionUpdateOneRequiredWithoutLotTransactionBatchNestedInput
+  account: AccountUpdateOneRequiredWithoutLotTransactionBatchNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   deletedLots: JSON
   holdingsPayload: JSON
@@ -8809,9 +8886,9 @@ input LotTransactionBatchUpdateWithoutPortfolioInput {
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
-input LotTransactionBatchUpsertWithWhereUniqueWithoutAuthConnectionInput {
-  create: LotTransactionBatchCreateWithoutAuthConnectionInput!
-  update: LotTransactionBatchUpdateWithoutAuthConnectionInput!
+input LotTransactionBatchUpsertWithWhereUniqueWithoutAccountInput {
+  create: LotTransactionBatchCreateWithoutAccountInput!
+  update: LotTransactionBatchUpdateWithoutAccountInput!
   where: LotTransactionBatchWhereUniqueInput!
 }
 
@@ -8831,8 +8908,8 @@ input LotTransactionBatchWhereInput {
   AND: [LotTransactionBatchWhereInput!]
   NOT: [LotTransactionBatchWhereInput!]
   OR: [LotTransactionBatchWhereInput!]
-  authConnection: AuthConnectionScalarRelationFilter
-  authConnectionId: UuidFilter
+  account: AccountScalarRelationFilter
+  accountId: UuidFilter
   createdAt: DateTimeFilter
   deletedLots: JsonNullableFilter
   holdingsPayload: JsonNullableFilter
@@ -8855,8 +8932,8 @@ input LotTransactionBatchWhereUniqueInput {
   AND: [LotTransactionBatchWhereInput!]
   NOT: [LotTransactionBatchWhereInput!]
   OR: [LotTransactionBatchWhereInput!]
-  authConnection: AuthConnectionScalarRelationFilter
-  authConnectionId: UuidFilter
+  account: AccountScalarRelationFilter
+  accountId: UuidFilter
   createdAt: DateTimeFilter
   deletedLots: JsonNullableFilter
   holdingsPayload: JsonNullableFilter
@@ -9472,6 +9549,12 @@ type Mutation {
 
   """Create a portfolio for a user"""
   createPortfolio(portfolioInsertObject: PortfolioCreateInput!): Portfolio!
+
+  """Delete a connected account and all associated data"""
+  deleteAccount(accountWhereUniqueInput: AccountWhereUniqueInput!): Account!
+
+  """Delete an auth connection and all associated accounts and data"""
+  deleteAuthConnection(authConnectionId: String!): AuthConnection!
 
   """Delete multiple harvests by their IDs"""
   deleteHarvests(ids: [String!]!): Boolean!
@@ -12825,6 +12908,7 @@ type Query {
 
   """Harvest within the directed params."""
   directedHarvest(lots: [DirectedHarvestLot!]!, targetRealized: Float!, targetUnrealized: Float!): HarvestResult!
+  files(where: FileWhereInput): [File!]!
 
   """Find one user by email"""
   findOneUserByEmail(email: String!): User!

@@ -142,58 +142,6 @@ export class PlaidService {
     metaData: PlaidLinkOnSuccessMetadata
     existingAccountId?: string
   }): Promise<Account[]> {
-    const existingAccounts = await this.prismaService
-      .$extends(PrismaService.forPortfolio(portfolioId))
-      .account
-      .findMany({
-        include: {
-          authConnection: true,
-        },
-        where: {
-          OR: metaData.accounts.map(account => ({
-            plaidAccountMask: {
-              equals: account.mask,
-            },
-            name: {
-              equals: account.name,
-            },
-          })),
-        },
-      })
-
-    const existingAuthConnections = new Map(
-      existingAccounts.map(a => [a.authConnectionId, a.authConnection]),
-    )
-
-    const allExistingAccountsForAuthConnections = await this.prismaService
-      .$extends(PrismaService.forPortfolio(portfolioId))
-      .account
-      .findMany({
-        where: {
-          authConnectionId: {
-            // @ts-expect-error - this should exist
-            in: [...existingAuthConnections.keys()],
-          },
-          portfolioId: {
-            equals: portfolioId,
-          },
-        },
-      })
-
-    // Ensure the new connection has every existing account for the existing connections
-    // this means we can delete the old one and use the new without account loss
-    const noDanglingAccounts = allExistingAccountsForAuthConnections.every(
-      existingAuthAccount =>
-        existingAccounts.find(a => a.id === existingAuthAccount.id)
-        !== undefined,
-    )
-
-    if (!noDanglingAccounts) {
-      throw new Error(
-        'New Plaid link coveres existing account links but not all.',
-      )
-    }
-
     const response = await this.client.itemPublicTokenExchange({
       public_token: publicToken,
     })
@@ -222,23 +170,23 @@ export class PlaidService {
     }
 
     // Remove old Plaid items if we have existing auth connections that will be replaced
-    if (existingAuthConnections.size > 0) {
-      const oldAuthConnectionsToRemove = [...existingAuthConnections.values()]
-        .filter(authConn => authConn && authConn.secret)
-      
-      for (const oldAuthConnection of oldAuthConnectionsToRemove) {
-        if (oldAuthConnection?.secret) {
-          try {
-            await this.removeItem(oldAuthConnection.secret)
-            this.logger.log(`Removed old Plaid item for auth connection: ${oldAuthConnection.id}`)
-          }
-          catch (error) {
-            this.logger.warn(`Failed to remove old Plaid item for auth connection ${oldAuthConnection.id}:`, error)
-            // Continue processing even if removal fails
-          }
-        }
-      }
-    }
+    // if (existingAuthConnections.size > 0) {
+    //   const oldAuthConnectionsToRemove = [...existingAuthConnections.values()]
+    //     .filter(authConn => authConn && authConn.secret)
+
+    //   for (const oldAuthConnection of oldAuthConnectionsToRemove) {
+    //     if (oldAuthConnection?.secret) {
+    //       try {
+    //         await this.removeItem(oldAuthConnection.secret)
+    //         this.logger.log(`Removed old Plaid item for auth connection: ${oldAuthConnection.id}`)
+    //       }
+    //       catch (error) {
+    //         this.logger.warn(`Failed to remove old Plaid item for auth connection ${oldAuthConnection.id}:`, error)
+    //         // Continue processing even if removal fails
+    //       }
+    //     }
+    //   }
+    // }
 
     const plaidAuthConnection = await this.prismaService
       .$extends(PrismaService.forPortfolio(portfolioId))
@@ -356,53 +304,49 @@ export class PlaidService {
     ])
 
     // Now we attempt to process the unapplied transactions based on initialLots and initialPositions
-    await this.applyNewTransactions({
-      authConnection: plaidAuthConnection,
-    })
+    // await this.applyNewTransactions({
+    //   authConnection: plaidAuthConnection,
+    // })
 
     return accounts
   }
 
   async applyNewTransactions({
-    authConnection,
+    accountId,
+    portfolioId,
   }: {
-    authConnection: AuthConnection
+    accountId: string
+    portfolioId: string
   }): Promise<void> {
-    this.logger.log('Applying new transactions')
+    this.logger.log('Applying new transactions for account: ', accountId)
     const [finalPositions, initialLots, transactions] = await Promise.all([
       this.prismaService
-        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .$extends(PrismaService.forPortfolio(portfolioId))
         .position
         .findMany({
           where: {
             account: {
-              authConnectionId: {
-                equals: authConnection.id,
-              },
+              id: accountId,
             },
           },
         }),
       this.prismaService
-        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .$extends(PrismaService.forPortfolio(portfolioId))
         .lot
         .findMany({
           where: {
             account: {
-              authConnectionId: {
-                equals: authConnection.id,
-              },
+              id: accountId,
             },
           },
         }),
       this.prismaService
-        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .$extends(PrismaService.forPortfolio(portfolioId))
         .transaction
         .findMany({
           where: {
             account: {
-              authConnectionId: {
-                equals: authConnection.id,
-              },
+              id: accountId,
             },
             appliedToLots: false,
           },
@@ -428,11 +372,12 @@ export class PlaidService {
       finalPositions,
       transactions,
       initialLots,
-      authConnection,
+      accountId,
+      portfolioId,
     }
 
     await this.prismaService
-      .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+      .$extends(PrismaService.forPortfolio(portfolioId))
       .log
       .create({
         data: {
@@ -442,7 +387,7 @@ export class PlaidService {
           description: 'Attempting trx merge',
           source: AuthSource.PLAID,
           type: LogType.PLAID_TRX_MERGE,
-          portfolioId: authConnection.portfolioId,
+          portfolioId,
         },
       })
 
@@ -452,7 +397,7 @@ export class PlaidService {
     catch (error) {
       console.error(error)
       await this.prismaService
-        .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+        .$extends(PrismaService.forPortfolio(portfolioId))
         .log
         .create({
           data: {
@@ -465,7 +410,7 @@ export class PlaidService {
             description: `Trx merge failed with error: ${JSON.stringify(error)}`,
             source: AuthSource.PLAID,
             type: LogType.PLAID_TRX_MERGE_ERROR,
-            portfolioId: authConnection.portfolioId,
+            portfolioId,
           },
         })
       throw error
@@ -474,12 +419,12 @@ export class PlaidService {
     const { realizedProfitAndLoss, lotUpserts, lotDeletes, newBuys, newSells, newTransactions, lotTupleMap, intitialLotMap } = resolvedResults
 
     await this.prismaService
-      .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+      .$extends(PrismaService.forPortfolio(portfolioId))
       .$transaction(async (trx) => {
         const lotTransactionBatch = await trx.lotTransactionBatch.create({
           data: {
-            authConnectionId: authConnection.id,
-            portfolioId: authConnection.portfolioId,
+            accountId,
+            portfolioId,
             positionsAfter: finalPositions,
             lotTupleMap: JSON.parse(
               JSON.stringify(Array.from(lotTupleMap.entries())),
@@ -524,9 +469,7 @@ export class PlaidService {
           // update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
           trx.account.updateMany({
             where: {
-              authConnection: {
-                id: authConnection.id,
-              },
+              id: accountId,
             },
             data: {
               lotSeededDate: transactions[0]?.transactionDate ?? undefined,
@@ -536,7 +479,7 @@ export class PlaidService {
           trx.transaction.updateMany({
             where: {
               account: {
-                authConnectionId: authConnection.id,
+                id: accountId,
               },
             },
             data: {
@@ -549,7 +492,7 @@ export class PlaidService {
               description: 'Trx merge results',
               source: AuthSource.PLAID,
               type: LogType.PLAID_TRX_MERGE_SUCCESS,
-              portfolioId: authConnection.portfolioId,
+              portfolioId,
             },
           }),
           trx.lotChangeLog.createMany({
@@ -570,7 +513,7 @@ export class PlaidService {
                   ?? new Decimal(0)
                 ).minus(upsert.remainingQty as Decimal),
                 accountId: upsert.account.connect?.id ?? '',
-                portfolioId: authConnection.portfolioId,
+                portfolioId,
                 lotBefore: intitialLotMap.get(upsert.id ?? ''),
                 lotAfter: JSON.parse(JSON.stringify(upsert)),
                 operationType,
@@ -592,7 +535,7 @@ export class PlaidService {
                   ?? new Decimal(0)
                 ).minus(upsert.remainingQty as Decimal),
                 accountId: upsert.account.connect?.id ?? '',
-                portfolioId: authConnection.portfolioId,
+                portfolioId,
                 lotBefore: intitialLotMap.get(upsert.id ?? ''),
                 lotAfter: JSON.parse(JSON.stringify(upsert)),
                 operationType,
@@ -607,12 +550,12 @@ export class PlaidService {
     finalPositions,
     transactions,
     initialLots,
-    authConnection,
+    portfolioId,
   }: {
     finalPositions: Position[]
     transactions: Transaction[]
     initialLots: Lot[]
-    authConnection: AuthConnection
+    portfolioId: string
   }): ResolvedLotChangeResults {
     const intitialLotMap = new Map<string, Lot>()
     for (const lot of initialLots) {
@@ -644,7 +587,7 @@ export class PlaidService {
           targetValue,
           symbol,
         }
-        return findLotChangeSets(changeAlgoParams, authConnection.portfolioId).lotChanges
+        return findLotChangeSets(changeAlgoParams, portfolioId).lotChanges
       },
     ))).flat()
 
@@ -1368,12 +1311,12 @@ export class PlaidService {
         client_id: this.configService.get('PLAID_CLIENT_ID'),
         secret: this.configService.get('PLAID_SECRET_KEY'),
       })
-      
+
       this.logger.log(`Successfully removed Plaid item with access token: ${accessToken.substring(0, 10)}...`)
     }
     catch (error) {
       this.logger.error(`Failed to remove Plaid item:`, error)
-      throw error
+      // dont throw as this is not critical
     }
   }
 

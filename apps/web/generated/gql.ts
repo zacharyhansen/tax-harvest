@@ -9457,6 +9457,10 @@ export type Mutation = {
   createHarvest: Harvest;
   /** Create a portfolio for a user */
   createPortfolio: Portfolio;
+  /** Delete a connected account and all associated data */
+  deleteAccount: Account;
+  /** Delete an auth connection and all associated accounts and data */
+  deleteAuthConnection: AuthConnection;
   /** Delete multiple harvests by their IDs */
   deleteHarvests: Scalars['Boolean']['output'];
   /** Finalize harvest for review */
@@ -9528,6 +9532,16 @@ export type MutationCreateHarvestArgs = {
 
 export type MutationCreatePortfolioArgs = {
   portfolioInsertObject: PortfolioCreateInput;
+};
+
+
+export type MutationDeleteAccountArgs = {
+  accountWhereUniqueInput: AccountWhereUniqueInput;
+};
+
+
+export type MutationDeleteAuthConnectionArgs = {
+  authConnectionId: Scalars['String']['input'];
 };
 
 
@@ -12934,6 +12948,7 @@ export type Query = {
   chartThreeMonth: Array<PolygonStockData>;
   /** Harvest within the directed params. */
   directedHarvest: HarvestResult;
+  files: Array<File>;
   /** Find one user by email */
   findOneUserByEmail: User;
   /** New harvest endpoint that returns all orders and summary */
@@ -13012,6 +13027,11 @@ export type QueryDirectedHarvestArgs = {
   lots: Array<DirectedHarvestLot>;
   targetRealized: Scalars['Float']['input'];
   targetUnrealized: Scalars['Float']['input'];
+};
+
+
+export type QueryFilesArgs = {
+  where?: InputMaybe<FileWhereInput>;
 };
 
 
@@ -15414,14 +15434,14 @@ export enum VectorWindow {
   Year_2 = 'YEAR_2'
 }
 
-export type AccountItemFragment = { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, description?: string | null, institution?: AccountInstitution | null, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, marketValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string }, _realizedProfitAndLoss: { __typename?: 'RealizedPAndL', id: string, longTerm: string, shortTerm: string, dividend: string, year: number, deferredLoss: string } };
+export type AccountItemFragment = { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, description?: string | null, institution?: AccountInstitution | null, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, marketValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnection?: { __typename?: 'AuthConnection', id: string, source: AuthSource, plaidInstitutionId?: string | null } | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string }, _realizedProfitAndLoss: { __typename?: 'RealizedPAndL', id: string, longTerm: string, shortTerm: string, dividend: string, year: number, deferredLoss: string } };
 
 export type AccountQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
 
 
-export type AccountQuery = { __typename?: 'Query', account: { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, description?: string | null, institution?: AccountInstitution | null, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, marketValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string }, _realizedProfitAndLoss: { __typename?: 'RealizedPAndL', id: string, longTerm: string, shortTerm: string, dividend: string, year: number, deferredLoss: string } } };
+export type AccountQuery = { __typename?: 'Query', account: { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, description?: string | null, institution?: AccountInstitution | null, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, marketValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnection?: { __typename?: 'AuthConnection', id: string, source: AuthSource, plaidInstitutionId?: string | null } | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string }, _realizedProfitAndLoss: { __typename?: 'RealizedPAndL', id: string, longTerm: string, shortTerm: string, dividend: string, year: number, deferredLoss: string } } };
 
 export type UpdateAccountMutationVariables = Exact<{
   accountUpdateInput: AccountUpdateInput;
@@ -15438,6 +15458,38 @@ export type UpdateAccountRealizedPAndLMutationVariables = Exact<{
 
 
 export type UpdateAccountRealizedPAndLMutation = { __typename?: 'Mutation', updateRealizedPAndL: { __typename?: 'RealizedPAndL', id: string, shortTerm: string, longTerm: string, deferredLoss: string, dividend: string } };
+
+export type LotItemFragment = { __typename?: 'Lot', id: string, acquiredDate: any, costTotal?: string | null, price: string, remainingQty: string, assetSymbol: string, totalCostForGainPct?: string | null, asset: { __typename?: 'Asset', symbol: string, lastPrice: string }, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } };
+
+export type AccountLotsQueryVariables = Exact<{
+  accountId: Scalars['String']['input'];
+}>;
+
+
+export type AccountLotsQuery = { __typename?: 'Query', lots: Array<{ __typename?: 'Lot', id: string, acquiredDate: any, costTotal?: string | null, price: string, remainingQty: string, assetSymbol: string, totalCostForGainPct?: string | null, asset: { __typename?: 'Asset', symbol: string, lastPrice: string }, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } }> };
+
+export type DeleteAccountMutationVariables = Exact<{
+  accountWhereUniqueInput: AccountWhereUniqueInput;
+}>;
+
+
+export type DeleteAccountMutation = { __typename?: 'Mutation', deleteAccount: { __typename?: 'Account', id: string, name?: string | null } };
+
+export type AccountFilesQueryVariables = Exact<{
+  accountId: Scalars['String']['input'];
+}>;
+
+
+export type AccountFilesQuery = { __typename?: 'Query', files: Array<{ __typename?: 'File', id: string, accountId: string, displayName: string, gcpFilename: string, type: string, createdAt: any, updatedAt: any }> };
+
+export type AccountFileItemFragment = { __typename?: 'File', id: string, accountId: string, displayName: string, gcpFilename: string, type: string, createdAt: any, updatedAt: any };
+
+export type AuthConnectionInfoQueryVariables = Exact<{
+  authConnectionId: Scalars['String']['input'];
+}>;
+
+
+export type AuthConnectionInfoQuery = { __typename?: 'Query', authConnection: { __typename?: 'AuthConnectionExt', id: string, source: AuthSource, plaidInstitutionId?: string | null, accounts?: Array<{ __typename?: 'Account', id: string, name?: string | null }> | null } };
 
 export type AccountTableItemFragment = { __typename?: 'Account', id: string, name?: string | null, type: string, portfolioId: string, provider: AccountProvider, externalId?: string | null, key?: string | null, institution?: AccountInstitution | null, mode?: AccountMode | null, status: AccountStatus, optionLevel?: OptionLevel | null, cashForOpenOrders?: string | null, balanceMoneyMarket?: string | null, cashAvailableForInvestment?: string | null, accountValueTotal?: string | null, cashNet?: string | null, cashBalance?: string | null, balanceAccount?: string | null, createdAt: any, updatedAt: any, authConnectionId?: string | null, createdBy: { __typename?: 'User', id: string, name?: string | null, email?: string | null, photo?: string | null, stripeCustomerId: string } };
 
@@ -15824,8 +15876,6 @@ export type FinalizeHarvestMutationVariables = Exact<{
 
 export type FinalizeHarvestMutation = { __typename?: 'Mutation', finalizeHarvest: { __typename?: 'Harvest', id: string, date: any, step: HarvestStep, amount: string, type: HarvestType, label: string, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null }> | null } };
 
-export type LotItemFragment = { __typename?: 'Lot', id: string, acquiredDate: any, costTotal?: string | null, price: string, remainingQty: string, assetSymbol: string, totalCostForGainPct?: string | null, asset: { __typename?: 'Asset', symbol: string, lastPrice: string }, account: { __typename?: 'Account', id: string, externalId?: string | null, name?: string | null, type: string } };
-
 export type PortfolioLotsQueryVariables = Exact<{
   where?: InputMaybe<LotWhereInput>;
   includeTaxAdvantaged?: InputMaybe<Scalars['Boolean']['input']>;
@@ -15914,6 +15964,11 @@ export const AccountItemFragmentDoc = gql`
   balanceAccount
   createdAt
   updatedAt
+  authConnection {
+    id
+    source
+    plaidInstitutionId
+  }
   createdBy {
     id
     ...UserItem
@@ -15928,6 +15983,38 @@ export const AccountItemFragmentDoc = gql`
   }
 }
     ${UserItemFragmentDoc}`;
+export const LotItemFragmentDoc = gql`
+    fragment LotItem on Lot {
+  id
+  acquiredDate
+  costTotal
+  price
+  remainingQty
+  assetSymbol
+  totalCostForGainPct
+  asset {
+    symbol
+    lastPrice
+  }
+  account {
+    id
+    externalId
+    name
+    type
+  }
+}
+    `;
+export const AccountFileItemFragmentDoc = gql`
+    fragment AccountFileItem on File {
+  id
+  accountId
+  displayName
+  gcpFilename
+  type
+  createdAt
+  updatedAt
+}
+    `;
 export const AccountTableItemFragmentDoc = gql`
     fragment AccountTableItem on Account {
   id
@@ -16401,27 +16488,6 @@ export const HarvestItemFragmentDoc = gql`
   }
 }
     ${HarvestTransactionRecordFragmentDoc}`;
-export const LotItemFragmentDoc = gql`
-    fragment LotItem on Lot {
-  id
-  acquiredDate
-  costTotal
-  price
-  remainingQty
-  assetSymbol
-  totalCostForGainPct
-  asset {
-    symbol
-    lastPrice
-  }
-  account {
-    id
-    externalId
-    name
-    type
-  }
-}
-    `;
 export const PortfolioItemFragmentDoc = gql`
     fragment PortfolioItem on Portfolio {
   id
@@ -16607,6 +16673,168 @@ export function useUpdateAccountRealizedPAndLMutation(baseOptions?: Apollo.Mutat
 export type UpdateAccountRealizedPAndLMutationHookResult = ReturnType<typeof useUpdateAccountRealizedPAndLMutation>;
 export type UpdateAccountRealizedPAndLMutationResult = Apollo.MutationResult<UpdateAccountRealizedPAndLMutation>;
 export type UpdateAccountRealizedPAndLMutationOptions = Apollo.BaseMutationOptions<UpdateAccountRealizedPAndLMutation, UpdateAccountRealizedPAndLMutationVariables>;
+export const AccountLotsDocument = gql`
+    query AccountLots($accountId: String!) {
+  lots(where: {accountId: {equals: $accountId}}) {
+    id
+    ...LotItem
+  }
+}
+    ${LotItemFragmentDoc}`;
+
+/**
+ * __useAccountLotsQuery__
+ *
+ * To run a query within a React component, call `useAccountLotsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountLotsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccountLotsQuery({
+ *   variables: {
+ *      accountId: // value for 'accountId'
+ *   },
+ * });
+ */
+export function useAccountLotsQuery(baseOptions: Apollo.QueryHookOptions<AccountLotsQuery, AccountLotsQueryVariables> & ({ variables: AccountLotsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountLotsQuery, AccountLotsQueryVariables>(AccountLotsDocument, options);
+      }
+export function useAccountLotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountLotsQuery, AccountLotsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountLotsQuery, AccountLotsQueryVariables>(AccountLotsDocument, options);
+        }
+export function useAccountLotsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccountLotsQuery, AccountLotsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccountLotsQuery, AccountLotsQueryVariables>(AccountLotsDocument, options);
+        }
+export type AccountLotsQueryHookResult = ReturnType<typeof useAccountLotsQuery>;
+export type AccountLotsLazyQueryHookResult = ReturnType<typeof useAccountLotsLazyQuery>;
+export type AccountLotsSuspenseQueryHookResult = ReturnType<typeof useAccountLotsSuspenseQuery>;
+export type AccountLotsQueryResult = Apollo.QueryResult<AccountLotsQuery, AccountLotsQueryVariables>;
+export const DeleteAccountDocument = gql`
+    mutation DeleteAccount($accountWhereUniqueInput: AccountWhereUniqueInput!) {
+  deleteAccount(accountWhereUniqueInput: $accountWhereUniqueInput) {
+    id
+    name
+  }
+}
+    `;
+export type DeleteAccountMutationFn = Apollo.MutationFunction<DeleteAccountMutation, DeleteAccountMutationVariables>;
+
+/**
+ * __useDeleteAccountMutation__
+ *
+ * To run a mutation, you first call `useDeleteAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAccountMutation, { data, loading, error }] = useDeleteAccountMutation({
+ *   variables: {
+ *      accountWhereUniqueInput: // value for 'accountWhereUniqueInput'
+ *   },
+ * });
+ */
+export function useDeleteAccountMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccountMutation, DeleteAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(DeleteAccountDocument, options);
+      }
+export type DeleteAccountMutationHookResult = ReturnType<typeof useDeleteAccountMutation>;
+export type DeleteAccountMutationResult = Apollo.MutationResult<DeleteAccountMutation>;
+export type DeleteAccountMutationOptions = Apollo.BaseMutationOptions<DeleteAccountMutation, DeleteAccountMutationVariables>;
+export const AccountFilesDocument = gql`
+    query AccountFiles($accountId: String!) {
+  files(where: {accountId: {equals: $accountId}}) {
+    id
+    ...AccountFileItem
+  }
+}
+    ${AccountFileItemFragmentDoc}`;
+
+/**
+ * __useAccountFilesQuery__
+ *
+ * To run a query within a React component, call `useAccountFilesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountFilesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccountFilesQuery({
+ *   variables: {
+ *      accountId: // value for 'accountId'
+ *   },
+ * });
+ */
+export function useAccountFilesQuery(baseOptions: Apollo.QueryHookOptions<AccountFilesQuery, AccountFilesQueryVariables> & ({ variables: AccountFilesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountFilesQuery, AccountFilesQueryVariables>(AccountFilesDocument, options);
+      }
+export function useAccountFilesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountFilesQuery, AccountFilesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountFilesQuery, AccountFilesQueryVariables>(AccountFilesDocument, options);
+        }
+export function useAccountFilesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccountFilesQuery, AccountFilesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccountFilesQuery, AccountFilesQueryVariables>(AccountFilesDocument, options);
+        }
+export type AccountFilesQueryHookResult = ReturnType<typeof useAccountFilesQuery>;
+export type AccountFilesLazyQueryHookResult = ReturnType<typeof useAccountFilesLazyQuery>;
+export type AccountFilesSuspenseQueryHookResult = ReturnType<typeof useAccountFilesSuspenseQuery>;
+export type AccountFilesQueryResult = Apollo.QueryResult<AccountFilesQuery, AccountFilesQueryVariables>;
+export const AuthConnectionInfoDocument = gql`
+    query AuthConnectionInfo($authConnectionId: String!) {
+  authConnection(id: $authConnectionId) {
+    id
+    source
+    plaidInstitutionId
+    accounts {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useAuthConnectionInfoQuery__
+ *
+ * To run a query within a React component, call `useAuthConnectionInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAuthConnectionInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAuthConnectionInfoQuery({
+ *   variables: {
+ *      authConnectionId: // value for 'authConnectionId'
+ *   },
+ * });
+ */
+export function useAuthConnectionInfoQuery(baseOptions: Apollo.QueryHookOptions<AuthConnectionInfoQuery, AuthConnectionInfoQueryVariables> & ({ variables: AuthConnectionInfoQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AuthConnectionInfoQuery, AuthConnectionInfoQueryVariables>(AuthConnectionInfoDocument, options);
+      }
+export function useAuthConnectionInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AuthConnectionInfoQuery, AuthConnectionInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AuthConnectionInfoQuery, AuthConnectionInfoQueryVariables>(AuthConnectionInfoDocument, options);
+        }
+export function useAuthConnectionInfoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AuthConnectionInfoQuery, AuthConnectionInfoQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AuthConnectionInfoQuery, AuthConnectionInfoQueryVariables>(AuthConnectionInfoDocument, options);
+        }
+export type AuthConnectionInfoQueryHookResult = ReturnType<typeof useAuthConnectionInfoQuery>;
+export type AuthConnectionInfoLazyQueryHookResult = ReturnType<typeof useAuthConnectionInfoLazyQuery>;
+export type AuthConnectionInfoSuspenseQueryHookResult = ReturnType<typeof useAuthConnectionInfoSuspenseQuery>;
+export type AuthConnectionInfoQueryResult = Apollo.QueryResult<AuthConnectionInfoQuery, AuthConnectionInfoQueryVariables>;
 export const AccountsDocument = gql`
     query Accounts($where: AccountWhereInput) {
   accounts(where: $where) {

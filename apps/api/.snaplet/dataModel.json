@@ -732,6 +732,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "LotTransactionBatch",
+          "type": "LotTransactionBatch",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotTransactionBatchToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Position",
           "type": "Position",
           "isRequired": false,
@@ -1779,20 +1793,6 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "AccountToAuthConnection",
-          "relationFromFields": [],
-          "relationToFields": [],
-          "isList": true,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "LotTransactionBatch",
-          "type": "LotTransactionBatch",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "LotTransactionBatchToAuthConnection",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4029,20 +4029,6 @@
           "maxLength": null
         },
         {
-          "id": "public.LotTransactionBatch.authConnectionId",
-          "name": "authConnectionId",
-          "columnName": "authConnectionId",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.LotTransactionBatch.portfolioId",
           "name": "portfolioId",
           "columnName": "portfolioId",
@@ -4197,13 +4183,27 @@
           "maxLength": null
         },
         {
-          "name": "AuthConnection",
-          "type": "AuthConnection",
+          "id": "public.LotTransactionBatch.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
           "isRequired": true,
           "kind": "object",
-          "relationName": "LotTransactionBatchToAuthConnection",
+          "relationName": "LotTransactionBatchToAccount",
           "relationFromFields": [
-            "authConnectionId"
+            "accountId"
           ],
           "relationToFields": [
             "id"

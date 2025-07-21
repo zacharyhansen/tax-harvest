@@ -8,12 +8,14 @@ import {
   type PlaidAuthConnectionFragment,
 } from '~/generated/gql';
 import PlaidLink from '~/modules/plaid/PlaidLink';
+import DeleteAuthConnectionDialog from '~/modules/plaid/DeleteAuthConnectionDialog';
 import { LoadingIcon } from '~/modules/utility-components';
 import { Format } from '~/modules/utils';
 
 interface InstitutionCardProps {
   authConnection: PlaidAuthConnectionFragment;
   showAddButton?: boolean;
+  showDeleteButton?: boolean;
   onAccountClick?: (accountId: string) => void;
   redirectTo?: string;
 }
@@ -22,18 +24,21 @@ interface InstitutionCardProps {
  * Component for displaying a connected financial institution with its accounts
  * @param authConnection - The Plaid auth connection data
  * @param showAddButton - Whether to show the "Add Accounts" button (default: true)
+ * @param showDeleteButton - Whether to show the "Disconnect" button (default: false)
  * @param onAccountClick - Optional callback when an account is clicked
  * @param redirectTo - Where to redirect after adding accounts (default: '/main/home')
  *
  * @example
  * <InstitutionCard
  *   authConnection={connection}
+ *   showDeleteButton={true}
  *   onAccountClick={(id) => router.push(`/accounts/${id}`)}
  * />
  */
 export function InstitutionCard({
   authConnection,
   showAddButton = true,
+  showDeleteButton = false,
   onAccountClick,
   redirectTo = '/main/home',
 }: InstitutionCardProps) {
@@ -112,23 +117,31 @@ export function InstitutionCard({
             </div>
           </div>
 
-          {/* Add Additional Accounts Button */}
-          {showAddButton && (
-            <div>
-              {updateTokenData?.linkToken ? (
-                <PlaidLink
-                  token={updateTokenData.linkToken}
-                  size="sm"
-                  iconLeft={<Plus className="h-4 w-4" />}
-                  redirectTo={redirectTo}
-                >
-                  Add {institution?.name} Accounts
-                </PlaidLink>
-              ) : (
-                <LoadingIcon className="mx-auto my-4" />
-              )}
-            </div>
-          )}
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2">
+            {showAddButton && (
+              <div>
+                {updateTokenData?.linkToken ? (
+                  <PlaidLink
+                    token={updateTokenData.linkToken}
+                    size="sm"
+                    iconLeft={<Plus className="h-4 w-4" />}
+                    redirectTo={redirectTo}
+                  >
+                    Add Accounts
+                  </PlaidLink>
+                ) : (
+                  <LoadingIcon className="mx-auto my-4" />
+                )}
+              </div>
+            )}
+            {showDeleteButton && (
+              <DeleteAuthConnectionDialog
+                authConnection={authConnection}
+                institutionName={institution?.name || 'Unknown Institution'}
+              />
+            )}
+          </div>
         </div>
       </div>
 

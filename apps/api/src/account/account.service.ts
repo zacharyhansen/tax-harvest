@@ -85,4 +85,73 @@ export class AccountService {
       },
     })
   }
+
+  /**
+   * Delete an account and all associated data (only for UNCONNECTED accounts)
+   * @param accountWhereUniqueInput - The unique identifier for the account
+   * @param portfolioId - The portfolio ID for security
+   * @returns The deleted account
+   */
+  async deleteAccount(
+    accountWhereUniqueInput: Prisma.AccountWhereUniqueInput,
+    portfolioId: string,
+  ) {
+    this.logger.log(`Deleting account ${accountWhereUniqueInput.id} from portfolio ${portfolioId}`)
+    
+    // First verify the account exists and is UNCONNECTED
+    const account = await this.prismaService
+      .$extends(PrismaService.forPortfolio(portfolioId))
+      .account
+      .findUniqueOrThrow({
+        where: {
+          ...accountWhereUniqueInput,
+          portfolioId,
+        },
+      })
+
+    if (account.provider !== 'UNCONNECTED') {
+      throw new Error('Can only delete UNCONNECTED accounts. For connected accounts, delete the auth connection instead.')
+    }
+    
+    return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
+      // First delete all related data
+      await Promise.all([
+        // Delete positions
+        trx.position.deleteMany({
+          where: {
+            account: {
+              id: accountWhereUniqueInput.id,
+              portfolioId,
+            },
+          },
+        }),
+        // Delete lots
+        trx.lot.deleteMany({
+          where: {
+            account: {
+              id: accountWhereUniqueInput.id,
+              portfolioId,
+            },
+          },
+        }),
+        // Delete transactions
+        trx.transaction.deleteMany({
+          where: {
+            account: {
+              id: accountWhereUniqueInput.id,
+              portfolioId,
+            },
+          },
+        }),
+      ])
+
+      // Finally delete the account itself
+      return trx.account.delete({
+        where: {
+          ...accountWhereUniqueInput,
+          portfolioId,
+        },
+      })
+    })
+  }
 }

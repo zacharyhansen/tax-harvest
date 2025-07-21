@@ -160,6 +160,23 @@ export class AccountResolver {
     )
   }
 
+  @Mutation(() => Account, {
+    description: 'Delete a connected account and all associated data',
+    name: 'deleteAccount',
+  })
+  async deleteAccount(
+    @Args('accountWhereUniqueInput', {
+      type: () => AccountWhereUniqueInput,
+    })
+    accountWhereUniqueInput: Prisma.AccountWhereUniqueInput,
+    @ClerkContext() { metadata }: ClerkClaims,
+  ): Promise<Account> {
+    return this.accountService.deleteAccount(
+      accountWhereUniqueInput,
+      metadata.portfolioId,
+    )
+  }
+
   @ResolveField(() => RealizedPAndL, { name: '_realizedProfitAndLoss' })
   async _realizedProfitAndLoss(
     @Parent() account: Account,

@@ -1,45 +1,66 @@
-'use client'
+'use client';
 
-import { Building2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { Building2, Link, UserX, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
-import { 
-  usePlaidAuthConnectionsQuery, 
-  usePlaidLinkTokenQuery 
-} from '~/generated/gql'
-import { TypedRoutes } from '~/lib/routes'
-import { NoAccounts } from '~/modules/account'
-import { PageWrapper } from '~/modules/layout'
-import { InstitutionCard } from '~/modules/plaid'
-import PlaidLink from '~/modules/plaid/PlaidLink'
-import { ErrorPage, LoadingPage, LoadingIcon } from '~/modules/utility-components'
+import {
+  usePlaidAuthConnectionsQuery,
+  usePlaidLinkTokenQuery,
+  useAccountsQuery,
+  AccountProvider,
+} from '~/generated/gql';
+import { TypedRoutes } from '~/lib/routes';
+import { NoAccounts } from '~/modules/account';
+import { PageWrapper } from '~/modules/layout';
+import { InstitutionCard } from '~/modules/plaid';
+import PlaidLink from '~/modules/plaid/PlaidLink';
+import {
+  ErrorPage,
+  LoadingPage,
+  LoadingIcon,
+} from '~/modules/utility-components';
+import DeleteAccountDialog from './[id]/DeleteAccountDialog';
+import { Button } from '@repo/ui/components/button';
 
 export default function AccountPage() {
-  const router = useRouter()
-  const { data: linkTokenData } = usePlaidLinkTokenQuery()
-  const { data: authConnectionsData, loading: authConnectionsLoading, error } = 
-    usePlaidAuthConnectionsQuery()
+  const router = useRouter();
+  const { data: linkTokenData } = usePlaidLinkTokenQuery();
+  const {
+    data: authConnectionsData,
+    loading: authConnectionsLoading,
+    error,
+  } = usePlaidAuthConnectionsQuery();
+  const { data: accountsData, loading: accountsLoading } = useAccountsQuery({
+    variables: {
+      where: {
+        provider: { equals: AccountProvider.Unconnected },
+      },
+    },
+  });
 
   const handleAccountClick = (accountId: string) => {
-    router.push(TypedRoutes.account({ id: accountId }))
-  }
+    router.push(TypedRoutes.account({ id: accountId }));
+  };
 
-  if (authConnectionsLoading) {
-    return <LoadingPage />
+  if (authConnectionsLoading || accountsLoading) {
+    return <LoadingPage />;
   }
 
   if (error) {
     return (
       <ErrorPage message="Could not load accounts at this time. If this issue persists please contact support" />
-    )
+    );
   }
 
   const hasConnections =
     authConnectionsData?.plaidAuthConnections &&
-    authConnectionsData.plaidAuthConnections.length > 0
+    authConnectionsData.plaidAuthConnections.length > 0;
 
-  if (!hasConnections) {
-    return <NoAccounts />
+  const hasUnconnectedAccounts =
+    accountsData?.accounts && accountsData.accounts.length > 0;
+
+  if (!hasConnections && !hasUnconnectedAccounts) {
+    return <NoAccounts />;
   }
 
   return (
@@ -54,24 +75,65 @@ export default function AccountPage() {
           </div>
 
           <div className="p-8">
-            <div className="space-y-6">
-              <div>
-                <h2 className="mb-4 text-lg font-semibold">
-                  Connected Institutions
-                </h2>
-                <div className="space-y-4">
-                  {authConnectionsData.plaidAuthConnections.map(
-                    authConnection => (
-                      <InstitutionCard
-                        key={authConnection.id}
-                        authConnection={authConnection}
-                        onAccountClick={handleAccountClick}
-                        redirectTo="/main/accounts"
-                      />
-                    )
-                  )}
+            <div className="space-y-12">
+              {hasConnections && (
+                <div>
+                  <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                    <Link className="h-5 w-5" />
+                    Connected Institutions
+                  </h2>
+                  <div className="space-y-4">
+                    {authConnectionsData.plaidAuthConnections.map(
+                      authConnection => (
+                        <InstitutionCard
+                          key={authConnection.id}
+                          authConnection={authConnection}
+                          showDeleteButton={true}
+                          onAccountClick={handleAccountClick}
+                          redirectTo="/main/accounts"
+                        />
+                      )
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {hasUnconnectedAccounts && (
+                <div>
+                  <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                    Unconnected Accounts
+                  </h2>
+                  <div className="space-y-4">
+                    {accountsData.accounts.map(account => (
+                      <div 
+                        key={account.id} 
+                        className="group rounded-lg border transition-all duration-200 hover:bg-muted/20 hover:shadow-sm cursor-pointer border-l-4 border-l-transparent hover:border-l-primary/50"
+                        onClick={() => handleAccountClick(account.id)}
+                      >
+                        <div className="flex items-center justify-between p-4">
+                          <div className="flex-1">
+                            <h3 className="font-medium group-hover:text-primary transition-colors">{account.name}</h3>
+                            <p className="text-muted-foreground text-sm">
+                              {account.type} •{' '}
+                              {account.institution || 'Manual Entry'}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                            <DeleteAccountDialog
+                              accountId={account.id}
+                              accountName={
+                                account.name ?? account.externalId ?? 'Unnamed'
+                              }
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Link New Institution Button */}
               <div className="mt-8 border-t pt-8">
@@ -102,5 +164,5 @@ export default function AccountPage() {
         </div>
       </div>
     </PageWrapper>
-  )
+  );
 }

@@ -302,7 +302,7 @@ export interface LotCurrent {
 }
 
 export interface LotTransactionBatch {
-  authConnectionId: string;
+  accountId: string;
   createdAt: Generated<Timestamp>;
   deletedLots: Json | null;
   holdingsPayload: Json | null;

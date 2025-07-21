@@ -90,10 +90,13 @@ export default function UploadPage() {
         onError: () => {
           toast.error('Failed to create account');
         },
-        onCompleted: (data) => {
+        onCompleted: data => {
           // Store the account ID in localStorage for later use in Plaid linking
           if (data?.initAccountFileUpload?.accountId) {
-            localStorage.setItem('onboardingAccountId', data.initAccountFileUpload.accountId);
+            localStorage.setItem(
+              'onboardingAccountId',
+              data.initAccountFileUpload.accountId
+            );
           }
           router.push('/onboarding/analyze');
         },
@@ -136,7 +139,12 @@ export default function UploadPage() {
                 maxSize={5 * 1024 * 1024}
                 className="w-full"
                 value={files}
-                onValueChange={setFiles}
+                onValueChange={files => {
+                  setFiles(files);
+                  if (files?.length > 0 && files[0]?.name) {
+                    form.setValue('accountName', files[0].name);
+                  }
+                }}
                 onFileReject={onFileReject}
                 multiple
                 accept="text/csv"

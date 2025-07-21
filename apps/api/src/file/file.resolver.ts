@@ -12,7 +12,7 @@ import {
 } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
-import { File, FileCreateManyInput, FileType } from '../generated/graphql'
+import { File, FileCreateManyInput, FileType, FileWhereInput } from '../generated/graphql'
 import { GCPUploadFile } from '../google-storage/google-storage.dto'
 import { GoogleStorageService } from '../google-storage/google-storage.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
@@ -81,6 +81,46 @@ export class FileResolver {
     private readonly googleStorageService: GoogleStorageService,
     private readonly fileService: FileService,
   ) { }
+
+  /**
+   * Query to fetch files with optional filtering
+   * @param clerkContext - Clerk authentication context
+   * @param info - GraphQL resolve info for field selection
+   * @param where - Optional where clause for filtering files
+   * @returns Promise<File[]> - Array of files matching the criteria
+   * @example
+   * query AccountFiles($accountId: String!) {
+   *   files(where: { accountId: { equals: $accountId } }) {
+   *     id
+   *     displayName
+   *     type
+   *   }
+   * }
+   */
+  @Query(() => [File], {
+    name: 'files',
+  })
+  async files(
+    @ClerkContext()
+    clerkContext: ClerkClaims,
+    @Info()
+    info: GraphQLResolveInfo,
+    @Args('where', { type: () => FileWhereInput, nullable: true })
+    where?: FileWhereInput,
+  ): Promise<File[]> {
+    const { select } = new PrismaSelect<Prisma.FileSelect>(info).value
+
+    return this.fileService.findMany({
+      where: {
+        ...where,
+        account: {
+          portfolioId: clerkContext.metadata.portfolioId,
+        },
+      },
+      select,
+      portfolioId: clerkContext.metadata.portfolioId,
+    })
+  }
 
   @Mutation(() => [File], {
     name: 'createFiles',
