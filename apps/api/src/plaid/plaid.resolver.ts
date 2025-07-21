@@ -6,7 +6,7 @@ import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
 import { Account } from '../generated/graphql'
 import { PrismaService } from '../prisma/prisma.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
-import { PlaidLinkOnSuccessMetadata } from './plaid.dto'
+import { PlaidInstitutionInfo, PlaidLinkOnSuccessMetadata } from './plaid.dto'
 import { PlaidService } from './plaid.service'
 
 @Resolver()
@@ -14,7 +14,7 @@ export class PlaidResolver {
   constructor(
     private readonly plaidService: PlaidService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   @Query(() => String, {
     description: 'Get plaid link token for user',
@@ -25,10 +25,13 @@ export class PlaidResolver {
     info: GraphQLResolveInfo,
     @ClerkContext()
     currentUser: ClerkClaims,
+    @Args('authConnectionId', { type: () => String, nullable: true })
+    authConnectionId?: string,
   ) {
     const plaidResponse = await this.plaidService.linkToken({
       userId: currentUser.sub,
       portfolioId: currentUser.metadata.portfolioId,
+      authConnectionId,
     })
 
     return plaidResponse.data.link_token
@@ -76,5 +79,29 @@ export class PlaidResolver {
         id: { in: accounts.map(a => a.id) },
       },
     })
+  }
+
+  /**
+   * Get institution information from Plaid
+   * @param institutionId - The Plaid institution ID
+   * @returns Institution information including name, logo, colors, etc.
+   * @example
+   * query {
+   *   plaidInstitution(institutionId: "ins_3") {
+   *     name
+   *     logo
+   *     primary_color
+   *   }
+   * }
+   */
+  @Query(() => PlaidInstitutionInfo, {
+    description: 'Get institution information from Plaid',
+    name: 'plaidInstitution',
+  })
+  async plaidInstitution(
+    @Args('institutionId', { type: () => String })
+    institutionId: string,
+  ) {
+    return this.plaidService.getInstitution(institutionId)
   }
 }

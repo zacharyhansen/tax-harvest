@@ -454,9 +454,10 @@ export class EtradeService implements ConnectionProvider {
               type: account.accountType,
             },
             where: {
-              provider_externalId: {
-                externalId: account.accountId,
-                provider: 'ETRADE',
+              authConnectionId_plaidAccountMask_type: {
+                authConnectionId: authConnection.id,
+                plaidAccountMask: account.accountId,
+                type: account.accountType,
               },
             },
           })

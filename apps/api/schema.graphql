@@ -9872,6 +9872,16 @@ input PlaidInstitution {
   name: String!
 }
 
+type PlaidInstitutionInfo {
+  country_codes: [String!]!
+  institution_id: String!
+  logo: String
+  name: String!
+  primary_color: String
+  products: [String!]!
+  url: String
+}
+
 input PlaidLinkOnSuccessMetadata {
   accounts: [PlaidAccount!]!
   institution: PlaidInstitution
@@ -12844,7 +12854,7 @@ type Query {
   harvests(where: HarvestWhereInput): [Harvest!]!
 
   """Get plaid link token for user"""
-  linkToken: String!
+  linkToken(authConnectionId: String): String!
   log(logId: Int!): Log
   logs(orderBy: LogOrderByRelationAggregateInput, pagination: PaginationProps): [Log!]!
   logsCount: Int!
@@ -12854,6 +12864,10 @@ type Query {
   lotTransactionBatch(lotTransactionBatchId: String!): LotTransactionBatch
   lotTransactionBatches(orderBy: LotTransactionBatchOrderByRelationAggregateInput): [LotTransactionBatch!]!
   lots(includeTaxAdvantaged: Boolean, where: LotWhereInput): [Lot!]!
+  plaidAuthConnections: [AuthConnection!]!
+
+  """Get institution information from Plaid"""
+  plaidInstitution(institutionId: String!): PlaidInstitutionInfo!
 
   """Get authenticated portfolio"""
   portfolioAuthed: Portfolio!

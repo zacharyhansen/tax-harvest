@@ -32,7 +32,7 @@ export class AuthConnectionResolver {
   constructor(
     private readonly authConnectionService: AuthConnectionService,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   @Query(() => AuthConnectionExt, { name: 'authConnection', nullable: false })
   authConnection(
@@ -52,6 +52,41 @@ export class AuthConnectionResolver {
         id,
         userId: currentUser.sub,
         portfolioId: currentUser.metadata.portfolioId,
+      },
+    })
+  }
+
+  /**
+   * Get all Plaid auth connections for the current user
+   * @example
+   * query {
+   *   plaidAuthConnections {
+   *     id
+   *     plaidInstitutionId
+   *     authedAt
+   *     accounts {
+   *       id
+   *       name
+   *     }
+   *   }
+   * }
+   */
+  @Query(() => [AuthConnection], { name: 'plaidAuthConnections', nullable: false })
+  plaidAuthConnections(
+    @Info()
+    info: GraphQLResolveInfo,
+    @ClerkContext()
+    currentUser: ClerkClaims,
+  ) {
+    const { select } = new PrismaSelect<Prisma.AuthConnectionSelect>(info)
+      .value
+
+    return this.prismaService.$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId)).authConnection.findMany({
+      select,
+      where: {
+        userId: currentUser.sub,
+        portfolioId: currentUser.metadata.portfolioId,
+        source: AuthSource.PLAID,
       },
     })
   }

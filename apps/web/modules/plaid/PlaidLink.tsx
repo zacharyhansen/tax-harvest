@@ -136,9 +136,15 @@ export default function PlaidLink({
         open();
       }}
       disabled={!ready}
-      iconLeft={<Image src={plaidIcon} alt="Plaid" width={24} height={24} />}
+      iconLeft={
+        buttonProps.children ? (
+          buttonProps.iconLeft
+        ) : (
+          <Image src={plaidIcon} alt="Plaid" width={24} height={24} />
+        )
+      }
     >
-      Connect
+      {buttonProps.children || 'Connect'}
     </Button>
   );
 }

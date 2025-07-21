@@ -20,6 +20,7 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+/** Unless unconnected, these are always plaid accounts */
 export type Account = {
   __typename?: 'Account';
   _count: AccountCount;
@@ -49,7 +50,7 @@ export type Account = {
   description?: Maybe<Scalars['String']['output']>;
   equityRegt?: Maybe<Scalars['Decimal']['output']>;
   equityRegtPercent?: Maybe<Scalars['Decimal']['output']>;
-  /** The unique id in the external system for the account (only unique in combination with provider) */
+  /** The unique id in the external system for the account */
   externalId?: Maybe<Scalars['String']['output']>;
   files?: Maybe<Array<File>>;
   fundsWithheldFromPurchasingPower?: Maybe<Scalars['Decimal']['output']>;
@@ -95,8 +96,15 @@ export type Account = {
 };
 
 
+/** Unless unconnected, these are always plaid accounts */
 export type Account_RealizedProfitAndLossArgs = {
   year?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput = {
+  authConnectionId: Scalars['String']['input'];
+  plaidAccountMask: Scalars['String']['input'];
+  type: Scalars['String']['input'];
 };
 
 export type AccountAvgAggregate = {
@@ -1048,11 +1056,6 @@ export enum AccountProvider {
   Unconnected = 'UNCONNECTED'
 }
 
-export type AccountProviderExternalIdCompoundUniqueInput = {
-  externalId: Scalars['String']['input'];
-  provider: AccountProvider;
-};
-
 export type AccountScalarRelationFilter = {
   is?: InputMaybe<AccountWhereInput>;
   isNot?: InputMaybe<AccountWhereInput>;
@@ -1915,6 +1918,7 @@ export type AccountWhereUniqueInput = {
   accountValueTotal?: InputMaybe<DecimalNullableFilter>;
   authConnection?: InputMaybe<AuthConnectionNullableScalarRelationFilter>;
   authConnectionId?: InputMaybe<UuidNullableFilter>;
+  authConnectionId_plaidAccountMask_type?: InputMaybe<AccountAuthConnectionIdPlaidAccountMaskTypeCompoundUniqueInput>;
   balanceAccount?: InputMaybe<DecimalNullableFilter>;
   balanceMoneyMarket?: InputMaybe<DecimalNullableFilter>;
   balanceShortAdjustment?: InputMaybe<DecimalNullableFilter>;
@@ -1956,7 +1960,6 @@ export type AccountWhereUniqueInput = {
   portfolioId?: InputMaybe<UuidFilter>;
   positions?: InputMaybe<PositionListRelationFilter>;
   provider?: InputMaybe<EnumAccountProviderFilter>;
-  provider_externalId?: InputMaybe<AccountProviderExternalIdCompoundUniqueInput>;
   raw?: InputMaybe<JsonNullableFilter>;
   realizedPAndL?: InputMaybe<RealizedPAndLListRelationFilter>;
   setRealizedValues?: InputMaybe<BoolFilter>;
@@ -3303,7 +3306,7 @@ export type AssetWhereUniqueInput = {
   vectorGraphs?: InputMaybe<VectorGraphListRelationFilter>;
 };
 
-/** An authorized connection to some external system */
+/** An authorized connection to some external system (pretty much one ot one to a plaid Link/item) */
 export type AuthConnection = {
   __typename?: 'AuthConnection';
   _count: AuthConnectionCount;
@@ -3321,6 +3324,8 @@ export type AuthConnection = {
   /** When was the last transaction sync Plaid */
   lastTransactionSyncedAtPlaid?: Maybe<Scalars['DateTime']['output']>;
   lotTransactionBatch?: Maybe<Array<LotTransactionBatch>>;
+  /** Plaid institution id */
+  plaidInstitutionId?: Maybe<Scalars['String']['output']>;
   portfolio: Portfolio;
   /** The portfolio this provider belongs to */
   portfolioId: Scalars['String']['output'];
@@ -3354,6 +3359,7 @@ export type AuthConnectionCountAggregate = {
   id: Scalars['Int']['output'];
   isSyncing: Scalars['Int']['output'];
   lastTransactionSyncedAtPlaid: Scalars['Int']['output'];
+  plaidInstitutionId: Scalars['Int']['output'];
   portfolioId: Scalars['Int']['output'];
   source: Scalars['Int']['output'];
   syncedAt: Scalars['Int']['output'];
@@ -3370,6 +3376,7 @@ export type AuthConnectionCreateManyPortfolioInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   isSyncing?: InputMaybe<Scalars['Boolean']['input']>;
   lastTransactionSyncedAtPlaid?: InputMaybe<Scalars['DateTime']['input']>;
+  plaidInstitutionId?: InputMaybe<Scalars['String']['input']>;
   source: AuthSource;
   syncedAt?: InputMaybe<Scalars['DateTime']['input']>;
   type: AuthType;
@@ -3390,6 +3397,7 @@ export type AuthConnectionCreateManyUserInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   isSyncing?: InputMaybe<Scalars['Boolean']['input']>;
   lastTransactionSyncedAtPlaid?: InputMaybe<Scalars['DateTime']['input']>;
+  plaidInstitutionId?: InputMaybe<Scalars['String']['input']>;
   portfolioId: Scalars['String']['input'];
   source: AuthSource;
   syncedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -3457,6 +3465,7 @@ export type AuthConnectionCreateWithoutAccountsInput = {
   isSyncing?: InputMaybe<Scalars['Boolean']['input']>;
   lastTransactionSyncedAtPlaid?: InputMaybe<Scalars['DateTime']['input']>;
   lotTransactionBatch?: InputMaybe<LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput>;
+  plaidInstitutionId?: InputMaybe<Scalars['String']['input']>;
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput;
   source: AuthSource;
   syncedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -3474,6 +3483,7 @@ export type AuthConnectionCreateWithoutLotTransactionBatchInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   isSyncing?: InputMaybe<Scalars['Boolean']['input']>;
   lastTransactionSyncedAtPlaid?: InputMaybe<Scalars['DateTime']['input']>;
+  plaidInstitutionId?: InputMaybe<Scalars['String']['input']>;
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput;
   source: AuthSource;
   syncedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -3492,6 +3502,7 @@ export type AuthConnectionCreateWithoutPortfolioInput = {
   isSyncing?: InputMaybe<Scalars['Boolean']['input']>;
   lastTransactionSyncedAtPlaid?: InputMaybe<Scalars['DateTime']['input']>;
   lotTransactionBatch?: InputMaybe<LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput>;
+  plaidInstitutionId?: InputMaybe<Scalars['String']['input']>;
   source: AuthSource;
   syncedAt?: InputMaybe<Scalars['DateTime']['input']>;
   type: AuthType;
@@ -3509,6 +3520,7 @@ export type AuthConnectionCreateWithoutUserInput = {
   isSyncing?: InputMaybe<Scalars['Boolean']['input']>;
   lastTransactionSyncedAtPlaid?: InputMaybe<Scalars['DateTime']['input']>;
   lotTransactionBatch?: InputMaybe<LotTransactionBatchCreateNestedManyWithoutAuthConnectionInput>;
+  plaidInstitutionId?: InputMaybe<Scalars['String']['input']>;
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput;
   source: AuthSource;
   syncedAt?: InputMaybe<Scalars['DateTime']['input']>;
@@ -3535,6 +3547,8 @@ export type AuthConnectionExt = {
   /** When was the last transaction sync Plaid */
   lastTransactionSyncedAtPlaid?: Maybe<Scalars['DateTime']['output']>;
   lotTransactionBatch?: Maybe<Array<LotTransactionBatch>>;
+  /** Plaid institution id */
+  plaidInstitutionId?: Maybe<Scalars['String']['output']>;
   portfolio: Portfolio;
   /** The portfolio this provider belongs to */
   portfolioId: Scalars['String']['output'];
@@ -3567,6 +3581,7 @@ export type AuthConnectionMaxAggregate = {
   id?: Maybe<Scalars['String']['output']>;
   isSyncing?: Maybe<Scalars['Boolean']['output']>;
   lastTransactionSyncedAtPlaid?: Maybe<Scalars['DateTime']['output']>;
+  plaidInstitutionId?: Maybe<Scalars['String']['output']>;
   portfolioId?: Maybe<Scalars['String']['output']>;
   source?: Maybe<AuthSource>;
   syncedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -3584,6 +3599,7 @@ export type AuthConnectionMinAggregate = {
   id?: Maybe<Scalars['String']['output']>;
   isSyncing?: Maybe<Scalars['Boolean']['output']>;
   lastTransactionSyncedAtPlaid?: Maybe<Scalars['DateTime']['output']>;
+  plaidInstitutionId?: Maybe<Scalars['String']['output']>;
   portfolioId?: Maybe<Scalars['String']['output']>;
   source?: Maybe<AuthSource>;
   syncedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -3613,6 +3629,7 @@ export type AuthConnectionScalarWhereInput = {
   id?: InputMaybe<UuidFilter>;
   isSyncing?: InputMaybe<BoolFilter>;
   lastTransactionSyncedAtPlaid?: InputMaybe<DateTimeNullableFilter>;
+  plaidInstitutionId?: InputMaybe<StringNullableFilter>;
   portfolioId?: InputMaybe<UuidFilter>;
   source?: InputMaybe<EnumAuthSourceFilter>;
   syncedAt?: InputMaybe<DateTimeNullableFilter>;
@@ -3622,7 +3639,8 @@ export type AuthConnectionScalarWhereInput = {
   verificationUrl?: InputMaybe<StringNullableFilter>;
 };
 
-export type AuthConnectionSourceUserIdPortfolioIdCompoundUniqueInput = {
+export type AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput = {
+  plaidInstitutionId: Scalars['String']['input'];
   portfolioId: Scalars['String']['input'];
   source: AuthSource;
   userId: Scalars['String']['input'];
@@ -3635,6 +3653,7 @@ export type AuthConnectionUpdateManyMutationInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   isSyncing?: InputMaybe<BoolFieldUpdateOperationsInput>;
   lastTransactionSyncedAtPlaid?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  plaidInstitutionId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   source?: InputMaybe<EnumAuthSourceFieldUpdateOperationsInput>;
   syncedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumAuthTypeFieldUpdateOperationsInput>;
@@ -3726,6 +3745,7 @@ export type AuthConnectionUpdateWithoutAccountsInput = {
   isSyncing?: InputMaybe<BoolFieldUpdateOperationsInput>;
   lastTransactionSyncedAtPlaid?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   lotTransactionBatch?: InputMaybe<LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput>;
+  plaidInstitutionId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput>;
   source?: InputMaybe<EnumAuthSourceFieldUpdateOperationsInput>;
   syncedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -3743,6 +3763,7 @@ export type AuthConnectionUpdateWithoutLotTransactionBatchInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   isSyncing?: InputMaybe<BoolFieldUpdateOperationsInput>;
   lastTransactionSyncedAtPlaid?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  plaidInstitutionId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput>;
   source?: InputMaybe<EnumAuthSourceFieldUpdateOperationsInput>;
   syncedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -3761,6 +3782,7 @@ export type AuthConnectionUpdateWithoutPortfolioInput = {
   isSyncing?: InputMaybe<BoolFieldUpdateOperationsInput>;
   lastTransactionSyncedAtPlaid?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   lotTransactionBatch?: InputMaybe<LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput>;
+  plaidInstitutionId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   source?: InputMaybe<EnumAuthSourceFieldUpdateOperationsInput>;
   syncedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumAuthTypeFieldUpdateOperationsInput>;
@@ -3778,6 +3800,7 @@ export type AuthConnectionUpdateWithoutUserInput = {
   isSyncing?: InputMaybe<BoolFieldUpdateOperationsInput>;
   lastTransactionSyncedAtPlaid?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   lotTransactionBatch?: InputMaybe<LotTransactionBatchUpdateManyWithoutAuthConnectionNestedInput>;
+  plaidInstitutionId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput>;
   source?: InputMaybe<EnumAuthSourceFieldUpdateOperationsInput>;
   syncedAt?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -3822,6 +3845,7 @@ export type AuthConnectionWhereInput = {
   isSyncing?: InputMaybe<BoolFilter>;
   lastTransactionSyncedAtPlaid?: InputMaybe<DateTimeNullableFilter>;
   lotTransactionBatch?: InputMaybe<LotTransactionBatchListRelationFilter>;
+  plaidInstitutionId?: InputMaybe<StringNullableFilter>;
   portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
   portfolioId?: InputMaybe<UuidFilter>;
   source?: InputMaybe<EnumAuthSourceFilter>;
@@ -3845,10 +3869,11 @@ export type AuthConnectionWhereUniqueInput = {
   isSyncing?: InputMaybe<BoolFilter>;
   lastTransactionSyncedAtPlaid?: InputMaybe<DateTimeNullableFilter>;
   lotTransactionBatch?: InputMaybe<LotTransactionBatchListRelationFilter>;
+  plaidInstitutionId?: InputMaybe<StringNullableFilter>;
   portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
   portfolioId?: InputMaybe<UuidFilter>;
   source?: InputMaybe<EnumAuthSourceFilter>;
-  source_userId_portfolioId?: InputMaybe<AuthConnectionSourceUserIdPortfolioIdCompoundUniqueInput>;
+  source_userId_portfolioId_plaidInstitutionId?: InputMaybe<AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput>;
   syncedAt?: InputMaybe<DateTimeNullableFilter>;
   type?: InputMaybe<EnumAuthTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -9957,6 +9982,17 @@ export type PlaidInstitution = {
   name: Scalars['String']['input'];
 };
 
+export type PlaidInstitutionInfo = {
+  __typename?: 'PlaidInstitutionInfo';
+  country_codes: Array<Scalars['String']['output']>;
+  institution_id: Scalars['String']['output'];
+  logo?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  primary_color?: Maybe<Scalars['String']['output']>;
+  products: Array<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
+};
+
 export type PlaidLinkOnSuccessMetadata = {
   accounts: Array<PlaidAccount>;
   institution?: InputMaybe<PlaidInstitution>;
@@ -12926,6 +12962,9 @@ export type Query = {
   lotTransactionBatch?: Maybe<LotTransactionBatch>;
   lotTransactionBatches: Array<LotTransactionBatch>;
   lots: Array<Lot>;
+  plaidAuthConnections: Array<AuthConnection>;
+  /** Get institution information from Plaid */
+  plaidInstitution: PlaidInstitutionInfo;
   /** Get authenticated portfolio */
   portfolioAuthed: Portfolio;
   portfolioPositions: Array<Position>;
@@ -13011,6 +13050,11 @@ export type QueryHarvestsArgs = {
 };
 
 
+export type QueryLinkTokenArgs = {
+  authConnectionId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryLogArgs = {
   logId: Scalars['Int']['input'];
 };
@@ -13042,6 +13086,11 @@ export type QueryLotTransactionBatchesArgs = {
 export type QueryLotsArgs = {
   includeTaxAdvantaged?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<LotWhereInput>;
+};
+
+
+export type QueryPlaidInstitutionArgs = {
+  institutionId: Scalars['String']['input'];
 };
 
 
@@ -15635,10 +15684,26 @@ export type OauthEtradeMutationVariables = Exact<{
 
 export type OauthEtradeMutation = { __typename?: 'Mutation', accessOauthConnection: { __typename?: 'AuthConnectionExt', id: string } };
 
-export type PlaidLinkTokenQueryVariables = Exact<{ [key: string]: never; }>;
+export type PlaidLinkTokenQueryVariables = Exact<{
+  authConnectionId?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
 export type PlaidLinkTokenQuery = { __typename?: 'Query', linkToken: string };
+
+export type PlaidAuthConnectionFragment = { __typename?: 'AuthConnection', id: string, plaidInstitutionId?: string | null, authedAt: any, syncedAt?: any | null, accounts?: Array<{ __typename?: 'Account', id: string, name?: string | null, plaidAccountMask?: string | null, type: string, subType?: string | null, status: AccountStatus, balanceAccount?: string | null, accountValueTotal?: string | null }> | null };
+
+export type PlaidAuthConnectionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PlaidAuthConnectionsQuery = { __typename?: 'Query', plaidAuthConnections: Array<{ __typename?: 'AuthConnection', id: string, plaidInstitutionId?: string | null, authedAt: any, syncedAt?: any | null, accounts?: Array<{ __typename?: 'Account', id: string, name?: string | null, plaidAccountMask?: string | null, type: string, subType?: string | null, status: AccountStatus, balanceAccount?: string | null, accountValueTotal?: string | null }> | null }> };
+
+export type PlaidInstitutionQueryVariables = Exact<{
+  institutionId: Scalars['String']['input'];
+}>;
+
+
+export type PlaidInstitutionQuery = { __typename?: 'Query', plaidInstitution: { __typename?: 'PlaidInstitutionInfo', institution_id: string, name: string, logo?: string | null, primary_color?: string | null, url?: string | null, products: Array<string>, country_codes: Array<string> } };
 
 export type PlaidSetAccessTokenAndSyncAccountsMutationVariables = Exact<{
   publicToken: Scalars['String']['input'];
@@ -16222,6 +16287,24 @@ export const TransactionTableItemFragmentDoc = gql`
   }
 }
     ${AccountTransactionItemFragmentDoc}`;
+export const PlaidAuthConnectionFragmentDoc = gql`
+    fragment PlaidAuthConnection on AuthConnection {
+  id
+  plaidInstitutionId
+  authedAt
+  syncedAt
+  accounts {
+    id
+    name
+    plaidAccountMask
+    type
+    subType
+    status
+    balanceAccount
+    accountValueTotal
+  }
+}
+    `;
 export const FileItemFragmentDoc = gql`
     fragment FileItem on File {
   id
@@ -17786,8 +17869,8 @@ export type OauthEtradeMutationHookResult = ReturnType<typeof useOauthEtradeMuta
 export type OauthEtradeMutationResult = Apollo.MutationResult<OauthEtradeMutation>;
 export type OauthEtradeMutationOptions = Apollo.BaseMutationOptions<OauthEtradeMutation, OauthEtradeMutationVariables>;
 export const PlaidLinkTokenDocument = gql`
-    query PlaidLinkToken {
-  linkToken
+    query PlaidLinkToken($authConnectionId: String) {
+  linkToken(authConnectionId: $authConnectionId)
 }
     `;
 
@@ -17803,6 +17886,7 @@ export const PlaidLinkTokenDocument = gql`
  * @example
  * const { data, loading, error } = usePlaidLinkTokenQuery({
  *   variables: {
+ *      authConnectionId: // value for 'authConnectionId'
  *   },
  * });
  */
@@ -17822,6 +17906,91 @@ export type PlaidLinkTokenQueryHookResult = ReturnType<typeof usePlaidLinkTokenQ
 export type PlaidLinkTokenLazyQueryHookResult = ReturnType<typeof usePlaidLinkTokenLazyQuery>;
 export type PlaidLinkTokenSuspenseQueryHookResult = ReturnType<typeof usePlaidLinkTokenSuspenseQuery>;
 export type PlaidLinkTokenQueryResult = Apollo.QueryResult<PlaidLinkTokenQuery, PlaidLinkTokenQueryVariables>;
+export const PlaidAuthConnectionsDocument = gql`
+    query PlaidAuthConnections {
+  plaidAuthConnections {
+    ...PlaidAuthConnection
+  }
+}
+    ${PlaidAuthConnectionFragmentDoc}`;
+
+/**
+ * __usePlaidAuthConnectionsQuery__
+ *
+ * To run a query within a React component, call `usePlaidAuthConnectionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePlaidAuthConnectionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePlaidAuthConnectionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePlaidAuthConnectionsQuery(baseOptions?: Apollo.QueryHookOptions<PlaidAuthConnectionsQuery, PlaidAuthConnectionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PlaidAuthConnectionsQuery, PlaidAuthConnectionsQueryVariables>(PlaidAuthConnectionsDocument, options);
+      }
+export function usePlaidAuthConnectionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PlaidAuthConnectionsQuery, PlaidAuthConnectionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PlaidAuthConnectionsQuery, PlaidAuthConnectionsQueryVariables>(PlaidAuthConnectionsDocument, options);
+        }
+export function usePlaidAuthConnectionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PlaidAuthConnectionsQuery, PlaidAuthConnectionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PlaidAuthConnectionsQuery, PlaidAuthConnectionsQueryVariables>(PlaidAuthConnectionsDocument, options);
+        }
+export type PlaidAuthConnectionsQueryHookResult = ReturnType<typeof usePlaidAuthConnectionsQuery>;
+export type PlaidAuthConnectionsLazyQueryHookResult = ReturnType<typeof usePlaidAuthConnectionsLazyQuery>;
+export type PlaidAuthConnectionsSuspenseQueryHookResult = ReturnType<typeof usePlaidAuthConnectionsSuspenseQuery>;
+export type PlaidAuthConnectionsQueryResult = Apollo.QueryResult<PlaidAuthConnectionsQuery, PlaidAuthConnectionsQueryVariables>;
+export const PlaidInstitutionDocument = gql`
+    query PlaidInstitution($institutionId: String!) {
+  plaidInstitution(institutionId: $institutionId) {
+    institution_id
+    name
+    logo
+    primary_color
+    url
+    products
+    country_codes
+  }
+}
+    `;
+
+/**
+ * __usePlaidInstitutionQuery__
+ *
+ * To run a query within a React component, call `usePlaidInstitutionQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePlaidInstitutionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePlaidInstitutionQuery({
+ *   variables: {
+ *      institutionId: // value for 'institutionId'
+ *   },
+ * });
+ */
+export function usePlaidInstitutionQuery(baseOptions: Apollo.QueryHookOptions<PlaidInstitutionQuery, PlaidInstitutionQueryVariables> & ({ variables: PlaidInstitutionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PlaidInstitutionQuery, PlaidInstitutionQueryVariables>(PlaidInstitutionDocument, options);
+      }
+export function usePlaidInstitutionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PlaidInstitutionQuery, PlaidInstitutionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PlaidInstitutionQuery, PlaidInstitutionQueryVariables>(PlaidInstitutionDocument, options);
+        }
+export function usePlaidInstitutionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PlaidInstitutionQuery, PlaidInstitutionQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PlaidInstitutionQuery, PlaidInstitutionQueryVariables>(PlaidInstitutionDocument, options);
+        }
+export type PlaidInstitutionQueryHookResult = ReturnType<typeof usePlaidInstitutionQuery>;
+export type PlaidInstitutionLazyQueryHookResult = ReturnType<typeof usePlaidInstitutionLazyQuery>;
+export type PlaidInstitutionSuspenseQueryHookResult = ReturnType<typeof usePlaidInstitutionSuspenseQuery>;
+export type PlaidInstitutionQueryResult = Apollo.QueryResult<PlaidInstitutionQuery, PlaidInstitutionQueryVariables>;
 export const PlaidSetAccessTokenAndSyncAccountsDocument = gql`
     mutation PlaidSetAccessTokenAndSyncAccounts($publicToken: String!, $metaData: PlaidLinkOnSuccessMetadata!, $existingAccountId: String) {
   setAccessTokenAndSyncAccounts(

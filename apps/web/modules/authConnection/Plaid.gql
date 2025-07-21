@@ -1,5 +1,39 @@
-query PlaidLinkToken {
-  linkToken
+query PlaidLinkToken($authConnectionId: String) {
+  linkToken(authConnectionId: $authConnectionId)
+}
+fragment PlaidAuthConnection on AuthConnection {
+  id
+  plaidInstitutionId
+  authedAt
+  syncedAt
+  accounts {
+    id
+    name
+    plaidAccountMask
+    type
+    subType
+    status
+    balanceAccount
+    accountValueTotal
+  }
+}
+
+query PlaidAuthConnections {
+  plaidAuthConnections {
+    ...PlaidAuthConnection
+  }
+}
+
+query PlaidInstitution($institutionId: String!) {
+  plaidInstitution(institutionId: $institutionId) {
+    institution_id
+    name
+    logo
+    primary_color
+    url
+    products
+    country_codes
+  }
 }
 
 mutation PlaidSetAccessTokenAndSyncAccounts(

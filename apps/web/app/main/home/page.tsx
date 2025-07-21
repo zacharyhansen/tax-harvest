@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { SetUpStatus, usePortfolioSummaryQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
 import { NoAccounts, OutstandingAccountSetupList } from '~/modules/account';
-import HarvestSummaryCards from '~/modules/harvest/HarvestSummaryCards';
 import { PageWrapper } from '~/modules/layout';
 import { LotsTable } from '~/modules/lot';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
@@ -106,7 +105,6 @@ export default function HomePage() {
           <OutstandingAccountSetupList />
         </div>
       ) : null}
-      <HarvestSummaryCards />
       <LotsTable />
     </PageWrapper>
   );

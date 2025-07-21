@@ -71,32 +71,19 @@ export class PlaidService {
   async linkToken({
     userId,
     portfolioId,
+    authConnectionId,
   }: {
     userId: string
     portfolioId: string
+    authConnectionId?: string
   }) {
     const user = await this.assertUserIsCreatedInPlaid({ userId, portfolioId })
-
-    // We want to open plaid link as update if user already has one for portfolio
-    const existingAuthConnection = await this.prismaService
-      .$extends(PrismaService.forPortfolio(portfolioId))
-      .authConnection
-      .findUnique({
-        where: {
-          source_userId_portfolioId_plaidInstitutionId: {
-            userId,
-            portfolioId,
-            source: AuthSource.PLAID,
-            plaidInstitutionId: '',
-          },
-        },
-      })
 
     const baseLinkTokenCreate: LinkTokenCreateRequest = {
       client_id: this.configService.get('PLAID_CLIENT_ID'),
       client_name: 'TaxHarvest',
       country_codes: [CountryCode.Us],
-      enable_multi_item_link: true,
+      // enable_multi_item_link: true,
       language: 'en',
       products: [Products.Investments],
       // redirect_uri: `${this.configService.get('CLIENT_ORIGIN')}${this.configService.get('CLIENT_HOME_PAGE_PATH')}`,
@@ -111,7 +98,17 @@ export class PlaidService {
       webhook: `${this.configService.get<string>('ORIGIN')}/plaid/webhook`,
     }
 
-    if (existingAuthConnection?.secret) {
+    if (authConnectionId) {
+      // We want to open plaid link as update if user already has one for portfolio
+      const existingAuthConnection = await this.prismaService
+        .$extends(PrismaService.forPortfolio(portfolioId))
+        .authConnection
+        .findUniqueOrThrow({
+          where: {
+            id: authConnectionId,
+          },
+        })
+
       this.logger.log(`Updating existing plaid link. existingAuthConnectionId: ${existingAuthConnection.id}`)
       baseLinkTokenCreate.access_token = existingAuthConnection.secret
       baseLinkTokenCreate.update = {
@@ -1040,6 +1037,7 @@ export class PlaidService {
       plaidAccounts,
       plaidAuthConnection,
     })
+    console.log('accounts', accounts)
     return this.prismaService
       .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
       .$transaction(async (trx) => {
@@ -1053,6 +1051,8 @@ export class PlaidService {
                 type: input.type ?? '',
               },
             },
+          }).catch(() => {
+            this.logger.log('No account found to delete from plaid', accounts)
           })
         }
 
@@ -1082,6 +1082,7 @@ export class PlaidService {
             upsertedAccounts.push(account)
           }
         }
+        console.log('upsertedAccounts', upsertedAccounts)
         return upsertedAccounts
       })
   }
@@ -1334,5 +1335,27 @@ export class PlaidService {
       }
       return acc
     }, {})
+  }
+
+  /**
+   * Get institution information from Plaid
+   * @param institutionId - The Plaid institution ID
+   * @returns Institution information including name, logo, colors, etc.
+   * @example
+   * const institution = await plaidService.getInstitution('ins_3')
+   */
+  async getInstitution(institutionId: string) {
+    try {
+      const response = await this.client.institutionsGetById({
+        country_codes: [CountryCode.Us],
+        institution_id: institutionId,
+      })
+
+      return response.data.institution
+    }
+    catch (error) {
+      this.logger.error(`Failed to fetch institution ${institutionId}:`, error)
+      throw error
+    }
   }
 }

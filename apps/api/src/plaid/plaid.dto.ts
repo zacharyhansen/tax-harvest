@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
 
 @InputType()
 class PlaidInstitution {
@@ -53,4 +53,31 @@ export interface PlaidWebhook {
   updated_holdings: number
   webhook_code: string
   webhook_type: string
+}
+
+/**
+ * Plaid institution information returned from the API
+ */
+@ObjectType()
+export class PlaidInstitutionInfo {
+  @Field(() => String)
+  institution_id: string
+
+  @Field(() => String)
+  name: string
+
+  @Field(() => String, { nullable: true })
+  logo?: string
+
+  @Field(() => String, { nullable: true })
+  primary_color?: string
+
+  @Field(() => String, { nullable: true })
+  url?: string
+
+  @Field(() => [String])
+  products: string[]
+
+  @Field(() => [String])
+  country_codes: string[]
 }

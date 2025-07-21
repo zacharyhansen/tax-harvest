@@ -120,7 +120,7 @@ describe('plaidService', () => {
       const transactions = PlaidService.convertPlaidTransactions({
         investmentsTransactionsGetResponse: transactionsData,
         accounts: mockAccounts,
-        portfolioId: 'test-portfolio',
+        plaidAuthConnection: mockAuthConnection,
       })
 
       writeFileSync(

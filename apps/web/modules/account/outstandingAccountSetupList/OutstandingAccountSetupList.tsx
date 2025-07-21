@@ -53,12 +53,16 @@ export default function OutstandingAccountSetupList() {
           <AlertDescription>
             Current year to date profit and loss is not set. This will impact
             your tax loss harvesting strategy.
-            <div className="flex w-full justify-between">
-              <Link href={TypedRoutes.account({ id: account.id })}>
+            <div className="flex w-full gap-2">
+              <Link
+                href={TypedRoutes.account({ id: account.id })}
+                className="w-1/2"
+              >
                 <Button
                   iconLeft={<Pencil className="size-3" />}
                   variant="default"
                   size="sm"
+                  className="w-full"
                 >
                   Set Profit & Loss
                 </Button>
@@ -66,6 +70,7 @@ export default function OutstandingAccountSetupList() {
               <Button
                 variant="outline"
                 size="sm"
+                className="w-1/2"
                 iconLeft={<CircleCheckBig className="size-3" />}
                 onClick={() => {
                   toast.promise(
@@ -89,7 +94,7 @@ export default function OutstandingAccountSetupList() {
                   );
                 }}
               >
-                Set Year to Date Profit & Loss is $0
+                My Year to Date Profit & Loss is $0
               </Button>
             </div>
           </AlertDescription>

@@ -186,13 +186,7 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
           className="flex flex-col items-center gap-4"
           variants={itemVariants}
         >
-          <motion.div
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-          >
-            <AddAccountButton size="lg" className="px-8 py-6 text-lg" />
-          </motion.div>
+          <AddAccountButton size="lg" className="px-8 py-6 text-lg" />
 
           <motion.p
             className="text-muted-foreground text-center text-sm"
