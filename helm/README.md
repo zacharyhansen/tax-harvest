@@ -90,7 +90,7 @@ Get ArgoCD password
 test chart
 
 ```
-helm template . > helm_output.yaml --debug
+helm template . --values values-dev.yaml --debug > helm_output.yaml
 ```
 
 [Allow GKE App to read secrets](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity)

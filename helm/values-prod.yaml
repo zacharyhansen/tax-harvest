@@ -74,11 +74,11 @@ argocd:
     #   kubernetes.io/ingress.global-static-ip-name: prod-argo-taxharvest-static-ip
     #   kubernetes.io/ingress.allow-http: "true"
     #   kubernetes.io/ingress.class: gce
-    # host: argocd.taxharvest.ai
-    # className: gce
-    # path: /
-    # pathType: Prefix
-    # service:
-    #   name: argocd-server
-    #   port:
-    #     name: https
+    host: argocd.taxharvest.ai
+    className: gce
+    path: /
+    pathType: Prefix
+    service:
+      name: argocd-server
+      port:
+        name: http
