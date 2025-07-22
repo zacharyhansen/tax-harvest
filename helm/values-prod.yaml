@@ -72,6 +72,7 @@ secrets:
 
 argocd:
   enabled: true
+  namespace: argocd
   ingress:
     enabled: true
     # annotations:
@@ -79,8 +80,7 @@ argocd:
     #   kubernetes.io/ingress.global-static-ip-name: prod-argo-taxharvest-static-ip
     #   kubernetes.io/ingress.allow-http: "true"
     #   kubernetes.io/ingress.class: gce
-    host: argocd.taxharvest.ai
-    className: gce
+    # host: argocd.taxharvest.ai
     path: /
     pathType: Prefix
     service:
