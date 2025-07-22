@@ -40,18 +40,19 @@ export default function DeleteAccountDialog({
 }: DeleteAccountDialogProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const [deleteAccount, { loading }] = useMutation(DELETE_ACCOUNT_MUTATION, {
     onCompleted: () => {
       toast.success(`Account "${accountName}" has been deleted successfully.`);
-      router.push(TypedRoutes.home());
+      router.push(TypedRoutes.accounts());
     },
     onError: (error: any) => {
       toast.error(`Failed to delete account: ${error.message}`);
     },
   });
 
-  const handleDelete = async () => {
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     await deleteAccount({
       variables: {
         accountWhereUniqueInput: {
@@ -64,7 +65,7 @@ export default function DeleteAccountDialog({
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogTrigger asChild>
+      <AlertDialogTrigger asChild onClick={e => e.stopPropagation()}>
         <Button variant="destructive" size="sm" className="gap-2">
           <Trash2 className="h-4 w-4" />
           Delete Account
@@ -91,7 +92,9 @@ export default function DeleteAccountDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={e => e.stopPropagation()}>
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
             onClick={handleDelete}
