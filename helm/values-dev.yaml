@@ -31,3 +31,21 @@ api:
       CLIENT_ORIGIN: https://dev.taxharvest.ai
       ORIGIN: https://dev.taxharvest.ai/core
       STRIPE_PUBLISHABLE_KEY: pk_test_51RMA1bCIs96aprc48ICF4qlFkUUWlsfSnZw4xPQ4D43J775q4DkS1PPLFNdEu7cLyWFh6S0gRgk7W9FlFqwjZs1C00aQKxFWQW
+
+argocd:
+  enabled: true
+  namespace: argocd
+  # ingress:
+  #   enabled: true
+  #   annotations:
+  #     networking.gke.io/managed-certificates: argocd-dev-cert
+  #     kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
+  #     kubernetes.io/ingress.allow-http: 'false'
+  #     kubernetes.io/ingress.class: gce
+  #   host: argocd-dev.taxharvest.ai
+  #   path: /
+  #   pathType: Prefix
+  #   service:
+  #     name: argocd-server
+  #     port:
+  #       name: https
