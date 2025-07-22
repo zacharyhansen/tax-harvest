@@ -35,17 +35,17 @@ api:
 argocd:
   enabled: true
   namespace: argocd
-  # ingress:
-  #   enabled: true
-  #   annotations:
-  #     networking.gke.io/managed-certificates: argocd-dev-cert
-  #     kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
-  #     kubernetes.io/ingress.allow-http: 'false'
-  #     kubernetes.io/ingress.class: gce
-  #   host: argocd-dev.taxharvest.ai
-  #   path: /
-  #   pathType: Prefix
-  #   service:
-  #     name: argocd-server
-  #     port:
-  #       name: https
+  ingress:
+    enabled: true
+    # annotations:
+    #   networking.gke.io/managed-certificates: argocd-dev-cert
+    #   kubernetes.io/ingress.global-static-ip-name: argocd-dev-static-ip
+    #   kubernetes.io/ingress.allow-http: 'false'
+    #   kubernetes.io/ingress.class: gce
+    # host: argocd-dev.taxharvest.ai
+    path: /
+    pathType: Prefix
+    service:
+      name: argocd-server
+      port:
+        name: http
