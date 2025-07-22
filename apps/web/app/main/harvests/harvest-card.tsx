@@ -147,11 +147,10 @@ export function HarvestCard({
           >
             <div>
               <h3 className="text-lg font-semibold">
-                Harvest for{' '}
-                {
-                  harvest.harvestTransactions?.[0]?.harvestTransactionItem
-                    .assetSymbol
-                }
+                Harvest for {sourceLots.map(lot => lot.symbol).join(', ')}
+                {matchedLots.length > 0
+                  ? ` ↔ ${matchedLots.map(lot => lot.symbol).join(', ')}`
+                  : null}
               </h3>
               <p className="text-muted-foreground inline-flex items-center gap-2">
                 Matched Pair • Marked for sale on {formatDate(harvest.date)}

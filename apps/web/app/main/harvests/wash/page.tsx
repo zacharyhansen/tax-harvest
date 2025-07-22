@@ -66,9 +66,9 @@ export default function WashHarvestsPage() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                Today's harvests will automatically be added to the wash window
-                after 24 hours so you are notified when they capture their tax
-                gains.
+                Open harvests will automatically be added to the wash window
+                after their open window. You will be notified when they capture
+                their tax gains if you have notifications enabled.
               </motion.p>
             </CardContent>
           </Card>
@@ -79,7 +79,7 @@ export default function WashHarvestsPage() {
 
   return (
     <div className="flex grow flex-col gap-4 pt-4">
-      <Alert variant="info">
+      <Alert variant="default">
         <AlertTitle>Wash Harvests</AlertTitle>
         <AlertDescription>
           Once capturing your harvests, you should not revert the portfolio

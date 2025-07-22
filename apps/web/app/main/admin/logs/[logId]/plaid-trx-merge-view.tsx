@@ -41,7 +41,7 @@ interface Lot {
   lastPrice?: string;
   price?: string;
   remainingQty?: string;
-  symbol?: string;
+  assetSymbol?: string;
   value?: string;
   dollarPerSharePnL?: string;
   taxGain?: string;
@@ -135,8 +135,10 @@ interface PlaidTrxMergeLogViewProps {
   LotTransactionBatch?: LotTransactionBatch[];
 }
 
-
-export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMergeLogViewProps) {
+export function PlaidTrxMergeLogView({
+  data,
+  LotTransactionBatch,
+}: PlaidTrxMergeLogViewProps) {
   const typedData = data as PlaidTrxMergeData;
   const lotBatches = LotTransactionBatch || [];
 
@@ -210,7 +212,7 @@ export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMerg
                     return (
                       <tr key={lot.id || index} className="border-b">
                         <td className="p-2 font-mono font-semibold">
-                          {lot.symbol}
+                          {lot.assetSymbol}
                         </td>
                         <td className="p-2 font-mono">{lot.remainingQty}</td>
                         <td className="p-2 font-mono">${lot.costBasis}</td>
@@ -394,53 +396,64 @@ export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMerg
           </CardHeader>
           <CardContent className="space-y-6">
             {lotBatches.map((batch, batchIndex) => (
-              <div key={batch.id} className="border rounded-lg p-4 space-y-4">
-                <div className="flex justify-between items-start">
+              <div key={batch.id} className="space-y-4 rounded-lg border p-4">
+                <div className="flex items-start justify-between">
                   <div>
                     <h4 className="font-semibold">Batch {batchIndex + 1}</h4>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       ID: {batch.id}
                     </p>
-                    <p className="text-sm text-muted-foreground">
-                      Account: {batch.account.name || batch.account.type} ({batch.account.externalId})
+                    <p className="text-muted-foreground text-sm">
+                      Account: {batch.account.name || batch.account.type} (
+                      {batch.account.externalId})
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-muted-foreground">Created</p>
-                    <p className="text-sm font-mono">
+                    <p className="text-muted-foreground text-sm">Created</p>
+                    <p className="font-mono text-sm">
                       {new Date(batch.createdAt).toLocaleString()}
                     </p>
                   </div>
                 </div>
 
                 {/* Batch Summary */}
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-4 bg-muted/50 p-3 rounded">
+                <div className="bg-muted/50 grid grid-cols-2 gap-4 rounded p-3 md:grid-cols-4">
                   <div>
-                    <p className="text-sm text-muted-foreground">Lot Changes</p>
+                    <p className="text-muted-foreground text-sm">Lot Changes</p>
                     <p className="font-medium">{batch.lotChangeLog.length}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Realized P&L</p>
-                    <p className="font-medium font-mono">
-                      {batch.realizedProfitAndLoss ? Format.money(batch.realizedProfitAndLoss) : 'N/A'}
+                    <p className="text-muted-foreground text-sm">
+                      Realized P&L
+                    </p>
+                    <p className="font-mono font-medium">
+                      {batch.realizedProfitAndLoss
+                        ? Format.money(batch.realizedProfitAndLoss)
+                        : 'N/A'}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">New Transactions</p>
+                    <p className="text-muted-foreground text-sm">
+                      New Transactions
+                    </p>
                     <p className="font-medium">
-                      {batch.newTransactions ? (() => {
-                        try {
-                          return JSON.parse(batch.newTransactions).length;
-                        } catch {
-                          return 'Invalid';
-                        }
-                      })() : 0}
+                      {batch.newTransactions
+                        ? (() => {
+                            try {
+                              // @ts-expect-errorjust for logs
+                              return JSON.parse(batch.newTransactions).length;
+                            } catch {
+                              return 'Invalid';
+                            }
+                          })()
+                        : 0}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Processed</p>
+                    <p className="text-muted-foreground text-sm">Processed</p>
                     <p className="font-medium">
-                      {batch.lotChangeLog.filter(log => log.processed).length} / {batch.lotChangeLog.length}
+                      {batch.lotChangeLog.filter(log => log.processed).length} /{' '}
+                      {batch.lotChangeLog.length}
                     </p>
                   </div>
                 </div>
@@ -448,7 +461,9 @@ export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMerg
                 {/* Lot Change Log */}
                 {batch.lotChangeLog && batch.lotChangeLog.length > 0 && (
                   <div className="space-y-3">
-                    <h5 className="font-medium">Lot Change Log ({batch.lotChangeLog.length})</h5>
+                    <h5 className="font-medium">
+                      Lot Change Log ({batch.lotChangeLog.length})
+                    </h5>
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
@@ -472,22 +487,32 @@ export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMerg
                                     changeLog.operationType === 'create'
                                       ? 'default'
                                       : changeLog.operationType === 'update'
-                                      ? 'secondary'
-                                      : 'destructive'
+                                        ? 'secondary'
+                                        : 'destructive'
                                   }
                                 >
                                   {changeLog.operationType.toUpperCase()}
                                 </Badge>
                               </td>
                               <td className="p-2 font-mono">
-                                {changeLog.lot?.assetSymbol || changeLog.transaction?.assetSymbol || 'N/A'}
+                                {changeLog.lot?.assetSymbol ||
+                                  changeLog.transaction?.assetSymbol ||
+                                  'N/A'}
                               </td>
                               <td className="p-2 font-mono">
                                 {changeLog.quantityChange || 'N/A'}
                               </td>
-                              <td className="p-2">{changeLog.source || 'N/A'}</td>
                               <td className="p-2">
-                                <Badge variant={changeLog.processed ? 'default' : 'secondary'}>
+                                {changeLog.source || 'N/A'}
+                              </td>
+                              <td className="p-2">
+                                <Badge
+                                  variant={
+                                    changeLog.processed
+                                      ? 'default'
+                                      : 'secondary'
+                                  }
+                                >
                                   {changeLog.processed ? 'Yes' : 'No'}
                                 </Badge>
                               </td>
@@ -495,16 +520,24 @@ export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMerg
                                 {changeLog.lot && (
                                   <div className="space-y-1">
                                     <p className="text-xs">
-                                      <span className="text-muted-foreground">Remaining:</span>{' '}
+                                      <span className="text-muted-foreground">
+                                        Remaining:
+                                      </span>{' '}
                                       {changeLog.lot.remainingQty}
                                     </p>
                                     <p className="text-xs">
-                                      <span className="text-muted-foreground">Price:</span>{' '}
+                                      <span className="text-muted-foreground">
+                                        Price:
+                                      </span>{' '}
                                       {Format.money(changeLog.lot.price)}
                                     </p>
                                     <p className="text-xs">
-                                      <span className="text-muted-foreground">Acquired:</span>{' '}
-                                      {new Date(changeLog.lot.acquiredDate).toLocaleDateString()}
+                                      <span className="text-muted-foreground">
+                                        Acquired:
+                                      </span>{' '}
+                                      {new Date(
+                                        changeLog.lot.acquiredDate
+                                      ).toLocaleDateString()}
                                     </p>
                                   </div>
                                 )}
@@ -513,16 +546,26 @@ export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMerg
                                 {changeLog.transaction && (
                                   <div className="space-y-1">
                                     <p className="text-xs">
-                                      <span className="text-muted-foreground">Type:</span>{' '}
+                                      <span className="text-muted-foreground">
+                                        Type:
+                                      </span>{' '}
                                       {changeLog.transaction.type}
                                     </p>
                                     <p className="text-xs">
-                                      <span className="text-muted-foreground">Qty:</span>{' '}
+                                      <span className="text-muted-foreground">
+                                        Qty:
+                                      </span>{' '}
                                       {changeLog.transaction.quantity || 'N/A'}
                                     </p>
                                     <p className="text-xs">
-                                      <span className="text-muted-foreground">Price:</span>{' '}
-                                      {changeLog.transaction.price ? Format.money(changeLog.transaction.price) : 'N/A'}
+                                      <span className="text-muted-foreground">
+                                        Price:
+                                      </span>{' '}
+                                      {changeLog.transaction.price
+                                        ? Format.money(
+                                            changeLog.transaction.price
+                                          )
+                                        : 'N/A'}
                                     </p>
                                   </div>
                                 )}
@@ -543,84 +586,90 @@ export function PlaidTrxMergeLogView({ data, LotTransactionBatch }: PlaidTrxMerg
                   <div className="space-y-3">
                     <h5 className="font-medium">Additional Batch Data</h5>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                      {batch.newBuys && (() => {
-                        try {
-                          const buys = JSON.parse(batch.newBuys);
-                          return (
-                            <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded">
-                              <p className="text-sm font-medium text-green-700 dark:text-green-300">
-                                New Buys ({buys.length})
-                              </p>
-                              <pre className="text-xs mt-2 overflow-auto max-h-32">
-                                {JSON.stringify(buys, null, 2)}
-                              </pre>
-                            </div>
-                          );
-                        } catch {
-                          return (
-                            <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded">
-                              <p className="text-sm font-medium text-green-700 dark:text-green-300">
-                                New Buys (Invalid JSON)
-                              </p>
-                              <pre className="text-xs mt-2 overflow-auto max-h-32">
-                                {batch.newBuys}
-                              </pre>
-                            </div>
-                          );
-                        }
-                      })()}
-                      {batch.newSells && (() => {
-                        try {
-                          const sells = JSON.parse(batch.newSells);
-                          return (
-                            <div className="bg-red-50 dark:bg-red-950/20 p-3 rounded">
-                              <p className="text-sm font-medium text-red-700 dark:text-red-300">
-                                New Sells ({sells.length})
-                              </p>
-                              <pre className="text-xs mt-2 overflow-auto max-h-32">
-                                {JSON.stringify(sells, null, 2)}
-                              </pre>
-                            </div>
-                          );
-                        } catch {
-                          return (
-                            <div className="bg-red-50 dark:bg-red-950/20 p-3 rounded">
-                              <p className="text-sm font-medium text-red-700 dark:text-red-300">
-                                New Sells (Invalid JSON)
-                              </p>
-                              <pre className="text-xs mt-2 overflow-auto max-h-32">
-                                {batch.newSells}
-                              </pre>
-                            </div>
-                          );
-                        }
-                      })()}
-                      {batch.deletedLots && (() => {
-                        try {
-                          const lots = JSON.parse(batch.deletedLots);
-                          return (
-                            <div className="bg-yellow-50 dark:bg-yellow-950/20 p-3 rounded">
-                              <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">
-                                Deleted Lots ({lots.length})
-                              </p>
-                              <pre className="text-xs mt-2 overflow-auto max-h-32">
-                                {JSON.stringify(lots, null, 2)}
-                              </pre>
-                            </div>
-                          );
-                        } catch {
-                          return (
-                            <div className="bg-yellow-50 dark:bg-yellow-950/20 p-3 rounded">
-                              <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">
-                                Deleted Lots (Invalid JSON)
-                              </p>
-                              <pre className="text-xs mt-2 overflow-auto max-h-32">
-                                {batch.deletedLots}
-                              </pre>
-                            </div>
-                          );
-                        }
-                      })()}
+                      {batch.newBuys &&
+                        (() => {
+                          try {
+                            const buys = JSON.parse(batch.newBuys);
+                            return (
+                              <div className="rounded bg-green-50 p-3 dark:bg-green-950/20">
+                                <p className="text-sm font-medium text-green-700 dark:text-green-300">
+                                  {/* @ts-expect-errorjust for logs */}
+                                  New Buys ({buys.length})
+                                </p>
+                                <pre className="mt-2 max-h-32 overflow-auto text-xs">
+                                  {JSON.stringify(buys, null, 2)}
+                                </pre>
+                              </div>
+                            );
+                          } catch {
+                            return (
+                              <div className="rounded bg-green-50 p-3 dark:bg-green-950/20">
+                                <p className="text-sm font-medium text-green-700 dark:text-green-300">
+                                  New Buys (Invalid JSON)
+                                </p>
+                                <pre className="mt-2 max-h-32 overflow-auto text-xs">
+                                  {batch.newBuys}
+                                </pre>
+                              </div>
+                            );
+                          }
+                        })()}
+                      {batch.newSells &&
+                        (() => {
+                          try {
+                            const sells = JSON.parse(batch.newSells);
+                            return (
+                              <div className="rounded bg-red-50 p-3 dark:bg-red-950/20">
+                                <p className="text-sm font-medium text-red-700 dark:text-red-300">
+                                  {/* @ts-expect-error just for logs */}
+                                  New Sells ({sells.length})
+                                </p>
+                                <pre className="mt-2 max-h-32 overflow-auto text-xs">
+                                  {JSON.stringify(sells, null, 2)}
+                                </pre>
+                              </div>
+                            );
+                          } catch {
+                            return (
+                              <div className="rounded bg-red-50 p-3 dark:bg-red-950/20">
+                                <p className="text-sm font-medium text-red-700 dark:text-red-300">
+                                  New Sells (Invalid JSON)
+                                </p>
+                                <pre className="mt-2 max-h-32 overflow-auto text-xs">
+                                  {batch.newSells}
+                                </pre>
+                              </div>
+                            );
+                          }
+                        })()}
+                      {batch.deletedLots &&
+                        (() => {
+                          try {
+                            const lots = JSON.parse(batch.deletedLots);
+                            return (
+                              <div className="rounded bg-yellow-50 p-3 dark:bg-yellow-950/20">
+                                <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">
+                                  {/* @ts-expect-errorjust for logs */}
+                                  Deleted Lots ({lots.length})
+                                </p>
+                                <pre className="mt-2 max-h-32 overflow-auto text-xs">
+                                  {JSON.stringify(lots, null, 2)}
+                                </pre>
+                              </div>
+                            );
+                          } catch {
+                            return (
+                              <div className="rounded bg-yellow-50 p-3 dark:bg-yellow-950/20">
+                                <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">
+                                  Deleted Lots (Invalid JSON)
+                                </p>
+                                <pre className="mt-2 max-h-32 overflow-auto text-xs">
+                                  {batch.deletedLots}
+                                </pre>
+                              </div>
+                            );
+                          }
+                        })()}
                     </div>
                   </div>
                 )}

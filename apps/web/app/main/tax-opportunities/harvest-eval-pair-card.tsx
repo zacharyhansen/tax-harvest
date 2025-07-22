@@ -237,19 +237,6 @@ export function HarvestEvalPairCard({
                     toast.promise(
                       createHarvest({
                         variables: {
-                          // directedHarvestLots: [
-                          //   {
-                          //     lotId: sourceLot.id,
-                          //     quantity: sourceShares,
-                          //     counterTransaction: false,
-                          //   },
-                          //   {
-                          //     lotId: selectedMatch.id,
-                          //     quantity: matchShares,
-                          //     counterTransaction: true,
-                          //   },
-                          // ],
-
                           directedHarvestLots: selectedMatch.sourceLots
                             .map(lot => ({
                               lotId: lot.id,

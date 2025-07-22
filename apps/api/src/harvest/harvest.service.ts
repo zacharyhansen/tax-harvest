@@ -64,19 +64,19 @@ export class HarvestService {
 
             const replacementHarvestTransactionItem: Omit<Prisma.HarvestTransactionItemCreateManyInput, 'harvestId'>
               = {
-                assetSymbol: 'AAPL',
-                orderType: OrderType.BUY,
-                price: replacementAsset.lastPrice,
-                quantity:
+              assetSymbol: 'AAPL',
+              orderType: OrderType.BUY,
+              price: replacementAsset.lastPrice,
+              quantity:
                 saleValue
                   .div(replacementAsset.lastPrice)
                   .floor()
                   .toNumber() || 0,
-                portfolioId,
-                lotAcquiredDate: lot.acquiredDate,
-                lotPricePaid: lot.price,
-                lotPriceAtHarvest: lot.lastPrice,
-              }
+              portfolioId,
+              lotAcquiredDate: lot.acquiredDate,
+              lotPricePaid: lot.price,
+              lotPriceAtHarvest: lot.lastPrice,
+            }
 
             return {
               ...lot,
@@ -111,7 +111,7 @@ export class HarvestService {
           portfolioId,
           type: harvestType,
           afterWashRevertDate: this.getPostWashSaleDate(new Date()),
-          label: `${new Date().toLocaleDateString('en-US')} ${currentLotsWithReplacement.map(item => `${item.selectedQuantity} x ${item.symbol}`).join(', ')} for ${currentLotsWithReplacement.map(item => `${item.replacementHarvestTransactionItem.quantity} x ${item.replacementHarvestTransactionItem.assetSymbol}`).join(', ')}`,
+          label: `${new Date().toLocaleDateString('en-US')} ${currentLotsWithReplacement.map(item => `${item.symbol}`).join(', ')} ↔ ${currentLotsWithReplacement.map(item => `${item.replacementHarvestTransactionItem.assetSymbol}`).join(', ')}`,
         },
       })
 

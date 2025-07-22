@@ -72,8 +72,7 @@ export class HarvestResolver {
     where?: HarvestWhereInput,
   ) {
     const { select } = new PrismaSelect<Prisma.HarvestSelect>(info).value
-
-    return this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).harvest.findMany({
+    const result = await this.prismaService.$extends(PrismaService.forPortfolio(metadata.portfolioId)).harvest.findMany({
       orderBy: [
         {
           date: 'desc',
@@ -82,6 +81,7 @@ export class HarvestResolver {
       select,
       where,
     })
+    return result
   }
 
   @Query(() => Harvest, {
