@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: release-name-api
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: release-name-web
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: web-0.1.0
     app.kubernetes.io/name: web
@@ -52,7 +52,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: release-name-api
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
@@ -87,32 +87,14 @@ spec:
               value: "production"
             - name: CLIENT_HOME_PAGE_PATH
               value: "/main/home"
-            - name: CLIENT_ORIGIN
-              value: "https://dev.taxharvest.ai"
             - name: DEFAULT_EMAIL_ADDRESS
               value: "support@taxharvest.ai"
-            - name: ETRADE_HOSTNAME
-              value: "api.etrade.com"
-            - name: ETRADE_OAUTH_AUTHORIZE_URL
-              value: "https://us.etrade.com/e/t/etws/authorize"
-            - name: ETRADE_OAUTH_TOKEN_URL
-              value: "https://us.etrade.com/e/t/etws/token"
-            - name: GCS_LOTS_BUCKET_NAME
-              value: "lot_upload"
-            - name: GOOGLE_PROJECT
-              value: "harvester-ai-428202"
             - name: MATCH_PERCENTAGE_DIFFERENCE
               value: "0.3"
             - name: NUETRAL_HARVEST_THRESHOLD
               value: "1000"
-            - name: ORIGIN
-              value: "https://dev.taxharvest.ai/core"
-            - name: PLAID_ENV
-              value: "https://production.plaid.com"
             - name: PORT
               value: "8000"
-            - name: STRIPE_PUBLISHABLE_KEY
-              value: "pk_test_51RMA1bCIs96aprc48ICF4qlFkUUWlsfSnZw4xPQ4D43J775q4DkS1PPLFNdEu7cLyWFh6S0gRgk7W9FlFqwjZs1C00aQKxFWQW"
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
@@ -213,7 +195,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: release-name-web
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: web-0.1.0
     app.kubernetes.io/name: web
@@ -290,7 +272,7 @@ metadata:
 spec:
   ingressClassName: gce
   rules:
-  - host: 
+  - host: argocd.taxharvest.ai
     http:
       paths:
       - path: /
@@ -306,20 +288,20 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: harvester-ingress
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
-    app.kubernetes.io/name: harvester-dev
+    app.kubernetes.io/name: harvester-prod
     app.kubernetes.io/instance: release-name
     app.kubernetes.io/managed-by: Helm
   annotations:
     kubernetes.io/ingress.allow-http: "false"
     kubernetes.io/ingress.class: gce
-    kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
-    networking.gke.io/managed-certificates: harvester-dev-cert
+    kubernetes.io/ingress.global-static-ip-name: prod-taxharvest-static-ip
+    networking.gke.io/managed-certificates: harvester-prod-cert
 spec:
   ingressClassName: gce
   rules:
-    - host: dev.taxharvest.ai
+    - host: app.taxharvest.ai
       http:
         paths:
           - path: /core
@@ -356,7 +338,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: google-secret-service-account
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     app.kubernetes.io/name: harvester
     app.kubernetes.io/instance: release-name
@@ -371,7 +353,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: release-name-api-migrations
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
@@ -410,32 +392,14 @@ spec:
             # Add general environment variables except secrets
             - name: CLIENT_HOME_PAGE_PATH
               value: "/main/home"
-            - name: CLIENT_ORIGIN
-              value: "https://dev.taxharvest.ai"
             - name: DEFAULT_EMAIL_ADDRESS
               value: "support@taxharvest.ai"
-            - name: ETRADE_HOSTNAME
-              value: "api.etrade.com"
-            - name: ETRADE_OAUTH_AUTHORIZE_URL
-              value: "https://us.etrade.com/e/t/etws/authorize"
-            - name: ETRADE_OAUTH_TOKEN_URL
-              value: "https://us.etrade.com/e/t/etws/token"
-            - name: GCS_LOTS_BUCKET_NAME
-              value: "lot_upload"
-            - name: GOOGLE_PROJECT
-              value: "harvester-ai-428202"
             - name: MATCH_PERCENTAGE_DIFFERENCE
               value: "0.3"
             - name: NUETRAL_HARVEST_THRESHOLD
               value: "1000"
-            - name: ORIGIN
-              value: "https://dev.taxharvest.ai/core"
-            - name: PLAID_ENV
-              value: "https://production.plaid.com"
             - name: PORT
               value: "8000"
-            - name: STRIPE_PUBLISHABLE_KEY
-              value: "pk_test_51RMA1bCIs96aprc48ICF4qlFkUUWlsfSnZw4xPQ4D43J775q4DkS1PPLFNdEu7cLyWFh6S0gRgk7W9FlFqwjZs1C00aQKxFWQW"
             # Add migration-specific environment variables
             # Add migration-specific secrets (these will override any general secrets)
             - name: DATABASE_URL
@@ -499,7 +463,7 @@ spec:
         workloadIdentity:
           serviceAccountRef:
             name: google-secret-service-account
-            namespace: harvester-dev
+            namespace: harvester-prod
           clusterLocation: us-central1-b
           clusterName: harvester-dev
 ---
@@ -508,7 +472,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: database-external-secret
-  namespace: harvester-dev
+  namespace: harvester-prod
   annotations:
     helm.sh/hook: 'pre-install,pre-upgrade'
     helm.sh/hook-weight: '-90'
@@ -523,17 +487,17 @@ spec:
   data:
     - secretKey: DATABASE_URL
       remoteRef:
-        key: DATABASE_URL
+        key: PROD_DATABASE_URL
     - secretKey: DATABASE_URL_MIGRATION
       remoteRef:
-        key: DATABASE_URL_MIGRATION
+        key: PROD_DATABASE_URL_MIGRATION
 ---
 # Source: harvester/charts/secrets/templates/external-secrets.yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: clerk-external-secret
-  namespace: harvester-dev
+  namespace: harvester-prod
   annotations:
     helm.sh/hook: 'pre-install,pre-upgrade'
     helm.sh/hook-weight: '-90'
@@ -548,17 +512,17 @@ spec:
   data:
     - secretKey: CLERK_SECRET_KEY
       remoteRef:
-        key: CLERK_SECRET_KEY
+        key: PROD_CLERK_SECRET_KEY
     - secretKey: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
       remoteRef:
-        key: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+        key: PROD_CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
 ---
 # Source: harvester/charts/secrets/templates/external-secrets.yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: stripe-external-secret
-  namespace: harvester-dev
+  namespace: harvester-prod
   annotations:
     helm.sh/hook: 'pre-install,pre-upgrade'
     helm.sh/hook-weight: '-90'
@@ -573,14 +537,14 @@ spec:
   data:
     - secretKey: STRIPE_SECRET_KEY
       remoteRef:
-        key: STRIPE_SECRET_KEY
+        key: PROD_STRIPE_SECRET_KEY
 ---
 # Source: harvester/charts/secrets/templates/external-secrets.yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: etrade-external-secret
-  namespace: harvester-dev
+  namespace: harvester-prod
   annotations:
     helm.sh/hook: 'pre-install,pre-upgrade'
     helm.sh/hook-weight: '-90'
@@ -595,17 +559,17 @@ spec:
   data:
     - secretKey: ETRADE_API_KEY
       remoteRef:
-        key: ETRADE_API_KEY
+        key: PROD_ETRADE_API_KEY
     - secretKey: ETRADE_API_SECRET
       remoteRef:
-        key: ETRADE_API_SECRET
+        key: PROD_ETRADE_API_SECRET
 ---
 # Source: harvester/charts/secrets/templates/external-secrets.yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: polygon-external-secret
-  namespace: harvester-dev
+  namespace: harvester-prod
   annotations:
     helm.sh/hook: 'pre-install,pre-upgrade'
     helm.sh/hook-weight: '-90'
@@ -620,14 +584,14 @@ spec:
   data:
     - secretKey: POLYGON_API_KEY
       remoteRef:
-        key: POLYGON_API_KEY
+        key: PROD_POLYGON_API_KEY
 ---
 # Source: harvester/charts/secrets/templates/external-secrets.yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: plaid-external-secret
-  namespace: harvester-dev
+  namespace: harvester-prod
   annotations:
     helm.sh/hook: 'pre-install,pre-upgrade'
     helm.sh/hook-weight: '-90'
@@ -642,17 +606,17 @@ spec:
   data:
     - secretKey: PLAID_SECRET_KEY
       remoteRef:
-        key: PLAID_SECRET_KEY
+        key: PROD_PLAID_SECRET_KEY
     - secretKey: PLAID_CLIENT_ID
       remoteRef:
-        key: PLAID_CLIENT_ID
+        key: PROD_PLAID_CLIENT_ID
 ---
 # Source: harvester/charts/secrets/templates/external-secrets.yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: sendgrid-external-secret
-  namespace: harvester-dev
+  namespace: harvester-prod
   annotations:
     helm.sh/hook: 'pre-install,pre-upgrade'
     helm.sh/hook-weight: '-90'
@@ -667,4 +631,4 @@ spec:
   data:
     - secretKey: SENDGRID_API_KEY
       remoteRef:
-        key: SENDGRID_API_KEY
+        key: PROD_SENDGRID_API_KEY

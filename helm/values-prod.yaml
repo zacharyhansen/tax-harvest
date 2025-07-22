@@ -1,6 +1,11 @@
 global:
   namespace: harvester-prod
   environment: production
+  certificates:
+    - name: harvester-prod-cert
+      namespace: harvester-prod
+      domains:
+        - app.taxharvest.ai
   ingress:
     enabled: true
     className: gce

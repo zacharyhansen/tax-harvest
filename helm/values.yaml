@@ -1,8 +1,8 @@
 global:
+  namespace: harvester-dev
   projectID: harvester-ai-428202
   clusterLocation: us-central1-b
   clusterName: harvester-dev
-  namespace: harvester-dev
   ingress:
     enabled: true
     className: gce
