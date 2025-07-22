@@ -70,20 +70,20 @@ secrets:
         - secretKey: SENDGRID_API_KEY
           remoteKey: PROD_SENDGRID_API_KEY
 
-argocd:
-  enabled: true
-  namespace: argocd
-  ingress:
-    enabled: true
-    # annotations:
-    #   networking.gke.io/managed-certificates: argocd-prod-cert
-    #   kubernetes.io/ingress.global-static-ip-name: prod-argo-taxharvest-static-ip
-    #   kubernetes.io/ingress.allow-http: "true"
-    #   kubernetes.io/ingress.class: gce
-    # host: argocd.taxharvest.ai
-    path: /
-    pathType: Prefix
-    service:
-      name: argocd-server
-      port:
-        name: http
+# argocd:
+#   enabled: true
+#   namespace: argocd
+# ingress:
+#   enabled: true
+# annotations:
+#   networking.gke.io/managed-certificates: argocd-prod-cert
+#   kubernetes.io/ingress.global-static-ip-name: prod-argo-taxharvest-static-ip
+#   kubernetes.io/ingress.allow-http: "true"
+#   kubernetes.io/ingress.class: gce
+# host: argocd.taxharvest.ai
+# path: /
+# pathType: Prefix
+# service:
+#   name: argocd-server
+#   port:
+#     name: http
