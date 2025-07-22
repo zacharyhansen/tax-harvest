@@ -23,7 +23,13 @@ global:
           - path: /
             pathType: Prefix
             service: web
+
 api:
+  replicaCount: 1
+  image:
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api-prod
+    tag: v3.1.2
+    pullPolicy: Always
   env:
     extras:
       PLAID_ENV: https://production.plaid.com
@@ -35,6 +41,13 @@ api:
       CLIENT_ORIGIN: https://app.taxharvest.ai
       ORIGIN: https://app.taxharvest.ai/core
       STRIPE_PUBLISHABLE_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
+
+web:
+  replicaCount: 1
+  image:
+    repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web-prod
+    tag: v3.1.2
+    pullPolicy: Always
 
 secrets:
   externalSecrets:

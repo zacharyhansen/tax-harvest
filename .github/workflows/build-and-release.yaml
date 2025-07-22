@@ -102,7 +102,7 @@ jobs:
           cache-to: type=inline
 
   build-web-prod:
-    name: Build and Push Web Image Prod
+    name: Build and Push Web Image
     needs: [version]
     runs-on: ubuntu-latest
     steps:

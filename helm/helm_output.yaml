@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: release-name-api
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: release-name-web
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: web-0.1.0
     app.kubernetes.io/name: web
@@ -52,7 +52,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: release-name-api
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
@@ -88,7 +88,7 @@ spec:
             - name: CLIENT_HOME_PAGE_PATH
               value: "/main/home"
             - name: CLIENT_ORIGIN
-              value: "https://dev.taxharvest.ai"
+              value: "https://app.taxharvest.ai"
             - name: DEFAULT_EMAIL_ADDRESS
               value: "support@taxharvest.ai"
             - name: ETRADE_HOSTNAME
@@ -98,7 +98,7 @@ spec:
             - name: ETRADE_OAUTH_TOKEN_URL
               value: "https://us.etrade.com/e/t/etws/token"
             - name: GCS_LOTS_BUCKET_NAME
-              value: "lot_upload"
+              value: "lot_upload_prod"
             - name: GOOGLE_PROJECT
               value: "harvester-ai-428202"
             - name: MATCH_PERCENTAGE_DIFFERENCE
@@ -106,13 +106,13 @@ spec:
             - name: NUETRAL_HARVEST_THRESHOLD
               value: "1000"
             - name: ORIGIN
-              value: "https://dev.taxharvest.ai/core"
+              value: "https://app.taxharvest.ai/core"
             - name: PLAID_ENV
               value: "https://production.plaid.com"
             - name: PORT
               value: "8000"
             - name: STRIPE_PUBLISHABLE_KEY
-              value: "pk_test_51RMA1bCIs96aprc48ICF4qlFkUUWlsfSnZw4xPQ4D43J775q4DkS1PPLFNdEu7cLyWFh6S0gRgk7W9FlFqwjZs1C00aQKxFWQW"
+              value: "pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk"
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
@@ -185,6 +185,7 @@ spec:
               path: /health
               port: http
             initialDelaySeconds: 15
+            periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 3
         # Cloud SQL Auth Proxy sidecar container
@@ -213,7 +214,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: release-name-web
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: web-0.1.0
     app.kubernetes.io/name: web
@@ -284,20 +285,20 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: harvester-ingress
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
-    app.kubernetes.io/name: harvester-dev
+    app.kubernetes.io/name: harvester-prod
     app.kubernetes.io/instance: release-name
     app.kubernetes.io/managed-by: Helm
   annotations:
     kubernetes.io/ingress.allow-http: "false"
     kubernetes.io/ingress.class: gce
-    kubernetes.io/ingress.global-static-ip-name: harvester-static-ip
-    networking.gke.io/managed-certificates: harvester-dev-cert
+    kubernetes.io/ingress.global-static-ip-name: prod-taxharvest-static-ip
+    networking.gke.io/managed-certificates: harvester-prod-cert
 spec:
   ingressClassName: gce
   rules:
-    - host: dev.taxharvest.ai
+    - host: app.taxharvest.ai
       http:
         paths:
           - path: /core
@@ -315,26 +316,188 @@ spec:
                 port:
                   number: 80
 ---
+# Source: harvester/charts/secrets/templates/secretstore.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: gcp-secret-store
+spec:
+  provider:
+    gcpsm:
+      projectID: harvester-ai-428202
+      auth:
+        workloadIdentity:
+          serviceAccountRef:
+            name: google-secret-service-account
+            namespace: harvester-prod
+          clusterLocation: us-central1-b
+          clusterName: harvester-dev
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: database-external-secret
+  namespace: harvester-prod
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: database
+    creationPolicy: Owner
+  data:
+    - secretKey: DATABASE_URL
+      remoteRef:
+        key: PROD_DATABASE_URL
+    - secretKey: DATABASE_URL_MIGRATION
+      remoteRef:
+        key: PROD_DATABASE_URL_MIGRATION
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: clerk-external-secret
+  namespace: harvester-prod
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: clerk
+    creationPolicy: Owner
+  data:
+    - secretKey: CLERK_SECRET_KEY
+      remoteRef:
+        key: PROD_CLERK_SECRET_KEY
+    - secretKey: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+      remoteRef:
+        key: PROD_CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: stripe-external-secret
+  namespace: harvester-prod
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: stripe
+    creationPolicy: Owner
+  data:
+    - secretKey: STRIPE_SECRET_KEY
+      remoteRef:
+        key: PROD_STRIPE_SECRET_KEY
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: etrade-external-secret
+  namespace: harvester-prod
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: etrade
+    creationPolicy: Owner
+  data:
+    - secretKey: ETRADE_API_KEY
+      remoteRef:
+        key: PROD_ETRADE_API_KEY
+    - secretKey: ETRADE_API_SECRET
+      remoteRef:
+        key: PROD_ETRADE_API_SECRET
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: polygon-external-secret
+  namespace: harvester-prod
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: polygon
+    creationPolicy: Owner
+  data:
+    - secretKey: POLYGON_API_KEY
+      remoteRef:
+        key: PROD_POLYGON_API_KEY
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: plaid-external-secret
+  namespace: harvester-prod
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: plaid
+    creationPolicy: Owner
+  data:
+    - secretKey: PLAID_SECRET_KEY
+      remoteRef:
+        key: PROD_PLAID_SECRET_KEY
+    - secretKey: PLAID_CLIENT_ID
+      remoteRef:
+        key: PROD_PLAID_CLIENT_ID
+---
+# Source: harvester/charts/secrets/templates/external-secrets.yaml
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sendgrid-external-secret
+  namespace: harvester-prod
+spec:
+  refreshInterval: "15m"
+  secretStoreRef:
+    name: gcp-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: sendgrid
+    creationPolicy: Owner
+  data:
+    - secretKey: SENDGRID_API_KEY
+      remoteRef:
+        key: PROD_SENDGRID_API_KEY
+---
 # Source: harvester/templates/managed-certificate.yaml
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: harvester-dev-cert
-  namespace: harvester-dev
+  name: harvester-prod-cert
+  namespace: harvester-prod
   labels:
     app.kubernetes.io/name: harvester
     app.kubernetes.io/instance: release-name
     app.kubernetes.io/managed-by: Helm
 spec:
   domains:
-    - dev.taxharvest.ai
+    - app.taxharvest.ai
 ---
 # Source: harvester/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: google-secret-service-account
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     app.kubernetes.io/name: harvester
     app.kubernetes.io/instance: release-name
@@ -349,7 +512,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: release-name-api-migrations
-  namespace: harvester-dev
+  namespace: harvester-prod
   labels:
     helm.sh/chart: api-0.1.0
     app.kubernetes.io/name: api
@@ -389,7 +552,7 @@ spec:
             - name: CLIENT_HOME_PAGE_PATH
               value: "/main/home"
             - name: CLIENT_ORIGIN
-              value: "https://dev.taxharvest.ai"
+              value: "https://app.taxharvest.ai"
             - name: DEFAULT_EMAIL_ADDRESS
               value: "support@taxharvest.ai"
             - name: ETRADE_HOSTNAME
@@ -399,7 +562,7 @@ spec:
             - name: ETRADE_OAUTH_TOKEN_URL
               value: "https://us.etrade.com/e/t/etws/token"
             - name: GCS_LOTS_BUCKET_NAME
-              value: "lot_upload"
+              value: "lot_upload_prod"
             - name: GOOGLE_PROJECT
               value: "harvester-ai-428202"
             - name: MATCH_PERCENTAGE_DIFFERENCE
@@ -407,13 +570,13 @@ spec:
             - name: NUETRAL_HARVEST_THRESHOLD
               value: "1000"
             - name: ORIGIN
-              value: "https://dev.taxharvest.ai/core"
+              value: "https://app.taxharvest.ai/core"
             - name: PLAID_ENV
               value: "https://production.plaid.com"
             - name: PORT
               value: "8000"
             - name: STRIPE_PUBLISHABLE_KEY
-              value: "pk_test_51RMA1bCIs96aprc48ICF4qlFkUUWlsfSnZw4xPQ4D43J775q4DkS1PPLFNdEu7cLyWFh6S0gRgk7W9FlFqwjZs1C00aQKxFWQW"
+              value: "pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk"
             # Add migration-specific environment variables
             # Add migration-specific secrets (these will override any general secrets)
             - name: DATABASE_URL
@@ -458,191 +621,3 @@ spec:
       volumes:
         - name: cloudsql
           emptyDir: {}
----
-# Source: harvester/charts/secrets/templates/secretstore.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ClusterSecretStore
-metadata:
-  name: gcp-secret-store-development
-  labels:
-    app.kubernetes.io/component: secretstore
-  annotations:
-    helm.sh/hook: "pre-install,pre-upgrade"
-    helm.sh/hook-weight: "-100"
-spec:
-  provider:
-    gcpsm:
-      projectID: harvester-ai-428202
-      auth:
-        workloadIdentity:
-          serviceAccountRef:
-            name: google-secret-service-account
-            namespace: harvester-dev
-          clusterLocation: us-central1-b
-          clusterName: harvester-dev
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: database-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store-development
-    kind: ClusterSecretStore
-  target:
-    name: database
-    creationPolicy: Owner
-  data:
-    - secretKey: DATABASE_URL
-      remoteRef:
-        key: DATABASE_URL
-    - secretKey: DATABASE_URL_MIGRATION
-      remoteRef:
-        key: DATABASE_URL_MIGRATION
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: clerk-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store-development
-    kind: ClusterSecretStore
-  target:
-    name: clerk
-    creationPolicy: Owner
-  data:
-    - secretKey: CLERK_SECRET_KEY
-      remoteRef:
-        key: CLERK_SECRET_KEY
-    - secretKey: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
-      remoteRef:
-        key: CLERK_USER_UPDATE_CREATE_WEBHOOK_SIGN_SECRET
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: stripe-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store-development
-    kind: ClusterSecretStore
-  target:
-    name: stripe
-    creationPolicy: Owner
-  data:
-    - secretKey: STRIPE_SECRET_KEY
-      remoteRef:
-        key: STRIPE_SECRET_KEY
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: etrade-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store-development
-    kind: ClusterSecretStore
-  target:
-    name: etrade
-    creationPolicy: Owner
-  data:
-    - secretKey: ETRADE_API_KEY
-      remoteRef:
-        key: ETRADE_API_KEY
-    - secretKey: ETRADE_API_SECRET
-      remoteRef:
-        key: ETRADE_API_SECRET
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: polygon-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store-development
-    kind: ClusterSecretStore
-  target:
-    name: polygon
-    creationPolicy: Owner
-  data:
-    - secretKey: POLYGON_API_KEY
-      remoteRef:
-        key: POLYGON_API_KEY
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: plaid-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store-development
-    kind: ClusterSecretStore
-  target:
-    name: plaid
-    creationPolicy: Owner
-  data:
-    - secretKey: PLAID_SECRET_KEY
-      remoteRef:
-        key: PLAID_SECRET_KEY
-    - secretKey: PLAID_CLIENT_ID
-      remoteRef:
-        key: PLAID_CLIENT_ID
----
-# Source: harvester/charts/secrets/templates/external-secrets.yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: sendgrid-external-secret
-  namespace: harvester-dev
-  annotations:
-    helm.sh/hook: 'pre-install,pre-upgrade'
-    helm.sh/hook-weight: '-90'
-spec:
-  refreshInterval: "1h"
-  secretStoreRef:
-    name: gcp-secret-store-development
-    kind: ClusterSecretStore
-  target:
-    name: sendgrid
-    creationPolicy: Owner
-  data:
-    - secretKey: SENDGRID_API_KEY
-      remoteRef:
-        key: SENDGRID_API_KEY
