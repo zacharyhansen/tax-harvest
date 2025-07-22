@@ -23,6 +23,18 @@ global:
           - path: /
             pathType: Prefix
             service: web
+api:
+  env:
+    extras:
+      PLAID_ENV: https://production.plaid.com
+      ETRADE_OAUTH_AUTHORIZE_URL: https://us.etrade.com/e/t/etws/authorize
+      ETRADE_OAUTH_TOKEN_URL: https://us.etrade.com/e/t/etws/token
+      ETRADE_HOSTNAME: api.etrade.com
+      GOOGLE_PROJECT: harvester-ai-428202
+      GCS_LOTS_BUCKET_NAME: lot_upload_prod
+      CLIENT_ORIGIN: https://app.taxharvest.ai
+      ORIGIN: https://app.taxharvest.ai/core
+      STRIPE_PUBLISHABLE_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
 
 secrets:
   externalSecrets:
