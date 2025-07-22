@@ -7,7 +7,7 @@ global:
     annotations:
       networking.gke.io/managed-certificates: harvester-prod-cert
       kubernetes.io/ingress.global-static-ip-name: prod-taxharvest-static-ip
-      kubernetes.io/ingress.allow-http: "false"
+      kubernetes.io/ingress.allow-http: 'false'
       kubernetes.io/ingress.class: gce
     rules:
       - host: app.taxharvest.ai
@@ -64,21 +64,3 @@ secrets:
       data:
         - secretKey: SENDGRID_API_KEY
           remoteKey: PROD_SENDGRID_API_KEY
-
-argocd:
-  enabled: true
-  ingress:
-    enabled: true
-    annotations:
-      networking.gke.io/managed-certificates: argocd-prod-cert
-      kubernetes.io/ingress.global-static-ip-name: prod-argo-taxharvest-static-ip
-      kubernetes.io/ingress.allow-http: "true"
-      kubernetes.io/ingress.class: gce
-    host: argocd.taxharvest.ai
-    className: gce
-    path: /
-    pathType: Prefix
-    service:
-      name: argocd-server
-      port:
-        name: https
