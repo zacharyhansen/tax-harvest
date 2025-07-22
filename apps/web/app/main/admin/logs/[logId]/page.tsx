@@ -1,40 +1,41 @@
-'use client'
-import ReactJsonView from '@microlink/react-json-view'
+'use client';
 
-import { useTheme } from 'next-themes'
-import { use } from 'react'
+import ReactJsonView from '@microlink/react-json-view';
 
-import { useLogQuery } from '~/generated/gql'
-import { TypedRoutes } from '~/lib/routes'
-import { PageWrapper } from '~/modules/layout'
-import { ErrorPage, LoadingPage } from '~/modules/utility-components'
-import { PlaidTrxMergeLogView } from './plaid-trx-merge-view'
-import { PlaidTrxMergeSuccessLogView } from './plaid-trx-merge-success-view'
-import { ExternalSyncLogView } from './external-sync-log-view'
+import { useTheme } from 'next-themes';
+import { use } from 'react';
+
+import { useLogQuery } from '~/generated/gql';
+import { TypedRoutes } from '~/lib/routes';
+import { PageWrapper } from '~/modules/layout';
+import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { PlaidTrxMergeLogView } from './plaid-trx-merge-view';
+import { PlaidTrxMergeSuccessLogView } from './plaid-trx-merge-success-view';
+import { ExternalSyncLogView } from './external-sync-log-view';
 
 export default function LogPage(props: {
-  params: Promise<typeof TypedRoutes.log.params>
+  params: Promise<typeof TypedRoutes.log.params>;
 }) {
-  const params = use(props.params)
-  const theme = useTheme()
-  const safeParams = TypedRoutes.log.parse(params)
+  const params = use(props.params);
+  const theme = useTheme();
+  const safeParams = TypedRoutes.log.parse(params);
 
   const { data, error, loading } = useLogQuery({
     variables: { logId: safeParams.logId },
-  })
+  });
 
   if (error) {
-    return <ErrorPage message={JSON.stringify(error)} />
+    return <ErrorPage message={JSON.stringify(error)} />;
   }
 
   if (loading) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
 
   return (
     <PageWrapper
       title="Log Explorer"
-      description={(
+      description={
         <div className="grid grid-cols-2 gap-2">
           <div className="flex gap-2">
             <span className="font-bold">ID:</span>
@@ -53,16 +54,18 @@ export default function LogPage(props: {
             <span>{data?.log?.source}</span>
           </div>
         </div>
-      )}
+      }
     >
       {data?.log?.type === 'PLAID_TRX_MERGE' ? (
-        <PlaidTrxMergeLogView 
-          data={data.log.data} 
-          LotTransactionBatch={data.log.LotTransactionBatch}
+        <PlaidTrxMergeLogView
+          data={data.log.data}
+          // @ts-expect-error - LotTransactionBatch is not defined in the log type
+          LotTransactionBatch={data.log.LotTransactionBatch ?? undefined}
         />
       ) : data?.log?.type === 'PLAID_TRX_MERGE_SUCCESS' ? (
         <PlaidTrxMergeSuccessLogView data={data.log.data} />
-      ) : data?.log?.type === 'EXTERNAL_SYNC' && data?.log?.description === '/investmentsTransactionsGet' ? (
+      ) : data?.log?.type === 'EXTERNAL_SYNC' &&
+        data?.log?.description === '/investmentsTransactionsGet' ? (
         <ExternalSyncLogView data={data.log.data} />
       ) : (
         <ReactJsonView
@@ -73,5 +76,5 @@ export default function LogPage(props: {
         />
       )}
     </PageWrapper>
-  )
+  );
 }

@@ -156,45 +156,6 @@ export default function TaxOpportunitiesPage() {
             Optimize your portfolio for tax efficiency
           </motion.p>
         </div>
-
-        {/* Portfolio Summary Card */}
-        <motion.div variants={itemVariants}>
-          <Card className="bg-muted/70 w-full rounded-xl border-0 md:w-auto">
-            <CardHeader className="bg-muted rounded-t-xl p-4 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Net Realized Position
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-2">
-              <div className="flex items-center gap-2">
-                <span
-                  className={cn(
-                    'text-2xl font-bold',
-                    MoneyUtil.colored(netPosition)
-                  )}
-                >
-                  {Format.money(netPosition)}
-                </span>
-              </div>
-              <p className="text-muted-foreground mt-1 text-xs">
-                {harvestEvalResult.harvestType === HarvestType.ReduceCostBasis
-                  ? 'Balanced position: Look for cost basis management opportunities'
-                  : harvestEvalResult.harvestType === HarvestType.ReduceTaxes
-                    ? 'Net realized gain: Consider harvesting losses'
-                    : harvestEvalResult.harvestType ===
-                        HarvestType.CaptureGainsTaxFree
-                      ? 'Net realized loss: Consider harvesting gains'
-                      : harvestEvalResult.harvestType ===
-                          HarvestType.NoOpportunityEmpty
-                        ? 'No positions to harvest'
-                        : harvestEvalResult.harvestType ===
-                            HarvestType.NoOpportunityGains
-                          ? 'All positions have gains'
-                          : 'All positions have losses'}
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
       </motion.div>
 
       {/* Portfolio Status */}

@@ -1,18 +1,18 @@
-'use client'
-import { useState, ReactNode } from 'react'
-import { Button } from '@repo/ui/components/button'
+'use client';
+import { useState, type ReactNode } from 'react';
+import { Button } from '@repo/ui/components/button';
 
 interface LogViewerLayoutProps {
-  data: any
-  children: ReactNode
+  data: any;
+  children: ReactNode;
 }
 
 export function LogViewerLayout({ data, children }: LogViewerLayoutProps) {
-  const [showRawJson, setShowRawJson] = useState(false)
+  const [showRawJson, setShowRawJson] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(data, null, 2))
-  }
+    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+  };
 
   if (showRawJson) {
     return (
@@ -25,11 +25,11 @@ export function LogViewerLayout({ data, children }: LogViewerLayoutProps) {
             Copy Raw JSON
           </Button>
         </div>
-        <pre className="bg-muted p-4 rounded-lg overflow-auto text-sm">
+        <pre className="bg-muted overflow-auto rounded-lg p-4 text-sm">
           {JSON.stringify(data, null, 2)}
         </pre>
       </div>
-    )
+    );
   }
 
   return (
@@ -44,5 +44,5 @@ export function LogViewerLayout({ data, children }: LogViewerLayoutProps) {
       </div>
       {children}
     </div>
-  )
+  );
 }
