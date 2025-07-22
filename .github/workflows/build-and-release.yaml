@@ -13,14 +13,6 @@ on:
           - patch
           - minor
           - major
-      deployment_env:
-        description: Deployment environment (development/staging/production)
-        required: true
-        type: choice
-        options:
-          - development
-          - production
-        default: development
       manual_version:
         description: Manual version override (leave empty for automatic)
         required: false
@@ -105,8 +97,32 @@ jobs:
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:v${{ needs.version.outputs.new_version }}
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
           build-args: |
-            DEPLOYMENT_ENV=${{ inputs.deployment_env }}
+            DEPLOYMENT_ENV=development
           cache-from: type=registry,ref=${{ env.AR_URL_PREFIX }}-web/harvester-web:latest
+          cache-to: type=inline
+
+  build-web-prod:
+    name: Build and Push Web Image Prod
+    needs: [version]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate with Google Cloud and Docker
+        uses: ./.github/actions/auth
+
+      - name: Build and Push Web Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          push: true
+          tags: |
+            ${{ env.AR_URL_PREFIX }}-web/harvester-web-prod:v${{ needs.version.outputs.new_version }}
+            ${{ env.AR_URL_PREFIX }}-web/harvester-web-prod:latest
+          build-args: |
+            DEPLOYMENT_ENV=production
+          cache-from: type=registry,ref=${{ env.AR_URL_PREFIX }}-web/harvester-web-prod:latest
           cache-to: type=inline
 
   build-api:
@@ -247,7 +263,6 @@ jobs:
             ```
             ${{ env.AR_URL_PREFIX }}-api/harvester-api:v${{ needs.version.outputs.new_version }}
             ${{ env.AR_URL_PREFIX }}-web/harvester-web:v${{ needs.version.outputs.new_version }}
-            ${{ env.AR_URL_PREFIX }}-api/harvester-studio:v${{ needs.version.outputs.new_version }}
             ```
 
             ## Automated Release
