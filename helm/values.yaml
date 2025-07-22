@@ -13,7 +13,6 @@ global:
       namespace: harvester-dev
       domains:
         - dev.taxharvest.ai
-
 # Service accounts configuration
 serviceAccounts:
   - name: google-secret-service-account
@@ -23,7 +22,7 @@ api:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v3.1.1
+    tag: v3.1.2
     pullPolicy: Always
   hookWeight: -10
   annotations:
@@ -146,7 +145,7 @@ web:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web
-    tag: v3.1.1
+    tag: v3.1.2
     pullPolicy: Always
   hookWeight: 10
   annotations:
