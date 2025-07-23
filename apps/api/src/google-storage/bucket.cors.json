@@ -1,8 +1,8 @@
 [
   {
-    "origin": ["http://localhost:3000", "http://dev.taxharvest.ai", "http://app.taxharvest.ai"],
+    "origin": ["https://app.taxharvest.ai", "http://localhost:3000"],
     "responseHeader": ["Content-Type"],
-    "method": ["PUT"],
+    "method": ["GET", "PUT", "POST", "DELETE"],
     "maxAgeSeconds": 3600
   }
 ]
