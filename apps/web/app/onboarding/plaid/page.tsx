@@ -55,7 +55,7 @@ export default function PlaidPage() {
     authConnectionsData.plaidAuthConnections.length > 0;
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
+    <div className="mx-auto max-h-screen w-full max-w-4xl overflow-auto">
       <div className="bg-card rounded-lg border">
         <div className="border-b p-6">
           <h1 className="text-2xl font-semibold">Connect Your Accounts</h1>

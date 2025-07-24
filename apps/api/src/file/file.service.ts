@@ -148,7 +148,7 @@ export class FileService {
       select,
       portfolioId,
     })
-    await this.prismaService.account.update({
+    await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).account.update({
       where: { id: account.id },
       data: {
         uploadedPositions: true,

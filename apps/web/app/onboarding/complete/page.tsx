@@ -17,25 +17,25 @@ export default function CompletePage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
-      <div className="rounded-lg border bg-card">
+    <div className="mx-auto max-h-screen w-full max-w-4xl overflow-auto">
+      <div className="bg-card rounded-lg border">
         <div className="border-b p-6">
           <h1 className="text-2xl font-semibold">Complete</h1>
           <p className="text-muted-foreground mt-1">
             Your account is ready to go!
           </p>
         </div>
-        
+
         <OnboardingCompleteStep />
-        
+
         <div className="flex justify-end gap-2 border-t p-6">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => router.push('/onboarding/analyze')}
           >
             Back
           </Button>
-          <Button 
+          <Button
             onClick={() => {
               handleComplete();
               router.push('/onboarding/plaid');

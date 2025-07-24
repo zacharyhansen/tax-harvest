@@ -220,17 +220,6 @@ export default function AccountMappingPage() {
     });
   };
 
-  /**
-   * Allows users to revert a skipped account back to pending status for CSV upload
-   */
-  const handleRevertSkip = (accountId: string) => {
-    updateAccountMapping(accountId, {
-      hasCSV: false,
-      uploadProgress: 'none',
-      files: [],
-    });
-  };
-
   const handleFinish = async () => {
     const incompleteAccounts = accountMappings.filter(
       mapping => mapping.uploadProgress !== 'completed'

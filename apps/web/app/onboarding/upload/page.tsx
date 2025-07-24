@@ -113,7 +113,7 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="mx-auto max-h-screen w-full max-w-4xl overflow-y-auto">
+    <div className="mx-auto max-h-screen w-full max-w-4xl overflow-auto">
       <div className="bg-card rounded-lg border">
         <div className="border-b p-6">
           <h1 className="text-2xl font-semibold">Upload Positions</h1>

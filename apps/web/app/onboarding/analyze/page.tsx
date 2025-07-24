@@ -18,25 +18,26 @@ export default function AnalyzePage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
-      <div className="rounded-lg border bg-card">
+    <div className="mx-auto max-h-screen w-full max-w-4xl overflow-auto">
+      <div className="bg-card rounded-lg border">
         <div className="border-b p-6">
           <h1 className="text-2xl font-semibold">Analyzing Account</h1>
           <p className="text-muted-foreground mt-1">
-            Building the most optimal strategies for your account based on its current tax lots
+            Building the most optimal strategies for your account based on its
+            current tax lots
           </p>
         </div>
-        
+
         <AnalyzeStep onAnimationsComplete={handleAnimationsComplete} />
-        
+
         <div className="flex justify-end gap-2 border-t p-6">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => router.push('/onboarding/upload')}
           >
             Back
           </Button>
-          <Button 
+          <Button
             onClick={() => router.push('/onboarding/complete')}
             disabled={!isComplete}
           >

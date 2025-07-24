@@ -261,25 +261,23 @@ export class HarvestService {
         data: revertTransactionItems,
       })
 
-      await Promise.all(
-        Object.keys(indexMap).map((transactionId) => {
-          return tx.harvestTransaction.update({
-            data: {
-              revertHarvestTransactionItemId:
-                indexMap[transactionId].harvest === undefined
-                  ? undefined
-                  : createdItems[indexMap[transactionId].harvest ?? -1].id,
-              revertReplacementTransactionItemId:
-                indexMap[transactionId].replacement === undefined
-                  ? undefined
-                  : createdItems[indexMap[transactionId].replacement ?? -1].id,
-            },
-            where: {
-              id: transactionId,
-            },
-          })
-        }),
-      )
+      for (const transactionId of Object.keys(indexMap)) {
+        await tx.harvestTransaction.update({
+          data: {
+            revertHarvestTransactionItemId:
+              indexMap[transactionId].harvest === undefined
+                ? undefined
+                : createdItems[indexMap[transactionId].harvest ?? -1].id,
+            revertReplacementTransactionItemId:
+              indexMap[transactionId].replacement === undefined
+                ? undefined
+                : createdItems[indexMap[transactionId].replacement ?? -1].id,
+          },
+          where: {
+            id: transactionId,
+          },
+        })
+      }
       return tx.harvest.update({
         data: {
           step: {
