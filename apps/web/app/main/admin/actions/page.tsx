@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from '@repo/ui/components/card';
 import { toast } from '@repo/ui/components/toast-sonner';
-import { Receipt } from 'lucide-react';
+import { Receipt, RefreshCw } from 'lucide-react';
 
 import {
   HarvestNotificationFrequency,
@@ -22,6 +22,7 @@ import { PageWrapper } from '~/modules/layout';
 import { DatePicker } from '@repo/ui/components/date-picker';
 import { useState } from 'react';
 import { Combobox } from '@repo/ui/components/combobox';
+import { PlaidSyncComponent } from './PlaidSyncComponent';
 
 export default function ActionsPage() {
   // const [updateHourlyAssetPrices] = useUpdateHourlyAssetPricesMutation();
@@ -247,6 +248,25 @@ export default function ActionsPage() {
             </Button>
           </CardContent>
         </Card> */}
+      </div>
+
+      {/* Plaid Sync Section */}
+      <div className="mt-8">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <RefreshCw className="size-6" />
+              Sync Plaid Connections
+            </CardTitle>
+            <CardDescription>
+              Manually sync Plaid connections (same as webhooks). This will
+              refresh account balances, holdings, and transactions.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PlaidSyncComponent />
+          </CardContent>
+        </Card>
       </div>
     </PageWrapper>
   );

@@ -30,6 +30,7 @@ import {
   Security,
 } from 'plaid'
 import { PrismaService } from '../prisma/prisma.service'
+import { TimeMethod } from '../utilities/time-method'
 import { findLotChangeSets, LotChange, LotData } from './lot-application'
 import { PlaidLinkOnSuccessMetadata, PlaidWebhook } from './plaid.dto'
 import { taxAdvantadedSubTypes } from './plaid.utils'
@@ -47,10 +48,39 @@ interface ResolvedLotChangeResults {
   intitialLotMap: Map<string, Lot>
 }
 
+/**
+ * Process an array in batches with sequential batch processing
+ * @param items Array of items to process
+ * @param batchSize Size of each batch
+ * @param processor Function to process each item
+ * @returns Promise that resolves when all batches are processed
+ * @example
+ * await processBatch(items, 10, async (item) => {
+ *   await processItem(item)
+ * })
+ */
+async function processBatch<T, R>(
+  items: T[],
+  batchSize: number,
+  processor: (item: T) => Promise<R>,
+): Promise<R[]> {
+  const results: R[] = []
+
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize)
+    const batchResults = await Promise.all(batch.map(processor))
+    results.push(...batchResults)
+  }
+
+  return results
+}
+
 @Injectable()
 export class PlaidService {
   private readonly logger = new Logger(PlaidService.name)
   private readonly client: PlaidApi
+  private readonly dbBatchSize: number
+
   constructor(
     private readonly configService: ConfigService,
     private readonly prismaService: PrismaService,
@@ -66,6 +96,9 @@ export class PlaidService {
         basePath: this.configService.get('PLAID_ENV'),
       }),
     )
+    // Default to 5 for connection pool limit
+    this.dbBatchSize = this.configService.get<number>('DB_BATCH_SIZE') ?? 5
+    this.logger.log(`Database batch size set to: ${this.dbBatchSize}`)
   }
 
   async linkToken({
@@ -213,6 +246,7 @@ export class PlaidService {
     })
   }
 
+  @TimeMethod()
   async syncPlaidItem({
     plaidAuthConnection,
     existingAccountId,
@@ -221,7 +255,7 @@ export class PlaidService {
     asReversableOperations?: boolean
     existingAccountId?: string
   }): Promise<Account[]> {
-    this.logger.log('Syncing Plaid item: ', plaidAuthConnection.id)
+    this.logger.log(`Syncing Plaid item: ${plaidAuthConnection.id}`)
     if (plaidAuthConnection.type !== AuthType.PLAID_LINK) {
       throw new Error('This is not a plaid auth connection')
     }
@@ -253,58 +287,60 @@ export class PlaidService {
       })
 
     // Set up create of positions
-    const [accounts] = await Promise.all([
-      this.resetPlaidAccounts({
-        plaidAccounts: plaidResponse.data.accounts,
-        plaidAuthConnection,
-        existingAccountId,
-      }),
-      this.assertPlaidSecuritiesExist({
-        securities: plaidResponse.data.securities,
-        portfolioId: plaidAuthConnection.portfolioId,
-      }),
-      this.prismaService
-        .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
-        .log
-        .create({
-          data: {
-            data: plaidResponse.data as unknown as InputJsonValue,
-            description: '/investmentsHoldingsGet',
-            responseStatus: plaidResponse.status,
-            source: AuthSource.PLAID,
-            type: LogType.EXTERNAL_SYNC,
-            portfolioId: plaidAuthConnection.portfolioId,
-          },
-        }),
-    ])
+    // Run these sequentially to avoid connection pool exhaustion
+    const accounts = await this.resetPlaidAccounts({
+      plaidAccounts: plaidResponse.data.accounts,
+      plaidAuthConnection,
+      existingAccountId,
+    })
+
+    await this.assertPlaidSecuritiesExist({
+      securities: plaidResponse.data.securities,
+      portfolioId: plaidAuthConnection.portfolioId,
+    })
+
+    await this.prismaService
+      .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+      .log
+      .create({
+        data: {
+          data: plaidResponse.data as unknown as InputJsonValue,
+          description: '/investmentsHoldingsGet',
+          responseStatus: plaidResponse.status,
+          source: AuthSource.PLAID,
+          type: LogType.EXTERNAL_SYNC,
+          portfolioId: plaidAuthConnection.portfolioId,
+        },
+      })
 
     // Remove all the positions we are syncing (cant know which have been deleted or not)
     // Then create them - return the created positions and the unapplied transactions
-    await Promise.all([
-      this.prismaService
-        .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
-        .$transaction([
-          this.prismaService.position.deleteMany({
-            where: {
-              account: {
-                authConnectionId: {
-                  in: accounts.map(a => a.authConnectionId ?? ''),
-                },
+
+    await this.prismaService
+      .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+      .$transaction(async (trx) => {
+        await trx.position.deleteMany({
+          where: {
+            account: {
+              authConnectionId: {
+                in: accounts.map(a => a.authConnectionId ?? ''),
               },
             },
+          },
+        })
+
+        return trx.position.createMany({
+          data: PlaidService.convertPlaidHoldings({
+            holdingsResponse: plaidResponse.data,
+            accounts,
+            portfolioId: plaidAuthConnection.portfolioId,
           }),
-          this.prismaService.position.createMany({
-            data: PlaidService.convertPlaidHoldings({
-              holdingsResponse: plaidResponse.data,
-              accounts,
-              portfolioId: plaidAuthConnection.portfolioId,
-            }),
-          }),
-        ]),
-      this.syncPlaidTransactions({
-        plaidAuthConnection,
-      }),
-    ])
+        })
+      })
+
+    await this.syncPlaidTransactions({
+      plaidAuthConnection,
+    })
 
     // Now we attempt to process the unapplied transactions based on initialLots and initialPositions
     // await this.applyNewTransactions({
@@ -321,7 +357,7 @@ export class PlaidService {
     accountId: string
     portfolioId: string
   }): Promise<void> {
-    this.logger.log('Applying new transactions for account: ', accountId)
+    this.logger.log(`Applying new transactions for account: ${accountId}`)
     const [finalPositions, initialLots, transactions] = await Promise.all([
       this.prismaService
         .$extends(PrismaService.forPortfolio(portfolioId))
@@ -836,6 +872,7 @@ export class PlaidService {
     if (!plaidAuthConnection.secret) {
       throw new Error('Missing plaid access token for auth connection.')
     }
+
     const end_date = endDate ?? new Date()
 
     // Only need to get from most recent transaction if we are not providing a start date
@@ -866,35 +903,35 @@ export class PlaidService {
     )
 
     // Set up the upsert
-    const [accounts] = await Promise.all([
-      this.prismaService
-        .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
-        .account
-        .findMany({
-          where: {
-            externalId: {
-              in: plaidResponse.data.accounts.map(a => a.account_id ?? ''),
-            },
+    await this.assertPlaidSecuritiesExist({
+      securities: plaidResponse.data.securities,
+      portfolioId: plaidAuthConnection.portfolioId,
+    })
+
+    await this.prismaService
+      .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+      .log
+      .create({
+        data: {
+          data: plaidResponse.data as unknown as InputJsonValue,
+          description: '/investmentsTransactionsGet',
+          responseStatus: plaidResponse.status,
+          source: AuthSource.PLAID,
+          type: LogType.EXTERNAL_SYNC,
+          portfolioId: plaidAuthConnection.portfolioId,
+        },
+      })
+
+    const accounts = await this.prismaService
+      .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+      .account
+      .findMany({
+        where: {
+          externalId: {
+            in: plaidResponse.data.accounts.map(a => a.account_id ?? ''),
           },
-        }),
-      this.assertPlaidSecuritiesExist({
-        securities: plaidResponse.data.securities,
-        portfolioId: plaidAuthConnection.portfolioId,
-      }),
-      this.prismaService
-        .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
-        .log
-        .create({
-          data: {
-            data: plaidResponse.data as unknown as InputJsonValue,
-            description: '/investmentsTransactionsGet',
-            responseStatus: plaidResponse.status,
-            source: AuthSource.PLAID,
-            type: LogType.EXTERNAL_SYNC,
-            portfolioId: plaidAuthConnection.portfolioId,
-          },
-        }),
-    ])
+        },
+      })
 
     const lastTransOfPage = plaidResponse.data.investment_transactions.at(-1)
 
@@ -913,12 +950,16 @@ export class PlaidService {
         },
       }))
 
-    await Promise.all(
-      PlaidService.convertPlaidTransactions({
-        investmentsTransactionsGetResponse: plaidResponse.data,
-        accounts,
-        plaidAuthConnection,
-      }).map((input) => {
+    const transactionsToUpsert = PlaidService.convertPlaidTransactions({
+      investmentsTransactionsGetResponse: plaidResponse.data,
+      accounts,
+      plaidAuthConnection,
+    })
+
+    await processBatch(
+      transactionsToUpsert,
+      this.dbBatchSize,
+      async (input) => {
         return this.prismaService
           .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
           .transaction
@@ -938,7 +979,7 @@ export class PlaidService {
               },
             },
           })
-      }),
+      },
     )
 
     // If these are new transactions and the page is full we need to fetch more pages
@@ -963,15 +1004,19 @@ export class PlaidService {
     securities: Security[]
     portfolioId: string
   }) {
-    return Promise.all(
-      PlaidService.convertPlaidAssets({
-        securities: securities.filter(
-          security =>
-            security.ticker_symbol
-            ?? security.name
-            ?? security.market_identifier_code,
-        ),
-      }).map((input) => {
+    const assetsToUpsert = PlaidService.convertPlaidAssets({
+      securities: securities.filter(
+        security =>
+          security.ticker_symbol
+          ?? security.name
+          ?? security.market_identifier_code,
+      ),
+    })
+
+    return processBatch(
+      assetsToUpsert,
+      this.dbBatchSize,
+      async (input) => {
         return this.prismaService
           .$extends(PrismaService.forPortfolio(portfolioId))
           .asset
@@ -982,7 +1027,7 @@ export class PlaidService {
               symbol: input.symbol,
             },
           })
-      }),
+      },
     )
   }
 

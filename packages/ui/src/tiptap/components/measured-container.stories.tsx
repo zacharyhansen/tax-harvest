@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SlashCmd, SlashCmdProvider } from "@harshtalks/slash-tiptap";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { LinkBubbleMenu } from "@repo/ui/tiptap/components/bubble-menu/link-bubble-menu";

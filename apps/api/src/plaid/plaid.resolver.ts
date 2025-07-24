@@ -1,8 +1,10 @@
 import type { GraphQLResolveInfo } from 'graphql'
 import type { ClerkClaims } from '../auth/types'
+import { UseGuards } from '@nestjs/common'
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator'
+import { AdminGuard } from '../auth/guards/admin.guard'
 import { Account } from '../generated/graphql'
 import { PrismaService } from '../prisma/prisma.service'
 import { PrismaSelect } from '../utilities/prisma/prisma-select'
@@ -131,6 +133,42 @@ export class PlaidResolver {
         portfolioId: currentUser.metadata.portfolioId,
       })
     }
+    return true
+  }
+
+  /**
+   * Admin-only mutation to sync a specific Plaid auth connection
+   * @param authConnectionId - The ID of the auth connection to sync
+   * @returns Promise<boolean> - Returns true when sync is complete
+   * @example
+   * mutation {
+   *   adminSyncPlaidItem(authConnectionId: "auth-connection-id")
+   * }
+   */
+  @Mutation(() => Boolean, {
+    description: 'Admin-only: Sync a specific Plaid auth connection',
+    name: 'adminSyncPlaidItem',
+  })
+  @UseGuards(AdminGuard)
+  async adminSyncPlaidItem(
+    @ClerkContext()
+    currentUser: ClerkClaims,
+    @Args('authConnectionId', { type: () => String })
+    authConnectionId: string,
+  ): Promise<boolean> {
+    // Fetch the auth connection without portfolio restrictions
+    const authConnection = await this.prismaService
+      .$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId))
+      .authConnection
+      .findUniqueOrThrow({
+        where: { id: authConnectionId },
+      })
+
+    // Sync the Plaid item
+    await this.plaidService.syncPlaidItem({
+      plaidAuthConnection: authConnection,
+    })
+
     return true
   }
 }

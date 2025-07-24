@@ -151,6 +151,12 @@ export enum NullableJsonNullValueInput {
     JsonNull = "JsonNull"
 }
 
+export enum NotificationLevel {
+    INFO = "INFO",
+    WARNING = "WARNING",
+    ERROR = "ERROR"
+}
+
 export enum LogType {
     EXTERNAL_SYNC = "EXTERNAL_SYNC",
     AUTH = "AUTH",
@@ -340,6 +346,18 @@ export enum PortfolioScalarFieldEnum {
     harvestTickerBucketLowerLimitShort = "harvestTickerBucketLowerLimitShort",
     notificationFrequency = "notificationFrequency",
     endOfYearTaxOpportunityNotification = "endOfYearTaxOpportunityNotification"
+}
+
+export enum NotificationScalarFieldEnum {
+    id = "id",
+    createdAt = "createdAt",
+    title = "title",
+    description = "description",
+    body = "body",
+    acked = "acked",
+    portfolioId = "portfolioId",
+    accountId = "accountId",
+    level = "level"
 }
 
 export enum LotTransactionBatchScalarFieldEnum {
@@ -609,6 +627,7 @@ registerEnumType(LogScalarFieldEnum, { name: 'LogScalarFieldEnum', description: 
 registerEnumType(LotScalarFieldEnum, { name: 'LotScalarFieldEnum', description: undefined })
 registerEnumType(LotChangeLogScalarFieldEnum, { name: 'LotChangeLogScalarFieldEnum', description: undefined })
 registerEnumType(LotTransactionBatchScalarFieldEnum, { name: 'LotTransactionBatchScalarFieldEnum', description: undefined })
+registerEnumType(NotificationScalarFieldEnum, { name: 'NotificationScalarFieldEnum', description: undefined })
 registerEnumType(PortfolioScalarFieldEnum, { name: 'PortfolioScalarFieldEnum', description: undefined })
 registerEnumType(PositionScalarFieldEnum, { name: 'PositionScalarFieldEnum', description: undefined })
 registerEnumType(PriceHourlyScalarFieldEnum, { name: 'PriceHourlyScalarFieldEnum', description: undefined })
@@ -643,6 +662,7 @@ registerEnumType(HarvestType, { name: 'HarvestType', description: undefined })
 registerEnumType(JsonNullValueFilter, { name: 'JsonNullValueFilter', description: undefined })
 registerEnumType(JsonNullValueInput, { name: 'JsonNullValueInput', description: undefined })
 registerEnumType(LogType, { name: 'LogType', description: undefined })
+registerEnumType(NotificationLevel, { name: 'NotificationLevel', description: undefined })
 registerEnumType(NullableJsonNullValueInput, { name: 'NullableJsonNullValueInput', description: undefined })
 registerEnumType(NullsOrder, { name: 'NullsOrder', description: undefined })
 registerEnumType(OperationType, { name: 'OperationType', description: undefined })
@@ -1139,6 +1159,8 @@ export class AccountCount {
     files?: number;
     @Field(() => Int, {nullable:false})
     LotTransactionBatch?: number;
+    @Field(() => Int, {nullable:false})
+    Notification?: number;
 }
 
 @InputType()
@@ -1794,6 +1816,19 @@ export class AccountCreateNestedOneWithoutLotsInput {
 }
 
 @InputType()
+export class AccountCreateNestedOneWithoutNotificationInput {
+    @Field(() => AccountCreateWithoutNotificationInput, {nullable:true})
+    @Type(() => AccountCreateWithoutNotificationInput)
+    create?: InstanceType<typeof AccountCreateWithoutNotificationInput>;
+    @Field(() => AccountCreateOrConnectWithoutNotificationInput, {nullable:true})
+    @Type(() => AccountCreateOrConnectWithoutNotificationInput)
+    connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutNotificationInput>;
+    @Field(() => AccountWhereUniqueInput, {nullable:true})
+    @Type(() => AccountWhereUniqueInput)
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
+}
+
+@InputType()
 export class AccountCreateNestedOneWithoutPositionsInput {
     @Field(() => AccountCreateWithoutPositionsInput, {nullable:true})
     @Type(() => AccountCreateWithoutPositionsInput)
@@ -1880,6 +1915,16 @@ export class AccountCreateOrConnectWithoutLotsInput {
     @Field(() => AccountCreateWithoutLotsInput, {nullable:false})
     @Type(() => AccountCreateWithoutLotsInput)
     create!: InstanceType<typeof AccountCreateWithoutLotsInput>;
+}
+
+@InputType()
+export class AccountCreateOrConnectWithoutNotificationInput {
+    @Field(() => AccountWhereUniqueInput, {nullable:false})
+    @Type(() => AccountWhereUniqueInput)
+    where!: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
+    @Field(() => AccountCreateWithoutNotificationInput, {nullable:false})
+    @Type(() => AccountCreateWithoutNotificationInput)
+    create!: InstanceType<typeof AccountCreateWithoutNotificationInput>;
 }
 
 @InputType()
@@ -2073,6 +2118,9 @@ export class AccountCreateWithoutAuthConnectionInput {
     @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2227,6 +2275,9 @@ export class AccountCreateWithoutCreatedByInput {
     @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2380,6 +2431,9 @@ export class AccountCreateWithoutFilesInput {
     @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2533,6 +2587,9 @@ export class AccountCreateWithoutLotTransactionBatchInput {
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2680,6 +2737,165 @@ export class AccountCreateWithoutLotsInput {
     @Field(() => RealizedPAndLCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => RealizedPAndLCreateNestedManyWithoutAccountInput)
     realizedPAndL?: InstanceType<typeof RealizedPAndLCreateNestedManyWithoutAccountInput>;
+    @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => FileCreateNestedManyWithoutAccountInput)
+    files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
+}
+
+@InputType()
+export class AccountCreateWithoutNotificationInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => AccountProvider, {nullable:true})
+    provider?: `${AccountProvider}`;
+    @Field(() => String, {nullable:true})
+    externalId?: string;
+    @Field(() => String, {nullable:true})
+    name?: string;
+    @Field(() => String, {nullable:true})
+    plaidAccountMask?: string;
+    @Field(() => String, {nullable:true})
+    key?: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => AccountInstitution, {nullable:true})
+    institution?: `${AccountInstitution}`;
+    @Field(() => String, {nullable:true})
+    type?: string;
+    @Field(() => String, {nullable:true})
+    subType?: string;
+    @Field(() => AccountMode, {nullable:true})
+    mode?: `${AccountMode}`;
+    @Field(() => AccountStatus, {nullable:true})
+    status?: `${AccountStatus}`;
+    @Field(() => Date, {nullable:true})
+    closedDate?: Date | string;
+    @Field(() => OptionLevel, {nullable:true})
+    optionLevel?: `${OptionLevel}`;
+    @Field(() => Date, {nullable:true})
+    lotSeededDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    uploadedPositions?: boolean;
+    @Field(() => Boolean, {nullable:true})
+    setRealizedValues?: boolean;
+    @Field(() => Boolean, {nullable:true})
+    skipSetup?: boolean;
+    @Field(() => String, {nullable:true})
+    liveURL?: string;
+    @Field(() => Date, {nullable:true})
+    liveURLCreated?: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashForOpenOrders?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceMoneyMarket?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    accountValueTotal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marketValueTotal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashAvailableForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashNet?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashBalance?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashSettledForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashUnsettledForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashBuyingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    fundsWithheldFromPurchasingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    fundsWithheldFromWithdrawal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginBuyingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginBuyingPowerDT?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceShortAdjustment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceAccount?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    equityRegt?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    equityRegtPercent?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashOpenOrderReserveDT?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginOpenOrderReserveDT?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    raw?: any;
+    @HideField()
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutAccountInput>;
+    @Field(() => AuthConnectionCreateNestedOneWithoutAccountsInput, {nullable:true})
+    @Type(() => AuthConnectionCreateNestedOneWithoutAccountsInput)
+    authConnection?: InstanceType<typeof AuthConnectionCreateNestedOneWithoutAccountsInput>;
+    @Field(() => PortfolioCreateNestedOneWithoutAccountsInput, {nullable:false})
+    @Type(() => PortfolioCreateNestedOneWithoutAccountsInput)
+    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutAccountsInput>;
+    @Field(() => PositionCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => PositionCreateNestedManyWithoutAccountInput)
+    positions?: InstanceType<typeof PositionCreateNestedManyWithoutAccountInput>;
+    @Field(() => TransactionCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => TransactionCreateNestedManyWithoutAccountInput)
+    transactions?: InstanceType<typeof TransactionCreateNestedManyWithoutAccountInput>;
+    @Field(() => RealizedPAndLCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => RealizedPAndLCreateNestedManyWithoutAccountInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotCreateNestedManyWithoutAccountInput)
+    lots?: InstanceType<typeof LotCreateNestedManyWithoutAccountInput>;
     @Field(() => FileCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutAccountInput>;
@@ -2839,6 +3055,9 @@ export class AccountCreateWithoutPortfolioInput {
     @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -2992,6 +3211,9 @@ export class AccountCreateWithoutPositionsInput {
     @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -3145,6 +3367,9 @@ export class AccountCreateWithoutRealizedPAndLInput {
     @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -3298,6 +3523,9 @@ export class AccountCreateWithoutTransactionsInput {
     @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -3454,6 +3682,9 @@ export class AccountCreateInput {
     @Field(() => LotTransactionBatchCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutAccountInput>;
 }
 
 @ArgsType()
@@ -4174,6 +4405,16 @@ export class AccountMinOrderByAggregateInput {
 }
 
 @InputType()
+export class AccountNullableScalarRelationFilter {
+    @Field(() => AccountWhereInput, {nullable:true})
+    @Type(() => AccountWhereInput)
+    is?: InstanceType<typeof AccountWhereInput>;
+    @Field(() => AccountWhereInput, {nullable:true})
+    @Type(() => AccountWhereInput)
+    isNot?: InstanceType<typeof AccountWhereInput>;
+}
+
+@InputType()
 export class AccountOrderByRelationAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     _count?: `${SortOrder}`;
@@ -4451,6 +4692,9 @@ export class AccountOrderByWithRelationInput {
     @Field(() => LotTransactionBatchOrderByRelationAggregateInput, {nullable:true})
     @Type(() => LotTransactionBatchOrderByRelationAggregateInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchOrderByRelationAggregateInput>;
+    @Field(() => NotificationOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => NotificationOrderByRelationAggregateInput)
+    Notification?: InstanceType<typeof NotificationOrderByRelationAggregateInput>;
 }
 
 @InputType()
@@ -5043,6 +5287,9 @@ export class AccountUncheckedCreateWithoutAuthConnectionInput {
     @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5195,6 +5442,9 @@ export class AccountUncheckedCreateWithoutCreatedByInput {
     @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5346,6 +5596,9 @@ export class AccountUncheckedCreateWithoutFilesInput {
     @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5497,6 +5750,9 @@ export class AccountUncheckedCreateWithoutLotTransactionBatchInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5642,6 +5898,163 @@ export class AccountUncheckedCreateWithoutLotsInput {
     @Field(() => RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput)
     realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
+    files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
+}
+
+@InputType()
+export class AccountUncheckedCreateWithoutNotificationInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => AccountProvider, {nullable:true})
+    provider?: `${AccountProvider}`;
+    @Field(() => String, {nullable:true})
+    authConnectionId?: string;
+    @Field(() => String, {nullable:true})
+    externalId?: string;
+    @Field(() => String, {nullable:true})
+    name?: string;
+    @Field(() => String, {nullable:true})
+    plaidAccountMask?: string;
+    @Field(() => String, {nullable:true})
+    key?: string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => AccountInstitution, {nullable:true})
+    institution?: `${AccountInstitution}`;
+    @Field(() => String, {nullable:true})
+    type?: string;
+    @Field(() => String, {nullable:true})
+    subType?: string;
+    @Field(() => AccountMode, {nullable:true})
+    mode?: `${AccountMode}`;
+    @Field(() => AccountStatus, {nullable:true})
+    status?: `${AccountStatus}`;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => Date, {nullable:true})
+    closedDate?: Date | string;
+    @Field(() => OptionLevel, {nullable:true})
+    optionLevel?: `${OptionLevel}`;
+    @Field(() => Date, {nullable:true})
+    lotSeededDate?: Date | string;
+    @Field(() => Boolean, {nullable:true})
+    uploadedPositions?: boolean;
+    @Field(() => Boolean, {nullable:true})
+    setRealizedValues?: boolean;
+    @Field(() => Boolean, {nullable:true})
+    skipSetup?: boolean;
+    @Field(() => String, {nullable:true})
+    liveURL?: string;
+    @Field(() => Date, {nullable:true})
+    liveURLCreated?: Date | string;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashForOpenOrders?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceMoneyMarket?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    accountValueTotal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marketValueTotal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashAvailableForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashNet?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashBalance?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashSettledForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashUnsettledForInvestment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashBuyingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    fundsWithheldFromPurchasingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    fundsWithheldFromWithdrawal?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginBuyingPower?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginBuyingPowerDT?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceShortAdjustment?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    balanceAccount?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    equityRegt?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    equityRegtPercent?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    cashOpenOrderReserveDT?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    marginOpenOrderReserveDT?: Decimal;
+    @Field(() => GraphQLJSON, {nullable:true})
+    raw?: any;
+    @Field(() => PositionUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => PositionUncheckedCreateNestedManyWithoutAccountInput)
+    positions?: InstanceType<typeof PositionUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => TransactionUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => TransactionUncheckedCreateNestedManyWithoutAccountInput)
+    transactions?: InstanceType<typeof TransactionUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => LotUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => LotUncheckedCreateNestedManyWithoutAccountInput)
+    lots?: InstanceType<typeof LotUncheckedCreateNestedManyWithoutAccountInput>;
     @Field(() => FileUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutAccountInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutAccountInput>;
@@ -5800,6 +6213,9 @@ export class AccountUncheckedCreateWithoutPortfolioInput {
     @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -5951,6 +6367,9 @@ export class AccountUncheckedCreateWithoutPositionsInput {
     @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -6102,6 +6521,9 @@ export class AccountUncheckedCreateWithoutRealizedPAndLInput {
     @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -6253,6 +6675,9 @@ export class AccountUncheckedCreateWithoutTransactionsInput {
     @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -6407,6 +6832,9 @@ export class AccountUncheckedCreateInput {
     @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutAccountInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutAccountInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutAccountInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutAccountInput>;
 }
 
 @InputType()
@@ -7108,6 +7536,9 @@ export class AccountUncheckedUpdateWithoutAuthConnectionInput {
     @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7240,6 +7671,9 @@ export class AccountUncheckedUpdateWithoutCreatedByInput {
     @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7371,6 +7805,9 @@ export class AccountUncheckedUpdateWithoutFilesInput {
     @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7502,6 +7939,9 @@ export class AccountUncheckedUpdateWithoutLotTransactionBatchInput {
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7627,6 +8067,143 @@ export class AccountUncheckedUpdateWithoutLotsInput {
     @Field(() => RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput)
     realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
+    files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
+}
+
+@InputType()
+export class AccountUncheckedUpdateWithoutNotificationInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumAccountProviderFieldUpdateOperationsInput, {nullable:true})
+    provider?: InstanceType<typeof EnumAccountProviderFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    authConnectionId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    externalId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    name?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidAccountMask?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    key?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAccountInstitutionFieldUpdateOperationsInput, {nullable:true})
+    institution?: InstanceType<typeof NullableEnumAccountInstitutionFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    subType?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAccountModeFieldUpdateOperationsInput, {nullable:true})
+    mode?: InstanceType<typeof NullableEnumAccountModeFieldUpdateOperationsInput>;
+    @Field(() => EnumAccountStatusFieldUpdateOperationsInput, {nullable:true})
+    status?: InstanceType<typeof EnumAccountStatusFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    closedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumOptionLevelFieldUpdateOperationsInput, {nullable:true})
+    optionLevel?: InstanceType<typeof NullableEnumOptionLevelFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    lotSeededDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    uploadedPositions?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    setRealizedValues?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    skipSetup?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    liveURL?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    liveURLCreated?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashForOpenOrders?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceMoneyMarket?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    accountValueTotal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marketValueTotal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashAvailableForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashNet?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashBalance?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashSettledForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashUnsettledForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashBuyingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    fundsWithheldFromPurchasingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    fundsWithheldFromWithdrawal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginBuyingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginBuyingPowerDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceShortAdjustment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceAccount?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    equityRegt?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    equityRegtPercent?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashOpenOrderReserveDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginOpenOrderReserveDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    raw?: any;
+    @Field(() => PositionUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => PositionUncheckedUpdateManyWithoutAccountNestedInput)
+    positions?: InstanceType<typeof PositionUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => TransactionUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => TransactionUncheckedUpdateManyWithoutAccountNestedInput)
+    transactions?: InstanceType<typeof TransactionUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotUncheckedUpdateManyWithoutAccountNestedInput)
+    lots?: InstanceType<typeof LotUncheckedUpdateManyWithoutAccountNestedInput>;
     @Field(() => FileUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutAccountNestedInput>;
@@ -7765,6 +8342,9 @@ export class AccountUncheckedUpdateWithoutPortfolioInput {
     @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -7896,6 +8476,9 @@ export class AccountUncheckedUpdateWithoutPositionsInput {
     @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8027,6 +8610,9 @@ export class AccountUncheckedUpdateWithoutRealizedPAndLInput {
     @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8158,6 +8744,9 @@ export class AccountUncheckedUpdateWithoutTransactionsInput {
     @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8292,6 +8881,9 @@ export class AccountUncheckedUpdateInput {
     @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -8660,6 +9252,31 @@ export class AccountUpdateOneRequiredWithoutTransactionsNestedInput {
 }
 
 @InputType()
+export class AccountUpdateOneWithoutNotificationNestedInput {
+    @Field(() => AccountCreateWithoutNotificationInput, {nullable:true})
+    @Type(() => AccountCreateWithoutNotificationInput)
+    create?: InstanceType<typeof AccountCreateWithoutNotificationInput>;
+    @Field(() => AccountCreateOrConnectWithoutNotificationInput, {nullable:true})
+    @Type(() => AccountCreateOrConnectWithoutNotificationInput)
+    connectOrCreate?: InstanceType<typeof AccountCreateOrConnectWithoutNotificationInput>;
+    @Field(() => AccountUpsertWithoutNotificationInput, {nullable:true})
+    @Type(() => AccountUpsertWithoutNotificationInput)
+    upsert?: InstanceType<typeof AccountUpsertWithoutNotificationInput>;
+    @Field(() => AccountWhereInput, {nullable:true})
+    @Type(() => AccountWhereInput)
+    disconnect?: InstanceType<typeof AccountWhereInput>;
+    @Field(() => AccountWhereInput, {nullable:true})
+    @Type(() => AccountWhereInput)
+    delete?: InstanceType<typeof AccountWhereInput>;
+    @Field(() => AccountWhereUniqueInput, {nullable:true})
+    @Type(() => AccountWhereUniqueInput)
+    connect?: Prisma.AtLeast<AccountWhereUniqueInput, 'id' | 'authConnectionId_plaidAccountMask_type'>;
+    @Field(() => AccountUpdateToOneWithWhereWithoutNotificationInput, {nullable:true})
+    @Type(() => AccountUpdateToOneWithWhereWithoutNotificationInput)
+    update?: InstanceType<typeof AccountUpdateToOneWithWhereWithoutNotificationInput>;
+}
+
+@InputType()
 export class AccountUpdateToOneWithWhereWithoutFilesInput {
     @Field(() => AccountWhereInput, {nullable:true})
     @Type(() => AccountWhereInput)
@@ -8687,6 +9304,16 @@ export class AccountUpdateToOneWithWhereWithoutLotsInput {
     @Field(() => AccountUpdateWithoutLotsInput, {nullable:false})
     @Type(() => AccountUpdateWithoutLotsInput)
     data!: InstanceType<typeof AccountUpdateWithoutLotsInput>;
+}
+
+@InputType()
+export class AccountUpdateToOneWithWhereWithoutNotificationInput {
+    @Field(() => AccountWhereInput, {nullable:true})
+    @Type(() => AccountWhereInput)
+    where?: InstanceType<typeof AccountWhereInput>;
+    @Field(() => AccountUpdateWithoutNotificationInput, {nullable:false})
+    @Type(() => AccountUpdateWithoutNotificationInput)
+    data!: InstanceType<typeof AccountUpdateWithoutNotificationInput>;
 }
 
 @InputType()
@@ -8881,6 +9508,9 @@ export class AccountUpdateWithoutAuthConnectionInput {
     @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9015,6 +9645,9 @@ export class AccountUpdateWithoutCreatedByInput {
     @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9149,6 +9782,9 @@ export class AccountUpdateWithoutFilesInput {
     @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9283,6 +9919,9 @@ export class AccountUpdateWithoutLotTransactionBatchInput {
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9411,6 +10050,146 @@ export class AccountUpdateWithoutLotsInput {
     @Field(() => RealizedPAndLUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => RealizedPAndLUpdateManyWithoutAccountNestedInput)
     realizedPAndL?: InstanceType<typeof RealizedPAndLUpdateManyWithoutAccountNestedInput>;
+    @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => FileUpdateManyWithoutAccountNestedInput)
+    files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
+    LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
+}
+
+@InputType()
+export class AccountUpdateWithoutNotificationInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => EnumAccountProviderFieldUpdateOperationsInput, {nullable:true})
+    provider?: InstanceType<typeof EnumAccountProviderFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    externalId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    name?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    plaidAccountMask?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    key?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAccountInstitutionFieldUpdateOperationsInput, {nullable:true})
+    institution?: InstanceType<typeof NullableEnumAccountInstitutionFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    type?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    subType?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumAccountModeFieldUpdateOperationsInput, {nullable:true})
+    mode?: InstanceType<typeof NullableEnumAccountModeFieldUpdateOperationsInput>;
+    @Field(() => EnumAccountStatusFieldUpdateOperationsInput, {nullable:true})
+    status?: InstanceType<typeof EnumAccountStatusFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    closedDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableEnumOptionLevelFieldUpdateOperationsInput, {nullable:true})
+    optionLevel?: InstanceType<typeof NullableEnumOptionLevelFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    lotSeededDate?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    uploadedPositions?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    setRealizedValues?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    skipSetup?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    liveURL?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableDateTimeFieldUpdateOperationsInput, {nullable:true})
+    liveURLCreated?: InstanceType<typeof NullableDateTimeFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashForOpenOrders?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceMoneyMarket?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    accountValueTotal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marketValueTotal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashAvailableForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashNet?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashBalance?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashSettledForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashUnsettledForInvestment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashBuyingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    fundsWithheldFromPurchasingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    fundsWithheldFromWithdrawal?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginBuyingPower?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginBuyingPowerDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceShortAdjustment?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    balanceAccount?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    equityRegt?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    equityRegtPercent?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    cashOpenOrderReserveDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => NullableDecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => NullableDecimalFieldUpdateOperationsInput)
+    marginOpenOrderReserveDT?: InstanceType<typeof NullableDecimalFieldUpdateOperationsInput>;
+    @Field(() => GraphQLJSON, {nullable:true})
+    raw?: any;
+    @Field(() => UserUpdateOneRequiredWithoutAccountNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutAccountNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutAccountNestedInput>;
+    @Field(() => AuthConnectionUpdateOneWithoutAccountsNestedInput, {nullable:true})
+    @Type(() => AuthConnectionUpdateOneWithoutAccountsNestedInput)
+    authConnection?: InstanceType<typeof AuthConnectionUpdateOneWithoutAccountsNestedInput>;
+    @Field(() => PortfolioUpdateOneRequiredWithoutAccountsNestedInput, {nullable:true})
+    @Type(() => PortfolioUpdateOneRequiredWithoutAccountsNestedInput)
+    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutAccountsNestedInput>;
+    @Field(() => PositionUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => PositionUpdateManyWithoutAccountNestedInput)
+    positions?: InstanceType<typeof PositionUpdateManyWithoutAccountNestedInput>;
+    @Field(() => TransactionUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => TransactionUpdateManyWithoutAccountNestedInput)
+    transactions?: InstanceType<typeof TransactionUpdateManyWithoutAccountNestedInput>;
+    @Field(() => RealizedPAndLUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => RealizedPAndLUpdateManyWithoutAccountNestedInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUpdateManyWithoutAccountNestedInput>;
+    @Field(() => LotUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => LotUpdateManyWithoutAccountNestedInput)
+    lots?: InstanceType<typeof LotUpdateManyWithoutAccountNestedInput>;
     @Field(() => FileUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutAccountNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutAccountNestedInput>;
@@ -9551,6 +10330,9 @@ export class AccountUpdateWithoutPortfolioInput {
     @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9685,6 +10467,9 @@ export class AccountUpdateWithoutPositionsInput {
     @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9819,6 +10604,9 @@ export class AccountUpdateWithoutRealizedPAndLInput {
     @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -9953,6 +10741,9 @@ export class AccountUpdateWithoutTransactionsInput {
     @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -10090,6 +10881,9 @@ export class AccountUpdateInput {
     @Field(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput, {nullable:true})
     @Type(() => LotTransactionBatchUpdateManyWithoutAccountNestedInput)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutAccountNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutAccountNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutAccountNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutAccountNestedInput>;
 }
 
 @InputType()
@@ -10165,6 +10959,19 @@ export class AccountUpsertWithoutLotsInput {
     @Field(() => AccountCreateWithoutLotsInput, {nullable:false})
     @Type(() => AccountCreateWithoutLotsInput)
     create!: InstanceType<typeof AccountCreateWithoutLotsInput>;
+    @Field(() => AccountWhereInput, {nullable:true})
+    @Type(() => AccountWhereInput)
+    where?: InstanceType<typeof AccountWhereInput>;
+}
+
+@InputType()
+export class AccountUpsertWithoutNotificationInput {
+    @Field(() => AccountUpdateWithoutNotificationInput, {nullable:false})
+    @Type(() => AccountUpdateWithoutNotificationInput)
+    update!: InstanceType<typeof AccountUpdateWithoutNotificationInput>;
+    @Field(() => AccountCreateWithoutNotificationInput, {nullable:false})
+    @Type(() => AccountCreateWithoutNotificationInput)
+    create!: InstanceType<typeof AccountCreateWithoutNotificationInput>;
     @Field(() => AccountWhereInput, {nullable:true})
     @Type(() => AccountWhereInput)
     where?: InstanceType<typeof AccountWhereInput>;
@@ -10362,6 +11169,9 @@ export class AccountWhereUniqueInput {
     @Field(() => LotTransactionBatchListRelationFilter, {nullable:true})
     @Type(() => LotTransactionBatchListRelationFilter)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchListRelationFilter>;
+    @Field(() => NotificationListRelationFilter, {nullable:true})
+    @Type(() => NotificationListRelationFilter)
+    Notification?: InstanceType<typeof NotificationListRelationFilter>;
 }
 
 @InputType()
@@ -10514,6 +11324,9 @@ export class AccountWhereInput {
     @Field(() => LotTransactionBatchListRelationFilter, {nullable:true})
     @Type(() => LotTransactionBatchListRelationFilter)
     LotTransactionBatch?: InstanceType<typeof LotTransactionBatchListRelationFilter>;
+    @Field(() => NotificationListRelationFilter, {nullable:true})
+    @Type(() => NotificationListRelationFilter)
+    Notification?: InstanceType<typeof NotificationListRelationFilter>;
 }
 
 /**
@@ -10673,6 +11486,8 @@ export class Account {
     files?: Array<File>;
     @Field(() => [LotTransactionBatch], {nullable:true})
     LotTransactionBatch?: Array<LotTransactionBatch>;
+    @Field(() => [Notification], {nullable:true})
+    Notification?: Array<Notification>;
     @Field(() => AccountCount, {nullable:false})
     _count?: InstanceType<typeof AccountCount>;
 }
@@ -45396,6 +46211,1400 @@ export class UpsertOneLotTransactionBatchArgs {
 }
 
 @ObjectType()
+export class AggregateNotification {
+    @Field(() => NotificationCountAggregate, {nullable:true})
+    _count?: InstanceType<typeof NotificationCountAggregate>;
+    @Field(() => NotificationAvgAggregate, {nullable:true})
+    _avg?: InstanceType<typeof NotificationAvgAggregate>;
+    @Field(() => NotificationSumAggregate, {nullable:true})
+    _sum?: InstanceType<typeof NotificationSumAggregate>;
+    @Field(() => NotificationMinAggregate, {nullable:true})
+    _min?: InstanceType<typeof NotificationMinAggregate>;
+    @Field(() => NotificationMaxAggregate, {nullable:true})
+    _max?: InstanceType<typeof NotificationMaxAggregate>;
+}
+
+@ArgsType()
+export class CreateManyNotificationArgs {
+    @Field(() => [NotificationCreateManyInput], {nullable:false})
+    @Type(() => NotificationCreateManyInput)
+    data!: Array<NotificationCreateManyInput>;
+    @Field(() => Boolean, {nullable:true})
+    skipDuplicates?: boolean;
+}
+
+@ArgsType()
+export class CreateOneNotificationArgs {
+    @Field(() => NotificationCreateInput, {nullable:false})
+    @Type(() => NotificationCreateInput)
+    data!: InstanceType<typeof NotificationCreateInput>;
+}
+
+@ArgsType()
+export class DeleteManyNotificationArgs {
+    @Field(() => NotificationWhereInput, {nullable:true})
+    @Type(() => NotificationWhereInput)
+    where?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => Int, {nullable:true})
+    limit?: number;
+}
+
+@ArgsType()
+export class DeleteOneNotificationArgs {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+}
+
+@ArgsType()
+export class FindFirstNotificationOrThrowArgs {
+    @Field(() => NotificationWhereInput, {nullable:true})
+    @Type(() => NotificationWhereInput)
+    where?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => [NotificationOrderByWithRelationInput], {nullable:true})
+    orderBy?: Array<NotificationOrderByWithRelationInput>;
+    @Field(() => NotificationWhereUniqueInput, {nullable:true})
+    cursor?: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => Int, {nullable:true})
+    take?: number;
+    @Field(() => Int, {nullable:true})
+    skip?: number;
+    @Field(() => [NotificationScalarFieldEnum], {nullable:true})
+    distinct?: Array<`${NotificationScalarFieldEnum}`>;
+}
+
+@ArgsType()
+export class FindFirstNotificationArgs {
+    @Field(() => NotificationWhereInput, {nullable:true})
+    @Type(() => NotificationWhereInput)
+    where?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => [NotificationOrderByWithRelationInput], {nullable:true})
+    orderBy?: Array<NotificationOrderByWithRelationInput>;
+    @Field(() => NotificationWhereUniqueInput, {nullable:true})
+    cursor?: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => Int, {nullable:true})
+    take?: number;
+    @Field(() => Int, {nullable:true})
+    skip?: number;
+    @Field(() => [NotificationScalarFieldEnum], {nullable:true})
+    distinct?: Array<`${NotificationScalarFieldEnum}`>;
+}
+
+@ArgsType()
+export class FindManyNotificationArgs {
+    @Field(() => NotificationWhereInput, {nullable:true})
+    @Type(() => NotificationWhereInput)
+    where?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => [NotificationOrderByWithRelationInput], {nullable:true})
+    orderBy?: Array<NotificationOrderByWithRelationInput>;
+    @Field(() => NotificationWhereUniqueInput, {nullable:true})
+    cursor?: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => Int, {nullable:true})
+    take?: number;
+    @Field(() => Int, {nullable:true})
+    skip?: number;
+    @Field(() => [NotificationScalarFieldEnum], {nullable:true})
+    distinct?: Array<`${NotificationScalarFieldEnum}`>;
+}
+
+@ArgsType()
+export class FindUniqueNotificationOrThrowArgs {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+}
+
+@ArgsType()
+export class FindUniqueNotificationArgs {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+}
+
+@ArgsType()
+export class NotificationAggregateArgs {
+    @Field(() => NotificationWhereInput, {nullable:true})
+    @Type(() => NotificationWhereInput)
+    where?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => [NotificationOrderByWithRelationInput], {nullable:true})
+    orderBy?: Array<NotificationOrderByWithRelationInput>;
+    @Field(() => NotificationWhereUniqueInput, {nullable:true})
+    cursor?: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => Int, {nullable:true})
+    take?: number;
+    @Field(() => Int, {nullable:true})
+    skip?: number;
+    @Field(() => NotificationCountAggregateInput, {nullable:true})
+    _count?: InstanceType<typeof NotificationCountAggregateInput>;
+    @Field(() => NotificationAvgAggregateInput, {nullable:true})
+    _avg?: InstanceType<typeof NotificationAvgAggregateInput>;
+    @Field(() => NotificationSumAggregateInput, {nullable:true})
+    _sum?: InstanceType<typeof NotificationSumAggregateInput>;
+    @Field(() => NotificationMinAggregateInput, {nullable:true})
+    _min?: InstanceType<typeof NotificationMinAggregateInput>;
+    @Field(() => NotificationMaxAggregateInput, {nullable:true})
+    _max?: InstanceType<typeof NotificationMaxAggregateInput>;
+}
+
+@InputType()
+export class NotificationAvgAggregateInput {
+    @Field(() => Boolean, {nullable:true})
+    id?: true;
+}
+
+@ObjectType()
+export class NotificationAvgAggregate {
+    @Field(() => Float, {nullable:true})
+    id?: number;
+}
+
+@InputType()
+export class NotificationAvgOrderByAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    id?: `${SortOrder}`;
+}
+
+@InputType()
+export class NotificationCountAggregateInput {
+    @Field(() => Boolean, {nullable:true})
+    id?: true;
+    @Field(() => Boolean, {nullable:true})
+    createdAt?: true;
+    @Field(() => Boolean, {nullable:true})
+    title?: true;
+    @Field(() => Boolean, {nullable:true})
+    description?: true;
+    @Field(() => Boolean, {nullable:true})
+    body?: true;
+    @Field(() => Boolean, {nullable:true})
+    acked?: true;
+    @Field(() => Boolean, {nullable:true})
+    portfolioId?: true;
+    @Field(() => Boolean, {nullable:true})
+    accountId?: true;
+    @Field(() => Boolean, {nullable:true})
+    level?: true;
+    @Field(() => Boolean, {nullable:true})
+    _all?: true;
+}
+
+@ObjectType()
+export class NotificationCountAggregate {
+    @Field(() => Int, {nullable:false})
+    id!: number;
+    @Field(() => Int, {nullable:false})
+    createdAt!: number;
+    @Field(() => Int, {nullable:false})
+    title!: number;
+    @Field(() => Int, {nullable:false})
+    description!: number;
+    @Field(() => Int, {nullable:false})
+    body!: number;
+    @Field(() => Int, {nullable:false})
+    acked!: number;
+    @Field(() => Int, {nullable:false})
+    portfolioId!: number;
+    @Field(() => Int, {nullable:false})
+    accountId!: number;
+    @Field(() => Int, {nullable:false})
+    level!: number;
+    @Field(() => Int, {nullable:false})
+    _all!: number;
+}
+
+@InputType()
+export class NotificationCountOrderByAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    id?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    createdAt?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    title?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    description?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    body?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    acked?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    accountId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    level?: `${SortOrder}`;
+}
+
+@InputType()
+export class NotificationCreateManyAccountInputEnvelope {
+    @Field(() => [NotificationCreateManyAccountInput], {nullable:false})
+    @Type(() => NotificationCreateManyAccountInput)
+    data!: Array<NotificationCreateManyAccountInput>;
+    @Field(() => Boolean, {nullable:true})
+    skipDuplicates?: boolean;
+}
+
+@InputType()
+export class NotificationCreateManyAccountInput {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class NotificationCreateManyPortfolioInputEnvelope {
+    @Field(() => [NotificationCreateManyPortfolioInput], {nullable:false})
+    @Type(() => NotificationCreateManyPortfolioInput)
+    data!: Array<NotificationCreateManyPortfolioInput>;
+    @Field(() => Boolean, {nullable:true})
+    skipDuplicates?: boolean;
+}
+
+@InputType()
+export class NotificationCreateManyPortfolioInput {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => String, {nullable:true})
+    accountId?: string;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class NotificationCreateManyInput {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => String, {nullable:true})
+    accountId?: string;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class NotificationCreateNestedManyWithoutAccountInput {
+    @Field(() => [NotificationCreateWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationCreateWithoutAccountInput)
+    create?: Array<NotificationCreateWithoutAccountInput>;
+    @Field(() => [NotificationCreateOrConnectWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationCreateOrConnectWithoutAccountInput)
+    connectOrCreate?: Array<NotificationCreateOrConnectWithoutAccountInput>;
+    @Field(() => NotificationCreateManyAccountInputEnvelope, {nullable:true})
+    @Type(() => NotificationCreateManyAccountInputEnvelope)
+    createMany?: InstanceType<typeof NotificationCreateManyAccountInputEnvelope>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+}
+
+@InputType()
+export class NotificationCreateNestedManyWithoutPortfolioInput {
+    @Field(() => [NotificationCreateWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationCreateWithoutPortfolioInput)
+    create?: Array<NotificationCreateWithoutPortfolioInput>;
+    @Field(() => [NotificationCreateOrConnectWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationCreateOrConnectWithoutPortfolioInput)
+    connectOrCreate?: Array<NotificationCreateOrConnectWithoutPortfolioInput>;
+    @Field(() => NotificationCreateManyPortfolioInputEnvelope, {nullable:true})
+    @Type(() => NotificationCreateManyPortfolioInputEnvelope)
+    createMany?: InstanceType<typeof NotificationCreateManyPortfolioInputEnvelope>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+}
+
+@InputType()
+export class NotificationCreateOrConnectWithoutAccountInput {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => NotificationCreateWithoutAccountInput, {nullable:false})
+    @Type(() => NotificationCreateWithoutAccountInput)
+    create!: InstanceType<typeof NotificationCreateWithoutAccountInput>;
+}
+
+@InputType()
+export class NotificationCreateOrConnectWithoutPortfolioInput {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => NotificationCreateWithoutPortfolioInput, {nullable:false})
+    @Type(() => NotificationCreateWithoutPortfolioInput)
+    create!: InstanceType<typeof NotificationCreateWithoutPortfolioInput>;
+}
+
+@InputType()
+export class NotificationCreateWithoutAccountInput {
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+    @Field(() => PortfolioCreateNestedOneWithoutNotificationInput, {nullable:false})
+    @Type(() => PortfolioCreateNestedOneWithoutNotificationInput)
+    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutNotificationInput>;
+}
+
+@InputType()
+export class NotificationCreateWithoutPortfolioInput {
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+    @Field(() => AccountCreateNestedOneWithoutNotificationInput, {nullable:true})
+    @Type(() => AccountCreateNestedOneWithoutNotificationInput)
+    account?: InstanceType<typeof AccountCreateNestedOneWithoutNotificationInput>;
+}
+
+@InputType()
+export class NotificationCreateInput {
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+    @Field(() => PortfolioCreateNestedOneWithoutNotificationInput, {nullable:false})
+    @Type(() => PortfolioCreateNestedOneWithoutNotificationInput)
+    portfolio!: InstanceType<typeof PortfolioCreateNestedOneWithoutNotificationInput>;
+    @Field(() => AccountCreateNestedOneWithoutNotificationInput, {nullable:true})
+    @Type(() => AccountCreateNestedOneWithoutNotificationInput)
+    account?: InstanceType<typeof AccountCreateNestedOneWithoutNotificationInput>;
+}
+
+@ArgsType()
+export class NotificationGroupByArgs {
+    @Field(() => NotificationWhereInput, {nullable:true})
+    @Type(() => NotificationWhereInput)
+    where?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => [NotificationOrderByWithAggregationInput], {nullable:true})
+    orderBy?: Array<NotificationOrderByWithAggregationInput>;
+    @Field(() => [NotificationScalarFieldEnum], {nullable:false})
+    by!: Array<`${NotificationScalarFieldEnum}`>;
+    @Field(() => NotificationScalarWhereWithAggregatesInput, {nullable:true})
+    having?: InstanceType<typeof NotificationScalarWhereWithAggregatesInput>;
+    @Field(() => Int, {nullable:true})
+    take?: number;
+    @Field(() => Int, {nullable:true})
+    skip?: number;
+    @Field(() => NotificationCountAggregateInput, {nullable:true})
+    _count?: InstanceType<typeof NotificationCountAggregateInput>;
+    @Field(() => NotificationAvgAggregateInput, {nullable:true})
+    _avg?: InstanceType<typeof NotificationAvgAggregateInput>;
+    @Field(() => NotificationSumAggregateInput, {nullable:true})
+    _sum?: InstanceType<typeof NotificationSumAggregateInput>;
+    @Field(() => NotificationMinAggregateInput, {nullable:true})
+    _min?: InstanceType<typeof NotificationMinAggregateInput>;
+    @Field(() => NotificationMaxAggregateInput, {nullable:true})
+    _max?: InstanceType<typeof NotificationMaxAggregateInput>;
+}
+
+@ObjectType()
+export class NotificationGroupBy {
+    @Field(() => Int, {nullable:false})
+    id!: number;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:false})
+    acked!: boolean;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => String, {nullable:true})
+    accountId?: string;
+    @Field(() => NotificationLevel, {nullable:false})
+    level!: `${NotificationLevel}`;
+    @Field(() => NotificationCountAggregate, {nullable:true})
+    _count?: InstanceType<typeof NotificationCountAggregate>;
+    @Field(() => NotificationAvgAggregate, {nullable:true})
+    _avg?: InstanceType<typeof NotificationAvgAggregate>;
+    @Field(() => NotificationSumAggregate, {nullable:true})
+    _sum?: InstanceType<typeof NotificationSumAggregate>;
+    @Field(() => NotificationMinAggregate, {nullable:true})
+    _min?: InstanceType<typeof NotificationMinAggregate>;
+    @Field(() => NotificationMaxAggregate, {nullable:true})
+    _max?: InstanceType<typeof NotificationMaxAggregate>;
+}
+
+@InputType()
+export class NotificationListRelationFilter {
+    @Field(() => NotificationWhereInput, {nullable:true})
+    every?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => NotificationWhereInput, {nullable:true})
+    some?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => NotificationWhereInput, {nullable:true})
+    none?: InstanceType<typeof NotificationWhereInput>;
+}
+
+@InputType()
+export class NotificationMaxAggregateInput {
+    @Field(() => Boolean, {nullable:true})
+    id?: true;
+    @Field(() => Boolean, {nullable:true})
+    createdAt?: true;
+    @Field(() => Boolean, {nullable:true})
+    title?: true;
+    @Field(() => Boolean, {nullable:true})
+    description?: true;
+    @Field(() => Boolean, {nullable:true})
+    body?: true;
+    @Field(() => Boolean, {nullable:true})
+    acked?: true;
+    @Field(() => Boolean, {nullable:true})
+    portfolioId?: true;
+    @Field(() => Boolean, {nullable:true})
+    accountId?: true;
+    @Field(() => Boolean, {nullable:true})
+    level?: true;
+}
+
+@ObjectType()
+export class NotificationMaxAggregate {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:true})
+    title?: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => String, {nullable:true})
+    portfolioId?: string;
+    @Field(() => String, {nullable:true})
+    accountId?: string;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class NotificationMaxOrderByAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    id?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    createdAt?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    title?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    description?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    body?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    acked?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    accountId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    level?: `${SortOrder}`;
+}
+
+@InputType()
+export class NotificationMinAggregateInput {
+    @Field(() => Boolean, {nullable:true})
+    id?: true;
+    @Field(() => Boolean, {nullable:true})
+    createdAt?: true;
+    @Field(() => Boolean, {nullable:true})
+    title?: true;
+    @Field(() => Boolean, {nullable:true})
+    description?: true;
+    @Field(() => Boolean, {nullable:true})
+    body?: true;
+    @Field(() => Boolean, {nullable:true})
+    acked?: true;
+    @Field(() => Boolean, {nullable:true})
+    portfolioId?: true;
+    @Field(() => Boolean, {nullable:true})
+    accountId?: true;
+    @Field(() => Boolean, {nullable:true})
+    level?: true;
+}
+
+@ObjectType()
+export class NotificationMinAggregate {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:true})
+    title?: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => String, {nullable:true})
+    portfolioId?: string;
+    @Field(() => String, {nullable:true})
+    accountId?: string;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class NotificationMinOrderByAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    id?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    createdAt?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    title?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    description?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    body?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    acked?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    accountId?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    level?: `${SortOrder}`;
+}
+
+@InputType()
+export class NotificationOrderByRelationAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    _count?: `${SortOrder}`;
+}
+
+@InputType()
+export class NotificationOrderByWithAggregationInput {
+    @Field(() => SortOrder, {nullable:true})
+    id?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    createdAt?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    title?: `${SortOrder}`;
+    @Field(() => SortOrderInput, {nullable:true})
+    description?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    body?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrder, {nullable:true})
+    acked?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrderInput, {nullable:true})
+    accountId?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrder, {nullable:true})
+    level?: `${SortOrder}`;
+    @Field(() => NotificationCountOrderByAggregateInput, {nullable:true})
+    _count?: InstanceType<typeof NotificationCountOrderByAggregateInput>;
+    @Field(() => NotificationAvgOrderByAggregateInput, {nullable:true})
+    _avg?: InstanceType<typeof NotificationAvgOrderByAggregateInput>;
+    @Field(() => NotificationMaxOrderByAggregateInput, {nullable:true})
+    _max?: InstanceType<typeof NotificationMaxOrderByAggregateInput>;
+    @Field(() => NotificationMinOrderByAggregateInput, {nullable:true})
+    _min?: InstanceType<typeof NotificationMinOrderByAggregateInput>;
+    @Field(() => NotificationSumOrderByAggregateInput, {nullable:true})
+    _sum?: InstanceType<typeof NotificationSumOrderByAggregateInput>;
+}
+
+@InputType()
+export class NotificationOrderByWithRelationInput {
+    @Field(() => SortOrder, {nullable:true})
+    id?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    createdAt?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    title?: `${SortOrder}`;
+    @Field(() => SortOrderInput, {nullable:true})
+    description?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrderInput, {nullable:true})
+    body?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrder, {nullable:true})
+    acked?: `${SortOrder}`;
+    @Field(() => SortOrder, {nullable:true})
+    portfolioId?: `${SortOrder}`;
+    @Field(() => SortOrderInput, {nullable:true})
+    accountId?: InstanceType<typeof SortOrderInput>;
+    @Field(() => SortOrder, {nullable:true})
+    level?: `${SortOrder}`;
+    @Field(() => PortfolioOrderByWithRelationInput, {nullable:true})
+    @Type(() => PortfolioOrderByWithRelationInput)
+    portfolio?: InstanceType<typeof PortfolioOrderByWithRelationInput>;
+    @Field(() => AccountOrderByWithRelationInput, {nullable:true})
+    @Type(() => AccountOrderByWithRelationInput)
+    account?: InstanceType<typeof AccountOrderByWithRelationInput>;
+}
+
+@InputType()
+export class NotificationScalarWhereWithAggregatesInput {
+    @Field(() => [NotificationScalarWhereWithAggregatesInput], {nullable:true})
+    AND?: Array<NotificationScalarWhereWithAggregatesInput>;
+    @Field(() => [NotificationScalarWhereWithAggregatesInput], {nullable:true})
+    OR?: Array<NotificationScalarWhereWithAggregatesInput>;
+    @Field(() => [NotificationScalarWhereWithAggregatesInput], {nullable:true})
+    NOT?: Array<NotificationScalarWhereWithAggregatesInput>;
+    @Field(() => IntWithAggregatesFilter, {nullable:true})
+    id?: InstanceType<typeof IntWithAggregatesFilter>;
+    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeWithAggregatesFilter>;
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
+    title?: InstanceType<typeof StringWithAggregatesFilter>;
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    description?: InstanceType<typeof StringNullableWithAggregatesFilter>;
+    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
+    body?: InstanceType<typeof StringNullableWithAggregatesFilter>;
+    @Field(() => BoolWithAggregatesFilter, {nullable:true})
+    acked?: InstanceType<typeof BoolWithAggregatesFilter>;
+    @Field(() => UuidWithAggregatesFilter, {nullable:true})
+    portfolioId?: InstanceType<typeof UuidWithAggregatesFilter>;
+    @Field(() => UuidNullableWithAggregatesFilter, {nullable:true})
+    accountId?: InstanceType<typeof UuidNullableWithAggregatesFilter>;
+    @Field(() => EnumNotificationLevelWithAggregatesFilter, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelWithAggregatesFilter>;
+}
+
+@InputType()
+export class NotificationScalarWhereInput {
+    @Field(() => [NotificationScalarWhereInput], {nullable:true})
+    AND?: Array<NotificationScalarWhereInput>;
+    @Field(() => [NotificationScalarWhereInput], {nullable:true})
+    OR?: Array<NotificationScalarWhereInput>;
+    @Field(() => [NotificationScalarWhereInput], {nullable:true})
+    NOT?: Array<NotificationScalarWhereInput>;
+    @Field(() => IntFilter, {nullable:true})
+    id?: InstanceType<typeof IntFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    title?: InstanceType<typeof StringFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    description?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    body?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    acked?: InstanceType<typeof BoolFilter>;
+    @Field(() => UuidFilter, {nullable:true})
+    portfolioId?: InstanceType<typeof UuidFilter>;
+    @Field(() => UuidNullableFilter, {nullable:true})
+    accountId?: InstanceType<typeof UuidNullableFilter>;
+    @Field(() => EnumNotificationLevelFilter, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFilter>;
+}
+
+@InputType()
+export class NotificationSumAggregateInput {
+    @Field(() => Boolean, {nullable:true})
+    id?: true;
+}
+
+@ObjectType()
+export class NotificationSumAggregate {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+}
+
+@InputType()
+export class NotificationSumOrderByAggregateInput {
+    @Field(() => SortOrder, {nullable:true})
+    id?: `${SortOrder}`;
+}
+
+@InputType()
+export class NotificationUncheckedCreateNestedManyWithoutAccountInput {
+    @Field(() => [NotificationCreateWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationCreateWithoutAccountInput)
+    create?: Array<NotificationCreateWithoutAccountInput>;
+    @Field(() => [NotificationCreateOrConnectWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationCreateOrConnectWithoutAccountInput)
+    connectOrCreate?: Array<NotificationCreateOrConnectWithoutAccountInput>;
+    @Field(() => NotificationCreateManyAccountInputEnvelope, {nullable:true})
+    @Type(() => NotificationCreateManyAccountInputEnvelope)
+    createMany?: InstanceType<typeof NotificationCreateManyAccountInputEnvelope>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+}
+
+@InputType()
+export class NotificationUncheckedCreateNestedManyWithoutPortfolioInput {
+    @Field(() => [NotificationCreateWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationCreateWithoutPortfolioInput)
+    create?: Array<NotificationCreateWithoutPortfolioInput>;
+    @Field(() => [NotificationCreateOrConnectWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationCreateOrConnectWithoutPortfolioInput)
+    connectOrCreate?: Array<NotificationCreateOrConnectWithoutPortfolioInput>;
+    @Field(() => NotificationCreateManyPortfolioInputEnvelope, {nullable:true})
+    @Type(() => NotificationCreateManyPortfolioInputEnvelope)
+    createMany?: InstanceType<typeof NotificationCreateManyPortfolioInputEnvelope>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+}
+
+@InputType()
+export class NotificationUncheckedCreateWithoutAccountInput {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class NotificationUncheckedCreateWithoutPortfolioInput {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => String, {nullable:true})
+    accountId?: string;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class NotificationUncheckedCreateInput {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description?: string;
+    @Field(() => String, {nullable:true})
+    body?: string;
+    @Field(() => Boolean, {nullable:true})
+    acked?: boolean;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => String, {nullable:true})
+    accountId?: string;
+    @Field(() => NotificationLevel, {nullable:true})
+    level?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class NotificationUncheckedUpdateManyWithoutAccountNestedInput {
+    @Field(() => [NotificationCreateWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationCreateWithoutAccountInput)
+    create?: Array<NotificationCreateWithoutAccountInput>;
+    @Field(() => [NotificationCreateOrConnectWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationCreateOrConnectWithoutAccountInput)
+    connectOrCreate?: Array<NotificationCreateOrConnectWithoutAccountInput>;
+    @Field(() => [NotificationUpsertWithWhereUniqueWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationUpsertWithWhereUniqueWithoutAccountInput)
+    upsert?: Array<NotificationUpsertWithWhereUniqueWithoutAccountInput>;
+    @Field(() => NotificationCreateManyAccountInputEnvelope, {nullable:true})
+    @Type(() => NotificationCreateManyAccountInputEnvelope)
+    createMany?: InstanceType<typeof NotificationCreateManyAccountInputEnvelope>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    set?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    disconnect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    delete?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationUpdateWithWhereUniqueWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationUpdateWithWhereUniqueWithoutAccountInput)
+    update?: Array<NotificationUpdateWithWhereUniqueWithoutAccountInput>;
+    @Field(() => [NotificationUpdateManyWithWhereWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationUpdateManyWithWhereWithoutAccountInput)
+    updateMany?: Array<NotificationUpdateManyWithWhereWithoutAccountInput>;
+    @Field(() => [NotificationScalarWhereInput], {nullable:true})
+    @Type(() => NotificationScalarWhereInput)
+    deleteMany?: Array<NotificationScalarWhereInput>;
+}
+
+@InputType()
+export class NotificationUncheckedUpdateManyWithoutAccountInput {
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class NotificationUncheckedUpdateManyWithoutPortfolioNestedInput {
+    @Field(() => [NotificationCreateWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationCreateWithoutPortfolioInput)
+    create?: Array<NotificationCreateWithoutPortfolioInput>;
+    @Field(() => [NotificationCreateOrConnectWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationCreateOrConnectWithoutPortfolioInput)
+    connectOrCreate?: Array<NotificationCreateOrConnectWithoutPortfolioInput>;
+    @Field(() => [NotificationUpsertWithWhereUniqueWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationUpsertWithWhereUniqueWithoutPortfolioInput)
+    upsert?: Array<NotificationUpsertWithWhereUniqueWithoutPortfolioInput>;
+    @Field(() => NotificationCreateManyPortfolioInputEnvelope, {nullable:true})
+    @Type(() => NotificationCreateManyPortfolioInputEnvelope)
+    createMany?: InstanceType<typeof NotificationCreateManyPortfolioInputEnvelope>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    set?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    disconnect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    delete?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationUpdateWithWhereUniqueWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationUpdateWithWhereUniqueWithoutPortfolioInput)
+    update?: Array<NotificationUpdateWithWhereUniqueWithoutPortfolioInput>;
+    @Field(() => [NotificationUpdateManyWithWhereWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationUpdateManyWithWhereWithoutPortfolioInput)
+    updateMany?: Array<NotificationUpdateManyWithWhereWithoutPortfolioInput>;
+    @Field(() => [NotificationScalarWhereInput], {nullable:true})
+    @Type(() => NotificationScalarWhereInput)
+    deleteMany?: Array<NotificationScalarWhereInput>;
+}
+
+@InputType()
+export class NotificationUncheckedUpdateManyWithoutPortfolioInput {
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    accountId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class NotificationUncheckedUpdateManyInput {
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    accountId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class NotificationUncheckedUpdateWithoutAccountInput {
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class NotificationUncheckedUpdateWithoutPortfolioInput {
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    accountId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class NotificationUncheckedUpdateInput {
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    portfolioId?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    accountId?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class NotificationUpdateManyMutationInput {
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+}
+
+@InputType()
+export class NotificationUpdateManyWithWhereWithoutAccountInput {
+    @Field(() => NotificationScalarWhereInput, {nullable:false})
+    @Type(() => NotificationScalarWhereInput)
+    where!: InstanceType<typeof NotificationScalarWhereInput>;
+    @Field(() => NotificationUpdateManyMutationInput, {nullable:false})
+    @Type(() => NotificationUpdateManyMutationInput)
+    data!: InstanceType<typeof NotificationUpdateManyMutationInput>;
+}
+
+@InputType()
+export class NotificationUpdateManyWithWhereWithoutPortfolioInput {
+    @Field(() => NotificationScalarWhereInput, {nullable:false})
+    @Type(() => NotificationScalarWhereInput)
+    where!: InstanceType<typeof NotificationScalarWhereInput>;
+    @Field(() => NotificationUpdateManyMutationInput, {nullable:false})
+    @Type(() => NotificationUpdateManyMutationInput)
+    data!: InstanceType<typeof NotificationUpdateManyMutationInput>;
+}
+
+@InputType()
+export class NotificationUpdateManyWithoutAccountNestedInput {
+    @Field(() => [NotificationCreateWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationCreateWithoutAccountInput)
+    create?: Array<NotificationCreateWithoutAccountInput>;
+    @Field(() => [NotificationCreateOrConnectWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationCreateOrConnectWithoutAccountInput)
+    connectOrCreate?: Array<NotificationCreateOrConnectWithoutAccountInput>;
+    @Field(() => [NotificationUpsertWithWhereUniqueWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationUpsertWithWhereUniqueWithoutAccountInput)
+    upsert?: Array<NotificationUpsertWithWhereUniqueWithoutAccountInput>;
+    @Field(() => NotificationCreateManyAccountInputEnvelope, {nullable:true})
+    @Type(() => NotificationCreateManyAccountInputEnvelope)
+    createMany?: InstanceType<typeof NotificationCreateManyAccountInputEnvelope>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    set?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    disconnect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    delete?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationUpdateWithWhereUniqueWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationUpdateWithWhereUniqueWithoutAccountInput)
+    update?: Array<NotificationUpdateWithWhereUniqueWithoutAccountInput>;
+    @Field(() => [NotificationUpdateManyWithWhereWithoutAccountInput], {nullable:true})
+    @Type(() => NotificationUpdateManyWithWhereWithoutAccountInput)
+    updateMany?: Array<NotificationUpdateManyWithWhereWithoutAccountInput>;
+    @Field(() => [NotificationScalarWhereInput], {nullable:true})
+    @Type(() => NotificationScalarWhereInput)
+    deleteMany?: Array<NotificationScalarWhereInput>;
+}
+
+@InputType()
+export class NotificationUpdateManyWithoutPortfolioNestedInput {
+    @Field(() => [NotificationCreateWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationCreateWithoutPortfolioInput)
+    create?: Array<NotificationCreateWithoutPortfolioInput>;
+    @Field(() => [NotificationCreateOrConnectWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationCreateOrConnectWithoutPortfolioInput)
+    connectOrCreate?: Array<NotificationCreateOrConnectWithoutPortfolioInput>;
+    @Field(() => [NotificationUpsertWithWhereUniqueWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationUpsertWithWhereUniqueWithoutPortfolioInput)
+    upsert?: Array<NotificationUpsertWithWhereUniqueWithoutPortfolioInput>;
+    @Field(() => NotificationCreateManyPortfolioInputEnvelope, {nullable:true})
+    @Type(() => NotificationCreateManyPortfolioInputEnvelope)
+    createMany?: InstanceType<typeof NotificationCreateManyPortfolioInputEnvelope>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    set?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    disconnect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    delete?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationWhereUniqueInput], {nullable:true})
+    @Type(() => NotificationWhereUniqueInput)
+    connect?: Array<Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>>;
+    @Field(() => [NotificationUpdateWithWhereUniqueWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationUpdateWithWhereUniqueWithoutPortfolioInput)
+    update?: Array<NotificationUpdateWithWhereUniqueWithoutPortfolioInput>;
+    @Field(() => [NotificationUpdateManyWithWhereWithoutPortfolioInput], {nullable:true})
+    @Type(() => NotificationUpdateManyWithWhereWithoutPortfolioInput)
+    updateMany?: Array<NotificationUpdateManyWithWhereWithoutPortfolioInput>;
+    @Field(() => [NotificationScalarWhereInput], {nullable:true})
+    @Type(() => NotificationScalarWhereInput)
+    deleteMany?: Array<NotificationScalarWhereInput>;
+}
+
+@InputType()
+export class NotificationUpdateWithWhereUniqueWithoutAccountInput {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => NotificationUpdateWithoutAccountInput, {nullable:false})
+    @Type(() => NotificationUpdateWithoutAccountInput)
+    data!: InstanceType<typeof NotificationUpdateWithoutAccountInput>;
+}
+
+@InputType()
+export class NotificationUpdateWithWhereUniqueWithoutPortfolioInput {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => NotificationUpdateWithoutPortfolioInput, {nullable:false})
+    @Type(() => NotificationUpdateWithoutPortfolioInput)
+    data!: InstanceType<typeof NotificationUpdateWithoutPortfolioInput>;
+}
+
+@InputType()
+export class NotificationUpdateWithoutAccountInput {
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+    @Field(() => PortfolioUpdateOneRequiredWithoutNotificationNestedInput, {nullable:true})
+    @Type(() => PortfolioUpdateOneRequiredWithoutNotificationNestedInput)
+    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutNotificationNestedInput>;
+}
+
+@InputType()
+export class NotificationUpdateWithoutPortfolioInput {
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+    @Field(() => AccountUpdateOneWithoutNotificationNestedInput, {nullable:true})
+    @Type(() => AccountUpdateOneWithoutNotificationNestedInput)
+    account?: InstanceType<typeof AccountUpdateOneWithoutNotificationNestedInput>;
+}
+
+@InputType()
+export class NotificationUpdateInput {
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    description?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    body?: InstanceType<typeof NullableStringFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    acked?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => EnumNotificationLevelFieldUpdateOperationsInput, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFieldUpdateOperationsInput>;
+    @Field(() => PortfolioUpdateOneRequiredWithoutNotificationNestedInput, {nullable:true})
+    @Type(() => PortfolioUpdateOneRequiredWithoutNotificationNestedInput)
+    portfolio?: InstanceType<typeof PortfolioUpdateOneRequiredWithoutNotificationNestedInput>;
+    @Field(() => AccountUpdateOneWithoutNotificationNestedInput, {nullable:true})
+    @Type(() => AccountUpdateOneWithoutNotificationNestedInput)
+    account?: InstanceType<typeof AccountUpdateOneWithoutNotificationNestedInput>;
+}
+
+@InputType()
+export class NotificationUpsertWithWhereUniqueWithoutAccountInput {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => NotificationUpdateWithoutAccountInput, {nullable:false})
+    @Type(() => NotificationUpdateWithoutAccountInput)
+    update!: InstanceType<typeof NotificationUpdateWithoutAccountInput>;
+    @Field(() => NotificationCreateWithoutAccountInput, {nullable:false})
+    @Type(() => NotificationCreateWithoutAccountInput)
+    create!: InstanceType<typeof NotificationCreateWithoutAccountInput>;
+}
+
+@InputType()
+export class NotificationUpsertWithWhereUniqueWithoutPortfolioInput {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => NotificationUpdateWithoutPortfolioInput, {nullable:false})
+    @Type(() => NotificationUpdateWithoutPortfolioInput)
+    update!: InstanceType<typeof NotificationUpdateWithoutPortfolioInput>;
+    @Field(() => NotificationCreateWithoutPortfolioInput, {nullable:false})
+    @Type(() => NotificationCreateWithoutPortfolioInput)
+    create!: InstanceType<typeof NotificationCreateWithoutPortfolioInput>;
+}
+
+@InputType()
+export class NotificationWhereUniqueInput {
+    @Field(() => Int, {nullable:true})
+    id?: number;
+    @Field(() => [NotificationWhereInput], {nullable:true})
+    AND?: Array<NotificationWhereInput>;
+    @Field(() => [NotificationWhereInput], {nullable:true})
+    OR?: Array<NotificationWhereInput>;
+    @Field(() => [NotificationWhereInput], {nullable:true})
+    NOT?: Array<NotificationWhereInput>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    title?: InstanceType<typeof StringFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    description?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    body?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    acked?: InstanceType<typeof BoolFilter>;
+    @Field(() => UuidFilter, {nullable:true})
+    portfolioId?: InstanceType<typeof UuidFilter>;
+    @Field(() => UuidNullableFilter, {nullable:true})
+    accountId?: InstanceType<typeof UuidNullableFilter>;
+    @Field(() => EnumNotificationLevelFilter, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFilter>;
+    @Field(() => PortfolioScalarRelationFilter, {nullable:true})
+    @Type(() => PortfolioScalarRelationFilter)
+    portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
+    @Field(() => AccountNullableScalarRelationFilter, {nullable:true})
+    @Type(() => AccountNullableScalarRelationFilter)
+    account?: InstanceType<typeof AccountNullableScalarRelationFilter>;
+}
+
+@InputType()
+export class NotificationWhereInput {
+    @Field(() => [NotificationWhereInput], {nullable:true})
+    AND?: Array<NotificationWhereInput>;
+    @Field(() => [NotificationWhereInput], {nullable:true})
+    OR?: Array<NotificationWhereInput>;
+    @Field(() => [NotificationWhereInput], {nullable:true})
+    NOT?: Array<NotificationWhereInput>;
+    @Field(() => IntFilter, {nullable:true})
+    id?: InstanceType<typeof IntFilter>;
+    @Field(() => DateTimeFilter, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFilter>;
+    @Field(() => StringFilter, {nullable:true})
+    title?: InstanceType<typeof StringFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    description?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    body?: InstanceType<typeof StringNullableFilter>;
+    @Field(() => BoolFilter, {nullable:true})
+    acked?: InstanceType<typeof BoolFilter>;
+    @Field(() => UuidFilter, {nullable:true})
+    portfolioId?: InstanceType<typeof UuidFilter>;
+    @Field(() => UuidNullableFilter, {nullable:true})
+    accountId?: InstanceType<typeof UuidNullableFilter>;
+    @Field(() => EnumNotificationLevelFilter, {nullable:true})
+    level?: InstanceType<typeof EnumNotificationLevelFilter>;
+    @Field(() => PortfolioScalarRelationFilter, {nullable:true})
+    @Type(() => PortfolioScalarRelationFilter)
+    portfolio?: InstanceType<typeof PortfolioScalarRelationFilter>;
+    @Field(() => AccountNullableScalarRelationFilter, {nullable:true})
+    @Type(() => AccountNullableScalarRelationFilter)
+    account?: InstanceType<typeof AccountNullableScalarRelationFilter>;
+}
+
+@ObjectType()
+export class Notification {
+    @Field(() => ID, {nullable:false})
+    id!: number;
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
+    @Field(() => String, {nullable:false})
+    title!: string;
+    @Field(() => String, {nullable:true})
+    description!: string | null;
+    @Field(() => String, {nullable:true})
+    body!: string | null;
+    @Field(() => Boolean, {defaultValue:false,nullable:false})
+    acked!: boolean;
+    @Field(() => String, {nullable:false})
+    portfolioId!: string;
+    @Field(() => String, {nullable:true})
+    accountId!: string | null;
+    @Field(() => NotificationLevel, {defaultValue:'INFO',nullable:false})
+    level!: `${NotificationLevel}`;
+    @Field(() => Portfolio, {nullable:false})
+    portfolio?: InstanceType<typeof Portfolio>;
+    @Field(() => Account, {nullable:true})
+    account?: InstanceType<typeof Account> | null;
+}
+
+@ArgsType()
+export class UpdateManyNotificationArgs {
+    @Field(() => NotificationUpdateManyMutationInput, {nullable:false})
+    @Type(() => NotificationUpdateManyMutationInput)
+    data!: InstanceType<typeof NotificationUpdateManyMutationInput>;
+    @Field(() => NotificationWhereInput, {nullable:true})
+    @Type(() => NotificationWhereInput)
+    where?: InstanceType<typeof NotificationWhereInput>;
+    @Field(() => Int, {nullable:true})
+    limit?: number;
+}
+
+@ArgsType()
+export class UpdateOneNotificationArgs {
+    @Field(() => NotificationUpdateInput, {nullable:false})
+    @Type(() => NotificationUpdateInput)
+    data!: InstanceType<typeof NotificationUpdateInput>;
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+}
+
+@ArgsType()
+export class UpsertOneNotificationArgs {
+    @Field(() => NotificationWhereUniqueInput, {nullable:false})
+    @Type(() => NotificationWhereUniqueInput)
+    where!: Prisma.AtLeast<NotificationWhereUniqueInput, 'id'>;
+    @Field(() => NotificationCreateInput, {nullable:false})
+    @Type(() => NotificationCreateInput)
+    create!: InstanceType<typeof NotificationCreateInput>;
+    @Field(() => NotificationUpdateInput, {nullable:false})
+    @Type(() => NotificationUpdateInput)
+    update!: InstanceType<typeof NotificationUpdateInput>;
+}
+
+@ObjectType()
 export class AggregatePortfolio {
     @Field(() => PortfolioCountAggregate, {nullable:true})
     _count?: InstanceType<typeof PortfolioCountAggregate>;
@@ -45728,6 +47937,8 @@ export class PortfolioCount {
     realizedPAndL?: number;
     @Field(() => Int, {nullable:false})
     harvestTransactionItem?: number;
+    @Field(() => Int, {nullable:false})
+    Notification?: number;
 }
 
 @InputType()
@@ -45972,6 +48183,19 @@ export class PortfolioCreateNestedOneWithoutLotsInput {
 }
 
 @InputType()
+export class PortfolioCreateNestedOneWithoutNotificationInput {
+    @Field(() => PortfolioCreateWithoutNotificationInput, {nullable:true})
+    @Type(() => PortfolioCreateWithoutNotificationInput)
+    create?: InstanceType<typeof PortfolioCreateWithoutNotificationInput>;
+    @Field(() => PortfolioCreateOrConnectWithoutNotificationInput, {nullable:true})
+    @Type(() => PortfolioCreateOrConnectWithoutNotificationInput)
+    connectOrCreate?: InstanceType<typeof PortfolioCreateOrConnectWithoutNotificationInput>;
+    @Field(() => PortfolioWhereUniqueInput, {nullable:true})
+    @Type(() => PortfolioWhereUniqueInput)
+    connect?: Prisma.AtLeast<PortfolioWhereUniqueInput, 'id'>;
+}
+
+@InputType()
 export class PortfolioCreateNestedOneWithoutPositionsInput {
     @Field(() => PortfolioCreateWithoutPositionsInput, {nullable:true})
     @Type(() => PortfolioCreateWithoutPositionsInput)
@@ -46134,6 +48358,16 @@ export class PortfolioCreateOrConnectWithoutLotsInput {
 }
 
 @InputType()
+export class PortfolioCreateOrConnectWithoutNotificationInput {
+    @Field(() => PortfolioWhereUniqueInput, {nullable:false})
+    @Type(() => PortfolioWhereUniqueInput)
+    where!: Prisma.AtLeast<PortfolioWhereUniqueInput, 'id'>;
+    @Field(() => PortfolioCreateWithoutNotificationInput, {nullable:false})
+    @Type(() => PortfolioCreateWithoutNotificationInput)
+    create!: InstanceType<typeof PortfolioCreateWithoutNotificationInput>;
+}
+
+@InputType()
 export class PortfolioCreateOrConnectWithoutPositionsInput {
     @Field(() => PortfolioWhereUniqueInput, {nullable:false})
     @Type(() => PortfolioWhereUniqueInput)
@@ -46255,6 +48489,9 @@ export class PortfolioCreateWithoutAccountsInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -46339,6 +48576,9 @@ export class PortfolioCreateWithoutAuthConnectionsInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -46423,6 +48663,9 @@ export class PortfolioCreateWithoutCreatedByInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -46507,6 +48750,9 @@ export class PortfolioCreateWithoutFilesInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -46591,6 +48837,9 @@ export class PortfolioCreateWithoutHarvestTransactionItemInput {
     @Field(() => RealizedPAndLCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => RealizedPAndLCreateNestedManyWithoutPortfolioInput)
     realizedPAndL?: InstanceType<typeof RealizedPAndLCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -46675,6 +48924,9 @@ export class PortfolioCreateWithoutHarvestTransactionInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -46759,6 +49011,9 @@ export class PortfolioCreateWithoutHarvestsInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -46843,6 +49098,9 @@ export class PortfolioCreateWithoutLogInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -46927,6 +49185,9 @@ export class PortfolioCreateWithoutLotChangeLogInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -47011,6 +49272,9 @@ export class PortfolioCreateWithoutLotTransactionBatchInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -47083,6 +49347,96 @@ export class PortfolioCreateWithoutLotsInput {
     @Field(() => FileCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => FileCreateNestedManyWithoutPortfolioInput)
     files?: InstanceType<typeof FileCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => PositionCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => PositionCreateNestedManyWithoutPortfolioInput)
+    positions?: InstanceType<typeof PositionCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => TransactionCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => TransactionCreateNestedManyWithoutPortfolioInput)
+    transactions?: InstanceType<typeof TransactionCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => RealizedPAndLCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => RealizedPAndLCreateNestedManyWithoutPortfolioInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
+    harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
+}
+
+@InputType()
+export class PortfolioCreateWithoutNotificationInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => String, {nullable:true})
+    name?: string;
+    @Field(() => Int, {nullable:true})
+    harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestShareDollarThreshold?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestTickerBucketDollarSizeLong?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestTickerBucketLowerLimitLong?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestTickerBucketDollarSizeShort?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestTickerBucketLowerLimitShort?: Decimal;
+    @Field(() => HarvestNotificationFrequency, {nullable:true})
+    notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
+    @Field(() => AccountCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => AccountCreateNestedManyWithoutPortfolioInput)
+    accounts?: InstanceType<typeof AccountCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput)
+    usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => UserCreateNestedOneWithoutPortfolioInput, {nullable:false})
+    @Type(() => UserCreateNestedOneWithoutPortfolioInput)
+    createdBy!: InstanceType<typeof UserCreateNestedOneWithoutPortfolioInput>;
+    @Field(() => AuthConnectionCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => AuthConnectionCreateNestedManyWithoutPortfolioInput)
+    authConnections?: InstanceType<typeof AuthConnectionCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => HarvestCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => HarvestCreateNestedManyWithoutPortfolioInput)
+    harvests?: InstanceType<typeof HarvestCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => LogCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => LogCreateNestedManyWithoutPortfolioInput)
+    log?: InstanceType<typeof LogCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => LotTransactionBatchCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => LotTransactionBatchCreateNestedManyWithoutPortfolioInput)
+    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => LotChangeLogCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => LotChangeLogCreateNestedManyWithoutPortfolioInput)
+    lotChangeLog?: InstanceType<typeof LotChangeLogCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => HarvestTransactionCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => HarvestTransactionCreateNestedManyWithoutPortfolioInput)
+    harvestTransaction?: InstanceType<typeof HarvestTransactionCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => FileCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => FileCreateNestedManyWithoutPortfolioInput)
+    files?: InstanceType<typeof FileCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => LotCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => LotCreateNestedManyWithoutPortfolioInput)
+    lots?: InstanceType<typeof LotCreateNestedManyWithoutPortfolioInput>;
     @Field(() => PositionCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => PositionCreateNestedManyWithoutPortfolioInput)
     positions?: InstanceType<typeof PositionCreateNestedManyWithoutPortfolioInput>;
@@ -47179,6 +49533,9 @@ export class PortfolioCreateWithoutPositionsInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -47263,6 +49620,9 @@ export class PortfolioCreateWithoutRealizedPAndLInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -47347,6 +49707,9 @@ export class PortfolioCreateWithoutTransactionsInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -47431,6 +49794,9 @@ export class PortfolioCreateWithoutUsersOnPortfoliosInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -47518,6 +49884,9 @@ export class PortfolioCreateInput {
     @Field(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationCreateNestedManyWithoutPortfolioInput>;
 }
 
 @ArgsType()
@@ -47929,6 +50298,9 @@ export class PortfolioOrderByWithRelationInput {
     @Field(() => HarvestTransactionItemOrderByRelationAggregateInput, {nullable:true})
     @Type(() => HarvestTransactionItemOrderByRelationAggregateInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemOrderByRelationAggregateInput>;
+    @Field(() => NotificationOrderByRelationAggregateInput, {nullable:true})
+    @Type(() => NotificationOrderByRelationAggregateInput)
+    Notification?: InstanceType<typeof NotificationOrderByRelationAggregateInput>;
 }
 
 @InputType()
@@ -48186,6 +50558,9 @@ export class PortfolioUncheckedCreateWithoutAccountsInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48269,6 +50644,9 @@ export class PortfolioUncheckedCreateWithoutAuthConnectionsInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48353,6 +50731,9 @@ export class PortfolioUncheckedCreateWithoutCreatedByInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48436,6 +50817,9 @@ export class PortfolioUncheckedCreateWithoutFilesInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48519,6 +50903,9 @@ export class PortfolioUncheckedCreateWithoutHarvestTransactionItemInput {
     @Field(() => RealizedPAndLUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => RealizedPAndLUncheckedCreateNestedManyWithoutPortfolioInput)
     realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48602,6 +50989,9 @@ export class PortfolioUncheckedCreateWithoutHarvestTransactionInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48685,6 +51075,9 @@ export class PortfolioUncheckedCreateWithoutHarvestsInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48768,6 +51161,9 @@ export class PortfolioUncheckedCreateWithoutLogInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48851,6 +51247,9 @@ export class PortfolioUncheckedCreateWithoutLotChangeLogInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -48934,6 +51333,9 @@ export class PortfolioUncheckedCreateWithoutLotTransactionBatchInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -49005,6 +51407,95 @@ export class PortfolioUncheckedCreateWithoutLotsInput {
     @Field(() => FileUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => FileUncheckedCreateNestedManyWithoutPortfolioInput)
     files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => PositionUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => PositionUncheckedCreateNestedManyWithoutPortfolioInput)
+    positions?: InstanceType<typeof PositionUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => TransactionUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => TransactionUncheckedCreateNestedManyWithoutPortfolioInput)
+    transactions?: InstanceType<typeof TransactionUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => RealizedPAndLUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => RealizedPAndLUncheckedCreateNestedManyWithoutPortfolioInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
+    harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
+}
+
+@InputType()
+export class PortfolioUncheckedCreateWithoutNotificationInput {
+    @Field(() => String, {nullable:true})
+    id?: string;
+    @Field(() => Date, {nullable:true})
+    createdAt?: Date | string;
+    @Field(() => Date, {nullable:true})
+    updatedAt?: Date | string;
+    @Field(() => String, {nullable:false})
+    createdById!: string;
+    @Field(() => String, {nullable:true})
+    name?: string;
+    @Field(() => Int, {nullable:true})
+    harvestCycleWeeks?: number;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    minimumLotPAndL?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestShareDollarThreshold?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestTickerBucketDollarSizeLong?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestTickerBucketLowerLimitLong?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestTickerBucketDollarSizeShort?: Decimal;
+    @Field(() => GraphQLDecimal, {nullable:true})
+    @Type(() => Object)
+    @Transform(transformToDecimal)
+    harvestTickerBucketLowerLimitShort?: Decimal;
+    @Field(() => HarvestNotificationFrequency, {nullable:true})
+    notificationFrequency?: `${HarvestNotificationFrequency}`;
+    @Field(() => Boolean, {nullable:true})
+    endOfYearTaxOpportunityNotification?: boolean;
+    @Field(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => AccountUncheckedCreateNestedManyWithoutPortfolioInput)
+    accounts?: InstanceType<typeof AccountUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => UsersOnPortfoliosUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => UsersOnPortfoliosUncheckedCreateNestedManyWithoutPortfolioInput)
+    usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => AuthConnectionUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => AuthConnectionUncheckedCreateNestedManyWithoutPortfolioInput)
+    authConnections?: InstanceType<typeof AuthConnectionUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => HarvestUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => HarvestUncheckedCreateNestedManyWithoutPortfolioInput)
+    harvests?: InstanceType<typeof HarvestUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => LogUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => LogUncheckedCreateNestedManyWithoutPortfolioInput)
+    log?: InstanceType<typeof LogUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => LotTransactionBatchUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedCreateNestedManyWithoutPortfolioInput)
+    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => LotChangeLogUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => LotChangeLogUncheckedCreateNestedManyWithoutPortfolioInput)
+    lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => HarvestTransactionUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedCreateNestedManyWithoutPortfolioInput)
+    harvestTransaction?: InstanceType<typeof HarvestTransactionUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => FileUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => FileUncheckedCreateNestedManyWithoutPortfolioInput)
+    files?: InstanceType<typeof FileUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => LotUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => LotUncheckedCreateNestedManyWithoutPortfolioInput)
+    lots?: InstanceType<typeof LotUncheckedCreateNestedManyWithoutPortfolioInput>;
     @Field(() => PositionUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => PositionUncheckedCreateNestedManyWithoutPortfolioInput)
     positions?: InstanceType<typeof PositionUncheckedCreateNestedManyWithoutPortfolioInput>;
@@ -49100,6 +51591,9 @@ export class PortfolioUncheckedCreateWithoutPositionsInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -49183,6 +51677,9 @@ export class PortfolioUncheckedCreateWithoutRealizedPAndLInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -49266,6 +51763,9 @@ export class PortfolioUncheckedCreateWithoutTransactionsInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -49349,6 +51849,9 @@ export class PortfolioUncheckedCreateWithoutUsersOnPortfoliosInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -49435,6 +51938,9 @@ export class PortfolioUncheckedCreateInput {
     @Field(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedCreateNestedManyWithoutPortfolioInput>;
+    @Field(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput, {nullable:true})
+    @Type(() => NotificationUncheckedCreateNestedManyWithoutPortfolioInput)
+    Notification?: InstanceType<typeof NotificationUncheckedCreateNestedManyWithoutPortfolioInput>;
 }
 
 @InputType()
@@ -49623,6 +52129,9 @@ export class PortfolioUncheckedUpdateWithoutAccountsInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -49700,6 +52209,9 @@ export class PortfolioUncheckedUpdateWithoutAuthConnectionsInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -49778,6 +52290,9 @@ export class PortfolioUncheckedUpdateWithoutCreatedByInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -49855,6 +52370,9 @@ export class PortfolioUncheckedUpdateWithoutFilesInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -49932,6 +52450,9 @@ export class PortfolioUncheckedUpdateWithoutHarvestTransactionItemInput {
     @Field(() => RealizedPAndLUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => RealizedPAndLUncheckedUpdateManyWithoutPortfolioNestedInput)
     realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50009,6 +52530,9 @@ export class PortfolioUncheckedUpdateWithoutHarvestTransactionInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50086,6 +52610,9 @@ export class PortfolioUncheckedUpdateWithoutHarvestsInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50163,6 +52690,9 @@ export class PortfolioUncheckedUpdateWithoutLogInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50240,6 +52770,9 @@ export class PortfolioUncheckedUpdateWithoutLotChangeLogInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50317,6 +52850,9 @@ export class PortfolioUncheckedUpdateWithoutLotTransactionBatchInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50382,6 +52918,89 @@ export class PortfolioUncheckedUpdateWithoutLotsInput {
     @Field(() => FileUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => FileUncheckedUpdateManyWithoutPortfolioNestedInput)
     files?: InstanceType<typeof FileUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => PositionUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => PositionUncheckedUpdateManyWithoutPortfolioNestedInput)
+    positions?: InstanceType<typeof PositionUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => TransactionUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => TransactionUncheckedUpdateManyWithoutPortfolioNestedInput)
+    transactions?: InstanceType<typeof TransactionUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => RealizedPAndLUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => RealizedPAndLUncheckedUpdateManyWithoutPortfolioNestedInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
+    harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
+}
+
+@InputType()
+export class PortfolioUncheckedUpdateWithoutNotificationInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    createdById?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestTickerBucketDollarSizeLong?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestTickerBucketLowerLimitLong?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestTickerBucketDollarSizeShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
+    notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => AccountUncheckedUpdateManyWithoutPortfolioNestedInput)
+    accounts?: InstanceType<typeof AccountUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => UsersOnPortfoliosUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UsersOnPortfoliosUncheckedUpdateManyWithoutPortfolioNestedInput)
+    usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => AuthConnectionUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => AuthConnectionUncheckedUpdateManyWithoutPortfolioNestedInput)
+    authConnections?: InstanceType<typeof AuthConnectionUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => HarvestUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => HarvestUncheckedUpdateManyWithoutPortfolioNestedInput)
+    harvests?: InstanceType<typeof HarvestUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => LogUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => LogUncheckedUpdateManyWithoutPortfolioNestedInput)
+    log?: InstanceType<typeof LogUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => LotTransactionBatchUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUncheckedUpdateManyWithoutPortfolioNestedInput)
+    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => LotChangeLogUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => LotChangeLogUncheckedUpdateManyWithoutPortfolioNestedInput)
+    lotChangeLog?: InstanceType<typeof LotChangeLogUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => HarvestTransactionUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUncheckedUpdateManyWithoutPortfolioNestedInput)
+    harvestTransaction?: InstanceType<typeof HarvestTransactionUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => FileUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => FileUncheckedUpdateManyWithoutPortfolioNestedInput)
+    files?: InstanceType<typeof FileUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => LotUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => LotUncheckedUpdateManyWithoutPortfolioNestedInput)
+    lots?: InstanceType<typeof LotUncheckedUpdateManyWithoutPortfolioNestedInput>;
     @Field(() => PositionUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => PositionUncheckedUpdateManyWithoutPortfolioNestedInput)
     positions?: InstanceType<typeof PositionUncheckedUpdateManyWithoutPortfolioNestedInput>;
@@ -50471,6 +53090,9 @@ export class PortfolioUncheckedUpdateWithoutPositionsInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50548,6 +53170,9 @@ export class PortfolioUncheckedUpdateWithoutRealizedPAndLInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50625,6 +53250,9 @@ export class PortfolioUncheckedUpdateWithoutTransactionsInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50702,6 +53330,9 @@ export class PortfolioUncheckedUpdateWithoutUsersOnPortfoliosInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -50782,6 +53413,9 @@ export class PortfolioUncheckedUpdateInput {
     @Field(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUncheckedUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUncheckedUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUncheckedUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51058,6 +53692,25 @@ export class PortfolioUpdateOneRequiredWithoutLotsNestedInput {
 }
 
 @InputType()
+export class PortfolioUpdateOneRequiredWithoutNotificationNestedInput {
+    @Field(() => PortfolioCreateWithoutNotificationInput, {nullable:true})
+    @Type(() => PortfolioCreateWithoutNotificationInput)
+    create?: InstanceType<typeof PortfolioCreateWithoutNotificationInput>;
+    @Field(() => PortfolioCreateOrConnectWithoutNotificationInput, {nullable:true})
+    @Type(() => PortfolioCreateOrConnectWithoutNotificationInput)
+    connectOrCreate?: InstanceType<typeof PortfolioCreateOrConnectWithoutNotificationInput>;
+    @Field(() => PortfolioUpsertWithoutNotificationInput, {nullable:true})
+    @Type(() => PortfolioUpsertWithoutNotificationInput)
+    upsert?: InstanceType<typeof PortfolioUpsertWithoutNotificationInput>;
+    @Field(() => PortfolioWhereUniqueInput, {nullable:true})
+    @Type(() => PortfolioWhereUniqueInput)
+    connect?: Prisma.AtLeast<PortfolioWhereUniqueInput, 'id'>;
+    @Field(() => PortfolioUpdateToOneWithWhereWithoutNotificationInput, {nullable:true})
+    @Type(() => PortfolioUpdateToOneWithWhereWithoutNotificationInput)
+    update?: InstanceType<typeof PortfolioUpdateToOneWithWhereWithoutNotificationInput>;
+}
+
+@InputType()
 export class PortfolioUpdateOneRequiredWithoutPositionsNestedInput {
     @Field(() => PortfolioCreateWithoutPositionsInput, {nullable:true})
     @Type(() => PortfolioCreateWithoutPositionsInput)
@@ -51234,6 +53887,16 @@ export class PortfolioUpdateToOneWithWhereWithoutLotsInput {
 }
 
 @InputType()
+export class PortfolioUpdateToOneWithWhereWithoutNotificationInput {
+    @Field(() => PortfolioWhereInput, {nullable:true})
+    @Type(() => PortfolioWhereInput)
+    where?: InstanceType<typeof PortfolioWhereInput>;
+    @Field(() => PortfolioUpdateWithoutNotificationInput, {nullable:false})
+    @Type(() => PortfolioUpdateWithoutNotificationInput)
+    data!: InstanceType<typeof PortfolioUpdateWithoutNotificationInput>;
+}
+
+@InputType()
 export class PortfolioUpdateToOneWithWhereWithoutPositionsInput {
     @Field(() => PortfolioWhereInput, {nullable:true})
     @Type(() => PortfolioWhereInput)
@@ -51359,6 +54022,9 @@ export class PortfolioUpdateWithoutAccountsInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51437,6 +54103,9 @@ export class PortfolioUpdateWithoutAuthConnectionsInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51515,6 +54184,9 @@ export class PortfolioUpdateWithoutCreatedByInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51593,6 +54265,9 @@ export class PortfolioUpdateWithoutFilesInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51671,6 +54346,9 @@ export class PortfolioUpdateWithoutHarvestTransactionItemInput {
     @Field(() => RealizedPAndLUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => RealizedPAndLUpdateManyWithoutPortfolioNestedInput)
     realizedPAndL?: InstanceType<typeof RealizedPAndLUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51749,6 +54427,9 @@ export class PortfolioUpdateWithoutHarvestTransactionInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51827,6 +54508,9 @@ export class PortfolioUpdateWithoutHarvestsInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51905,6 +54589,9 @@ export class PortfolioUpdateWithoutLogInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -51983,6 +54670,9 @@ export class PortfolioUpdateWithoutLotChangeLogInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -52061,6 +54751,9 @@ export class PortfolioUpdateWithoutLotTransactionBatchInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -52127,6 +54820,90 @@ export class PortfolioUpdateWithoutLotsInput {
     @Field(() => FileUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => FileUpdateManyWithoutPortfolioNestedInput)
     files?: InstanceType<typeof FileUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => PositionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => PositionUpdateManyWithoutPortfolioNestedInput)
+    positions?: InstanceType<typeof PositionUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => TransactionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => TransactionUpdateManyWithoutPortfolioNestedInput)
+    transactions?: InstanceType<typeof TransactionUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => RealizedPAndLUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => RealizedPAndLUpdateManyWithoutPortfolioNestedInput)
+    realizedPAndL?: InstanceType<typeof RealizedPAndLUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
+    harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
+}
+
+@InputType()
+export class PortfolioUpdateWithoutNotificationInput {
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    id?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    createdAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    updatedAt?: InstanceType<typeof DateTimeFieldUpdateOperationsInput>;
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    name?: InstanceType<typeof StringFieldUpdateOperationsInput>;
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    harvestCycleWeeks?: InstanceType<typeof IntFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    minimumLotPAndL?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestShareDollarThreshold?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestTickerBucketDollarSizeLong?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestTickerBucketLowerLimitLong?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestTickerBucketDollarSizeShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => DecimalFieldUpdateOperationsInput, {nullable:true})
+    @Type(() => DecimalFieldUpdateOperationsInput)
+    harvestTickerBucketLowerLimitShort?: InstanceType<typeof DecimalFieldUpdateOperationsInput>;
+    @Field(() => EnumHarvestNotificationFrequencyFieldUpdateOperationsInput, {nullable:true})
+    notificationFrequency?: InstanceType<typeof EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    endOfYearTaxOpportunityNotification?: InstanceType<typeof BoolFieldUpdateOperationsInput>;
+    @Field(() => AccountUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => AccountUpdateManyWithoutPortfolioNestedInput)
+    accounts?: InstanceType<typeof AccountUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput)
+    usersOnPortfolios?: InstanceType<typeof UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => UserUpdateOneRequiredWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => UserUpdateOneRequiredWithoutPortfolioNestedInput)
+    createdBy?: InstanceType<typeof UserUpdateOneRequiredWithoutPortfolioNestedInput>;
+    @Field(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => AuthConnectionUpdateManyWithoutPortfolioNestedInput)
+    authConnections?: InstanceType<typeof AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => HarvestUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => HarvestUpdateManyWithoutPortfolioNestedInput)
+    harvests?: InstanceType<typeof HarvestUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => LogUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => LogUpdateManyWithoutPortfolioNestedInput)
+    log?: InstanceType<typeof LogUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => LotTransactionBatchUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => LotTransactionBatchUpdateManyWithoutPortfolioNestedInput)
+    lotTransactionBatch?: InstanceType<typeof LotTransactionBatchUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => LotChangeLogUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => LotChangeLogUpdateManyWithoutPortfolioNestedInput)
+    lotChangeLog?: InstanceType<typeof LotChangeLogUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => HarvestTransactionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => HarvestTransactionUpdateManyWithoutPortfolioNestedInput)
+    harvestTransaction?: InstanceType<typeof HarvestTransactionUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => FileUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => FileUpdateManyWithoutPortfolioNestedInput)
+    files?: InstanceType<typeof FileUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => LotUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => LotUpdateManyWithoutPortfolioNestedInput)
+    lots?: InstanceType<typeof LotUpdateManyWithoutPortfolioNestedInput>;
     @Field(() => PositionUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => PositionUpdateManyWithoutPortfolioNestedInput)
     positions?: InstanceType<typeof PositionUpdateManyWithoutPortfolioNestedInput>;
@@ -52217,6 +54994,9 @@ export class PortfolioUpdateWithoutPositionsInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -52295,6 +55075,9 @@ export class PortfolioUpdateWithoutRealizedPAndLInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -52373,6 +55156,9 @@ export class PortfolioUpdateWithoutTransactionsInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -52451,6 +55237,9 @@ export class PortfolioUpdateWithoutUsersOnPortfoliosInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -52532,6 +55321,9 @@ export class PortfolioUpdateInput {
     @Field(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput, {nullable:true})
     @Type(() => HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+    @Field(() => NotificationUpdateManyWithoutPortfolioNestedInput, {nullable:true})
+    @Type(() => NotificationUpdateManyWithoutPortfolioNestedInput)
+    Notification?: InstanceType<typeof NotificationUpdateManyWithoutPortfolioNestedInput>;
 }
 
 @InputType()
@@ -52672,6 +55464,19 @@ export class PortfolioUpsertWithoutLotsInput {
     @Field(() => PortfolioCreateWithoutLotsInput, {nullable:false})
     @Type(() => PortfolioCreateWithoutLotsInput)
     create!: InstanceType<typeof PortfolioCreateWithoutLotsInput>;
+    @Field(() => PortfolioWhereInput, {nullable:true})
+    @Type(() => PortfolioWhereInput)
+    where?: InstanceType<typeof PortfolioWhereInput>;
+}
+
+@InputType()
+export class PortfolioUpsertWithoutNotificationInput {
+    @Field(() => PortfolioUpdateWithoutNotificationInput, {nullable:false})
+    @Type(() => PortfolioUpdateWithoutNotificationInput)
+    update!: InstanceType<typeof PortfolioUpdateWithoutNotificationInput>;
+    @Field(() => PortfolioCreateWithoutNotificationInput, {nullable:false})
+    @Type(() => PortfolioCreateWithoutNotificationInput)
+    create!: InstanceType<typeof PortfolioCreateWithoutNotificationInput>;
     @Field(() => PortfolioWhereInput, {nullable:true})
     @Type(() => PortfolioWhereInput)
     where?: InstanceType<typeof PortfolioWhereInput>;
@@ -52819,6 +55624,9 @@ export class PortfolioWhereUniqueInput {
     @Field(() => HarvestTransactionItemListRelationFilter, {nullable:true})
     @Type(() => HarvestTransactionItemListRelationFilter)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemListRelationFilter>;
+    @Field(() => NotificationListRelationFilter, {nullable:true})
+    @Type(() => NotificationListRelationFilter)
+    Notification?: InstanceType<typeof NotificationListRelationFilter>;
 }
 
 @InputType()
@@ -52911,6 +55719,9 @@ export class PortfolioWhereInput {
     @Field(() => HarvestTransactionItemListRelationFilter, {nullable:true})
     @Type(() => HarvestTransactionItemListRelationFilter)
     harvestTransactionItem?: InstanceType<typeof HarvestTransactionItemListRelationFilter>;
+    @Field(() => NotificationListRelationFilter, {nullable:true})
+    @Type(() => NotificationListRelationFilter)
+    Notification?: InstanceType<typeof NotificationListRelationFilter>;
 }
 
 @ObjectType()
@@ -52994,6 +55805,8 @@ export class Portfolio {
     realizedPAndL?: Array<RealizedPAndL>;
     @Field(() => [HarvestTransactionItem], {nullable:true})
     harvestTransactionItem?: Array<HarvestTransactionItem>;
+    @Field(() => [Notification], {nullable:true})
+    Notification?: Array<Notification>;
     @Field(() => PortfolioCount, {nullable:false})
     _count?: InstanceType<typeof PortfolioCount>;
 }
@@ -60582,6 +63395,42 @@ export class EnumLogTypeWithAggregatesFilter {
 }
 
 @InputType()
+export class EnumNotificationLevelFieldUpdateOperationsInput {
+    @Field(() => NotificationLevel, {nullable:true})
+    set?: `${NotificationLevel}`;
+}
+
+@InputType()
+export class EnumNotificationLevelFilter {
+    @Field(() => NotificationLevel, {nullable:true})
+    equals?: `${NotificationLevel}`;
+    @Field(() => [NotificationLevel], {nullable:true})
+    in?: Array<`${NotificationLevel}`>;
+    @Field(() => [NotificationLevel], {nullable:true})
+    notIn?: Array<`${NotificationLevel}`>;
+    @Field(() => NestedEnumNotificationLevelFilter, {nullable:true})
+    not?: InstanceType<typeof NestedEnumNotificationLevelFilter>;
+}
+
+@InputType()
+export class EnumNotificationLevelWithAggregatesFilter {
+    @Field(() => NotificationLevel, {nullable:true})
+    equals?: `${NotificationLevel}`;
+    @Field(() => [NotificationLevel], {nullable:true})
+    in?: Array<`${NotificationLevel}`>;
+    @Field(() => [NotificationLevel], {nullable:true})
+    notIn?: Array<`${NotificationLevel}`>;
+    @Field(() => NestedEnumNotificationLevelWithAggregatesFilter, {nullable:true})
+    not?: InstanceType<typeof NestedEnumNotificationLevelWithAggregatesFilter>;
+    @Field(() => NestedIntFilter, {nullable:true})
+    _count?: InstanceType<typeof NestedIntFilter>;
+    @Field(() => NestedEnumNotificationLevelFilter, {nullable:true})
+    _min?: InstanceType<typeof NestedEnumNotificationLevelFilter>;
+    @Field(() => NestedEnumNotificationLevelFilter, {nullable:true})
+    _max?: InstanceType<typeof NestedEnumNotificationLevelFilter>;
+}
+
+@InputType()
 export class EnumOperationTypeFieldUpdateOperationsInput {
     @Field(() => OperationType, {nullable:true})
     set?: `${OperationType}`;
@@ -61841,6 +64690,36 @@ export class NestedEnumLogTypeWithAggregatesFilter {
     _min?: InstanceType<typeof NestedEnumLogTypeFilter>;
     @Field(() => NestedEnumLogTypeFilter, {nullable:true})
     _max?: InstanceType<typeof NestedEnumLogTypeFilter>;
+}
+
+@InputType()
+export class NestedEnumNotificationLevelFilter {
+    @Field(() => NotificationLevel, {nullable:true})
+    equals?: `${NotificationLevel}`;
+    @Field(() => [NotificationLevel], {nullable:true})
+    in?: Array<`${NotificationLevel}`>;
+    @Field(() => [NotificationLevel], {nullable:true})
+    notIn?: Array<`${NotificationLevel}`>;
+    @Field(() => NestedEnumNotificationLevelFilter, {nullable:true})
+    not?: InstanceType<typeof NestedEnumNotificationLevelFilter>;
+}
+
+@InputType()
+export class NestedEnumNotificationLevelWithAggregatesFilter {
+    @Field(() => NotificationLevel, {nullable:true})
+    equals?: `${NotificationLevel}`;
+    @Field(() => [NotificationLevel], {nullable:true})
+    in?: Array<`${NotificationLevel}`>;
+    @Field(() => [NotificationLevel], {nullable:true})
+    notIn?: Array<`${NotificationLevel}`>;
+    @Field(() => NestedEnumNotificationLevelWithAggregatesFilter, {nullable:true})
+    not?: InstanceType<typeof NestedEnumNotificationLevelWithAggregatesFilter>;
+    @Field(() => NestedIntFilter, {nullable:true})
+    _count?: InstanceType<typeof NestedIntFilter>;
+    @Field(() => NestedEnumNotificationLevelFilter, {nullable:true})
+    _min?: InstanceType<typeof NestedEnumNotificationLevelFilter>;
+    @Field(() => NestedEnumNotificationLevelFilter, {nullable:true})
+    _max?: InstanceType<typeof NestedEnumNotificationLevelFilter>;
 }
 
 @InputType()

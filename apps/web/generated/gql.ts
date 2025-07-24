@@ -9753,6 +9753,8 @@ export type Mutation = {
   accessOauthConnection: AuthConnectionExt;
   /** Add User to Portfolio. True if user added, False if user is invited as they do not exist */
   addUserToPortfolio: Scalars['Boolean']['output'];
+  /** Admin-only: Sync a specific Plaid auth connection */
+  adminSyncPlaidItem: Scalars['Boolean']['output'];
   /** Create a new connected account */
   createAccountForPortfolio: Account;
   createFiles: Array<File>;
@@ -9816,6 +9818,11 @@ export type MutationAccessOauthConnectionArgs = {
 
 export type MutationAddUserToPortfolioArgs = {
   email: Scalars['String']['input'];
+};
+
+
+export type MutationAdminSyncPlaidItemArgs = {
+  authConnectionId: Scalars['String']['input'];
 };
 
 
@@ -15956,6 +15963,18 @@ export type SendNotificationsByFrequencyMutationVariables = Exact<{
 
 export type SendNotificationsByFrequencyMutation = { __typename?: 'Mutation', sendNotificationsByFrequency: boolean };
 
+export type AdminPlaidAuthConnectionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AdminPlaidAuthConnectionsQuery = { __typename?: 'Query', plaidAuthConnections: Array<{ __typename?: 'AuthConnection', id: string, plaidInstitutionId?: string | null, authedAt: any, syncedAt?: any | null, portfolioId: string, user: { __typename?: 'User', id: string, email?: string | null, phoneNumber?: string | null }, accounts?: Array<{ __typename?: 'Account', id: string, name?: string | null, plaidAccountMask?: string | null, type: string, subType?: string | null, status: AccountStatus, balanceAccount?: string | null, accountValueTotal?: string | null }> | null }> };
+
+export type AdminSyncPlaidItemMutationVariables = Exact<{
+  authConnectionId: Scalars['String']['input'];
+}>;
+
+
+export type AdminSyncPlaidItemMutation = { __typename?: 'Mutation', adminSyncPlaidItem: boolean };
+
 export type LogFragment = { __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType };
 
 export type LogsQueryVariables = Exact<{
@@ -17475,6 +17494,95 @@ export function useSendNotificationsByFrequencyMutation(baseOptions?: Apollo.Mut
 export type SendNotificationsByFrequencyMutationHookResult = ReturnType<typeof useSendNotificationsByFrequencyMutation>;
 export type SendNotificationsByFrequencyMutationResult = Apollo.MutationResult<SendNotificationsByFrequencyMutation>;
 export type SendNotificationsByFrequencyMutationOptions = Apollo.BaseMutationOptions<SendNotificationsByFrequencyMutation, SendNotificationsByFrequencyMutationVariables>;
+export const AdminPlaidAuthConnectionsDocument = gql`
+    query AdminPlaidAuthConnections {
+  plaidAuthConnections {
+    id
+    plaidInstitutionId
+    authedAt
+    syncedAt
+    portfolioId
+    user {
+      id
+      email
+      phoneNumber
+    }
+    accounts {
+      id
+      name
+      plaidAccountMask
+      type
+      subType
+      status
+      balanceAccount
+      accountValueTotal
+    }
+  }
+}
+    `;
+
+/**
+ * __useAdminPlaidAuthConnectionsQuery__
+ *
+ * To run a query within a React component, call `useAdminPlaidAuthConnectionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminPlaidAuthConnectionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminPlaidAuthConnectionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAdminPlaidAuthConnectionsQuery(baseOptions?: Apollo.QueryHookOptions<AdminPlaidAuthConnectionsQuery, AdminPlaidAuthConnectionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminPlaidAuthConnectionsQuery, AdminPlaidAuthConnectionsQueryVariables>(AdminPlaidAuthConnectionsDocument, options);
+      }
+export function useAdminPlaidAuthConnectionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminPlaidAuthConnectionsQuery, AdminPlaidAuthConnectionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminPlaidAuthConnectionsQuery, AdminPlaidAuthConnectionsQueryVariables>(AdminPlaidAuthConnectionsDocument, options);
+        }
+export function useAdminPlaidAuthConnectionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdminPlaidAuthConnectionsQuery, AdminPlaidAuthConnectionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdminPlaidAuthConnectionsQuery, AdminPlaidAuthConnectionsQueryVariables>(AdminPlaidAuthConnectionsDocument, options);
+        }
+export type AdminPlaidAuthConnectionsQueryHookResult = ReturnType<typeof useAdminPlaidAuthConnectionsQuery>;
+export type AdminPlaidAuthConnectionsLazyQueryHookResult = ReturnType<typeof useAdminPlaidAuthConnectionsLazyQuery>;
+export type AdminPlaidAuthConnectionsSuspenseQueryHookResult = ReturnType<typeof useAdminPlaidAuthConnectionsSuspenseQuery>;
+export type AdminPlaidAuthConnectionsQueryResult = Apollo.QueryResult<AdminPlaidAuthConnectionsQuery, AdminPlaidAuthConnectionsQueryVariables>;
+export const AdminSyncPlaidItemDocument = gql`
+    mutation AdminSyncPlaidItem($authConnectionId: String!) {
+  adminSyncPlaidItem(authConnectionId: $authConnectionId)
+}
+    `;
+export type AdminSyncPlaidItemMutationFn = Apollo.MutationFunction<AdminSyncPlaidItemMutation, AdminSyncPlaidItemMutationVariables>;
+
+/**
+ * __useAdminSyncPlaidItemMutation__
+ *
+ * To run a mutation, you first call `useAdminSyncPlaidItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminSyncPlaidItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminSyncPlaidItemMutation, { data, loading, error }] = useAdminSyncPlaidItemMutation({
+ *   variables: {
+ *      authConnectionId: // value for 'authConnectionId'
+ *   },
+ * });
+ */
+export function useAdminSyncPlaidItemMutation(baseOptions?: Apollo.MutationHookOptions<AdminSyncPlaidItemMutation, AdminSyncPlaidItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminSyncPlaidItemMutation, AdminSyncPlaidItemMutationVariables>(AdminSyncPlaidItemDocument, options);
+      }
+export type AdminSyncPlaidItemMutationHookResult = ReturnType<typeof useAdminSyncPlaidItemMutation>;
+export type AdminSyncPlaidItemMutationResult = Apollo.MutationResult<AdminSyncPlaidItemMutation>;
+export type AdminSyncPlaidItemMutationOptions = Apollo.BaseMutationOptions<AdminSyncPlaidItemMutation, AdminSyncPlaidItemMutationVariables>;
 export const LogsDocument = gql`
     query Logs($pagination: PaginationProps) {
   logs(pagination: $pagination) {

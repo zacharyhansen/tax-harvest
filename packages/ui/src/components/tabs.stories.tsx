@@ -1,5 +1,5 @@
 import type { TabsProps } from "@radix-ui/react-tabs";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Button } from "./button";
 import {

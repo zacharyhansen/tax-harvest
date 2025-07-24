@@ -118,15 +118,10 @@
     "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^3.2.2",
+    "@chromatic-com/storybook": "^4.0.1",
     "@repo/typescript-config": "workspace:*",
-    "@storybook/addon-essentials": "^8.4.7",
-    "@storybook/addon-interactions": "^8.4.7",
-    "@storybook/addon-onboarding": "^8.4.7",
-    "@storybook/blocks": "^8.4.7",
-    "@storybook/react": "^8.4.7",
-    "@storybook/react-vite": "^8.4.7",
-    "@storybook/test": "^8.4.7",
+    "@storybook/addon-onboarding": "^9.0.18",
+    "@storybook/react-vite": "^9.0.18",
     "@tailwindcss/postcss": "^4.1.8",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
@@ -137,11 +132,12 @@
     "@vitejs/plugin-react": "^4.3.1",
     "@vitest/coverage-v8": "^2.1.1",
     "chromatic": "^11.20.2",
-    "eslint-plugin-storybook": "^0.11.1",
+    "eslint-plugin-storybook": "^9.0.18",
     "happy-dom": "^15.7.4",
     "postcss": "^8.4.47",
     "prop-types": "^15.8.1",
-    "storybook": "^8.4.7",
-    "tailwindcss": "^4.1.8"
+    "storybook": "^9.0.18",
+    "tailwindcss": "^4.1.8",
+    "@storybook/addon-docs": "^9.0.18"
   }
 }

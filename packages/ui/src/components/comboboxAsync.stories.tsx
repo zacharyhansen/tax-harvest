@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ComboboxAsyncOption } from "./comboboxAsync";
 
 import { useState } from "react";

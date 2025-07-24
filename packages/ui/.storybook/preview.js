@@ -1,7 +1,7 @@
 import "../src/tailwind.css";
 import "../src/tiptap/styles/index.css";
 
-/** @type { import('@storybook/react').Preview } */
+/** @type { import('@storybook/react-vite').Preview } */
 const preview = {
   parameters: {
     controls: {

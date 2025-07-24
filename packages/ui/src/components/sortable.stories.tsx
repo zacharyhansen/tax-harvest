@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DragHandleDots2Icon, TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "@repo/ui/components/button";

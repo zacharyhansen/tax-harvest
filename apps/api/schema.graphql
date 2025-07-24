@@ -5,6 +5,7 @@
 """Unless unconnected, these are always plaid accounts"""
 type Account {
   LotTransactionBatch: [LotTransactionBatch!]
+  Notification: [Notification!]
   _count: AccountCount!
   _realizedProfitAndLoss(year: Float): RealizedPAndL!
   accountValueTotal: Decimal
@@ -126,6 +127,7 @@ type AccountAvgAggregate {
 
 type AccountCount {
   LotTransactionBatch: Int!
+  Notification: Int!
   files: Int!
   lots: Int!
   positions: Int!
@@ -185,6 +187,7 @@ type AccountCountAggregate {
 
 input AccountCreateInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -433,6 +436,12 @@ input AccountCreateNestedOneWithoutLotsInput {
   create: AccountCreateWithoutLotsInput
 }
 
+input AccountCreateNestedOneWithoutNotificationInput {
+  connect: AccountWhereUniqueInput
+  connectOrCreate: AccountCreateOrConnectWithoutNotificationInput
+  create: AccountCreateWithoutNotificationInput
+}
+
 input AccountCreateNestedOneWithoutPositionsInput {
   connect: AccountWhereUniqueInput
   connectOrCreate: AccountCreateOrConnectWithoutPositionsInput
@@ -476,6 +485,11 @@ input AccountCreateOrConnectWithoutLotsInput {
   where: AccountWhereUniqueInput!
 }
 
+input AccountCreateOrConnectWithoutNotificationInput {
+  create: AccountCreateWithoutNotificationInput!
+  where: AccountWhereUniqueInput!
+}
+
 input AccountCreateOrConnectWithoutPortfolioInput {
   create: AccountCreateWithoutPortfolioInput!
   where: AccountWhereUniqueInput!
@@ -498,6 +512,7 @@ input AccountCreateOrConnectWithoutTransactionsInput {
 
 input AccountCreateWithoutAuthConnectionInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   balanceAccount: Decimal
   balanceMoneyMarket: Decimal
@@ -551,6 +566,7 @@ input AccountCreateWithoutAuthConnectionInput {
 
 input AccountCreateWithoutCreatedByInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -605,6 +621,7 @@ input AccountCreateWithoutCreatedByInput {
 
 input AccountCreateWithoutFilesInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -657,6 +674,7 @@ input AccountCreateWithoutFilesInput {
 }
 
 input AccountCreateWithoutLotTransactionBatchInput {
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -711,6 +729,7 @@ input AccountCreateWithoutLotTransactionBatchInput {
 
 input AccountCreateWithoutLotsInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -762,8 +781,63 @@ input AccountCreateWithoutLotsInput {
   uploadedPositions: Boolean
 }
 
+input AccountCreateWithoutNotificationInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  accountValueTotal: Decimal
+  authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
+  balanceAccount: Decimal
+  balanceMoneyMarket: Decimal
+  balanceShortAdjustment: Decimal
+  cashAvailableForInvestment: Decimal
+  cashBalance: Decimal
+  cashBuyingPower: Decimal
+  cashForOpenOrders: Decimal
+  cashNet: Decimal
+  cashOpenOrderReserveDT: Decimal
+  cashSettledForInvestment: Decimal
+  cashUnsettledForInvestment: Decimal
+  closedDate: DateTime
+  createdAt: DateTime
+  description: String
+  equityRegt: Decimal
+  equityRegtPercent: Decimal
+  externalId: String
+  files: FileCreateNestedManyWithoutAccountInput
+  fundsWithheldFromPurchasingPower: Decimal
+  fundsWithheldFromWithdrawal: Decimal
+  id: String
+  institution: AccountInstitution
+  key: String
+  liveURL: String
+  liveURLCreated: DateTime
+  lotSeededDate: DateTime
+  lots: LotCreateNestedManyWithoutAccountInput
+  marginBuyingPower: Decimal
+  marginBuyingPowerDT: Decimal
+  marginOpenOrderReserveDT: Decimal
+  marketValueTotal: Decimal
+  mode: AccountMode
+  name: String
+  optionLevel: OptionLevel
+  plaidAccountMask: String
+  portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  positions: PositionCreateNestedManyWithoutAccountInput
+  provider: AccountProvider
+  raw: JSON
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutAccountInput
+  setRealizedValues: Boolean
+  skipSetup: Boolean
+  status: AccountStatus
+  subType: String
+  transactions: TransactionCreateNestedManyWithoutAccountInput
+  type: String
+  updatedAt: DateTime
+  uploadedPositions: Boolean
+}
+
 input AccountCreateWithoutPortfolioInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -817,6 +891,7 @@ input AccountCreateWithoutPortfolioInput {
 
 input AccountCreateWithoutPositionsInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -870,6 +945,7 @@ input AccountCreateWithoutPositionsInput {
 
 input AccountCreateWithoutRealizedPAndLInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -923,6 +999,7 @@ input AccountCreateWithoutRealizedPAndLInput {
 
 input AccountCreateWithoutTransactionsInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -1111,6 +1188,11 @@ enum AccountMode {
   SAVINGS
 }
 
+input AccountNullableScalarRelationFilter {
+  is: AccountWhereInput
+  isNot: AccountWhereInput
+}
+
 """The provider of the account"""
 enum AccountProvider {
   ETRADE
@@ -1206,6 +1288,7 @@ type AccountSumAggregate {
 
 input AccountUpdateInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1410,6 +1493,16 @@ input AccountUpdateOneRequiredWithoutTransactionsNestedInput {
   upsert: AccountUpsertWithoutTransactionsInput
 }
 
+input AccountUpdateOneWithoutNotificationNestedInput {
+  connect: AccountWhereUniqueInput
+  connectOrCreate: AccountCreateOrConnectWithoutNotificationInput
+  create: AccountCreateWithoutNotificationInput
+  delete: AccountWhereInput
+  disconnect: AccountWhereInput
+  update: AccountUpdateToOneWithWhereWithoutNotificationInput
+  upsert: AccountUpsertWithoutNotificationInput
+}
+
 input AccountUpdateToOneWithWhereWithoutFilesInput {
   data: AccountUpdateWithoutFilesInput!
   where: AccountWhereInput
@@ -1422,6 +1515,11 @@ input AccountUpdateToOneWithWhereWithoutLotTransactionBatchInput {
 
 input AccountUpdateToOneWithWhereWithoutLotsInput {
   data: AccountUpdateWithoutLotsInput!
+  where: AccountWhereInput
+}
+
+input AccountUpdateToOneWithWhereWithoutNotificationInput {
+  data: AccountUpdateWithoutNotificationInput!
   where: AccountWhereInput
 }
 
@@ -1457,6 +1555,7 @@ input AccountUpdateWithWhereUniqueWithoutPortfolioInput {
 
 input AccountUpdateWithoutAuthConnectionInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
   balanceMoneyMarket: NullableDecimalFieldUpdateOperationsInput
@@ -1511,6 +1610,7 @@ input AccountUpdateWithoutAuthConnectionInput {
 
 input AccountUpdateWithoutCreatedByInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1565,6 +1665,7 @@ input AccountUpdateWithoutCreatedByInput {
 
 input AccountUpdateWithoutFilesInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1618,6 +1719,7 @@ input AccountUpdateWithoutFilesInput {
 }
 
 input AccountUpdateWithoutLotTransactionBatchInput {
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1673,6 +1775,7 @@ input AccountUpdateWithoutLotTransactionBatchInput {
 
 input AccountUpdateWithoutLotsInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1725,8 +1828,64 @@ input AccountUpdateWithoutLotsInput {
   uploadedPositions: BoolFieldUpdateOperationsInput
 }
 
+input AccountUpdateWithoutNotificationInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  accountValueTotal: NullableDecimalFieldUpdateOperationsInput
+  authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
+  balanceAccount: NullableDecimalFieldUpdateOperationsInput
+  balanceMoneyMarket: NullableDecimalFieldUpdateOperationsInput
+  balanceShortAdjustment: NullableDecimalFieldUpdateOperationsInput
+  cashAvailableForInvestment: NullableDecimalFieldUpdateOperationsInput
+  cashBalance: NullableDecimalFieldUpdateOperationsInput
+  cashBuyingPower: NullableDecimalFieldUpdateOperationsInput
+  cashForOpenOrders: NullableDecimalFieldUpdateOperationsInput
+  cashNet: NullableDecimalFieldUpdateOperationsInput
+  cashOpenOrderReserveDT: NullableDecimalFieldUpdateOperationsInput
+  cashSettledForInvestment: NullableDecimalFieldUpdateOperationsInput
+  cashUnsettledForInvestment: NullableDecimalFieldUpdateOperationsInput
+  closedDate: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutAccountNestedInput
+  description: NullableStringFieldUpdateOperationsInput
+  equityRegt: NullableDecimalFieldUpdateOperationsInput
+  equityRegtPercent: NullableDecimalFieldUpdateOperationsInput
+  externalId: NullableStringFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutAccountNestedInput
+  fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
+  fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
+  key: NullableStringFieldUpdateOperationsInput
+  liveURL: NullableStringFieldUpdateOperationsInput
+  liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
+  lotSeededDate: NullableDateTimeFieldUpdateOperationsInput
+  lots: LotUpdateManyWithoutAccountNestedInput
+  marginBuyingPower: NullableDecimalFieldUpdateOperationsInput
+  marginBuyingPowerDT: NullableDecimalFieldUpdateOperationsInput
+  marginOpenOrderReserveDT: NullableDecimalFieldUpdateOperationsInput
+  marketValueTotal: NullableDecimalFieldUpdateOperationsInput
+  mode: NullableEnumAccountModeFieldUpdateOperationsInput
+  name: NullableStringFieldUpdateOperationsInput
+  optionLevel: NullableEnumOptionLevelFieldUpdateOperationsInput
+  plaidAccountMask: NullableStringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  positions: PositionUpdateManyWithoutAccountNestedInput
+  provider: EnumAccountProviderFieldUpdateOperationsInput
+  raw: JSON
+  realizedPAndL: RealizedPAndLUpdateManyWithoutAccountNestedInput
+  setRealizedValues: BoolFieldUpdateOperationsInput
+  skipSetup: BoolFieldUpdateOperationsInput
+  status: EnumAccountStatusFieldUpdateOperationsInput
+  subType: NullableStringFieldUpdateOperationsInput
+  transactions: TransactionUpdateManyWithoutAccountNestedInput
+  type: StringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  uploadedPositions: BoolFieldUpdateOperationsInput
+}
+
 input AccountUpdateWithoutPortfolioInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1781,6 +1940,7 @@ input AccountUpdateWithoutPortfolioInput {
 
 input AccountUpdateWithoutPositionsInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1835,6 +1995,7 @@ input AccountUpdateWithoutPositionsInput {
 
 input AccountUpdateWithoutRealizedPAndLInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1889,6 +2050,7 @@ input AccountUpdateWithoutRealizedPAndLInput {
 
 input AccountUpdateWithoutTransactionsInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1977,6 +2139,12 @@ input AccountUpsertWithoutLotsInput {
   where: AccountWhereInput
 }
 
+input AccountUpsertWithoutNotificationInput {
+  create: AccountCreateWithoutNotificationInput!
+  update: AccountUpdateWithoutNotificationInput!
+  where: AccountWhereInput
+}
+
 input AccountUpsertWithoutPositionsInput {
   create: AccountCreateWithoutPositionsInput!
   update: AccountUpdateWithoutPositionsInput!
@@ -1999,6 +2167,7 @@ input AccountWhereInput {
   AND: [AccountWhereInput!]
   LotTransactionBatch: LotTransactionBatchListRelationFilter
   NOT: [AccountWhereInput!]
+  Notification: NotificationListRelationFilter
   OR: [AccountWhereInput!]
   accountValueTotal: DecimalNullableFilter
   authConnection: AuthConnectionNullableScalarRelationFilter
@@ -2060,6 +2229,7 @@ input AccountWhereUniqueInput {
   AND: [AccountWhereInput!]
   LotTransactionBatch: LotTransactionBatchListRelationFilter
   NOT: [AccountWhereInput!]
+  Notification: NotificationListRelationFilter
   OR: [AccountWhereInput!]
   accountValueTotal: DecimalNullableFilter
   authConnection: AuthConnectionNullableScalarRelationFilter
@@ -4246,6 +4416,17 @@ input EnumLogTypeFilter {
   in: [LogType!]
   not: NestedEnumLogTypeFilter
   notIn: [LogType!]
+}
+
+input EnumNotificationLevelFieldUpdateOperationsInput {
+  set: NotificationLevel
+}
+
+input EnumNotificationLevelFilter {
+  equals: NotificationLevel
+  in: [NotificationLevel!]
+  not: NestedEnumNotificationLevelFilter
+  notIn: [NotificationLevel!]
 }
 
 input EnumOperationTypeFieldUpdateOperationsInput {
@@ -9765,6 +9946,9 @@ type Mutation {
   """
   addUserToPortfolio(email: String!): Boolean!
 
+  """Admin-only: Sync a specific Plaid auth connection"""
+  adminSyncPlaidItem(authConnectionId: String!): Boolean!
+
   """Create a new connected account"""
   createAccountForPortfolio(accountCreateInput: AccountCreateInput!): Account!
   createFiles(data: [FileCreateManyInput!]!): [File!]!
@@ -10016,6 +10200,13 @@ input NestedEnumLogTypeFilter {
   notIn: [LogType!]
 }
 
+input NestedEnumNotificationLevelFilter {
+  equals: NotificationLevel
+  in: [NotificationLevel!]
+  not: NestedEnumNotificationLevelFilter
+  notIn: [NotificationLevel!]
+}
+
 input NestedEnumOperationTypeFilter {
   equals: OperationType
   in: [OperationType!]
@@ -10121,6 +10312,291 @@ input NestedUuidNullableFilter {
   lte: String
   not: NestedUuidNullableFilter
   notIn: [String!]
+}
+
+type Notification {
+  account: Account
+  accountId: String
+  acked: Boolean!
+  body: String
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  level: NotificationLevel!
+  portfolio: Portfolio!
+  portfolioId: String!
+  title: String!
+}
+
+type NotificationAvgAggregate {
+  id: Float
+}
+
+type NotificationCountAggregate {
+  _all: Int!
+  accountId: Int!
+  acked: Int!
+  body: Int!
+  createdAt: Int!
+  description: Int!
+  id: Int!
+  level: Int!
+  portfolioId: Int!
+  title: Int!
+}
+
+input NotificationCreateManyAccountInput {
+  acked: Boolean
+  body: String
+  createdAt: DateTime
+  description: String
+  id: Int
+  level: NotificationLevel
+  portfolioId: String!
+  title: String!
+}
+
+input NotificationCreateManyAccountInputEnvelope {
+  data: [NotificationCreateManyAccountInput!]!
+  skipDuplicates: Boolean
+}
+
+input NotificationCreateManyPortfolioInput {
+  accountId: String
+  acked: Boolean
+  body: String
+  createdAt: DateTime
+  description: String
+  id: Int
+  level: NotificationLevel
+  title: String!
+}
+
+input NotificationCreateManyPortfolioInputEnvelope {
+  data: [NotificationCreateManyPortfolioInput!]!
+  skipDuplicates: Boolean
+}
+
+input NotificationCreateNestedManyWithoutAccountInput {
+  connect: [NotificationWhereUniqueInput!]
+  connectOrCreate: [NotificationCreateOrConnectWithoutAccountInput!]
+  create: [NotificationCreateWithoutAccountInput!]
+  createMany: NotificationCreateManyAccountInputEnvelope
+}
+
+input NotificationCreateNestedManyWithoutPortfolioInput {
+  connect: [NotificationWhereUniqueInput!]
+  connectOrCreate: [NotificationCreateOrConnectWithoutPortfolioInput!]
+  create: [NotificationCreateWithoutPortfolioInput!]
+  createMany: NotificationCreateManyPortfolioInputEnvelope
+}
+
+input NotificationCreateOrConnectWithoutAccountInput {
+  create: NotificationCreateWithoutAccountInput!
+  where: NotificationWhereUniqueInput!
+}
+
+input NotificationCreateOrConnectWithoutPortfolioInput {
+  create: NotificationCreateWithoutPortfolioInput!
+  where: NotificationWhereUniqueInput!
+}
+
+input NotificationCreateWithoutAccountInput {
+  acked: Boolean
+  body: String
+  createdAt: DateTime
+  description: String
+  level: NotificationLevel
+  portfolio: PortfolioCreateNestedOneWithoutNotificationInput!
+  title: String!
+}
+
+input NotificationCreateWithoutPortfolioInput {
+  account: AccountCreateNestedOneWithoutNotificationInput
+  acked: Boolean
+  body: String
+  createdAt: DateTime
+  description: String
+  level: NotificationLevel
+  title: String!
+}
+
+enum NotificationLevel {
+  ERROR
+  INFO
+  WARNING
+}
+
+input NotificationListRelationFilter {
+  every: NotificationWhereInput
+  none: NotificationWhereInput
+  some: NotificationWhereInput
+}
+
+type NotificationMaxAggregate {
+  accountId: String
+  acked: Boolean
+  body: String
+  createdAt: DateTime
+  description: String
+  id: Int
+  level: NotificationLevel
+  portfolioId: String
+  title: String
+}
+
+type NotificationMinAggregate {
+  accountId: String
+  acked: Boolean
+  body: String
+  createdAt: DateTime
+  description: String
+  id: Int
+  level: NotificationLevel
+  portfolioId: String
+  title: String
+}
+
+input NotificationScalarWhereInput {
+  AND: [NotificationScalarWhereInput!]
+  NOT: [NotificationScalarWhereInput!]
+  OR: [NotificationScalarWhereInput!]
+  accountId: UuidNullableFilter
+  acked: BoolFilter
+  body: StringNullableFilter
+  createdAt: DateTimeFilter
+  description: StringNullableFilter
+  id: IntFilter
+  level: EnumNotificationLevelFilter
+  portfolioId: UuidFilter
+  title: StringFilter
+}
+
+type NotificationSumAggregate {
+  id: Int
+}
+
+input NotificationUpdateManyMutationInput {
+  acked: BoolFieldUpdateOperationsInput
+  body: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  description: NullableStringFieldUpdateOperationsInput
+  level: EnumNotificationLevelFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+}
+
+input NotificationUpdateManyWithWhereWithoutAccountInput {
+  data: NotificationUpdateManyMutationInput!
+  where: NotificationScalarWhereInput!
+}
+
+input NotificationUpdateManyWithWhereWithoutPortfolioInput {
+  data: NotificationUpdateManyMutationInput!
+  where: NotificationScalarWhereInput!
+}
+
+input NotificationUpdateManyWithoutAccountNestedInput {
+  connect: [NotificationWhereUniqueInput!]
+  connectOrCreate: [NotificationCreateOrConnectWithoutAccountInput!]
+  create: [NotificationCreateWithoutAccountInput!]
+  createMany: NotificationCreateManyAccountInputEnvelope
+  delete: [NotificationWhereUniqueInput!]
+  deleteMany: [NotificationScalarWhereInput!]
+  disconnect: [NotificationWhereUniqueInput!]
+  set: [NotificationWhereUniqueInput!]
+  update: [NotificationUpdateWithWhereUniqueWithoutAccountInput!]
+  updateMany: [NotificationUpdateManyWithWhereWithoutAccountInput!]
+  upsert: [NotificationUpsertWithWhereUniqueWithoutAccountInput!]
+}
+
+input NotificationUpdateManyWithoutPortfolioNestedInput {
+  connect: [NotificationWhereUniqueInput!]
+  connectOrCreate: [NotificationCreateOrConnectWithoutPortfolioInput!]
+  create: [NotificationCreateWithoutPortfolioInput!]
+  createMany: NotificationCreateManyPortfolioInputEnvelope
+  delete: [NotificationWhereUniqueInput!]
+  deleteMany: [NotificationScalarWhereInput!]
+  disconnect: [NotificationWhereUniqueInput!]
+  set: [NotificationWhereUniqueInput!]
+  update: [NotificationUpdateWithWhereUniqueWithoutPortfolioInput!]
+  updateMany: [NotificationUpdateManyWithWhereWithoutPortfolioInput!]
+  upsert: [NotificationUpsertWithWhereUniqueWithoutPortfolioInput!]
+}
+
+input NotificationUpdateWithWhereUniqueWithoutAccountInput {
+  data: NotificationUpdateWithoutAccountInput!
+  where: NotificationWhereUniqueInput!
+}
+
+input NotificationUpdateWithWhereUniqueWithoutPortfolioInput {
+  data: NotificationUpdateWithoutPortfolioInput!
+  where: NotificationWhereUniqueInput!
+}
+
+input NotificationUpdateWithoutAccountInput {
+  acked: BoolFieldUpdateOperationsInput
+  body: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  description: NullableStringFieldUpdateOperationsInput
+  level: EnumNotificationLevelFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutNotificationNestedInput
+  title: StringFieldUpdateOperationsInput
+}
+
+input NotificationUpdateWithoutPortfolioInput {
+  account: AccountUpdateOneWithoutNotificationNestedInput
+  acked: BoolFieldUpdateOperationsInput
+  body: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  description: NullableStringFieldUpdateOperationsInput
+  level: EnumNotificationLevelFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+}
+
+input NotificationUpsertWithWhereUniqueWithoutAccountInput {
+  create: NotificationCreateWithoutAccountInput!
+  update: NotificationUpdateWithoutAccountInput!
+  where: NotificationWhereUniqueInput!
+}
+
+input NotificationUpsertWithWhereUniqueWithoutPortfolioInput {
+  create: NotificationCreateWithoutPortfolioInput!
+  update: NotificationUpdateWithoutPortfolioInput!
+  where: NotificationWhereUniqueInput!
+}
+
+input NotificationWhereInput {
+  AND: [NotificationWhereInput!]
+  NOT: [NotificationWhereInput!]
+  OR: [NotificationWhereInput!]
+  account: AccountNullableScalarRelationFilter
+  accountId: UuidNullableFilter
+  acked: BoolFilter
+  body: StringNullableFilter
+  createdAt: DateTimeFilter
+  description: StringNullableFilter
+  id: IntFilter
+  level: EnumNotificationLevelFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  title: StringFilter
+}
+
+input NotificationWhereUniqueInput {
+  AND: [NotificationWhereInput!]
+  NOT: [NotificationWhereInput!]
+  OR: [NotificationWhereInput!]
+  account: AccountNullableScalarRelationFilter
+  accountId: UuidNullableFilter
+  acked: BoolFilter
+  body: StringNullableFilter
+  createdAt: DateTimeFilter
+  description: StringNullableFilter
+  id: Int
+  level: EnumNotificationLevelFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  title: StringFilter
 }
 
 input NullableDateTimeFieldUpdateOperationsInput {
@@ -10249,6 +10725,7 @@ type PolygonStockData {
 }
 
 type Portfolio {
+  Notification: [Notification!]
   _count: PortfolioCount!
   accounts: [Account!]
   authConnections: [AuthConnection!]
@@ -10312,6 +10789,7 @@ type PortfolioAvgAggregate {
 }
 
 type PortfolioCount {
+  Notification: Int!
   accounts: Int!
   authConnections: Int!
   files: Int!
@@ -10347,6 +10825,7 @@ type PortfolioCountAggregate {
 }
 
 input PortfolioCreateInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10465,6 +10944,12 @@ input PortfolioCreateNestedOneWithoutLotsInput {
   create: PortfolioCreateWithoutLotsInput
 }
 
+input PortfolioCreateNestedOneWithoutNotificationInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutNotificationInput
+  create: PortfolioCreateWithoutNotificationInput
+}
+
 input PortfolioCreateNestedOneWithoutPositionsInput {
   connect: PortfolioWhereUniqueInput
   connectOrCreate: PortfolioCreateOrConnectWithoutPositionsInput
@@ -10544,6 +11029,11 @@ input PortfolioCreateOrConnectWithoutLotsInput {
   where: PortfolioWhereUniqueInput!
 }
 
+input PortfolioCreateOrConnectWithoutNotificationInput {
+  create: PortfolioCreateWithoutNotificationInput!
+  where: PortfolioWhereUniqueInput!
+}
+
 input PortfolioCreateOrConnectWithoutPositionsInput {
   create: PortfolioCreateWithoutPositionsInput!
   where: PortfolioWhereUniqueInput!
@@ -10565,6 +11055,7 @@ input PortfolioCreateOrConnectWithoutUsersOnPortfoliosInput {
 }
 
 input PortfolioCreateWithoutAccountsInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
@@ -10595,6 +11086,7 @@ input PortfolioCreateWithoutAccountsInput {
 }
 
 input PortfolioCreateWithoutAuthConnectionsInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
@@ -10625,6 +11117,7 @@ input PortfolioCreateWithoutAuthConnectionsInput {
 }
 
 input PortfolioCreateWithoutCreatedByInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10655,6 +11148,7 @@ input PortfolioCreateWithoutCreatedByInput {
 }
 
 input PortfolioCreateWithoutFilesInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10685,6 +11179,7 @@ input PortfolioCreateWithoutFilesInput {
 }
 
 input PortfolioCreateWithoutHarvestTransactionInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10715,6 +11210,7 @@ input PortfolioCreateWithoutHarvestTransactionInput {
 }
 
 input PortfolioCreateWithoutHarvestTransactionItemInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10745,6 +11241,7 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
 }
 
 input PortfolioCreateWithoutHarvestsInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10775,6 +11272,7 @@ input PortfolioCreateWithoutHarvestsInput {
 }
 
 input PortfolioCreateWithoutLogInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10805,6 +11303,7 @@ input PortfolioCreateWithoutLogInput {
 }
 
 input PortfolioCreateWithoutLotChangeLogInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10835,6 +11334,7 @@ input PortfolioCreateWithoutLotChangeLogInput {
 }
 
 input PortfolioCreateWithoutLotTransactionBatchInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10865,6 +11365,7 @@ input PortfolioCreateWithoutLotTransactionBatchInput {
 }
 
 input PortfolioCreateWithoutLotsInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10894,7 +11395,39 @@ input PortfolioCreateWithoutLotsInput {
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
 
+input PortfolioCreateWithoutNotificationInput {
+  accounts: AccountCreateNestedManyWithoutPortfolioInput
+  authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
+  createdAt: DateTime
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
+  files: FileCreateNestedManyWithoutPortfolioInput
+  harvestCycleWeeks: Int
+  harvestShareDollarThreshold: Decimal
+  harvestTickerBucketDollarSizeLong: Decimal
+  harvestTickerBucketDollarSizeShort: Decimal
+  harvestTickerBucketLowerLimitLong: Decimal
+  harvestTickerBucketLowerLimitShort: Decimal
+  harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
+  harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
+  harvests: HarvestCreateNestedManyWithoutPortfolioInput
+  id: String
+  log: LogCreateNestedManyWithoutPortfolioInput
+  lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
+  lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
+  lots: LotCreateNestedManyWithoutPortfolioInput
+  minimumLotPAndL: Decimal
+  name: String
+  notificationFrequency: HarvestNotificationFrequency
+  positions: PositionCreateNestedManyWithoutPortfolioInput
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
+  transactions: TransactionCreateNestedManyWithoutPortfolioInput
+  updatedAt: DateTime
+  usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
+}
+
 input PortfolioCreateWithoutPositionsInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10925,6 +11458,7 @@ input PortfolioCreateWithoutPositionsInput {
 }
 
 input PortfolioCreateWithoutRealizedPAndLInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10955,6 +11489,7 @@ input PortfolioCreateWithoutRealizedPAndLInput {
 }
 
 input PortfolioCreateWithoutTransactionsInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -10985,6 +11520,7 @@ input PortfolioCreateWithoutTransactionsInput {
 }
 
 input PortfolioCreateWithoutUsersOnPortfoliosInput {
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -11125,6 +11661,7 @@ type PortfolioSummaryUnrealized {
 }
 
 input PortfolioUpdateInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11270,6 +11807,14 @@ input PortfolioUpdateOneRequiredWithoutLotsNestedInput {
   upsert: PortfolioUpsertWithoutLotsInput
 }
 
+input PortfolioUpdateOneRequiredWithoutNotificationNestedInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutNotificationInput
+  create: PortfolioCreateWithoutNotificationInput
+  update: PortfolioUpdateToOneWithWhereWithoutNotificationInput
+  upsert: PortfolioUpsertWithoutNotificationInput
+}
+
 input PortfolioUpdateOneRequiredWithoutPositionsNestedInput {
   connect: PortfolioWhereUniqueInput
   connectOrCreate: PortfolioCreateOrConnectWithoutPositionsInput
@@ -11352,6 +11897,11 @@ input PortfolioUpdateToOneWithWhereWithoutLotsInput {
   where: PortfolioWhereInput
 }
 
+input PortfolioUpdateToOneWithWhereWithoutNotificationInput {
+  data: PortfolioUpdateWithoutNotificationInput!
+  where: PortfolioWhereInput
+}
+
 input PortfolioUpdateToOneWithWhereWithoutPositionsInput {
   data: PortfolioUpdateWithoutPositionsInput!
   where: PortfolioWhereInput
@@ -11378,6 +11928,7 @@ input PortfolioUpdateWithWhereUniqueWithoutCreatedByInput {
 }
 
 input PortfolioUpdateWithoutAccountsInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
@@ -11408,6 +11959,7 @@ input PortfolioUpdateWithoutAccountsInput {
 }
 
 input PortfolioUpdateWithoutAuthConnectionsInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
@@ -11438,6 +11990,7 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
 }
 
 input PortfolioUpdateWithoutCreatedByInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11468,6 +12021,7 @@ input PortfolioUpdateWithoutCreatedByInput {
 }
 
 input PortfolioUpdateWithoutFilesInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11498,6 +12052,7 @@ input PortfolioUpdateWithoutFilesInput {
 }
 
 input PortfolioUpdateWithoutHarvestTransactionInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11528,6 +12083,7 @@ input PortfolioUpdateWithoutHarvestTransactionInput {
 }
 
 input PortfolioUpdateWithoutHarvestTransactionItemInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11558,6 +12114,7 @@ input PortfolioUpdateWithoutHarvestTransactionItemInput {
 }
 
 input PortfolioUpdateWithoutHarvestsInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11588,6 +12145,7 @@ input PortfolioUpdateWithoutHarvestsInput {
 }
 
 input PortfolioUpdateWithoutLogInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11618,6 +12176,7 @@ input PortfolioUpdateWithoutLogInput {
 }
 
 input PortfolioUpdateWithoutLotChangeLogInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11648,6 +12207,7 @@ input PortfolioUpdateWithoutLotChangeLogInput {
 }
 
 input PortfolioUpdateWithoutLotTransactionBatchInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11678,6 +12238,7 @@ input PortfolioUpdateWithoutLotTransactionBatchInput {
 }
 
 input PortfolioUpdateWithoutLotsInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11707,7 +12268,39 @@ input PortfolioUpdateWithoutLotsInput {
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
 
+input PortfolioUpdateWithoutNotificationInput {
+  accounts: AccountUpdateManyWithoutPortfolioNestedInput
+  authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutPortfolioNestedInput
+  harvestCycleWeeks: IntFieldUpdateOperationsInput
+  harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeShort: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
+  harvestTransaction: HarvestTransactionUpdateManyWithoutPortfolioNestedInput
+  harvestTransactionItem: HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput
+  harvests: HarvestUpdateManyWithoutPortfolioNestedInput
+  id: StringFieldUpdateOperationsInput
+  log: LogUpdateManyWithoutPortfolioNestedInput
+  lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
+  lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
+  lots: LotUpdateManyWithoutPortfolioNestedInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
+  positions: PositionUpdateManyWithoutPortfolioNestedInput
+  realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
+  transactions: TransactionUpdateManyWithoutPortfolioNestedInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
+}
+
 input PortfolioUpdateWithoutPositionsInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11738,6 +12331,7 @@ input PortfolioUpdateWithoutPositionsInput {
 }
 
 input PortfolioUpdateWithoutRealizedPAndLInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11768,6 +12362,7 @@ input PortfolioUpdateWithoutRealizedPAndLInput {
 }
 
 input PortfolioUpdateWithoutTransactionsInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11798,6 +12393,7 @@ input PortfolioUpdateWithoutTransactionsInput {
 }
 
 input PortfolioUpdateWithoutUsersOnPortfoliosInput {
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -11893,6 +12489,12 @@ input PortfolioUpsertWithoutLotsInput {
   where: PortfolioWhereInput
 }
 
+input PortfolioUpsertWithoutNotificationInput {
+  create: PortfolioCreateWithoutNotificationInput!
+  update: PortfolioUpdateWithoutNotificationInput!
+  where: PortfolioWhereInput
+}
+
 input PortfolioUpsertWithoutPositionsInput {
   create: PortfolioCreateWithoutPositionsInput!
   update: PortfolioUpdateWithoutPositionsInput!
@@ -11920,6 +12522,7 @@ input PortfolioUpsertWithoutUsersOnPortfoliosInput {
 input PortfolioWhereInput {
   AND: [PortfolioWhereInput!]
   NOT: [PortfolioWhereInput!]
+  Notification: NotificationListRelationFilter
   OR: [PortfolioWhereInput!]
   accounts: AccountListRelationFilter
   authConnections: AuthConnectionListRelationFilter
@@ -11955,6 +12558,7 @@ input PortfolioWhereInput {
 input PortfolioWhereUniqueInput {
   AND: [PortfolioWhereInput!]
   NOT: [PortfolioWhereInput!]
+  Notification: NotificationListRelationFilter
   OR: [PortfolioWhereInput!]
   accounts: AccountListRelationFilter
   authConnections: AuthConnectionListRelationFilter

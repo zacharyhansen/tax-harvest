@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 import { defaultCommands } from "../extensions/slash-command-lists/default.commands";

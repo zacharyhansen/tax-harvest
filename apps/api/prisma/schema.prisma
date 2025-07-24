@@ -100,6 +100,7 @@ model Portfolio {
   transactions           Transaction[]
   realizedPAndL          RealizedPAndL[]
   harvestTransactionItem HarvestTransactionItem[]
+  Notification           Notification[]
 }
 
 enum HarvestType {
@@ -284,6 +285,7 @@ model Account {
   lots                Lot[]
   files               File[]
   LotTransactionBatch LotTransactionBatch[]
+  Notification        Notification[]
 
   /// This attempts to ensure user doesnt link the same account twice (i.e. same plaid account mask)
   @@unique([authConnectionId, plaidAccountMask, type])
@@ -783,6 +785,29 @@ model File {
   account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   lots      Lot[]
   portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+enum NotificationLevel {
+  INFO
+  WARNING
+  ERROR
+}
+
+model Notification {
+  id          Int               @id @default(autoincrement())
+  createdAt   DateTime          @default(now())
+  title       String
+  description String?
+  body        String?
+  acked       Boolean           @default(false)
+  portfolioId String            @db.Uuid
+  accountId   String?           @db.Uuid
+  level       NotificationLevel @default(INFO)
+
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account   Account?  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId, acked])
 }
 
 enum LogType {
