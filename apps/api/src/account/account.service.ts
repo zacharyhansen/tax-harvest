@@ -10,7 +10,7 @@ export class AccountService {
   constructor(
     private readonly db: Database,
     private readonly prismaService: PrismaService,
-  ) {}
+  ) { }
 
   getAccountsWithPortfolioId(
     portfolioId: string,
@@ -97,7 +97,7 @@ export class AccountService {
     portfolioId: string,
   ) {
     this.logger.log(`Deleting account ${accountWhereUniqueInput.id} from portfolio ${portfolioId}`)
-    
+
     // First verify the account exists and is UNCONNECTED
     const account = await this.prismaService
       .$extends(PrismaService.forPortfolio(portfolioId))
@@ -112,38 +112,36 @@ export class AccountService {
     if (account.provider !== 'UNCONNECTED') {
       throw new Error('Can only delete UNCONNECTED accounts. For connected accounts, delete the auth connection instead.')
     }
-    
+
     return this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).$transaction(async (trx) => {
       // First delete all related data
-      await Promise.all([
-        // Delete positions
-        trx.position.deleteMany({
-          where: {
-            account: {
-              id: accountWhereUniqueInput.id,
-              portfolioId,
-            },
+      // Delete positions
+      await trx.position.deleteMany({
+        where: {
+          account: {
+            id: accountWhereUniqueInput.id,
+            portfolioId,
           },
-        }),
-        // Delete lots
-        trx.lot.deleteMany({
-          where: {
-            account: {
-              id: accountWhereUniqueInput.id,
-              portfolioId,
-            },
+        },
+      })
+      // Delete lots
+      await trx.lot.deleteMany({
+        where: {
+          account: {
+            id: accountWhereUniqueInput.id,
+            portfolioId,
           },
-        }),
-        // Delete transactions
-        trx.transaction.deleteMany({
-          where: {
-            account: {
-              id: accountWhereUniqueInput.id,
-              portfolioId,
-            },
+        },
+      })
+      // Delete transactions
+      await trx.transaction.deleteMany({
+        where: {
+          account: {
+            id: accountWhereUniqueInput.id,
+            portfolioId,
           },
-        }),
-      ])
+        },
+      })
 
       // Finally delete the account itself
       return trx.account.delete({

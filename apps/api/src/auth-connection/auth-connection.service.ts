@@ -11,7 +11,7 @@ export class AuthConnectionService {
     readonly prismaService: PrismaService,
     private readonly etradeService: EtradeService,
     private readonly plaidService: PlaidService,
-  ) {}
+  ) { }
 
   async syncAuthConnection({
     authConnection,
@@ -32,12 +32,12 @@ export class AuthConnectionService {
 
     const connection
       = authConnection
-        ?? (await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.findUniqueOrThrow({
-          where: {
-            id,
-            portfolioId,
-          },
-        }))
+      ?? (await this.prismaService.$extends(PrismaService.forPortfolio(portfolioId)).authConnection.findUniqueOrThrow({
+        where: {
+          id,
+          portfolioId,
+        },
+      }))
 
     switch (connection.source) {
       case AuthSource.ETRADE_ACCESS: {
@@ -169,17 +169,15 @@ export class AuthConnectionService {
 
         for (const account of accounts) {
           // Delete related data for each account
-          await Promise.all([
-            trx.position.deleteMany({
-              where: { accountId: account.id },
-            }),
-            trx.lot.deleteMany({
-              where: { accountId: account.id },
-            }),
-            trx.transaction.deleteMany({
-              where: { accountId: account.id },
-            }),
-          ])
+          await trx.position.deleteMany({
+            where: { accountId: account.id },
+          })
+          await trx.lot.deleteMany({
+            where: { accountId: account.id },
+          })
+          await trx.transaction.deleteMany({
+            where: { accountId: account.id },
+          })
 
           // Delete the account
           await trx.account.delete({

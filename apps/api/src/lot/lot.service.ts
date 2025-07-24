@@ -42,21 +42,19 @@ export class LotService {
       })
 
       const assets = new Set(lots.map(lot => lot.assetSymbol))
-      await Promise.all(
-        [...assets].map((asset) => {
-          return trx.asset.upsert({
-            create: {
-              symbol: asset,
-            },
-            update: {
-              symbol: asset,
-            },
-            where: {
-              symbol: asset,
-            },
-          })
-        }),
-      )
+      for (const asset of assets) {
+        await trx.asset.upsert({
+          create: {
+            symbol: asset,
+          },
+          update: {
+            symbol: asset,
+          },
+          where: {
+            symbol: asset,
+          },
+        })
+      }
 
       if (replace) {
         await trx.lot.deleteMany({

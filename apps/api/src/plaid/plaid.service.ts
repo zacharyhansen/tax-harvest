@@ -446,107 +446,104 @@ export class PlaidService {
         })
 
         // Upsert lots that have remaining quantity
-        await Promise.all(
-          lotUpserts.map(({ upsert }) =>
-            trx.lot.upsert({
-              where: {
-                id: upsert.id,
-              },
-              create: upsert,
-              update: upsert,
-            }),
-          ),
-        )
+        for (const { upsert } of lotUpserts) {
+          await trx.lot.upsert({
+            where: {
+              id: upsert.id,
+            },
+            create: upsert,
+            update: upsert,
+          })
+        }
 
         // Delete lots that have no remaining quantity
-        await Promise.all([
-          trx.lot.deleteMany({
-            where: {
-              id: {
-                in: lotDeletes.map(({ upsert }) => upsert.id ?? ''),
-              },
+        await trx.lot.deleteMany({
+          where: {
+            id: {
+              in: lotDeletes.map(({ upsert }) => upsert.id ?? ''),
             },
-          }),
-        ])
+          },
+        })
+        // update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
+        await trx.account.updateMany({
+          where: {
+            id: accountId,
+          },
+          data: {
+            lotSeededDate: transactions[0]?.transactionDate ?? undefined,
+          },
+        })
 
-        await Promise.all([
-          // update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
-          trx.account.updateMany({
-            where: {
+        // update appliedToLots to true so we know we do not need to process these again
+        await trx.transaction.updateMany({
+          where: {
+            account: {
               id: accountId,
             },
-            data: {
-              lotSeededDate: transactions[0]?.transactionDate ?? undefined,
-            },
-          }),
-          // update appliedToLots to true so we know we do not need to process these again
-          trx.transaction.updateMany({
-            where: {
-              account: {
-                id: accountId,
-              },
-            },
-            data: {
-              appliedToLots: true,
-            },
-          }),
-          trx.log.create({
-            data: {
-              data: JSON.parse(JSON.stringify({ lotTupleMap })),
-              description: 'Trx merge results',
-              source: AuthSource.PLAID,
-              type: LogType.PLAID_TRX_MERGE_SUCCESS,
+          },
+          data: {
+            appliedToLots: true,
+          },
+        })
+
+        await trx.log.create({
+          data: {
+            data: JSON.parse(JSON.stringify({ lotTupleMap })),
+            description: 'Trx merge results',
+            source: AuthSource.PLAID,
+            type: LogType.PLAID_TRX_MERGE_SUCCESS,
+            portfolioId,
+          },
+        })
+
+        await trx.lotChangeLog.createMany({
+          data: lotUpserts.map(({ upsert, isNewBuy }) => {
+            const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0)
+            const operationType = isNewBuy
+              ? OperationType.create
+              : isZeroQuantity
+                ? OperationType.delete
+                : OperationType.update
+            return {
+              lotTransactionBatchId: lotTransactionBatch.id,
+              lotId: operationType === OperationType.delete
+                ? undefined
+                : upsert.id,
+              quantityChange: (
+                intitialLotMap.get(upsert.id ?? '')?.remainingQty
+                ?? new Decimal(0)
+              ).minus(upsert.remainingQty as Decimal),
+              accountId: upsert.account.connect?.id ?? '',
               portfolioId,
-            },
+              lotBefore: intitialLotMap.get(upsert.id ?? ''),
+              lotAfter: JSON.parse(JSON.stringify(upsert)),
+              operationType,
+            }
           }),
-          trx.lotChangeLog.createMany({
-            data: lotUpserts.map(({ upsert, isNewBuy }) => {
-              const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0)
-              const operationType = isNewBuy
-                ? OperationType.create
-                : isZeroQuantity
-                  ? OperationType.delete
-                  : OperationType.update
-              return {
-                lotTransactionBatchId: lotTransactionBatch.id,
-                lotId: operationType === OperationType.delete
-                  ? undefined
-                  : upsert.id,
-                quantityChange: (
-                  intitialLotMap.get(upsert.id ?? '')?.remainingQty
-                  ?? new Decimal(0)
-                ).minus(upsert.remainingQty as Decimal),
-                accountId: upsert.account.connect?.id ?? '',
-                portfolioId,
-                lotBefore: intitialLotMap.get(upsert.id ?? ''),
-                lotAfter: JSON.parse(JSON.stringify(upsert)),
-                operationType,
-              }
-            }),
+        })
+
+        await trx.lotChangeLog.createMany({
+          data: lotDeletes.map(({ upsert, isNewBuy }) => {
+            const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0)
+            const operationType = isNewBuy
+              ? OperationType.create
+              : isZeroQuantity
+                ? OperationType.delete
+                : OperationType.update
+            return {
+              lotTransactionBatchId: lotTransactionBatch.id,
+              quantityChange: (
+                intitialLotMap.get(upsert.id ?? '')?.remainingQty
+                ?? new Decimal(0)
+              ).minus(upsert.remainingQty as Decimal),
+              accountId: upsert.account.connect?.id ?? '',
+              portfolioId,
+              lotBefore: intitialLotMap.get(upsert.id ?? ''),
+              lotAfter: JSON.parse(JSON.stringify(upsert)),
+              operationType,
+            }
           }),
-          trx.lotChangeLog.createMany({
-            data: lotDeletes.map(({ upsert, isNewBuy }) => {
-              const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0)
-              const operationType = isNewBuy
-                ? OperationType.create
-                : isZeroQuantity
-                  ? OperationType.delete
-                  : OperationType.update
-              return {
-                lotTransactionBatchId: lotTransactionBatch.id,
-                quantityChange: (
-                  intitialLotMap.get(upsert.id ?? '')?.remainingQty
-                  ?? new Decimal(0)
-                ).minus(upsert.remainingQty as Decimal),
-                accountId: upsert.account.connect?.id ?? '',
-                portfolioId,
-                lotBefore: intitialLotMap.get(upsert.id ?? ''),
-                lotAfter: JSON.parse(JSON.stringify(upsert)),
-                operationType,
-              }
-            }),
-          }),
-        ])
+        })
       })
   }
 
