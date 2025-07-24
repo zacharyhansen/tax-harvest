@@ -1025,7 +1025,9 @@ export class PlaidService {
         for (let i = 0; i < accounts.length; i++) {
           const input = accounts[i]
           // Not pretty but we want to tie the account created in the upload file step to once of the linekd ones
-          if (existingAccountId && i === 0) {
+          if (existingAccountId && i === 0 && await trx.account.findUnique({
+            where: { id: existingAccountId },
+          })) {
             const account = await trx.account.update({
               where: { id: existingAccountId },
               data: input,

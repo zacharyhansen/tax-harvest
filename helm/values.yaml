@@ -61,7 +61,7 @@ api:
       # How much realized P&L is needed to allow for realizable harvests
       NUETRAL_HARVEST_THRESHOLD: 1000
       # When pairing harvests, what is the max percentage difference between the two
-      MATCH_PERCENTAGE_DIFFERENCE: 0.3
+      MATCH_PERCENTAGE_DIFFERENCE: 33
       CLIENT_HOME_PAGE_PATH: /main/home
       DEFAULT_EMAIL_ADDRESS: support@taxharvest.ai
     secretRefs:

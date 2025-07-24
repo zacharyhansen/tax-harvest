@@ -10,7 +10,6 @@ import {
   FileUploadItemMetadata,
   FileUploadItemPreview,
   FileUploadList,
-  FileUploadTrigger,
 } from '@repo/ui/components/file-upload';
 import { toast } from '@repo/ui/components/toast-sonner';
 import InputField from '@repo/ui/form-builder/fields/input.field';
@@ -91,7 +90,7 @@ export default function AccountMappingPage() {
           accountName: account.name || `Account ${account.plaidAccountMask}`,
           accountMask: account.plaidAccountMask || '',
           accountType: account.type,
-          hasCSV: hasFiles,
+          hasCSV: hasFiles ?? false,
           files: [], // Keep local files for upload UI
           uploadProgress:
             hasFiles || account.lotSeededDate ? 'completed' : 'none',

@@ -40,20 +40,20 @@ export const metadata: Metadata = {
       },
     ],
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Tax Harvest',
-    description:
-      'Optimize your investment portfolio with ai native tax-loss harvesting strategies',
-    images: [
-      {
-        url: '/twitter-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Tax Harvest.AI - AI-Powered Tax Loss Harvesting',
-      },
-    ],
-  },
+  // twitter: {
+  //   card: 'summary_large_image',
+  //   title: 'Tax Harvest',
+  //   description:
+  //     'Optimize your investment portfolio with ai native tax-loss harvesting strategies',
+  //   images: [
+  //     {
+  //       url: '/twitter-image.jpg',
+  //       width: 1200,
+  //       height: 630,
+  //       alt: 'Tax Harvest.AI - AI-Powered Tax Loss Harvesting',
+  //     },
+  //   ],
+  // },
   robots: {
     index: true,
     follow: true,

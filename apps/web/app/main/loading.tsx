@@ -13,40 +13,8 @@ export default function LoadingScreen() {
       }}
     >
       <div className="flex flex-col items-center gap-8">
-        {/* Animated Logo/Icon */}
-        <motion.div
-          className="relative"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-        >
-          <motion.div
-            className="border-primary/20 h-16 w-16 rounded-full border-4"
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 2,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: 'linear',
-            }}
-          />
-          <motion.div
-            className="border-t-primary absolute inset-0 h-16 w-16 rounded-full border-4 border-transparent"
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 1,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: 'linear',
-            }}
-          />
-        </motion.div>
-
         {/* Loading Text */}
-        <motion.div
-          className="space-y-2 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
+        <motion.div className="space-y-2 text-center">
           <h2 className="text-xl font-semibold">Setting up your dashboard</h2>
           <motion.p
             className="text-muted-foreground"
@@ -57,7 +25,7 @@ export default function LoadingScreen() {
               ease: 'easeInOut',
             }}
           >
-            Please wait a moment...
+            just a moment...
           </motion.p>
         </motion.div>
 

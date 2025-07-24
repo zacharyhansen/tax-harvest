@@ -26,14 +26,14 @@ export default function MainLayout({
 }>) {
   return (
     <ClerkProvider>
-      <NextTopLoader color="#faa700" showSpinner={false} />
+      <NextTopLoader color="#faa700" showSpinner={true} />
       <ApolloProviderWrapper>
         <SignedIn>
           <MediaProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               <UserProvider>
                 <PortfolioProvider>
-                  <div className="min-h-screen bg-background/50 backdrop-blur-sm">
+                  <div className="bg-background/50 min-h-screen backdrop-blur-sm">
                     <div className="flex min-h-screen items-center justify-center p-4">
                       {children}
                     </div>

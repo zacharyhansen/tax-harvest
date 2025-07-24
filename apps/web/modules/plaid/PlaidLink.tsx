@@ -32,7 +32,7 @@ export default function PlaidLink({
   existingAccountId,
   ...buttonProps
 }: PlaidLinkProps) {
-  const router = (redirectTo || accountMappingUrl) ? useRouter() : null;
+  const router = redirectTo || accountMappingUrl ? useRouter() : null;
   const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation();
 
   const onSuccess: PlaidLinkOnSuccess = useCallback<PlaidLinkOnSuccess>(
@@ -50,12 +50,14 @@ export default function PlaidLink({
                 type: account.type,
                 verification_status: account.verification_status,
               })),
-              institution: metaData.institution
-                ? {
-                    institution_id: metaData.institution.institution_id,
-                    name: metaData.institution.name,
-                  }
-                : undefined,
+              institution:
+                metaData.institution?.institution_id &&
+                metaData.institution.name
+                  ? {
+                      institution_id: metaData.institution.institution_id,
+                      name: metaData.institution.name,
+                    }
+                  : undefined,
               link_session_id: metaData.link_session_id,
               transfer_status: metaData.transfer_status,
             },
@@ -63,14 +65,14 @@ export default function PlaidLink({
             existingAccountId,
           },
         })
-          .then((result) => {
+          .then(result => {
             const accounts = result.data?.setAccessTokenAndSyncAccounts || [];
-            
+
             // Clean up the stored account ID since linking is complete
             if (existingAccountId) {
               localStorage.removeItem('onboardingAccountId');
             }
-            
+
             // Handle redirect logic based on number of accounts
             if (router) {
               if (accounts.length > 1 && accountMappingUrl) {

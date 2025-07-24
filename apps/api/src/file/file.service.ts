@@ -148,6 +148,12 @@ export class FileService {
       select,
       portfolioId,
     })
+    await this.prismaService.account.update({
+      where: { id: account.id },
+      data: {
+        uploadedPositions: true,
+      },
+    })
 
     return { files, accountId: account.id }
   }

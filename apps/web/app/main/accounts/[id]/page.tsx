@@ -245,6 +245,9 @@ function AccountSettingsForm({ account }: { account: AccountItemFragment }) {
                 description: {
                   set: description,
                 },
+                setRealizedValues: {
+                  set: true,
+                },
               },
               accountWhereUniqueInput: {
                 id: account.id,

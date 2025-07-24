@@ -250,7 +250,6 @@ export function OnboardingCompleteStep() {
             </div>
 
             <Alert className="mt-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/20">
-              <ArrowRight className="text-blue-600" />
               <AlertTitle className="text-blue-900 dark:text-blue-100">
                 Connect Plaid to Discover More
               </AlertTitle>

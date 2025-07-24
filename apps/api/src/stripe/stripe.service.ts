@@ -38,7 +38,7 @@ export class StripeService {
       ],
       mode: 'subscription',
       payment_method_types: ['card'],
-      return_url: `${this.configService.get('CLIENT_ORIGIN')}/dashboard/payment-confirmation?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${this.configService.get('CLIENT_ORIGIN')}/main/payment-confirmation?session_id={CHECKOUT_SESSION_ID}`,
       ui_mode: 'embedded',
     })
     return {
