@@ -862,8 +862,7 @@ export class PlaidService {
     })
 
     this.logger.log(
-      'Plaid transactions length:',
-      plaidResponse.data.investment_transactions.length,
+      `Plaid transactions length: ${plaidResponse.data.investment_transactions.length}`,
     )
 
     // Set up the upsert
@@ -1064,6 +1063,18 @@ export class PlaidService {
           },
         },
       })
+    await this.prismaService
+      .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+      .log
+      .create({
+        data: {
+          data: webhookData as unknown as InputJsonValue,
+          description: `/${webhookData.webhook_code}`,
+          source: AuthSource.PLAID,
+          type: LogType.PLAID_WEBHOOK,
+          portfolioId: authConnection.portfolioId,
+        },
+      })
     switch (webhookData.webhook_code) {
       case 'DEFAULT_UPDATE': {
         this.logger.log('Processing Plaid holdings DEFAULT_UPDATE')
@@ -1075,18 +1086,6 @@ export class PlaidService {
         break
       }
       default: {
-        await this.prismaService
-          .$extends(PrismaService.forPortfolio(authConnection.portfolioId))
-          .log
-          .create({
-            data: {
-              data: webhookData as unknown as InputJsonValue,
-              description: `/${webhookData.webhook_code}`,
-              source: AuthSource.PLAID,
-              type: LogType.EXTERNAL_SYNC,
-              portfolioId: authConnection.portfolioId,
-            },
-          })
         this.logger.warn(`Unhandled webhook code: ${webhookData.webhook_code}`)
       }
     }
