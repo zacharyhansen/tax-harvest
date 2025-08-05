@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactNode } from 'react';
 
 import type { NavItem } from './components/nav-main';
@@ -14,6 +16,7 @@ import {
   SidebarTrigger,
 } from '@repo/ui/components/sidebar';
 import { NavMain } from './components/nav-main';
+import { useIsMobile } from '../hooks/use-is-mobile';
 
 export type NavGroup = {
   title: string;
@@ -23,7 +26,9 @@ export type NavGroup = {
 
 export function Dashboard({
   navGroups,
+  breadcrumb,
   children,
+  sidebarOptions,
   pathname,
   header,
   userRole,
@@ -38,6 +43,8 @@ export function Dashboard({
   header?: ReactNode;
   userRole?: string;
 }>) {
+  const isMobile = useIsMobile();
+
   return (
     <SidebarProvider>
       <Sidebar collapsible="icon">
@@ -62,7 +69,7 @@ export function Dashboard({
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        {/* <header className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 sticky top-0 z-50 flex h-14 items-center gap-2 border-b p-2 backdrop-blur-md transition-[width,height] ease-linear">
+        {isMobile ? <header className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 sticky top-0 z-50 flex h-14 items-center gap-2 border-b p-2 backdrop-blur-md transition-[width,height] ease-linear">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
@@ -73,7 +80,7 @@ export function Dashboard({
               {sidebarOptions}
             </div>
           )}
-        </header> */}
+        </header> : null}
         {children}
       </SidebarInset>
     </SidebarProvider>

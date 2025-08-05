@@ -15,7 +15,6 @@ import { ThemeProvider } from '@repo/ui/providers/theme-provider';
 import { usePathname } from 'next/navigation';
 import { AddAccountButton } from '~/modules/account/add-account/add-account.button';
 import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs';
-// import { PlaidConnectButton } from '~/modules/plaid'
 import { PortfolioProvider, PortfolioSwitcher } from '~/modules/portfolio';
 import { motion } from 'framer-motion';
 import ApolloProviderWrapper from './ApolloProviderWrapper';
@@ -259,16 +258,14 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
       //     </BreadcrumbList>
       //   </Breadcrumb>
       // }
-      // sidebarOptions={
-      //   <>
-      //     <SignedIn>
-      //       <AddAccountButton />
-      //       {/* <PlaidConnectButton /> */}
-      //       <UserButton />
-      //       <ThemeButton />
-      //     </SignedIn>
-      //   </>
-      // }
+      sidebarOptions={
+        <>
+          <SignedIn>
+            <UserButton />
+            <ThemeButton />
+          </SignedIn>
+        </>
+      }
       navGroups={NavTree}
       userRole={clerkUser.user?.publicMetadata.role as string | undefined}
       footer={<div className="flex items-center justify-center gap-2 group-data-[state=collapsed]:flex-col">
