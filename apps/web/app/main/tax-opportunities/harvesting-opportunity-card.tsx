@@ -42,11 +42,13 @@ export function HarvestingOpportunityCard({
     ? new Date(lot.acquiredDate).toLocaleDateString()
     : 'Unknown';
   const quantity = new Decimal(lot.availableQty);
-  const sellQuantity = Math.min(
+  const sellQuantity = Math.round(Math.min(
     new Decimal(netPosition).abs().div(lot.dollarPerSharePnL).abs().toNumber(),
     quantity.toNumber()
-  );
-  const taxSavings = new Decimal(lot.gainTotal).mul(
+  ));
+  const sellAmount = new Decimal(lot.dollarPerSharePnL).mul(sellQuantity);
+  console.log({ lot, sellAmount: sellAmount.toString(), sellQuantity, quantity: quantity.toString() });
+  const taxSavings = sellAmount.mul(
     clientEnvironment.NEXT_PUBLIC_TAX_PERCENTAGE
   );
   const colorClass = MoneyUtil.colored(taxSavings.toNumber());
@@ -124,7 +126,7 @@ export function HarvestingOpportunityCard({
             <div className="text-base">
               {Format.roundShares(sellQuantity) === Format.roundShares(quantity)
                 ? Format.roundShares(sellQuantity)
-                : `${Format.roundShares(sellQuantity)} / ${Format.roundShares(quantity)}`}{' '}
+                : `${Format.roundShares(sellQuantity)} of ${Format.roundShares(quantity)}`}{' '}
               shares
             </div>
           </div>
@@ -158,7 +160,7 @@ export function HarvestingOpportunityCard({
                 : 'Potential Gain'}
             </div>
             <div className={cn('text-base', colorClass)}>
-              {Format.money(lot.gainTotal)}
+              {Format.money(sellAmount.toString())}
             </div>
           </div>
 
