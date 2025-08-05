@@ -16,11 +16,6 @@ export class CronTasksService {
     private readonly notificationService: NotificationService,
   ) { }
 
-  @Cron(CronExpression.EVERY_10_SECONDS, { name: 'test' })
-  async test() {
-    this.logger.log(`Test`)
-  }
-
   @Cron('*/15 * * * *', { name: 'update_asset_last_price' })
   async updateAssetsLastPrice() {
     this.logger.log(`Updating all asset prices`)

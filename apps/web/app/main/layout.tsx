@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import {
   RedirectToSignIn,
   SignedIn,
@@ -9,19 +8,10 @@ import {
   useUser,
   ClerkProvider,
 } from '@clerk/nextjs';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@repo/ui/components/breadcrumb';
 import { Toaster } from '@repo/ui/components/sonner';
 import { Dashboard } from '@repo/ui/layouts/dashboard';
 import MediaProvider from '@repo/ui/providers/media-provider';
 import { ThemeProvider } from '@repo/ui/providers/theme-provider';
-import { capitalCase } from 'change-case';
 import { usePathname } from 'next/navigation';
 import { AddAccountButton } from '~/modules/account/add-account/add-account.button';
 import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs';
@@ -269,18 +259,22 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
       //     </BreadcrumbList>
       //   </Breadcrumb>
       // }
-      sidebarOptions={
-        <>
-          <SignedIn>
-            <AddAccountButton />
-            {/* <PlaidConnectButton /> */}
-            <UserButton />
-            <ThemeButton />
-          </SignedIn>
-        </>
-      }
+      // sidebarOptions={
+      //   <>
+      //     <SignedIn>
+      //       <AddAccountButton />
+      //       {/* <PlaidConnectButton /> */}
+      //       <UserButton />
+      //       <ThemeButton />
+      //     </SignedIn>
+      //   </>
+      // }
       navGroups={NavTree}
       userRole={clerkUser.user?.publicMetadata.role as string | undefined}
+      footer={<div className="flex items-center justify-center gap-2 group-data-[state=collapsed]:flex-col">
+        <ThemeButton />
+        <UserButton />
+      </div>}
     >
       {children}
     </Dashboard>

@@ -23,17 +23,17 @@ export type NavGroup = {
 
 export function Dashboard({
   navGroups,
-  breadcrumb,
   children,
-  sidebarOptions,
   pathname,
   header,
   userRole,
+  footer,
 }: Readonly<{
   navGroups: NavGroup[];
   breadcrumb?: ReactNode;
+  footer?: ReactNode;
   children: ReactNode;
-  sidebarOptions: ReactNode;
+  sidebarOptions?: ReactNode;
   pathname: string;
   header?: ReactNode;
   userRole?: string;
@@ -57,27 +57,23 @@ export function Dashboard({
             ))}
         </SidebarContent>
         <SidebarFooter>
-          {/* <NavUser
-            user={{
-              name: 'shadcn',
-              email: 'm@example.com',
-              avatar: 'https://avatars.githubusercontent.com/u/21320719?v=4',
-            }}
-          /> */}
+          {footer ?? null}
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>
       <SidebarInset>
-        <header className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 sticky top-0 z-50 flex h-14 items-center gap-2 border-b p-2 backdrop-blur-md transition-[width,height] ease-linear">
+        {/* <header className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 sticky top-0 z-50 flex h-14 items-center gap-2 border-b p-2 backdrop-blur-md transition-[width,height] ease-linear">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
             {breadcrumb ?? null}
           </div>
-          <div className="ml-auto flex items-center space-x-2 pr-2">
-            {sidebarOptions ?? null}
-          </div>
-        </header>
+          {sidebarOptions && (
+            <div className="ml-auto flex items-center space-x-2 pr-2">
+              {sidebarOptions}
+            </div>
+          )}
+        </header> */}
         {children}
       </SidebarInset>
     </SidebarProvider>
