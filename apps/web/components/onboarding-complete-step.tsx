@@ -16,6 +16,18 @@ import { Alert, AlertDescription, AlertTitle } from '@repo/ui/components/alert';
 import { FileText, ArrowRight } from 'lucide-react';
 
 /**
+ * Represents a tax harvesting opportunity
+ */
+interface Opportunity {
+  id: string;
+  symbol: string;
+  quantity: number;
+  potentialLoss: number;
+  taxSavings: number;
+  type: 'matched' | 'individual';
+}
+
+/**
  * OnboardingCompleteStep component that displays tax opportunities analysis for CSV upload
  * with onboarding-specific messaging that encourages Plaid connection for better analysis
  */
@@ -52,7 +64,7 @@ export function OnboardingCompleteStep() {
     if (!data?.harvestEvalResult) return [];
 
     const result = data.harvestEvalResult;
-    const opportunitiesMap = new Map();
+    const opportunitiesMap = new Map<string, Opportunity>();
 
     // Get opportunities from matched pairs (cost basis reset)
     if (result.matchedItems?.length) {
