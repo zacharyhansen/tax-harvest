@@ -36,8 +36,8 @@ export function OnboardingCompleteStep() {
   useEffect(() => {
     if (data?.harvestEvalResult) {
       const timer = setTimeout(() => {
-        // Calculate total potential tax savings from first 3 opportunities
-        const opportunities = getFirstThreeOpportunities();
+        // Calculate total potential tax savings from all opportunities
+        const opportunities = getAllOpportunities();
         const totalSavings = opportunities.reduce(
           (total, opp) => total + opp.taxSavings,
           0
@@ -48,15 +48,15 @@ export function OnboardingCompleteStep() {
     }
   }, [data]);
 
-  const getFirstThreeOpportunities = () => {
+  const getAllOpportunities = () => {
     if (!data?.harvestEvalResult) return [];
 
     const result = data.harvestEvalResult;
-    const opportunities = [];
+    const opportunitiesMap = new Map();
 
     // Get opportunities from matched pairs (cost basis reset)
     if (result.matchedItems?.length) {
-      for (const matchItem of result.matchedItems.slice(0, 3)) {
+      for (const matchItem of result.matchedItems) {
         if (matchItem.pairs.length > 0) {
           const firstPair = matchItem.pairs[0];
           // Use the source lots (typically loss positions in cost basis reset)
@@ -67,43 +67,61 @@ export function OnboardingCompleteStep() {
               .abs()
               .toNumber();
 
-            opportunities.push({
-              id: matchItem.id,
-              symbol: sourceLot.symbol,
-              quantity: parseFloat(sourceLot.availableQty),
-              potentialLoss: parseFloat(sourceLot.gainTotal),
-              taxSavings,
-              type: 'matched',
-            });
+            const existing = opportunitiesMap.get(sourceLot.symbol);
+            if (existing) {
+              // Merge with existing opportunity
+              existing.quantity += parseFloat(sourceLot.availableQty);
+              existing.potentialLoss += parseFloat(sourceLot.gainTotal);
+              existing.taxSavings += taxSavings;
+            } else {
+              // Create new opportunity
+              opportunitiesMap.set(sourceLot.symbol, {
+                id: `${sourceLot.symbol}-merged`,
+                symbol: sourceLot.symbol,
+                quantity: parseFloat(sourceLot.availableQty),
+                potentialLoss: parseFloat(sourceLot.gainTotal),
+                taxSavings,
+                type: 'matched',
+              });
+            }
           }
         }
       }
     }
 
-    // Fill remaining with individual lots if needed
-    if (opportunities.length < 3 && result.lotsCurrent?.length) {
-      const remainingSlots = 3 - opportunities.length;
-      for (const lot of result.lotsCurrent.slice(0, remainingSlots)) {
+    // Add all individual lots
+    if (result.lotsCurrent?.length) {
+      for (const lot of result.lotsCurrent) {
         const taxSavings = new Decimal(lot.gainTotal)
           .mul(clientEnvironment.NEXT_PUBLIC_TAX_PERCENTAGE)
           .abs()
           .toNumber();
 
-        opportunities.push({
-          id: lot.id,
-          symbol: lot.symbol,
-          quantity: parseFloat(lot.availableQty),
-          potentialLoss: parseFloat(lot.gainTotal),
-          taxSavings,
-          type: 'individual',
-        });
+        const existing = opportunitiesMap.get(lot.symbol);
+        if (existing) {
+          // Merge with existing opportunity
+          existing.quantity += parseFloat(lot.availableQty);
+          existing.potentialLoss += parseFloat(lot.gainTotal);
+          existing.taxSavings += taxSavings;
+        } else {
+          // Create new opportunity
+          opportunitiesMap.set(lot.symbol, {
+            id: `${lot.symbol}-merged`,
+            symbol: lot.symbol,
+            quantity: parseFloat(lot.availableQty),
+            potentialLoss: parseFloat(lot.gainTotal),
+            taxSavings,
+            type: 'individual',
+          });
+        }
       }
     }
 
-    return opportunities.slice(0, 3);
+    // Convert map to array and sort by tax savings (descending)
+    return Array.from(opportunitiesMap.values()).sort((a, b) => b.taxSavings - a.taxSavings);
   };
 
-  const opportunities = getFirstThreeOpportunities();
+  const opportunities = getAllOpportunities();
 
   if (loading) {
     return (
@@ -205,14 +223,14 @@ export function OnboardingCompleteStep() {
           <div className="mb-8">
             <h3 className="mb-4 text-left text-lg font-semibold">
               {data?.harvestEvalResult.harvestType ===
-              HarvestType.ReduceCostBasis
-                ? 'Cost Basis Reset Opportunities from CSV:'
+                HarvestType.ReduceCostBasis
+                ? `Cost Basis Reset Opportunities from CSV (${opportunities.length}):`
                 : data?.harvestEvalResult.harvestType ===
-                    HarvestType.ReduceTaxes
-                  ? 'Tax Loss Harvesting Opportunities from CSV:'
-                  : 'Tax Opportunities from CSV:'}
+                  HarvestType.ReduceTaxes
+                  ? `Tax Loss Harvesting Opportunities from CSV (${opportunities.length}):`
+                  : `Tax Opportunities from CSV (${opportunities.length}):`}
             </h3>
-            <div className="space-y-3">
+            <div className="max-h-96 space-y-3 overflow-y-auto">
               {opportunities.map(opportunity => (
                 <div
                   key={opportunity.id}
