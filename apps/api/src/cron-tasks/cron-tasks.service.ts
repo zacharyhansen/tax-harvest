@@ -29,7 +29,7 @@ export class CronTasksService {
     this.logger.log(`Updated all asset prices`)
   }
 
-  @Cron(CronExpression.EVERY_WEEK, { name: 'ingest_hourly_asset_prices' })
+  @Cron('*/15 * * * *', { name: 'ingest_hourly_asset_prices' })
   async updateHourlyAssetPrices() {
     this.logger.log(`Updating asset hourly prices for this week.`)
     const now = new Date()
@@ -50,13 +50,13 @@ export class CronTasksService {
     this.logger.log(`Updated asset info for ${assets.length} assets`)
   }
 
-  @Cron('0 0 */14 * 0', { name: 'generate_embeddings' })
-  async generateEmbeddings() {
-    const date = new Date().toString()
-    this.logger.log(`Creating embeddings // ${date}.`)
-    await this.priceHourlyVectorService.createEmbeddings()
-    this.logger.log(`Created embeddings // ${date}.`)
-  }
+  // @Cron('0 0 */14 * 0', { name: 'generate_embeddings' })
+  // async generateEmbeddings() {
+  //   const date = new Date().toString()
+  //   this.logger.log(`Creating embeddings // ${date}.`)
+  //   await this.priceHourlyVectorService.createEmbeddings()
+  //   this.logger.log(`Created embeddings // ${date}.`)
+  // }
 
   @Cron(CronExpression.EVERY_DAY_AT_5AM, { name: 'send_wash_sale_notifications' })
   async sendDailyWashSaleNotifications() {
