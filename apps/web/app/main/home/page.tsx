@@ -1,11 +1,7 @@
 'use client';
 
-import { Button } from '@repo/ui/components/button';
-import { Scissors } from 'lucide-react';
-import Link from 'next/link';
 import { SetUpStatus, usePortfolioSummaryQuery } from '~/generated/gql';
-import { TypedRoutes } from '~/lib/routes';
-import { NoAccounts, OutstandingAccountSetupList } from '~/modules/account';
+import { NoAccounts } from '~/modules/account';
 import { HarvestSummaryCards } from '~/modules/harvest';
 import { PageWrapper } from '~/modules/layout';
 import { LotsTable } from '~/modules/lot';
@@ -70,42 +66,14 @@ export default function HomePage() {
               <rect width="100%" height="100%" fill="url(#dollarPattern)" />
             </svg>
           </div>
-
-          <div className="relative px-4 py-5 sm:p-6">
-            <div className="flex flex-col items-center justify-between sm:flex-row">
-              <div className="text-background mb-4 text-center sm:mb-0 sm:text-left">
-                <h2 className="text-xl font-bold sm:text-2xl">
-                  Ready to improve your portfolio?
-                </h2>
-                <p className="mt-1">
-                  Our{' '}
-                  <Link className="group" href={TypedRoutes.taxOpportunities()}>
-                    <span className="underline">Tax Opportunities</span>
-                  </Link>{' '}
-                  will direct you to the best tax-saving opportunities for your
-                  portfolio.
-                </p>
-              </div>
-              <div className="shrink-0">
-                <Link className="group" href={TypedRoutes.taxOpportunities()}>
-                  <Button
-                    variant="outline"
-                    iconRight={<Scissors className="size-4" />}
-                  >
-                    Tax Opportunities
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-      {data?.portfolioSummary.setUpStatus ===
-      SetUpStatus.AccountSetupRequired ? (
+      {/* {data?.portfolioSummary.setUpStatus ===
+        SetUpStatus.AccountSetupRequired ? (
         <div className="space-y-2 py-2">
           <OutstandingAccountSetupList />
         </div>
-      ) : null}
+      ) : null} */}
       <HarvestSummaryCards />
       <LotsTable />
     </PageWrapper>
