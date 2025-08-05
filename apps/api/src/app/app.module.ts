@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { GraphQLModule } from '@nestjs/graphql'
+import { ScheduleModule } from '@nestjs/schedule'
 import GraphQLJSON from 'graphql-type-json'
 import { AccountModule } from '~/account/account.module'
 import { AssetModule } from '~/asset/asset.module'
@@ -11,6 +12,7 @@ import { AuthConnectionModule } from '~/auth-connection/auth-connection.module'
 import { ClerkGuard } from '~/auth/guards/clerk.guard'
 import { CacheModule } from '~/cache/cache.module'
 import { ClerkModule } from '~/clerk/clerk.module'
+import { CronTasksModule } from '~/cron-tasks/cron-tasks.module'
 import { DatabaseModule } from '~/database/database.module'
 import { EmailModule } from '~/email/email.module'
 import { envSchema } from '~/env/env.schema'
@@ -20,6 +22,7 @@ import { HealthModule } from '~/health/health.module'
 import { LogsModule } from '~/logs/logs.module'
 import { LotTransactionBatchModule } from '~/lot-transaction-batch/lot-transaction-batch.module'
 import { LotModule } from '~/lot/lot.module'
+import { NotificationModule } from '~/notification/notification.module'
 import { OauthModule } from '~/oauth/oauth.module'
 import { PlaidModule } from '~/plaid/plaid.module'
 import { PolygonModule } from '~/polygon/polygon.module'
@@ -51,6 +54,7 @@ import { errorFormatPlugin } from '../plugins/error-format'
       sortSchema: true,
       useGlobalPrefix: true,
     }),
+    ...(process.env.CRON_ENABLED ? [ScheduleModule.forRoot()] : []),
     PrismaModule,
     HealthModule,
     CacheModule,
@@ -76,6 +80,8 @@ import { errorFormatPlugin } from '../plugins/error-format'
     LotTransactionBatchModule,
     StripeModule,
     EmailModule,
+    NotificationModule,
+    CronTasksModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ClerkGuard }],
 })

@@ -31,7 +31,7 @@ export function Dashboard({
   userRole,
 }: Readonly<{
   navGroups: NavGroup[];
-  breadcrumb: ReactNode;
+  breadcrumb?: ReactNode;
   children: ReactNode;
   sidebarOptions: ReactNode;
   pathname: string;
@@ -72,7 +72,7 @@ export function Dashboard({
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
-            {breadcrumb}
+            {breadcrumb ?? null}
           </div>
           <div className="ml-auto flex items-center space-x-2 pr-2">
             {sidebarOptions ?? null}

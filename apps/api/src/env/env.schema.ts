@@ -7,6 +7,7 @@ export const envSchema = z.object({
   NUETRAL_HARVEST_THRESHOLD: z.coerce.number(),
   MATCH_PERCENTAGE_DIFFERENCE: z.coerce.number(),
   PORT: z.string(),
+  CRON_ENABLED: z.coerce.boolean(),
   // Database
   DATABASE_URL: z.string(),
   // Clerk

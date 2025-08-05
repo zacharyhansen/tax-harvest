@@ -12,7 +12,6 @@ import {
 import { clientEnvironment } from '~/lib/env/clientEnvironment';
 import { Format, MoneyUtil } from '~/modules/utils';
 import { toast } from '@repo/ui/components/toast-sonner';
-import { Badge } from '@repo/ui/components/badge';
 
 type HarvestingOpportunityCardProps = {
   lot: FiniteHarvestLotItemFragment;

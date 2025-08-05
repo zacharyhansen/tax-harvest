@@ -6,15 +6,13 @@ import {
 } from '@nestjs/graphql'
 import { AdminGuard } from '~/auth/guards/admin.guard'
 import { HarvestNotificationFrequency } from '~/generated/graphql'
-import { PrismaService } from '~/prisma/prisma.service'
-import { CronTasksService } from './cron-tasks.service'
+import { NotificationService } from '~/notification/notification.service'
 
 @Resolver()
 @UseGuards(AdminGuard)
 export class CronTasksResolver {
   constructor(
-    private readonly cronTasksService: CronTasksService,
-    private readonly prismaService: PrismaService,
+    private readonly notificationService: NotificationService,
   ) { }
 
   @Mutation(() => Boolean)
@@ -24,7 +22,7 @@ export class CronTasksResolver {
     })
     date: Date,
   ): Promise<boolean> {
-    return this.cronTasksService.sendWashSaleNotifications({ date })
+    return this.notificationService.sendWashSaleNotifications({ date })
   }
 
   @Mutation(() => Boolean)
@@ -34,6 +32,6 @@ export class CronTasksResolver {
     })
     frequency: HarvestNotificationFrequency,
   ): Promise<boolean> {
-    return this.cronTasksService.sendPortfolioNotifications(frequency)
+    return this.notificationService.sendPortfolioNotifications(frequency)
   }
 }
