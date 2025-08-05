@@ -1048,24 +1048,25 @@ export class PlaidService {
       .$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
       .$transaction(async (trx) => {
         /// Need to delete all existing accounts first to avoid conflicts (user is effectively re-linking/replacing these accounts)
-        for (const input of accounts) {
-          await trx.account.delete({
-            where: {
-              authConnectionId_plaidAccountMask_type: {
-                authConnectionId: plaidAuthConnection.id,
-                plaidAccountMask: input.plaidAccountMask ?? '',
-                type: input.type ?? '',
-              },
-            },
-          }).catch(() => {
-            this.logger.log('No account found to delete from plaid', accounts)
-          })
-        }
+        // for (const input of accounts) {
+        //   await trx.account.delete({
+        //     where: {
+        //       authConnectionId_plaidAccountMask_type: {
+        //         authConnectionId: plaidAuthConnection.id,
+        //         plaidAccountMask: input.plaidAccountMask ?? '',
+        //         type: input.type ?? '',
+        //       },
+        //     },
+        //   }).catch(() => {
+        //     this.logger.log('No account found to delete from plaid', accounts)
+        //   })
+        // }
 
         const upsertedAccounts = []
         for (let i = 0; i < accounts.length; i++) {
           const input = accounts[i]
-          // Not pretty but we want to tie the account created in the upload file step to once of the linekd ones
+          // Not pretty but we want to tie the account created in the upload file step to one of the linekd ones
+          // existingAccountId is th eone that came from the onbaording flow of uploading a csv file
           if (existingAccountId && i === 0 && await trx.account.findUnique({
             where: { id: existingAccountId },
           })) {
@@ -1090,6 +1091,7 @@ export class PlaidService {
             upsertedAccounts.push(account)
           }
         }
+
         return upsertedAccounts
       })
   }

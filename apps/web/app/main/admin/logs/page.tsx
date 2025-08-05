@@ -27,9 +27,22 @@ export default function LogsPage() {
   const columnDefs: ColDef[] = useMemo(() => {
     return [
       {
-        headerName: 'ID',
-        field: 'id',
-        width: 50,
+        headerName: 'Created At',
+        field: 'createdAt',
+        // cellDataType: 'date',
+        width: 300,
+        valueGetter: (params) => {
+          console.log(params.data.createdAt)
+          return new Date(params.data.createdAt).toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            timeZoneName: 'short'
+          })
+        },
       },
       {
         headerName: 'Description',
@@ -45,7 +58,6 @@ export default function LogsPage() {
         field: 'source',
       },
       { headerName: 'Type', field: 'type' },
-      { headerName: 'Created At', field: 'createdAt', cellDataType: 'date' },
     ] satisfies ColDef[]
   }, [])
 
@@ -65,7 +77,7 @@ export default function LogsPage() {
               router.push(TypedRoutes.log({ logId: row.data.id }))
             }
           }}
-          loading={loading}
+        // loading={loading}
         />
       </AgGridWrapper>
     </PageWrapper>
