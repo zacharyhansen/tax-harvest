@@ -77,7 +77,7 @@ export default function LogsPage() {
               router.push(TypedRoutes.log({ logId: row.data.id }))
             }
           }}
-        // loading={loading}
+          loading={loading}
         />
       </AgGridWrapper>
     </PageWrapper>
