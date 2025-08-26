@@ -95,7 +95,7 @@ function FileRow({ file }: FileRowProps) {
 
 	/**
 	 * Handles file download by fetching a signed URL from Google Cloud Storage
-	 * and opening it in a new window to trigger the download
+	 * and using a reliable download method that works across all browsers
 	 */
 	const handleDownload = async () => {
 		try {
@@ -108,19 +108,29 @@ function FileRow({ file }: FileRowProps) {
 			});
 
 			if (error) {
-				throw new Error('Failed to generate download URL');
+				console.error('GraphQL error:', error);
+				throw new Error(`Failed to generate download URL: ${error.message}`);
 			}
 
-			if (data?.genrerateSignedUrlsForDownload?.downloadUrls?.[0]) {
-				// Open the signed URL in a new window to trigger download
-				window.open(data.genrerateSignedUrlsForDownload.downloadUrls[0], '_blank');
-				toast.success(`Downloading ${file.displayName}`);
-			} else {
-				throw new Error('No download URL received');
+			const downloadUrl = data?.genrerateSignedUrlsForDownload?.downloadUrls?.[0];
+			if (!downloadUrl) {
+				throw new Error('No download URL received from server');
 			}
+
+			// Use a more reliable download method that works across browsers
+			const link = document.createElement('a');
+			link.href = downloadUrl;
+			link.download = file.displayName || 'download';
+			link.style.display = 'none';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+
+			toast.success(`Download started for ${file.displayName}`);
 		} catch (error) {
 			console.error('Download error:', error);
-			toast.error('Failed to download file. Please try again.');
+			const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+			toast.error(`Download failed: ${errorMessage}`);
 		} finally {
 			setIsDownloading(false);
 		}
