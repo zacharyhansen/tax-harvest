@@ -1,26 +1,26 @@
 fragment LotItem on Lot {
-  id
-  acquiredDate
-  costTotal
-  price
-  remainingQty
-  assetSymbol
-  totalCostForGainPct
-  asset {
-    symbol
-    lastPrice
-  }
-  account {
-    id
-    externalId
-    name
-    type
-  }
+	id
+	acquiredDate
+	costTotal
+	price
+	remainingQty
+	assetSymbol
+	totalCostForGainPct
+	asset {
+		symbol
+		lastPrice
+	}
+	account {
+		id
+		externalId
+		name
+		type
+	}
 }
 
 query PortfolioLots($where: LotWhereInput, $includeTaxAdvantaged: Boolean) {
-  lots(where: $where, includeTaxAdvantaged: $includeTaxAdvantaged) {
-    id
-    ...LotItem
-  }
+	lots(where: $where, includeTaxAdvantaged: $includeTaxAdvantaged) {
+		id
+		...LotItem
+	}
 }

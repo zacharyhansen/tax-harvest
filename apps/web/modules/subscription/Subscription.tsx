@@ -1,9 +1,9 @@
-import 'server-only'
+import 'server-only';
 
 export type SubscriptionProps = {
-  stripeCustomerId: string
-}
+	stripeCustomerId: string;
+};
 
 export default async function Subscription() {
-  return <div>Subscription Component</div>
+	return <div>Subscription Component</div>;
 }

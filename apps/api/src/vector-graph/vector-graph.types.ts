@@ -1,4 +1,4 @@
 export interface GraphTimeValue {
-  date: string
-  value: number
+	date: string;
+	value: number;
 }

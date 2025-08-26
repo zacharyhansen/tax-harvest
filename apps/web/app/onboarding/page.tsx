@@ -4,9 +4,9 @@ import { redirect } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function OnboardingPage() {
-  useEffect(() => {
-    redirect('/onboarding/upload');
-  }, []);
+	useEffect(() => {
+		redirect('/onboarding/upload');
+	}, []);
 
-  return null;
+	return null;
 }

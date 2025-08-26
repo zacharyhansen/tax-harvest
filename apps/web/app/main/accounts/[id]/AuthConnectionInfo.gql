@@ -1,11 +1,11 @@
 query AuthConnectionInfo($authConnectionId: String!) {
-  authConnection(id: $authConnectionId) {
-    id
-    source
-    plaidInstitutionId
-    accounts {
-      id
-      name
-    }
-  }
+	authConnection(id: $authConnectionId) {
+		id
+		source
+		plaidInstitutionId
+		accounts {
+			id
+			name
+		}
+	}
 }

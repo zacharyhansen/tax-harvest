@@ -1,281 +1,287 @@
 import {
-  Field,
-  InputType,
-  ObjectType,
-  registerEnumType,
-} from '@nestjs/graphql'
-import { OrderType as PrismaOrderType } from '@prisma/client'
+	Field,
+	InputType,
+	ObjectType,
+	registerEnumType,
+} from '@nestjs/graphql';
+import type { OrderType as PrismaOrderType } from '@prisma/client';
 
-import { HarvestLotCurrent, LotCurrent, TaxGain } from '~/lot/lot.dto'
-import { HarvestType, OrderType } from '../generated/graphql'
+import { HarvestLotCurrent, LotCurrent, TaxGain } from '~/lot/lot.dto';
+import { HarvestType, OrderType } from '../generated/graphql';
 
 export enum SetUpStatus {
-  NO_ACCOUNTS = 'NO_ACCOUNTS',
-  ACCOUNT_SETUP_REQUIRED = 'ACCOUNT_SETUP_REQUIRED',
-  COMPLETE = 'COMPLETE',
+	NO_ACCOUNTS = 'NO_ACCOUNTS',
+	ACCOUNT_SETUP_REQUIRED = 'ACCOUNT_SETUP_REQUIRED',
+	COMPLETE = 'COMPLETE',
 }
 
 registerEnumType(SetUpStatus, {
-  name: 'SetUpStatus',
-})
+	name: 'SetUpStatus',
+});
 
 @ObjectType()
 export class PortfolioSummaryUnrealized {
-  @Field()
-  gainTotal: number
+	@Field()
+	gainTotal: number;
 
-  @Field()
-  lossTotal: number
+	@Field()
+	lossTotal: number;
 
-  @Field()
-  accountCount: number
+	@Field()
+	accountCount: number;
 
-  @Field()
-  total: number
+	@Field()
+	total: number;
 
-  @Field()
-  positionCount: number
+	@Field()
+	positionCount: number;
 }
 
 @ObjectType()
 export class PortfolioSummaryRealized {
-  @Field()
-  accountCount: number
+	@Field()
+	accountCount: number;
 
-  @Field()
-  gainTotal: number
+	@Field()
+	gainTotal: number;
 
-  @Field()
-  gainShortTerm: number
+	@Field()
+	gainShortTerm: number;
 
-  @Field()
-  gainLongTerm: number
+	@Field()
+	gainLongTerm: number;
 
-  @Field()
-  dividend: number
+	@Field()
+	dividend: number;
 }
 
 @ObjectType()
 export class HarvestPotential {
-  @Field(() => Number, {
-    description: 'The realized gain or loss that can be harvested',
-  })
-  realized: number
+	@Field(() => Number, {
+		description: 'The realized gain or loss that can be harvested',
+	})
+	realized: number;
 
-  @Field(() => Number, {
-    description: 'The unrealized gain or loss that can be harvested',
-  })
-  unrealized: number
+	@Field(() => Number, {
+		description: 'The unrealized gain or loss that can be harvested',
+	})
+	unrealized: number;
 
-  @Field(() => Number, {
-    description: 'The total amount to be harvested (should always be positive)',
-  })
-  total: number
+	@Field(() => Number, {
+		description: 'The total amount to be harvested (should always be positive)',
+	})
+	total: number;
 }
 
 @ObjectType()
 export class PortfolioSummaryIncludingHarvest {
-  @Field(() => PortfolioSummaryRealized)
-  realized: PortfolioSummaryRealized
+	@Field(() => PortfolioSummaryRealized)
+	realized: PortfolioSummaryRealized;
 
-  @Field(() => PortfolioSummaryUnrealized)
-  unrealized: PortfolioSummaryUnrealized
+	@Field(() => PortfolioSummaryUnrealized)
+	unrealized: PortfolioSummaryUnrealized;
 
-  @Field(() => HarvestPotential)
-  harvest: HarvestPotential
+	@Field(() => HarvestPotential)
+	harvest: HarvestPotential;
 }
 
 @ObjectType()
 export class PortfolioSummary {
-  @Field(() => PortfolioSummaryRealized)
-  realized: PortfolioSummaryRealized
+	@Field(() => PortfolioSummaryRealized)
+	realized: PortfolioSummaryRealized;
 
-  @Field(() => PortfolioSummaryUnrealized)
-  unrealized: PortfolioSummaryUnrealized
+	@Field(() => PortfolioSummaryUnrealized)
+	unrealized: PortfolioSummaryUnrealized;
 
-  @Field(() => HarvestPotential)
-  harvest: HarvestPotential
+	@Field(() => HarvestPotential)
+	harvest: HarvestPotential;
 
-  @Field(() => SetUpStatus)
-  setUpStatus: SetUpStatus
+	@Field(() => SetUpStatus)
+	setUpStatus: SetUpStatus;
 
-  @Field(() => PortfolioSummaryIncludingHarvest)
-  includingCurrentHarvest: PortfolioSummaryIncludingHarvest
+	@Field(() => PortfolioSummaryIncludingHarvest)
+	includingCurrentHarvest: PortfolioSummaryIncludingHarvest;
 }
 
 @ObjectType()
 export class HarvestOrder {
-  @Field(() => String, { nullable: true })
-  lotId?: string
+	@Field(() => String, { nullable: true })
+	lotId?: string;
 
-  @Field(() => String)
-  assetSymbol: string
+	@Field(() => String)
+	assetSymbol: string;
 
-  @Field(() => Number)
-  quantity: number
+	@Field(() => Number)
+	quantity: number;
 
-  @Field(() => String)
-  type: 'sell' | 'buy'
+	@Field(() => String)
+	type: 'sell' | 'buy';
 
-  @Field(() => Number)
-  profitAndLoss: number
+	@Field(() => Number)
+	profitAndLoss: number;
 }
 
 @ObjectType()
 export class HarvestLotOrder {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field({ description: 'Lot Id' })
-  lotId: string
+	@Field({ description: 'Lot Id' })
+	lotId: string;
 
-  @Field()
-  accountId: string
+	@Field()
+	accountId: string;
 
-  @Field()
-  pricePaid: string
+	@Field()
+	pricePaid: string;
 
-  @Field()
-  costBasis: string
+	@Field()
+	costBasis: string;
 
-  @Field()
-  valueTotal: string
+	@Field()
+	valueTotal: string;
 
-  @Field()
-  gainTotal: string
+	@Field()
+	gainTotal: string;
 
-  @Field()
-  quantity: string
+	@Field()
+	quantity: string;
 
-  @Field()
-  lastPrice: string
+	@Field()
+	lastPrice: string;
 
-  @Field()
-  assetSymbol: string
+	@Field()
+	assetSymbol: string;
 
-  @Field()
-  dollarPerSharePnL: string
+	@Field()
+	dollarPerSharePnL: string;
 
-  @Field(() => TaxGain)
-  taxGain: TaxGain
+	@Field(() => TaxGain)
+	taxGain: TaxGain;
 
-  @Field(() => OrderType)
-  orderType: PrismaOrderType
+	@Field(() => OrderType)
+	orderType: PrismaOrderType;
 
-  @Field(() => Date)
-  acquiredDate: Date
+	@Field(() => Date)
+	acquiredDate: Date;
 }
 
 @ObjectType()
 export class HarvestResult {
-  @Field(() => [HarvestLotOrder])
-  realizedOrders: HarvestLotOrder[]
+	@Field(() => [HarvestLotOrder])
+	realizedOrders: HarvestLotOrder[];
 
-  @Field(() => [HarvestLotOrder])
-  unrealizedOrders: HarvestLotOrder[]
+	@Field(() => [HarvestLotOrder])
+	unrealizedOrders: HarvestLotOrder[];
 
-  @Field(() => [HarvestLotOrder])
-  allOrders: HarvestLotOrder[]
+	@Field(() => [HarvestLotOrder])
+	allOrders: HarvestLotOrder[];
 
-  @Field(() => PortfolioSummary)
-  portfolioSummary: PortfolioSummary
+	@Field(() => PortfolioSummary)
+	portfolioSummary: PortfolioSummary;
 }
 
 @ObjectType()
 export class UnrealizedHarvestMatchResult {
-  @Field(() => LotCurrent)
-  sourceLot: LotCurrent
+	@Field(() => LotCurrent)
+	sourceLot: LotCurrent;
 
-  @Field(() => [HarvestLotOrder])
-  matchedLotOrders: HarvestLotOrder[]
+	@Field(() => [HarvestLotOrder])
+	matchedLotOrders: HarvestLotOrder[];
 }
 
 @ObjectType()
 export class FiniteHarvestResult {
-  @Field(() => PortfolioSummary)
-  summary: PortfolioSummary
+	@Field(() => PortfolioSummary)
+	summary: PortfolioSummary;
 
-  @Field(() => HarvestType)
-  harvestType: HarvestType
+	@Field(() => HarvestType)
+	harvestType: HarvestType;
 
-  @Field(() => [LotCurrent], { nullable: true })
-  lotsCurrent?: LotCurrent[]
+	@Field(() => [LotCurrent], { nullable: true })
+	lotsCurrent?: LotCurrent[];
 
-  @Field(() => Number, { description: 'Total number of harvest lots if user is paying' })
-  totalHarvestLots: number
+	@Field(() => Number, {
+		description: 'Total number of harvest lots if user is paying',
+	})
+	totalHarvestLots: number;
 
-  @Field(() => [UnrealizedHarvestMatchResult], { nullable: true })
-  unrealizedHarvestMatchResults?: UnrealizedHarvestMatchResult[]
+	@Field(() => [UnrealizedHarvestMatchResult], { nullable: true })
+	unrealizedHarvestMatchResults?: UnrealizedHarvestMatchResult[];
 }
 
 @ObjectType()
 export class HarvestMatchPair {
-  @Field(() => [HarvestLotCurrent])
-  sourceLots: HarvestLotCurrent[]
+	@Field(() => [HarvestLotCurrent])
+	sourceLots: HarvestLotCurrent[];
 
-  @Field(() => [HarvestLotCurrent])
-  matchedLots: HarvestLotCurrent[]
+	@Field(() => [HarvestLotCurrent])
+	matchedLots: HarvestLotCurrent[];
 
-  @Field(() => Number)
-  sourceHarvestPAndL: number
+	@Field(() => Number)
+	sourceHarvestPAndL: number;
 
-  @Field(() => Number)
-  matchedHarvestPAndL: number
+	@Field(() => Number)
+	matchedHarvestPAndL: number;
 }
 
 @ObjectType()
 export class HarvestMatchItem {
-  @Field()
-  id: string
+	@Field()
+	id: string;
 
-  @Field(() => [HarvestMatchPair])
-  pairs: HarvestMatchPair[]
+	@Field(() => [HarvestMatchPair])
+	pairs: HarvestMatchPair[];
 }
 
 @ObjectType()
 export class HarvestEvalResult {
-  @Field(() => PortfolioSummary)
-  summary: PortfolioSummary
+	@Field(() => PortfolioSummary)
+	summary: PortfolioSummary;
 
-  @Field(() => HarvestType)
-  harvestType: HarvestType
+	@Field(() => HarvestType)
+	harvestType: HarvestType;
 
-  @Field(() => [LotCurrent], { nullable: true })
-  lotsCurrent?: LotCurrent[]
+	@Field(() => [LotCurrent], { nullable: true })
+	lotsCurrent?: LotCurrent[];
 
-  @Field(() => [HarvestMatchItem], { nullable: true })
-  matchedItems?: HarvestMatchItem[]
+	@Field(() => [HarvestMatchItem], { nullable: true })
+	matchedItems?: HarvestMatchItem[];
 
-  @Field(() => Number, { description: 'Total number of harvest lots if user is paying' })
-  totalHarvestLots: number
+	@Field(() => Number, {
+		description: 'Total number of harvest lots if user is paying',
+	})
+	totalHarvestLots: number;
 
-  @Field(() => [String], { description: 'List of unique asset symbols in portfolio' })
-  uniqueAssetSymbols: string[]
+	@Field(() => [String], {
+		description: 'List of unique asset symbols in portfolio',
+	})
+	uniqueAssetSymbols: string[];
 }
 
 @InputType()
 export class DirectedHarvestLot {
-  @Field(() => String)
-  lotId: string
+	@Field(() => String)
+	lotId: string;
 
-  @Field(() => Number)
-  quantity: number
+	@Field(() => Number)
+	quantity: number;
 
-  @Field(() => Boolean, { nullable: true })
-  counterTransaction?: boolean
+	@Field(() => Boolean, { nullable: true })
+	counterTransaction?: boolean;
 }
 
 @InputType()
 export class HarvestEvalFilters {
-  @Field(() => Number, { nullable: true })
-  minPAndL?: number
+	@Field(() => Number, { nullable: true })
+	minPAndL?: number;
 
-  @Field(() => [String], { nullable: true })
-  excludeAssetSymbols?: string[]
+	@Field(() => [String], { nullable: true })
+	excludeAssetSymbols?: string[];
 
-  @Field(() => Date, { nullable: true })
-  purchaseDateBefore?: Date
+	@Field(() => Date, { nullable: true })
+	purchaseDateBefore?: Date;
 
-  @Field(() => Date, { nullable: true })
-  purchaseDateAfter?: Date
+	@Field(() => Date, { nullable: true })
+	purchaseDateAfter?: Date;
 }

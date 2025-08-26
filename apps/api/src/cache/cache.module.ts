@@ -1,15 +1,15 @@
-import { CacheModule as NestCacheModule } from '@nestjs/cache-manager'
-import { Module } from '@nestjs/common'
+import { CacheModule as NestCacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
 
-import { CacheService } from './cache.service'
+import { CacheService } from './cache.service';
 
 @Module({
-  imports: [
-    NestCacheModule.register({
-      isGlobal: true,
-    }),
-  ],
-  providers: [CacheService],
-  exports: [CacheService],
+	imports: [
+		NestCacheModule.register({
+			isGlobal: true,
+		}),
+	],
+	providers: [CacheService],
+	exports: [CacheService],
 })
 export class CacheModule {}

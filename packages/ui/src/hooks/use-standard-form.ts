@@ -1,19 +1,19 @@
-import type { FieldValues, UseFormProps } from "react-hook-form";
-import { useForm } from "react-hook-form";
+import type { FieldValues, UseFormProps } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 export function useStandardForm<
-  TFieldValues extends FieldValues = FieldValues,
-  // eslint-disable-next-line ts/no-explicit-any
-  TContext = any,
+	TFieldValues extends FieldValues = FieldValues,
+	// biome-ignore lint/suspicious/noExplicitAny: <ok>
+	TContext = any,
 >({
-  handleSubmit,
-  ...useFormProps
+	handleSubmit,
+	...useFormProps
 }: {
-  handleSubmit: (params: TFieldValues) => void;
+	handleSubmit: (params: TFieldValues) => void;
 } & UseFormProps<TFieldValues, TContext>) {
-  const form = useForm<TFieldValues, TContext>({
-    ...useFormProps,
-  });
+	const form = useForm<TFieldValues, TContext>({
+		...useFormProps,
+	});
 
-  return { form, handleSubmit: form.handleSubmit(handleSubmit) };
+	return { form, handleSubmit: form.handleSubmit(handleSubmit) };
 }

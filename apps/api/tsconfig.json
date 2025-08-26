@@ -1,38 +1,38 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "target": "esnext",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "baseUrl": ".",
-    "module": "esnext",
-    "moduleResolution": "Bundler",
-    "paths": {
-      "~/*": ["src/*"],
-      "@/tests/*": ["tests/*"]
-    },
-    "resolveJsonModule": true,
-    "types": ["vitest/globals"],
-    "strict": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": false,
-    "inlineSources": true,
-    "outDir": "dist",
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
-  },
-  "include": [
-    "tests",
-    "src",
-    "index.ts",
-    "seed.client.ts",
-    "prisma/seed",
-    "src/command/post-migrate.ts",
-    "vitest.config.ts",
-    "vitest.config.unit.ts",
-    "vitest.config.e2e.ts"
-  ],
-  "exclude": ["node_modules", "dist", "@generated/server.ts"]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"compilerOptions": {
+		"target": "esnext",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"baseUrl": ".",
+		"module": "esnext",
+		"moduleResolution": "Bundler",
+		"paths": {
+			"~/*": ["src/*"],
+			"@/tests/*": ["tests/*"]
+		},
+		"resolveJsonModule": true,
+		"types": ["vitest/globals"],
+		"strict": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": false,
+		"inlineSources": true,
+		"outDir": "dist",
+		"sourceMap": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true
+	},
+	"include": [
+		"tests",
+		"src",
+		"index.ts",
+		"seed.client.ts",
+		"prisma/seed",
+		"src/command/post-migrate.ts",
+		"vitest.config.ts",
+		"vitest.config.unit.ts",
+		"vitest.config.e2e.ts"
+	],
+	"exclude": ["node_modules", "dist", "@generated/server.ts"]
 }

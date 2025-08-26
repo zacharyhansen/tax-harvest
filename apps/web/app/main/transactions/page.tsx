@@ -1,33 +1,213 @@
-'use client'
+'use client';
 
-import DataTable from '@repo/ui/components/dataTable/dataTable'
+import { Badge } from '@repo/ui/components/badge';
+import type { ColDef } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import dynamic from 'next/dynamic';
+import { useMemo } from 'react';
+import { useTransactionsQuery } from '~/generated/gql';
+import { PageWrapper } from '~/modules/layout';
+import { ErrorPage } from '~/modules/utility-components';
 
-import { useTransactionsQuery } from '~/generated/gql'
+const AgGridWrapper = dynamic(
+	() => import('~/modules/client-ag-grid/ag-grid-wrapper'),
+	{
+		ssr: false,
+	},
+);
 
-import { PageWrapper } from '~/modules/layout'
-import { ErrorPage, LoadingPage } from '~/modules/utility-components'
-import columns from './TransactionsTable.ColumnDef'
+/**
+ * Transactions page component that displays a grid of transaction data
+ * @returns The transactions page with AG Grid table
+ * @example
+ * <TransactionsPage />
+ */
+export default function TransactionsPage() {
+	const { data, error, loading } = useTransactionsQuery();
 
-export default function AccountIndex() {
-  const { data, error, loading } = useTransactionsQuery()
+	const columnDefs: ColDef[] = useMemo(() => {
+		return [
+			{
+				headerName: 'Date',
+				field: 'transactionDate',
+				width: 120,
+				valueGetter: (params) => {
+					return new Date(params.data.transactionDate).toLocaleDateString(
+						'en-US',
+					);
+				},
+			},
+			{
+				headerName: 'Applied?',
+				field: 'appliedToLots',
+				width: 100,
+				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
+				cellRenderer: (params: any) => {
+					return (
+						<Badge
+							variant={params.value ? 'secondary' : 'default'}
+							className="text-xs"
+						>
+							{params.value ? 'Yes' : 'No'}
+						</Badge>
+					);
+				},
+			},
+			{
+				headerName: 'Account',
+				field: 'account.name',
+				width: 150,
+				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
+				cellRenderer: (params: any) => {
+					const colors = [
+						'bg-blue-300',
+						'bg-green-300',
+						'bg-yellow-300',
+						'bg-purple-300',
+						'bg-pink-300',
+					];
+					const colorIndex =
+						Math.abs(
+							params.value
+								.split('')
+								.reduce(
+									(acc: number, char: string) => acc + char.charCodeAt(0),
+									0,
+								),
+						) % 5;
 
-  if (loading) {
-    return <LoadingPage />
-  }
+					return (
+						<Badge className={`text-xs ${colors[colorIndex]}`}>
+							{params.value}
+						</Badge>
+					);
+				},
+			},
+			{
+				headerName: 'Source',
+				field: 'account.authConnection.source',
+				width: 130,
+				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
+				cellRenderer: (params: any) => {
+					return <Badge className="text-xs">{params.value}</Badge>;
+				},
+			},
+			{
+				headerName: 'Type',
+				field: 'type',
+				width: 100,
+				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
+				cellRenderer: (params: any) => {
+					return <Badge className="text-xs">{params.value}</Badge>;
+				},
+			},
+			{
+				headerName: 'Subtype',
+				field: 'subtype',
+				width: 100,
+				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
+				cellRenderer: (params: any) => {
+					return <Badge className="text-xs">{params.value}</Badge>;
+				},
+			},
+			{
+				headerName: 'Description',
+				field: 'memo',
+				flex: 1,
+				minWidth: 300,
+			},
+			{
+				headerName: 'Security',
+				field: 'assetSymbol',
+				width: 100,
+				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
+				cellRenderer: (params: any) => {
+					return params.value ? (
+						<Badge className="text-xs">{params.value}</Badge>
+					) : null;
+				},
+			},
+			{
+				headerName: 'Price',
+				field: 'price',
+				width: 100,
+				valueFormatter: (params) => {
+					const value = params.value;
+					if (value == null) return '';
+					const numValue =
+						typeof value === 'string' ? parseFloat(value) : value;
+					return !Number.isNaN(numValue) ? `$${numValue.toFixed(2)}` : '';
+				},
+			},
+			{
+				headerName: 'Quantity',
+				field: 'quantity',
+				width: 100,
+			},
+			{
+				headerName: 'Amount',
+				field: 'amount',
+				width: 110,
+				valueFormatter: (params) => {
+					const value = params.value;
+					if (value == null) return '';
+					const numValue =
+						typeof value === 'string' ? parseFloat(value) : value;
+					if (Number.isNaN(numValue)) return '';
+					const isNegative = numValue < 0;
+					const formattedValue = `$${Math.abs(numValue).toFixed(2)}`;
+					return isNegative ? `(${formattedValue})` : formattedValue;
+				},
+				cellClass: (params) => {
+					const numValue =
+						typeof params.value === 'string'
+							? parseFloat(params.value)
+							: params.value;
+					return numValue < 0 ? 'text-destructive' : 'text-green-600';
+				},
+			},
+			{
+				headerName: 'Fee',
+				field: 'fee',
+				width: 90,
+				valueFormatter: (params) => {
+					const value = params.value;
+					if (value == null) return '';
+					const numValue =
+						typeof value === 'string' ? parseFloat(value) : value;
+					return !Number.isNaN(numValue) ? `$${numValue.toFixed(2)}` : '';
+				},
+			},
+			{
+				headerName: 'External ID',
+				field: 'externalId',
+				width: 300,
+				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
+				cellRenderer: (params: any) => {
+					return params.value ? (
+						<Badge className="text-xs">{params.value}</Badge>
+					) : null;
+				},
+			},
+		] satisfies ColDef[];
+	}, []);
 
-  if (error) {
-    return (
-      <ErrorPage message="Could not load transactions at this time. If this issue persists please contact support" />
-    )
-  }
+	if (error) {
+		return (
+			<ErrorPage message="Could not load transactions at this time. If this issue persists please contact support" />
+		);
+	}
 
-  return (
-    <PageWrapper>
-      <DataTable
-        columns={columns}
-        data={data?.transactions}
-        noResultsAlert="No transactions were found for the search criteria"
-      />
-    </PageWrapper>
-  )
+	return (
+		<PageWrapper>
+			<AgGridWrapper loading={loading}>
+				<AgGridReact
+					columnDefs={columnDefs}
+					rowData={data?.transactions}
+					rowSelection="single"
+					loading={loading}
+				/>
+			</AgGridWrapper>
+		</PageWrapper>
+	);
 }

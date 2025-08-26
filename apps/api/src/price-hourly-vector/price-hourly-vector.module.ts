@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common'
-import { PriceHourlyVectorService } from './price-hourly-vector.service'
+import { Module } from '@nestjs/common';
+import { PriceHourlyVectorService } from './price-hourly-vector.service';
 
 @Module({
-  exports: [PriceHourlyVectorService],
-  providers: [PriceHourlyVectorService],
+	exports: [PriceHourlyVectorService],
+	providers: [PriceHourlyVectorService],
 })
 export class PriceHourlyVectorModule {}

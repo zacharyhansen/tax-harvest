@@ -1,19 +1,19 @@
 query VerificationEtrade($portfolioId: String!) {
-  requestOauthConnection(
-    authSource: ETRADE_REQUEST
-    portfolioId: $portfolioId
-  ) {
-    id
-    verificationUrl
-  }
+	requestOauthConnection(
+		authSource: ETRADE_REQUEST
+		portfolioId: $portfolioId
+	) {
+		id
+		verificationUrl
+	}
 }
 
 mutation OauthEtrade($verifier: String!, $portfolioId: String!) {
-  accessOauthConnection(
-    verifier: $verifier
-    authSource: ETRADE_ACCESS
-    portfolioId: $portfolioId
-  ) {
-    id
-  }
+	accessOauthConnection(
+		verifier: $verifier
+		authSource: ETRADE_ACCESS
+		portfolioId: $portfolioId
+	) {
+		id
+	}
 }

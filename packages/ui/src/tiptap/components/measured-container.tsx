@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { useContainerSize } from "../hooks/use-container-size";
+import { useContainerSize } from '../hooks/use-container-size';
 
 // type MeasuredContainerProps<T extends React.ElementType> = {
 //   as: T;
@@ -9,28 +9,29 @@ import { useContainerSize } from "../hooks/use-container-size";
 // };
 
 export const MeasuredContainer = (
-  // @ts-expect-error - no idea what this is
-  { ref, as: Component, name, children, style = {}, ...props },
+	// @ts-expect-error - no idea what this is
+	{ ref, as: Component, name, children, style = {}, ...props },
 ) => {
-  const innerReference = React.useRef<HTMLElement>(null);
-  const rect = useContainerSize(innerReference.current);
+	const innerReference = React.useRef<HTMLElement>(null);
+	const rect = useContainerSize(innerReference.current);
 
-  React.useImperativeHandle(ref, () => innerReference.current!);
+	// biome-ignore lint/style/noNonNullAssertion: <ok>
+	React.useImperativeHandle(ref, () => innerReference.current!);
 
-  const customStyle = {
-    [`--${name}-width`]: `${rect.width}px`,
-    [`--${name}-height`]: `${rect.height}px`,
-  };
+	const customStyle = {
+		[`--${name}-width`]: `${rect.width}px`,
+		[`--${name}-height`]: `${rect.height}px`,
+	};
 
-  return (
-    <Component
-      {...props}
-      ref={innerReference}
-      style={{ ...customStyle, ...style }}
-    >
-      {children}
-    </Component>
-  );
+	return (
+		<Component
+			{...props}
+			ref={innerReference}
+			style={{ ...customStyle, ...style }}
+		>
+			{children}
+		</Component>
+	);
 };
 
-MeasuredContainer.displayName = "MeasuredContainer";
+MeasuredContainer.displayName = 'MeasuredContainer';

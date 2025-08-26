@@ -1,15 +1,15 @@
-import { cn } from "@repo/ui/utils";
+import { cn } from '@repo/ui/utils';
 
 function Skeleton({
-  className,
-  ...props
+	className,
+	...props
 }: Readonly<React.HTMLAttributes<HTMLDivElement>>) {
-  return (
-    <div
-      className={cn("bg-muted animate-pulse rounded-lg", className)}
-      {...props}
-    />
-  );
+	return (
+		<div
+			className={cn('bg-muted animate-pulse rounded-lg', className)}
+			{...props}
+		/>
+	);
 }
 
 export { Skeleton };

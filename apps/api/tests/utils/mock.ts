@@ -1,1 +1,1 @@
-export { mock as createMock, MockProxy as Mock } from 'vitest-mock-extended'
+export { MockProxy as Mock, mock as createMock } from 'vitest-mock-extended';

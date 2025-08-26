@@ -1,128 +1,127 @@
 fragment AccountItem on Account {
-  id
-  name
-  type
-  portfolioId
-  provider
-  externalId
-  key
-  description
-  institution
-  mode
-  status
-  optionLevel
-  cashForOpenOrders
-  balanceMoneyMarket
-  cashAvailableForInvestment
-  accountValueTotal
-  marketValueTotal
-  cashNet
-  cashBalance
-  balanceAccount
-  createdAt
-  updatedAt
-  authConnection {
-    id
-    source
-    plaidInstitutionId
-  }
-  createdBy {
-    id
-    # eslint-disable-next-line @graphql-eslint/known-fragment-names
-    ...UserItem
-  }
-  _realizedProfitAndLoss {
-    id
-    longTerm
-    shortTerm
-    dividend
-    year
-    deferredLoss
-  }
+	id
+	name
+	type
+	portfolioId
+	provider
+	externalId
+	key
+	description
+	institution
+	mode
+	status
+	optionLevel
+	cashForOpenOrders
+	balanceMoneyMarket
+	cashAvailableForInvestment
+	accountValueTotal
+	marketValueTotal
+	cashNet
+	cashBalance
+	balanceAccount
+	createdAt
+	updatedAt
+	authConnection {
+		id
+		source
+		plaidInstitutionId
+	}
+	createdBy {
+		id
+		...UserItem
+	}
+	_realizedProfitAndLoss {
+		id
+		longTerm
+		shortTerm
+		dividend
+		year
+		deferredLoss
+	}
 }
 
 query Account($id: String!) {
-  account(id: $id) {
-    id
-    ...AccountItem
-  }
+	account(id: $id) {
+		id
+		...AccountItem
+	}
 }
 
 mutation UpdateAccount(
-  $accountUpdateInput: AccountUpdateInput!
-  $accountWhereUniqueInput: AccountWhereUniqueInput!
+	$accountUpdateInput: AccountUpdateInput!
+	$accountWhereUniqueInput: AccountWhereUniqueInput!
 ) {
-  updateAccount(
-    accountUpdateInput: $accountUpdateInput
-    accountWhereUniqueInput: $accountWhereUniqueInput
-  ) {
-    id
-    name
-    portfolioId
-    description
-  }
+	updateAccount(
+		accountUpdateInput: $accountUpdateInput
+		accountWhereUniqueInput: $accountWhereUniqueInput
+	) {
+		id
+		name
+		portfolioId
+		description
+	}
 }
 
 mutation UpdateAccountRealizedPAndL(
-  $id: String!
-  $input: RealizedPAndLUpdateInput!
+	$id: String!
+	$input: RealizedPAndLUpdateInput!
 ) {
-  updateRealizedPAndL(id: $id, input: $input) {
-    id
-    shortTerm
-    longTerm
-    deferredLoss
-    dividend
-  }
+	updateRealizedPAndL(id: $id, input: $input) {
+		id
+		shortTerm
+		longTerm
+		deferredLoss
+		dividend
+	}
 }
 
 fragment LotItem on Lot {
-  id
-  acquiredDate
-  costTotal
-  price
-  remainingQty
-  assetSymbol
-  totalCostForGainPct
-  asset {
-    symbol
-    lastPrice
-  }
-  account {
-    id
-    externalId
-    name
-    type
-  }
+	id
+	acquiredDate
+	costTotal
+	price
+	remainingQty
+	assetSymbol
+	totalCostForGainPct
+	asset {
+		symbol
+		lastPrice
+	}
+	account {
+		id
+		externalId
+		name
+		type
+	}
 }
 
 query AccountLots($accountId: String!) {
-  lots(where: { accountId: { equals: $accountId } }) {
-    id
-    ...LotItem
-  }
+	lots(where: { accountId: { equals: $accountId } }) {
+		id
+		...LotItem
+	}
 }
 
 mutation DeleteAccount($accountWhereUniqueInput: AccountWhereUniqueInput!) {
-  deleteAccount(accountWhereUniqueInput: $accountWhereUniqueInput) {
-    id
-    name
-  }
+	deleteAccount(accountWhereUniqueInput: $accountWhereUniqueInput) {
+		id
+		name
+	}
 }
 
 query AccountFiles($accountId: String!) {
-  files(where: { accountId: { equals: $accountId } }) {
-    id
-    ...AccountFileItem
-  }
+	files(where: { accountId: { equals: $accountId } }) {
+		id
+		...AccountFileItem
+	}
 }
 
 fragment AccountFileItem on File {
-  id
-  accountId
-  displayName
-  gcpFilename
-  type
-  createdAt
-  updatedAt
+	id
+	accountId
+	displayName
+	gcpFilename
+	type
+	createdAt
+	updatedAt
 }

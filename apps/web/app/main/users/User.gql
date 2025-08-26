@@ -1,14 +1,14 @@
 fragment UserItem on User {
-  id
-  name
-  email
-  photo
-  stripeCustomerId
+	id
+	name
+	email
+	photo
+	stripeCustomerId
 }
 
 query User {
-  userCurrent {
-    id
-    ...UserItem
-  }
+	userCurrent {
+		id
+		...UserItem
+	}
 }

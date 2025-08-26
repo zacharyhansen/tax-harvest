@@ -1,16 +1,16 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
 export type LayoutProps = Readonly<{
-  children: ReactNode
-}>
+	children: ReactNode;
+}>;
 
 export type ErrorProps = Readonly<{
-  error: Error & { digest?: string }
-  reset: () => void
-}>
+	error: Error & { digest?: string };
+	reset: () => void;
+}>;
 
 export type PageProps = Readonly<{
-  searchParams: {
-    name?: string
-  }
-}>
+	searchParams: {
+		name?: string;
+	};
+}>;

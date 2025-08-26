@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common'
+import { Module } from '@nestjs/common';
 
-import { CsvService } from './csv.service'
+import { CsvService } from './csv.service';
 
 @Module({
-  exports: [CsvService],
-  providers: [CsvService],
+	exports: [CsvService],
+	providers: [CsvService],
 })
 export class CsvModule {}

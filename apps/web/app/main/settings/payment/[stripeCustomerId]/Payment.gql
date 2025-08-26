@@ -1,9 +1,9 @@
 query StripeSession($stripePriceId: String!, $stripeCustomerId: String!) {
-  stripeSession(
-    stripePriceId: $stripePriceId
-    stripeCustomerId: $stripeCustomerId
-  ) {
-    id
-    client_secret
-  }
+	stripeSession(
+		stripePriceId: $stripePriceId
+		stripeCustomerId: $stripeCustomerId
+	) {
+		id
+		client_secret
+	}
 }

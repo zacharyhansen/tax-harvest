@@ -1,87 +1,86 @@
 fragment HarvestTableItem on Harvest {
-  id
-  date
-  type
-  step
-  createdAt
-  amount
-  label
-  afterWashRevertDate
-  notify
-  recommendationExpiresDate
-  createdBy {
-    id
-    # eslint-disable-next-line @graphql-eslint/known-fragment-names
-    ...UserItem
-  }
+	id
+	date
+	type
+	step
+	createdAt
+	amount
+	label
+	afterWashRevertDate
+	notify
+	recommendationExpiresDate
+	createdBy {
+		id
+		...UserItem
+	}
 }
 
 query Harvests($where: HarvestWhereInput) {
-  harvests(where: $where) {
-    id
-    ...HarvestTableItem
-  }
+	harvests(where: $where) {
+		id
+		...HarvestTableItem
+	}
 }
 
 fragment HarvestTransactionItemTableItem on HarvestTransactionItem {
-  id
-  orderType
-  assetSymbol
-  quantity
-  price
-  lotId
-  completedDate
-  lotAcquiredDate
-  lotPricePaid
-  lotPriceAtHarvest
+	id
+	orderType
+	assetSymbol
+	quantity
+	price
+	lotId
+	completedDate
+	lotAcquiredDate
+	lotPricePaid
+	lotPriceAtHarvest
 }
 
 fragment HarvestTransactionTableItem on HarvestTransaction {
-  id
-  revert
-  counterTransaction
-  harvestTransactionItem {
-    id
-    ...HarvestTransactionItemTableItem
-  }
-  replacementTransactionItem {
-    id
-    ...HarvestTransactionItemTableItem
-  }
-  revertHarvestTransactionItem {
-    id
-    ...HarvestTransactionItemTableItem
-  }
-  revertReplacementTransactionItem {
-    id
-    ...HarvestTransactionItemTableItem
-  }
+	id
+	revert
+	counterTransaction
+	harvestTransactionItem {
+		id
+		...HarvestTransactionItemTableItem
+	}
+	replacementTransactionItem {
+		id
+		...HarvestTransactionItemTableItem
+	}
+	revertHarvestTransactionItem {
+		id
+		...HarvestTransactionItemTableItem
+	}
+	revertReplacementTransactionItem {
+		id
+		...HarvestTransactionItemTableItem
+	}
 }
 
 query HarvestsAndTransactions($where: HarvestWhereInput) {
-  harvests(where: $where) {
-    id
-    ...HarvestSingleItem
-  }
+	harvests(where: $where) {
+		id
+		...HarvestSingleItem
+	}
 }
 
 fragment HarvestSingleItem on Harvest {
-  id
-  ...HarvestTableItem
-  harvestTransactions {
-    id
-    ...HarvestTransactionTableItem
-  }
+	id
+	...HarvestTableItem
+	harvestTransactions {
+		id
+		...HarvestTransactionTableItem
+	}
 }
 
 query HarvestSingle($id: String!) {
-  harvest(id: $id) {
-    ...HarvestSingleItem
-  }
+	harvest(id: $id) {
+		...HarvestSingleItem
+	}
 }
 
 mutation UpdateHarvestSingle($id: String!, $data: HarvestUpdateInput!) {
-  updateHarvest(id: $id, data: $data) {
-    ...HarvestSingleItem
-  }
+	updateHarvest(id: $id, data: $data) {
+		...HarvestSingleItem
+	}
 }

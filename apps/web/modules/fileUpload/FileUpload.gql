@@ -1,39 +1,43 @@
 query SignedUrlsForUpload($files: [GCPUploadFile!]!) {
-  generateSignedUrlsForUpload(files: $files) {
-    uploadUrls
-  }
+	generateSignedUrlsForUpload(files: $files) {
+		uploadUrls
+	}
 }
 
 query SignedUrlsForDownload($gcpFileNames: [String!]!) {
-  genrerateSignedUrlsForDownload(gcpFileNames: $gcpFileNames) {
-    downloadUrls
-  }
+	genrerateSignedUrlsForDownload(gcpFileNames: $gcpFileNames) {
+		downloadUrls
+	}
 }
 
 fragment FileItem on File {
-  id
-  accountId
-  displayName
-  gcpFilename
-  type
+	id
+	accountId
+	displayName
+	gcpFilename
+	type
 }
 
 mutation CreateFiles($data: [FileCreateManyInput!]!) {
-  createFiles(data: $data) {
-    id
-    ...FileItem
-  }
+	createFiles(data: $data) {
+		id
+		...FileItem
+	}
 }
 
 mutation InitAccountFileUpload(
-  $fileData: [InitFileUploadPayload!]!
-  $accountData: InitAccountFileUploadPayload
-  $accountId: String
+	$fileData: [InitFileUploadPayload!]!
+	$accountData: InitAccountFileUploadPayload
+	$accountId: String
 ) {
-  initAccountFileUpload(fileData: $fileData, accountData: $accountData, accountId: $accountId) {
-    accountId
-    files {
-      ...FileItem
-    }
-  }
+	initAccountFileUpload(
+		fileData: $fileData
+		accountData: $accountData
+		accountId: $accountId
+	) {
+		accountId
+		files {
+			...FileItem
+		}
+	}
 }

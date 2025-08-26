@@ -1,5 +1,5 @@
-import Decimal from 'decimal.js'
+import Decimal from 'decimal.js';
 
 export function sum(values: Decimal[]): Decimal {
-  return values.reduce((acc, val) => acc.plus(val), new Decimal(0))
+	return values.reduce((acc, val) => acc.plus(val), new Decimal(0));
 }

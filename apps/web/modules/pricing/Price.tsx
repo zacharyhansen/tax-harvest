@@ -25,5 +25,5 @@
 // }
 
 export default async function Price() {
-  return <div>Price</div>
+	return <div>Price</div>;
 }

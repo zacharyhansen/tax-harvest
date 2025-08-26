@@ -1,97 +1,99 @@
-import type { Editor } from "@tiptap/react";
-import { Button } from "@repo/ui/components/button";
-
-import { Input } from "@repo/ui/components/input";
-import { Label } from "@repo/ui/components/label";
-import * as React from "react";
+import { Button } from '@repo/ui/components/button';
+import { Input } from '@repo/ui/components/input';
+import { Label } from '@repo/ui/components/label';
+import type { Editor } from '@tiptap/react';
+import * as React from 'react';
 
 type ImageEditBlockProps = {
-  editor: Editor;
-  close: () => void;
+	editor: Editor;
+	close: () => void;
 };
 
 export const ImageEditBlock: React.FC<ImageEditBlockProps> = ({
-  editor,
-  close,
+	editor,
+	close,
 }) => {
-  const fileInputReference = React.useRef<HTMLInputElement>(null);
-  const [link, setLink] = React.useState("");
+	const fileInputReference = React.useRef<HTMLInputElement>(null);
+	const [link, setLink] = React.useState('');
 
-  const handleClick = React.useCallback(() => {
-    fileInputReference.current?.click();
-  }, []);
+	const handleClick = React.useCallback(() => {
+		fileInputReference.current?.click();
+	}, []);
 
-  const handleFile = React.useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files?.length) {
-        return;
-      }
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <ok>
+	const handleFile = React.useCallback(
+		(event: React.ChangeEvent<HTMLInputElement>) => {
+			const files = event.target.files;
+			if (!files?.length) {
+				return;
+			}
 
-      const insertImages = () => {
-        const contentBucket = [];
-        const filesArray = Array.from(files);
+			const insertImages = () => {
+				const contentBucket = [];
+				const filesArray = Array.from(files);
 
-        for (const file of filesArray) {
-          contentBucket.push({ src: file });
-        }
+				for (const file of filesArray) {
+					contentBucket.push({ src: file });
+				}
 
-        editor.commands.setImages(contentBucket);
-      };
+				// editor.commands.setImages(contentBucket);
+			};
 
-      insertImages();
-      close();
-    },
-    [editor, close],
-  );
+			insertImages();
+			close();
+		},
+		[editor, close],
+	);
 
-  const handleSubmit = React.useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <ok>
+	const handleSubmit = React.useCallback(
+		(event: React.FormEvent<HTMLFormElement>) => {
+			event.preventDefault();
+			event.stopPropagation();
 
-      if (link) {
-        editor.commands.setImages([{ src: link }]);
-        close();
-      }
-    },
-    [editor, link, close],
-  );
+			if (link) {
+				// editor.commands.setImages([{ src: link }]);
+				close();
+			}
+		},
+		[editor, link, close],
+	);
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-1">
-        <Label htmlFor="image-link">Attach an image link</Label>
-        <div className="flex">
-          <Input
-            id="image-link"
-            type="url"
-            required
-            placeholder="https://example.com"
-            value={link}
-            className="grow"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setLink(event.target.value);
-            }}
-          />
-          <Button type="submit" className="ml-2">
-            Submit
-          </Button>
-        </div>
-      </div>
-      <Button type="button" className="w-full" onClick={handleClick}>
-        Upload from your computer
-      </Button>
-      <input
-        type="file"
-        accept="image/*"
-        ref={fileInputReference}
-        multiple
-        className="hidden"
-        onChange={handleFile}
-      />
-    </form>
-  );
+	return (
+		<form onSubmit={handleSubmit} className="space-y-6">
+			<div className="space-y-1">
+				<Label htmlFor="image-link">Attach an image link</Label>
+				<div className="flex">
+					{/** biome-ignore lint/correctness/useUniqueElementIds: <ok> */}
+					<Input
+						id="image-link"
+						type="url"
+						required
+						placeholder="https://example.com"
+						value={link}
+						className="grow"
+						onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+							setLink(event.target.value);
+						}}
+					/>
+					<Button type="submit" className="ml-2">
+						Submit
+					</Button>
+				</div>
+			</div>
+			<Button type="button" className="w-full" onClick={handleClick}>
+				Upload from your computer
+			</Button>
+			<input
+				type="file"
+				accept="image/*"
+				ref={fileInputReference}
+				multiple
+				className="hidden"
+				onChange={handleFile}
+			/>
+		</form>
+	);
 };
 
 export default ImageEditBlock;

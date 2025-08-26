@@ -1,776 +1,776 @@
 [
-  {
-    "acquiredDate": "2014-09-03T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "25.0000",
-    "remainingQty": "19.3860"
-  },
-  {
-    "acquiredDate": "2014-09-04T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "24.4994",
-    "remainingQty": "40.0010"
-  },
-  {
-    "acquiredDate": "2019-08-15T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "50.8811",
-    "remainingQty": "0.2270"
-  },
-  {
-    "acquiredDate": "2019-11-14T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "66.2286",
-    "remainingQty": "0.1750"
-  },
-  {
-    "acquiredDate": "2020-02-13T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "81.3287",
-    "remainingQty": "0.1430"
-  },
-  {
-    "acquiredDate": "2020-05-14T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "75.6707",
-    "remainingQty": "0.1640"
-  },
-  {
-    "acquiredDate": "2020-08-13T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "114.2202",
-    "remainingQty": "0.1090"
-  },
-  {
-    "acquiredDate": "2020-09-01T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "132.0880",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2020-11-12T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "119.3750",
-    "remainingQty": "0.1120"
-  },
-  {
-    "acquiredDate": "2020-11-19T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "118.3300",
-    "remainingQty": "1.0000"
-  },
-  {
-    "acquiredDate": "2021-01-06T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "130.5900",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2021-02-11T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "135.3704",
-    "remainingQty": "0.1080"
-  },
-  {
-    "acquiredDate": "2021-05-13T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "124.6825",
-    "remainingQty": "0.1260"
-  },
-  {
-    "acquiredDate": "2021-08-12T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "147.1028",
-    "remainingQty": "0.1070"
-  },
-  {
-    "acquiredDate": "2021-11-11T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "148.6792",
-    "remainingQty": "0.1060"
-  },
-  {
-    "acquiredDate": "2022-02-10T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "173.5165",
-    "remainingQty": "0.0910"
-  },
-  {
-    "acquiredDate": "2022-05-12T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "142.5000",
-    "remainingQty": "0.1160"
-  },
-  {
-    "acquiredDate": "2022-08-11T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "170.6186",
-    "remainingQty": "0.0970"
-  },
-  {
-    "acquiredDate": "2022-10-20T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "145.3080",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2022-11-10T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "142.9839",
-    "remainingQty": "0.1240"
-  },
-  {
-    "acquiredDate": "2023-02-16T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "154.3478",
-    "remainingQty": "0.1150"
-  },
-  {
-    "acquiredDate": "2023-05-18T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "173.3645",
-    "remainingQty": "0.1070"
-  },
-  {
-    "acquiredDate": "2023-08-17T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "175.2830",
-    "remainingQty": "0.1060"
-  },
-  {
-    "acquiredDate": "2023-08-21T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "174.5380",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2023-11-16T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "188.5714",
-    "remainingQty": "0.1050"
-  },
-  {
-    "acquiredDate": "2024-02-02T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "182.5450",
-    "remainingQty": "4.0000"
-  },
-  {
-    "acquiredDate": "2024-02-15T08:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "182.3684",
-    "remainingQty": "0.1140"
-  },
-  {
-    "acquiredDate": "2024-05-16T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "188.5217",
-    "remainingQty": "0.1150"
-  },
-  {
-    "acquiredDate": "2024-08-15T07:00:00.000Z",
-    "assetSymbol": "AAPL",
-    "price": "221.5306",
-    "remainingQty": "0.0980"
-  },
-  {
-    "acquiredDate": "2024-09-03T07:00:00.000Z",
-    "assetSymbol": "ABNB",
-    "price": "115.9500",
-    "remainingQty": "9.0000"
-  },
-  {
-    "acquiredDate": "2022-09-15T07:00:00.000Z",
-    "assetSymbol": "ADBE",
-    "price": "322.1500",
-    "remainingQty": "1.0000"
-  },
-  {
-    "acquiredDate": "2022-09-15T07:00:00.000Z",
-    "assetSymbol": "ADBE",
-    "price": "322.1900",
-    "remainingQty": "14.0000"
-  },
-  {
-    "acquiredDate": "2022-09-15T07:00:00.000Z",
-    "assetSymbol": "ADBE",
-    "price": "321.2225",
-    "remainingQty": "4.0000"
-  },
-  {
-    "acquiredDate": "2022-10-31T07:00:00.000Z",
-    "assetSymbol": "ADBE",
-    "price": "319.6850",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2022-11-03T07:00:00.000Z",
-    "assetSymbol": "ADBE",
-    "price": "295.0000",
-    "remainingQty": "8.0000"
-  },
-  {
-    "acquiredDate": "2022-11-08T08:00:00.000Z",
-    "assetSymbol": "ADBE",
-    "price": "307.5600",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2022-11-23T08:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "154.5500",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2022-12-14T08:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "157.5700",
-    "remainingQty": "20.0000"
-  },
-  {
-    "acquiredDate": "2022-12-16T08:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "145.3800",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2022-12-16T08:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "145.4600",
-    "remainingQty": "8.0000"
-  },
-  {
-    "acquiredDate": "2023-02-10T08:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "176.6990",
-    "remainingQty": "0.1030"
-  },
-  {
-    "acquiredDate": "2023-05-10T07:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "151.5108",
-    "remainingQty": "0.1390"
-  },
-  {
-    "acquiredDate": "2023-08-10T07:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "166.4567",
-    "remainingQty": "0.1270"
-  },
-  {
-    "acquiredDate": "2023-11-02T07:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "149.4800",
-    "remainingQty": "10.0000"
-  },
-  {
-    "acquiredDate": "2023-11-10T08:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "152.6619",
-    "remainingQty": "0.1390"
-  },
-  {
-    "acquiredDate": "2024-02-09T08:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "210.0000",
-    "remainingQty": "0.1300"
-  },
-  {
-    "acquiredDate": "2024-05-10T07:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "236.6667",
-    "remainingQty": "0.1350"
-  },
-  {
-    "acquiredDate": "2024-08-09T07:00:00.000Z",
-    "assetSymbol": "AXP",
-    "price": "232.1739",
-    "remainingQty": "0.1380"
-  },
-  {
-    "acquiredDate": "2024-06-06T07:00:00.000Z",
-    "assetSymbol": "CAVA",
-    "price": "86.4700",
-    "remainingQty": "27.0000"
-  },
-  {
-    "acquiredDate": "2024-07-16T07:00:00.000Z",
-    "assetSymbol": "CAVA",
-    "price": "86.2900",
-    "remainingQty": "9.0000"
-  },
-  {
-    "acquiredDate": "2024-07-18T07:00:00.000Z",
-    "assetSymbol": "CAVA",
-    "price": "79.2480",
-    "remainingQty": "15.0000"
-  },
-  {
-    "acquiredDate": "2021-10-13T07:00:00.000Z",
-    "assetSymbol": "COIN",
-    "price": "246.6600",
-    "remainingQty": "4.0000"
-  },
-  {
-    "acquiredDate": "2021-11-10T08:00:00.000Z",
-    "assetSymbol": "COIN",
-    "price": "333.2200",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2021-11-10T08:00:00.000Z",
-    "assetSymbol": "COIN",
-    "price": "333.2850",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2022-10-28T07:00:00.000Z",
-    "assetSymbol": "COIN",
-    "price": "72.0893",
-    "remainingQty": "15.0000"
-  },
-  {
-    "acquiredDate": "2024-09-30T07:00:00.000Z",
-    "assetSymbol": "COIN",
-    "price": "181.9750",
-    "remainingQty": "12.0000"
-  },
-  {
-    "acquiredDate": "2022-12-07T08:00:00.000Z",
-    "assetSymbol": "CRWD",
-    "price": "112.1500",
-    "remainingQty": "10.0000"
-  },
-  {
-    "acquiredDate": "2022-12-16T08:00:00.000Z",
-    "assetSymbol": "CRWD",
-    "price": "111.0500",
-    "remainingQty": "10.0000"
-  },
-  {
-    "acquiredDate": "2022-12-20T08:00:00.000Z",
-    "assetSymbol": "CRWD",
-    "price": "106.6900",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2022-12-21T08:00:00.000Z",
-    "assetSymbol": "CRWD",
-    "price": "107.9900",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2024-07-19T07:00:00.000Z",
-    "assetSymbol": "CRWD",
-    "price": "312.7450",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2024-08-06T07:00:00.000Z",
-    "assetSymbol": "CRWD",
-    "price": "230.9600",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2024-06-05T07:00:00.000Z",
-    "assetSymbol": "GOOG",
-    "price": "177.4800",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2024-06-17T07:00:00.000Z",
-    "assetSymbol": "GOOG",
-    "price": "166.6667",
-    "remainingQty": "0.0060"
-  },
-  {
-    "acquiredDate": "2024-07-01T07:00:00.000Z",
-    "assetSymbol": "GOOG",
-    "price": "184.1650",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2024-09-09T07:00:00.000Z",
-    "assetSymbol": "GOOG",
-    "price": "149.7767",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2024-09-16T07:00:00.000Z",
-    "assetSymbol": "GOOG",
-    "price": "155.5556",
-    "remainingQty": "0.0090"
-  },
-  {
-    "acquiredDate": "2024-10-08T07:00:00.000Z",
-    "assetSymbol": "GOOG",
-    "price": "164.8800",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2024-09-23T07:00:00.000Z",
-    "assetSymbol": "IVW",
-    "price": "95.1567",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2024-09-30T07:00:00.000Z",
-    "assetSymbol": "IVW",
-    "price": "88.0000",
-    "remainingQty": "0.0050"
-  },
-  {
-    "acquiredDate": "2024-09-30T07:00:00.000Z",
-    "assetSymbol": "IVW",
-    "price": "95.4400",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2024-10-08T07:00:00.000Z",
-    "assetSymbol": "IVW",
-    "price": "95.7760",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2024-10-08T07:00:00.000Z",
-    "assetSymbol": "IVW",
-    "price": "95.7600",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2022-12-07T08:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "15.8986",
-    "remainingQty": "90.0000"
-  },
-  {
-    "acquiredDate": "2022-12-16T08:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "16.5370",
-    "remainingQty": "50.0000"
-  },
-  {
-    "acquiredDate": "2022-12-20T08:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "15.8990",
-    "remainingQty": "50.0000"
-  },
-  {
-    "acquiredDate": "2023-03-29T07:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "25.3333",
-    "remainingQty": "0.0300"
-  },
-  {
-    "acquiredDate": "2023-06-30T07:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "38.0000",
-    "remainingQty": "0.0200"
-  },
-  {
-    "acquiredDate": "2023-09-28T07:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "38.0000",
-    "remainingQty": "0.0200"
-  },
-  {
-    "acquiredDate": "2023-12-28T08:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "38.0000",
-    "remainingQty": "0.0200"
-  },
-  {
-    "acquiredDate": "2024-03-27T07:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "76.0000",
-    "remainingQty": "0.0100"
-  },
-  {
-    "acquiredDate": "2024-06-28T07:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "118.7500",
-    "remainingQty": "0.0160"
-  },
-  {
-    "acquiredDate": "2024-10-03T07:00:00.000Z",
-    "assetSymbol": "NVDA",
-    "price": "118.7500",
-    "remainingQty": "0.0160"
-  },
-  {
-    "acquiredDate": "2024-04-15T07:00:00.000Z",
-    "assetSymbol": "NVO",
-    "price": "125.4800",
-    "remainingQty": "11.0000"
-  },
-  {
-    "acquiredDate": "2024-07-18T07:00:00.000Z",
-    "assetSymbol": "NVO",
-    "price": "129.0000",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2024-08-26T07:00:00.000Z",
-    "assetSymbol": "NVO",
-    "price": "135.3846",
-    "remainingQty": "0.0390"
-  },
-  {
-    "acquiredDate": "2024-08-06T07:00:00.000Z",
-    "assetSymbol": "QQQ",
-    "price": "444.4533",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2019-09-26T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "30.5415",
-    "remainingQty": "60.0000"
-  },
-  {
-    "acquiredDate": "2020-03-06T08:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "46.0000",
-    "remainingQty": "100.0000"
-  },
-  {
-    "acquiredDate": "2020-09-02T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "107.3600",
-    "remainingQty": "20.0000"
-  },
-  {
-    "acquiredDate": "2020-09-03T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "101.5960",
-    "remainingQty": "20.0000"
-  },
-  {
-    "acquiredDate": "2021-08-23T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "147.6250",
-    "remainingQty": "10.0000"
-  },
-  {
-    "acquiredDate": "2022-09-30T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "27.3583",
-    "remainingQty": "6.0000"
-  },
-  {
-    "acquiredDate": "2024-04-15T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "69.5500",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2024-05-06T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "74.9900",
-    "remainingQty": "1.0000"
-  },
-  {
-    "acquiredDate": "2024-05-08T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "61.7991",
-    "remainingQty": "23.0000"
-  },
-  {
-    "acquiredDate": "2024-05-14T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "57.4463",
-    "remainingQty": "30.0000"
-  },
-  {
-    "acquiredDate": "2024-06-05T07:00:00.000Z",
-    "assetSymbol": "SHOP",
-    "price": "60.6280",
-    "remainingQty": "10.0000"
-  },
-  {
-    "acquiredDate": "2022-09-30T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "362.0695",
-    "remainingQty": "23.0010"
-  },
-  {
-    "acquiredDate": "2022-10-31T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "387.4700",
-    "remainingQty": "4.0000"
-  },
-  {
-    "acquiredDate": "2022-12-14T08:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "404.3267",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2022-12-16T08:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "382.6167",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2022-12-20T08:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "378.2100",
-    "remainingQty": "20.0000"
-  },
-  {
-    "acquiredDate": "2023-01-31T08:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "401.8045",
-    "remainingQty": "0.1330"
-  },
-  {
-    "acquiredDate": "2023-02-08T08:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "412.7200",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2023-04-28T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "415.2000",
-    "remainingQty": "0.2000"
-  },
-  {
-    "acquiredDate": "2023-07-31T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "457.8788",
-    "remainingQty": "0.1980"
-  },
-  {
-    "acquiredDate": "2023-09-01T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "452.7600",
-    "remainingQty": "3.0000"
-  },
-  {
-    "acquiredDate": "2023-09-13T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "447.1300",
-    "remainingQty": "1.0000"
-  },
-  {
-    "acquiredDate": "2023-10-31T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "411.5721",
-    "remainingQty": "0.2290"
-  },
-  {
-    "acquiredDate": "2024-01-31T08:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "488.8841",
-    "remainingQty": "0.2330"
-  },
-  {
-    "acquiredDate": "2024-04-30T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "508.9894",
-    "remainingQty": "0.1880"
-  },
-  {
-    "acquiredDate": "2024-05-06T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "514.1750",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2024-05-24T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "528.2150",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2024-06-05T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "529.4350",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2024-07-01T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "545.0500",
-    "remainingQty": "1.0000"
-  },
-  {
-    "acquiredDate": "2024-07-31T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "544.0187",
-    "remainingQty": "0.2140"
-  },
-  {
-    "acquiredDate": "2024-10-08T07:00:00.000Z",
-    "assetSymbol": "SPY",
-    "price": "571.6800",
-    "remainingQty": "1.0000"
-  },
-  {
-    "acquiredDate": "2018-10-11T07:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "70.8867",
-    "remainingQty": "6.0000"
-  },
-  {
-    "acquiredDate": "2019-09-09T07:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "62.6850",
-    "remainingQty": "4.0000"
-  },
-  {
-    "acquiredDate": "2022-12-16T08:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "61.0000",
-    "remainingQty": "70.0000"
-  },
-  {
-    "acquiredDate": "2022-12-20T08:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "59.2170",
-    "remainingQty": "10.0000"
-  },
-  {
-    "acquiredDate": "2023-02-09T08:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "80.7060",
-    "remainingQty": "5.0000"
-  },
-  {
-    "acquiredDate": "2023-02-13T08:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "76.5400",
-    "remainingQty": "2.0000"
-  },
-  {
-    "acquiredDate": "2023-03-10T08:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "70.6200",
-    "remainingQty": "12.0000"
-  },
-  {
-    "acquiredDate": "2023-03-13T07:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "68.0944",
-    "remainingQty": "80.0000"
-  },
-  {
-    "acquiredDate": "2023-03-23T07:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "57.7650",
-    "remainingQty": "100.0000"
-  },
-  {
-    "acquiredDate": "2023-08-21T07:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "56.6000",
-    "remainingQty": "10.0000"
-  },
-  {
-    "acquiredDate": "2023-11-02T07:00:00.000Z",
-    "assetSymbol": "SQ",
-    "price": "43.3750",
-    "remainingQty": "50.0000"
-  }
+	{
+		"acquiredDate": "2014-09-03T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "25.0000",
+		"remainingQty": "19.3860"
+	},
+	{
+		"acquiredDate": "2014-09-04T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "24.4994",
+		"remainingQty": "40.0010"
+	},
+	{
+		"acquiredDate": "2019-08-15T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "50.8811",
+		"remainingQty": "0.2270"
+	},
+	{
+		"acquiredDate": "2019-11-14T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "66.2286",
+		"remainingQty": "0.1750"
+	},
+	{
+		"acquiredDate": "2020-02-13T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "81.3287",
+		"remainingQty": "0.1430"
+	},
+	{
+		"acquiredDate": "2020-05-14T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "75.6707",
+		"remainingQty": "0.1640"
+	},
+	{
+		"acquiredDate": "2020-08-13T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "114.2202",
+		"remainingQty": "0.1090"
+	},
+	{
+		"acquiredDate": "2020-09-01T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "132.0880",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2020-11-12T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "119.3750",
+		"remainingQty": "0.1120"
+	},
+	{
+		"acquiredDate": "2020-11-19T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "118.3300",
+		"remainingQty": "1.0000"
+	},
+	{
+		"acquiredDate": "2021-01-06T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "130.5900",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2021-02-11T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "135.3704",
+		"remainingQty": "0.1080"
+	},
+	{
+		"acquiredDate": "2021-05-13T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "124.6825",
+		"remainingQty": "0.1260"
+	},
+	{
+		"acquiredDate": "2021-08-12T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "147.1028",
+		"remainingQty": "0.1070"
+	},
+	{
+		"acquiredDate": "2021-11-11T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "148.6792",
+		"remainingQty": "0.1060"
+	},
+	{
+		"acquiredDate": "2022-02-10T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "173.5165",
+		"remainingQty": "0.0910"
+	},
+	{
+		"acquiredDate": "2022-05-12T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "142.5000",
+		"remainingQty": "0.1160"
+	},
+	{
+		"acquiredDate": "2022-08-11T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "170.6186",
+		"remainingQty": "0.0970"
+	},
+	{
+		"acquiredDate": "2022-10-20T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "145.3080",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2022-11-10T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "142.9839",
+		"remainingQty": "0.1240"
+	},
+	{
+		"acquiredDate": "2023-02-16T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "154.3478",
+		"remainingQty": "0.1150"
+	},
+	{
+		"acquiredDate": "2023-05-18T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "173.3645",
+		"remainingQty": "0.1070"
+	},
+	{
+		"acquiredDate": "2023-08-17T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "175.2830",
+		"remainingQty": "0.1060"
+	},
+	{
+		"acquiredDate": "2023-08-21T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "174.5380",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2023-11-16T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "188.5714",
+		"remainingQty": "0.1050"
+	},
+	{
+		"acquiredDate": "2024-02-02T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "182.5450",
+		"remainingQty": "4.0000"
+	},
+	{
+		"acquiredDate": "2024-02-15T08:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "182.3684",
+		"remainingQty": "0.1140"
+	},
+	{
+		"acquiredDate": "2024-05-16T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "188.5217",
+		"remainingQty": "0.1150"
+	},
+	{
+		"acquiredDate": "2024-08-15T07:00:00.000Z",
+		"assetSymbol": "AAPL",
+		"price": "221.5306",
+		"remainingQty": "0.0980"
+	},
+	{
+		"acquiredDate": "2024-09-03T07:00:00.000Z",
+		"assetSymbol": "ABNB",
+		"price": "115.9500",
+		"remainingQty": "9.0000"
+	},
+	{
+		"acquiredDate": "2022-09-15T07:00:00.000Z",
+		"assetSymbol": "ADBE",
+		"price": "322.1500",
+		"remainingQty": "1.0000"
+	},
+	{
+		"acquiredDate": "2022-09-15T07:00:00.000Z",
+		"assetSymbol": "ADBE",
+		"price": "322.1900",
+		"remainingQty": "14.0000"
+	},
+	{
+		"acquiredDate": "2022-09-15T07:00:00.000Z",
+		"assetSymbol": "ADBE",
+		"price": "321.2225",
+		"remainingQty": "4.0000"
+	},
+	{
+		"acquiredDate": "2022-10-31T07:00:00.000Z",
+		"assetSymbol": "ADBE",
+		"price": "319.6850",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2022-11-03T07:00:00.000Z",
+		"assetSymbol": "ADBE",
+		"price": "295.0000",
+		"remainingQty": "8.0000"
+	},
+	{
+		"acquiredDate": "2022-11-08T08:00:00.000Z",
+		"assetSymbol": "ADBE",
+		"price": "307.5600",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2022-11-23T08:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "154.5500",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2022-12-14T08:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "157.5700",
+		"remainingQty": "20.0000"
+	},
+	{
+		"acquiredDate": "2022-12-16T08:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "145.3800",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2022-12-16T08:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "145.4600",
+		"remainingQty": "8.0000"
+	},
+	{
+		"acquiredDate": "2023-02-10T08:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "176.6990",
+		"remainingQty": "0.1030"
+	},
+	{
+		"acquiredDate": "2023-05-10T07:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "151.5108",
+		"remainingQty": "0.1390"
+	},
+	{
+		"acquiredDate": "2023-08-10T07:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "166.4567",
+		"remainingQty": "0.1270"
+	},
+	{
+		"acquiredDate": "2023-11-02T07:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "149.4800",
+		"remainingQty": "10.0000"
+	},
+	{
+		"acquiredDate": "2023-11-10T08:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "152.6619",
+		"remainingQty": "0.1390"
+	},
+	{
+		"acquiredDate": "2024-02-09T08:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "210.0000",
+		"remainingQty": "0.1300"
+	},
+	{
+		"acquiredDate": "2024-05-10T07:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "236.6667",
+		"remainingQty": "0.1350"
+	},
+	{
+		"acquiredDate": "2024-08-09T07:00:00.000Z",
+		"assetSymbol": "AXP",
+		"price": "232.1739",
+		"remainingQty": "0.1380"
+	},
+	{
+		"acquiredDate": "2024-06-06T07:00:00.000Z",
+		"assetSymbol": "CAVA",
+		"price": "86.4700",
+		"remainingQty": "27.0000"
+	},
+	{
+		"acquiredDate": "2024-07-16T07:00:00.000Z",
+		"assetSymbol": "CAVA",
+		"price": "86.2900",
+		"remainingQty": "9.0000"
+	},
+	{
+		"acquiredDate": "2024-07-18T07:00:00.000Z",
+		"assetSymbol": "CAVA",
+		"price": "79.2480",
+		"remainingQty": "15.0000"
+	},
+	{
+		"acquiredDate": "2021-10-13T07:00:00.000Z",
+		"assetSymbol": "COIN",
+		"price": "246.6600",
+		"remainingQty": "4.0000"
+	},
+	{
+		"acquiredDate": "2021-11-10T08:00:00.000Z",
+		"assetSymbol": "COIN",
+		"price": "333.2200",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2021-11-10T08:00:00.000Z",
+		"assetSymbol": "COIN",
+		"price": "333.2850",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2022-10-28T07:00:00.000Z",
+		"assetSymbol": "COIN",
+		"price": "72.0893",
+		"remainingQty": "15.0000"
+	},
+	{
+		"acquiredDate": "2024-09-30T07:00:00.000Z",
+		"assetSymbol": "COIN",
+		"price": "181.9750",
+		"remainingQty": "12.0000"
+	},
+	{
+		"acquiredDate": "2022-12-07T08:00:00.000Z",
+		"assetSymbol": "CRWD",
+		"price": "112.1500",
+		"remainingQty": "10.0000"
+	},
+	{
+		"acquiredDate": "2022-12-16T08:00:00.000Z",
+		"assetSymbol": "CRWD",
+		"price": "111.0500",
+		"remainingQty": "10.0000"
+	},
+	{
+		"acquiredDate": "2022-12-20T08:00:00.000Z",
+		"assetSymbol": "CRWD",
+		"price": "106.6900",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2022-12-21T08:00:00.000Z",
+		"assetSymbol": "CRWD",
+		"price": "107.9900",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2024-07-19T07:00:00.000Z",
+		"assetSymbol": "CRWD",
+		"price": "312.7450",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2024-08-06T07:00:00.000Z",
+		"assetSymbol": "CRWD",
+		"price": "230.9600",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2024-06-05T07:00:00.000Z",
+		"assetSymbol": "GOOG",
+		"price": "177.4800",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2024-06-17T07:00:00.000Z",
+		"assetSymbol": "GOOG",
+		"price": "166.6667",
+		"remainingQty": "0.0060"
+	},
+	{
+		"acquiredDate": "2024-07-01T07:00:00.000Z",
+		"assetSymbol": "GOOG",
+		"price": "184.1650",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2024-09-09T07:00:00.000Z",
+		"assetSymbol": "GOOG",
+		"price": "149.7767",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2024-09-16T07:00:00.000Z",
+		"assetSymbol": "GOOG",
+		"price": "155.5556",
+		"remainingQty": "0.0090"
+	},
+	{
+		"acquiredDate": "2024-10-08T07:00:00.000Z",
+		"assetSymbol": "GOOG",
+		"price": "164.8800",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2024-09-23T07:00:00.000Z",
+		"assetSymbol": "IVW",
+		"price": "95.1567",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2024-09-30T07:00:00.000Z",
+		"assetSymbol": "IVW",
+		"price": "88.0000",
+		"remainingQty": "0.0050"
+	},
+	{
+		"acquiredDate": "2024-09-30T07:00:00.000Z",
+		"assetSymbol": "IVW",
+		"price": "95.4400",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2024-10-08T07:00:00.000Z",
+		"assetSymbol": "IVW",
+		"price": "95.7760",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2024-10-08T07:00:00.000Z",
+		"assetSymbol": "IVW",
+		"price": "95.7600",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2022-12-07T08:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "15.8986",
+		"remainingQty": "90.0000"
+	},
+	{
+		"acquiredDate": "2022-12-16T08:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "16.5370",
+		"remainingQty": "50.0000"
+	},
+	{
+		"acquiredDate": "2022-12-20T08:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "15.8990",
+		"remainingQty": "50.0000"
+	},
+	{
+		"acquiredDate": "2023-03-29T07:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "25.3333",
+		"remainingQty": "0.0300"
+	},
+	{
+		"acquiredDate": "2023-06-30T07:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "38.0000",
+		"remainingQty": "0.0200"
+	},
+	{
+		"acquiredDate": "2023-09-28T07:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "38.0000",
+		"remainingQty": "0.0200"
+	},
+	{
+		"acquiredDate": "2023-12-28T08:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "38.0000",
+		"remainingQty": "0.0200"
+	},
+	{
+		"acquiredDate": "2024-03-27T07:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "76.0000",
+		"remainingQty": "0.0100"
+	},
+	{
+		"acquiredDate": "2024-06-28T07:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "118.7500",
+		"remainingQty": "0.0160"
+	},
+	{
+		"acquiredDate": "2024-10-03T07:00:00.000Z",
+		"assetSymbol": "NVDA",
+		"price": "118.7500",
+		"remainingQty": "0.0160"
+	},
+	{
+		"acquiredDate": "2024-04-15T07:00:00.000Z",
+		"assetSymbol": "NVO",
+		"price": "125.4800",
+		"remainingQty": "11.0000"
+	},
+	{
+		"acquiredDate": "2024-07-18T07:00:00.000Z",
+		"assetSymbol": "NVO",
+		"price": "129.0000",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2024-08-26T07:00:00.000Z",
+		"assetSymbol": "NVO",
+		"price": "135.3846",
+		"remainingQty": "0.0390"
+	},
+	{
+		"acquiredDate": "2024-08-06T07:00:00.000Z",
+		"assetSymbol": "QQQ",
+		"price": "444.4533",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2019-09-26T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "30.5415",
+		"remainingQty": "60.0000"
+	},
+	{
+		"acquiredDate": "2020-03-06T08:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "46.0000",
+		"remainingQty": "100.0000"
+	},
+	{
+		"acquiredDate": "2020-09-02T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "107.3600",
+		"remainingQty": "20.0000"
+	},
+	{
+		"acquiredDate": "2020-09-03T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "101.5960",
+		"remainingQty": "20.0000"
+	},
+	{
+		"acquiredDate": "2021-08-23T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "147.6250",
+		"remainingQty": "10.0000"
+	},
+	{
+		"acquiredDate": "2022-09-30T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "27.3583",
+		"remainingQty": "6.0000"
+	},
+	{
+		"acquiredDate": "2024-04-15T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "69.5500",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2024-05-06T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "74.9900",
+		"remainingQty": "1.0000"
+	},
+	{
+		"acquiredDate": "2024-05-08T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "61.7991",
+		"remainingQty": "23.0000"
+	},
+	{
+		"acquiredDate": "2024-05-14T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "57.4463",
+		"remainingQty": "30.0000"
+	},
+	{
+		"acquiredDate": "2024-06-05T07:00:00.000Z",
+		"assetSymbol": "SHOP",
+		"price": "60.6280",
+		"remainingQty": "10.0000"
+	},
+	{
+		"acquiredDate": "2022-09-30T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "362.0695",
+		"remainingQty": "23.0010"
+	},
+	{
+		"acquiredDate": "2022-10-31T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "387.4700",
+		"remainingQty": "4.0000"
+	},
+	{
+		"acquiredDate": "2022-12-14T08:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "404.3267",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2022-12-16T08:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "382.6167",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2022-12-20T08:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "378.2100",
+		"remainingQty": "20.0000"
+	},
+	{
+		"acquiredDate": "2023-01-31T08:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "401.8045",
+		"remainingQty": "0.1330"
+	},
+	{
+		"acquiredDate": "2023-02-08T08:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "412.7200",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2023-04-28T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "415.2000",
+		"remainingQty": "0.2000"
+	},
+	{
+		"acquiredDate": "2023-07-31T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "457.8788",
+		"remainingQty": "0.1980"
+	},
+	{
+		"acquiredDate": "2023-09-01T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "452.7600",
+		"remainingQty": "3.0000"
+	},
+	{
+		"acquiredDate": "2023-09-13T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "447.1300",
+		"remainingQty": "1.0000"
+	},
+	{
+		"acquiredDate": "2023-10-31T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "411.5721",
+		"remainingQty": "0.2290"
+	},
+	{
+		"acquiredDate": "2024-01-31T08:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "488.8841",
+		"remainingQty": "0.2330"
+	},
+	{
+		"acquiredDate": "2024-04-30T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "508.9894",
+		"remainingQty": "0.1880"
+	},
+	{
+		"acquiredDate": "2024-05-06T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "514.1750",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2024-05-24T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "528.2150",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2024-06-05T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "529.4350",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2024-07-01T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "545.0500",
+		"remainingQty": "1.0000"
+	},
+	{
+		"acquiredDate": "2024-07-31T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "544.0187",
+		"remainingQty": "0.2140"
+	},
+	{
+		"acquiredDate": "2024-10-08T07:00:00.000Z",
+		"assetSymbol": "SPY",
+		"price": "571.6800",
+		"remainingQty": "1.0000"
+	},
+	{
+		"acquiredDate": "2018-10-11T07:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "70.8867",
+		"remainingQty": "6.0000"
+	},
+	{
+		"acquiredDate": "2019-09-09T07:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "62.6850",
+		"remainingQty": "4.0000"
+	},
+	{
+		"acquiredDate": "2022-12-16T08:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "61.0000",
+		"remainingQty": "70.0000"
+	},
+	{
+		"acquiredDate": "2022-12-20T08:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "59.2170",
+		"remainingQty": "10.0000"
+	},
+	{
+		"acquiredDate": "2023-02-09T08:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "80.7060",
+		"remainingQty": "5.0000"
+	},
+	{
+		"acquiredDate": "2023-02-13T08:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "76.5400",
+		"remainingQty": "2.0000"
+	},
+	{
+		"acquiredDate": "2023-03-10T08:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "70.6200",
+		"remainingQty": "12.0000"
+	},
+	{
+		"acquiredDate": "2023-03-13T07:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "68.0944",
+		"remainingQty": "80.0000"
+	},
+	{
+		"acquiredDate": "2023-03-23T07:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "57.7650",
+		"remainingQty": "100.0000"
+	},
+	{
+		"acquiredDate": "2023-08-21T07:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "56.6000",
+		"remainingQty": "10.0000"
+	},
+	{
+		"acquiredDate": "2023-11-02T07:00:00.000Z",
+		"assetSymbol": "SQ",
+		"price": "43.3750",
+		"remainingQty": "50.0000"
+	}
 ]

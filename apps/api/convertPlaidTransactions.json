@@ -1,2848 +1,2842 @@
 {
-  "input": {
-    "investmentsTransactionsGetResponse": {
-      "accounts": [
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "balances": {
-            "available": 116337.55,
-            "current": 200872.36,
-            "iso_currency_code": "USD",
-            "limit": null,
-            "unofficial_currency_code": null
-          },
-          "mask": "4314",
-          "name": "Individual Brokerage -4314",
-          "official_name": null,
-          "subtype": "brokerage",
-          "type": "investment"
-        }
-      ],
-      "investment_transactions": [
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -116268.855446,
-          "cancel_transaction_id": null,
-          "date": "2025-07-18",
-          "fees": 2.144554,
-          "investment_transaction_id": "LgwNvXJjrMc46MnwRy8DiyMMje7wkwTBb6wP0",
-          "iso_currency_code": "USD",
-          "name": "SOLD 12919 UUUU @ 9",
-          "price": 9,
-          "quantity": -12919,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "sell",
-          "type": "sell",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 2034.18,
-          "cancel_transaction_id": null,
-          "date": "2025-07-08",
-          "fees": 0,
-          "investment_transaction_id": "DaApPVYB30sy8Vxq459ZiZMMybD585tRx71qw",
-          "iso_currency_code": "USD",
-          "name": "BOT 18 SHOP @ 113.01",
-          "price": 113.01,
-          "quantity": 18,
-          "security_id": "DAE3Yo3wXgskjJLjJDZkIr6Z7OZjoJfoQ3zLq",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 2209.4805,
-          "cancel_transaction_id": null,
-          "date": "2025-07-08",
-          "fees": 0,
-          "investment_transaction_id": "1dvXoK1PjrTXx7yM89OoH0VVNOPakaCgzdKqY",
-          "iso_currency_code": "USD",
-          "name": "BOT 15 RDDT @ 147.2987",
-          "price": 147.2987,
-          "quantity": 15,
-          "security_id": "vLRMV3MvY1Fq4K3A1Eb7CJD5QN5rw9F7jRj96",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 4900,
-          "cancel_transaction_id": null,
-          "date": "2025-07-08",
-          "fees": 0,
-          "investment_transaction_id": "PN1p4wbnJgh86JXQpLN4FPDD41B7o7fA0Yk7A",
-          "iso_currency_code": "USD",
-          "name": "BOT 28 GOOG @ 175",
-          "price": 175,
-          "quantity": 28,
-          "security_id": "EvByboy6Z7I4LvOb8rzzHQ5R4YRjPMf5M4Nkk",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 1953.81,
-          "cancel_transaction_id": null,
-          "date": "2025-05-27",
-          "fees": 0,
-          "investment_transaction_id": "qzJbLRx8M4sLPJRYxbrgtw77dKyN1NIEmyXrB",
-          "iso_currency_code": "USD",
-          "name": "BOT 17 AMD @ 114.93",
-          "price": 114.93,
-          "quantity": 17,
-          "security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 6965.3133,
-          "cancel_transaction_id": null,
-          "date": "2025-05-27",
-          "fees": 0,
-          "investment_transaction_id": "BrKXD7VPqASBPbv9Y1XpsvwwpD0PMPI7Peoj8",
-          "iso_currency_code": "USD",
-          "name": "BOT 67 RDDT @ 103.9599",
-          "price": 103.9599,
-          "quantity": 67,
-          "security_id": "vLRMV3MvY1Fq4K3A1Eb7CJD5QN5rw9F7jRj96",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 3214.3692,
-          "cancel_transaction_id": null,
-          "date": "2025-05-19",
-          "fees": 0,
-          "investment_transaction_id": "36mXoAqB4auoOvnzM1XVsgjjvreJpJUA3m800",
-          "iso_currency_code": "USD",
-          "name": "BOT 28 AMD @ 114.7989",
-          "price": 114.7989,
-          "quantity": 28,
-          "security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 9715.72,
-          "cancel_transaction_id": null,
-          "date": "2025-05-07",
-          "fees": 0,
-          "investment_transaction_id": "yzPbKw68M1swv7n6kbzDTEDDjg8w6wcgej6oa",
-          "iso_currency_code": "USD",
-          "name": "BOT 98 AMD @ 99.14",
-          "price": 99.14,
-          "quantity": 98,
-          "security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 198.28,
-          "cancel_transaction_id": null,
-          "date": "2025-05-07",
-          "fees": 0,
-          "investment_transaction_id": "KbdYApm0jgsrjJAd0m8ZHErryMReqecmaxkvA",
-          "iso_currency_code": "USD",
-          "name": "BOT 2 AMD @ 99.14",
-          "price": 99.14,
-          "quantity": 2,
-          "security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -12477.6334,
-          "cancel_transaction_id": null,
-          "date": "2025-05-01",
-          "fees": 0.3666,
-          "investment_transaction_id": "kmZOJ7bAEkIpzEb9BxVRHOjjD3vVzVhvzVgDj",
-          "iso_currency_code": "USD",
-          "name": "SOLD 100 ABNB @ 124.78",
-          "price": 124.78,
-          "quantity": -100,
-          "security_id": "AyvPNVPQ75Say8OJmwpjUOXJP6JdVph6PEbqg",
-          "subtype": "sell",
-          "type": "sell",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 2923.218,
-          "cancel_transaction_id": null,
-          "date": "2025-05-01",
-          "fees": 0,
-          "investment_transaction_id": "AjyXLgN1PkhqYbnkBKAZSJzzA4b1D1Hnr1oBO",
-          "iso_currency_code": "USD",
-          "name": "BOT 30 AMD @ 97.4406",
-          "price": 97.4406,
-          "quantity": 30,
-          "security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 12473.96,
-          "cancel_transaction_id": null,
-          "date": "2025-05-01",
-          "fees": 0,
-          "investment_transaction_id": "vzLbBNV8M6szKXB7LbVNI566zRgyjyI0x1R7D",
-          "iso_currency_code": "USD",
-          "name": "BOT 100 ABNB @ 124.7396",
-          "price": 124.7396,
-          "quantity": 100,
-          "security_id": "AyvPNVPQ75Say8OJmwpjUOXJP6JdVph6PEbqg",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 2494.8,
-          "cancel_transaction_id": null,
-          "date": "2025-05-01",
-          "fees": 0,
-          "investment_transaction_id": "07AXzmD10jfjPgzMBQX8TgDD4kjN8NUvZnL5E",
-          "iso_currency_code": "USD",
-          "name": "BOT 20 ABNB @ 124.74",
-          "price": 124.74,
-          "quantity": 20,
-          "security_id": "AyvPNVPQ75Say8OJmwpjUOXJP6JdVph6PEbqg",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 1447.5036,
-          "cancel_transaction_id": null,
-          "date": "2025-05-01",
-          "fees": 0,
-          "investment_transaction_id": "jNbOxgokEKhk74ozRyQ0TKqqZAdnenUjgP4YX",
-          "iso_currency_code": "USD",
-          "name": "BOT 12 RDDT @ 120.6253",
-          "price": 120.6253,
-          "quantity": 12,
-          "security_id": "vLRMV3MvY1Fq4K3A1Eb7CJD5QN5rw9F7jRj96",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 63.8,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "rzJbDQ48MasNqpV9dbY4UxaaorRA6AIwq4yAY",
-          "iso_currency_code": "USD",
-          "name": "BOT 11 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 11,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 110.2,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "4LrXOvB3axSYjPy0m5pOiwRRJKdDxDInP5YEd",
-          "iso_currency_code": "USD",
-          "name": "BOT 19 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 19,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 58,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "aeJOK4mLE6IrN8vna10XHwAAn9eypyI1Jkd4Y",
-          "iso_currency_code": "USD",
-          "name": "BOT 10 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 10,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 75.4,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "xz1bydw7MDsdAR5aberLCNggnKjdDdtKw0Dop",
-          "iso_currency_code": "USD",
-          "name": "BOT 13 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 13,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 87,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "JompknJv0McjKMrbB1mkTMJJR8we3eh7JZOkB",
-          "iso_currency_code": "USD",
-          "name": "BOT 15 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 15,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 14923.4,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "8qweo4kAZLUq7avpKdr1SjeeRO9gdgIvbeLZX",
-          "iso_currency_code": "USD",
-          "name": "BOT 2573 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 2573,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 1003.4,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "ZN0ODKRnEgh9k8deYAVrSyYYzVZEbETkYBAvY",
-          "iso_currency_code": "USD",
-          "name": "BOT 173 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 173,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 1583.4,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "5D4Xo03ymdim67QEpNXKi4YYg7o1k1I4jPXVM",
-          "iso_currency_code": "USD",
-          "name": "BOT 273 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 273,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 57025.6,
-          "cancel_transaction_id": null,
-          "date": "2025-01-23",
-          "fees": 0,
-          "investment_transaction_id": "ozJNwM4OYjsNDpQ4L8ryUdww3aqjYjtbmexO1",
-          "iso_currency_code": "USD",
-          "name": "BOT 9832 UUUU @ 5.8",
-          "price": 5.8,
-          "quantity": 9832,
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 12.08,
-          "cancel_transaction_id": null,
-          "date": "2024-11-26",
-          "fees": 0,
-          "investment_transaction_id": "bNnpka8DQLhBxpwQPb0rsEyyjgaXJXcDEyb9M",
-          "iso_currency_code": "USD",
-          "name": "BOT 1 RIVN @ 12.08",
-          "price": 12.08,
-          "quantity": 1,
-          "security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 19992.4,
-          "cancel_transaction_id": null,
-          "date": "2024-11-26",
-          "fees": 0,
-          "investment_transaction_id": "gNJOr583EBhPoONjkDQyTaAA93MN8NUKew7Ap",
-          "iso_currency_code": "USD",
-          "name": "BOT 1655 RIVN @ 12.08",
-          "price": 12.08,
-          "quantity": 1655,
-          "security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -2694.66585,
-          "cancel_transaction_id": null,
-          "date": "2024-11-22",
-          "fees": 0.08415,
-          "investment_transaction_id": "7PdXQrKk86uAZbvPoa8Duy446aJn1nT5VMPYP",
-          "iso_currency_code": "USD",
-          "name": "SOLD 25 ESTC @ 107.79",
-          "price": 107.79,
-          "quantity": -25,
-          "security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
-          "subtype": "sell",
-          "type": "sell",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -1508.449076,
-          "cancel_transaction_id": null,
-          "date": "2024-11-22",
-          "fees": 0.052324,
-          "investment_transaction_id": "9B6XoaAv5DcrQwRn4x7KHY77PLRozocxej7yb",
-          "iso_currency_code": "USD",
-          "name": "SOLD 14 ESTC @ 107.7501",
-          "price": 107.7501,
-          "quantity": -14,
-          "security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
-          "subtype": "sell",
-          "type": "sell",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -10774.6934,
-          "cancel_transaction_id": null,
-          "date": "2024-11-22",
-          "fees": 0.3166,
-          "investment_transaction_id": "07AXzmD10jfjPgzMBQX8TgDD4kjN8NUvZnLJb",
-          "iso_currency_code": "USD",
-          "name": "SOLD 100 ESTC @ 107.7501",
-          "price": 107.7501,
-          "quantity": -100,
-          "security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
-          "subtype": "sell",
-          "type": "sell",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 12965.5864,
-          "cancel_transaction_id": null,
-          "date": "2024-11-21",
-          "fees": 0,
-          "investment_transaction_id": "jNbOxgokEKhk74ozRyQ0TKqqZAdnenUjgP439",
-          "iso_currency_code": "USD",
-          "name": "BOT 139 ESTC @ 93.2776",
-          "price": 93.2776,
-          "quantity": 139,
-          "security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -50000,
-          "cancel_transaction_id": null,
-          "date": "2024-11-20",
-          "fees": 0,
-          "investment_transaction_id": "XNAp638nEghVyp8R4KN0UBOOK0zwdwfaA1p6P",
-          "iso_currency_code": "USD",
-          "name": "ACH DEPOSIT  REFID:122336335906;",
-          "price": 0,
-          "quantity": 0,
-          "security_id": null,
-          "subtype": "transfer",
-          "type": "transfer",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.03,
-          "cancel_transaction_id": null,
-          "date": "2024-10-31",
-          "fees": 0,
-          "investment_transaction_id": "QNPpa6JX8ghZLgBPonErsvee7z5rOrI4YBnJ4",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 10/01-10/31)",
-          "price": 0,
-          "quantity": -0.03,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.02,
-          "cancel_transaction_id": null,
-          "date": "2024-09-30",
-          "fees": 0,
-          "investment_transaction_id": "nzbNdO4jn0s0Lpbzv7QVso5530Z6O6HpRPy70",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 09/01-09/30)",
-          "price": 0,
-          "quantity": -0.02,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.03,
-          "cancel_transaction_id": null,
-          "date": "2024-08-30",
-          "fees": 0,
-          "investment_transaction_id": "pzJb6E48MrsL1pEqxb7RtPppNKoaVaf4EMVa7",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 08/01-08/31)",
-          "price": 0,
-          "quantity": -0.03,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.02,
-          "cancel_transaction_id": null,
-          "date": "2024-07-31",
-          "fees": 0,
-          "investment_transaction_id": "ONDprdOnxEhJwe5ME698IPnnoVK5x5fgdBk4o",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 07/01-07/31)",
-          "price": 0,
-          "quantity": -0.02,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.02,
-          "cancel_transaction_id": null,
-          "date": "2024-06-28",
-          "fees": 0,
-          "investment_transaction_id": "M76p0NJn4gfaYg568dezs3ddxMQDVDspZn1PM",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 06/01-06/30)",
-          "price": 0,
-          "quantity": -0.02,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -2,
-          "cancel_transaction_id": null,
-          "date": "2024-06-26",
-          "fees": 0,
-          "investment_transaction_id": "ExvpqObmyjuKvyNEa3nocRbbyKBmxmUnm0YEQ",
-          "iso_currency_code": "USD",
-          "name": "META PLATFORMS INC CL A REC 06/26/24 PAY 06/26/24 RATE 0.00000000 QTY 0.00000000",
-          "price": 0,
-          "quantity": 0,
-          "security_id": "vLRMV3MvY1FqZZ5XLd0LHJD5QN5rw9F77vKJg",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 3133.5,
-          "cancel_transaction_id": null,
-          "date": "2024-06-20",
-          "fees": 0,
-          "investment_transaction_id": "rzJbDQ48MasNqpV9dbY4UxaaorRA6AIwq4ybX",
-          "iso_currency_code": "USD",
-          "name": "BOT 300 RIVN @ 10.445",
-          "price": 10.445,
-          "quantity": 300,
-          "security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -2289.066642,
-          "cancel_transaction_id": null,
-          "date": "2024-06-20",
-          "fees": 0.072158,
-          "investment_transaction_id": "4LrXOvB3axSYjPy0m5pOiwRRJKdDxDInP5Yqp",
-          "iso_currency_code": "USD",
-          "name": "SOLD 13 GOOGL @ 176.0876",
-          "price": 176.0876,
-          "quantity": -13,
-          "security_id": "oJ9Y46YmgRFjzKRvz0e9CXDdmndVkgCa3ZkPo",
-          "subtype": "sell",
-          "type": "sell",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -479.017906,
-          "cancel_transaction_id": null,
-          "date": "2024-06-20",
-          "fees": 0.021494,
-          "investment_transaction_id": "aeJOK4mLE6IrN8vna10XHwAAn9eypyI1Jkd4B",
-          "iso_currency_code": "USD",
-          "name": "SOLD 9 TWLO @ 53.2266",
-          "price": 53.2266,
-          "quantity": -9,
-          "security_id": "3mg4qV4JZycjeEaj4ZejSbEgn8gLKkUeMBQXX",
-          "subtype": "sell",
-          "type": "sell",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -1245.483336,
-          "cancel_transaction_id": null,
-          "date": "2024-06-20",
-          "fees": 0.040664,
-          "investment_transaction_id": "xz1bydw7MDsdAR5aberLCNggnKjdDdtKw0Dox",
-          "iso_currency_code": "USD",
-          "name": "SOLD 4 LULU @ 311.381",
-          "price": 311.381,
-          "quantity": -4,
-          "security_id": "jb8Eo5E6q9tEOPnadxONtJrKpbKao7FV8OMPw",
-          "subtype": "sell",
-          "type": "sell",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -2.6,
-          "cancel_transaction_id": null,
-          "date": "2024-06-17",
-          "fees": 0,
-          "investment_transaction_id": "RNqXxLJnZgh5DgMex1NmTaRRo4A9e9UqxEz19",
-          "iso_currency_code": "USD",
-          "name": "ALPHABET INC CL A REC 06/17/24 PAY 06/17/24 RATE 0.00000000 QTY 0.00000000",
-          "price": 0,
-          "quantity": 0,
-          "security_id": "oJ9Y46YmgRFjzKRvz0e9CXDdmndVkgCa3ZkPo",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.02,
-          "cancel_transaction_id": null,
-          "date": "2024-05-31",
-          "fees": 0,
-          "investment_transaction_id": "7PdXQrKk86uAZbvPoa8Duy446aJn1nT5VMPYo",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 05/01-05/31)",
-          "price": 0,
-          "quantity": -0.02,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.07,
-          "cancel_transaction_id": null,
-          "date": "2024-04-30",
-          "fees": 0,
-          "investment_transaction_id": "9B6XoaAv5DcrQwRn4x7KHY77PLRozocxej7yL",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 04/01-04/30)",
-          "price": 0,
-          "quantity": -0.07,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 1446.14,
-          "cancel_transaction_id": null,
-          "date": "2024-04-22",
-          "fees": 0,
-          "investment_transaction_id": "JompknJv0McjKMrbB1mkTMJJR8we3eh7JZOk4",
-          "iso_currency_code": "USD",
-          "name": "BOT 4 LULU @ 361.535",
-          "price": 361.535,
-          "quantity": 4,
-          "security_id": "jb8Eo5E6q9tEOPnadxONtJrKpbKao7FV8OMPw",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 940.72,
-          "cancel_transaction_id": null,
-          "date": "2024-04-22",
-          "fees": 0,
-          "investment_transaction_id": "8qweo4kAZLUq7avpKdr1SjeeRO9gdgIvbeLZq",
-          "iso_currency_code": "USD",
-          "name": "BOT 16 TWLO @ 58.795",
-          "price": 58.795,
-          "quantity": 16,
-          "security_id": "3mg4qV4JZycjeEaj4ZejSbEgn8gLKkUeMBQXX",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 2037.1,
-          "cancel_transaction_id": null,
-          "date": "2024-04-22",
-          "fees": 0,
-          "investment_transaction_id": "ZN0ODKRnEgh9k8deYAVrSyYYzVZEbETkYBAvD",
-          "iso_currency_code": "USD",
-          "name": "BOT 13 GOOGL @ 156.7",
-          "price": 156.7,
-          "quantity": 13,
-          "security_id": "oJ9Y46YmgRFjzKRvz0e9CXDdmndVkgCa3ZkPo",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 1493.115,
-          "cancel_transaction_id": null,
-          "date": "2024-04-22",
-          "fees": 0,
-          "investment_transaction_id": "5D4Xo03ymdim67QEpNXKi4YYg7o1k1I4jPXVo",
-          "iso_currency_code": "USD",
-          "name": "BOT 169 RIVN @ 8.835",
-          "price": 8.835,
-          "quantity": 169,
-          "security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": 1933.22,
-          "cancel_transaction_id": null,
-          "date": "2024-04-22",
-          "fees": 0,
-          "investment_transaction_id": "ozJNwM4OYjsNDpQ4L8ryUdww3aqjYjtbmexOe",
-          "iso_currency_code": "USD",
-          "name": "BOT 4 META @ 483.305",
-          "price": 483.305,
-          "quantity": 4,
-          "security_id": "vLRMV3MvY1FqZZ5XLd0LHJD5QN5rw9F77vKJg",
-          "subtype": "buy",
-          "type": "buy",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.08,
-          "cancel_transaction_id": null,
-          "date": "2024-03-28",
-          "fees": 0,
-          "investment_transaction_id": "VNKpmqQnEgh7BzXnV3NMs0KKqXaO4OCj1AqkQ",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 03/01-03/31)",
-          "price": 0,
-          "quantity": -0.08,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -0.07,
-          "cancel_transaction_id": null,
-          "date": "2024-02-29",
-          "fees": 0,
-          "investment_transaction_id": "bNnpka8DQLhBxpwQPb0rsEyyjgaXJXcDEyb9B",
-          "iso_currency_code": "USD",
-          "name": "MORGAN STANLEY PRIVATE BANK NA (Period 02/06-02/29)",
-          "price": 0,
-          "quantity": -0.07,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "subtype": "deposit",
-          "type": "cash",
-          "unofficial_currency_code": null
-        },
-        {
-          "account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-          "amount": -10000,
-          "cancel_transaction_id": null,
-          "date": "2024-02-05",
-          "fees": 0,
-          "investment_transaction_id": "gNJOr583EBhPoONjkDQyTaAA93MN8NUKew7Ar",
-          "iso_currency_code": "USD",
-          "name": "ACH DEPOSIT  REFID:99418876906;",
-          "price": 0,
-          "quantity": 0,
-          "security_id": null,
-          "subtype": "transfer",
-          "type": "transfer",
-          "unofficial_currency_code": null
-        }
-      ],
-      "item": {
-        "available_products": [],
-        "billed_products": [
-          "investments"
-        ],
-        "consent_expiration_time": null,
-        "consented_products": [
-          "investments"
-        ],
-        "error": null,
-        "institution_id": "ins_129473",
-        "institution_name": "E*TRADE Financial",
-        "item_id": "kmZOJ7bAEkIpzEb9BxVRHOABEvMyNVcR3KR8v",
-        "products": [
-          "investments"
-        ],
-        "update_type": "background",
-        "webhook": "http://localhost:8000/core/plaid/webhook"
-      },
-      "request_id": "2cQYsriaL63NOOU",
-      "securities": [
-        {
-          "close_price": 131,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Packaged Software",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNYS",
-          "name": "Twilio Inc - Ordinary Shares Class A",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Technology Services",
-          "security_id": "3mg4qV4JZycjeEaj4ZejSbEgn8gLKkUeMBQXX",
-          "sedol": "BD6P5Q0",
-          "ticker_symbol": "TWLO",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 139.34,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Hotels or Resorts or Cruise Lines",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNAS",
-          "name": "Airbnb Inc - Ordinary Shares - Class A",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Consumer Services",
-          "security_id": "AyvPNVPQ75Say8OJmwpjUOXJP6JdVph6PEbqg",
-          "sedol": null,
-          "ticker_symbol": "ABNB",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 127.07,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Information Technology Services",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNAS",
-          "name": "Shopify Inc - Ordinary Shares - Class A",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Technology Services",
-          "security_id": "DAE3Yo3wXgskjJLjJDZkIr6Z7OZjoJfoQ3zLq",
-          "sedol": "BXDZ9Z0",
-          "ticker_symbol": "SHOP",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 185.94,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Internet Software or Services",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNAS",
-          "name": "Alphabet Inc - Ordinary Shares - Class C",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Technology Services",
-          "security_id": "EvByboy6Z7I4LvOb8rzzHQ5R4YRjPMf5M4Nkk",
-          "sedol": null,
-          "ticker_symbol": "GOOG",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 9.36,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Other Metals or Minerals",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XPHL",
-          "name": "Energy Fuels Inc.",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Non-Energy Minerals",
-          "security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
-          "sedol": null,
-          "ticker_symbol": "UUUU",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 156.99,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Semiconductors",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNAS",
-          "name": "Advanced Micro Devices Inc.",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Electronic Technology",
-          "security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
-          "sedol": "2007849",
-          "ticker_symbol": "AMD",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 86.79,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Packaged Software",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNYS",
-          "name": "Elastic N.V",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Technology Services",
-          "security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
-          "sedol": null,
-          "ticker_symbol": "ESTC",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 229.77,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Apparel or Footwear",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNAS",
-          "name": "Lululemon Athletica Inc.",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Consumer Non-Durables",
-          "security_id": "jb8Eo5E6q9tEOPnadxONtJrKpbKao7FV8OMPw",
-          "sedol": "B23FN39",
-          "ticker_symbol": "LULU",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": null,
-          "close_price_as_of": null,
-          "cusip": null,
-          "fixed_income": null,
-          "industry": null,
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": null,
-          "name": "Mspbna",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": null,
-          "security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
-          "sedol": null,
-          "ticker_symbol": "MSPBNA",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 185.06,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Internet Software or Services",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNAS",
-          "name": "Alphabet Inc - Ordinary Shares - Class A",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Technology Services",
-          "security_id": "oJ9Y46YmgRFjzKRvz0e9CXDdmndVkgCa3ZkPo",
-          "sedol": "BYVY8G0",
-          "ticker_symbol": "GOOGL",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 148.24,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Internet Software or Services",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNYS",
-          "name": "Reddit Inc. - Ordinary Shares - Class A",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Technology Services",
-          "security_id": "vLRMV3MvY1Fq4K3A1Eb7CJD5QN5rw9F7jRj96",
-          "sedol": null,
-          "ticker_symbol": "RDDT",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 704.28,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Internet Software or Services",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNAS",
-          "name": "Meta Platforms Inc - Ordinary Shares - Class A",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Technology Services",
-          "security_id": "vLRMV3MvY1FqZZ5XLd0LHJD5QN5rw9F77vKJg",
-          "sedol": null,
-          "ticker_symbol": "META",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        },
-        {
-          "close_price": 13.7,
-          "close_price_as_of": "2025-07-18",
-          "cusip": null,
-          "fixed_income": null,
-          "industry": "Motor Vehicles",
-          "institution_id": null,
-          "institution_security_id": null,
-          "is_cash_equivalent": false,
-          "isin": null,
-          "iso_currency_code": "USD",
-          "market_identifier_code": "XNAS",
-          "name": "Rivian Automotive Inc - Ordinary Shares - Class A",
-          "option_contract": null,
-          "proxy_security_id": null,
-          "sector": "Consumer Durables",
-          "security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
-          "sedol": null,
-          "ticker_symbol": "RIVN",
-          "type": "equity",
-          "unofficial_currency_code": null,
-          "update_datetime": null
-        }
-      ],
-      "total_investment_transactions": 51
-    },
-    "accounts": [
-      {
-        "id": "5e569de1-a954-4ae5-8c43-d50ba0f30990",
-        "createdAt": "2025-07-20T21:27:22.388Z",
-        "updatedAt": "2025-07-20T21:29:25.714Z",
-        "provider": "PLAID",
-        "authConnectionId": "b7a0bf59-f10c-498c-ad01-5fa8d0f2e58c",
-        "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-        "name": "Individual Brokerage -4314",
-        "plaidAccountMask": "4314",
-        "key": null,
-        "createdById": "user_2jFwy6JTTb43hqvtE5pxG2aywe7",
-        "description": null,
-        "institution": "BROKERAGE",
-        "type": "investment",
-        "subType": "brokerage",
-        "mode": null,
-        "status": "ACTIVE",
-        "portfolioId": "154ae9bc-6b53-4b07-b4ca-3f8217408bac",
-        "closedDate": null,
-        "optionLevel": null,
-        "lotSeededDate": "2025-07-18T18:29:00.000Z",
-        "uploadedPositions": true,
-        "setRealizedValues": false,
-        "skipSetup": false,
-        "liveURL": null,
-        "liveURLCreated": null,
-        "cashForOpenOrders": null,
-        "balanceMoneyMarket": "116337.55",
-        "accountValueTotal": "200872.36",
-        "marketValueTotal": null,
-        "cashAvailableForInvestment": "116337.55",
-        "cashNet": null,
-        "cashBalance": null,
-        "cashSettledForInvestment": null,
-        "cashUnsettledForInvestment": null,
-        "cashBuyingPower": null,
-        "fundsWithheldFromPurchasingPower": null,
-        "fundsWithheldFromWithdrawal": null,
-        "marginBuyingPower": null,
-        "marginBuyingPowerDT": null,
-        "balanceShortAdjustment": null,
-        "balanceAccount": null,
-        "equityRegt": null,
-        "equityRegtPercent": null,
-        "cashOpenOrderReserveDT": null,
-        "marginOpenOrderReserveDT": null,
-        "raw": null
-      }
-    ],
-    "portfolioId": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-  },
-  "output": [
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -116268.855446,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "LgwNvXJjrMc46MnwRy8DiyMMje7wkwTBb6wP0",
-      "fee": 2.144554,
-      "memo": "SOLD 12919 UUUU @ 9",
-      "paymentCurrency": "USD",
-      "price": 9,
-      "quantity": -12919,
-      "settlementCurrency": "USD",
-      "subtype": "sell",
-      "transactionDate": "2025-07-18T00:00:00.000Z",
-      "type": "sell"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 2034.18,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "SHOP"
-        }
-      },
-      "externalId": "DaApPVYB30sy8Vxq459ZiZMMybD585tRx71qw",
-      "fee": 0,
-      "memo": "BOT 18 SHOP @ 113.01",
-      "paymentCurrency": "USD",
-      "price": 113.01,
-      "quantity": 18,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-07-08T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 2209.4805,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "RDDT"
-        }
-      },
-      "externalId": "1dvXoK1PjrTXx7yM89OoH0VVNOPakaCgzdKqY",
-      "fee": 0,
-      "memo": "BOT 15 RDDT @ 147.2987",
-      "paymentCurrency": "USD",
-      "price": 147.2987,
-      "quantity": 15,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-07-08T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 4900,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "GOOG"
-        }
-      },
-      "externalId": "PN1p4wbnJgh86JXQpLN4FPDD41B7o7fA0Yk7A",
-      "fee": 0,
-      "memo": "BOT 28 GOOG @ 175",
-      "paymentCurrency": "USD",
-      "price": 175,
-      "quantity": 28,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-07-08T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 1953.81,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "AMD"
-        }
-      },
-      "externalId": "qzJbLRx8M4sLPJRYxbrgtw77dKyN1NIEmyXrB",
-      "fee": 0,
-      "memo": "BOT 17 AMD @ 114.93",
-      "paymentCurrency": "USD",
-      "price": 114.93,
-      "quantity": 17,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-27T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 6965.3133,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "RDDT"
-        }
-      },
-      "externalId": "BrKXD7VPqASBPbv9Y1XpsvwwpD0PMPI7Peoj8",
-      "fee": 0,
-      "memo": "BOT 67 RDDT @ 103.9599",
-      "paymentCurrency": "USD",
-      "price": 103.9599,
-      "quantity": 67,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-27T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 3214.3692,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "AMD"
-        }
-      },
-      "externalId": "36mXoAqB4auoOvnzM1XVsgjjvreJpJUA3m800",
-      "fee": 0,
-      "memo": "BOT 28 AMD @ 114.7989",
-      "paymentCurrency": "USD",
-      "price": 114.7989,
-      "quantity": 28,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-19T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 9715.72,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "AMD"
-        }
-      },
-      "externalId": "yzPbKw68M1swv7n6kbzDTEDDjg8w6wcgej6oa",
-      "fee": 0,
-      "memo": "BOT 98 AMD @ 99.14",
-      "paymentCurrency": "USD",
-      "price": 99.14,
-      "quantity": 98,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-07T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 198.28,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "AMD"
-        }
-      },
-      "externalId": "KbdYApm0jgsrjJAd0m8ZHErryMReqecmaxkvA",
-      "fee": 0,
-      "memo": "BOT 2 AMD @ 99.14",
-      "paymentCurrency": "USD",
-      "price": 99.14,
-      "quantity": 2,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-07T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -12477.6334,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "ABNB"
-        }
-      },
-      "externalId": "kmZOJ7bAEkIpzEb9BxVRHOjjD3vVzVhvzVgDj",
-      "fee": 0.3666,
-      "memo": "SOLD 100 ABNB @ 124.78",
-      "paymentCurrency": "USD",
-      "price": 124.78,
-      "quantity": -100,
-      "settlementCurrency": "USD",
-      "subtype": "sell",
-      "transactionDate": "2025-05-01T00:00:00.000Z",
-      "type": "sell"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 2923.218,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "AMD"
-        }
-      },
-      "externalId": "AjyXLgN1PkhqYbnkBKAZSJzzA4b1D1Hnr1oBO",
-      "fee": 0,
-      "memo": "BOT 30 AMD @ 97.4406",
-      "paymentCurrency": "USD",
-      "price": 97.4406,
-      "quantity": 30,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-01T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 12473.96,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "ABNB"
-        }
-      },
-      "externalId": "vzLbBNV8M6szKXB7LbVNI566zRgyjyI0x1R7D",
-      "fee": 0,
-      "memo": "BOT 100 ABNB @ 124.7396",
-      "paymentCurrency": "USD",
-      "price": 124.7396,
-      "quantity": 100,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-01T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 2494.8,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "ABNB"
-        }
-      },
-      "externalId": "07AXzmD10jfjPgzMBQX8TgDD4kjN8NUvZnL5E",
-      "fee": 0,
-      "memo": "BOT 20 ABNB @ 124.74",
-      "paymentCurrency": "USD",
-      "price": 124.74,
-      "quantity": 20,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-01T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 1447.5036,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "RDDT"
-        }
-      },
-      "externalId": "jNbOxgokEKhk74ozRyQ0TKqqZAdnenUjgP4YX",
-      "fee": 0,
-      "memo": "BOT 12 RDDT @ 120.6253",
-      "paymentCurrency": "USD",
-      "price": 120.6253,
-      "quantity": 12,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-05-01T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 63.8,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "rzJbDQ48MasNqpV9dbY4UxaaorRA6AIwq4yAY",
-      "fee": 0,
-      "memo": "BOT 11 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 11,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 110.2,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "4LrXOvB3axSYjPy0m5pOiwRRJKdDxDInP5YEd",
-      "fee": 0,
-      "memo": "BOT 19 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 19,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 58,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "aeJOK4mLE6IrN8vna10XHwAAn9eypyI1Jkd4Y",
-      "fee": 0,
-      "memo": "BOT 10 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 10,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 75.4,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "xz1bydw7MDsdAR5aberLCNggnKjdDdtKw0Dop",
-      "fee": 0,
-      "memo": "BOT 13 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 13,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 87,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "JompknJv0McjKMrbB1mkTMJJR8we3eh7JZOkB",
-      "fee": 0,
-      "memo": "BOT 15 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 15,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 14923.4,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "8qweo4kAZLUq7avpKdr1SjeeRO9gdgIvbeLZX",
-      "fee": 0,
-      "memo": "BOT 2573 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 2573,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 1003.4,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "ZN0ODKRnEgh9k8deYAVrSyYYzVZEbETkYBAvY",
-      "fee": 0,
-      "memo": "BOT 173 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 173,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 1583.4,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "5D4Xo03ymdim67QEpNXKi4YYg7o1k1I4jPXVM",
-      "fee": 0,
-      "memo": "BOT 273 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 273,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 57025.6,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UUUU"
-        }
-      },
-      "externalId": "ozJNwM4OYjsNDpQ4L8ryUdww3aqjYjtbmexO1",
-      "fee": 0,
-      "memo": "BOT 9832 UUUU @ 5.8",
-      "paymentCurrency": "USD",
-      "price": 5.8,
-      "quantity": 9832,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2025-01-23T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 12.08,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "RIVN"
-        }
-      },
-      "externalId": "bNnpka8DQLhBxpwQPb0rsEyyjgaXJXcDEyb9M",
-      "fee": 0,
-      "memo": "BOT 1 RIVN @ 12.08",
-      "paymentCurrency": "USD",
-      "price": 12.08,
-      "quantity": 1,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-11-26T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 19992.4,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "RIVN"
-        }
-      },
-      "externalId": "gNJOr583EBhPoONjkDQyTaAA93MN8NUKew7Ap",
-      "fee": 0,
-      "memo": "BOT 1655 RIVN @ 12.08",
-      "paymentCurrency": "USD",
-      "price": 12.08,
-      "quantity": 1655,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-11-26T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -2694.66585,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "ESTC"
-        }
-      },
-      "externalId": "7PdXQrKk86uAZbvPoa8Duy446aJn1nT5VMPYP",
-      "fee": 0.08415,
-      "memo": "SOLD 25 ESTC @ 107.79",
-      "paymentCurrency": "USD",
-      "price": 107.79,
-      "quantity": -25,
-      "settlementCurrency": "USD",
-      "subtype": "sell",
-      "transactionDate": "2024-11-22T00:00:00.000Z",
-      "type": "sell"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -1508.449076,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "ESTC"
-        }
-      },
-      "externalId": "9B6XoaAv5DcrQwRn4x7KHY77PLRozocxej7yb",
-      "fee": 0.052324,
-      "memo": "SOLD 14 ESTC @ 107.7501",
-      "paymentCurrency": "USD",
-      "price": 107.7501,
-      "quantity": -14,
-      "settlementCurrency": "USD",
-      "subtype": "sell",
-      "transactionDate": "2024-11-22T00:00:00.000Z",
-      "type": "sell"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -10774.6934,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "ESTC"
-        }
-      },
-      "externalId": "07AXzmD10jfjPgzMBQX8TgDD4kjN8NUvZnLJb",
-      "fee": 0.3166,
-      "memo": "SOLD 100 ESTC @ 107.7501",
-      "paymentCurrency": "USD",
-      "price": 107.7501,
-      "quantity": -100,
-      "settlementCurrency": "USD",
-      "subtype": "sell",
-      "transactionDate": "2024-11-22T00:00:00.000Z",
-      "type": "sell"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 12965.5864,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "ESTC"
-        }
-      },
-      "externalId": "jNbOxgokEKhk74ozRyQ0TKqqZAdnenUjgP439",
-      "fee": 0,
-      "memo": "BOT 139 ESTC @ 93.2776",
-      "paymentCurrency": "USD",
-      "price": 93.2776,
-      "quantity": 139,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-11-21T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -50000,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UNKNOWN"
-        }
-      },
-      "externalId": "XNAp638nEghVyp8R4KN0UBOOK0zwdwfaA1p6P",
-      "fee": 0,
-      "memo": "ACH DEPOSIT  REFID:122336335906;",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": 0,
-      "settlementCurrency": "USD",
-      "subtype": "transfer",
-      "transactionDate": "2024-11-20T00:00:00.000Z",
-      "type": "transfer"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.03,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "QNPpa6JX8ghZLgBPonErsvee7z5rOrI4YBnJ4",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 10/01-10/31)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.03,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-10-31T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.02,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "nzbNdO4jn0s0Lpbzv7QVso5530Z6O6HpRPy70",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 09/01-09/30)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.02,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-09-30T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.03,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "pzJb6E48MrsL1pEqxb7RtPppNKoaVaf4EMVa7",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 08/01-08/31)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.03,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-08-30T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.02,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "ONDprdOnxEhJwe5ME698IPnnoVK5x5fgdBk4o",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 07/01-07/31)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.02,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-07-31T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.02,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "M76p0NJn4gfaYg568dezs3ddxMQDVDspZn1PM",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 06/01-06/30)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.02,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-06-28T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -2,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "META"
-        }
-      },
-      "externalId": "ExvpqObmyjuKvyNEa3nocRbbyKBmxmUnm0YEQ",
-      "fee": 0,
-      "memo": "META PLATFORMS INC CL A REC 06/26/24 PAY 06/26/24 RATE 0.00000000 QTY 0.00000000",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": 0,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-06-26T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 3133.5,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "RIVN"
-        }
-      },
-      "externalId": "rzJbDQ48MasNqpV9dbY4UxaaorRA6AIwq4ybX",
-      "fee": 0,
-      "memo": "BOT 300 RIVN @ 10.445",
-      "paymentCurrency": "USD",
-      "price": 10.445,
-      "quantity": 300,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-06-20T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -2289.066642,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "GOOGL"
-        }
-      },
-      "externalId": "4LrXOvB3axSYjPy0m5pOiwRRJKdDxDInP5Yqp",
-      "fee": 0.072158,
-      "memo": "SOLD 13 GOOGL @ 176.0876",
-      "paymentCurrency": "USD",
-      "price": 176.0876,
-      "quantity": -13,
-      "settlementCurrency": "USD",
-      "subtype": "sell",
-      "transactionDate": "2024-06-20T00:00:00.000Z",
-      "type": "sell"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -479.017906,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "TWLO"
-        }
-      },
-      "externalId": "aeJOK4mLE6IrN8vna10XHwAAn9eypyI1Jkd4B",
-      "fee": 0.021494,
-      "memo": "SOLD 9 TWLO @ 53.2266",
-      "paymentCurrency": "USD",
-      "price": 53.2266,
-      "quantity": -9,
-      "settlementCurrency": "USD",
-      "subtype": "sell",
-      "transactionDate": "2024-06-20T00:00:00.000Z",
-      "type": "sell"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -1245.483336,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "LULU"
-        }
-      },
-      "externalId": "xz1bydw7MDsdAR5aberLCNggnKjdDdtKw0Dox",
-      "fee": 0.040664,
-      "memo": "SOLD 4 LULU @ 311.381",
-      "paymentCurrency": "USD",
-      "price": 311.381,
-      "quantity": -4,
-      "settlementCurrency": "USD",
-      "subtype": "sell",
-      "transactionDate": "2024-06-20T00:00:00.000Z",
-      "type": "sell"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -2.6,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "GOOGL"
-        }
-      },
-      "externalId": "RNqXxLJnZgh5DgMex1NmTaRRo4A9e9UqxEz19",
-      "fee": 0,
-      "memo": "ALPHABET INC CL A REC 06/17/24 PAY 06/17/24 RATE 0.00000000 QTY 0.00000000",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": 0,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-06-17T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.02,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "7PdXQrKk86uAZbvPoa8Duy446aJn1nT5VMPYo",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 05/01-05/31)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.02,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-05-31T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.07,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "9B6XoaAv5DcrQwRn4x7KHY77PLRozocxej7yL",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 04/01-04/30)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.07,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-04-30T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 1446.14,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "LULU"
-        }
-      },
-      "externalId": "JompknJv0McjKMrbB1mkTMJJR8we3eh7JZOk4",
-      "fee": 0,
-      "memo": "BOT 4 LULU @ 361.535",
-      "paymentCurrency": "USD",
-      "price": 361.535,
-      "quantity": 4,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-04-22T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 940.72,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "TWLO"
-        }
-      },
-      "externalId": "8qweo4kAZLUq7avpKdr1SjeeRO9gdgIvbeLZq",
-      "fee": 0,
-      "memo": "BOT 16 TWLO @ 58.795",
-      "paymentCurrency": "USD",
-      "price": 58.795,
-      "quantity": 16,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-04-22T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 2037.1,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "GOOGL"
-        }
-      },
-      "externalId": "ZN0ODKRnEgh9k8deYAVrSyYYzVZEbETkYBAvD",
-      "fee": 0,
-      "memo": "BOT 13 GOOGL @ 156.7",
-      "paymentCurrency": "USD",
-      "price": 156.7,
-      "quantity": 13,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-04-22T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 1493.115,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "RIVN"
-        }
-      },
-      "externalId": "5D4Xo03ymdim67QEpNXKi4YYg7o1k1I4jPXVo",
-      "fee": 0,
-      "memo": "BOT 169 RIVN @ 8.835",
-      "paymentCurrency": "USD",
-      "price": 8.835,
-      "quantity": 169,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-04-22T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": 1933.22,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "META"
-        }
-      },
-      "externalId": "ozJNwM4OYjsNDpQ4L8ryUdww3aqjYjtbmexOe",
-      "fee": 0,
-      "memo": "BOT 4 META @ 483.305",
-      "paymentCurrency": "USD",
-      "price": 483.305,
-      "quantity": 4,
-      "settlementCurrency": "USD",
-      "subtype": "buy",
-      "transactionDate": "2024-04-22T00:00:00.000Z",
-      "type": "buy"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.08,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "VNKpmqQnEgh7BzXnV3NMs0KKqXaO4OCj1AqkQ",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 03/01-03/31)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.08,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-03-28T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -0.07,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "MSPBNA"
-        }
-      },
-      "externalId": "bNnpka8DQLhBxpwQPb0rsEyyjgaXJXcDEyb9B",
-      "fee": 0,
-      "memo": "MORGAN STANLEY PRIVATE BANK NA (Period 02/06-02/29)",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": -0.07,
-      "settlementCurrency": "USD",
-      "subtype": "deposit",
-      "transactionDate": "2024-02-29T00:00:00.000Z",
-      "type": "cash"
-    },
-    {
-      "account": {
-        "connect": {
-          "provider_externalId": {
-            "externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
-            "provider": "PLAID"
-          }
-        }
-      },
-      "portfolio": {
-        "connect": {
-          "id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
-        }
-      },
-      "amount": -10000,
-      "appliedToLots": true,
-      "asset": {
-        "connect": {
-          "symbol": "UNKNOWN"
-        }
-      },
-      "externalId": "gNJOr583EBhPoONjkDQyTaAA93MN8NUKew7Ar",
-      "fee": 0,
-      "memo": "ACH DEPOSIT  REFID:99418876906;",
-      "paymentCurrency": "USD",
-      "price": 0,
-      "quantity": 0,
-      "settlementCurrency": "USD",
-      "subtype": "transfer",
-      "transactionDate": "2024-02-05T00:00:00.000Z",
-      "type": "transfer"
-    }
-  ]
+	"input": {
+		"investmentsTransactionsGetResponse": {
+			"accounts": [
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"balances": {
+						"available": 116337.55,
+						"current": 200872.36,
+						"iso_currency_code": "USD",
+						"limit": null,
+						"unofficial_currency_code": null
+					},
+					"mask": "4314",
+					"name": "Individual Brokerage -4314",
+					"official_name": null,
+					"subtype": "brokerage",
+					"type": "investment"
+				}
+			],
+			"investment_transactions": [
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -116268.855446,
+					"cancel_transaction_id": null,
+					"date": "2025-07-18",
+					"fees": 2.144554,
+					"investment_transaction_id": "LgwNvXJjrMc46MnwRy8DiyMMje7wkwTBb6wP0",
+					"iso_currency_code": "USD",
+					"name": "SOLD 12919 UUUU @ 9",
+					"price": 9,
+					"quantity": -12919,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "sell",
+					"type": "sell",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 2034.18,
+					"cancel_transaction_id": null,
+					"date": "2025-07-08",
+					"fees": 0,
+					"investment_transaction_id": "DaApPVYB30sy8Vxq459ZiZMMybD585tRx71qw",
+					"iso_currency_code": "USD",
+					"name": "BOT 18 SHOP @ 113.01",
+					"price": 113.01,
+					"quantity": 18,
+					"security_id": "DAE3Yo3wXgskjJLjJDZkIr6Z7OZjoJfoQ3zLq",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 2209.4805,
+					"cancel_transaction_id": null,
+					"date": "2025-07-08",
+					"fees": 0,
+					"investment_transaction_id": "1dvXoK1PjrTXx7yM89OoH0VVNOPakaCgzdKqY",
+					"iso_currency_code": "USD",
+					"name": "BOT 15 RDDT @ 147.2987",
+					"price": 147.2987,
+					"quantity": 15,
+					"security_id": "vLRMV3MvY1Fq4K3A1Eb7CJD5QN5rw9F7jRj96",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 4900,
+					"cancel_transaction_id": null,
+					"date": "2025-07-08",
+					"fees": 0,
+					"investment_transaction_id": "PN1p4wbnJgh86JXQpLN4FPDD41B7o7fA0Yk7A",
+					"iso_currency_code": "USD",
+					"name": "BOT 28 GOOG @ 175",
+					"price": 175,
+					"quantity": 28,
+					"security_id": "EvByboy6Z7I4LvOb8rzzHQ5R4YRjPMf5M4Nkk",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 1953.81,
+					"cancel_transaction_id": null,
+					"date": "2025-05-27",
+					"fees": 0,
+					"investment_transaction_id": "qzJbLRx8M4sLPJRYxbrgtw77dKyN1NIEmyXrB",
+					"iso_currency_code": "USD",
+					"name": "BOT 17 AMD @ 114.93",
+					"price": 114.93,
+					"quantity": 17,
+					"security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 6965.3133,
+					"cancel_transaction_id": null,
+					"date": "2025-05-27",
+					"fees": 0,
+					"investment_transaction_id": "BrKXD7VPqASBPbv9Y1XpsvwwpD0PMPI7Peoj8",
+					"iso_currency_code": "USD",
+					"name": "BOT 67 RDDT @ 103.9599",
+					"price": 103.9599,
+					"quantity": 67,
+					"security_id": "vLRMV3MvY1Fq4K3A1Eb7CJD5QN5rw9F7jRj96",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 3214.3692,
+					"cancel_transaction_id": null,
+					"date": "2025-05-19",
+					"fees": 0,
+					"investment_transaction_id": "36mXoAqB4auoOvnzM1XVsgjjvreJpJUA3m800",
+					"iso_currency_code": "USD",
+					"name": "BOT 28 AMD @ 114.7989",
+					"price": 114.7989,
+					"quantity": 28,
+					"security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 9715.72,
+					"cancel_transaction_id": null,
+					"date": "2025-05-07",
+					"fees": 0,
+					"investment_transaction_id": "yzPbKw68M1swv7n6kbzDTEDDjg8w6wcgej6oa",
+					"iso_currency_code": "USD",
+					"name": "BOT 98 AMD @ 99.14",
+					"price": 99.14,
+					"quantity": 98,
+					"security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 198.28,
+					"cancel_transaction_id": null,
+					"date": "2025-05-07",
+					"fees": 0,
+					"investment_transaction_id": "KbdYApm0jgsrjJAd0m8ZHErryMReqecmaxkvA",
+					"iso_currency_code": "USD",
+					"name": "BOT 2 AMD @ 99.14",
+					"price": 99.14,
+					"quantity": 2,
+					"security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -12477.6334,
+					"cancel_transaction_id": null,
+					"date": "2025-05-01",
+					"fees": 0.3666,
+					"investment_transaction_id": "kmZOJ7bAEkIpzEb9BxVRHOjjD3vVzVhvzVgDj",
+					"iso_currency_code": "USD",
+					"name": "SOLD 100 ABNB @ 124.78",
+					"price": 124.78,
+					"quantity": -100,
+					"security_id": "AyvPNVPQ75Say8OJmwpjUOXJP6JdVph6PEbqg",
+					"subtype": "sell",
+					"type": "sell",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 2923.218,
+					"cancel_transaction_id": null,
+					"date": "2025-05-01",
+					"fees": 0,
+					"investment_transaction_id": "AjyXLgN1PkhqYbnkBKAZSJzzA4b1D1Hnr1oBO",
+					"iso_currency_code": "USD",
+					"name": "BOT 30 AMD @ 97.4406",
+					"price": 97.4406,
+					"quantity": 30,
+					"security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 12473.96,
+					"cancel_transaction_id": null,
+					"date": "2025-05-01",
+					"fees": 0,
+					"investment_transaction_id": "vzLbBNV8M6szKXB7LbVNI566zRgyjyI0x1R7D",
+					"iso_currency_code": "USD",
+					"name": "BOT 100 ABNB @ 124.7396",
+					"price": 124.7396,
+					"quantity": 100,
+					"security_id": "AyvPNVPQ75Say8OJmwpjUOXJP6JdVph6PEbqg",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 2494.8,
+					"cancel_transaction_id": null,
+					"date": "2025-05-01",
+					"fees": 0,
+					"investment_transaction_id": "07AXzmD10jfjPgzMBQX8TgDD4kjN8NUvZnL5E",
+					"iso_currency_code": "USD",
+					"name": "BOT 20 ABNB @ 124.74",
+					"price": 124.74,
+					"quantity": 20,
+					"security_id": "AyvPNVPQ75Say8OJmwpjUOXJP6JdVph6PEbqg",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 1447.5036,
+					"cancel_transaction_id": null,
+					"date": "2025-05-01",
+					"fees": 0,
+					"investment_transaction_id": "jNbOxgokEKhk74ozRyQ0TKqqZAdnenUjgP4YX",
+					"iso_currency_code": "USD",
+					"name": "BOT 12 RDDT @ 120.6253",
+					"price": 120.6253,
+					"quantity": 12,
+					"security_id": "vLRMV3MvY1Fq4K3A1Eb7CJD5QN5rw9F7jRj96",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 63.8,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "rzJbDQ48MasNqpV9dbY4UxaaorRA6AIwq4yAY",
+					"iso_currency_code": "USD",
+					"name": "BOT 11 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 11,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 110.2,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "4LrXOvB3axSYjPy0m5pOiwRRJKdDxDInP5YEd",
+					"iso_currency_code": "USD",
+					"name": "BOT 19 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 19,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 58,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "aeJOK4mLE6IrN8vna10XHwAAn9eypyI1Jkd4Y",
+					"iso_currency_code": "USD",
+					"name": "BOT 10 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 10,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 75.4,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "xz1bydw7MDsdAR5aberLCNggnKjdDdtKw0Dop",
+					"iso_currency_code": "USD",
+					"name": "BOT 13 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 13,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 87,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "JompknJv0McjKMrbB1mkTMJJR8we3eh7JZOkB",
+					"iso_currency_code": "USD",
+					"name": "BOT 15 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 15,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 14923.4,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "8qweo4kAZLUq7avpKdr1SjeeRO9gdgIvbeLZX",
+					"iso_currency_code": "USD",
+					"name": "BOT 2573 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 2573,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 1003.4,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "ZN0ODKRnEgh9k8deYAVrSyYYzVZEbETkYBAvY",
+					"iso_currency_code": "USD",
+					"name": "BOT 173 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 173,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 1583.4,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "5D4Xo03ymdim67QEpNXKi4YYg7o1k1I4jPXVM",
+					"iso_currency_code": "USD",
+					"name": "BOT 273 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 273,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 57025.6,
+					"cancel_transaction_id": null,
+					"date": "2025-01-23",
+					"fees": 0,
+					"investment_transaction_id": "ozJNwM4OYjsNDpQ4L8ryUdww3aqjYjtbmexO1",
+					"iso_currency_code": "USD",
+					"name": "BOT 9832 UUUU @ 5.8",
+					"price": 5.8,
+					"quantity": 9832,
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 12.08,
+					"cancel_transaction_id": null,
+					"date": "2024-11-26",
+					"fees": 0,
+					"investment_transaction_id": "bNnpka8DQLhBxpwQPb0rsEyyjgaXJXcDEyb9M",
+					"iso_currency_code": "USD",
+					"name": "BOT 1 RIVN @ 12.08",
+					"price": 12.08,
+					"quantity": 1,
+					"security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 19992.4,
+					"cancel_transaction_id": null,
+					"date": "2024-11-26",
+					"fees": 0,
+					"investment_transaction_id": "gNJOr583EBhPoONjkDQyTaAA93MN8NUKew7Ap",
+					"iso_currency_code": "USD",
+					"name": "BOT 1655 RIVN @ 12.08",
+					"price": 12.08,
+					"quantity": 1655,
+					"security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -2694.66585,
+					"cancel_transaction_id": null,
+					"date": "2024-11-22",
+					"fees": 0.08415,
+					"investment_transaction_id": "7PdXQrKk86uAZbvPoa8Duy446aJn1nT5VMPYP",
+					"iso_currency_code": "USD",
+					"name": "SOLD 25 ESTC @ 107.79",
+					"price": 107.79,
+					"quantity": -25,
+					"security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
+					"subtype": "sell",
+					"type": "sell",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -1508.449076,
+					"cancel_transaction_id": null,
+					"date": "2024-11-22",
+					"fees": 0.052324,
+					"investment_transaction_id": "9B6XoaAv5DcrQwRn4x7KHY77PLRozocxej7yb",
+					"iso_currency_code": "USD",
+					"name": "SOLD 14 ESTC @ 107.7501",
+					"price": 107.7501,
+					"quantity": -14,
+					"security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
+					"subtype": "sell",
+					"type": "sell",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -10774.6934,
+					"cancel_transaction_id": null,
+					"date": "2024-11-22",
+					"fees": 0.3166,
+					"investment_transaction_id": "07AXzmD10jfjPgzMBQX8TgDD4kjN8NUvZnLJb",
+					"iso_currency_code": "USD",
+					"name": "SOLD 100 ESTC @ 107.7501",
+					"price": 107.7501,
+					"quantity": -100,
+					"security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
+					"subtype": "sell",
+					"type": "sell",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 12965.5864,
+					"cancel_transaction_id": null,
+					"date": "2024-11-21",
+					"fees": 0,
+					"investment_transaction_id": "jNbOxgokEKhk74ozRyQ0TKqqZAdnenUjgP439",
+					"iso_currency_code": "USD",
+					"name": "BOT 139 ESTC @ 93.2776",
+					"price": 93.2776,
+					"quantity": 139,
+					"security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -50000,
+					"cancel_transaction_id": null,
+					"date": "2024-11-20",
+					"fees": 0,
+					"investment_transaction_id": "XNAp638nEghVyp8R4KN0UBOOK0zwdwfaA1p6P",
+					"iso_currency_code": "USD",
+					"name": "ACH DEPOSIT  REFID:122336335906;",
+					"price": 0,
+					"quantity": 0,
+					"security_id": null,
+					"subtype": "transfer",
+					"type": "transfer",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.03,
+					"cancel_transaction_id": null,
+					"date": "2024-10-31",
+					"fees": 0,
+					"investment_transaction_id": "QNPpa6JX8ghZLgBPonErsvee7z5rOrI4YBnJ4",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 10/01-10/31)",
+					"price": 0,
+					"quantity": -0.03,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.02,
+					"cancel_transaction_id": null,
+					"date": "2024-09-30",
+					"fees": 0,
+					"investment_transaction_id": "nzbNdO4jn0s0Lpbzv7QVso5530Z6O6HpRPy70",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 09/01-09/30)",
+					"price": 0,
+					"quantity": -0.02,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.03,
+					"cancel_transaction_id": null,
+					"date": "2024-08-30",
+					"fees": 0,
+					"investment_transaction_id": "pzJb6E48MrsL1pEqxb7RtPppNKoaVaf4EMVa7",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 08/01-08/31)",
+					"price": 0,
+					"quantity": -0.03,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.02,
+					"cancel_transaction_id": null,
+					"date": "2024-07-31",
+					"fees": 0,
+					"investment_transaction_id": "ONDprdOnxEhJwe5ME698IPnnoVK5x5fgdBk4o",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 07/01-07/31)",
+					"price": 0,
+					"quantity": -0.02,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.02,
+					"cancel_transaction_id": null,
+					"date": "2024-06-28",
+					"fees": 0,
+					"investment_transaction_id": "M76p0NJn4gfaYg568dezs3ddxMQDVDspZn1PM",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 06/01-06/30)",
+					"price": 0,
+					"quantity": -0.02,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -2,
+					"cancel_transaction_id": null,
+					"date": "2024-06-26",
+					"fees": 0,
+					"investment_transaction_id": "ExvpqObmyjuKvyNEa3nocRbbyKBmxmUnm0YEQ",
+					"iso_currency_code": "USD",
+					"name": "META PLATFORMS INC CL A REC 06/26/24 PAY 06/26/24 RATE 0.00000000 QTY 0.00000000",
+					"price": 0,
+					"quantity": 0,
+					"security_id": "vLRMV3MvY1FqZZ5XLd0LHJD5QN5rw9F77vKJg",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 3133.5,
+					"cancel_transaction_id": null,
+					"date": "2024-06-20",
+					"fees": 0,
+					"investment_transaction_id": "rzJbDQ48MasNqpV9dbY4UxaaorRA6AIwq4ybX",
+					"iso_currency_code": "USD",
+					"name": "BOT 300 RIVN @ 10.445",
+					"price": 10.445,
+					"quantity": 300,
+					"security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -2289.066642,
+					"cancel_transaction_id": null,
+					"date": "2024-06-20",
+					"fees": 0.072158,
+					"investment_transaction_id": "4LrXOvB3axSYjPy0m5pOiwRRJKdDxDInP5Yqp",
+					"iso_currency_code": "USD",
+					"name": "SOLD 13 GOOGL @ 176.0876",
+					"price": 176.0876,
+					"quantity": -13,
+					"security_id": "oJ9Y46YmgRFjzKRvz0e9CXDdmndVkgCa3ZkPo",
+					"subtype": "sell",
+					"type": "sell",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -479.017906,
+					"cancel_transaction_id": null,
+					"date": "2024-06-20",
+					"fees": 0.021494,
+					"investment_transaction_id": "aeJOK4mLE6IrN8vna10XHwAAn9eypyI1Jkd4B",
+					"iso_currency_code": "USD",
+					"name": "SOLD 9 TWLO @ 53.2266",
+					"price": 53.2266,
+					"quantity": -9,
+					"security_id": "3mg4qV4JZycjeEaj4ZejSbEgn8gLKkUeMBQXX",
+					"subtype": "sell",
+					"type": "sell",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -1245.483336,
+					"cancel_transaction_id": null,
+					"date": "2024-06-20",
+					"fees": 0.040664,
+					"investment_transaction_id": "xz1bydw7MDsdAR5aberLCNggnKjdDdtKw0Dox",
+					"iso_currency_code": "USD",
+					"name": "SOLD 4 LULU @ 311.381",
+					"price": 311.381,
+					"quantity": -4,
+					"security_id": "jb8Eo5E6q9tEOPnadxONtJrKpbKao7FV8OMPw",
+					"subtype": "sell",
+					"type": "sell",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -2.6,
+					"cancel_transaction_id": null,
+					"date": "2024-06-17",
+					"fees": 0,
+					"investment_transaction_id": "RNqXxLJnZgh5DgMex1NmTaRRo4A9e9UqxEz19",
+					"iso_currency_code": "USD",
+					"name": "ALPHABET INC CL A REC 06/17/24 PAY 06/17/24 RATE 0.00000000 QTY 0.00000000",
+					"price": 0,
+					"quantity": 0,
+					"security_id": "oJ9Y46YmgRFjzKRvz0e9CXDdmndVkgCa3ZkPo",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.02,
+					"cancel_transaction_id": null,
+					"date": "2024-05-31",
+					"fees": 0,
+					"investment_transaction_id": "7PdXQrKk86uAZbvPoa8Duy446aJn1nT5VMPYo",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 05/01-05/31)",
+					"price": 0,
+					"quantity": -0.02,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.07,
+					"cancel_transaction_id": null,
+					"date": "2024-04-30",
+					"fees": 0,
+					"investment_transaction_id": "9B6XoaAv5DcrQwRn4x7KHY77PLRozocxej7yL",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 04/01-04/30)",
+					"price": 0,
+					"quantity": -0.07,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 1446.14,
+					"cancel_transaction_id": null,
+					"date": "2024-04-22",
+					"fees": 0,
+					"investment_transaction_id": "JompknJv0McjKMrbB1mkTMJJR8we3eh7JZOk4",
+					"iso_currency_code": "USD",
+					"name": "BOT 4 LULU @ 361.535",
+					"price": 361.535,
+					"quantity": 4,
+					"security_id": "jb8Eo5E6q9tEOPnadxONtJrKpbKao7FV8OMPw",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 940.72,
+					"cancel_transaction_id": null,
+					"date": "2024-04-22",
+					"fees": 0,
+					"investment_transaction_id": "8qweo4kAZLUq7avpKdr1SjeeRO9gdgIvbeLZq",
+					"iso_currency_code": "USD",
+					"name": "BOT 16 TWLO @ 58.795",
+					"price": 58.795,
+					"quantity": 16,
+					"security_id": "3mg4qV4JZycjeEaj4ZejSbEgn8gLKkUeMBQXX",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 2037.1,
+					"cancel_transaction_id": null,
+					"date": "2024-04-22",
+					"fees": 0,
+					"investment_transaction_id": "ZN0ODKRnEgh9k8deYAVrSyYYzVZEbETkYBAvD",
+					"iso_currency_code": "USD",
+					"name": "BOT 13 GOOGL @ 156.7",
+					"price": 156.7,
+					"quantity": 13,
+					"security_id": "oJ9Y46YmgRFjzKRvz0e9CXDdmndVkgCa3ZkPo",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 1493.115,
+					"cancel_transaction_id": null,
+					"date": "2024-04-22",
+					"fees": 0,
+					"investment_transaction_id": "5D4Xo03ymdim67QEpNXKi4YYg7o1k1I4jPXVo",
+					"iso_currency_code": "USD",
+					"name": "BOT 169 RIVN @ 8.835",
+					"price": 8.835,
+					"quantity": 169,
+					"security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": 1933.22,
+					"cancel_transaction_id": null,
+					"date": "2024-04-22",
+					"fees": 0,
+					"investment_transaction_id": "ozJNwM4OYjsNDpQ4L8ryUdww3aqjYjtbmexOe",
+					"iso_currency_code": "USD",
+					"name": "BOT 4 META @ 483.305",
+					"price": 483.305,
+					"quantity": 4,
+					"security_id": "vLRMV3MvY1FqZZ5XLd0LHJD5QN5rw9F77vKJg",
+					"subtype": "buy",
+					"type": "buy",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.08,
+					"cancel_transaction_id": null,
+					"date": "2024-03-28",
+					"fees": 0,
+					"investment_transaction_id": "VNKpmqQnEgh7BzXnV3NMs0KKqXaO4OCj1AqkQ",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 03/01-03/31)",
+					"price": 0,
+					"quantity": -0.08,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -0.07,
+					"cancel_transaction_id": null,
+					"date": "2024-02-29",
+					"fees": 0,
+					"investment_transaction_id": "bNnpka8DQLhBxpwQPb0rsEyyjgaXJXcDEyb9B",
+					"iso_currency_code": "USD",
+					"name": "MORGAN STANLEY PRIVATE BANK NA (Period 02/06-02/29)",
+					"price": 0,
+					"quantity": -0.07,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"subtype": "deposit",
+					"type": "cash",
+					"unofficial_currency_code": null
+				},
+				{
+					"account_id": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+					"amount": -10000,
+					"cancel_transaction_id": null,
+					"date": "2024-02-05",
+					"fees": 0,
+					"investment_transaction_id": "gNJOr583EBhPoONjkDQyTaAA93MN8NUKew7Ar",
+					"iso_currency_code": "USD",
+					"name": "ACH DEPOSIT  REFID:99418876906;",
+					"price": 0,
+					"quantity": 0,
+					"security_id": null,
+					"subtype": "transfer",
+					"type": "transfer",
+					"unofficial_currency_code": null
+				}
+			],
+			"item": {
+				"available_products": [],
+				"billed_products": ["investments"],
+				"consent_expiration_time": null,
+				"consented_products": ["investments"],
+				"error": null,
+				"institution_id": "ins_129473",
+				"institution_name": "E*TRADE Financial",
+				"item_id": "kmZOJ7bAEkIpzEb9BxVRHOABEvMyNVcR3KR8v",
+				"products": ["investments"],
+				"update_type": "background",
+				"webhook": "http://localhost:8000/core/plaid/webhook"
+			},
+			"request_id": "2cQYsriaL63NOOU",
+			"securities": [
+				{
+					"close_price": 131,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Packaged Software",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNYS",
+					"name": "Twilio Inc - Ordinary Shares Class A",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Technology Services",
+					"security_id": "3mg4qV4JZycjeEaj4ZejSbEgn8gLKkUeMBQXX",
+					"sedol": "BD6P5Q0",
+					"ticker_symbol": "TWLO",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 139.34,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Hotels or Resorts or Cruise Lines",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNAS",
+					"name": "Airbnb Inc - Ordinary Shares - Class A",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Consumer Services",
+					"security_id": "AyvPNVPQ75Say8OJmwpjUOXJP6JdVph6PEbqg",
+					"sedol": null,
+					"ticker_symbol": "ABNB",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 127.07,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Information Technology Services",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNAS",
+					"name": "Shopify Inc - Ordinary Shares - Class A",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Technology Services",
+					"security_id": "DAE3Yo3wXgskjJLjJDZkIr6Z7OZjoJfoQ3zLq",
+					"sedol": "BXDZ9Z0",
+					"ticker_symbol": "SHOP",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 185.94,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Internet Software or Services",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNAS",
+					"name": "Alphabet Inc - Ordinary Shares - Class C",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Technology Services",
+					"security_id": "EvByboy6Z7I4LvOb8rzzHQ5R4YRjPMf5M4Nkk",
+					"sedol": null,
+					"ticker_symbol": "GOOG",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 9.36,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Other Metals or Minerals",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XPHL",
+					"name": "Energy Fuels Inc.",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Non-Energy Minerals",
+					"security_id": "QPO8Jo8vdDHMeLJ381M6FYZvqRv3XPskoLJvE",
+					"sedol": null,
+					"ticker_symbol": "UUUU",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 156.99,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Semiconductors",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNAS",
+					"name": "Advanced Micro Devices Inc.",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Electronic Technology",
+					"security_id": "RqmZJoZ0w1cPQVZg7j3LfMzaB8agQZf8rbLny",
+					"sedol": "2007849",
+					"ticker_symbol": "AMD",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 86.79,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Packaged Software",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNYS",
+					"name": "Elastic N.V",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Technology Services",
+					"security_id": "gJpE8MEnDbFBnAZXDokeImbav5aEj4HZEDgXa",
+					"sedol": null,
+					"ticker_symbol": "ESTC",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 229.77,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Apparel or Footwear",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNAS",
+					"name": "Lululemon Athletica Inc.",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Consumer Non-Durables",
+					"security_id": "jb8Eo5E6q9tEOPnadxONtJrKpbKao7FV8OMPw",
+					"sedol": "B23FN39",
+					"ticker_symbol": "LULU",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": null,
+					"close_price_as_of": null,
+					"cusip": null,
+					"fixed_income": null,
+					"industry": null,
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": null,
+					"name": "Mspbna",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": null,
+					"security_id": "oJ9Y46YmgRFX0OvxkAgLiXDdmndVkgCBD31ZO",
+					"sedol": null,
+					"ticker_symbol": "MSPBNA",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 185.06,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Internet Software or Services",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNAS",
+					"name": "Alphabet Inc - Ordinary Shares - Class A",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Technology Services",
+					"security_id": "oJ9Y46YmgRFjzKRvz0e9CXDdmndVkgCa3ZkPo",
+					"sedol": "BYVY8G0",
+					"ticker_symbol": "GOOGL",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 148.24,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Internet Software or Services",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNYS",
+					"name": "Reddit Inc. - Ordinary Shares - Class A",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Technology Services",
+					"security_id": "vLRMV3MvY1Fq4K3A1Eb7CJD5QN5rw9F7jRj96",
+					"sedol": null,
+					"ticker_symbol": "RDDT",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 704.28,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Internet Software or Services",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNAS",
+					"name": "Meta Platforms Inc - Ordinary Shares - Class A",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Technology Services",
+					"security_id": "vLRMV3MvY1FqZZ5XLd0LHJD5QN5rw9F77vKJg",
+					"sedol": null,
+					"ticker_symbol": "META",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				},
+				{
+					"close_price": 13.7,
+					"close_price_as_of": "2025-07-18",
+					"cusip": null,
+					"fixed_income": null,
+					"industry": "Motor Vehicles",
+					"institution_id": null,
+					"institution_security_id": null,
+					"is_cash_equivalent": false,
+					"isin": null,
+					"iso_currency_code": "USD",
+					"market_identifier_code": "XNAS",
+					"name": "Rivian Automotive Inc - Ordinary Shares - Class A",
+					"option_contract": null,
+					"proxy_security_id": null,
+					"sector": "Consumer Durables",
+					"security_id": "wD7MdyM0NPfnPJp5LD6gt4em3wm5jDCeLBXmV",
+					"sedol": null,
+					"ticker_symbol": "RIVN",
+					"type": "equity",
+					"unofficial_currency_code": null,
+					"update_datetime": null
+				}
+			],
+			"total_investment_transactions": 51
+		},
+		"accounts": [
+			{
+				"id": "5e569de1-a954-4ae5-8c43-d50ba0f30990",
+				"createdAt": "2025-07-20T21:27:22.388Z",
+				"updatedAt": "2025-07-20T21:29:25.714Z",
+				"provider": "PLAID",
+				"authConnectionId": "b7a0bf59-f10c-498c-ad01-5fa8d0f2e58c",
+				"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+				"name": "Individual Brokerage -4314",
+				"plaidAccountMask": "4314",
+				"key": null,
+				"createdById": "user_2jFwy6JTTb43hqvtE5pxG2aywe7",
+				"description": null,
+				"institution": "BROKERAGE",
+				"type": "investment",
+				"subType": "brokerage",
+				"mode": null,
+				"status": "ACTIVE",
+				"portfolioId": "154ae9bc-6b53-4b07-b4ca-3f8217408bac",
+				"closedDate": null,
+				"optionLevel": null,
+				"lotSeededDate": "2025-07-18T18:29:00.000Z",
+				"uploadedPositions": true,
+				"setRealizedValues": false,
+				"skipSetup": false,
+				"liveURL": null,
+				"liveURLCreated": null,
+				"cashForOpenOrders": null,
+				"balanceMoneyMarket": "116337.55",
+				"accountValueTotal": "200872.36",
+				"marketValueTotal": null,
+				"cashAvailableForInvestment": "116337.55",
+				"cashNet": null,
+				"cashBalance": null,
+				"cashSettledForInvestment": null,
+				"cashUnsettledForInvestment": null,
+				"cashBuyingPower": null,
+				"fundsWithheldFromPurchasingPower": null,
+				"fundsWithheldFromWithdrawal": null,
+				"marginBuyingPower": null,
+				"marginBuyingPowerDT": null,
+				"balanceShortAdjustment": null,
+				"balanceAccount": null,
+				"equityRegt": null,
+				"equityRegtPercent": null,
+				"cashOpenOrderReserveDT": null,
+				"marginOpenOrderReserveDT": null,
+				"raw": null
+			}
+		],
+		"portfolioId": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+	},
+	"output": [
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -116268.855446,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "LgwNvXJjrMc46MnwRy8DiyMMje7wkwTBb6wP0",
+			"fee": 2.144554,
+			"memo": "SOLD 12919 UUUU @ 9",
+			"paymentCurrency": "USD",
+			"price": 9,
+			"quantity": -12919,
+			"settlementCurrency": "USD",
+			"subtype": "sell",
+			"transactionDate": "2025-07-18T00:00:00.000Z",
+			"type": "sell"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 2034.18,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "SHOP"
+				}
+			},
+			"externalId": "DaApPVYB30sy8Vxq459ZiZMMybD585tRx71qw",
+			"fee": 0,
+			"memo": "BOT 18 SHOP @ 113.01",
+			"paymentCurrency": "USD",
+			"price": 113.01,
+			"quantity": 18,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-07-08T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 2209.4805,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "RDDT"
+				}
+			},
+			"externalId": "1dvXoK1PjrTXx7yM89OoH0VVNOPakaCgzdKqY",
+			"fee": 0,
+			"memo": "BOT 15 RDDT @ 147.2987",
+			"paymentCurrency": "USD",
+			"price": 147.2987,
+			"quantity": 15,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-07-08T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 4900,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "GOOG"
+				}
+			},
+			"externalId": "PN1p4wbnJgh86JXQpLN4FPDD41B7o7fA0Yk7A",
+			"fee": 0,
+			"memo": "BOT 28 GOOG @ 175",
+			"paymentCurrency": "USD",
+			"price": 175,
+			"quantity": 28,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-07-08T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 1953.81,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "AMD"
+				}
+			},
+			"externalId": "qzJbLRx8M4sLPJRYxbrgtw77dKyN1NIEmyXrB",
+			"fee": 0,
+			"memo": "BOT 17 AMD @ 114.93",
+			"paymentCurrency": "USD",
+			"price": 114.93,
+			"quantity": 17,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-27T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 6965.3133,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "RDDT"
+				}
+			},
+			"externalId": "BrKXD7VPqASBPbv9Y1XpsvwwpD0PMPI7Peoj8",
+			"fee": 0,
+			"memo": "BOT 67 RDDT @ 103.9599",
+			"paymentCurrency": "USD",
+			"price": 103.9599,
+			"quantity": 67,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-27T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 3214.3692,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "AMD"
+				}
+			},
+			"externalId": "36mXoAqB4auoOvnzM1XVsgjjvreJpJUA3m800",
+			"fee": 0,
+			"memo": "BOT 28 AMD @ 114.7989",
+			"paymentCurrency": "USD",
+			"price": 114.7989,
+			"quantity": 28,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-19T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 9715.72,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "AMD"
+				}
+			},
+			"externalId": "yzPbKw68M1swv7n6kbzDTEDDjg8w6wcgej6oa",
+			"fee": 0,
+			"memo": "BOT 98 AMD @ 99.14",
+			"paymentCurrency": "USD",
+			"price": 99.14,
+			"quantity": 98,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-07T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 198.28,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "AMD"
+				}
+			},
+			"externalId": "KbdYApm0jgsrjJAd0m8ZHErryMReqecmaxkvA",
+			"fee": 0,
+			"memo": "BOT 2 AMD @ 99.14",
+			"paymentCurrency": "USD",
+			"price": 99.14,
+			"quantity": 2,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-07T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -12477.6334,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "ABNB"
+				}
+			},
+			"externalId": "kmZOJ7bAEkIpzEb9BxVRHOjjD3vVzVhvzVgDj",
+			"fee": 0.3666,
+			"memo": "SOLD 100 ABNB @ 124.78",
+			"paymentCurrency": "USD",
+			"price": 124.78,
+			"quantity": -100,
+			"settlementCurrency": "USD",
+			"subtype": "sell",
+			"transactionDate": "2025-05-01T00:00:00.000Z",
+			"type": "sell"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 2923.218,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "AMD"
+				}
+			},
+			"externalId": "AjyXLgN1PkhqYbnkBKAZSJzzA4b1D1Hnr1oBO",
+			"fee": 0,
+			"memo": "BOT 30 AMD @ 97.4406",
+			"paymentCurrency": "USD",
+			"price": 97.4406,
+			"quantity": 30,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-01T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 12473.96,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "ABNB"
+				}
+			},
+			"externalId": "vzLbBNV8M6szKXB7LbVNI566zRgyjyI0x1R7D",
+			"fee": 0,
+			"memo": "BOT 100 ABNB @ 124.7396",
+			"paymentCurrency": "USD",
+			"price": 124.7396,
+			"quantity": 100,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-01T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 2494.8,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "ABNB"
+				}
+			},
+			"externalId": "07AXzmD10jfjPgzMBQX8TgDD4kjN8NUvZnL5E",
+			"fee": 0,
+			"memo": "BOT 20 ABNB @ 124.74",
+			"paymentCurrency": "USD",
+			"price": 124.74,
+			"quantity": 20,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-01T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 1447.5036,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "RDDT"
+				}
+			},
+			"externalId": "jNbOxgokEKhk74ozRyQ0TKqqZAdnenUjgP4YX",
+			"fee": 0,
+			"memo": "BOT 12 RDDT @ 120.6253",
+			"paymentCurrency": "USD",
+			"price": 120.6253,
+			"quantity": 12,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-05-01T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 63.8,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "rzJbDQ48MasNqpV9dbY4UxaaorRA6AIwq4yAY",
+			"fee": 0,
+			"memo": "BOT 11 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 11,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 110.2,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "4LrXOvB3axSYjPy0m5pOiwRRJKdDxDInP5YEd",
+			"fee": 0,
+			"memo": "BOT 19 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 19,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 58,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "aeJOK4mLE6IrN8vna10XHwAAn9eypyI1Jkd4Y",
+			"fee": 0,
+			"memo": "BOT 10 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 10,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 75.4,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "xz1bydw7MDsdAR5aberLCNggnKjdDdtKw0Dop",
+			"fee": 0,
+			"memo": "BOT 13 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 13,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 87,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "JompknJv0McjKMrbB1mkTMJJR8we3eh7JZOkB",
+			"fee": 0,
+			"memo": "BOT 15 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 15,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 14923.4,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "8qweo4kAZLUq7avpKdr1SjeeRO9gdgIvbeLZX",
+			"fee": 0,
+			"memo": "BOT 2573 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 2573,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 1003.4,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "ZN0ODKRnEgh9k8deYAVrSyYYzVZEbETkYBAvY",
+			"fee": 0,
+			"memo": "BOT 173 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 173,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 1583.4,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "5D4Xo03ymdim67QEpNXKi4YYg7o1k1I4jPXVM",
+			"fee": 0,
+			"memo": "BOT 273 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 273,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 57025.6,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UUUU"
+				}
+			},
+			"externalId": "ozJNwM4OYjsNDpQ4L8ryUdww3aqjYjtbmexO1",
+			"fee": 0,
+			"memo": "BOT 9832 UUUU @ 5.8",
+			"paymentCurrency": "USD",
+			"price": 5.8,
+			"quantity": 9832,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2025-01-23T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 12.08,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "RIVN"
+				}
+			},
+			"externalId": "bNnpka8DQLhBxpwQPb0rsEyyjgaXJXcDEyb9M",
+			"fee": 0,
+			"memo": "BOT 1 RIVN @ 12.08",
+			"paymentCurrency": "USD",
+			"price": 12.08,
+			"quantity": 1,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-11-26T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 19992.4,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "RIVN"
+				}
+			},
+			"externalId": "gNJOr583EBhPoONjkDQyTaAA93MN8NUKew7Ap",
+			"fee": 0,
+			"memo": "BOT 1655 RIVN @ 12.08",
+			"paymentCurrency": "USD",
+			"price": 12.08,
+			"quantity": 1655,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-11-26T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -2694.66585,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "ESTC"
+				}
+			},
+			"externalId": "7PdXQrKk86uAZbvPoa8Duy446aJn1nT5VMPYP",
+			"fee": 0.08415,
+			"memo": "SOLD 25 ESTC @ 107.79",
+			"paymentCurrency": "USD",
+			"price": 107.79,
+			"quantity": -25,
+			"settlementCurrency": "USD",
+			"subtype": "sell",
+			"transactionDate": "2024-11-22T00:00:00.000Z",
+			"type": "sell"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -1508.449076,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "ESTC"
+				}
+			},
+			"externalId": "9B6XoaAv5DcrQwRn4x7KHY77PLRozocxej7yb",
+			"fee": 0.052324,
+			"memo": "SOLD 14 ESTC @ 107.7501",
+			"paymentCurrency": "USD",
+			"price": 107.7501,
+			"quantity": -14,
+			"settlementCurrency": "USD",
+			"subtype": "sell",
+			"transactionDate": "2024-11-22T00:00:00.000Z",
+			"type": "sell"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -10774.6934,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "ESTC"
+				}
+			},
+			"externalId": "07AXzmD10jfjPgzMBQX8TgDD4kjN8NUvZnLJb",
+			"fee": 0.3166,
+			"memo": "SOLD 100 ESTC @ 107.7501",
+			"paymentCurrency": "USD",
+			"price": 107.7501,
+			"quantity": -100,
+			"settlementCurrency": "USD",
+			"subtype": "sell",
+			"transactionDate": "2024-11-22T00:00:00.000Z",
+			"type": "sell"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 12965.5864,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "ESTC"
+				}
+			},
+			"externalId": "jNbOxgokEKhk74ozRyQ0TKqqZAdnenUjgP439",
+			"fee": 0,
+			"memo": "BOT 139 ESTC @ 93.2776",
+			"paymentCurrency": "USD",
+			"price": 93.2776,
+			"quantity": 139,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-11-21T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -50000,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UNKNOWN"
+				}
+			},
+			"externalId": "XNAp638nEghVyp8R4KN0UBOOK0zwdwfaA1p6P",
+			"fee": 0,
+			"memo": "ACH DEPOSIT  REFID:122336335906;",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": 0,
+			"settlementCurrency": "USD",
+			"subtype": "transfer",
+			"transactionDate": "2024-11-20T00:00:00.000Z",
+			"type": "transfer"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.03,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "QNPpa6JX8ghZLgBPonErsvee7z5rOrI4YBnJ4",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 10/01-10/31)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.03,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-10-31T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.02,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "nzbNdO4jn0s0Lpbzv7QVso5530Z6O6HpRPy70",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 09/01-09/30)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.02,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-09-30T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.03,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "pzJb6E48MrsL1pEqxb7RtPppNKoaVaf4EMVa7",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 08/01-08/31)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.03,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-08-30T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.02,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "ONDprdOnxEhJwe5ME698IPnnoVK5x5fgdBk4o",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 07/01-07/31)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.02,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-07-31T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.02,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "M76p0NJn4gfaYg568dezs3ddxMQDVDspZn1PM",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 06/01-06/30)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.02,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-06-28T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -2,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "META"
+				}
+			},
+			"externalId": "ExvpqObmyjuKvyNEa3nocRbbyKBmxmUnm0YEQ",
+			"fee": 0,
+			"memo": "META PLATFORMS INC CL A REC 06/26/24 PAY 06/26/24 RATE 0.00000000 QTY 0.00000000",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": 0,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-06-26T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 3133.5,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "RIVN"
+				}
+			},
+			"externalId": "rzJbDQ48MasNqpV9dbY4UxaaorRA6AIwq4ybX",
+			"fee": 0,
+			"memo": "BOT 300 RIVN @ 10.445",
+			"paymentCurrency": "USD",
+			"price": 10.445,
+			"quantity": 300,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-06-20T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -2289.066642,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "GOOGL"
+				}
+			},
+			"externalId": "4LrXOvB3axSYjPy0m5pOiwRRJKdDxDInP5Yqp",
+			"fee": 0.072158,
+			"memo": "SOLD 13 GOOGL @ 176.0876",
+			"paymentCurrency": "USD",
+			"price": 176.0876,
+			"quantity": -13,
+			"settlementCurrency": "USD",
+			"subtype": "sell",
+			"transactionDate": "2024-06-20T00:00:00.000Z",
+			"type": "sell"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -479.017906,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "TWLO"
+				}
+			},
+			"externalId": "aeJOK4mLE6IrN8vna10XHwAAn9eypyI1Jkd4B",
+			"fee": 0.021494,
+			"memo": "SOLD 9 TWLO @ 53.2266",
+			"paymentCurrency": "USD",
+			"price": 53.2266,
+			"quantity": -9,
+			"settlementCurrency": "USD",
+			"subtype": "sell",
+			"transactionDate": "2024-06-20T00:00:00.000Z",
+			"type": "sell"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -1245.483336,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "LULU"
+				}
+			},
+			"externalId": "xz1bydw7MDsdAR5aberLCNggnKjdDdtKw0Dox",
+			"fee": 0.040664,
+			"memo": "SOLD 4 LULU @ 311.381",
+			"paymentCurrency": "USD",
+			"price": 311.381,
+			"quantity": -4,
+			"settlementCurrency": "USD",
+			"subtype": "sell",
+			"transactionDate": "2024-06-20T00:00:00.000Z",
+			"type": "sell"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -2.6,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "GOOGL"
+				}
+			},
+			"externalId": "RNqXxLJnZgh5DgMex1NmTaRRo4A9e9UqxEz19",
+			"fee": 0,
+			"memo": "ALPHABET INC CL A REC 06/17/24 PAY 06/17/24 RATE 0.00000000 QTY 0.00000000",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": 0,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-06-17T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.02,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "7PdXQrKk86uAZbvPoa8Duy446aJn1nT5VMPYo",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 05/01-05/31)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.02,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-05-31T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.07,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "9B6XoaAv5DcrQwRn4x7KHY77PLRozocxej7yL",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 04/01-04/30)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.07,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-04-30T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 1446.14,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "LULU"
+				}
+			},
+			"externalId": "JompknJv0McjKMrbB1mkTMJJR8we3eh7JZOk4",
+			"fee": 0,
+			"memo": "BOT 4 LULU @ 361.535",
+			"paymentCurrency": "USD",
+			"price": 361.535,
+			"quantity": 4,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-04-22T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 940.72,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "TWLO"
+				}
+			},
+			"externalId": "8qweo4kAZLUq7avpKdr1SjeeRO9gdgIvbeLZq",
+			"fee": 0,
+			"memo": "BOT 16 TWLO @ 58.795",
+			"paymentCurrency": "USD",
+			"price": 58.795,
+			"quantity": 16,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-04-22T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 2037.1,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "GOOGL"
+				}
+			},
+			"externalId": "ZN0ODKRnEgh9k8deYAVrSyYYzVZEbETkYBAvD",
+			"fee": 0,
+			"memo": "BOT 13 GOOGL @ 156.7",
+			"paymentCurrency": "USD",
+			"price": 156.7,
+			"quantity": 13,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-04-22T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 1493.115,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "RIVN"
+				}
+			},
+			"externalId": "5D4Xo03ymdim67QEpNXKi4YYg7o1k1I4jPXVo",
+			"fee": 0,
+			"memo": "BOT 169 RIVN @ 8.835",
+			"paymentCurrency": "USD",
+			"price": 8.835,
+			"quantity": 169,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-04-22T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": 1933.22,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "META"
+				}
+			},
+			"externalId": "ozJNwM4OYjsNDpQ4L8ryUdww3aqjYjtbmexOe",
+			"fee": 0,
+			"memo": "BOT 4 META @ 483.305",
+			"paymentCurrency": "USD",
+			"price": 483.305,
+			"quantity": 4,
+			"settlementCurrency": "USD",
+			"subtype": "buy",
+			"transactionDate": "2024-04-22T00:00:00.000Z",
+			"type": "buy"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.08,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "VNKpmqQnEgh7BzXnV3NMs0KKqXaO4OCj1AqkQ",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 03/01-03/31)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.08,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-03-28T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -0.07,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "MSPBNA"
+				}
+			},
+			"externalId": "bNnpka8DQLhBxpwQPb0rsEyyjgaXJXcDEyb9B",
+			"fee": 0,
+			"memo": "MORGAN STANLEY PRIVATE BANK NA (Period 02/06-02/29)",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": -0.07,
+			"settlementCurrency": "USD",
+			"subtype": "deposit",
+			"transactionDate": "2024-02-29T00:00:00.000Z",
+			"type": "cash"
+		},
+		{
+			"account": {
+				"connect": {
+					"provider_externalId": {
+						"externalId": "xz1bydw7MDsdAR5aberLCNgA5bzeZdtJrwzgL",
+						"provider": "PLAID"
+					}
+				}
+			},
+			"portfolio": {
+				"connect": {
+					"id": "154ae9bc-6b53-4b07-b4ca-3f8217408bac"
+				}
+			},
+			"amount": -10000,
+			"appliedToLots": true,
+			"asset": {
+				"connect": {
+					"symbol": "UNKNOWN"
+				}
+			},
+			"externalId": "gNJOr583EBhPoONjkDQyTaAA93MN8NUKew7Ar",
+			"fee": 0,
+			"memo": "ACH DEPOSIT  REFID:99418876906;",
+			"paymentCurrency": "USD",
+			"price": 0,
+			"quantity": 0,
+			"settlementCurrency": "USD",
+			"subtype": "transfer",
+			"transactionDate": "2024-02-05T00:00:00.000Z",
+			"type": "transfer"
+		}
+	]
 }

@@ -3,12 +3,12 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
 export function AddAccountButton({ ...props }: ButtonProps) {
-  return (
-    <Link href="/onboarding/upload">
-      <Button {...props}>
-        <Plus className="mr-2 size-4" />
-        Add Account
-      </Button>
-    </Link>
-  );
+	return (
+		<Link href="/onboarding/upload">
+			<Button {...props}>
+				<Plus className="mr-2 size-4" />
+				Add Account
+			</Button>
+		</Link>
+	);
 }

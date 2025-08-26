@@ -1,41 +1,41 @@
 fragment PortfolioTableItem on Portfolio {
-  createdBy {
-    name
-    id
-    photo
-    email
-  }
-  createdById
-  id
-  name
-  endOfYearTaxOpportunityNotification
-  notificationFrequency
-  accounts {
-    id
-    status
-    name
-    institution
-  }
-  createdAt
-  usersOnPortfolios {
-    user {
-      name
-      id
-      photo
-      email
-    }
-    role
-  }
+	createdBy {
+		name
+		id
+		photo
+		email
+	}
+	createdById
+	id
+	name
+	endOfYearTaxOpportunityNotification
+	notificationFrequency
+	accounts {
+		id
+		status
+		name
+		institution
+	}
+	createdAt
+	usersOnPortfolios {
+		user {
+			name
+			id
+			photo
+			email
+		}
+		role
+	}
 }
 
 query PortfolioTable {
-  portfolios {
-    id
-    ...PortfolioTableItem
-  }
+	portfolios {
+		id
+		...PortfolioTableItem
+	}
 }
 mutation UpdatePortfolio($data: PortfolioUpdateInput!) {
-  updatePortfolio(data: $data) {
-    ...PortfolioDetailItem
-  }
+	updatePortfolio(data: $data) {
+		...PortfolioDetailItem
+	}
 }

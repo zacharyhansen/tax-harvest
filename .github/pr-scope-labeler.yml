@@ -53,8 +53,6 @@
           - apps/api/.dockerignore
           - apps/api/.editorconfig
           - apps/api/.env.example
-          - apps/api/.eslintignore
-          - apps/api/.eslintrc
           - apps/api/.gitignore
           - apps/api/.npmignore
           - apps/api/.npmrc
@@ -62,7 +60,6 @@
           - apps/api/.prettierignore
           - apps/api/.swcrc
           - apps/api/.yamllint.yml
-          - apps/api/lint-staged.config.mjs
           - apps/api/vitest.config.**.ts
           - apps/api/create-vitest-test-config.ts
           - apps/api/commitlint.config.ts

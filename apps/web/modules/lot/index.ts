@@ -1,1 +1,1 @@
-export { default as LotsTable } from './LotsTable/LotsTable'
+export { default as LotsTable } from './LotsTable/LotsTable';

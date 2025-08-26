@@ -1,18 +1,18 @@
 [
-  {
-    "accountId": "f477e41d-63fc-4e4e-a22c-b2a055d269e7",
-    "acquiredDate": "2022-10-28T14:00:00.000Z",
-    "assetSymbol": "COIN",
-    "costBasis": "11665.0716",
-    "dollarPerSharePnL": "-658.2143",
-    "gainTotal": "-7898.5716",
-    "id": "c667e27b-cfca-4b51-be02-7de98f265a0d",
-    "lastPrice": "313.8750",
-    "lotId": "2258df94-15f2-4193-ad5a-db9d3212255c",
-    "orderType": "SELL_TO_CLOSE",
-    "pricePaid": "972.0893",
-    "quantity": "12",
-    "taxGain": "LONG",
-    "valueTotal": "3766.5"
-  }
+	{
+		"accountId": "f477e41d-63fc-4e4e-a22c-b2a055d269e7",
+		"acquiredDate": "2022-10-28T14:00:00.000Z",
+		"assetSymbol": "COIN",
+		"costBasis": "11665.0716",
+		"dollarPerSharePnL": "-658.2143",
+		"gainTotal": "-7898.5716",
+		"id": "c667e27b-cfca-4b51-be02-7de98f265a0d",
+		"lastPrice": "313.8750",
+		"lotId": "2258df94-15f2-4193-ad5a-db9d3212255c",
+		"orderType": "SELL_TO_CLOSE",
+		"pricePaid": "972.0893",
+		"quantity": "12",
+		"taxGain": "LONG",
+		"valueTotal": "3766.5"
+	}
 ]

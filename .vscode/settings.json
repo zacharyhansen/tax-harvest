@@ -1,98 +1,52 @@
 {
-  "editor.tabSize": 2,
-  "explorer.fileNesting.enabled": true,
-  "explorer.fileNesting.patterns": {
-    "*.ts": "$(capture).js, $(capture).*.ts, $(capture).*.js",
-    "*.js": "$(capture).js.map, $(capture).*.ts, $(capture).*.js",
-    "tsconfig.json": "tsconfig.*.json",
-    "Dockerfile": "docker-compose.yml, .dockerignore",
-    ".env": "*.env",
-    "package.json": "pnpm-lock.yaml, .nvmrc, pnpm-workspace.yaml, .npmrc",
-    ".eslintrc.*": ".eslintignore, .eslintcache",
-    ".prettierrc": ".prettierignore",
-    ".gitignore": ".gitattributes"
-  },
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "workbench.editor.tabSizing": "shrink",
-  "files.eol": "\n",
-  "files.watcherExclude": {
-    "**/node_modules/**": true,
-    "**/dist/**": true,
-    "**/.next/**": true
-  },
-  "search.exclude": {
-    "**/node_modules": true,
-    "**/dist": true,
-    "**/.next": true
-  },
-  "[dotenv]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  },
-  "[sql]": {
-    "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
-  },
-  "[ignore]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "editor.fontFamily": "JetBrains Mono",
-  "editor.fontSize": 13,
-  "prettier.enable": true,
-  "editor.formatOnSave": true,
+	"editor.tabSize": 2,
+	"editor.detectIndentation": false,
 
-  // Auto fix
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "never"
-  },
+	// TypeScript
+	"typescript.tsdk": "node_modules/typescript/lib", // Use the workspace version of TypeScript
+	"typescript.enablePromptUseWorkspaceTsdk": true, // For security reasons it's require that users opt into using the workspace version of typescript
+	"typescript.preferences.autoImportSpecifierExcludeRegexes": [
+		// useRouter should be imported from `next/navigation` instead of `next/router`
+		"next/router",
+		// give priority for Link to next/link instead of lucide-react
+		"lucide-react",
+		// Not used in the project and conflicts with `use()` from React
+		"chai",
+		// Use Zod v4 instead of v3
+		"zod/v3",
+		// Sentry is imported with `import *`
+		"@sentry/nextjs"
+	],
 
-  // Silent the stylistic rules in you IDE, but still auto fix them
-  "eslint.rules.customizations": [
-    { "rule": "style/*", "severity": "off", "fixable": true },
-    { "rule": "format/*", "severity": "off", "fixable": true },
-    { "rule": "*-indent", "severity": "off", "fixable": true },
-    { "rule": "*-spacing", "severity": "off", "fixable": true },
-    { "rule": "*-spaces", "severity": "off", "fixable": true },
-    { "rule": "*-order", "severity": "off", "fixable": true },
-    { "rule": "*-dangle", "severity": "off", "fixable": true },
-    { "rule": "*-newline", "severity": "off", "fixable": true },
-    { "rule": "*quotes", "severity": "off", "fixable": true },
-    { "rule": "*semi", "severity": "off", "fixable": true }
-  ],
+	"files.watcherExclude": {
+		"**/node_modules/**": true,
+		"**/dist/**": true,
+		"**/.next/**": true
+	},
 
-  // Enable eslint for all supported languages
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "vue",
-    "html",
-    "markdown",
-    "json",
-    "json5",
-    "jsonc",
-    "yaml",
-    "toml",
-    "xml",
-    "astro",
-    "svelte",
-    "css",
-    "less",
-    "scss",
-    "pcss",
-    "postcss",
-    "prisma"
-  ],
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "typescript.tsserver.experimental.enableProjectDiagnostics": true
+	"search.exclude": {
+		"**/node_modules/**": true,
+		"**/dist/**": true,
+		"**/.next/**": true,
+		"**/package-lock.json": true,
+		"**/coverage/unit/**": true
+	},
+
+	// Vitest
+	"testing.automaticallyOpenTestResults": "neverOpen", // Don't open the test results automatically
+
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.biome": "explicit"
+	},
+
+	"[dotenv]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
+	},
+	"[prisma]": {
+		"editor.defaultFormatter": "Prisma.prisma"
+	},
+	"[ignore]": {
+		"editor.defaultFormatter": "foxundermoon.shell-format"
+	}
 }

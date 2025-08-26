@@ -1,57 +1,63 @@
 query PlaidLinkToken($authConnectionId: String) {
-  linkToken(authConnectionId: $authConnectionId)
+	linkToken(authConnectionId: $authConnectionId)
 }
 fragment PlaidAuthConnection on AuthConnection {
-  id
-  plaidInstitutionId
-  authedAt
-  syncedAt
-  accounts {
-    id
-    name
-    plaidAccountMask
-    type
-    subType
-    status
-    balanceAccount
-    accountValueTotal
-  }
+	id
+	plaidInstitutionId
+	authedAt
+	syncedAt
+	portfolioId
+	user {
+		id
+		email
+		phoneNumber
+	}
+	accounts {
+		id
+		name
+		plaidAccountMask
+		type
+		subType
+		status
+		balanceAccount
+		accountValueTotal
+	}
 }
 
 query PlaidAuthConnections {
-  plaidAuthConnections {
-    ...PlaidAuthConnection
-  }
+	plaidAuthConnections {
+		...PlaidAuthConnection
+	}
 }
 
 query PlaidInstitution($institutionId: String!) {
-  plaidInstitution(institutionId: $institutionId) {
-    institution_id
-    name
-    logo
-    primary_color
-    url
-    products
-    country_codes
-  }
+	plaidInstitution(institutionId: $institutionId) {
+		institution_id
+		name
+		logo
+		primary_color
+		url
+		products
+		country_codes
+	}
 }
 
 mutation PlaidSetAccessTokenAndSyncAccounts(
-  $publicToken: String!
-  $metaData: PlaidLinkOnSuccessMetadata!
-  $existingAccountId: String
+	$publicToken: String!
+	$metaData: PlaidLinkOnSuccessMetadata!
+	$existingAccountId: String
 ) {
-  setAccessTokenAndSyncAccounts(
-    publicToken: $publicToken
-    metaData: $metaData
-    existingAccountId: $existingAccountId
-  ) {
-    id
-  }
+	setAccessTokenAndSyncAccounts(
+		publicToken: $publicToken
+		metaData: $metaData
+		existingAccountId: $existingAccountId
+	) {
+		id
+	}
 }
 
 mutation PlaidSync($authConnectionId: String!) {
-  syncAuthConnection(id: $authConnectionId) {
-    id
-  }
+	syncAuthConnection(id: $authConnectionId) {
+		id
+	}
 }

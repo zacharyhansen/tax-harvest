@@ -1,4 +1,4 @@
-import { IAggsQuery } from '@polygon.io/client-js'
+import type { IAggsQuery } from '@polygon.io/client-js';
 
 /**
  * c: cLose price
@@ -10,37 +10,37 @@ import { IAggsQuery } from '@polygon.io/client-js'
  * vw:volume weighted average price
  */
 export interface PolygonTickerSnapshot {
-  c: number
-  h: number
-  l: number
-  n: number
-  o: number
-  v: number
-  vw: number
-  t: number
+	c: number;
+	h: number;
+	l: number;
+	n: number;
+	o: number;
+	v: number;
+	vw: number;
+	t: number;
 }
 
 export enum PolygonTimespan {
-  second = 'second',
-  minute = 'minute',
-  hour = 'hour',
-  day = 'day',
-  week = 'week',
-  month = 'month',
-  quarter = 'quarter',
-  year = 'year',
+	second = 'second',
+	minute = 'minute',
+	hour = 'hour',
+	day = 'day',
+	week = 'week',
+	month = 'month',
+	quarter = 'quarter',
+	year = 'year',
 }
 
 export interface AggsQuery {
-  limit?: number
+	limit?: number;
 }
 
 export interface PolygonAggregateInput {
-  ticker: string
-  timespan?: PolygonTimespan
-  multiplier?: number
-  from: Date
-  to: Date
-  adjusted?: boolean
-  aggsQuery?: IAggsQuery
+	ticker: string;
+	timespan?: PolygonTimespan;
+	multiplier?: number;
+	from: Date;
+	to: Date;
+	adjusted?: boolean;
+	aggsQuery?: IAggsQuery;
 }

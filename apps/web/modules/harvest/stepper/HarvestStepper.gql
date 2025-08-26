@@ -1,166 +1,166 @@
 fragment HarvestLotOrderItem on HarvestLotOrder {
-  accountId
-  costBasis
-  gainTotal
-  id
-  lotId
-  pricePaid
-  quantity
-  taxGain
-  assetSymbol
-  dollarPerSharePnL
-  valueTotal
-  orderType
-  acquiredDate
+	accountId
+	costBasis
+	gainTotal
+	id
+	lotId
+	pricePaid
+	quantity
+	taxGain
+	assetSymbol
+	dollarPerSharePnL
+	valueTotal
+	orderType
+	acquiredDate
 }
 
 fragment LotCurrentItem on LotCurrent {
-  id
-  accountId
-  remainingQty
-  acquiredDate
-  price
-  symbol
-  lastPrice
-  costBasis
-  value
-  gainTotal
-  gainTotalPct
-  dollarPerSharePnL
-  taxGain
+	id
+	accountId
+	remainingQty
+	acquiredDate
+	price
+	symbol
+	lastPrice
+	costBasis
+	value
+	gainTotal
+	gainTotalPct
+	dollarPerSharePnL
+	taxGain
 }
 
 query LotsCurrentForLotType($lotValueType: LotValueType!) {
-  lotCurrent(lotValueType: $lotValueType) {
-    id
-    ...LotCurrentItem
-  }
+	lotCurrent(lotValueType: $lotValueType) {
+		id
+		...LotCurrentItem
+	}
 }
 
 query DirectedHarvest(
-  $targetRealized: Float!
-  $targetUnrealized: Float!
-  $lots: [DirectedHarvestLot!]!
+	$targetRealized: Float!
+	$targetUnrealized: Float!
+	$lots: [DirectedHarvestLot!]!
 ) {
-  directedHarvest(
-    lots: $lots
-    targetRealized: $targetRealized
-    targetUnrealized: $targetUnrealized
-  ) {
-    realizedOrders {
-      id
-      ...HarvestLotOrderItem
-    }
-    unrealizedOrders {
-      id
-      ...HarvestLotOrderItem
-    }
-    allOrders {
-      id
-      ...HarvestLotOrderItem
-    }
-  }
+	directedHarvest(
+		lots: $lots
+		targetRealized: $targetRealized
+		targetUnrealized: $targetUnrealized
+	) {
+		realizedOrders {
+			id
+			...HarvestLotOrderItem
+		}
+		unrealizedOrders {
+			id
+			...HarvestLotOrderItem
+		}
+		allOrders {
+			id
+			...HarvestLotOrderItem
+		}
+	}
 }
 
 fragment HarvestTransactionItemRecord on HarvestTransactionItem {
-  id
-  quantity
-  completedDate
-  orderType
-  lotSold {
-    id
-    acquiredDate
-  }
-  asset {
-    lastPrice
-    symbol
-  }
+	id
+	quantity
+	completedDate
+	orderType
+	lotSold {
+		id
+		acquiredDate
+	}
+	asset {
+		lastPrice
+		symbol
+	}
 }
 fragment HarvestTransactionRecord on HarvestTransaction {
-  id
-  revert
-  counterTransaction
-  harvestTransactionItem {
-    id
-    ...HarvestTransactionItemRecord
-  }
-  replacementTransactionItem {
-    id
-    ...HarvestTransactionItemRecord
-  }
-  revertHarvestTransactionItem {
-    id
-    ...HarvestTransactionItemRecord
-  }
-  revertReplacementTransactionItem {
-    id
-    ...HarvestTransactionItemRecord
-  }
+	id
+	revert
+	counterTransaction
+	harvestTransactionItem {
+		id
+		...HarvestTransactionItemRecord
+	}
+	replacementTransactionItem {
+		id
+		...HarvestTransactionItemRecord
+	}
+	revertHarvestTransactionItem {
+		id
+		...HarvestTransactionItemRecord
+	}
+	revertReplacementTransactionItem {
+		id
+		...HarvestTransactionItemRecord
+	}
 }
 
 fragment HarvestItem on Harvest {
-  id
-  date
-  step
-  amount
-  type
-  label
-  harvestTransactions {
-    id
-    ...HarvestTransactionRecord
-  }
+	id
+	date
+	step
+	amount
+	type
+	label
+	harvestTransactions {
+		id
+		...HarvestTransactionRecord
+	}
 }
 
 mutation CreateHarvest(
-  $directedHarvestLots: [DirectedHarvestLot!]!
-  $harvestType: HarvestType!
+	$directedHarvestLots: [DirectedHarvestLot!]!
+	$harvestType: HarvestType!
 ) {
-  createHarvest(
-    directedHarvestLots: $directedHarvestLots
-    harvestType: $harvestType
-  ) {
-    id
-    ...HarvestItem
-  }
+	createHarvest(
+		directedHarvestLots: $directedHarvestLots
+		harvestType: $harvestType
+	) {
+		id
+		...HarvestItem
+	}
 }
 
 mutation UpdateHarvest($id: String!, $data: HarvestUpdateInput!) {
-  updateHarvest(id: $id, data: $data) {
-    id
-    ...HarvestItem
-  }
+	updateHarvest(id: $id, data: $data) {
+		id
+		...HarvestItem
+	}
 }
 
 mutation UpdateHarvestTransaction(
-  $id: String!
-  $data: HarvestTransactionUpdateInput!
+	$id: String!
+	$data: HarvestTransactionUpdateInput!
 ) {
-  updateHarvestTransaction(id: $id, data: $data) {
-    id
-    ...HarvestTransactionRecord
-  }
+	updateHarvestTransaction(id: $id, data: $data) {
+		id
+		...HarvestTransactionRecord
+	}
 }
 
 mutation UpdateHarvestTransactionItem(
-  $id: String!
-  $data: HarvestTransactionItemUpdateInput!
+	$id: String!
+	$data: HarvestTransactionItemUpdateInput!
 ) {
-  updateHarvestTransactionItem(id: $id, data: $data) {
-    id
-    ...HarvestTransactionItemRecord
-  }
+	updateHarvestTransactionItem(id: $id, data: $data) {
+		id
+		...HarvestTransactionItemRecord
+	}
 }
 
 query Harvest($id: String!) {
-  harvest(id: $id) {
-    id
-    ...HarvestItem
-  }
+	harvest(id: $id) {
+		id
+		...HarvestItem
+	}
 }
 
 mutation FinalizeHarvest($id: String!) {
-  finalizeHarvest(id: $id) {
-    id
-    ...HarvestItem
-  }
+	finalizeHarvest(id: $id) {
+		id
+		...HarvestItem
+	}
 }

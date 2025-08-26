@@ -1,39 +1,39 @@
 fragment AccountTransactionItem on Account {
-  id
-  name
-  authConnection {
-    id
-    source
-  }
+	id
+	name
+	authConnection {
+		id
+		source
+	}
 }
 
 fragment TransactionTableItem on Transaction {
-  id
-  quantity
-  type
-  description
-  assetSymbol
-  settlementDate
-  securityType
-  displaySymbol
-  # Plaid filled
-  amount
-  externalId
-  fee
-  memo
-  price
-  subtype
-  transactionDate
-  appliedToLots
-  account {
-    id
-    ...AccountTransactionItem
-  }
+	id
+	quantity
+	type
+	description
+	assetSymbol
+	settlementDate
+	securityType
+	displaySymbol
+	# Plaid filled
+	amount
+	externalId
+	fee
+	memo
+	price
+	subtype
+	transactionDate
+	appliedToLots
+	account {
+		id
+		...AccountTransactionItem
+	}
 }
 
 query Transactions($where: TransactionWhereInput) {
-  transactions(where: $where) {
-    id
-    ...TransactionTableItem
-  }
+	transactions(where: $where) {
+		id
+		...TransactionTableItem
+	}
 }

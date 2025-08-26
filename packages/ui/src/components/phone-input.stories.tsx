@@ -1,17 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { PhoneInput } from "./phone-input";
+import { PhoneInput } from './phone-input';
 
 const meta = {
-  title: "Atoms/Phone Input",
-  component: PhoneInput,
-  tags: ["autodocs"],
-  parameters: {
-    layout: "centered",
-  },
-  args: {
-    onChange: () => {},
-  },
+	title: 'Atoms/Phone Input',
+	component: PhoneInput,
+	tags: ['autodocs'],
+	parameters: {
+		layout: 'centered',
+	},
+	args: {
+		onChange: () => {},
+	},
 } satisfies Meta<typeof PhoneInput>;
 
 export default meta;
@@ -19,11 +19,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+	args: {},
 };
 
 export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
+	args: {
+		disabled: true,
+	},
 };

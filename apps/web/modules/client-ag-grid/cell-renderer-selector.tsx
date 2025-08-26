@@ -102,25 +102,25 @@
 //       : '',
 // };
 
-import type { ICellRendererParams } from 'ag-grid-community'
+import type { ICellRendererParams } from 'ag-grid-community';
 
-import JsonCell from './cells/json.cell'
+import JsonCell from './cells/json.cell';
 
 // Define the cell renderer selector function for AG Grid
 export function cellRendererSelector(params: ICellRendererParams) {
-  // Check if colDef exists and if it has cellRendererParams with type 'json'
-  if (params.colDef?.cellDataType === 'json') {
-    return {
-      component: JsonCell,
-      params: {
-        ...params.colDef.cellRendererParams,
-        value: params.value,
-      },
-    }
-  }
+	// Check if colDef exists and if it has cellRendererParams with type 'json'
+	if (params.colDef?.cellDataType === 'json') {
+		return {
+			component: JsonCell,
+			params: {
+				...params.colDef.cellRendererParams,
+				value: params.value,
+			},
+		};
+	}
 
-  // Add other cell renderer types here as needed
+	// Add other cell renderer types here as needed
 
-  // Return undefined for default AG Grid behavior
-  return undefined
+	// Return undefined for default AG Grid behavior
+	return undefined;
 }

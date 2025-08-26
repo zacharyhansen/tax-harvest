@@ -1,19 +1,19 @@
 mutation InviteUsersToPlatform($emails: [String!]!) {
-  inviteUsersToPlatform(emails: $emails)
+	inviteUsersToPlatform(emails: $emails)
 }
 
 mutation AddUserToPortfolio($email: String!) {
-  addUserToPortfolio(email: $email)
+	addUserToPortfolio(email: $email)
 }
 
 mutation RemoveUserFromPortfolio($userId: String!) {
-  removeUserFromPortfolio(userId: $userId)
+	removeUserFromPortfolio(userId: $userId)
 }
 
 query UsersOnPortfolio {
-  usersOnPortfolio {
-    id
-    name
-    email
-  }
+	usersOnPortfolio {
+		id
+		name
+		email
+	}
 }

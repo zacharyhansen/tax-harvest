@@ -1,60 +1,60 @@
 fragment PortfolioItem on Portfolio {
-  id
-  name
-  harvestCycleWeeks
-  createdAt
-  createdById
-  endOfYearTaxOpportunityNotification
-  notificationFrequency
+	id
+	name
+	harvestCycleWeeks
+	createdAt
+	createdById
+	endOfYearTaxOpportunityNotification
+	notificationFrequency
 }
 
 fragment PortfolioDetailItem on Portfolio {
-  ...PortfolioItem
-  harvestShareDollarThreshold
-  harvestTickerBucketDollarSizeLong
-  harvestTickerBucketDollarSizeShort
-  harvestTickerBucketLowerLimitLong
-  harvestTickerBucketLowerLimitShort
-  minimumLotPAndL
-  accounts {
-    name
-    id
-  }
-  usersOnPortfolios {
-    role
-    user {
-      id
-      name
-      email
-      photo
-    }
-  }
+	...PortfolioItem
+	harvestShareDollarThreshold
+	harvestTickerBucketDollarSizeLong
+	harvestTickerBucketDollarSizeShort
+	harvestTickerBucketLowerLimitLong
+	harvestTickerBucketLowerLimitShort
+	minimumLotPAndL
+	accounts {
+		name
+		id
+	}
+	usersOnPortfolios {
+		role
+		user {
+			id
+			name
+			email
+			photo
+		}
+	}
 }
 
 query Portfolios {
-  portfolios {
-    ...PortfolioItem
-  }
+	portfolios {
+		...PortfolioItem
+	}
 }
 
 mutation CreatePortfolio($portfolioInsertObject: PortfolioCreateInput!) {
-  createPortfolio(portfolioInsertObject: $portfolioInsertObject) {
-    ...PortfolioDetailItem
-  }
+	createPortfolio(portfolioInsertObject: $portfolioInsertObject) {
+		...PortfolioDetailItem
+	}
 }
 
 query PortfolioAuthed {
-  portfolioAuthed {
-    ...PortfolioItem
-  }
+	portfolioAuthed {
+		...PortfolioItem
+	}
 }
 query PortfolioDetailAuthed {
-  portfolioAuthed {
-    ...PortfolioDetailItem
-  }
+	portfolioAuthed {
+		...PortfolioDetailItem
+	}
 }
 mutation SwitchPortfolio($porfolioId: String!) {
-  switchPortfolio(porfolioId: $porfolioId) {
-    ...PortfolioItem
-  }
+	switchPortfolio(porfolioId: $porfolioId) {
+		...PortfolioItem
+	}
 }

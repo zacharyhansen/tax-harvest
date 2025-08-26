@@ -1,25 +1,26 @@
-import type { HTMLProps } from "react";
-import { useEffect, useRef } from "react";
+import type { HTMLProps } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function IndeterminateCheckbox({
-  className = "",
-  indeterminate,
-  ...rest
+	className = '',
+	indeterminate,
+	...rest
 }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
-  const ref = useRef<HTMLInputElement>(null!);
+	// biome-ignore lint/style/noNonNullAssertion: <ok>
+	const ref = useRef<HTMLInputElement>(null!);
 
-  useEffect(() => {
-    if (typeof indeterminate === "boolean") {
-      ref.current.indeterminate = !rest.checked && indeterminate;
-    }
-  }, [ref, indeterminate, rest.checked]);
+	useEffect(() => {
+		if (typeof indeterminate === 'boolean') {
+			ref.current.indeterminate = !rest.checked && indeterminate;
+		}
+	}, [indeterminate, rest.checked]);
 
-  return (
-    <input
-      type="checkbox"
-      ref={ref}
-      className={`${className} cursor-pointer`}
-      {...rest}
-    />
-  );
+	return (
+		<input
+			type="checkbox"
+			ref={ref}
+			className={`${className} cursor-pointer`}
+			{...rest}
+		/>
+	);
 }

@@ -1,9 +1,9 @@
-import type { SortingFn } from "@tanstack/react-table";
+import type { SortingFn } from '@tanstack/react-table';
 
-// eslint-disable-next-line ts/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <ok>
 export const sortDecimalValue: SortingFn<any> = (rowA, rowB, columnId) => {
-  const statusA = Number(rowA.original[columnId] ?? 0);
-  const statusB = Number(rowB.original[columnId] ?? 0);
+	const statusA = Number(rowA.original[columnId] ?? 0);
+	const statusB = Number(rowB.original[columnId] ?? 0);
 
-  return Math.sign(Math.abs(Number(statusA)) - Math.abs(Number(statusB))); // Ensures correct sorting behavior
+	return Math.sign(Math.abs(Number(statusA)) - Math.abs(Number(statusB))); // Ensures correct sorting behavior
 };

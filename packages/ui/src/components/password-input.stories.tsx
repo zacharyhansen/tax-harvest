@@ -1,17 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { PasswordInput } from "./password-input";
+import { PasswordInput } from './password-input';
 
 const meta = {
-  title: "Atoms/Password Input",
-  component: PasswordInput,
-  tags: ["autodocs"],
-  parameters: {
-    layout: "centered",
-  },
-  args: {
-    disabled: false,
-  },
+	title: 'Atoms/Password Input',
+	component: PasswordInput,
+	tags: ['autodocs'],
+	parameters: {
+		layout: 'centered',
+	},
+	args: {
+		disabled: false,
+	},
 } satisfies Meta<typeof PasswordInput>;
 
 export default meta;
@@ -19,9 +19,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+	args: {},
 };
 
 export const Disabled: Story = {
-  args: {},
+	args: {},
 };

@@ -3,163 +3,162 @@
 import { Button } from '@repo/ui/components/button';
 // import { useState } from 'react';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
 } from '@repo/ui/components/card';
+import { Combobox } from '@repo/ui/components/combobox';
+import { DatePicker } from '@repo/ui/components/date-picker';
 import { toast } from '@repo/ui/components/toast-sonner';
 import { Receipt, RefreshCw } from 'lucide-react';
-
+import { useState } from 'react';
 import {
-  HarvestNotificationFrequency,
-  useSendNotificationsByFrequencyMutation,
-  useSendWashSaleNotificationsForDateMutation,
-  useUpdateAllAssetPricesMutation,
+	HarvestNotificationFrequency,
+	useSendNotificationsByFrequencyMutation,
+	useSendWashSaleNotificationsForDateMutation,
+	useUpdateAllAssetPricesMutation,
 } from '~/generated/gql';
 import { PageWrapper } from '~/modules/layout';
-import { DatePicker } from '@repo/ui/components/date-picker';
-import { useState } from 'react';
-import { Combobox } from '@repo/ui/components/combobox';
 import { PlaidSyncComponent } from './PlaidSyncComponent';
 
 export default function ActionsPage() {
-  // const [updateHourlyAssetPrices] = useUpdateHourlyAssetPricesMutation();
-  // const [updateAllAssetPrices] = useUpdateAllAssetPricesMutation();
+	// const [updateHourlyAssetPrices] = useUpdateHourlyAssetPricesMutation();
+	// const [updateAllAssetPrices] = useUpdateAllAssetPricesMutation();
 
-  // const [from, setFrom] = useState(() => {
-  //   const date = new Date();
-  //   date.setDate(new Date().getDate() - 8);
-  //   return date;
-  // });
-  // const [to, setTo] = useState(new Date());
-  // const [startDate, setStartDate] = useState(new Date());
+	// const [from, setFrom] = useState(() => {
+	//   const date = new Date();
+	//   date.setDate(new Date().getDate() - 8);
+	//   return date;
+	// });
+	// const [to, setTo] = useState(new Date());
+	// const [startDate, setStartDate] = useState(new Date());
 
-  const [date, setDate] = useState(new Date());
-  const [frequency, setFrequency] = useState(
-    HarvestNotificationFrequency.Daily
-  );
+	const [date, setDate] = useState(new Date());
+	const [frequency, setFrequency] = useState(
+		HarvestNotificationFrequency.Daily,
+	);
 
-  const [updateAllAssetPrices] = useUpdateAllAssetPricesMutation();
-  const [sendWashSaleNotificationsForDate] =
-    useSendWashSaleNotificationsForDateMutation();
-  const [sendNotificationsByFrequency] =
-    useSendNotificationsByFrequencyMutation();
+	const [updateAllAssetPrices] = useUpdateAllAssetPricesMutation();
+	const [sendWashSaleNotificationsForDate] =
+		useSendWashSaleNotificationsForDateMutation();
+	const [sendNotificationsByFrequency] =
+		useSendNotificationsByFrequencyMutation();
 
-  return (
-    <PageWrapper
-      title="System Actions"
-      description="Invoce actions within the platform."
-    >
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="flex flex-col">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Receipt className="size-6" />
-              Refresh Prices
-            </CardTitle>
-            <CardDescription>
-              Pull latest stock prices from Polygon.io
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="align-bottom">
-            <Button
-              className="w-full"
-              onClick={() => {
-                toast.promise(updateAllAssetPrices(), {
-                  error: 'There was an error',
-                  loading: 'Loading',
-                  success: 'Prices updated',
-                });
-              }}
-            >
-              Refresh Prices
-            </Button>
-          </CardContent>
-        </Card>
-        <Card className="flex flex-col">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Receipt className="size-6" />
-              Send Wash Sale Notifications
-            </CardTitle>
-            <CardDescription>
-              Send wash sale notifications for a specific date
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2 align-bottom">
-            <DatePicker
-              label="Date"
-              mode="single"
-              value={date}
-              onChange={date => setDate(date)}
-              required
-            />
-            <Button
-              className="w-full"
-              onClick={() => {
-                toast.promise(
-                  sendWashSaleNotificationsForDate({
-                    variables: {
-                      date,
-                    },
-                  }),
-                  {
-                    error: 'There was an error',
-                    loading: 'Loading',
-                    success: 'Notifications sent',
-                  }
-                );
-              }}
-            >
-              Send Notifications
-            </Button>
-          </CardContent>
-        </Card>
-        <Card className="flex flex-col">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Receipt className="size-6" />
-              Send Notifications By Frequency
-            </CardTitle>
-            <CardDescription>Send notifications by frequency</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2 align-bottom">
-            <Combobox
-              options={Object.values(HarvestNotificationFrequency).map(
-                frequency => ({
-                  label: frequency,
-                  value: frequency,
-                })
-              )}
-              value={frequency}
-              onChange={value =>
-                setFrequency(value as HarvestNotificationFrequency)
-              }
-            />
-            <Button
-              className="w-full"
-              onClick={() => {
-                toast.promise(
-                  sendNotificationsByFrequency({
-                    variables: {
-                      frequency,
-                    },
-                  }),
-                  {
-                    error: 'There was an error',
-                    loading: 'Loading',
-                    success: 'Notifications sent',
-                  }
-                );
-              }}
-            >
-              Send Notifications
-            </Button>
-          </CardContent>
-        </Card>
-        {/* <Card className="flex flex-col">
+	return (
+		<PageWrapper
+			title="System Actions"
+			description="Invoce actions within the platform."
+		>
+			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+				<Card className="flex flex-col">
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2">
+							<Receipt className="size-6" />
+							Refresh Prices
+						</CardTitle>
+						<CardDescription>
+							Pull latest stock prices from Polygon.io
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="align-bottom">
+						<Button
+							className="w-full"
+							onClick={() => {
+								toast.promise(updateAllAssetPrices(), {
+									error: 'There was an error',
+									loading: 'Loading',
+									success: 'Prices updated',
+								});
+							}}
+						>
+							Refresh Prices
+						</Button>
+					</CardContent>
+				</Card>
+				<Card className="flex flex-col">
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2">
+							<Receipt className="size-6" />
+							Send Wash Sale Notifications
+						</CardTitle>
+						<CardDescription>
+							Send wash sale notifications for a specific date
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-2 align-bottom">
+						<DatePicker
+							label="Date"
+							mode="single"
+							value={date}
+							onChange={(date) => setDate(date)}
+							required
+						/>
+						<Button
+							className="w-full"
+							onClick={() => {
+								toast.promise(
+									sendWashSaleNotificationsForDate({
+										variables: {
+											date,
+										},
+									}),
+									{
+										error: 'There was an error',
+										loading: 'Loading',
+										success: 'Notifications sent',
+									},
+								);
+							}}
+						>
+							Send Notifications
+						</Button>
+					</CardContent>
+				</Card>
+				<Card className="flex flex-col">
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2">
+							<Receipt className="size-6" />
+							Send Notifications By Frequency
+						</CardTitle>
+						<CardDescription>Send notifications by frequency</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-2 align-bottom">
+						<Combobox
+							options={Object.values(HarvestNotificationFrequency).map(
+								(frequency) => ({
+									label: frequency,
+									value: frequency,
+								}),
+							)}
+							value={frequency}
+							onChange={(value) =>
+								setFrequency(value as HarvestNotificationFrequency)
+							}
+						/>
+						<Button
+							className="w-full"
+							onClick={() => {
+								toast.promise(
+									sendNotificationsByFrequency({
+										variables: {
+											frequency,
+										},
+									}),
+									{
+										error: 'There was an error',
+										loading: 'Loading',
+										success: 'Notifications sent',
+									},
+								);
+							}}
+						>
+							Send Notifications
+						</Button>
+					</CardContent>
+				</Card>
+				{/* <Card className="flex flex-col">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CandlestickChart className="h-6 w-6" />
@@ -248,26 +247,26 @@ export default function ActionsPage() {
             </Button>
           </CardContent>
         </Card> */}
-      </div>
+			</div>
 
-      {/* Plaid Sync Section */}
-      <div className="mt-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <RefreshCw className="size-6" />
-              Sync Plaid Connections
-            </CardTitle>
-            <CardDescription>
-              Manually sync Plaid connections (same as webhooks). This will
-              refresh account balances, holdings, and transactions.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <PlaidSyncComponent />
-          </CardContent>
-        </Card>
-      </div>
-    </PageWrapper>
-  );
+			{/* Plaid Sync Section */}
+			<div className="mt-8">
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2">
+							<RefreshCw className="size-6" />
+							Sync Plaid Connections
+						</CardTitle>
+						<CardDescription>
+							Manually sync Plaid connections (same as webhooks). This will
+							refresh account balances, holdings, and transactions.
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<PlaidSyncComponent />
+					</CardContent>
+				</Card>
+			</div>
+		</PageWrapper>
+	);
 }

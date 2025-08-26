@@ -1,55 +1,54 @@
 fragment AccountTableItem on Account {
-  id
-  name
-  type
-  portfolioId
-  provider
-  externalId
-  key
-  institution
-  mode
-  status
-  optionLevel
-  cashForOpenOrders
-  balanceMoneyMarket
-  cashAvailableForInvestment
-  accountValueTotal
-  cashNet
-  cashBalance
-  balanceAccount
-  createdAt
-  updatedAt
-  createdBy {
-    id
-    # eslint-disable-next-line @graphql-eslint/known-fragment-names
-    ...UserItem
-  }
-  authConnectionId
-  # authConnectionExt {
-  #   ...AccountTableAuthConnection
-  # }
+	id
+	name
+	type
+	portfolioId
+	provider
+	externalId
+	key
+	institution
+	mode
+	status
+	optionLevel
+	cashForOpenOrders
+	balanceMoneyMarket
+	cashAvailableForInvestment
+	accountValueTotal
+	cashNet
+	cashBalance
+	balanceAccount
+	createdAt
+	updatedAt
+	createdBy {
+		id
+		...UserItem
+	}
+	authConnectionId
+	# authConnectionExt {
+	#   ...AccountTableAuthConnection
+	# }
 }
 
 query Accounts($where: AccountWhereInput) {
-  accounts(where: $where) {
-    id
-    ...AccountTableItem
-    positions {
-      id
-      gainTotal
-    }
-  }
+	accounts(where: $where) {
+		id
+		...AccountTableItem
+		positions {
+			id
+			gainTotal
+		}
+	}
 }
 
 mutation CreateAccountForPortfolio($accountCreateInput: AccountCreateInput!) {
-  createAccountForPortfolio(accountCreateInput: $accountCreateInput) {
-    id
-    ...AccountTableItem
-  }
+	createAccountForPortfolio(accountCreateInput: $accountCreateInput) {
+		id
+		...AccountTableItem
+	}
 }
 
 mutation SyncAccount($authConnectionId: String!) {
-  syncAuthConnection(id: $authConnectionId) {
-    id
-  }
+	syncAuthConnection(id: $authConnectionId) {
+		id
+	}
 }

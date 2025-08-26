@@ -1,95 +1,95 @@
 fragment Log on Log {
-  id
-  createdAt
-  description
-  responseStatus
-  source
-  type
+	id
+	createdAt
+	description
+	responseStatus
+	source
+	type
 }
 
 query Logs($pagination: PaginationProps) {
-  logs(pagination: $pagination) {
-    id
-    ...Log
-  }
-  logsCount
+	logs(pagination: $pagination) {
+		id
+		...Log
+	}
+	logsCount
 }
 
 fragment LogDetails on Log {
-  id
-  createdAt
-  description
-  responseStatus
-  source
-  type
-  data
+	id
+	createdAt
+	description
+	responseStatus
+	source
+	type
+	data
 }
 
 query Log($logId: Int!) {
-  log(logId: $logId) {
-    id
-    ...LogDetails
-    LotTransactionBatch {
-      id
-      createdAt
-      updatedAt
-      accountId
-      portfolioId
-      positionsBefore
-      positionsAfter
-      holdingsPayload
-      lotTupleMap
-      initialLots
-      newTransactions
-      newBuys
-      newSells
-      realizedProfitAndLoss
-      deletedLots
-      lotChangeLog {
-        id
-        createdAt
-        operationType
-        lotId
-        accountId
-        portfolioId
-        lotBefore
-        lotAfter
-        quantityChange
-        source
-        processed
-        transactionId
-        lot {
-          id
-          assetSymbol
-          remainingQty
-          price
-          acquiredDate
-          marketValue
-          costTotal
-          gainTotal
-          originalQty
-          availableQty
-        }
-        transaction {
-          id
-          externalId
-          type
-          subtype
-          transactionDate
-          description
-          assetSymbol
-          quantity
-          price
-          amount
-          fee
-        }
-      }
-      account {
-        id
-        name
-        type
-        externalId
-      }
-    }
-  }
+	log(logId: $logId) {
+		id
+		...LogDetails
+		LotTransactionBatch {
+			id
+			createdAt
+			updatedAt
+			accountId
+			portfolioId
+			positionsBefore
+			positionsAfter
+			holdingsPayload
+			lotTupleMap
+			initialLots
+			newTransactions
+			newBuys
+			newSells
+			realizedProfitAndLoss
+			deletedLots
+			lotChangeLog {
+				id
+				createdAt
+				operationType
+				lotId
+				accountId
+				portfolioId
+				lotBefore
+				lotAfter
+				quantityChange
+				source
+				processed
+				transactionId
+				lot {
+					id
+					assetSymbol
+					remainingQty
+					price
+					acquiredDate
+					marketValue
+					costTotal
+					gainTotal
+					originalQty
+					availableQty
+				}
+				transaction {
+					id
+					externalId
+					type
+					subtype
+					transactionDate
+					description
+					assetSymbol
+					quantity
+					price
+					amount
+					fee
+				}
+			}
+			account {
+				id
+				name
+				type
+				externalId
+			}
+		}
+	}
 }

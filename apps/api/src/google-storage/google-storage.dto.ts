@@ -1,13 +1,13 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class GCPUploadFile {
-  @Field(() => String)
-  fileName: string
+	@Field(() => String)
+	fileName: string;
 
-  @Field(() => String)
-  type: string
+	@Field(() => String)
+	type: string;
 
-  @Field(() => String)
-  displayName: string
+	@Field(() => String)
+	displayName: string;
 }

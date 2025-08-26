@@ -7,44 +7,44 @@
 # }
 
 mutation UpdateAllAssetPrices {
-  updateAllAssetPrices
+	updateAllAssetPrices
 }
 
 mutation SendWashSaleNotificationsForDate($date: DateTime!) {
-  sendWashSaleNotificationsForDate(date: $date)
+	sendWashSaleNotificationsForDate(date: $date)
 }
 
 mutation SendNotificationsByFrequency(
-  $frequency: HarvestNotificationFrequency!
+	$frequency: HarvestNotificationFrequency!
 ) {
-  sendNotificationsByFrequency(frequency: $frequency)
+	sendNotificationsByFrequency(frequency: $frequency)
 }
 
 query AdminPlaidAuthConnections {
-  plaidAuthConnections {
-    id
-    plaidInstitutionId
-    authedAt
-    syncedAt
-    portfolioId
-    user {
-      id
-      email
-      phoneNumber
-    }
-    accounts {
-      id
-      name
-      plaidAccountMask
-      type
-      subType
-      status
-      balanceAccount
-      accountValueTotal
-    }
-  }
+	plaidAuthConnections {
+		id
+		plaidInstitutionId
+		authedAt
+		syncedAt
+		portfolioId
+		user {
+			id
+			email
+			phoneNumber
+		}
+		accounts {
+			id
+			name
+			plaidAccountMask
+			type
+			subType
+			status
+			balanceAccount
+			accountValueTotal
+		}
+	}
 }
 
 mutation AdminSyncPlaidItem($authConnectionId: String!) {
-  adminSyncPlaidItem(authConnectionId: $authConnectionId)
+	adminSyncPlaidItem(authConnectionId: $authConnectionId)
 }

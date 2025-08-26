@@ -1,9 +1,9 @@
 export function mergeViewNameWithRole({
-  view,
-  role,
+	view,
+	role,
 }: {
-  view: string
-  role: string
+	view: string;
+	role: string;
 }): string {
-  return `${view}__${role}`
+	return `${view}__${role}`;
 }

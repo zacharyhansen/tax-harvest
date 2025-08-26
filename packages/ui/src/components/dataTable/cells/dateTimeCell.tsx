@@ -1,18 +1,17 @@
-import type { CellContext } from "@tanstack/react-table";
-
-import { cn } from "@repo/ui/utils/cn";
-import { DateFormatter } from "@repo/ui/utils/date-formatter";
+import { cn } from '@repo/ui/utils/cn';
+import { DateFormatter } from '@repo/ui/utils/date-formatter';
+import type { CellContext } from '@tanstack/react-table';
 
 export default function DateTimeCell<TData, TValue>({
-  getValue,
+	getValue,
 }: CellContext<TData, TValue>) {
-  if (!getValue()) {
-    return null;
-  }
+	if (!getValue()) {
+		return null;
+	}
 
-  return (
-    <div className={cn("font-medium")}>
-      {DateFormatter.timestamp(getValue<string | Date | null | undefined>())}
-    </div>
-  );
+	return (
+		<div className={cn('font-medium')}>
+			{DateFormatter.timestamp(getValue<string | Date | null | undefined>())}
+		</div>
+	);
 }

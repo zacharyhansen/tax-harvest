@@ -1,27 +1,27 @@
-import * as React from "react";
+import * as React from 'react';
 
 export function useTheme() {
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
+	const [isDarkMode, setIsDarkMode] = React.useState(false);
 
-  React.useEffect(() => {
-    const darkModeMediaQuery = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    );
-    setIsDarkMode(darkModeMediaQuery.matches);
+	React.useEffect(() => {
+		const darkModeMediaQuery = window.matchMedia(
+			'(prefers-color-scheme: dark)',
+		);
+		setIsDarkMode(darkModeMediaQuery.matches);
 
-    const handleChange = (event: MediaQueryListEvent) => {
-      const newDarkMode = event.matches;
-      setIsDarkMode(newDarkMode);
-    };
+		const handleChange = (event: MediaQueryListEvent) => {
+			const newDarkMode = event.matches;
+			setIsDarkMode(newDarkMode);
+		};
 
-    darkModeMediaQuery.addEventListener("change", handleChange);
+		darkModeMediaQuery.addEventListener('change', handleChange);
 
-    return () => {
-      darkModeMediaQuery.removeEventListener("change", handleChange);
-    };
-  }, []);
+		return () => {
+			darkModeMediaQuery.removeEventListener('change', handleChange);
+		};
+	}, []);
 
-  return isDarkMode;
+	return isDarkMode;
 }
 
 export default useTheme;

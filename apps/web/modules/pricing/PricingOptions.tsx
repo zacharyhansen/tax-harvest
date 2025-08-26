@@ -107,7 +107,7 @@
 // }
 
 function PricingOptions() {
-  return <div>PricingOptions</div>
+	return <div>PricingOptions</div>;
 }
 
-export default PricingOptions
+export default PricingOptions;

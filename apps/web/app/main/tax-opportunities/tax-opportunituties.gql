@@ -1,152 +1,152 @@
 fragment FiniteHarvestLotItem on LotCurrent {
-  id
-  accountId
-  remainingQty
-  acquiredDate
-  price
-  symbol
-  lastPrice
-  costBasis
-  value
-  gainTotal
-  gainTotalPct
-  dollarPerSharePnL
-  taxGain
-  currentHarvestQty
-  availableQty
+	id
+	accountId
+	remainingQty
+	acquiredDate
+	price
+	symbol
+	lastPrice
+	costBasis
+	value
+	gainTotal
+	gainTotalPct
+	dollarPerSharePnL
+	taxGain
+	currentHarvestQty
+	availableQty
 }
 
 fragment HarvestLotItem on HarvestLotCurrent {
-  id
-  accountId
-  remainingQty
-  acquiredDate
-  price
-  symbol
-  lastPrice
-  costBasis
-  value
-  gainTotal
-  gainTotalPct
-  dollarPerSharePnL
-  taxGain
-  currentHarvestQty
-  harvestQuantity
-  harvestPAndL
-  availableQty
+	id
+	accountId
+	remainingQty
+	acquiredDate
+	price
+	symbol
+	lastPrice
+	costBasis
+	value
+	gainTotal
+	gainTotalPct
+	dollarPerSharePnL
+	taxGain
+	currentHarvestQty
+	harvestQuantity
+	harvestPAndL
+	availableQty
 }
 
 fragment MatchedLotOrderItem on HarvestLotOrder {
-  accountId
-  costBasis
-  gainTotal
-  id
-  lotId
-  pricePaid
-  quantity
-  taxGain
-  assetSymbol
-  dollarPerSharePnL
-  valueTotal
-  orderType
-  acquiredDate
-  lastPrice
+	accountId
+	costBasis
+	gainTotal
+	id
+	lotId
+	pricePaid
+	quantity
+	taxGain
+	assetSymbol
+	dollarPerSharePnL
+	valueTotal
+	orderType
+	acquiredDate
+	lastPrice
 }
 
 fragment UnrealizedHarvestItem on UnrealizedHarvestMatchResult {
-  sourceLot {
-    id
-    ...FiniteHarvestLotItem
-  }
-  matchedLotOrders {
-    id
-    ...MatchedLotOrderItem
-  }
+	sourceLot {
+		id
+		...FiniteHarvestLotItem
+	}
+	matchedLotOrders {
+		id
+		...MatchedLotOrderItem
+	}
 }
 
 query FiniteHarvest {
-  finiteHarvest {
-    harvestType
-    totalHarvestLots
-    summary {
-      realized {
-        gainTotal
-      }
-      unrealized {
-        gainTotal
-        lossTotal
-        total
-      }
-      includingCurrentHarvest {
-        realized {
-          gainTotal
-        }
-        unrealized {
-          gainTotal
-          lossTotal
-        }
-      }
-    }
-    lotsCurrent {
-      id
-      ...FiniteHarvestLotItem
-    }
-    unrealizedHarvestMatchResults {
-      ...UnrealizedHarvestItem
-    }
-  }
+	finiteHarvest {
+		harvestType
+		totalHarvestLots
+		summary {
+			realized {
+				gainTotal
+			}
+			unrealized {
+				gainTotal
+				lossTotal
+				total
+			}
+			includingCurrentHarvest {
+				realized {
+					gainTotal
+				}
+				unrealized {
+					gainTotal
+					lossTotal
+				}
+			}
+		}
+		lotsCurrent {
+			id
+			...FiniteHarvestLotItem
+		}
+		unrealizedHarvestMatchResults {
+			...UnrealizedHarvestItem
+		}
+	}
 }
 
 mutation DeleteHarvests($ids: [String!]!) {
-  deleteHarvests(ids: $ids)
+	deleteHarvests(ids: $ids)
 }
 
 fragment HarvestEvalResultFragment on HarvestEvalResult {
-  harvestType
-  summary {
-    realized {
-      gainTotal
-    }
-    unrealized {
-      gainTotal
-      lossTotal
-      total
-    }
-    includingCurrentHarvest {
-      realized {
-        gainTotal
-      }
-      unrealized {
-        gainTotal
-        lossTotal
-      }
-    }
-  }
-  lotsCurrent {
-    id
-    ...FiniteHarvestLotItem
-  }
-  matchedItems {
-    id
-    pairs {
-      sourceHarvestPAndL
-      matchedHarvestPAndL
-      sourceLots {
-        id
-        ...HarvestLotItem
-      }
-      matchedLots {
-        id
-        ...HarvestLotItem
-      }
-    }
-  }
-  totalHarvestLots
-  uniqueAssetSymbols
+	harvestType
+	summary {
+		realized {
+			gainTotal
+		}
+		unrealized {
+			gainTotal
+			lossTotal
+			total
+		}
+		includingCurrentHarvest {
+			realized {
+				gainTotal
+			}
+			unrealized {
+				gainTotal
+				lossTotal
+			}
+		}
+	}
+	lotsCurrent {
+		id
+		...FiniteHarvestLotItem
+	}
+	matchedItems {
+		id
+		pairs {
+			sourceHarvestPAndL
+			matchedHarvestPAndL
+			sourceLots {
+				id
+				...HarvestLotItem
+			}
+			matchedLots {
+				id
+				...HarvestLotItem
+			}
+		}
+	}
+	totalHarvestLots
+	uniqueAssetSymbols
 }
 
 query HarvestEvalResult($filters: HarvestEvalFilters) {
-  harvestEvalResult(filters: $filters) {
-    ...HarvestEvalResultFragment
-  }
+	harvestEvalResult(filters: $filters) {
+		...HarvestEvalResultFragment
+	}
 }

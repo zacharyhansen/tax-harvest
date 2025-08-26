@@ -1,28 +1,28 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "~/*": ["./*"],
-      "@postgrest-internal": [
-        "./node_modules/@supabase/postgrest-js/src/select-query-parser/result"
-      ]
-    },
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
-    "strictNullChecks": true
-  },
-  "include": [
-    "next-env.d.ts",
-    "next.config.mjs",
-    "postcss.config.mjs",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "types/**/*.d.ts"
-  ],
-  "exclude": ["node_modules"]
+	"extends": "@repo/typescript-config/nextjs.json",
+	"compilerOptions": {
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"paths": {
+			"~/*": ["./*"],
+			"@postgrest-internal": [
+				"./node_modules/@supabase/postgrest-js/src/select-query-parser/result"
+			]
+		},
+		"types": ["vitest/globals", "@testing-library/jest-dom"],
+		"strictNullChecks": true
+	},
+	"include": [
+		"next-env.d.ts",
+		"next.config.mjs",
+		"postcss.config.mjs",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		"types/**/*.d.ts"
+	],
+	"exclude": ["node_modules"]
 }

@@ -1,0 +1,18 @@
+# Validate commit messages
+commit-msg:
+  commands:
+    commitlint:
+      run: npx --no -- commitlint --edit {1}
+
+# Validate content before committing
+pre-commit:
+  commands:
+    biome:
+      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc,gql,yml,yaml,graphql}"
+      run: pnpm lint:fix
+      stage_fixed: true
+      priority: 1
+    check-types:
+      glob: "*.{ts,tsx}"
+      run: pnpm run check:types
+      priority: 2

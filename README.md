@@ -61,10 +61,6 @@
     <img src="https://zod.dev/logo.svg" alt="Zod" width="40" height="40" />
   </a>
 
-  <a href="https://eslint.org">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/ESLint_logo.svg" alt="ESLint" width="40" height="40" />
-  </a>
-
   <a href="https://prettier.io">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_5JKKZwBUda4VTSenmQwFta2rgoJZBo0Ikg&s" style="border-radius: 12px" alt="Prettier" width="40" height="40" />
   </a>

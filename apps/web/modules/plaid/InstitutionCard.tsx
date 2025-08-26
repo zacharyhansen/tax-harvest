@@ -1,23 +1,30 @@
 'use client';
 
 import { Card } from '@repo/ui/components/card';
-import { Building2, Plus, Calendar, RefreshCw, ChevronRight } from 'lucide-react';
 import {
-  usePlaidLinkTokenQuery,
-  usePlaidInstitutionQuery,
-  type PlaidAuthConnectionFragment,
+	Building2,
+	Calendar,
+	ChevronRight,
+	Plus,
+	RefreshCw,
+	User,
+} from 'lucide-react';
+import {
+	type PlaidAuthConnectionFragment,
+	usePlaidInstitutionQuery,
+	usePlaidLinkTokenQuery,
 } from '~/generated/gql';
-import PlaidLink from '~/modules/plaid/PlaidLink';
 import DeleteAuthConnectionDialog from '~/modules/plaid/DeleteAuthConnectionDialog';
+import PlaidLink from '~/modules/plaid/PlaidLink';
 import { LoadingIcon } from '~/modules/utility-components';
 import { Format } from '~/modules/utils';
 
 interface InstitutionCardProps {
-  authConnection: PlaidAuthConnectionFragment;
-  showAddButton?: boolean;
-  showDeleteButton?: boolean;
-  onAccountClick?: (accountId: string) => void;
-  redirectTo?: string;
+	authConnection: PlaidAuthConnectionFragment;
+	showAddButton?: boolean;
+	showDeleteButton?: boolean;
+	onAccountClick?: (accountId: string) => void;
+	redirectTo?: string;
 }
 
 /**
@@ -36,167 +43,181 @@ interface InstitutionCardProps {
  * />
  */
 export function InstitutionCard({
-  authConnection,
-  showAddButton = true,
-  showDeleteButton = false,
-  onAccountClick,
-  redirectTo = '/main/home',
+	authConnection,
+	showAddButton = true,
+	showDeleteButton = false,
+	onAccountClick,
+	redirectTo = '/main/home',
 }: InstitutionCardProps) {
-  const { data: institutionData, loading } = usePlaidInstitutionQuery({
-    variables: { institutionId: authConnection.plaidInstitutionId! },
-    skip: !authConnection.plaidInstitutionId,
-  });
+	const { data: institutionData, loading } = usePlaidInstitutionQuery({
+		// biome-ignore lint/style/noNonNullAssertion: <ok>
+		variables: { institutionId: authConnection.plaidInstitutionId! },
+		skip: !authConnection.plaidInstitutionId,
+	});
 
-  const { data: updateTokenData, refetch: refetchUpdateToken } =
-    usePlaidLinkTokenQuery({
-      variables: { authConnectionId: authConnection.id },
-    });
+	const { data: updateTokenData } = usePlaidLinkTokenQuery({
+		variables: { authConnectionId: authConnection.id },
+	});
 
-  const handleAccountClick = (accountId: string) => {
-    if (onAccountClick) {
-      onAccountClick(accountId);
-    }
-  };
+	const handleAccountClick = (accountId: string) => {
+		if (onAccountClick) {
+			onAccountClick(accountId);
+		}
+	};
 
-  const institution = institutionData?.plaidInstitution;
+	const institution = institutionData?.plaidInstitution;
 
-  return (
-    <Card className="overflow-hidden">
-      {/* Institution Header */}
-      <div className="bg-muted/30 p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {institution?.logo ? (
-              <img
-                src={institution.logo}
-                alt={institution.name}
-                className="h-10 w-10 rounded object-contain"
-                style={{
-                  backgroundColor: institution.primary_color || '#f5f5f5',
-                }}
-              />
-            ) : (
-              <div
-                className="bg-secondary flex h-10 w-10 items-center justify-center rounded"
-                style={{
-                  backgroundColor: institution?.primary_color || '',
-                }}
-              >
-                <Building2 className="h-5 w-5" />
-              </div>
-            )}
+	return (
+		<Card className="overflow-hidden">
+			{/* Institution Header */}
+			<div className="bg-muted/30 p-4">
+				<div className="flex items-center justify-between">
+					<div className="flex items-center gap-3">
+						{institution?.logo ? (
+							// biome-ignore lint/performance/noImgElement: <ok>
+							<img
+								src={institution.logo}
+								alt={institution.name}
+								className="h-10 w-10 rounded object-contain"
+								style={{
+									backgroundColor: institution.primary_color || '#f5f5f5',
+								}}
+							/>
+						) : (
+							<div
+								className="bg-secondary flex h-10 w-10 items-center justify-center rounded"
+								style={{
+									backgroundColor: institution?.primary_color || '',
+								}}
+							>
+								<Building2 className="h-5 w-5" />
+							</div>
+						)}
 
-            <div>
-              <h3 className="text-base font-semibold">
-                {loading
-                  ? 'Loading...'
-                  : institution?.name || 'Unknown Institution'}
-              </h3>
+						<div>
+							<h3 className="text-base font-semibold">
+								{loading
+									? 'Loading...'
+									: institution?.name || 'Unknown Institution'}
+							</h3>
 
-              <div className="text-muted-foreground flex items-center gap-3 text-xs">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-3 w-3" />
-                  <span>
-                    Connected{' '}
-                    {new Date(authConnection.authedAt).toLocaleDateString()}
-                  </span>
-                </div>
-                {authConnection.syncedAt && (
-                  <>
-                    <span>•</span>
-                    <div className="flex items-center gap-1">
-                      <RefreshCw className="h-3 w-3" />
-                      <span>
-                        Last synced{' '}
-                        {new Date(authConnection.syncedAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+							<div className="text-muted-foreground flex items-center gap-3 text-xs">
+								<div className="flex items-center gap-1">
+									<Calendar className="h-3 w-3" />
+									<span>
+										Connected{' '}
+										{new Date(authConnection.authedAt).toLocaleDateString()}
+									</span>
+								</div>
+								{authConnection.user && (
+									<>
+										<span>•</span>
+										<div className="flex items-center gap-1">
+											<User className="h-3 w-3" />
+											<span title={authConnection.user.email || ''}>
+												{authConnection.user.email}
+											</span>
+										</div>
+									</>
+								)}
+								{authConnection.syncedAt && (
+									<>
+										<span>•</span>
+										<div className="flex items-center gap-1">
+											<RefreshCw className="h-3 w-3" />
+											<span>
+												Last synced{' '}
+												{new Date(authConnection.syncedAt).toLocaleDateString()}
+											</span>
+										</div>
+									</>
+								)}
+							</div>
+						</div>
+					</div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2">
-            {showAddButton && (
-              <div>
-                {updateTokenData?.linkToken ? (
-                  <PlaidLink
-                    token={updateTokenData.linkToken}
-                    size="sm"
-                    iconLeft={<Plus className="h-4 w-4" />}
-                    redirectTo={redirectTo}
-                  >
-                    Add Accounts
-                  </PlaidLink>
-                ) : (
-                  <LoadingIcon className="mx-auto my-4" />
-                )}
-              </div>
-            )}
-            {showDeleteButton && (
-              <DeleteAuthConnectionDialog
-                authConnection={authConnection}
-                institutionName={institution?.name || 'Unknown Institution'}
-              />
-            )}
-          </div>
-        </div>
-      </div>
+					{/* Action Buttons */}
+					<div className="flex items-center gap-2">
+						{showAddButton && (
+							<div>
+								{updateTokenData?.linkToken ? (
+									<PlaidLink
+										token={updateTokenData.linkToken}
+										size="sm"
+										iconLeft={<Plus className="h-4 w-4" />}
+										redirectTo={redirectTo}
+									>
+										Add Accounts
+									</PlaidLink>
+								) : (
+									<LoadingIcon className="mx-auto my-4" />
+								)}
+							</div>
+						)}
+						{showDeleteButton && (
+							<DeleteAuthConnectionDialog
+								authConnection={authConnection}
+								institutionName={institution?.name || 'Unknown Institution'}
+							/>
+						)}
+					</div>
+				</div>
+			</div>
 
-      {/* Account List */}
-      <div className="divide-y">
-        {authConnection.accounts?.map(account => (
-          <div
-            key={account.id}
-            className={`group flex items-center justify-between px-6 py-3 transition-all duration-200 ${
-              onAccountClick 
-                ? 'hover:bg-muted/20 hover:shadow-sm cursor-pointer border-l-4 border-l-transparent hover:border-l-primary/50' 
-                : ''
-            }`}
-            onClick={() => handleAccountClick(account.id)}
-          >
-            <div className="flex items-center gap-2">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium group-hover:text-primary transition-colors">
-                    {account.name}
-                  </span>
-                  {account.plaidAccountMask && (
-                    <span className="text-muted-foreground text-xs">
-                      •••• {account.plaidAccountMask}
-                    </span>
-                  )}
-                </div>
-                {account.subType && (
-                  <span className="text-muted-foreground text-xs capitalize">
-                    {account.subType.toLowerCase().replace(/_/g, ' ')}
-                  </span>
-                )}
-              </div>
-            </div>
+			{/* Account List */}
+			<div className="divide-y">
+				{authConnection.accounts?.map((account) => (
+					// biome-ignore lint/a11y/noStaticElementInteractions: <ok>
+					// biome-ignore lint/a11y/useKeyWithClickEvents: <ok>
+					<div
+						key={account.id}
+						className={`group flex items-center justify-between px-6 py-3 transition-all duration-200 ${
+							onAccountClick
+								? 'hover:bg-muted/20 hover:shadow-sm cursor-pointer border-l-4 border-l-transparent hover:border-l-primary/50'
+								: ''
+						}`}
+						onClick={() => handleAccountClick(account.id)}
+					>
+						<div className="flex items-center gap-2">
+							<div>
+								<div className="flex items-center gap-2">
+									<span className="text-sm font-medium group-hover:text-primary transition-colors">
+										{account.name}
+									</span>
+									{account.plaidAccountMask && (
+										<span className="text-muted-foreground text-xs">
+											•••• {account.plaidAccountMask}
+										</span>
+									)}
+								</div>
+								{account.subType && (
+									<span className="text-muted-foreground text-xs capitalize">
+										{account.subType.toLowerCase().replace(/_/g, ' ')}
+									</span>
+								)}
+							</div>
+						</div>
 
-            <div className="flex items-center gap-2">
-              <div className="text-right">
-                {account.accountValueTotal != null && (
-                  <span className="text-sm font-semibold">
-                    {Format.money(account.accountValueTotal)}
-                  </span>
-                )}
-                {account.status && account.status !== 'ACTIVE' && (
-                  <div className="text-muted-foreground text-xs">
-                    {account.status}
-                  </div>
-                )}
-              </div>
-              {onAccountClick && (
-                <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </Card>
-  );
+						<div className="flex items-center gap-2">
+							<div className="text-right">
+								{account.accountValueTotal != null && (
+									<span className="text-sm font-semibold">
+										{Format.money(account.accountValueTotal)}
+									</span>
+								)}
+								{account.status && account.status !== 'ACTIVE' && (
+									<div className="text-muted-foreground text-xs">
+										{account.status}
+									</div>
+								)}
+							</div>
+							{onAccountClick && (
+								<ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+							)}
+						</div>
+					</div>
+				))}
+			</div>
+		</Card>
+	);
 }
