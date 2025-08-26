@@ -9,9 +9,11 @@ import {
 	TableHeader,
 	TableRow,
 } from '@repo/ui/components/table';
-import { Download, FileText } from 'lucide-react';
+import { toast } from '@repo/ui/components/toast-sonner';
+import { Download, FileText, Loader2 } from 'lucide-react';
+import { useState } from 'react';
 import type { AccountFileItemFragment } from '~/generated/gql';
-import { useAccountFilesQuery } from '~/generated/gql';
+import { useAccountFilesQuery, useSignedUrlsForDownloadLazyQuery } from '~/generated/gql';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { DateFormatter } from '~/modules/utils/DateFormatter';
 
@@ -84,11 +86,44 @@ interface FileRowProps {
 /**
  * Individual row component for displaying file information
  * @param file - The file data to display
+ * @example
+ * <FileRow file={file} />
  */
 function FileRow({ file }: FileRowProps) {
-	const handleDownload = () => {
-		// TODO: Implement file download functionality
-		console.log('Download file:', file.gcpFilename);
+	const [isDownloading, setIsDownloading] = useState(false);
+	const [getDownloadUrl] = useSignedUrlsForDownloadLazyQuery();
+
+	/**
+	 * Handles file download by fetching a signed URL from Google Cloud Storage
+	 * and opening it in a new window to trigger the download
+	 */
+	const handleDownload = async () => {
+		try {
+			setIsDownloading(true);
+			
+			const { data, error } = await getDownloadUrl({
+				variables: {
+					gcpFileNames: [file.gcpFilename],
+				},
+			});
+
+			if (error) {
+				throw new Error('Failed to generate download URL');
+			}
+
+			if (data?.genrerateSignedUrlsForDownload?.downloadUrls?.[0]) {
+				// Open the signed URL in a new window to trigger download
+				window.open(data.genrerateSignedUrlsForDownload.downloadUrls[0], '_blank');
+				toast.success(`Downloading ${file.displayName}`);
+			} else {
+				throw new Error('No download URL received');
+			}
+		} catch (error) {
+			console.error('Download error:', error);
+			toast.error('Failed to download file. Please try again.');
+		} finally {
+			setIsDownloading(false);
+		}
 	};
 
 	return (
@@ -112,10 +147,15 @@ function FileRow({ file }: FileRowProps) {
 					variant="outline"
 					size="sm"
 					onClick={handleDownload}
+					disabled={isDownloading}
 					className="flex items-center space-x-1"
 				>
-					<Download className="h-3 w-3" />
-					<span>Download</span>
+					{isDownloading ? (
+						<Loader2 className="h-3 w-3 animate-spin" />
+					) : (
+						<Download className="h-3 w-3" />
+					)}
+					<span>{isDownloading ? 'Downloading...' : 'Download'}</span>
 				</Button>
 			</TableCell>
 		</TableRow>
