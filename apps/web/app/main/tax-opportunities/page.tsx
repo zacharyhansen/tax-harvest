@@ -16,11 +16,13 @@ import { cn } from '@repo/ui/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BarChart3, ChevronDown, Info } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useHarvestEvalResultQuery } from '~/generated/gql';
 import { useOpenHarvests } from '~/modules/hooks/use-open-harvests';
+import { useScrollPosition } from '~/modules/hooks/use-scroll-position';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { MoneyUtil } from '~/modules/utils';
+import { PortfolioCompactBanner } from '~/components/portfolio-compact-banner';
 import { FilterForm, type FilterFormData } from './filter-form';
 import { HarvestContent } from './harvest-content';
 import { OpenHarvestsBanner } from './open-harvests-banner';
@@ -49,6 +51,8 @@ export default function TaxOpportunitiesPage() {
 	const { openHarvestCount } = useOpenHarvests();
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const portfolioBannerRef = useRef<HTMLDivElement>(null);
+	const { isScrolledPast } = useScrollPosition({ targetRef: portfolioBannerRef });
 	const [searchQuery, setSearchQuery] = useState<FilterFormData>({
 		minPAndL: searchParams.get('minPAndL')
 			? Number(searchParams.get('minPAndL'))
@@ -156,8 +160,17 @@ export default function TaxOpportunitiesPage() {
 				</div>
 			</motion.div>
 
+			{/* Compact Portfolio Banner */}
+			<PortfolioCompactBanner
+				netPosition={harvestEvalResult.summary.realized.gainTotal ?? 0}
+				unrealizedGain={harvestEvalResult.summary.unrealized.gainTotal ?? 0}
+				unrealizedLoss={harvestEvalResult.summary.unrealized.lossTotal ?? 0}
+				isVisible={isScrolledPast}
+			/>
+
 			{/* Portfolio Status */}
 			<motion.div
+				ref={portfolioBannerRef}
 				className="bg-background top-0 z-20 flex flex-col items-start md:sticky"
 				variants={itemVariants}
 			>
