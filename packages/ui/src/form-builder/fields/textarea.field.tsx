@@ -23,6 +23,7 @@ export default function TextareaField({
 					<FormItem>
 						<FormLabel>{label}</FormLabel>
 						<FormControl>
+							{/* @ts-expect-error */}
 							<Textarea {...props} {...field} />
 						</FormControl>
 						<FormDescription>{description}</FormDescription>

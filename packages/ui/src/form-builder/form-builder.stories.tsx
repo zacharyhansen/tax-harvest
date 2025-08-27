@@ -22,7 +22,6 @@ import SliderField from './fields/slider.field';
 
 import SwitchField from './fields/switch.field';
 import TextareaField from './fields/textarea.field';
-import TiptapBasicField from './fields/tiptap-minimal-field';
 
 const formSchema = z.object({
 	name_7152014886: z.boolean().default(true).optional(),
@@ -190,14 +189,6 @@ export const AllFields: Story = {
 							label="Textarea Field"
 							description="Textarea allows for long form text and resizing."
 						/>
-
-						<TiptapBasicField
-							name="name_8427457173"
-							label="Tiptap Basic Field"
-							description="Tiptap allows for a rich text editing expeirence in the form. Nodes can be moved around etc."
-							placeholder="Start typing..."
-						/>
-
 						<Button
 							disabled={!form.formState.isDirty}
 							type="submit"

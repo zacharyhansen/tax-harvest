@@ -45,7 +45,7 @@ const columns: ColumnDef<PositionItemFragment, never>[] = [
 		cell: ({ getValue }) => {
 			const isLongTermGains = isOlderThanOneYear(getValue());
 			return (
-				<Badge variant={isLongTermGains ? 'outline-solid' : 'secondary'}>
+				<Badge variant={isLongTermGains ? 'outline' : 'secondary'}>
 					{isLongTermGains ? 'Long Term' : 'Short Term'}
 				</Badge>
 			);

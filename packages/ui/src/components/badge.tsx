@@ -1,7 +1,6 @@
 import { cn } from '@repo/ui/utils';
 import type { VariantProps } from 'class-variance-authority';
 import type * as React from 'react';
-
 import { badgeVariants } from './badge.variants';
 
 export type BadgeProps = {} & React.HTMLAttributes<HTMLDivElement> &

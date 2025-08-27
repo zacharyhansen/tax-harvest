@@ -159,7 +159,7 @@ export function findLotChangeSets(
 		// @ts-expect-error - This is a custom error
 		err.data = {
 			...params,
-			uniqueLotChanges: uniqueLotChangeSolutions,
+			uniqueLotChangeSolutions,
 		};
 		throw err;
 	}

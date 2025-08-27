@@ -1,0 +1,886 @@
+[
+	[
+		"ATUS",
+		[
+			{
+				"quantity": "10",
+				"price": "2.539",
+				"lotId": "l-ATUS-0",
+				"accountId": "test-account",
+				"acquiredDate": "2025-05-01T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "2.355",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-22T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "2.3392",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "2.2692",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "2.075",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-11T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"AZN",
+		[
+			{
+				"quantity": "1",
+				"price": "78.99",
+				"lotId": "l-AZN-1",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "78.43",
+				"lotId": "l-AZN-2",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "71.55",
+				"lotId": "l-AZN-3",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "80.025",
+				"lotId": "l-AZN-4",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-25T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"CLF",
+		[
+			{
+				"quantity": "6",
+				"price": "8.115",
+				"lotId": "l-CLF-5",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "8.558",
+				"lotId": "l-CLF-6",
+				"accountId": "test-account",
+				"acquiredDate": "2025-05-01T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "10.405",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "5",
+				"price": "10.2662",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"GT",
+		[
+			{
+				"quantity": "4",
+				"price": "10.705",
+				"lotId": "l-GT-7",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "8.475",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "3",
+				"price": "8.475",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "5",
+				"price": "8.576",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-13T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "5",
+				"price": "8.445",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"IQ",
+		[
+			{
+				"quantity": "20",
+				"price": "1.876",
+				"lotId": "l-IQ-8",
+				"accountId": "test-account",
+				"acquiredDate": "2025-05-01T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "2.4399",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-22T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "2.395",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"JBL",
+		[
+			{
+				"quantity": "1",
+				"price": "116.08",
+				"lotId": "l-JBL-9",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "111.42",
+				"lotId": "l-JBL-10",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-26T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"KDP",
+		[
+			{
+				"quantity": "1",
+				"price": "34.16",
+				"lotId": "l-KDP-11",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "34.43",
+				"lotId": "l-KDP-12",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"MNST",
+		[
+			{
+				"quantity": "1",
+				"price": "53.07",
+				"lotId": "l-MNST-13",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "48.66",
+				"lotId": "l-MNST-14",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "59.7967",
+				"lotId": "l-MNST-15",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"NKE",
+		[
+			{
+				"quantity": "2",
+				"price": "76.01",
+				"lotId": "l-NKE-16",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-28T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "54.74",
+				"lotId": "l-NKE-17",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-16T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"OKLO",
+		[
+			{
+				"quantity": "1",
+				"price": "7.55",
+				"lotId": "l-OKLO-18",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "10.08",
+				"lotId": "l-OKLO-19",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "9.62",
+				"lotId": "l-OKLO-20",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-24T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "9.4",
+				"lotId": "l-OKLO-21",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-26T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "26.74",
+				"lotId": "l-OKLO-22",
+				"accountId": "test-account",
+				"acquiredDate": "2025-05-01T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"ON",
+		[
+			{
+				"quantity": "1",
+				"price": "74.38",
+				"lotId": "l-ON-23",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "69.23",
+				"lotId": "l-ON-24",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "67.93",
+				"lotId": "l-ON-25",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-26T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "34.7",
+				"lotId": "l-ON-26",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-16T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "4",
+				"price": "38.4875",
+				"lotId": "l-ON-27",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"OPEN",
+		[
+			{
+				"quantity": "5",
+				"price": "2.156",
+				"lotId": "l-OPEN-28",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "1.87",
+				"lotId": "l-OPEN-29",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "1.836",
+				"lotId": "l-OPEN-30",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-24T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "4",
+				"price": "1.75",
+				"lotId": "l-OPEN-31",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-26T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "2.155",
+				"lotId": "l-OPEN-32",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-05T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "0.95333",
+				"lotId": "l-OPEN-33",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-15T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "0.95333",
+				"lotId": "l-OPEN-34",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-16T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "8",
+				"price": "0.96",
+				"lotId": "l-OPEN-35",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-17T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "20",
+				"price": "0.75",
+				"lotId": "l-OPEN-36",
+				"accountId": "test-account",
+				"acquiredDate": "2025-05-01T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "3.365",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"PK",
+		[
+			{
+				"quantity": "6",
+				"price": "9.75",
+				"lotId": "l-PK-37",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "11.0464",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "5",
+				"price": "10.4995",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"PLTR",
+		[
+			{
+				"quantity": "2",
+				"price": "20.87",
+				"lotId": "l-PLTR-38",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "20.82",
+				"lotId": "l-PLTR-39",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "26.44",
+				"lotId": "l-PLTR-40",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "24.46",
+				"lotId": "l-PLTR-41",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-26T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"QYLD",
+		[
+			{
+				"quantity": "4",
+				"price": "16.015",
+				"lotId": "l-QYLD-42",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-17T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "17.53",
+				"lotId": "l-QYLD-43",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-25T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "4",
+				"price": "16.34",
+				"lotId": "l-QYLD-44",
+				"accountId": "test-account",
+				"acquiredDate": "2025-05-01T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"SHOP",
+		[
+			{
+				"quantity": "1",
+				"price": "64.53",
+				"lotId": "l-SHOP-45",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "64.66",
+				"lotId": "l-SHOP-46",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-26T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"SNAP",
+		[
+			{
+				"quantity": "10",
+				"price": "7.737",
+				"lotId": "l-SNAP-47",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "10",
+				"price": "7.255",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"SOFI",
+		[
+			{
+				"quantity": "3",
+				"price": "6.96",
+				"lotId": "l-SOFI-48",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "4",
+				"price": "6.41",
+				"lotId": "l-SOFI-49",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-20T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "6.4465",
+				"lotId": "l-SOFI-50",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-24T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "10.7467",
+				"lotId": "l-SOFI-51",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-16T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "6",
+				"price": "12.43",
+				"lotId": "l-SOFI-52",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"SQQQ",
+		[
+			{
+				"quantity": "4",
+				"price": "30.065",
+				"lotId": "l-SQQQ-53",
+				"accountId": "test-account",
+				"acquiredDate": "2025-05-06T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "16.925",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-13T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"T",
+		[
+			{
+				"quantity": "2",
+				"price": "17.39",
+				"lotId": "l-T-54",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "2",
+				"price": "18.66",
+				"lotId": "l-T-55",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-26T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "27.66",
+				"lotId": "l-T-56",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-16T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"VALE",
+		[
+			{
+				"quantity": "6",
+				"price": "9.355",
+				"lotId": "l-VALE-57",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-30T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "10.355",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"WBD",
+		[
+			{
+				"quantity": "2",
+				"price": "8.035",
+				"lotId": "l-WBD-58",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-23T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "7.19",
+				"lotId": "l-WBD-59",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-26T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "8.1167",
+				"lotId": "l-WBD-60",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-16T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "3",
+				"price": "8.4967",
+				"lotId": "l-WBD-61",
+				"accountId": "test-account",
+				"acquiredDate": "2025-05-01T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "10.976",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"XYZ",
+		[
+			{
+				"quantity": "2",
+				"price": "54.345",
+				"lotId": "l-XYZ-62",
+				"accountId": "test-account",
+				"acquiredDate": "2025-04-17T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "58.17",
+				"lotId": "l-XYZ-63",
+				"accountId": "test-account",
+				"acquiredDate": "2024-06-07T19:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "1",
+				"price": "64.62",
+				"lotId": "l-XYZ-64",
+				"accountId": "test-account",
+				"acquiredDate": "2024-05-10T19:00:00.000Z",
+				"isNewBuy": false
+			}
+		]
+	],
+	[
+		"JBIO",
+		[
+			{
+				"quantity": "1",
+				"price": "7.813",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-22T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "5",
+				"price": "7.375",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "7.645",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-11T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"HL",
+		[
+			{
+				"quantity": "4",
+				"price": "7.8891",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-22T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "5",
+				"price": "7.7159",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "5",
+				"price": "7.1392",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-07T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"CERO",
+		[
+			{
+				"quantity": "4",
+				"price": "8.3958",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-22T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "5",
+				"price": "8.5277",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "15",
+				"price": "8",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-11T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"MFG",
+		[
+			{
+				"quantity": "5",
+				"price": "6.5792",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-22T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "6.6092",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	],
+	[
+		"PRTG",
+		[
+			{
+				"quantity": "7",
+				"price": "8.7362",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "9.1043",
+				"lotId": "test lot id",
+				"acquiredDate": "2025-08-11T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		]
+	]
+]

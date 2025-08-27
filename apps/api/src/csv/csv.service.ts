@@ -37,7 +37,33 @@ export class CsvService {
 		return records;
 	}
 
-	etradeTransformCSVRecords({ records }: { records: EtradeCSVLotRecord[] }): {
+	/**
+	 * Transforms E*TRADE CSV lot records into a standardized format with timezone-aware date handling.
+	 *
+	 * @param records - Array of raw E*TRADE CSV lot records
+	 * @param lotSeededDate - Optional date extracted from CSV generation timestamp, used for timezone correction
+	 * @returns Array of transformed lot records with properly adjusted dates
+	 *
+	 * @example
+	 * ```typescript
+	 * const csvContent = "Generated at Aug 4 2025 08:51 PM ET...";
+	 * const { records, lotSeededDate } = await service.etradeCSVToLots({ content: csvContent });
+	 * const transformedRecords = service.etradeTransformCSVRecords({ records, lotSeededDate });
+	 * // Dates will be adjusted to the timezone specified in the CSV (ET in this example)
+	 * ```
+	 *
+	 * @remarks
+	 * When lotSeededDate is provided, lot acquisition dates are parsed as 12:00 PM in the CSV's timezone.
+	 * Without lotSeededDate, dates default to local system timezone.
+	 * The CSV format expects lot dates in MM/DD/YYYY format within the Symbol column.
+	 */
+	etradeTransformCSVRecords({
+		records,
+		lotSeededDate,
+	}: {
+		records: EtradeCSVLotRecord[];
+		lotSeededDate?: Date;
+	}): {
 		acquiredDate: Date;
 		assetSymbol: string;
 		price: Decimal;
@@ -59,14 +85,40 @@ export class CsvService {
 			);
 		}
 
+		// Extract timezone offset from lotSeededDate if available
+		let timezoneOffsetMinutes = 0;
+		if (lotSeededDate) {
+			timezoneOffsetMinutes = lotSeededDate.getTimezoneOffset();
+		}
+
 		const transformedRecords = [];
 		let currentTicker = '';
 		for (const record of records) {
 			if (/^\D+$/.test(record.Symbol)) {
 				currentTicker = record.Symbol;
 			} else {
+				// Parse the date string (MM/DD/YYYY format) and create timezone-aware date
+				const dateStr = record.Symbol;
+				const [month, day, year] = dateStr
+					.split('/')
+					.map((num) => parseInt(num, 10));
+
+				// Create date at 12:00 PM (noon) in the CSV's timezone
+				let acquiredDate: Date;
+				if (lotSeededDate) {
+					// Create date in UTC first, then adjust for the CSV's timezone
+					const utcDate = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
+					// Apply the timezone offset from the lotSeededDate
+					acquiredDate = new Date(
+						utcDate.getTime() - timezoneOffsetMinutes * 60 * 1000,
+					);
+				} else {
+					// Fallback to local timezone if no lotSeededDate available
+					acquiredDate = new Date(year, month - 1, day, 12, 0, 0);
+				}
+
 				transformedRecords.push({
-					acquiredDate: new Date(record.Symbol),
+					acquiredDate,
 					assetSymbol: currentTicker,
 					price: new Decimal(record['Price Paid $']),
 					remainingQty: new Decimal(record.Quantity),

@@ -69,7 +69,7 @@ export const Link: Story = {
 };
 export const Outline: Story = {
 	args: {
-		variant: 'outline-solid',
+		variant: 'outline',
 		children: 'ButtonShadcn',
 	},
 };

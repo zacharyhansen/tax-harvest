@@ -13,7 +13,10 @@ import { toast } from '@repo/ui/components/toast-sonner';
 import { Download, FileText, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import type { AccountFileItemFragment } from '~/generated/gql';
-import { useAccountFilesQuery, useSignedUrlsForDownloadLazyQuery } from '~/generated/gql';
+import {
+	useAccountFilesQuery,
+	useSignedUrlsForDownloadLazyQuery,
+} from '~/generated/gql';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { DateFormatter } from '~/modules/utils/DateFormatter';
 
@@ -100,7 +103,7 @@ function FileRow({ file }: FileRowProps) {
 	const handleDownload = async () => {
 		try {
 			setIsDownloading(true);
-			
+
 			const { data, error } = await getDownloadUrl({
 				variables: {
 					gcpFileNames: [file.gcpFilename],
@@ -112,7 +115,8 @@ function FileRow({ file }: FileRowProps) {
 				throw new Error(`Failed to generate download URL: ${error.message}`);
 			}
 
-			const downloadUrl = data?.genrerateSignedUrlsForDownload?.downloadUrls?.[0];
+			const downloadUrl =
+				data?.genrerateSignedUrlsForDownload?.downloadUrls?.[0];
 			if (!downloadUrl) {
 				throw new Error('No download URL received from server');
 			}
@@ -129,7 +133,8 @@ function FileRow({ file }: FileRowProps) {
 			toast.success(`Download started for ${file.displayName}`);
 		} catch (error) {
 			console.error('Download error:', error);
-			const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+			const errorMessage =
+				error instanceof Error ? error.message : 'Unknown error occurred';
 			toast.error(`Download failed: ${errorMessage}`);
 		} finally {
 			setIsDownloading(false);

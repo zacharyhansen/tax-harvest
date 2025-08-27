@@ -61,7 +61,7 @@ describe('csvService', () => {
 	});
 
 	describe('etradeTransformCSVRecords', () => {
-		it('should transform valid etrade lot records with dates', () => {
+		it('should transform valid etrade lot records with dates (no timezone)', () => {
 			const records = service.etradeTransformCSVRecords({
 				records: lotRecordsFromEtradePortfolioDownload,
 			});
@@ -86,6 +86,141 @@ describe('csvService', () => {
 					acquiredDate: r.acquiredDate.toISOString(),
 				})),
 			).toEqual(transformedLotRecordsFromEtradePortfolioDownload_3);
+		});
+
+		it('should transform records with timezone-aware dates when lotSeededDate is provided', () => {
+			// Test with Eastern Time (ET) - during daylight saving time (EDT)
+			const etLotSeededDate = new Date('2024-08-15T20:30:00-0400'); // EDT: UTC-4
+			const testRecords = [
+				{
+					Symbol: 'AAPL',
+					'Last Price $': '150.00',
+					'Change $': '2.50',
+					'Change %': '1.69',
+					Quantity: '10.0000',
+					'Price Paid $': '145.00',
+					"Day's Gain $": '25.00',
+					'Total Gain $': '50.00',
+					'Total Gain %': '3.45',
+					'Value $': '1500.00',
+				},
+				{
+					Symbol: '05/10/2024', // This is the lot date
+					'Last Price $': '150.00',
+					'Change $': '2.50',
+					'Change %': '1.69',
+					Quantity: '5.0000',
+					'Price Paid $': '140.00',
+					"Day's Gain $": '50.00',
+					'Total Gain $': '50.00',
+					'Total Gain %': '7.14',
+					'Value $': '750.00',
+				},
+			];
+
+			const transformedRecords = service.etradeTransformCSVRecords({
+				records: testRecords,
+				lotSeededDate: etLotSeededDate,
+			});
+
+			expect(transformedRecords).toHaveLength(1);
+
+			// The date should be May 10, 2024 at 12:00 PM in EDT
+			// EDT is UTC-4, so 12:00 PM EDT = 16:00 UTC
+			const expectedDate = new Date('2024-05-10T16:00:00.000Z');
+			expect(transformedRecords[0].acquiredDate.getTime()).toBe(
+				expectedDate.getTime(),
+			);
+			expect(transformedRecords[0].assetSymbol).toBe('AAPL');
+		});
+
+		it('should handle Pacific Time timezone correctly', () => {
+			// Test with Pacific Time (PT) - during standard time (PST)
+			const pstLotSeededDate = new Date('2024-01-15T21:30:00-0800'); // PST: UTC-8
+			const testRecords = [
+				{
+					Symbol: 'MSFT',
+					'Last Price $': '400.00',
+					'Change $': '5.00',
+					'Change %': '1.27',
+					Quantity: '10.0000',
+					'Price Paid $': '350.00',
+					"Day's Gain $": '50.00',
+					'Total Gain $': '500.00',
+					'Total Gain %': '14.29',
+					'Value $': '4000.00',
+				},
+				{
+					Symbol: '12/25/2023', // Christmas day
+					'Last Price $': '400.00',
+					'Change $': '5.00',
+					'Change %': '1.27',
+					Quantity: '3.0000',
+					'Price Paid $': '320.00',
+					"Day's Gain $": '240.00',
+					'Total Gain $': '240.00',
+					'Total Gain %': '25.00',
+					'Value $': '1200.00',
+				},
+			];
+
+			const transformedRecords = service.etradeTransformCSVRecords({
+				records: testRecords,
+				lotSeededDate: pstLotSeededDate,
+			});
+
+			expect(transformedRecords).toHaveLength(1);
+
+			// The date should be December 25, 2023 at 12:00 PM in PST
+			// PST is UTC-8, so 12:00 PM PST = 20:00 UTC
+			const expectedDate = new Date('2023-12-25T20:00:00.000Z');
+			expect(transformedRecords[0].acquiredDate.getTime()).toBe(
+				expectedDate.getTime(),
+			);
+			expect(transformedRecords[0].assetSymbol).toBe('MSFT');
+		});
+
+		it('should fallback to local timezone when no lotSeededDate is provided', () => {
+			const testRecords = [
+				{
+					Symbol: 'GOOGL',
+					'Last Price $': '2800.00',
+					'Change $': '25.00',
+					'Change %': '0.90',
+					Quantity: '1.0000',
+					'Price Paid $': '2500.00',
+					"Day's Gain $": '25.00',
+					'Total Gain $': '300.00',
+					'Total Gain %': '12.00',
+					'Value $': '2800.00',
+				},
+				{
+					Symbol: '03/15/2024',
+					'Last Price $': '2800.00',
+					'Change $': '25.00',
+					'Change %': '0.90',
+					Quantity: '2.0000',
+					'Price Paid $': '2400.00',
+					"Day's Gain $": '50.00',
+					'Total Gain $': '800.00',
+					'Total Gain %': '16.67',
+					'Value $': '5600.00',
+				},
+			];
+
+			const transformedRecords = service.etradeTransformCSVRecords({
+				records: testRecords,
+				// No lotSeededDate provided
+			});
+
+			expect(transformedRecords).toHaveLength(1);
+
+			// Without timezone info, should create local date at noon
+			const expectedDate = new Date(2024, 2, 15, 12, 0, 0); // March 15, 2024 12:00 PM local
+			expect(transformedRecords[0].acquiredDate.getTime()).toBe(
+				expectedDate.getTime(),
+			);
+			expect(transformedRecords[0].assetSymbol).toBe('GOOGL');
 		});
 
 		it('should throw error when no dates are found in records', () => {
@@ -128,12 +263,13 @@ describe('csvService', () => {
 		const content = CsvService.csvToString(
 			resolve(__dirname, './test/etradePortfolioDownload_2.csv'),
 		);
-		const { records } = await service.etradeCSVToLots({
+		const { records, lotSeededDate } = await service.etradeCSVToLots({
 			content,
 		});
 		expect(records).toEqual(lotRecordsFromEtradePortfolioDownload_2);
 		const finalRecords = service.etradeTransformCSVRecords({
 			records,
+			lotSeededDate,
 		});
 
 		expect(
@@ -144,5 +280,33 @@ describe('csvService', () => {
 				acquiredDate: r.acquiredDate.toISOString(),
 			})),
 		).toEqual(transformedLotRecordsFromEtradePortfolioDownload_2);
+	});
+
+	it('should work end to end with timezone-aware date parsing', async () => {
+		const content = CsvService.csvToString(
+			resolve(__dirname, './test/etradePortfolioDownload.csv'),
+		);
+		const { records, lotSeededDate } = await service.etradeCSVToLots({
+			content,
+		});
+
+		// Ensure we got a lotSeededDate from the CSV
+		expect(lotSeededDate).toBeDefined();
+		expect(lotSeededDate?.toISOString()).toBe('2024-10-28T04:30:00.000Z');
+
+		const finalRecords = service.etradeTransformCSVRecords({
+			records,
+			lotSeededDate,
+		});
+
+		// Verify that dates are properly timezone-adjusted
+		// The lotSeededDate indicates EDT (UTC-4), so lot dates should be adjusted accordingly
+		const firstRecord = finalRecords[0];
+		expect(firstRecord).toBeDefined();
+
+		// The hour should be adjusted for the EDT timezone (4 hours ahead of the seeded date)
+		// Since we set lot dates to 12:00 PM in the CSV's timezone,
+		// and EDT is UTC-4, the UTC time should be 16:00
+		expect(firstRecord.acquiredDate.getUTCHours()).toBe(16);
 	});
 });

@@ -166,7 +166,6 @@ export function FilterForm({
 												<DatePickerField
 													name="purchaseDateBefore"
 													label="Purchased Before"
-													type="date"
 													description="Only include lots purchased before this date"
 												/>
 											</div>
@@ -175,7 +174,6 @@ export function FilterForm({
 												<DatePickerField
 													name="purchaseDateAfter"
 													label="Purchased After"
-													type="date"
 													description="Only include lots purchased after this date"
 												/>
 											</div>

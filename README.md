@@ -76,10 +76,6 @@
   <a href="https://pnpm.io">
     <img src="https://avatars.githubusercontent.com/u/21320719?v=4" alt="Github Actions" width="40" height="40" style="border-radius: 8px" />
   </a>
-
-  <a href="https://tiptap.dev/docs">
-    <img src="https://cdn.prod.website-files.com/645a9acecda2e0594fac6126/657c5d6268aea6c85dd4a066_tiptap-editor-hero.png" alt="Tiptap" width="40" height="40" style="border-radius: 8px" />
-  </a>
 </div>
 
 ### Apps and Packages

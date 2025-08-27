@@ -10,6 +10,8 @@ import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { ExternalSyncLogView } from './external-sync-log-view';
+import { InvestmentsHoldingsLogView } from './investments-holdings-log-view';
+import { PlaidTrxMergeErrorLogView } from './plaid-trx-merge-error-log-view';
 import { PlaidTrxMergeSuccessLogView } from './plaid-trx-merge-success-view';
 import { PlaidTrxMergeLogView } from './plaid-trx-merge-view';
 
@@ -62,11 +64,16 @@ export default function LogPage(props: {
 					// @ts-expect-error - LotTransactionBatch is not defined in the log type
 					LotTransactionBatch={data.log.LotTransactionBatch ?? undefined}
 				/>
+			) : data?.log?.type === 'PLAID_TRX_MERGE_ERROR' ? (
+				<PlaidTrxMergeErrorLogView data={data.log.data} />
 			) : data?.log?.type === 'PLAID_TRX_MERGE_SUCCESS' ? (
 				<PlaidTrxMergeSuccessLogView data={data.log.data} />
 			) : data?.log?.type === 'EXTERNAL_SYNC' &&
 				data?.log?.description === '/investmentsTransactionsGet' ? (
 				<ExternalSyncLogView data={data.log.data} />
+			) : data?.log?.type === 'EXTERNAL_SYNC' &&
+				data?.log?.description === '/investmentsHoldingsGet' ? (
+				<InvestmentsHoldingsLogView data={data.log.data} />
 			) : (
 				<ReactJsonView
 					src={data?.log?.data}

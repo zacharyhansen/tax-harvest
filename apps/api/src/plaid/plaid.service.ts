@@ -348,10 +348,13 @@ export class PlaidService {
 			plaidAuthConnection,
 		});
 
-		// Now we attempt to process the unapplied transactions based on initialLots and initialPositions
-		// await this.applyNewTransactions({
-		//   authConnection: plaidAuthConnection,
-		// })
+		for (const account of accounts) {
+			// Now we attempt to process the unapplied transactions based on initialLots and initialPositions
+			await this.applyNewTransactions({
+				accountId: account.id,
+				portfolioId: plaidAuthConnection.portfolioId,
+			});
+		}
 
 		return accounts;
 	}
@@ -442,7 +445,7 @@ export class PlaidService {
 							error: error as InputJsonValue,
 							input: JSON.parse(JSON.stringify(resolveInput)),
 						},
-						description: `Trx merge failed with error: ${JSON.stringify(error)}`,
+						description: `Trx merge failed.`,
 						source: AuthSource.PLAID,
 						type: LogType.PLAID_TRX_MERGE_ERROR,
 						portfolioId,

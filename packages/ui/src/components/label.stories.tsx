@@ -8,6 +8,7 @@ const meta = {
 		children: 'Shadcn',
 	},
 	tags: ['autodocs'],
+	// @ts-expect-error
 	component: (args) => <Label {...args}>{args.children}</Label>,
 	parameters: {
 		layout: 'centered',

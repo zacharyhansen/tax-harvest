@@ -4,7 +4,7 @@ export { default as NavLinkCell } from './cells/nav-link.cell';
 export { default as OptionsCell } from './cells/options.cell';
 export { defaultColumnTypes } from './column-types';
 export { dataTypeDefinitions } from './data-type-definitions';
-export { themeBalhamGridOptions, themeQuartzGridOptions } from './grid-options';
+export { themeBalhamGridOptions } from './grid-options';
 export enum FilterType {
 	empty = 'empty',
 	equals = 'equals',

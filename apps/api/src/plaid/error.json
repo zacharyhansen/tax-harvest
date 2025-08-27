@@ -1,0 +1,662 @@
+{
+	"name": "MultipleResultsFound",
+	"data": {
+		"lotsData": [
+			{
+				"quantity": "10",
+				"price": "2.539",
+				"lotId": "3a224a82-59c0-4805-8475-e510e07a0878",
+				"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+				"acquiredDate": "2025-05-01T00:00:00.000Z",
+				"isNewBuy": false
+			},
+			{
+				"quantity": "5",
+				"price": "2.355",
+				"lotId": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+				"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+				"acquiredDate": "2025-08-22T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "2.3392",
+				"lotId": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+				"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+				"acquiredDate": "2025-08-18T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "2.2692",
+				"lotId": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+				"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+				"acquiredDate": "2025-08-12T00:00:00.000Z",
+				"isNewBuy": true
+			},
+			{
+				"quantity": "10",
+				"price": "2.075",
+				"lotId": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+				"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+				"acquiredDate": "2025-08-11T00:00:00.000Z",
+				"isNewBuy": true
+			}
+		],
+		"targetQuantity": "37",
+		"targetValue": "85.07",
+		"symbol": "ATUS",
+		"uniqueLotChanges": [
+			[
+				{
+					"quantity": "10",
+					"price": "2.539",
+					"lotId": "3a224a82-59c0-4805-8475-e510e07a0878",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-05-01T00:00:00.000Z",
+					"isNewBuy": false,
+					"quantityChange": "1",
+					"quantityFinal": "9",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "3a224a82-59c0-4805-8475-e510e07a0878",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "9",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.539",
+						"acquiredDate": "2025-05-01T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "5",
+					"price": "2.355",
+					"lotId": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-22T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "5",
+					"quantityFinal": "0",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "0",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.355",
+						"acquiredDate": "2025-08-22T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.3392",
+					"lotId": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-18T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "1",
+					"quantityFinal": "9",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "9",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.3392",
+						"acquiredDate": "2025-08-18T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.2692",
+					"lotId": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-12T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "1",
+					"quantityFinal": "9",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "9",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.2692",
+						"acquiredDate": "2025-08-12T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.075",
+					"lotId": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-11T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "0",
+					"quantityFinal": "10",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "10",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.075",
+						"acquiredDate": "2025-08-11T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				}
+			],
+			[
+				{
+					"quantity": "10",
+					"price": "2.539",
+					"lotId": "3a224a82-59c0-4805-8475-e510e07a0878",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-05-01T00:00:00.000Z",
+					"isNewBuy": false,
+					"quantityChange": "2",
+					"quantityFinal": "8",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "3a224a82-59c0-4805-8475-e510e07a0878",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "8",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.539",
+						"acquiredDate": "2025-05-01T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "5",
+					"price": "2.355",
+					"lotId": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-22T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "1",
+					"quantityFinal": "4",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "4",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.355",
+						"acquiredDate": "2025-08-22T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.3392",
+					"lotId": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-18T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "2",
+					"quantityFinal": "8",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "8",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.3392",
+						"acquiredDate": "2025-08-18T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.2692",
+					"lotId": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-12T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "3",
+					"quantityFinal": "7",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "7",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.2692",
+						"acquiredDate": "2025-08-12T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.075",
+					"lotId": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-11T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "0",
+					"quantityFinal": "10",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "10",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.075",
+						"acquiredDate": "2025-08-11T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				}
+			],
+			[
+				{
+					"quantity": "10",
+					"price": "2.539",
+					"lotId": "3a224a82-59c0-4805-8475-e510e07a0878",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-05-01T00:00:00.000Z",
+					"isNewBuy": false,
+					"quantityChange": "5",
+					"quantityFinal": "5",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "3a224a82-59c0-4805-8475-e510e07a0878",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "5",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.539",
+						"acquiredDate": "2025-05-01T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "5",
+					"price": "2.355",
+					"lotId": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-22T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "0",
+					"quantityFinal": "5",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "5",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.355",
+						"acquiredDate": "2025-08-22T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.3392",
+					"lotId": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-18T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "0",
+					"quantityFinal": "10",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "10",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.3392",
+						"acquiredDate": "2025-08-18T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.2692",
+					"lotId": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-12T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "0",
+					"quantityFinal": "10",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "10",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.2692",
+						"acquiredDate": "2025-08-12T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.075",
+					"lotId": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-11T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "3",
+					"quantityFinal": "7",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "7",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.075",
+						"acquiredDate": "2025-08-11T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				}
+			],
+			[
+				{
+					"quantity": "10",
+					"price": "2.539",
+					"lotId": "3a224a82-59c0-4805-8475-e510e07a0878",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-05-01T00:00:00.000Z",
+					"isNewBuy": false,
+					"quantityChange": "2",
+					"quantityFinal": "8",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "3a224a82-59c0-4805-8475-e510e07a0878",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "8",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.539",
+						"acquiredDate": "2025-05-01T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "5",
+					"price": "2.355",
+					"lotId": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-22T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "5",
+					"quantityFinal": "0",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "0",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.355",
+						"acquiredDate": "2025-08-22T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.3392",
+					"lotId": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-18T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "0",
+					"quantityFinal": "10",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "10",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.3392",
+						"acquiredDate": "2025-08-18T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.2692",
+					"lotId": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-12T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "0",
+					"quantityFinal": "10",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "10",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.2692",
+						"acquiredDate": "2025-08-12T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.075",
+					"lotId": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-11T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "1",
+					"quantityFinal": "9",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "9",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.075",
+						"acquiredDate": "2025-08-11T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				}
+			],
+			[
+				{
+					"quantity": "10",
+					"price": "2.539",
+					"lotId": "3a224a82-59c0-4805-8475-e510e07a0878",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-05-01T00:00:00.000Z",
+					"isNewBuy": false,
+					"quantityChange": "3",
+					"quantityFinal": "7",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "3a224a82-59c0-4805-8475-e510e07a0878",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "7",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.539",
+						"acquiredDate": "2025-05-01T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "5",
+					"price": "2.355",
+					"lotId": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-22T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "1",
+					"quantityFinal": "4",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7fdf66fd-8b94-4393-b719-9d716f84192d",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "4",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.355",
+						"acquiredDate": "2025-08-22T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.3392",
+					"lotId": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-18T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "1",
+					"quantityFinal": "9",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "4e8368d5-672e-49ed-a09f-83bb1e5e770c",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "9",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.3392",
+						"acquiredDate": "2025-08-18T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.2692",
+					"lotId": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-12T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "2",
+					"quantityFinal": "8",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "7b52a214-08c6-4046-a085-e910bc2af9b1",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "8",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.2692",
+						"acquiredDate": "2025-08-12T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				},
+				{
+					"quantity": "10",
+					"price": "2.075",
+					"lotId": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+					"accountId": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67",
+					"acquiredDate": "2025-08-11T00:00:00.000Z",
+					"isNewBuy": true,
+					"quantityChange": "1",
+					"quantityFinal": "9",
+					"symbol": "ATUS",
+					"upsert": {
+						"id": "ec3d00e9-caaa-4f18-b152-82c23268efe9",
+						"account": {
+							"connect": { "id": "aeec08d8-e163-4b20-b6ac-89b52fc2fd67" }
+						},
+						"remainingQty": "9",
+						"asset": { "connect": { "symbol": "ATUS" } },
+						"price": "2.075",
+						"acquiredDate": "2025-08-11T00:00:00.000Z",
+						"portfolio": {
+							"connect": { "id": "8f58fa62-ecb7-4b35-afcc-15121f80cbb5" }
+						}
+					}
+				}
+			]
+		]
+	}
+}

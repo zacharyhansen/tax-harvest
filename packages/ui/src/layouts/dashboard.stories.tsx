@@ -120,5 +120,5 @@ const meta = {
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-
+// @ts-expect-error
 export const Default: Story = {};

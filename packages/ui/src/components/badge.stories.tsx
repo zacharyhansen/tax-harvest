@@ -39,7 +39,7 @@ export const Secondary: Story = {
 };
 export const Outline: Story = {
 	args: {
-		variant: 'outline-solid',
+		variant: 'outline',
 	},
 };
 export const Destructive: Story = {

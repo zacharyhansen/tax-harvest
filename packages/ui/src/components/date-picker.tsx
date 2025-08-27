@@ -53,14 +53,13 @@ export function DatePicker({
 			</PopoverTrigger>
 			<PopoverContent className="w-auto p-0" align="start">
 				<Calendar
-					mode={mode}
-					// @ts-expect-error this is always going to be date for now
-					onSelect={(currentValue) => {
+					mode={mode as 'single'}
+					// biome-ignore lint/suspicious/noExplicitAny: <opk>
+					onSelect={(currentValue: any) => {
 						onChange(currentValue === value ? '' : currentValue);
 						setOpen(false);
 					}}
-					// @ts-expect-error this is always going to be date for now
-					selected={value}
+					selected={value as Date}
 					autoFocus
 					{...props}
 				/>

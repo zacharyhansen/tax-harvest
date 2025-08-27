@@ -34,6 +34,7 @@ export default function ComboboxMultiField({
 						<FormLabel>{label}</FormLabel>
 						<FormControl>
 							<div>
+								{/* @ts-expect-error */}
 								<ComboboxMulti {...props} {...field} />
 							</div>
 						</FormControl>

@@ -121,7 +121,7 @@ describe('plaidService', () => {
 			});
 
 			writeFileSync(
-				join(dateDir, 'transactions.json'),
+				join(dateDir, 'test-output', 'transactions.json'),
 				JSON.stringify(transactions),
 			);
 
@@ -142,7 +142,7 @@ describe('plaidService', () => {
 			});
 
 			writeFileSync(
-				join(dateDir, 'lotTupleMap.json'),
+				join(dateDir, 'test-output', 'lotTupleMap.json'),
 				JSON.stringify(Array.from(lotTupleMap.entries())),
 			);
 
@@ -171,8 +171,10 @@ describe('plaidService', () => {
 
 			// Write the final positions to the output file
 			// This is just for debugging and inspection purposes
-			const finalPositionsFile = join(dateDir, 'finalPositions.json');
-			writeFileSync(finalPositionsFile, JSON.stringify(lotResults));
+			writeFileSync(
+				join(dateDir, 'test-output', 'finalPositions.json'),
+				JSON.stringify(lotResults),
+			);
 
 			// Basic expectations to verify test ran
 			expect(positions.length).toBeGreaterThan(0);

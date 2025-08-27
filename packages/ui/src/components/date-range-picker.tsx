@@ -101,7 +101,7 @@ export const DateRangePicker = ({
 	placeholder,
 	...props
 }: DateRangePickerProps & {
-	ref?: React.RefObject<HTMLButtonElement | null>;
+	ref?: React.RefObject<HTMLButtonElement>;
 }) => {
 	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 	const [selectedRange, setSelectedRange] = React.useState<string | null>(

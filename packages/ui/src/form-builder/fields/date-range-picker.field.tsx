@@ -8,8 +8,8 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@repo/ui/components/form';
-import type { BaseInputPropsUnion } from '@repo/ui/components/input.types';
 import { useFormContext } from 'react-hook-form';
+import type { BaseInputPropsUnion } from '../../components/input.types';
 import type { BaseFieldProps } from '../form-builder.types';
 
 /**
@@ -32,6 +32,7 @@ export default function DateRangePickerField({
 					<FormItem>
 						<FormLabel>{label}</FormLabel>
 						<FormControl>
+							{/* @ts-expect-error */}
 							<DateRangePicker {...props} {...field} />
 						</FormControl>
 						<FormDescription>{description}</FormDescription>
