@@ -18,6 +18,7 @@ import { Check, Copy, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useState } from 'react';
 import { LogViewerLayout } from './log-viewer-layout';
+import { useCopyStates, useJsonVisibility } from './shared-log-components';
 
 /**
  * Interface for initial lot information in PLAID_TRX_MERGE_ERROR logs
@@ -174,35 +175,9 @@ export function PlaidTrxMergeErrorLogView({
 	data,
 }: PlaidTrxMergeErrorLogViewProps) {
 	const typedData = data as PlaidTrxMergeErrorData;
-	const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({});
-	const [showRawJson, setShowRawJson] = useState<Record<string, boolean>>({});
+	const { copiedStates, copyToClipboard } = useCopyStates();
+	const { showRawJson, toggleRawJson } = useJsonVisibility();
 	const theme = useTheme();
-
-	/**
-	 * Copies JSON data to clipboard and shows success feedback
-	 * @param data - The data to copy as JSON
-	 * @param key - Unique key for tracking copy state
-	 */
-	/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
-	const copyToClipboard = async (data: any, key: string) => {
-		try {
-			await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-			setCopiedStates((prev) => ({ ...prev, [key]: true }));
-			setTimeout(() => {
-				setCopiedStates((prev) => ({ ...prev, [key]: false }));
-			}, 2000);
-		} catch (error) {
-			console.error('Failed to copy to clipboard:', error);
-		}
-	};
-
-	/**
-	 * Toggles raw JSON visibility for a specific section
-	 * @param key - Unique key for tracking JSON visibility state
-	 */
-	const toggleRawJson = (key: string) => {
-		setShowRawJson((prev) => ({ ...prev, [key]: !prev[key] }));
-	};
 
 	// Calculate summary metrics
 	const totalInitialLots = typedData.input?.initialLots?.length || 0;
