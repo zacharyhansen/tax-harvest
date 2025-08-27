@@ -21,7 +21,8 @@
 			"!**/generated",
 			"!**/*.tsbuildinfo",
 			"!**/storybook-static",
-			"!**/.nyc_output"
+			"!**/.nyc_output",
+			"!apps/api/schema.gql"
 		]
 	},
 	"formatter": {

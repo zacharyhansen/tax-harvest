@@ -18,6 +18,7 @@ import { BarChart3, ChevronDown, Info } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useHarvestEvalResultQuery } from '~/generated/gql';
+import { useOpenHarvests } from '~/modules/hooks/use-open-harvests';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { MoneyUtil } from '~/modules/utils';
 import { FilterForm, type FilterFormData } from './filter-form';
@@ -45,6 +46,7 @@ const itemVariants = {
 };
 
 export default function TaxOpportunitiesPage() {
+	const { openHarvestCount } = useOpenHarvests();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [searchQuery, setSearchQuery] = useState<FilterFormData>({
@@ -363,95 +365,97 @@ export default function TaxOpportunitiesPage() {
 								</motion.div>
 							</motion.div>
 
-							<motion.div
-								className="bg-muted/30 grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0"
-								variants={itemVariants}
-							>
+							{openHarvestCount > 0 && (
 								<motion.div
-									className="px-4 py-2 sm:px-6 sm:py-3"
+									className="bg-muted/30 grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0"
 									variants={itemVariants}
 								>
-									<div className="flex flex-col">
-										<span className="text-muted-foreground text-[10px] sm:text-xs">
-											after current harvest
-										</span>
-										<span
-											className={cn(
-												'mt-0.5 text-sm font-semibold sm:text-base',
-												MoneyUtil.colored(
-													harvestEvalResult.summary.includingCurrentHarvest
-														.realized.gainTotal ?? 0,
-												),
-											)}
-										>
-											<NumberFlow
-												value={
-													harvestEvalResult.summary.includingCurrentHarvest
-														.realized.gainTotal ?? 0
-												}
-												format={{ currency: 'USD', style: 'currency' }}
-											/>
-										</span>
-									</div>
-								</motion.div>
+									<motion.div
+										className="px-4 py-2 sm:px-6 sm:py-3"
+										variants={itemVariants}
+									>
+										<div className="flex flex-col">
+											<span className="text-muted-foreground text-[10px] sm:text-xs">
+												after current harvest
+											</span>
+											<span
+												className={cn(
+													'mt-0.5 text-sm font-semibold sm:text-base',
+													MoneyUtil.colored(
+														harvestEvalResult.summary.includingCurrentHarvest
+															.realized.gainTotal ?? 0,
+													),
+												)}
+											>
+												<NumberFlow
+													value={
+														harvestEvalResult.summary.includingCurrentHarvest
+															.realized.gainTotal ?? 0
+													}
+													format={{ currency: 'USD', style: 'currency' }}
+												/>
+											</span>
+										</div>
+									</motion.div>
 
-								<motion.div
-									className="px-4 py-2 sm:px-6 sm:py-3"
-									variants={itemVariants}
-								>
-									<div className="flex flex-col">
-										<span className="text-muted-foreground text-[10px] sm:text-xs">
-											after current harvest
-										</span>
-										<span
-											className={cn(
-												'mt-0.5 text-sm font-semibold sm:text-base',
-												MoneyUtil.colored(
-													harvestEvalResult.summary.includingCurrentHarvest
-														.unrealized.gainTotal ?? 0,
-												),
-											)}
-										>
-											<NumberFlow
-												value={
-													harvestEvalResult.summary.includingCurrentHarvest
-														.unrealized.gainTotal ?? 0
-												}
-												format={{ currency: 'USD', style: 'currency' }}
-											/>
-										</span>
-									</div>
-								</motion.div>
+									<motion.div
+										className="px-4 py-2 sm:px-6 sm:py-3"
+										variants={itemVariants}
+									>
+										<div className="flex flex-col">
+											<span className="text-muted-foreground text-[10px] sm:text-xs">
+												after current harvest
+											</span>
+											<span
+												className={cn(
+													'mt-0.5 text-sm font-semibold sm:text-base',
+													MoneyUtil.colored(
+														harvestEvalResult.summary.includingCurrentHarvest
+															.unrealized.gainTotal ?? 0,
+													),
+												)}
+											>
+												<NumberFlow
+													value={
+														harvestEvalResult.summary.includingCurrentHarvest
+															.unrealized.gainTotal ?? 0
+													}
+													format={{ currency: 'USD', style: 'currency' }}
+												/>
+											</span>
+										</div>
+									</motion.div>
 
-								<motion.div
-									className="px-4 py-2 sm:px-6 sm:py-3"
-									variants={itemVariants}
-								>
-									<div className="flex flex-col">
-										<span className="text-muted-foreground text-[10px] sm:text-xs">
-											after current harvest
-										</span>
-										<span
-											className={cn(
-												'mt-0.5 text-sm font-semibold sm:text-base',
-												MoneyUtil.colored(
-													harvestEvalResult.summary.includingCurrentHarvest
-														.unrealized.lossTotal ?? 0,
-												),
-											)}
-										>
-											<NumberFlow
-												defaultValue={0}
-												value={
-													harvestEvalResult.summary.includingCurrentHarvest
-														.unrealized.lossTotal ?? 0
-												}
-												format={{ currency: 'USD', style: 'currency' }}
-											/>
-										</span>
-									</div>
+									<motion.div
+										className="px-4 py-2 sm:px-6 sm:py-3"
+										variants={itemVariants}
+									>
+										<div className="flex flex-col">
+											<span className="text-muted-foreground text-[10px] sm:text-xs">
+												after current harvest
+											</span>
+											<span
+												className={cn(
+													'mt-0.5 text-sm font-semibold sm:text-base',
+													MoneyUtil.colored(
+														harvestEvalResult.summary.includingCurrentHarvest
+															.unrealized.lossTotal ?? 0,
+													),
+												)}
+											>
+												<NumberFlow
+													defaultValue={0}
+													value={
+														harvestEvalResult.summary.includingCurrentHarvest
+															.unrealized.lossTotal ?? 0
+													}
+													format={{ currency: 'USD', style: 'currency' }}
+												/>
+											</span>
+										</div>
+									</motion.div>
 								</motion.div>
-							</motion.div>
+							)}
 						</CollapsibleContent>
 					</div>
 				</Collapsible>
