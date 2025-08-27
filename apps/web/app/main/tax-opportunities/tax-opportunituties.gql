@@ -53,56 +53,14 @@ fragment MatchedLotOrderItem on HarvestLotOrder {
 	lastPrice
 }
 
-fragment UnrealizedHarvestItem on UnrealizedHarvestMatchResult {
-	sourceLot {
-		id
-		...FiniteHarvestLotItem
-	}
-	matchedLotOrders {
-		id
-		...MatchedLotOrderItem
-	}
-}
-
-query FiniteHarvest {
-	finiteHarvest {
-		harvestType
-		totalHarvestLots
-		summary {
-			realized {
-				gainTotal
-			}
-			unrealized {
-				gainTotal
-				lossTotal
-				total
-			}
-			includingCurrentHarvest {
-				realized {
-					gainTotal
-				}
-				unrealized {
-					gainTotal
-					lossTotal
-				}
-			}
-		}
-		lotsCurrent {
-			id
-			...FiniteHarvestLotItem
-		}
-		unrealizedHarvestMatchResults {
-			...UnrealizedHarvestItem
-		}
-	}
-}
-
 mutation DeleteHarvests($ids: [String!]!) {
 	deleteHarvests(ids: $ids)
 }
 
 fragment HarvestEvalResultFragment on HarvestEvalResult {
 	harvestType
+	neutralHarvestTarget
+	remainingHarvestTarget
 	summary {
 		realized {
 			gainTotal

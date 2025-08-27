@@ -26,9 +26,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import {
 	type DirectedHarvestLot,
-	type FiniteHarvestResult,
 	type HarvestEvalResult,
-	type HarvestLotOrder,
 	type HarvestResult,
 	type PortfolioSummary,
 	type PortfolioSummaryRealized,
@@ -550,6 +548,10 @@ export class PortfolioService {
 			portfolioSummary,
 			realizedOrders: harvest.realizedOrders,
 			unrealizedOrders: harvest.unrealizedOrders,
+			// biome-ignore lint/style/noNonNullAssertion: <ok>
+			neutralHarvestTarget: this.configService.get<number>(
+				'NUETRAL_HARVEST_TARGET',
+			)!,
 		};
 	}
 
@@ -600,6 +602,10 @@ export class PortfolioService {
 			allOrders: harvest.allOrders,
 			realizedOrders: harvest.realizedOrders,
 			unrealizedOrders: harvest.unrealizedOrders,
+			// biome-ignore lint/style/noNonNullAssertion: <ok>
+			neutralHarvestTarget: this.configService.get<number>(
+				'NUETRAL_HARVEST_TARGET',
+			)!,
 		};
 	}
 
@@ -626,6 +632,11 @@ export class PortfolioService {
 			purchaseDateAfter?: Date;
 		};
 	}): Promise<HarvestEvalResult> {
+		// biome-ignore lint/style/noNonNullAssertion: <ok>
+		const neutralHarvestTarget = this.configService.get<number>(
+			'NUETRAL_HARVEST_TARGET',
+		)!;
+
 		const portfolio = await this.prismaService
 			.$extends(PrismaService.forPortfolio(portfolioId))
 			.portfolio.findUniqueOrThrow({
@@ -670,6 +681,10 @@ export class PortfolioService {
 					summary,
 					totalHarvestLots: 0,
 					uniqueAssetSymbols,
+					neutralHarvestTarget,
+					remainingHarvestTarget:
+						neutralHarvestTarget -
+						summary.includingCurrentHarvest.realized.gainTotal,
 				};
 			}
 			case HarvestType.REDUCE_COST_BASIS: {
@@ -731,6 +746,10 @@ export class PortfolioService {
 					summary,
 					totalHarvestLots: 0,
 					uniqueAssetSymbols,
+					neutralHarvestTarget,
+					remainingHarvestTarget:
+						neutralHarvestTarget -
+						summary.includingCurrentHarvest.realized.gainTotal,
 				};
 			}
 			case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
@@ -768,6 +787,10 @@ export class PortfolioService {
 					harvestType,
 					totalHarvestLots: availableDirectedLots.length,
 					uniqueAssetSymbols,
+					neutralHarvestTarget,
+					remainingHarvestTarget:
+						neutralHarvestTarget -
+						summary.includingCurrentHarvest.realized.gainTotal,
 				};
 			}
 		}
@@ -777,6 +800,10 @@ export class PortfolioService {
 			summary,
 			totalHarvestLots: 0,
 			uniqueAssetSymbols,
+			neutralHarvestTarget,
+			remainingHarvestTarget:
+				neutralHarvestTarget -
+				summary.includingCurrentHarvest.realized.gainTotal,
 		};
 	}
 
@@ -1031,160 +1058,177 @@ export class PortfolioService {
 		unrealizedGainTotal: number;
 		unrealizedLossTotal: number;
 	}): HarvestType {
+		// biome-ignore lint/style/noNonNullAssertion: <ok>
+		const target = this.configService.get<number>('NUETRAL_HARVEST_TARGET')!;
 		const combined =
 			Math.abs(unrealizedGainTotal) +
 			Math.abs(unrealizedLossTotal) +
 			Math.abs(realizedGainTotal);
-		if (combined === 0) {
+		if (combined === target) {
 			return HarvestType.NO_OPPORTUNITY_EMPTY;
-		} else if (unrealizedGainTotal <= 0 && realizedGainTotal <= 0) {
+		} else if (unrealizedGainTotal <= 0 && realizedGainTotal <= target) {
 			return HarvestType.NO_OPPORTUNITY_LOSSES;
-		} else if (unrealizedLossTotal >= 0 && realizedGainTotal >= 0) {
+		} else if (unrealizedLossTotal >= 0 && realizedGainTotal >= target) {
 			return HarvestType.NO_OPPORTUNITY_GAINS;
 		}
 
-		return Math.abs(realizedGainTotal) <=
-			// biome-ignore lint/style/noNonNullAssertion: <ok>
-			Math.abs(this.configService.get('NUETRAL_HARVEST_THRESHOLD')!)
+		return Math.abs(Math.abs(realizedGainTotal) - Math.abs(target)) <=
+			Math.abs(
+				// biome-ignore lint/style/noNonNullAssertion: <ok>
+				this.configService.get('NUETRAL_HARVEST_THRESHOLD')!,
+			)
 			? HarvestType.REDUCE_COST_BASIS
-			: realizedGainTotal > 0
+			: realizedGainTotal > target
 				? HarvestType.REDUCE_TAXES
 				: HarvestType.CAPTURE_GAINS_TAX_FREE;
 	}
 
-	async finiteHarvest({
-		portfolioId,
-	}: {
-		portfolioId: string;
-	}): Promise<FiniteHarvestResult> {
-		const portfolio = await this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
-			.portfolio.findUniqueOrThrow({
-				where: {
-					id: portfolioId,
-				},
-			});
+	// async finiteHarvest({
+	// 	portfolioId,
+	// }: {
+	// 	portfolioId: string;
+	// }): Promise<FiniteHarvestResult> {
+	// 	const portfolio = await this.prismaService
+	// 		.$extends(PrismaService.forPortfolio(portfolioId))
+	// 		.portfolio.findUniqueOrThrow({
+	// 			where: {
+	// 				id: portfolioId,
+	// 			},
+	// 		});
 
-		const [summary, lots] = await Promise.all([
-			this.summary({
-				id: portfolioId,
-			}),
-			this.lotService.lotCurrent({
-				portfolioId,
-				minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
-			}),
-			this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
-				.portfolio.findUniqueOrThrow({
-					where: {
-						id: portfolioId,
-					},
-				}),
-		]);
+	// 	const [summary, lots] = await Promise.all([
+	// 		this.summary({
+	// 			id: portfolioId,
+	// 		}),
+	// 		this.lotService.lotCurrent({
+	// 			portfolioId,
+	// 			minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
+	// 		}),
+	// 		this.prismaService
+	// 			.$extends(PrismaService.forPortfolio(portfolioId))
+	// 			.portfolio.findUniqueOrThrow({
+	// 				where: {
+	// 					id: portfolioId,
+	// 				},
+	// 			}),
+	// 	]);
 
-		const harvestType =
-			Math.abs(summary.realized.gainTotal) <=
-			// biome-ignore lint/style/noNonNullAssertion: <ok>
-			Math.abs(this.configService.get('NUETRAL_HARVEST_THRESHOLD')!)
-				? HarvestType.REDUCE_COST_BASIS
-				: summary.realized.gainTotal > 0
-					? HarvestType.REDUCE_TAXES
-					: HarvestType.CAPTURE_GAINS_TAX_FREE;
+	// 	const harvestType =
+	// 		Math.abs(summary.realized.gainTotal) <=
+	// 		// biome-ignore lint/style/noNonNullAssertion: <ok>
+	// 		Math.abs(this.configService.get('NUETRAL_HARVEST_THRESHOLD')!)
+	// 			? HarvestType.REDUCE_COST_BASIS
+	// 			: summary.realized.gainTotal > 0
+	// 				? HarvestType.REDUCE_TAXES
+	// 				: HarvestType.CAPTURE_GAINS_TAX_FREE;
 
-		switch (harvestType) {
-			case HarvestType.REDUCE_COST_BASIS: {
-				// Netrual realized gain or loss so we want to match lots (unrelaized) by gain and loss to offset each other
-				const sourceLots: LotCurrent[] = [];
-				const matchingLots: LotCurrent[] = [];
+	// 	// biome-ignore lint/style/noNonNullAssertion: <ok>
+	// 	const NUETRAL_HARVEST_TARGET = this.configService.get<number>(
+	// 		'NUETRAL_HARVEST_TARGET',
+	// 	)!;
 
-				// Filter lots to only include those with available quantity > 0
-				const availableLots = lots.filter((lot) =>
-					new Decimal(lot.availableQty).greaterThan(0),
-				);
+	// 	switch (harvestType) {
+	// 		case HarvestType.REDUCE_COST_BASIS: {
+	// 			// Netrual realized gain or loss so we want to match lots (unrelaized) by gain and loss to offset each other
+	// 			const sourceLots: LotCurrent[] = [];
+	// 			const matchingLots: LotCurrent[] = [];
 
-				// Organize the lots depending on the unrealized gain and loss
-				for (const lot of availableLots) {
-					if (summary.unrealized.gainTotal > summary.unrealized.lossTotal) {
-						// more gain than loss so losers are the source
-						if (Number(lot.gainTotal) < 0) {
-							sourceLots.push(lot);
-						} else {
-							matchingLots.push(lot);
-						}
-					} else {
-						// more loss than gain so winners are the source
-						if (Number(lot.gainTotal) > 0) {
-							sourceLots.push(lot);
-						} else {
-							matchingLots.push(lot);
-						}
-					}
-				}
+	// 			// Filter lots to only include those with available quantity > 0
+	// 			const availableLots = lots.filter((lot) =>
+	// 				new Decimal(lot.availableQty).greaterThan(0),
+	// 			);
 
-				const unrealizedHarvestMatchResults: {
-					sourceLot: LotCurrent;
-					matchedLotOrders: HarvestLotOrder[];
-				}[] = [];
+	// 			// Organize the lots depending on the unrealized gain and loss
+	// 			for (const lot of availableLots) {
+	// 				if (summary.unrealized.gainTotal > summary.unrealized.lossTotal) {
+	// 					// more gain than loss so losers are the source
+	// 					if (Number(lot.gainTotal) < 0) {
+	// 						sourceLots.push(lot);
+	// 					} else {
+	// 						matchingLots.push(lot);
+	// 					}
+	// 				} else {
+	// 					// more loss than gain so winners are the source
+	// 					if (Number(lot.gainTotal) > 0) {
+	// 						sourceLots.push(lot);
+	// 					} else {
+	// 						matchingLots.push(lot);
+	// 					}
+	// 				}
+	// 			}
 
-				const harvest = new Harvest({
-					lots: matchingLots.map((lot) => {
-						return {
-							...lot,
-							originalQty: lot.remainingQty,
-							processQty: lot.remainingQty,
-						} satisfies LotHarvestInput;
-					}),
-					portfolio,
-					targetRealized: 0,
-					targetUnrealized: 0,
-				});
+	// 			const unrealizedHarvestMatchResults: {
+	// 				sourceLot: LotCurrent;
+	// 				matchedLotOrders: HarvestLotOrder[];
+	// 			}[] = [];
 
-				for (const sourceLot of sourceLots) {
-					harvest.targetUnrealized = new Decimal(sourceLot.gainTotal).mul(-1);
-					harvest.process();
+	// 			const harvest = new Harvest({
+	// 				lots: matchingLots.map((lot) => {
+	// 					return {
+	// 						...lot,
+	// 						originalQty: lot.remainingQty,
+	// 						processQty: lot.remainingQty,
+	// 					} satisfies LotHarvestInput;
+	// 				}),
+	// 				portfolio,
+	// 				targetRealized: 0,
+	// 				targetUnrealized: 0,
+	// 			});
 
-					// Only add the harvest if we have orders to process otherwise its a no op
-					if (harvest.allOrders.length > 0) {
-						unrealizedHarvestMatchResults.push({
-							sourceLot,
-							matchedLotOrders: harvest.allOrders,
-						});
-					}
-				}
+	// 			for (const sourceLot of sourceLots) {
+	// 				harvest.targetUnrealized = new Decimal(sourceLot.gainTotal).mul(-1);
+	// 				harvest.process();
 
-				return {
-					harvestType,
-					unrealizedHarvestMatchResults,
-					summary,
-					totalHarvestLots: 0,
-				};
-			}
-			case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
-			case HarvestType.CAPTURE_GAINS_TAX_FREE: {
-				// High realized gain or loss so we want to reduce that numberas much as possible by selling losses
-				const directedLots = await this.lotService.lotCurrent({
-					portfolioId,
-					lotValueType:
-						HarvestType.REDUCE_TAXES === harvestType
-							? LotValueType.LOSS
-							: LotValueType.GAIN,
-					minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
-				});
+	// 				// Only add the harvest if we have orders to process otherwise its a no op
+	// 				if (harvest.allOrders.length > 0) {
+	// 					unrealizedHarvestMatchResults.push({
+	// 						sourceLot,
+	// 						matchedLotOrders: harvest.allOrders,
+	// 					});
+	// 				}
+	// 			}
 
-				// Filter to only include lots with available quantity > 0
-				const availableDirectedLots = directedLots.filter((lot) =>
-					new Decimal(lot.availableQty).greaterThan(0),
-				);
+	// 			return {
+	// 				harvestType,
+	// 				unrealizedHarvestMatchResults,
+	// 				summary,
+	// 				totalHarvestLots: 0,
+	// 				neutralHarvestTarget: NUETRAL_HARVEST_TARGET,
+	// 				targetHarvestDiffAmount: Math.abs(
+	// 					NUETRAL_HARVEST_TARGET - summary.realized.gainTotal,
+	// 				),
+	// 			};
+	// 		}
+	// 		case HarvestType.REDUCE_TAXES: // High realized gain or loss so we want to reduce that numberas much as possible by selling losses
+	// 		case HarvestType.CAPTURE_GAINS_TAX_FREE: {
+	// 			// High realized gain or loss so we want to reduce that numberas much as possible by selling losses
+	// 			const directedLots = await this.lotService.lotCurrent({
+	// 				portfolioId,
+	// 				lotValueType:
+	// 					HarvestType.REDUCE_TAXES === harvestType
+	// 						? LotValueType.LOSS
+	// 						: LotValueType.GAIN,
+	// 				minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
+	// 			});
 
-				return {
-					summary,
-					lotsCurrent: availableDirectedLots,
-					harvestType,
-					totalHarvestLots: availableDirectedLots.length,
-				};
-			}
-		}
-	}
+	// 			// Filter to only include lots with available quantity > 0
+	// 			const availableDirectedLots = directedLots.filter((lot) =>
+	// 				new Decimal(lot.availableQty).greaterThan(0),
+	// 			);
+
+	// 			return {
+	// 				summary,
+	// 				lotsCurrent: availableDirectedLots,
+	// 				harvestType,
+	// 				totalHarvestLots: availableDirectedLots.length,
+	// 				neutralHarvestTarget: NUETRAL_HARVEST_TARGET,
+	// 				targetHarvestDiffAmount: Math.abs(
+	// 					NUETRAL_HARVEST_TARGET - summary.realized.gainTotal,
+	// 				),
+	// 			};
+	// 		}
+	// 	}
+	// }
 
 	public static RELEVANT_HARVEST_ACCOUNTS_WHERE({
 		portfolioId,

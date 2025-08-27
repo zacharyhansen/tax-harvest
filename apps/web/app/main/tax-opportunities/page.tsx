@@ -156,7 +156,7 @@ export default function TaxOpportunitiesPage() {
 
 			{/* Portfolio Status */}
 			<motion.div
-				className="bg-background top-16 z-20 flex flex-col items-start md:sticky"
+				className="bg-background top-0 z-20 flex flex-col items-start md:sticky"
 				variants={itemVariants}
 			>
 				<Collapsible

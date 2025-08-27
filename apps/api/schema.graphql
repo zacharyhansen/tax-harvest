@@ -4862,16 +4862,6 @@ input FileWhereUniqueInput {
   uploadedBy: StringFilter
 }
 
-type FiniteHarvestResult {
-  harvestType: HarvestType!
-  lotsCurrent: [LotCurrent!]
-  summary: PortfolioSummary!
-
-  """Total number of harvest lots if user is paying"""
-  totalHarvestLots: Float!
-  unrealizedHarvestMatchResults: [UnrealizedHarvestMatchResult!]
-}
-
 input GCPUploadFile {
   displayName: String!
   fileName: String!
@@ -5103,6 +5093,14 @@ type HarvestEvalResult {
   harvestType: HarvestType!
   lotsCurrent: [LotCurrent!]
   matchedItems: [HarvestMatchItem!]
+
+  """The neutral harvest target"""
+  neutralHarvestTarget: Float!
+
+  """
+  The remaining harvest target after harvesting the current lots (takes into account the target nuetral state ~-3k for tax write offs)
+  """
+  remainingHarvestTarget: Float!
   summary: PortfolioSummary!
 
   """Total number of harvest lots if user is paying"""
@@ -5237,6 +5235,7 @@ type HarvestPotential {
 
 type HarvestResult {
   allOrders: [HarvestLotOrder!]!
+  neutralHarvestTarget: Float!
   portfolioSummary: PortfolioSummary!
   realizedOrders: [HarvestLotOrder!]!
   unrealizedOrders: [HarvestLotOrder!]!
@@ -13857,9 +13856,6 @@ type Query {
   """Find one user by email"""
   findOneUserByEmail(email: String!): User!
 
-  """New harvest endpoint that returns all orders and summary"""
-  finiteHarvest: FiniteHarvestResult!
-
   """Get file upload url"""
   generateSignedUrlsForUpload(files: [GCPUploadFile!]!): SignedUrlsForUploadPayload!
 
@@ -15089,11 +15085,6 @@ input TransactionWhereUniqueInput {
   transactionDate: DateTimeNullableFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
-}
-
-type UnrealizedHarvestMatchResult {
-  matchedLotOrders: [HarvestLotOrder!]!
-  sourceLot: LotCurrent!
 }
 
 type User {

@@ -4848,16 +4848,6 @@ export type FileWhereUniqueInput = {
   uploadedBy?: InputMaybe<StringFilter>;
 };
 
-export type FiniteHarvestResult = {
-  __typename?: 'FiniteHarvestResult';
-  harvestType: HarvestType;
-  lotsCurrent?: Maybe<Array<LotCurrent>>;
-  summary: PortfolioSummary;
-  /** Total number of harvest lots if user is paying */
-  totalHarvestLots: Scalars['Float']['output'];
-  unrealizedHarvestMatchResults?: Maybe<Array<UnrealizedHarvestMatchResult>>;
-};
-
 export type GcpUploadFile = {
   displayName: Scalars['String']['input'];
   fileName: Scalars['String']['input'];
@@ -5089,6 +5079,10 @@ export type HarvestEvalResult = {
   harvestType: HarvestType;
   lotsCurrent?: Maybe<Array<LotCurrent>>;
   matchedItems?: Maybe<Array<HarvestMatchItem>>;
+  /** The neutral harvest target */
+  neutralHarvestTarget: Scalars['Float']['output'];
+  /** The remaining harvest target after harvesting the current lots (takes into account the target nuetral state ~-3k for tax write offs) */
+  remainingHarvestTarget: Scalars['Float']['output'];
   summary: PortfolioSummary;
   /** Total number of harvest lots if user is paying */
   totalHarvestLots: Scalars['Float']['output'];
@@ -5217,6 +5211,7 @@ export type HarvestPotential = {
 export type HarvestResult = {
   __typename?: 'HarvestResult';
   allOrders: Array<HarvestLotOrder>;
+  neutralHarvestTarget: Scalars['Float']['output'];
   portfolioSummary: PortfolioSummary;
   realizedOrders: Array<HarvestLotOrder>;
   unrealizedOrders: Array<HarvestLotOrder>;
@@ -13988,8 +13983,6 @@ export type Query = {
   files: Array<File>;
   /** Find one user by email */
   findOneUserByEmail: User;
-  /** New harvest endpoint that returns all orders and summary */
-  finiteHarvest: FiniteHarvestResult;
   /** Get file upload url */
   generateSignedUrlsForUpload: SignedUrlsForUploadPayload;
   /** Get file download url */
@@ -15358,12 +15351,6 @@ export type TransactionWhereUniqueInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
-export type UnrealizedHarvestMatchResult = {
-  __typename?: 'UnrealizedHarvestMatchResult';
-  matchedLotOrders: Array<HarvestLotOrder>;
-  sourceLot: LotCurrent;
-};
-
 export type User = {
   __typename?: 'User';
   Account?: Maybe<Array<Account>>;
@@ -16729,13 +16716,6 @@ export type HarvestLotItemFragment = { __typename?: 'HarvestLotCurrent', id: str
 
 export type MatchedLotOrderItemFragment = { __typename?: 'HarvestLotOrder', accountId: string, costBasis: string, gainTotal: string, id: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any, lastPrice: string };
 
-export type UnrealizedHarvestItemFragment = { __typename?: 'UnrealizedHarvestMatchResult', sourceLot: { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, availableQty: string }, matchedLotOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any, lastPrice: string }> };
-
-export type FiniteHarvestQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FiniteHarvestQuery = { __typename?: 'Query', finiteHarvest: { __typename?: 'FiniteHarvestResult', harvestType: HarvestType, totalHarvestLots: number, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, total: number }, includingCurrentHarvest: { __typename?: 'PortfolioSummaryIncludingHarvest', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } }, lotsCurrent?: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, availableQty: string }> | null, unrealizedHarvestMatchResults?: Array<{ __typename?: 'UnrealizedHarvestMatchResult', sourceLot: { __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, availableQty: string }, matchedLotOrders: Array<{ __typename?: 'HarvestLotOrder', id: string, accountId: string, costBasis: string, gainTotal: string, lotId: string, pricePaid: string, quantity: string, taxGain: TaxGain, assetSymbol: string, dollarPerSharePnL: string, valueTotal: string, orderType: OrderType, acquiredDate: any, lastPrice: string }> }> | null } };
-
 export type DeleteHarvestsMutationVariables = Exact<{
   ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
@@ -16743,14 +16723,14 @@ export type DeleteHarvestsMutationVariables = Exact<{
 
 export type DeleteHarvestsMutation = { __typename?: 'Mutation', deleteHarvests: boolean };
 
-export type HarvestEvalResultFragmentFragment = { __typename?: 'HarvestEvalResult', harvestType: HarvestType, totalHarvestLots: number, uniqueAssetSymbols: Array<string>, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, total: number }, includingCurrentHarvest: { __typename?: 'PortfolioSummaryIncludingHarvest', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } }, lotsCurrent?: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, availableQty: string }> | null, matchedItems?: Array<{ __typename?: 'HarvestMatchItem', id: string, pairs: Array<{ __typename?: 'HarvestMatchPair', sourceHarvestPAndL: number, matchedHarvestPAndL: number, sourceLots: Array<{ __typename?: 'HarvestLotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestQuantity: string, harvestPAndL: number, availableQty: string }>, matchedLots: Array<{ __typename?: 'HarvestLotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestQuantity: string, harvestPAndL: number, availableQty: string }> }> }> | null };
+export type HarvestEvalResultFragmentFragment = { __typename?: 'HarvestEvalResult', harvestType: HarvestType, neutralHarvestTarget: number, remainingHarvestTarget: number, totalHarvestLots: number, uniqueAssetSymbols: Array<string>, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, total: number }, includingCurrentHarvest: { __typename?: 'PortfolioSummaryIncludingHarvest', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } }, lotsCurrent?: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, availableQty: string }> | null, matchedItems?: Array<{ __typename?: 'HarvestMatchItem', id: string, pairs: Array<{ __typename?: 'HarvestMatchPair', sourceHarvestPAndL: number, matchedHarvestPAndL: number, sourceLots: Array<{ __typename?: 'HarvestLotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestQuantity: string, harvestPAndL: number, availableQty: string }>, matchedLots: Array<{ __typename?: 'HarvestLotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestQuantity: string, harvestPAndL: number, availableQty: string }> }> }> | null };
 
 export type HarvestEvalResultQueryVariables = Exact<{
   filters?: InputMaybe<HarvestEvalFilters>;
 }>;
 
 
-export type HarvestEvalResultQuery = { __typename?: 'Query', harvestEvalResult: { __typename?: 'HarvestEvalResult', harvestType: HarvestType, totalHarvestLots: number, uniqueAssetSymbols: Array<string>, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, total: number }, includingCurrentHarvest: { __typename?: 'PortfolioSummaryIncludingHarvest', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } }, lotsCurrent?: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, availableQty: string }> | null, matchedItems?: Array<{ __typename?: 'HarvestMatchItem', id: string, pairs: Array<{ __typename?: 'HarvestMatchPair', sourceHarvestPAndL: number, matchedHarvestPAndL: number, sourceLots: Array<{ __typename?: 'HarvestLotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestQuantity: string, harvestPAndL: number, availableQty: string }>, matchedLots: Array<{ __typename?: 'HarvestLotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestQuantity: string, harvestPAndL: number, availableQty: string }> }> }> | null } };
+export type HarvestEvalResultQuery = { __typename?: 'Query', harvestEvalResult: { __typename?: 'HarvestEvalResult', harvestType: HarvestType, neutralHarvestTarget: number, remainingHarvestTarget: number, totalHarvestLots: number, uniqueAssetSymbols: Array<string>, summary: { __typename?: 'PortfolioSummary', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, total: number }, includingCurrentHarvest: { __typename?: 'PortfolioSummaryIncludingHarvest', realized: { __typename?: 'PortfolioSummaryRealized', gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number } } }, lotsCurrent?: Array<{ __typename?: 'LotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, availableQty: string }> | null, matchedItems?: Array<{ __typename?: 'HarvestMatchItem', id: string, pairs: Array<{ __typename?: 'HarvestMatchPair', sourceHarvestPAndL: number, matchedHarvestPAndL: number, sourceLots: Array<{ __typename?: 'HarvestLotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestQuantity: string, harvestPAndL: number, availableQty: string }>, matchedLots: Array<{ __typename?: 'HarvestLotCurrent', id: string, accountId: string, remainingQty: string, acquiredDate: any, price: string, symbol: string, lastPrice: string, costBasis: string, value: string, gainTotal: string, gainTotalPct: string, dollarPerSharePnL: string, taxGain: TaxGain, currentHarvestQty: string, harvestQuantity: string, harvestPAndL: number, availableQty: string }> }> }> | null } };
 
 export type AccountTransactionItemFragment = { __typename?: 'Account', id: string, name?: string | null, authConnection?: { __typename?: 'AuthConnection', id: string, source: AuthSource } | null };
 
@@ -17285,6 +17265,24 @@ export const PortfolioTableItemFragmentDoc = gql`
   }
 }
     `;
+export const MatchedLotOrderItemFragmentDoc = gql`
+    fragment MatchedLotOrderItem on HarvestLotOrder {
+  accountId
+  costBasis
+  gainTotal
+  id
+  lotId
+  pricePaid
+  quantity
+  taxGain
+  assetSymbol
+  dollarPerSharePnL
+  valueTotal
+  orderType
+  acquiredDate
+  lastPrice
+}
+    `;
 export const FiniteHarvestLotItemFragmentDoc = gql`
     fragment FiniteHarvestLotItem on LotCurrent {
   id
@@ -17304,37 +17302,6 @@ export const FiniteHarvestLotItemFragmentDoc = gql`
   availableQty
 }
     `;
-export const MatchedLotOrderItemFragmentDoc = gql`
-    fragment MatchedLotOrderItem on HarvestLotOrder {
-  accountId
-  costBasis
-  gainTotal
-  id
-  lotId
-  pricePaid
-  quantity
-  taxGain
-  assetSymbol
-  dollarPerSharePnL
-  valueTotal
-  orderType
-  acquiredDate
-  lastPrice
-}
-    `;
-export const UnrealizedHarvestItemFragmentDoc = gql`
-    fragment UnrealizedHarvestItem on UnrealizedHarvestMatchResult {
-  sourceLot {
-    id
-    ...FiniteHarvestLotItem
-  }
-  matchedLotOrders {
-    id
-    ...MatchedLotOrderItem
-  }
-}
-    ${FiniteHarvestLotItemFragmentDoc}
-${MatchedLotOrderItemFragmentDoc}`;
 export const HarvestLotItemFragmentDoc = gql`
     fragment HarvestLotItem on HarvestLotCurrent {
   id
@@ -17359,6 +17326,8 @@ export const HarvestLotItemFragmentDoc = gql`
 export const HarvestEvalResultFragmentFragmentDoc = gql`
     fragment HarvestEvalResultFragment on HarvestEvalResult {
   harvestType
+  neutralHarvestTarget
+  remainingHarvestTarget
   summary {
     realized {
       gainTotal
@@ -19018,73 +18987,6 @@ export type StripeSessionQueryHookResult = ReturnType<typeof useStripeSessionQue
 export type StripeSessionLazyQueryHookResult = ReturnType<typeof useStripeSessionLazyQuery>;
 export type StripeSessionSuspenseQueryHookResult = ReturnType<typeof useStripeSessionSuspenseQuery>;
 export type StripeSessionQueryResult = Apollo.QueryResult<StripeSessionQuery, StripeSessionQueryVariables>;
-export const FiniteHarvestDocument = gql`
-    query FiniteHarvest {
-  finiteHarvest {
-    harvestType
-    totalHarvestLots
-    summary {
-      realized {
-        gainTotal
-      }
-      unrealized {
-        gainTotal
-        lossTotal
-        total
-      }
-      includingCurrentHarvest {
-        realized {
-          gainTotal
-        }
-        unrealized {
-          gainTotal
-          lossTotal
-        }
-      }
-    }
-    lotsCurrent {
-      id
-      ...FiniteHarvestLotItem
-    }
-    unrealizedHarvestMatchResults {
-      ...UnrealizedHarvestItem
-    }
-  }
-}
-    ${FiniteHarvestLotItemFragmentDoc}
-${UnrealizedHarvestItemFragmentDoc}`;
-
-/**
- * __useFiniteHarvestQuery__
- *
- * To run a query within a React component, call `useFiniteHarvestQuery` and pass it any options that fit your needs.
- * When your component renders, `useFiniteHarvestQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFiniteHarvestQuery({
- *   variables: {
- *   },
- * });
- */
-export function useFiniteHarvestQuery(baseOptions?: Apollo.QueryHookOptions<FiniteHarvestQuery, FiniteHarvestQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FiniteHarvestQuery, FiniteHarvestQueryVariables>(FiniteHarvestDocument, options);
-      }
-export function useFiniteHarvestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FiniteHarvestQuery, FiniteHarvestQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FiniteHarvestQuery, FiniteHarvestQueryVariables>(FiniteHarvestDocument, options);
-        }
-export function useFiniteHarvestSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FiniteHarvestQuery, FiniteHarvestQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<FiniteHarvestQuery, FiniteHarvestQueryVariables>(FiniteHarvestDocument, options);
-        }
-export type FiniteHarvestQueryHookResult = ReturnType<typeof useFiniteHarvestQuery>;
-export type FiniteHarvestLazyQueryHookResult = ReturnType<typeof useFiniteHarvestLazyQuery>;
-export type FiniteHarvestSuspenseQueryHookResult = ReturnType<typeof useFiniteHarvestSuspenseQuery>;
-export type FiniteHarvestQueryResult = Apollo.QueryResult<FiniteHarvestQuery, FiniteHarvestQueryVariables>;
 export const DeleteHarvestsDocument = gql`
     mutation DeleteHarvests($ids: [String!]!) {
   deleteHarvests(ids: $ids)

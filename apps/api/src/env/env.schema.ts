@@ -5,6 +5,7 @@ export const envSchema = z.object({
 	NODE_ENV: z.enum(['development', 'production', 'test']),
 	CLIENT_ORIGIN: z.string(),
 	NUETRAL_HARVEST_THRESHOLD: z.coerce.number(),
+	NUETRAL_HARVEST_TARGET: z.coerce.number(),
 	MATCH_PERCENTAGE_DIFFERENCE: z.coerce.number(),
 	PORT: z.string(),
 	CRON_ENABLED: z.coerce.boolean(),

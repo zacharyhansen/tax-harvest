@@ -3,7 +3,6 @@ import type { Prisma } from '@prisma/client';
 import type { GraphQLResolveInfo } from 'graphql';
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator';
 import type { ClerkClaims } from '../auth/types';
-import { isUserOnFreePlan } from '../auth/types';
 import {
 	Portfolio,
 	PortfolioCreateInput,
@@ -13,7 +12,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { PrismaSelect } from '../utilities/prisma/prisma-select';
 import {
 	DirectedHarvestLot,
-	FiniteHarvestResult,
 	HarvestEvalFilters,
 	HarvestEvalResult,
 	HarvestResult,
@@ -27,27 +25,6 @@ export class PortfolioResolver {
 		private readonly portfolioService: PortfolioService,
 		private readonly prismaService: PrismaService,
 	) {}
-
-	@Query(() => FiniteHarvestResult, {
-		description: 'New harvest endpoint that returns all orders and summary',
-		name: 'finiteHarvest',
-	})
-	async finiteHarvest(
-		@ClerkContext()
-		clerkClaims: ClerkClaims,
-	): Promise<FiniteHarvestResult> {
-		const harvestResult = await this.portfolioService.finiteHarvest({
-			portfolioId: clerkClaims.metadata.portfolioId,
-		});
-		if (isUserOnFreePlan(clerkClaims)) {
-			return {
-				...harvestResult,
-				lotsCurrent: harvestResult.lotsCurrent?.slice(0, 3),
-			};
-		}
-		return harvestResult;
-	}
-
 	@Query(() => PortfolioSummary, {
 		description: 'Summary summary',
 		name: 'portfolioSummary',
@@ -158,6 +135,12 @@ export class PortfolioResolver {
 		@ClerkContext()
 		{ metadata }: ClerkClaims,
 	): Promise<HarvestResult> {
+		// if (isUserOnFreePlan(clerkClaims)) {
+		// 	return {
+		// 		...harvestResult,
+		// 		lotsCurrent: harvestResult.lotsCurrent?.slice(0, 3),
+		// 	};
+		// }
 		return this.portfolioService.harvest({
 			portfolioId: metadata.portfolioId,
 		});

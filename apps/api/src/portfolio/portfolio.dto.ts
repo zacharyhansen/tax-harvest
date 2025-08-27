@@ -179,6 +179,9 @@ export class HarvestResult {
 
 	@Field(() => PortfolioSummary)
 	portfolioSummary: PortfolioSummary;
+
+	@Field(() => Number)
+	neutralHarvestTarget: number;
 }
 
 @ObjectType()
@@ -188,26 +191,6 @@ export class UnrealizedHarvestMatchResult {
 
 	@Field(() => [HarvestLotOrder])
 	matchedLotOrders: HarvestLotOrder[];
-}
-
-@ObjectType()
-export class FiniteHarvestResult {
-	@Field(() => PortfolioSummary)
-	summary: PortfolioSummary;
-
-	@Field(() => HarvestType)
-	harvestType: HarvestType;
-
-	@Field(() => [LotCurrent], { nullable: true })
-	lotsCurrent?: LotCurrent[];
-
-	@Field(() => Number, {
-		description: 'Total number of harvest lots if user is paying',
-	})
-	totalHarvestLots: number;
-
-	@Field(() => [UnrealizedHarvestMatchResult], { nullable: true })
-	unrealizedHarvestMatchResults?: UnrealizedHarvestMatchResult[];
 }
 
 @ObjectType()
@@ -257,6 +240,17 @@ export class HarvestEvalResult {
 		description: 'List of unique asset symbols in portfolio',
 	})
 	uniqueAssetSymbols: string[];
+
+	@Field(() => Number, {
+		description: 'The neutral harvest target',
+	})
+	neutralHarvestTarget: number;
+
+	@Field(() => Number, {
+		description:
+			'The remaining harvest target after harvesting the current lots (takes into account the target nuetral state ~-3k for tax write offs)',
+	})
+	remainingHarvestTarget: number;
 }
 
 @InputType()

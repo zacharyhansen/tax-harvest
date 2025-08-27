@@ -5,7 +5,7 @@ import { ArrowUpCircle, TrendingDown } from 'lucide-react';
 import Link from 'next/link';
 import {
 	type FiniteHarvestLotItemFragment,
-	type FiniteHarvestQuery,
+	type HarvestEvalResultFragmentFragment,
 	HarvestType,
 	TaxGain,
 } from '~/generated/gql';
@@ -35,25 +35,29 @@ const dummyLot: FiniteHarvestLotItemFragment = {
 export default function RealizedHarvestItems({
 	finiteHarvest,
 }: {
-	finiteHarvest: FiniteHarvestQuery['finiteHarvest'];
+	finiteHarvest: HarvestEvalResultFragmentFragment;
 }) {
+	console.log({ portfolio: finiteHarvest });
 	return (
 		<div className="space-y-6">
 			<div className="flex flex-col space-y-2">
 				<div className="flex items-center space-x-2">
-					{finiteHarvest.summary.realized.gainTotal > 0 ? (
+					{finiteHarvest.summary.realized.gainTotal >
+					finiteHarvest.neutralHarvestTarget ? (
 						<TrendingDown className="size-5 text-red-500" />
 					) : (
 						<ArrowUpCircle className="size-5 text-green-500" />
 					)}
 					<h2 className="text-lg font-semibold">
-						{finiteHarvest.summary.realized.gainTotal > 0
+						{finiteHarvest.summary.realized.gainTotal >
+						finiteHarvest.neutralHarvestTarget
 							? 'Loss Harvesting Opportunities'
 							: 'Gain Harvesting Opportunities'}
 					</h2>
 				</div>
 				<p className="text-muted-foreground">
-					{finiteHarvest.summary.realized.gainTotal > 0
+					{finiteHarvest.summary.realized.gainTotal >
+					finiteHarvest.neutralHarvestTarget
 						? 'Harvest these losses to offset your realized gains and reduce your tax liability'
 						: 'Harvest these gains to offset your realized losses and optimize your tax position'}
 				</p>
@@ -65,7 +69,7 @@ export default function RealizedHarvestItems({
 						key={lot.id}
 						lot={lot}
 						harvestType={finiteHarvest.harvestType}
-						netPosition={finiteHarvest.summary.realized.gainTotal}
+						remainingHarvestTarget={finiteHarvest.remainingHarvestTarget}
 					/>
 				))}
 
@@ -89,7 +93,7 @@ export default function RealizedHarvestItems({
 								<HarvestingOpportunityCard
 									lot={dummyLot}
 									harvestType={HarvestType.ReduceTaxes}
-									netPosition={-1000}
+									remainingHarvestTarget={finiteHarvest.remainingHarvestTarget}
 								/>
 							</div>
 						</Link>

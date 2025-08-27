@@ -16,13 +16,13 @@ import { Format, MoneyUtil } from '~/modules/utils';
 type HarvestingOpportunityCardProps = {
 	lot: FiniteHarvestLotItemFragment;
 	harvestType: HarvestType;
-	netPosition: number;
+	remainingHarvestTarget: number;
 };
 
 export function HarvestingOpportunityCard({
 	lot,
 	harvestType,
-	netPosition,
+	remainingHarvestTarget,
 }: HarvestingOpportunityCardProps) {
 	const [createHarvest, { loading: isHarvesting }] = useCreateHarvestMutation({
 		refetchQueries: [
@@ -43,7 +43,7 @@ export function HarvestingOpportunityCard({
 	const quantity = new Decimal(lot.availableQty);
 	const sellQuantity = Math.round(
 		Math.min(
-			new Decimal(netPosition)
+			new Decimal(remainingHarvestTarget)
 				.abs()
 				.div(lot.dollarPerSharePnL)
 				.abs()

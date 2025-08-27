@@ -26,7 +26,7 @@ api:
     pullPolicy: Always
   hookWeight: -10
   annotations:
-    helm.sh/hook-weight: '-10'
+    helm.sh/hook-weight: "-10"
   service:
     type: ClusterIP
     port: 80
@@ -52,7 +52,7 @@ api:
   serviceAccountName: google-secret-service-account
   cloudsql:
     enabled: true
-    instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+    instanceConnectionName: "harvester-ai-428202:us-central1:harvester-dev"
     resources: {}
   env:
     NODE_ENV: production
@@ -60,6 +60,7 @@ api:
       PORT: 8000
       # How much realized P&L is needed to allow for realizable harvests
       NUETRAL_HARVEST_THRESHOLD: 1000
+      NUETRAL_HARVEST_TARGET: -3000
       # When pairing harvests, what is the max percentage difference between the two
       MATCH_PERCENTAGE_DIFFERENCE: 33
       CLIENT_HOME_PAGE_PATH: /main/home
@@ -130,7 +131,7 @@ api:
     cloudsql:
       restartPolicy: Never
       enabled: true
-      instanceConnectionName: 'harvester-ai-428202:us-central1:harvester-dev'
+      instanceConnectionName: "harvester-ai-428202:us-central1:harvester-dev"
       resources: {}
     env:
       # use different connection for migrations to avoid RLS
@@ -149,7 +150,7 @@ web:
     pullPolicy: Always
   hookWeight: 10
   annotations:
-    helm.sh/hook-weight: '10'
+    helm.sh/hook-weight: "10"
   service:
     type: ClusterIP
     port: 80

@@ -29,7 +29,7 @@ interface HarvestContentProps {
 }
 
 export function HarvestContent({ harvestEvalResult }: HarvestContentProps) {
-	const { harvestType, lotsCurrent } = harvestEvalResult;
+	const { harvestType } = harvestEvalResult;
 
 	switch (harvestType) {
 		case HarvestType.NoOpportunityEmpty:
@@ -74,14 +74,7 @@ export function HarvestContent({ harvestEvalResult }: HarvestContentProps) {
 							</TabsList>
 							<TabsContent value="unrealized" className="space-y-4">
 								<TabsContent value="realized" className="space-y-8">
-									<RealizedHarvestItems
-										finiteHarvest={{
-											summary: harvestEvalResult.summary,
-											harvestType: harvestEvalResult.harvestType,
-											totalHarvestLots: harvestEvalResult.totalHarvestLots || 0,
-											lotsCurrent: lotsCurrent,
-										}}
-									/>
+									<RealizedHarvestItems finiteHarvest={harvestEvalResult} />
 								</TabsContent>
 								<div className="mb-6">
 									<h2 className="mb-2 text-xl font-semibold">
@@ -102,14 +95,7 @@ export function HarvestContent({ harvestEvalResult }: HarvestContentProps) {
 			}
 			return (
 				<motion.div variants={itemVariants}>
-					<RealizedHarvestItems
-						finiteHarvest={{
-							summary: harvestEvalResult.summary,
-							harvestType: harvestEvalResult.harvestType,
-							totalHarvestLots: harvestEvalResult.totalHarvestLots || 0,
-							lotsCurrent: lotsCurrent,
-						}}
-					/>
+					<RealizedHarvestItems finiteHarvest={harvestEvalResult} />
 				</motion.div>
 			);
 
