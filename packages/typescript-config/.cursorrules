@@ -1,0 +1,66 @@
+# TypeScript Config Package Rules
+
+## Architecture
+- Shared TypeScript configurations
+- Base configs for different project types
+- Standardized compiler options
+- Consistent type checking across monorepo
+
+## Available Configurations
+- `base.json` - Base TypeScript configuration
+- `nextjs.json` - Next.js specific configuration
+- `nestjs.json` - NestJS backend configuration
+- `react-library.json` - React library configuration
+
+## Usage Patterns
+```json
+{
+  "extends": "@repo/typescript-config/nextjs.json"
+}
+```
+
+## Configuration Standards
+- Enable strict mode for all configs
+- Use consistent module resolution
+- Proper path mapping for monorepo
+- Enable incremental compilation
+- Configure proper output directories
+
+## Type Safety
+- Enable all strict type checks
+- Use consistent lib configurations
+- Proper JSX settings for React projects
+- Enable source map generation
+- Use consistent target versions
+
+## Path Resolution
+- Configure proper baseUrl settings
+- Use path mapping for internal packages
+- Support absolute imports where needed
+- Maintain consistent import patterns
+
+## Build Settings
+- Optimize for development speed
+- Enable proper output generation
+- Configure declaration file generation
+- Support proper tree shaking
+- Enable proper source maps
+
+## Linting Integration
+- Work with ESLint configurations
+- Support Prettier integration
+- Enable proper type checking in editors
+- Support import sorting
+
+## Performance
+- Enable incremental compilation
+- Use proper build caching
+- Optimize type checking speed
+- Configure proper exclude patterns
+
+## Maintenance
+- Keep TypeScript version consistent
+- Update compiler options as needed
+- Test configurations across all packages
+- Document breaking changes
+- Follow semantic versioning

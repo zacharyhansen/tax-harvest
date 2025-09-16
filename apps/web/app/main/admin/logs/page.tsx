@@ -32,7 +32,6 @@ export default function LogsPage() {
 				// cellDataType: 'date',
 				width: 300,
 				valueGetter: (params) => {
-					console.log(params.data.createdAt);
 					return new Date(params.data.createdAt).toLocaleString('en-US', {
 						year: 'numeric',
 						month: 'long',

@@ -1,0 +1,82 @@
+# UI Package (Shared Components) Rules
+
+## Architecture
+- Shared UI component library
+- Built with React + TypeScript
+- Styled with Tailwind CSS
+- Storybook for component documentation
+
+## Development Commands
+```bash
+pnpm dev         # Start Storybook development server
+pnpm build       # Build the package
+pnpm lint        # Lint the code
+pnpm check:types # Type check
+pnpm test        # Run tests
+pnpm ui          # Storybook shortcut command
+```
+
+## Component Development
+- Use shadcn/ui as base components
+- Extend components with proper variants
+- Use cva (class-variance-authority) for variants
+- Export components from index files
+- Follow existing component patterns
+
+## Styling Guidelines
+- Use Tailwind CSS exclusively
+- Use CSS variables from `shadcn-theme.css`
+- Create proper variant classes
+- Follow responsive design principles
+- Use semantic color tokens
+
+## Component Structure
+- Create stories for all components
+- Include proper TypeScript types
+- Add JSDoc documentation
+- Use proper prop interfaces
+- Export variants separately when needed
+
+## Form Components
+- Use react-hook-form integration
+- Create field wrapper components
+- Implement proper validation patterns
+- Follow form-builder conventions
+
+## Layout Components
+- Create reusable layout patterns
+- Support responsive behavior
+- Use proper semantic HTML
+- Follow accessibility guidelines
+
+## Data Components
+- Create table/grid components
+- Support sorting and filtering
+- Implement proper pagination
+- Use virtualization for large datasets
+
+## Hooks & Utilities
+- Create reusable custom hooks
+- Export utility functions
+- Use proper TypeScript types
+- Follow React hook conventions
+
+## Storybook
+- Create stories for all components
+- Include multiple variants
+- Add proper controls
+- Document component usage
+- Include accessibility checks
+
+## Testing
+- Test component behavior
+- Test accessibility features
+- Use React Testing Library
+- Mock external dependencies
+- Maintain test coverage
+
+## Theme & Theming
+- Use CSS custom properties
+- Support light/dark modes
+- Follow design system tokens
+- Maintain consistency across components

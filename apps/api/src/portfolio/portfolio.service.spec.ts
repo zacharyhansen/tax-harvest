@@ -771,32 +771,6 @@ describe('portfolioService', () => {
 			// Matching lot should use 20 shares to match -$100 P&L
 			expect(result[0][0].matchedLots[0].harvestQuantity).toBe('20');
 			expect(result[0][0].matchedLots[0].harvestPAndL).toBe(-100);
-
-			// const sourceLots_MSTR = [[
-			//   createMockLot({
-			//     id: 'source-1',
-			//     remainingQty: '5',
-			//     currentHarvestQty: '0',
-			//     dollarPerSharePnL: '-133',
-			//   }),
-			// ]]
-
-			// const matchingLots_CRWD = [[
-			//   createMockLot({
-			//     id: 'match-1',
-			//     remainingQty: '2',
-			//     currentHarvestQty: '0',
-			//     dollarPerSharePnL: '222',
-			//   }),
-			// ]]
-
-			// const result_MSTR = PortfolioService.matchLots({ sourceLots: sourceLots_MSTR, matchingLots: matchingLots_CRWD })
-			// console.log({ result_MSTR: JSON.stringify(result_MSTR, null, 2) })
-			// expect(result_MSTR).toHaveLength(1)
-			// expect(result_MSTR[0][0].sourceLots[0].harvestQuantity).toBe('2')
-			// expect(result_MSTR[0][0].sourceLots[0].harvestPAndL).toBe(-266)
-			// expect(result_MSTR[0][0].matchedLots[0].harvestQuantity).toBe('2')
-			// expect(result_MSTR[0][0].matchedLots[0].harvestPAndL).toBe(266)
 		});
 
 		it('should handle scenario B where source lots are adjusted to match limited matching capacity', () => {

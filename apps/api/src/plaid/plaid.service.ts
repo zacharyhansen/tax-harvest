@@ -610,8 +610,6 @@ export class PlaidService {
 				transactions,
 			});
 
-		// console.log({ lotTupleMap, newBuys, newSells })
-
 		// Attempt to generate the change set for each asset
 		const lotResults = Array.from(lotTupleMap.entries()).flatMap(
 			([symbol, lotTuples]) => {

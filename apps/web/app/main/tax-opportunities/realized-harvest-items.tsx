@@ -37,7 +37,6 @@ export default function RealizedHarvestItems({
 }: {
 	finiteHarvest: HarvestEvalResultFragmentFragment;
 }) {
-	console.log({ portfolio: finiteHarvest });
 	return (
 		<div className="space-y-6">
 			<div className="flex flex-col space-y-2">

@@ -52,12 +52,7 @@ export function HarvestingOpportunityCard({
 		),
 	);
 	const sellAmount = new Decimal(lot.dollarPerSharePnL).mul(sellQuantity);
-	console.log({
-		lot,
-		sellAmount: sellAmount.toString(),
-		sellQuantity,
-		quantity: quantity.toString(),
-	});
+
 	const taxSavings = sellAmount.mul(
 		clientEnvironment.NEXT_PUBLIC_TAX_PERCENTAGE,
 	);

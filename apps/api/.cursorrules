@@ -1,0 +1,60 @@
+# API (NestJS Backend) Rules
+
+## Architecture
+- NestJS framework with GraphQL API
+- Prisma ORM for database operations
+- Row Level Security (RLS) implementation
+- Clerk authentication integration
+
+## Development Commands
+```bash
+pnpm dev         # Start development server
+pnpm build       # Build the application
+pnpm lint        # Lint the code
+pnpm check:types # Type check
+pnpm test        # Run unit tests
+```
+
+## Database & Prisma
+- Use Prisma for all database operations
+- Follow RLS patterns for data security
+- Run migrations with `pnpm db:migrate`
+- Generate Prisma client after schema changes
+- Use proper transaction patterns for data integrity
+
+## GraphQL
+- Schema-first approach
+- Auto-generated schema in `schema.graphql`
+- Use code-first decorators
+- Implement proper resolvers with authentication
+- Use DataLoader for N+1 query prevention
+
+## Authentication
+- Clerk integration for user management
+- Use guards for route protection
+- Implement proper authorization checks
+- Use decorators for user context
+
+## Testing
+- Unit tests with Vitest
+- E2E tests for API endpoints
+- Mock external services in tests
+- Maintain high test coverage
+
+## File Structure
+- Organize by domain modules
+- Use proper NestJS module structure
+- Separate DTOs, services, and resolvers
+- Keep utilities in shared folders
+
+## Error Handling
+- Use NestJS exception filters
+- Proper error responses
+- Log errors appropriately
+- Handle validation errors
+
+## Performance
+- Use caching where appropriate
+- Optimize database queries
+- Implement proper pagination
+- Use proper indexing strategies

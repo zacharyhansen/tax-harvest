@@ -16,7 +16,7 @@ import { cn } from '@repo/ui/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BarChart3, ChevronDown, Info } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHarvestEvalResultQuery } from '~/generated/gql';
 import { useOpenHarvests } from '~/modules/hooks/use-open-harvests';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
@@ -49,6 +49,7 @@ export default function TaxOpportunitiesPage() {
 	const { openHarvestCount } = useOpenHarvests();
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const portfolioBannerRef = useRef<HTMLDivElement>(null);
 	const [searchQuery, setSearchQuery] = useState<FilterFormData>({
 		minPAndL: searchParams.get('minPAndL')
 			? Number(searchParams.get('minPAndL'))
@@ -67,6 +68,7 @@ export default function TaxOpportunitiesPage() {
 	});
 	const pathname = usePathname();
 	const [isCollapsed, setIsCollapsed] = useState(false);
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	const { data, error, loading } = useHarvestEvalResultQuery({
 		variables: { filters: searchQuery },
@@ -129,10 +131,10 @@ export default function TaxOpportunitiesPage() {
 	}
 
 	const harvestEvalResult = data.harvestEvalResult;
-	const _netPosition = harvestEvalResult.summary.realized.gainTotal;
 
 	return (
 		<motion.div
+			ref={containerRef}
 			className="container mx-auto max-w-6xl space-y-4 px-4 py-8"
 			variants={containerVariants}
 			initial="hidden"
@@ -158,6 +160,7 @@ export default function TaxOpportunitiesPage() {
 
 			{/* Portfolio Status */}
 			<motion.div
+				ref={portfolioBannerRef}
 				className="bg-background top-0 z-20 flex flex-col items-start md:sticky"
 				variants={itemVariants}
 			>

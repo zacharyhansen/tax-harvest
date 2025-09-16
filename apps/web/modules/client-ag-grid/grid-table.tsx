@@ -80,9 +80,6 @@ export default function GridTable<TData>({
 							? 'cursor-pointer hover:!bg-muted/50'
 							: undefined,
 					}}
-					// onFilterChanged={() => {
-					//   console.log(gridRef.current?.api?.getFilterModel());
-					// }}
 				/>
 			</div>
 		</div>

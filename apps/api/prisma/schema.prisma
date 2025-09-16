@@ -579,7 +579,7 @@ model AssetType {
 model Asset {
   symbol            String  @id
   active            Boolean @default(true)
-  plaid_security_id String? @unique
+  plaid_security_id String?
 
   // udpated daily from polygon
   lastPrice          Decimal  @default(0) @db.Decimal(14, 4)

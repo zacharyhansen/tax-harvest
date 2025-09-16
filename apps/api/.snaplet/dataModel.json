@@ -1426,13 +1426,6 @@
             "symbol"
           ],
           "nullNotDistinct": false
-        },
-        {
-          "name": "Asset_plaid_security_id_key",
-          "fields": [
-            "plaid_security_id"
-          ],
-          "nullNotDistinct": false
         }
       ]
     },
