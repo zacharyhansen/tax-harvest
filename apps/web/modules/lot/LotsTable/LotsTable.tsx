@@ -172,7 +172,6 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
 				name?: string;
 				externalId?: string;
 			}>();
-			console.log('account', account);
 			return (
 				<span>{account.name ?? Format.hideNumbers(account.externalId)}</span>
 			);

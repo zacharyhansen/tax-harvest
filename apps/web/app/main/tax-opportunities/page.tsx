@@ -16,13 +16,11 @@ import { cn } from '@repo/ui/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BarChart3, ChevronDown, Info } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHarvestEvalResultQuery } from '~/generated/gql';
 import { useOpenHarvests } from '~/modules/hooks/use-open-harvests';
-import { useScrollPosition } from '~/modules/hooks/use-scroll-position';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { MoneyUtil } from '~/modules/utils';
-import { PortfolioCompactBanner } from '~/components/portfolio-compact-banner';
 import { FilterForm, type FilterFormData } from './filter-form';
 import { HarvestContent } from './harvest-content';
 import { OpenHarvestsBanner } from './open-harvests-banner';
@@ -52,7 +50,6 @@ export default function TaxOpportunitiesPage() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const portfolioBannerRef = useRef<HTMLDivElement>(null);
-	const { isScrolledPast } = useScrollPosition({ targetRef: portfolioBannerRef });
 	const [searchQuery, setSearchQuery] = useState<FilterFormData>({
 		minPAndL: searchParams.get('minPAndL')
 			? Number(searchParams.get('minPAndL'))
@@ -71,6 +68,7 @@ export default function TaxOpportunitiesPage() {
 	});
 	const pathname = usePathname();
 	const [isCollapsed, setIsCollapsed] = useState(false);
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	const { data, error, loading } = useHarvestEvalResultQuery({
 		variables: { filters: searchQuery },
@@ -133,10 +131,10 @@ export default function TaxOpportunitiesPage() {
 	}
 
 	const harvestEvalResult = data.harvestEvalResult;
-	const _netPosition = harvestEvalResult.summary.realized.gainTotal;
 
 	return (
 		<motion.div
+			ref={containerRef}
 			className="container mx-auto max-w-6xl space-y-4 px-4 py-8"
 			variants={containerVariants}
 			initial="hidden"
@@ -159,14 +157,6 @@ export default function TaxOpportunitiesPage() {
 					</motion.p>
 				</div>
 			</motion.div>
-
-			{/* Compact Portfolio Banner */}
-			<PortfolioCompactBanner
-				netPosition={harvestEvalResult.summary.realized.gainTotal ?? 0}
-				unrealizedGain={harvestEvalResult.summary.unrealized.gainTotal ?? 0}
-				unrealizedLoss={harvestEvalResult.summary.unrealized.lossTotal ?? 0}
-				isVisible={isScrolledPast}
-			/>
 
 			{/* Portfolio Status */}
 			<motion.div
