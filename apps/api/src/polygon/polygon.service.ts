@@ -205,7 +205,7 @@ export class PolygonService {
 	}
 
 	async updateAllAssetPrices() {
-		const batchSize = 1000;
+		const batchSize = 100;
 		return this.polygonClient.stocks
 			.snapshotAllTickers()
 			.then(async (results) => {

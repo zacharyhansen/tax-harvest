@@ -16,7 +16,7 @@ export class TransactionService {
 		args: Prisma.TransactionFindManyArgs,
 	) {
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.transaction.findMany({
 				...args,
 				orderBy: {

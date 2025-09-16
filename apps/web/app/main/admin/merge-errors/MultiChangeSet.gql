@@ -1,0 +1,62 @@
+fragment MultiChangeSetTableItem on MultiChangeSet {
+	id
+	portfolioId
+	assetSymbol
+	targetValue
+	targetQuantity
+	resolved
+	createdAt
+	updatedAt
+}
+
+fragment MultiChangeSetDetail on MultiChangeSet {
+	id
+	portfolioId
+	assetSymbol
+	targetValue
+	targetQuantity
+	lotsData
+	resolved
+	createdAt
+	updatedAt
+	MultiChangeSetOption {
+		...MultiChangeSetOptionItem
+	}
+}
+
+fragment MultiChangeSetOptionItem on MultiChangeSetOption {
+	id
+	MultiChangeSetOptionItem {
+		id
+		lotId
+		acquiredDate
+		quantityFinal
+		quantityChange
+		isNewBuy
+		price
+	}
+}
+
+query MultiChangeSets {
+	multiChangeSets {
+		...MultiChangeSetTableItem
+	}
+}
+
+query AdminMultiChangeSets {
+	adminMultiChangeSets {
+		...MultiChangeSetTableItem
+	}
+}
+
+query MultiChangeSet($id: Float!) {
+	multiChangeSet(id: $id) {
+		...MultiChangeSetDetail
+	}
+}
+
+mutation UpdateMultiChangeSet($id: Float!, $data: MultiChangeSetUpdateInput!) {
+	updateMultiChangeSet(id: $id, data: $data) {
+		...MultiChangeSetDetail
+	}
+}

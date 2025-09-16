@@ -22,6 +22,7 @@ import { HealthModule } from '~/health/health.module';
 import { LogsModule } from '~/logs/logs.module';
 import { LotModule } from '~/lot/lot.module';
 import { LotTransactionBatchModule } from '~/lot-transaction-batch/lot-transaction-batch.module';
+import { MultiChangeSetModule } from '~/multi-change-set/multi-change-set.module';
 import { NotificationModule } from '~/notification/notification.module';
 import { OauthModule } from '~/oauth/oauth.module';
 import { PlaidModule } from '~/plaid/plaid.module';
@@ -54,7 +55,7 @@ import { errorFormatPlugin } from '../plugins/error-format';
 			sortSchema: true,
 			useGlobalPrefix: true,
 		}),
-		...(process.env.CRON_ENABLED ? [ScheduleModule.forRoot()] : []),
+		...(process.env.CRON_ENABLED === 'true' ? [ScheduleModule.forRoot()] : []),
 		PrismaModule,
 		HealthModule,
 		CacheModule,
@@ -81,6 +82,7 @@ import { errorFormatPlugin } from '../plugins/error-format';
 		StripeModule,
 		EmailModule,
 		NotificationModule,
+		MultiChangeSetModule,
 		CronTasksModule,
 	],
 	providers: [{ provide: APP_GUARD, useClass: ClerkGuard }],

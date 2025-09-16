@@ -76,7 +76,7 @@ export class PlaidResolver {
 		});
 
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId))
+			.rlsPortfolioClient(currentUser.metadata.portfolioId)
 			.account.findMany({
 				select,
 				where: {
@@ -161,7 +161,7 @@ export class PlaidResolver {
 	): Promise<boolean> {
 		// Fetch the auth connection without portfolio restrictions
 		const authConnection = await this.prismaService
-			.$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId))
+			.rlsPortfolioClient(currentUser.metadata.portfolioId)
 			.authConnection.findUniqueOrThrow({
 				where: { id: authConnectionId },
 			});

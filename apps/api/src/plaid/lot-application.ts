@@ -23,6 +23,13 @@ export interface LotChange extends LotData {
 	symbol: string;
 }
 
+export interface TMultiChangeSet {
+	options: LotChange[][];
+	targetValue?: Decimal;
+	targetQuantity?: Decimal;
+	symbol: string;
+}
+
 interface FindSubsetHybridArgs {
 	lotsData: LotData[];
 	targetQuantity?: Decimal;
@@ -102,9 +109,10 @@ export function findLotChangeSets(
 	portfolioId: string,
 ): {
 	lotChanges: LotChange[];
+	multiChangeSet: TMultiChangeSet | null;
 } {
 	if (params.targetQuantity === undefined && params.targetValue === undefined) {
-		return { lotChanges: [] };
+		return { lotChanges: [], multiChangeSet: null };
 	}
 
 	const results = findSubsetHybrid({ ...params });
@@ -154,17 +162,46 @@ export function findLotChangeSets(
 	const uniqueLotChangeSolutions = deduplicateEquivalentChangeSets(lotChanges);
 
 	if (uniqueLotChangeSolutions.length > 1) {
-		const err = new Error('Multiple results found');
-		err.name = 'MultipleResultsFound';
-		// @ts-expect-error - This is a custom error
-		err.data = {
-			...params,
-			uniqueLotChangeSolutions,
+		return {
+			lotChanges: processMultiChangeSet(uniqueLotChangeSolutions),
+			multiChangeSet: {
+				options: uniqueLotChangeSolutions,
+				targetValue: params.targetValue,
+				targetQuantity: params.targetQuantity,
+				symbol: params.symbol,
+			},
 		};
-		throw err;
+		// throw err;
 	}
 
-	return { lotChanges: uniqueLotChangeSolutions[0] };
+	return { lotChanges: uniqueLotChangeSolutions[0], multiChangeSet: null };
+}
+
+export function processMultiChangeSet(
+	uniqueLotChangeSolutions: LotChange[][],
+): LotChange[] {
+	// find the lot change with the highest number of zeroed out lots
+	const indexMap = new Map<string, number>();
+	for (const [index, lotChanges] of uniqueLotChangeSolutions.entries()) {
+		for (const lotChangeList of lotChanges) {
+			if (lotChangeList.quantityFinal.eq(0)) {
+				indexMap.set(
+					index.toString(),
+					(indexMap.get(index.toString()) ?? 0) + 1,
+				);
+			}
+		}
+	}
+
+	// return the LotChange with the highest number of zeroed out lots
+	const maxIndex = Array.from(indexMap.entries()).reduce(
+		(max, [index, count]) => {
+			return count > max.count ? { index: Number(index), count } : max;
+		},
+		{ index: 0, count: 0 },
+	);
+
+	return uniqueLotChangeSolutions[maxIndex.index];
 }
 
 /**

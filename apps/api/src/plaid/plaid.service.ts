@@ -35,6 +35,7 @@ import {
 	findLotChangeSets,
 	type LotChange,
 	type LotData,
+	TMultiChangeSet,
 } from './lot-application';
 import type { PlaidLinkOnSuccessMetadata, PlaidWebhook } from './plaid.dto';
 import { taxAdvantadedSubTypes } from './plaid.utils';
@@ -50,6 +51,7 @@ interface ResolvedLotChangeResults {
 	newTransactions: Transaction[];
 	lotTupleMap: Map<string, LotData[]>;
 	intitialLotMap: Map<string, Lot>;
+	multiChangeSetResults: TMultiChangeSet[];
 }
 
 /**
@@ -411,6 +413,7 @@ export class PlaidService {
 			newTransactions: [],
 			lotTupleMap: new Map<string, LotData[]>(),
 			intitialLotMap: new Map<string, Lot>(),
+			multiChangeSetResults: [],
 		};
 
 		const resolveInput = {
@@ -463,6 +466,7 @@ export class PlaidService {
 			newTransactions,
 			lotTupleMap,
 			intitialLotMap,
+			multiChangeSetResults,
 		} = resolvedResults;
 
 		await this.prismaService
@@ -585,6 +589,40 @@ export class PlaidService {
 						};
 					}),
 				});
+
+				if (multiChangeSetResults.length > 0) {
+					for (const multiChangeSet of multiChangeSetResults) {
+						const insertedMultiChangeSet = await trx.multiChangeSet.create({
+							data: {
+								portfolioId,
+								assetSymbol: lotDeletes[0].symbol,
+								lotsData: JSON.parse(JSON.stringify(initialLots)),
+							},
+						});
+						for (const option of multiChangeSet.options) {
+							await trx.multiChangeSetOption.create({
+								data: {
+									portfolioId,
+									multiChangeSetId: insertedMultiChangeSet.id,
+									MultiChangeSetOptionItem: {
+										createMany: {
+											data: option.map((option) => ({
+												portfolioId,
+												lotId: option.lotId,
+												accountId: option.accountId,
+												acquiredDate: option.acquiredDate,
+												quantityFinal: option.quantityFinal,
+												quantityChange: option.quantityChange,
+												isNewBuy: option.isNewBuy,
+												price: option.price,
+											})),
+										},
+									},
+								},
+							});
+						}
+					}
+				}
 			});
 	}
 
@@ -610,6 +648,7 @@ export class PlaidService {
 				transactions,
 			});
 
+		const multiChangeSetResults: TMultiChangeSet[] = [];
 		// Attempt to generate the change set for each asset
 		const lotResults = Array.from(lotTupleMap.entries()).flatMap(
 			([symbol, lotTuples]) => {
@@ -627,7 +666,14 @@ export class PlaidService {
 					targetValue,
 					symbol,
 				};
-				return findLotChangeSets(changeAlgoParams, portfolioId).lotChanges;
+				const { lotChanges, multiChangeSet } = findLotChangeSets(
+					changeAlgoParams,
+					portfolioId,
+				);
+				if (multiChangeSet) {
+					multiChangeSetResults.push(multiChangeSet);
+				}
+				return lotChanges;
 			},
 		);
 
@@ -667,6 +713,7 @@ export class PlaidService {
 			newTransactions,
 			lotTupleMap,
 			intitialLotMap,
+			multiChangeSetResults,
 		};
 	}
 

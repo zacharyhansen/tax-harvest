@@ -5,11 +5,7 @@ import { Test, type TestingModule } from '@nestjs/testing';
 
 import { CsvService } from './csv.service';
 import lotRecordsFromEtradePortfolioDownload from './test/lotRecordsFromEtradePortfolioDownload.json';
-import lotRecordsFromEtradePortfolioDownload_2 from './test/lotRecordsFromEtradePortfolioDownload_2.json';
 import lotRecordsFromEtradePortfolioDownload_3 from './test/lotRecordsFromEtradePortfolioDownload_3.json';
-import transformedLotRecordsFromEtradePortfolioDownload from './test/transformedLotRecordsFromEtradePortfolioDownload.json';
-import transformedLotRecordsFromEtradePortfolioDownload_2 from './test/transformedLotRecordsFromEtradePortfolioDownload_2.json';
-import transformedLotRecordsFromEtradePortfolioDownload_3 from './test/transformedLotRecordsFromEtradePortfolioDownload_3.json';
 
 describe('csvService', () => {
 	let service: CsvService;
@@ -72,7 +68,7 @@ describe('csvService', () => {
 					remainingQty: r.remainingQty.toFixed(4),
 					acquiredDate: r.acquiredDate.toISOString(),
 				})),
-			).toEqual(transformedLotRecordsFromEtradePortfolioDownload);
+			).toMatchSnapshot();
 
 			const records_3 = service.etradeTransformCSVRecords({
 				records: lotRecordsFromEtradePortfolioDownload_3,
@@ -85,7 +81,7 @@ describe('csvService', () => {
 					remainingQty: r.remainingQty.toFixed(4),
 					acquiredDate: r.acquiredDate.toISOString(),
 				})),
-			).toEqual(transformedLotRecordsFromEtradePortfolioDownload_3);
+			).toMatchSnapshot();
 		});
 
 		it('should transform records with timezone-aware dates when lotSeededDate is provided', () => {
@@ -266,7 +262,7 @@ describe('csvService', () => {
 		const { records, lotSeededDate } = await service.etradeCSVToLots({
 			content,
 		});
-		expect(records).toEqual(lotRecordsFromEtradePortfolioDownload_2);
+		expect(records).toMatchSnapshot();
 		const finalRecords = service.etradeTransformCSVRecords({
 			records,
 			lotSeededDate,
@@ -279,7 +275,7 @@ describe('csvService', () => {
 				remainingQty: r.remainingQty.valueOf(),
 				acquiredDate: r.acquiredDate.toISOString(),
 			})),
-		).toEqual(transformedLotRecordsFromEtradePortfolioDownload_2);
+		).toMatchSnapshot();
 	});
 
 	it('should work end to end with timezone-aware date parsing', async () => {

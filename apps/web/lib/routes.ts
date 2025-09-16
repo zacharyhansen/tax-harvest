@@ -51,6 +51,11 @@ export const TypedRoutes = {
 		({ logId }) => `/main/admin/logs/${logId}`,
 		z.object({ logId: z.coerce.number() }),
 	),
+	mergeErrors: makeRoute(() => `/main/admin/merge-errors`),
+	mergeError: makeRoute(
+		({ mergeErrorId }) => `/main/admin/merge-errors/${mergeErrorId}`,
+		z.object({ mergeErrorId: z.string() }),
+	),
 	lotTransactionBatch: makeRoute(
 		({ lotTransactionBatchId }) =>
 			`/main/admin/plaid-history/${lotTransactionBatchId}`,

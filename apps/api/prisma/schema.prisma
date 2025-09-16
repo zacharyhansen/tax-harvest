@@ -85,22 +85,25 @@ model Portfolio {
   notificationFrequency               HarvestNotificationFrequency @default(WEEKLY)
   endOfYearTaxOpportunityNotification Boolean                      @default(true)
 
-  accounts               Account[]
-  usersOnPortfolios      UsersOnPortfolios[]
-  createdBy              User                     @relation(fields: [createdById], references: [id], onDelete: Restrict)
-  authConnections        AuthConnection[]
-  harvests               Harvest[]
-  log                    Log[]
-  lotTransactionBatch    LotTransactionBatch[]
-  lotChangeLog           LotChangeLog[]
-  harvestTransaction     HarvestTransaction[]
-  files                  File[]
-  lots                   Lot[]
-  positions              Position[]
-  transactions           Transaction[]
-  realizedPAndL          RealizedPAndL[]
-  harvestTransactionItem HarvestTransactionItem[]
-  Notification           Notification[]
+  accounts                 Account[]
+  usersOnPortfolios        UsersOnPortfolios[]
+  createdBy                User                       @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  authConnections          AuthConnection[]
+  harvests                 Harvest[]
+  log                      Log[]
+  lotTransactionBatch      LotTransactionBatch[]
+  lotChangeLog             LotChangeLog[]
+  harvestTransaction       HarvestTransaction[]
+  files                    File[]
+  lots                     Lot[]
+  positions                Position[]
+  transactions             Transaction[]
+  realizedPAndL            RealizedPAndL[]
+  harvestTransactionItem   HarvestTransactionItem[]
+  Notification             Notification[]
+  MultiChangeSet           MultiChangeSet[]
+  MultiChangeSetOption     MultiChangeSetOption[]
+  MultiChangeSetOptionItem MultiChangeSetOptionItem[]
 }
 
 enum HarvestType {
@@ -276,16 +279,17 @@ model Account {
   raw                              Json?
 
   /// @HideField({ match: '@(Account)Create*Input' })
-  createdBy           User                  @relation(fields: [createdById], references: [id], onDelete: Restrict)
-  authConnection      AuthConnection?       @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
-  portfolio           Portfolio             @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  positions           Position[]
-  transactions        Transaction[]
-  realizedPAndL       RealizedPAndL[]
-  lots                Lot[]
-  files               File[]
-  LotTransactionBatch LotTransactionBatch[]
-  Notification        Notification[]
+  createdBy                User                       @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  authConnection           AuthConnection?            @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
+  portfolio                Portfolio                  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  positions                Position[]
+  transactions             Transaction[]
+  realizedPAndL            RealizedPAndL[]
+  lots                     Lot[]
+  files                    File[]
+  LotTransactionBatch      LotTransactionBatch[]
+  Notification             Notification[]
+  MultiChangeSetOptionItem MultiChangeSetOptionItem[]
 
   /// This attempts to ensure user doesnt link the same account twice (i.e. same plaid account mask)
   @@unique([authConnectionId, plaidAccountMask, type])
@@ -501,13 +505,14 @@ model Lot {
   locationCode        Int?
   shortType           Int?
 
-  file                    File?                    @relation(fields: [fileId], references: [id], onDelete: SetNull)
-  asset                   Asset                    @relation(fields: [assetSymbol], references: [symbol])
-  position                Position?                @relation(fields: [positionId], references: [id], onDelete: Cascade)
-  account                 Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  harvestTransactionItems HarvestTransactionItem[]
-  lotChangeLog            LotChangeLog[]
-  portfolio               Portfolio                @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  file                     File?                      @relation(fields: [fileId], references: [id], onDelete: SetNull)
+  asset                    Asset                      @relation(fields: [assetSymbol], references: [symbol])
+  position                 Position?                  @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  account                  Account                    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  harvestTransactionItems  HarvestTransactionItem[]
+  lotChangeLog             LotChangeLog[]
+  portfolio                Portfolio                  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  MultiChangeSetOptionItem MultiChangeSetOptionItem[]
 
   @@unique([positionId, externalId])
   @@index([accountId])
@@ -623,6 +628,7 @@ model Asset {
   transactions            Transaction[]
   lots                    Lot[]
   harvestTransactionItems HarvestTransactionItem[]
+  MultiChangeSet          MultiChangeSet[]
 }
 
 model PriceHourly {
@@ -785,6 +791,60 @@ model File {
   account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   lots      Lot[]
   portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+}
+
+model MultiChangeSet {
+  id             BigInt   @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+  portfolioId    String   @db.Uuid
+  assetSymbol    String
+  targetValue    Decimal? @db.Decimal(14, 4)
+  targetQuantity Decimal? @db.Decimal(14, 4)
+  lotsData       Json     @db.JsonB
+  resolved       Boolean  @default(false)
+
+  portfolio            Portfolio              @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  asset                Asset                  @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  MultiChangeSetOption MultiChangeSetOption[]
+
+  @@index([portfolioId])
+}
+
+model MultiChangeSetOption {
+  id               BigInt   @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now()) @updatedAt
+  portfolioId      String   @db.Uuid
+  multiChangeSetId BigInt
+
+  multiChangeSet           MultiChangeSet             @relation(fields: [multiChangeSetId], references: [id], onDelete: Cascade)
+  portfolio                Portfolio                  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  MultiChangeSetOptionItem MultiChangeSetOptionItem[]
+
+  @@index([portfolioId, multiChangeSetId])
+}
+
+model MultiChangeSetOptionItem {
+  id                     BigInt   @id @default(autoincrement())
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @default(now()) @updatedAt
+  portfolioId            String   @db.Uuid
+  accountId              String   @db.Uuid
+  lotId                  String   @db.Uuid
+  multiChangeSetOptionId BigInt
+  acquiredDate           DateTime
+  quantityFinal          Decimal? @db.Decimal(14, 4)
+  quantityChange         Decimal? @db.Decimal(14, 4)
+  isNewBuy               Boolean  @default(false)
+  price                  Decimal? @db.Decimal(14, 4)
+
+  multiChangeSetOption MultiChangeSetOption @relation(fields: [multiChangeSetOptionId], references: [id], onDelete: Cascade)
+  account              Account              @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  portfolio            Portfolio            @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  lot                  Lot                  @relation(fields: [lotId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId, accountId, multiChangeSetOptionId])
 }
 
 enum NotificationLevel {

@@ -322,6 +322,41 @@ export interface LotTransactionBatch {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface MultiChangeSet {
+  assetSymbol: string;
+  createdAt: Generated<Timestamp>;
+  id: Generated<Int8>;
+  lotsData: Json;
+  portfolioId: string;
+  resolved: Generated<boolean>;
+  targetQuantity: Numeric | null;
+  targetValue: Numeric | null;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface MultiChangeSetOption {
+  createdAt: Generated<Timestamp>;
+  id: Generated<Int8>;
+  multiChangeSetId: Int8;
+  portfolioId: string;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface MultiChangeSetOptionItem {
+  accountId: string;
+  acquiredDate: Timestamp;
+  createdAt: Generated<Timestamp>;
+  id: Generated<Int8>;
+  isNewBuy: Generated<boolean>;
+  lotId: string;
+  multiChangeSetOptionId: Int8;
+  portfolioId: string;
+  price: Numeric | null;
+  quantityChange: Numeric | null;
+  quantityFinal: Numeric | null;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface Notification {
   accountId: string | null;
   acked: Generated<boolean>;
@@ -490,6 +525,9 @@ export interface DB {
   LotChangeLog: LotChangeLog;
   LotCurrent: LotCurrent;
   LotTransactionBatch: LotTransactionBatch;
+  MultiChangeSet: MultiChangeSet;
+  MultiChangeSetOption: MultiChangeSetOption;
+  MultiChangeSetOptionItem: MultiChangeSetOptionItem;
   Notification: Notification;
   Portfolio: Portfolio;
   Position: Position;

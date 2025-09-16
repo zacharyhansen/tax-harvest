@@ -746,6 +746,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "MultiChangeSetOptionItem",
+          "type": "MultiChangeSetOptionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Notification",
           "type": "Notification",
           "isRequired": false,
@@ -1326,6 +1340,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "LotToAsset",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSet",
+          "type": "MultiChangeSet",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetToAsset",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -3712,6 +3740,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOptionItem",
+          "type": "MultiChangeSetOptionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToLot",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -4310,6 +4352,602 @@
         }
       ]
     },
+    "MultiChangeSet": {
+      "id": "public.MultiChangeSet",
+      "schemaName": "public",
+      "tableName": "MultiChangeSet",
+      "fields": [
+        {
+          "id": "public.MultiChangeSet.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"MultiChangeSet_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSet.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSet.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSet.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSet.assetSymbol",
+          "name": "assetSymbol",
+          "columnName": "assetSymbol",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSet.targetValue",
+          "name": "targetValue",
+          "columnName": "targetValue",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSet.targetQuantity",
+          "name": "targetQuantity",
+          "columnName": "targetQuantity",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSet.lotsData",
+          "name": "lotsData",
+          "columnName": "lotsData",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSet.resolved",
+          "name": "resolved",
+          "columnName": "resolved",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Asset",
+          "type": "Asset",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetToAsset",
+          "relationFromFields": [
+            "assetSymbol"
+          ],
+          "relationToFields": [
+            "symbol"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOption",
+          "type": "MultiChangeSetOption",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionToMultiChangeSet",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "MultiChangeSet_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "MultiChangeSetOption": {
+      "id": "public.MultiChangeSetOption",
+      "schemaName": "public",
+      "tableName": "MultiChangeSetOption",
+      "fields": [
+        {
+          "id": "public.MultiChangeSetOption.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"MultiChangeSetOption_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOption.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOption.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOption.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOption.multiChangeSetId",
+          "name": "multiChangeSetId",
+          "columnName": "multiChangeSetId",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "MultiChangeSet",
+          "type": "MultiChangeSet",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionToMultiChangeSet",
+          "relationFromFields": [
+            "multiChangeSetId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOptionItem",
+          "type": "MultiChangeSetOptionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToMultiChangeSetOption",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "MultiChangeSetOption_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "MultiChangeSetOptionItem": {
+      "id": "public.MultiChangeSetOptionItem",
+      "schemaName": "public",
+      "tableName": "MultiChangeSetOptionItem",
+      "fields": [
+        {
+          "id": "public.MultiChangeSetOptionItem.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"MultiChangeSetOptionItem_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.lotId",
+          "name": "lotId",
+          "columnName": "lotId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.multiChangeSetOptionId",
+          "name": "multiChangeSetOptionId",
+          "columnName": "multiChangeSetOptionId",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.acquiredDate",
+          "name": "acquiredDate",
+          "columnName": "acquiredDate",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.quantityFinal",
+          "name": "quantityFinal",
+          "columnName": "quantityFinal",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.quantityChange",
+          "name": "quantityChange",
+          "columnName": "quantityChange",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.isNewBuy",
+          "name": "isNewBuy",
+          "columnName": "isNewBuy",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.price",
+          "name": "price",
+          "columnName": "price",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToAccount",
+          "relationFromFields": [
+            "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Lot",
+          "type": "Lot",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToLot",
+          "relationFromFields": [
+            "lotId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOption",
+          "type": "MultiChangeSetOption",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToMultiChangeSetOption",
+          "relationFromFields": [
+            "multiChangeSetOptionId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "MultiChangeSetOptionItem_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "Notification": {
       "id": "public.Notification",
       "schemaName": "public",
@@ -4843,6 +5481,48 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "LotTransactionBatchToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSet",
+          "type": "MultiChangeSet",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOption",
+          "type": "MultiChangeSetOption",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOptionItem",
+          "type": "MultiChangeSetOptionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToPortfolio",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,

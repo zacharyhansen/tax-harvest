@@ -49,19 +49,17 @@ export class PortfolioService {
 	) {}
 
 	getPortfoliosByUserId(userId: string, args: Prisma.PortfolioFindManyArgs) {
-		return this.prismaService
-			.$extends(PrismaService.bypassRLS())
-			.portfolio.findMany({
-				...args,
-				select: undefined, // dont allow nested seelct due to RLS bypass
-				where: {
-					usersOnPortfolios: {
-						some: {
-							userId,
-						},
+		return this.prismaService.rlsBypassClient().portfolio.findMany({
+			...args,
+			select: undefined, // dont allow nested seelct due to RLS bypass
+			where: {
+				usersOnPortfolios: {
+					some: {
+						userId,
 					},
 				},
-			});
+			},
+		});
 	}
 
 	async switchPortfolio(clerkContext: ClerkClaims, portfolioId: string) {
@@ -85,18 +83,16 @@ export class PortfolioService {
 		portfolioId?: string,
 	) {
 		const user = await this.userService.asserUserExists(userId);
-		return this.prismaService
-			.$extends(PrismaService.bypassRLS())
-			.portfolio.findUniqueOrThrow({
-				where: {
-					id: portfolioId,
-					usersOnPortfolios: {
-						some: {
-							userId: user.id,
-						},
+		return this.prismaService.rlsBypassClient().portfolio.findUniqueOrThrow({
+			where: {
+				id: portfolioId,
+				usersOnPortfolios: {
+					some: {
+						userId: user.id,
 					},
 				},
-			});
+			},
+		});
 
 		// .catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId))
 	}
