@@ -67,7 +67,7 @@ export default function TaxOpportunitiesPage() {
 			: null,
 	});
 	const pathname = usePathname();
-	const [isCollapsed, setIsCollapsed] = useState(false);
+	const [isCollapsed, setIsCollapsed] = useState(true);
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const { data, error, loading } = useHarvestEvalResultQuery({
