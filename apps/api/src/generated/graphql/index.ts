@@ -11668,7 +11668,7 @@ export class AssetAggregateArgs {
     orderBy?: Array<AssetOrderByWithRelationInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    cursor?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    cursor?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -12212,7 +12212,7 @@ export class AssetCreateNestedManyWithoutAssetTypeInput {
     createMany?: InstanceType<typeof AssetCreateManyAssetTypeInputEnvelope>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
 }
 
 @InputType()
@@ -12225,7 +12225,7 @@ export class AssetCreateNestedManyWithoutFavoritedByInput {
     connectOrCreate?: Array<AssetCreateOrConnectWithoutFavoritedByInput>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
 }
 
 @InputType()
@@ -12238,7 +12238,7 @@ export class AssetCreateNestedOneWithoutHarvestTransactionItemsInput {
     connectOrCreate?: InstanceType<typeof AssetCreateOrConnectWithoutHarvestTransactionItemsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @InputType()
@@ -12251,7 +12251,7 @@ export class AssetCreateNestedOneWithoutLotsInput {
     connectOrCreate?: InstanceType<typeof AssetCreateOrConnectWithoutLotsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @InputType()
@@ -12264,7 +12264,7 @@ export class AssetCreateNestedOneWithoutPositionsInput {
     connectOrCreate?: InstanceType<typeof AssetCreateOrConnectWithoutPositionsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @InputType()
@@ -12277,7 +12277,7 @@ export class AssetCreateNestedOneWithoutPriceHourlyVectorsInput {
     connectOrCreate?: InstanceType<typeof AssetCreateOrConnectWithoutPriceHourlyVectorsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @InputType()
@@ -12290,7 +12290,7 @@ export class AssetCreateNestedOneWithoutPriceHourlyInput {
     connectOrCreate?: InstanceType<typeof AssetCreateOrConnectWithoutPriceHourlyInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @InputType()
@@ -12303,7 +12303,7 @@ export class AssetCreateNestedOneWithoutTransactionsInput {
     connectOrCreate?: InstanceType<typeof AssetCreateOrConnectWithoutTransactionsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @InputType()
@@ -12316,14 +12316,14 @@ export class AssetCreateNestedOneWithoutVectorGraphsInput {
     connectOrCreate?: InstanceType<typeof AssetCreateOrConnectWithoutVectorGraphsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @InputType()
 export class AssetCreateOrConnectWithoutAssetTypeInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutAssetTypeInput, {nullable:false})
     @Type(() => AssetCreateWithoutAssetTypeInput)
     create!: InstanceType<typeof AssetCreateWithoutAssetTypeInput>;
@@ -12333,7 +12333,7 @@ export class AssetCreateOrConnectWithoutAssetTypeInput {
 export class AssetCreateOrConnectWithoutFavoritedByInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutFavoritedByInput, {nullable:false})
     @Type(() => AssetCreateWithoutFavoritedByInput)
     create!: InstanceType<typeof AssetCreateWithoutFavoritedByInput>;
@@ -12343,7 +12343,7 @@ export class AssetCreateOrConnectWithoutFavoritedByInput {
 export class AssetCreateOrConnectWithoutHarvestTransactionItemsInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutHarvestTransactionItemsInput, {nullable:false})
     @Type(() => AssetCreateWithoutHarvestTransactionItemsInput)
     create!: InstanceType<typeof AssetCreateWithoutHarvestTransactionItemsInput>;
@@ -12353,7 +12353,7 @@ export class AssetCreateOrConnectWithoutHarvestTransactionItemsInput {
 export class AssetCreateOrConnectWithoutLotsInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutLotsInput, {nullable:false})
     @Type(() => AssetCreateWithoutLotsInput)
     create!: InstanceType<typeof AssetCreateWithoutLotsInput>;
@@ -12363,7 +12363,7 @@ export class AssetCreateOrConnectWithoutLotsInput {
 export class AssetCreateOrConnectWithoutPositionsInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutPositionsInput, {nullable:false})
     @Type(() => AssetCreateWithoutPositionsInput)
     create!: InstanceType<typeof AssetCreateWithoutPositionsInput>;
@@ -12373,7 +12373,7 @@ export class AssetCreateOrConnectWithoutPositionsInput {
 export class AssetCreateOrConnectWithoutPriceHourlyVectorsInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutPriceHourlyVectorsInput, {nullable:false})
     @Type(() => AssetCreateWithoutPriceHourlyVectorsInput)
     create!: InstanceType<typeof AssetCreateWithoutPriceHourlyVectorsInput>;
@@ -12383,7 +12383,7 @@ export class AssetCreateOrConnectWithoutPriceHourlyVectorsInput {
 export class AssetCreateOrConnectWithoutPriceHourlyInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutPriceHourlyInput, {nullable:false})
     @Type(() => AssetCreateWithoutPriceHourlyInput)
     create!: InstanceType<typeof AssetCreateWithoutPriceHourlyInput>;
@@ -12393,7 +12393,7 @@ export class AssetCreateOrConnectWithoutPriceHourlyInput {
 export class AssetCreateOrConnectWithoutTransactionsInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutTransactionsInput, {nullable:false})
     @Type(() => AssetCreateWithoutTransactionsInput)
     create!: InstanceType<typeof AssetCreateWithoutTransactionsInput>;
@@ -12403,7 +12403,7 @@ export class AssetCreateOrConnectWithoutTransactionsInput {
 export class AssetCreateOrConnectWithoutVectorGraphsInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateWithoutVectorGraphsInput, {nullable:false})
     @Type(() => AssetCreateWithoutVectorGraphsInput)
     create!: InstanceType<typeof AssetCreateWithoutVectorGraphsInput>;
@@ -14578,7 +14578,7 @@ export class AssetUncheckedCreateNestedManyWithoutAssetTypeInput {
     createMany?: InstanceType<typeof AssetCreateManyAssetTypeInputEnvelope>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
 }
 
 @InputType()
@@ -14591,7 +14591,7 @@ export class AssetUncheckedCreateNestedManyWithoutFavoritedByInput {
     connectOrCreate?: Array<AssetCreateOrConnectWithoutFavoritedByInput>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
 }
 
 @InputType()
@@ -15744,16 +15744,16 @@ export class AssetUncheckedUpdateManyWithoutAssetTypeNestedInput {
     createMany?: InstanceType<typeof AssetCreateManyAssetTypeInputEnvelope>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    set?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    disconnect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    delete?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetUpdateWithWhereUniqueWithoutAssetTypeInput], {nullable:true})
     @Type(() => AssetUpdateWithWhereUniqueWithoutAssetTypeInput)
     update?: Array<AssetUpdateWithWhereUniqueWithoutAssetTypeInput>;
@@ -15857,16 +15857,16 @@ export class AssetUncheckedUpdateManyWithoutFavoritedByNestedInput {
     upsert?: Array<AssetUpsertWithWhereUniqueWithoutFavoritedByInput>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    set?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    disconnect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    delete?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetUpdateWithWhereUniqueWithoutFavoritedByInput], {nullable:true})
     @Type(() => AssetUpdateWithWhereUniqueWithoutFavoritedByInput)
     update?: Array<AssetUpdateWithWhereUniqueWithoutFavoritedByInput>;
@@ -17179,16 +17179,16 @@ export class AssetUpdateManyWithoutAssetTypeNestedInput {
     createMany?: InstanceType<typeof AssetCreateManyAssetTypeInputEnvelope>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    set?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    disconnect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    delete?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetUpdateWithWhereUniqueWithoutAssetTypeInput], {nullable:true})
     @Type(() => AssetUpdateWithWhereUniqueWithoutAssetTypeInput)
     update?: Array<AssetUpdateWithWhereUniqueWithoutAssetTypeInput>;
@@ -17213,16 +17213,16 @@ export class AssetUpdateManyWithoutFavoritedByNestedInput {
     upsert?: Array<AssetUpsertWithWhereUniqueWithoutFavoritedByInput>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    set?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    set?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    disconnect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    disconnect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    delete?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    delete?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetWhereUniqueInput], {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>>;
+    connect?: Array<Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>>;
     @Field(() => [AssetUpdateWithWhereUniqueWithoutFavoritedByInput], {nullable:true})
     @Type(() => AssetUpdateWithWhereUniqueWithoutFavoritedByInput)
     update?: Array<AssetUpdateWithWhereUniqueWithoutFavoritedByInput>;
@@ -17247,7 +17247,7 @@ export class AssetUpdateOneRequiredWithoutHarvestTransactionItemsNestedInput {
     upsert?: InstanceType<typeof AssetUpsertWithoutHarvestTransactionItemsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateToOneWithWhereWithoutHarvestTransactionItemsInput, {nullable:true})
     @Type(() => AssetUpdateToOneWithWhereWithoutHarvestTransactionItemsInput)
     update?: InstanceType<typeof AssetUpdateToOneWithWhereWithoutHarvestTransactionItemsInput>;
@@ -17266,7 +17266,7 @@ export class AssetUpdateOneRequiredWithoutLotsNestedInput {
     upsert?: InstanceType<typeof AssetUpsertWithoutLotsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateToOneWithWhereWithoutLotsInput, {nullable:true})
     @Type(() => AssetUpdateToOneWithWhereWithoutLotsInput)
     update?: InstanceType<typeof AssetUpdateToOneWithWhereWithoutLotsInput>;
@@ -17285,7 +17285,7 @@ export class AssetUpdateOneRequiredWithoutPositionsNestedInput {
     upsert?: InstanceType<typeof AssetUpsertWithoutPositionsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateToOneWithWhereWithoutPositionsInput, {nullable:true})
     @Type(() => AssetUpdateToOneWithWhereWithoutPositionsInput)
     update?: InstanceType<typeof AssetUpdateToOneWithWhereWithoutPositionsInput>;
@@ -17304,7 +17304,7 @@ export class AssetUpdateOneRequiredWithoutPriceHourlyNestedInput {
     upsert?: InstanceType<typeof AssetUpsertWithoutPriceHourlyInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateToOneWithWhereWithoutPriceHourlyInput, {nullable:true})
     @Type(() => AssetUpdateToOneWithWhereWithoutPriceHourlyInput)
     update?: InstanceType<typeof AssetUpdateToOneWithWhereWithoutPriceHourlyInput>;
@@ -17323,7 +17323,7 @@ export class AssetUpdateOneRequiredWithoutPriceHourlyVectorsNestedInput {
     upsert?: InstanceType<typeof AssetUpsertWithoutPriceHourlyVectorsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateToOneWithWhereWithoutPriceHourlyVectorsInput, {nullable:true})
     @Type(() => AssetUpdateToOneWithWhereWithoutPriceHourlyVectorsInput)
     update?: InstanceType<typeof AssetUpdateToOneWithWhereWithoutPriceHourlyVectorsInput>;
@@ -17342,7 +17342,7 @@ export class AssetUpdateOneRequiredWithoutTransactionsNestedInput {
     upsert?: InstanceType<typeof AssetUpsertWithoutTransactionsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateToOneWithWhereWithoutTransactionsInput, {nullable:true})
     @Type(() => AssetUpdateToOneWithWhereWithoutTransactionsInput)
     update?: InstanceType<typeof AssetUpdateToOneWithWhereWithoutTransactionsInput>;
@@ -17361,7 +17361,7 @@ export class AssetUpdateOneRequiredWithoutVectorGraphsNestedInput {
     upsert?: InstanceType<typeof AssetUpsertWithoutVectorGraphsInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    connect?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateToOneWithWhereWithoutVectorGraphsInput, {nullable:true})
     @Type(() => AssetUpdateToOneWithWhereWithoutVectorGraphsInput)
     update?: InstanceType<typeof AssetUpdateToOneWithWhereWithoutVectorGraphsInput>;
@@ -17441,7 +17441,7 @@ export class AssetUpdateToOneWithWhereWithoutVectorGraphsInput {
 export class AssetUpdateWithWhereUniqueWithoutAssetTypeInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateWithoutAssetTypeInput, {nullable:false})
     @Type(() => AssetUpdateWithoutAssetTypeInput)
     data!: InstanceType<typeof AssetUpdateWithoutAssetTypeInput>;
@@ -17451,7 +17451,7 @@ export class AssetUpdateWithWhereUniqueWithoutAssetTypeInput {
 export class AssetUpdateWithWhereUniqueWithoutFavoritedByInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateWithoutFavoritedByInput, {nullable:false})
     @Type(() => AssetUpdateWithoutFavoritedByInput)
     data!: InstanceType<typeof AssetUpdateWithoutFavoritedByInput>;
@@ -18494,7 +18494,7 @@ export class AssetUpdateInput {
 export class AssetUpsertWithWhereUniqueWithoutAssetTypeInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateWithoutAssetTypeInput, {nullable:false})
     @Type(() => AssetUpdateWithoutAssetTypeInput)
     update!: InstanceType<typeof AssetUpdateWithoutAssetTypeInput>;
@@ -18507,7 +18507,7 @@ export class AssetUpsertWithWhereUniqueWithoutAssetTypeInput {
 export class AssetUpsertWithWhereUniqueWithoutFavoritedByInput {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetUpdateWithoutFavoritedByInput, {nullable:false})
     @Type(() => AssetUpdateWithoutFavoritedByInput)
     update!: InstanceType<typeof AssetUpdateWithoutFavoritedByInput>;
@@ -18611,8 +18611,6 @@ export class AssetUpsertWithoutVectorGraphsInput {
 export class AssetWhereUniqueInput {
     @Field(() => String, {nullable:true})
     symbol?: string;
-    @Field(() => String, {nullable:true})
-    plaid_security_id?: string;
     @Field(() => [AssetWhereInput], {nullable:true})
     @Type(() => AssetWhereInput)
     AND?: Array<AssetWhereInput>;
@@ -18624,6 +18622,8 @@ export class AssetWhereUniqueInput {
     NOT?: Array<AssetWhereInput>;
     @Field(() => BoolFilter, {nullable:true})
     active?: InstanceType<typeof BoolFilter>;
+    @Field(() => StringNullableFilter, {nullable:true})
+    plaid_security_id?: InstanceType<typeof StringNullableFilter>;
     @Field(() => DecimalFilter, {nullable:true})
     @Type(() => DecimalFilter)
     lastPrice?: InstanceType<typeof DecimalFilter>;
@@ -18960,7 +18960,7 @@ export class DeleteManyAssetArgs {
 export class DeleteOneAssetArgs {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @ArgsType()
@@ -18973,7 +18973,7 @@ export class FindFirstAssetOrThrowArgs {
     orderBy?: Array<AssetOrderByWithRelationInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    cursor?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    cursor?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -18992,7 +18992,7 @@ export class FindFirstAssetArgs {
     orderBy?: Array<AssetOrderByWithRelationInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    cursor?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    cursor?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -19011,7 +19011,7 @@ export class FindManyAssetArgs {
     orderBy?: Array<AssetOrderByWithRelationInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:true})
     @Type(() => AssetWhereUniqueInput)
-    cursor?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    cursor?: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => Int, {nullable:true})
     take?: number;
     @Field(() => Int, {nullable:true})
@@ -19024,14 +19024,14 @@ export class FindManyAssetArgs {
 export class FindUniqueAssetOrThrowArgs {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @ArgsType()
 export class FindUniqueAssetArgs {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @ArgsType()
@@ -19053,14 +19053,14 @@ export class UpdateOneAssetArgs {
     data!: InstanceType<typeof AssetUpdateInput>;
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
 }
 
 @ArgsType()
 export class UpsertOneAssetArgs {
     @Field(() => AssetWhereUniqueInput, {nullable:false})
     @Type(() => AssetWhereUniqueInput)
-    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol' | 'plaid_security_id'>;
+    where!: Prisma.AtLeast<AssetWhereUniqueInput, 'symbol'>;
     @Field(() => AssetCreateInput, {nullable:false})
     @Type(() => AssetCreateInput)
     create!: InstanceType<typeof AssetCreateInput>;

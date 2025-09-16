@@ -13,6 +13,7 @@ import { Database } from './database';
 			inject: [ConfigService],
 			provide: Database,
 			useFactory: async () => {
+				console.log('DATABASE_URL', process.env.DATABASE_URL);
 				return new Database({
 					log: (event) => {
 						if (event.level === 'error') {

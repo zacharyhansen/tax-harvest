@@ -1,0 +1,76 @@
+# Web App (Next.js Frontend) Rules
+
+## Architecture
+- Next.js 14+ with App Router
+- Apollo Client for GraphQL
+- Clerk authentication
+- Tailwind CSS for styling
+
+## Development Commands
+```bash
+pnpm dev         # Start development server
+pnpm build       # Build the application
+pnpm start       # Start production server
+pnpm lint        # Lint the code
+pnpm check:types # Type check
+pnpm test        # Run tests
+pnpm codegen     # Generate GraphQL types
+```
+
+## Styling & UI
+- Use `@repo/ui` components exclusively
+- Use Tailwind classes from shadcn theme
+- No custom CSS files (use Tailwind utilities)
+- Follow responsive design patterns
+- Use proper color variables from theme
+
+## GraphQL & Data Fetching
+- Use Apollo Client for GraphQL operations
+- Create `.gql` files for queries/mutations
+- Use generated types from codegen
+- Implement proper loading and error states
+- Use Apollo cache effectively
+
+## Component Architecture
+- Use React Server Components where appropriate
+- Client components only when needed
+- Proper component composition
+- Use custom hooks for logic
+- Follow existing patterns in modules/
+
+## Routing & Navigation
+- Use Next.js App Router conventions
+- Implement proper page layouts
+- Use middleware for auth checks
+- Follow existing route structure
+
+## Authentication
+- Clerk integration for auth flows
+- Protect routes with middleware
+- Use auth context appropriately
+- Handle auth states properly
+
+## File Organization
+- Group by feature in `modules/`
+- Separate components, hooks, and utils
+- Use index files for exports
+- Follow kebab-case for file names
+
+## Performance
+- Optimize images and assets
+- Use proper caching strategies
+- Implement code splitting
+- Optimize bundle size
+- Use Next.js performance features
+
+## Testing
+- Use Vitest for component testing
+- Test user interactions
+- Mock GraphQL operations
+- Maintain test coverage
+
+## Type Safety
+- Use generated GraphQL types
+- Proper TypeScript configurations
+- No `any` types
+- Use strict type checking

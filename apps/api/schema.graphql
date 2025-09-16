@@ -3593,7 +3593,7 @@ input AssetWhereUniqueInput {
   lots: LotListRelationFilter
   marketCap: DecimalNullableFilter
   name: StringNullableFilter
-  plaid_security_id: String
+  plaid_security_id: StringNullableFilter
   positions: PositionListRelationFilter
   priceHourly: PriceHourlyListRelationFilter
   priceHourlyVectors: PriceHourlyVectorListRelationFilter
