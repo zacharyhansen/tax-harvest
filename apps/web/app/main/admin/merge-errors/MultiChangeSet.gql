@@ -1,7 +1,8 @@
-fragment MultiChangeSetTableItem on MultiChangeSet {
+fragment MultiChangeSetTableItem on MergeError {
 	id
 	portfolioId
 	assetSymbol
+	type
 	targetValue
 	targetQuantity
 	resolved
@@ -9,24 +10,32 @@ fragment MultiChangeSetTableItem on MultiChangeSet {
 	updatedAt
 }
 
-fragment MultiChangeSetDetail on MultiChangeSet {
+fragment MultiChangeSetDetail on MergeError {
 	id
 	portfolioId
 	assetSymbol
+	type
 	targetValue
 	targetQuantity
 	lotsData
 	resolved
 	createdAt
 	updatedAt
-	MultiChangeSetOption {
+	log {
+		id
+		type
+		createdAt
+		description
+		responseStatus
+	}
+	multiChangeSetOption {
 		...MultiChangeSetOptionItem
 	}
 }
 
 fragment MultiChangeSetOptionItem on MultiChangeSetOption {
 	id
-	MultiChangeSetOptionItem {
+	multiChangeSetOptionItem {
 		id
 		lotId
 		acquiredDate
@@ -37,26 +46,26 @@ fragment MultiChangeSetOptionItem on MultiChangeSetOption {
 	}
 }
 
-query MultiChangeSets {
-	multiChangeSets {
+query MergeErrors {
+	mergeErrors {
 		...MultiChangeSetTableItem
 	}
 }
 
-query AdminMultiChangeSets {
-	adminMultiChangeSets {
+query AdminMergeErrors {
+	adminMergeErrors {
 		...MultiChangeSetTableItem
 	}
 }
 
-query MultiChangeSet($id: Float!) {
-	multiChangeSet(id: $id) {
+query MergeError($id: String!) {
+	mergeError(id: $id) {
 		...MultiChangeSetDetail
 	}
 }
 
-mutation UpdateMultiChangeSet($id: Float!, $data: MultiChangeSetUpdateInput!) {
-	updateMultiChangeSet(id: $id, data: $data) {
+mutation UpdateMergeError($id: String!, $data: MergeErrorUpdateInput!) {
+	updateMergeError(id: $id, data: $data) {
 		...MultiChangeSetDetail
 	}
 }

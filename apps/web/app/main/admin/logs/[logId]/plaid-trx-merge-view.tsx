@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: <ok> */
 'use client';
 import ReactJsonView from '@microlink/react-json-view';
 import { Badge } from '@repo/ui/components/badge';
@@ -193,12 +194,18 @@ export function PlaidTrxMergeLogView({
 
 	// Calculate total P&L
 	const totalPnL = totalPortfolioValue - totalCostBasis;
-	const totalPnLPercent = totalCostBasis > 0 ? (totalPnL / totalCostBasis) * 100 : 0;
+	const totalPnLPercent =
+		totalCostBasis > 0 ? (totalPnL / totalCostBasis) * 100 : 0;
 
 	return (
 		<LogViewerLayout data={data}>
 			<Tabs defaultValue="summary" className="space-y-4">
-				<TabsList className="grid w-full" style={{ gridTemplateColumns: `repeat(${totalBatches > 0 ? 6 : 5}, 1fr)` }}>
+				<TabsList
+					className="grid w-full"
+					style={{
+						gridTemplateColumns: `repeat(${totalBatches > 0 ? 6 : 5}, 1fr)`,
+					}}
+				>
 					<TabsTrigger value="summary">Summary</TabsTrigger>
 					<TabsTrigger value="initial-lots">
 						Initial Lots ({totalInitialLots})
@@ -211,9 +218,7 @@ export function PlaidTrxMergeLogView({
 					</TabsTrigger>
 					<TabsTrigger value="auth">Auth Connection</TabsTrigger>
 					{totalBatches > 0 && (
-						<TabsTrigger value="batches">
-							Batches ({totalBatches})
-						</TabsTrigger>
+						<TabsTrigger value="batches">Batches ({totalBatches})</TabsTrigger>
 					)}
 				</TabsList>
 
@@ -254,23 +259,29 @@ export function PlaidTrxMergeLogView({
 					{/* Portfolio Metrics */}
 					<Card>
 						<CardHeader>
-							<CardTitle>Portfolio Metrics</CardTitle>
+							<CardTitle>Plaid Portfolio Metrics</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
 								<div>
-									<p className="text-sm text-muted-foreground">Total Market Value</p>
+									<p className="text-sm text-muted-foreground">
+										Total Market Value
+									</p>
 									<p className="text-lg font-medium font-mono">
-										${totalPortfolioValue.toLocaleString(undefined, {
+										$
+										{totalPortfolioValue.toLocaleString(undefined, {
 											minimumFractionDigits: 2,
 											maximumFractionDigits: 2,
 										})}
 									</p>
 								</div>
 								<div>
-									<p className="text-sm text-muted-foreground">Total Cost Basis</p>
+									<p className="text-sm text-muted-foreground">
+										Total Cost Basis
+									</p>
 									<p className="text-lg font-medium font-mono">
-										${totalCostBasis.toLocaleString(undefined, {
+										$
+										{totalCostBasis.toLocaleString(undefined, {
 											minimumFractionDigits: 2,
 											maximumFractionDigits: 2,
 										})}
@@ -278,8 +289,11 @@ export function PlaidTrxMergeLogView({
 								</div>
 								<div>
 									<p className="text-sm text-muted-foreground">Total P&L</p>
-									<p className={`text-lg font-medium font-mono ${totalPnL >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-										${totalPnL.toLocaleString(undefined, {
+									<p
+										className={`text-lg font-medium font-mono ${totalPnL >= 0 ? 'text-green-600' : 'text-red-600'}`}
+									>
+										$
+										{totalPnL.toLocaleString(undefined, {
 											minimumFractionDigits: 2,
 											maximumFractionDigits: 2,
 										})}
@@ -287,7 +301,9 @@ export function PlaidTrxMergeLogView({
 								</div>
 								<div>
 									<p className="text-sm text-muted-foreground">Total P&L %</p>
-									<p className={`text-lg font-medium font-mono ${totalPnLPercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+									<p
+										className={`text-lg font-medium font-mono ${totalPnLPercent >= 0 ? 'text-green-600' : 'text-red-600'}`}
+									>
 										{totalPnLPercent.toFixed(2)}%
 									</p>
 								</div>
@@ -391,7 +407,9 @@ export function PlaidTrxMergeLogView({
 														<td className="p-2 font-mono font-semibold">
 															{lot.assetSymbol}
 														</td>
-														<td className="p-2 font-mono">{lot.remainingQty}</td>
+														<td className="p-2 font-mono">
+															{lot.remainingQty}
+														</td>
 														<td className="p-2 font-mono">${lot.costBasis}</td>
 														<td className="p-2 font-mono">${lot.value}</td>
 														<td
@@ -407,7 +425,9 @@ export function PlaidTrxMergeLogView({
 														<td className="p-2">
 															<Badge
 																variant={
-																	lot.taxGain === 'LONG' ? 'default' : 'secondary'
+																	lot.taxGain === 'LONG'
+																		? 'default'
+																		: 'secondary'
 																}
 															>
 																{lot.taxGain}
@@ -415,7 +435,9 @@ export function PlaidTrxMergeLogView({
 														</td>
 														<td className="p-2">
 															{lot.acquiredDate
-																? new Date(lot.acquiredDate).toLocaleDateString()
+																? new Date(
+																		lot.acquiredDate,
+																	).toLocaleDateString()
 																: 'N/A'}
 														</td>
 													</tr>
@@ -425,7 +447,9 @@ export function PlaidTrxMergeLogView({
 									</table>
 								</div>
 							) : (
-								<p className="text-muted-foreground">No initial lots data available</p>
+								<p className="text-muted-foreground">
+									No initial lots data available
+								</p>
 							)}
 						</CardContent>
 					</Card>
@@ -476,7 +500,8 @@ export function PlaidTrxMergeLogView({
 									displayDataTypes={false}
 									indentWidth={6}
 								/>
-							) : typedData.transactions && typedData.transactions.length > 0 ? (
+							) : typedData.transactions &&
+								typedData.transactions.length > 0 ? (
 								<div className="overflow-x-auto">
 									<table className="w-full text-sm">
 										<thead>
@@ -502,7 +527,10 @@ export function PlaidTrxMergeLogView({
 												.map((transaction, index) => {
 													const amount = parseFloat(transaction.amount || '0');
 													return (
-														<tr key={transaction.id || index} className="border-b">
+														<tr
+															key={transaction.id || index}
+															className="border-b"
+														>
 															<td className="p-2">
 																{transaction.transactionDate
 																	? new Date(
@@ -526,9 +554,14 @@ export function PlaidTrxMergeLogView({
 															<td className="p-2 font-mono font-semibold">
 																{transaction.assetSymbol}
 															</td>
-															<td className="p-2 font-mono">{transaction.quantity}</td>
 															<td className="p-2 font-mono">
-																${parseFloat(transaction.price || '0').toFixed(4)}
+																{transaction.quantity}
+															</td>
+															<td className="p-2 font-mono">
+																$
+																{parseFloat(transaction.price || '0').toFixed(
+																	4,
+																)}
 															</td>
 															<td
 																className={`p-2 font-mono ${amount >= 0 ? 'text-green-600' : 'text-red-600'}`}
@@ -560,7 +593,9 @@ export function PlaidTrxMergeLogView({
 									)}
 								</div>
 							) : (
-								<p className="text-muted-foreground">No transactions data available</p>
+								<p className="text-muted-foreground">
+									No transactions data available
+								</p>
 							)}
 						</CardContent>
 					</Card>
@@ -611,7 +646,8 @@ export function PlaidTrxMergeLogView({
 									displayDataTypes={false}
 									indentWidth={6}
 								/>
-							) : typedData.finalPositions && typedData.finalPositions.length > 0 ? (
+							) : typedData.finalPositions &&
+								typedData.finalPositions.length > 0 ? (
 								<div className="overflow-x-auto">
 									<table className="w-full text-sm">
 										<thead>
@@ -683,7 +719,9 @@ export function PlaidTrxMergeLogView({
 									</table>
 								</div>
 							) : (
-								<p className="text-muted-foreground">No final positions data available</p>
+								<p className="text-muted-foreground">
+									No final positions data available
+								</p>
 							)}
 						</CardContent>
 					</Card>
@@ -736,21 +774,25 @@ export function PlaidTrxMergeLogView({
 								/>
 							) : typedData.authConnection ? (
 								<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-									{Object.entries(typedData.authConnection).map(([key, value]) => (
-										<div key={key}>
-											<p className="text-sm text-muted-foreground capitalize">
-												{key.replace(/([A-Z])/g, ' $1').trim()}
-											</p>
-											<p className="font-mono text-sm">
-												{typeof value === 'object'
-													? JSON.stringify(value)
-													: String(value)}
-											</p>
-										</div>
-									))}
+									{Object.entries(typedData.authConnection).map(
+										([key, value]) => (
+											<div key={key}>
+												<p className="text-sm text-muted-foreground capitalize">
+													{key.replace(/([A-Z])/g, ' $1').trim()}
+												</p>
+												<p className="font-mono text-sm">
+													{typeof value === 'object'
+														? JSON.stringify(value)
+														: String(value)}
+												</p>
+											</div>
+										),
+									)}
 								</div>
 							) : (
-								<p className="text-muted-foreground">No authentication connection data available</p>
+								<p className="text-muted-foreground">
+									No authentication connection data available
+								</p>
 							)}
 						</CardContent>
 					</Card>
@@ -761,14 +803,21 @@ export function PlaidTrxMergeLogView({
 					<TabsContent value="batches" className="space-y-4">
 						<Card>
 							<CardHeader>
-								<CardTitle>Lot Transaction Batches ({lotBatches.length})</CardTitle>
+								<CardTitle>
+									Lot Transaction Batches ({lotBatches.length})
+								</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-6">
 								{lotBatches.map((batch, batchIndex) => (
-									<div key={batch.id} className="space-y-4 rounded-lg border p-4">
+									<div
+										key={batch.id}
+										className="space-y-4 rounded-lg border p-4"
+									>
 										<div className="flex items-start justify-between">
 											<div>
-												<h4 className="font-semibold">Batch {batchIndex + 1}</h4>
+												<h4 className="font-semibold">
+													Batch {batchIndex + 1}
+												</h4>
 												<p className="text-sm text-muted-foreground">
 													ID: {batch.id}
 												</p>
@@ -788,8 +837,12 @@ export function PlaidTrxMergeLogView({
 										{/* Batch Summary */}
 										<div className="grid grid-cols-2 gap-4 rounded bg-muted/50 p-3 md:grid-cols-4">
 											<div>
-												<p className="text-sm text-muted-foreground">Lot Changes</p>
-												<p className="font-medium">{batch.lotChangeLog.length}</p>
+												<p className="text-sm text-muted-foreground">
+													Lot Changes
+												</p>
+												<p className="font-medium">
+													{batch.lotChangeLog.length}
+												</p>
 											</div>
 											<div>
 												<p className="text-sm text-muted-foreground">
@@ -810,7 +863,8 @@ export function PlaidTrxMergeLogView({
 														? (() => {
 																try {
 																	// @ts-expect-errorjust for logs
-																	return JSON.parse(batch.newTransactions).length;
+																	return JSON.parse(batch.newTransactions)
+																		.length;
 																} catch {
 																	return 'Invalid';
 																}
@@ -819,9 +873,14 @@ export function PlaidTrxMergeLogView({
 												</p>
 											</div>
 											<div>
-												<p className="text-sm text-muted-foreground">Processed</p>
+												<p className="text-sm text-muted-foreground">
+													Processed
+												</p>
 												<p className="font-medium">
-													{batch.lotChangeLog.filter((log) => log.processed).length}{' '}
+													{
+														batch.lotChangeLog.filter((log) => log.processed)
+															.length
+													}{' '}
 													/ {batch.lotChangeLog.length}
 												</p>
 											</div>
@@ -839,7 +898,9 @@ export function PlaidTrxMergeLogView({
 															<tr className="border-b">
 																<th className="p-2 text-left">Operation</th>
 																<th className="p-2 text-left">Asset</th>
-																<th className="p-2 text-left">Quantity Change</th>
+																<th className="p-2 text-left">
+																	Quantity Change
+																</th>
 																<th className="p-2 text-left">Source</th>
 																<th className="p-2 text-left">Processed</th>
 																<th className="p-2 text-left">Lot Details</th>
@@ -848,102 +909,108 @@ export function PlaidTrxMergeLogView({
 															</tr>
 														</thead>
 														<tbody>
-															{batch.lotChangeLog.map((changeLog, _logIndex) => (
-																<tr key={changeLog.id} className="border-b">
-																	<td className="p-2">
-																		<Badge
-																			variant={
-																				changeLog.operationType === 'create'
-																					? 'default'
-																					: changeLog.operationType === 'update'
-																						? 'secondary'
-																						: 'destructive'
-																			}
-																		>
-																			{changeLog.operationType.toUpperCase()}
-																		</Badge>
-																	</td>
-																	<td className="p-2 font-mono">
-																		{changeLog.lot?.assetSymbol ||
-																			changeLog.transaction?.assetSymbol ||
-																			'N/A'}
-																	</td>
-																	<td className="p-2 font-mono">
-																		{changeLog.quantityChange || 'N/A'}
-																	</td>
-																	<td className="p-2">
-																		{changeLog.source || 'N/A'}
-																	</td>
-																	<td className="p-2">
-																		<Badge
-																			variant={
-																				changeLog.processed
-																					? 'default'
-																					: 'secondary'
-																			}
-																		>
-																			{changeLog.processed ? 'Yes' : 'No'}
-																		</Badge>
-																	</td>
-																	<td className="p-2">
-																		{changeLog.lot && (
-																			<div className="space-y-1">
-																				<p className="text-xs">
-																					<span className="text-muted-foreground">
-																						Remaining:
-																					</span>{' '}
-																					{changeLog.lot.remainingQty}
-																				</p>
-																				<p className="text-xs">
-																					<span className="text-muted-foreground">
-																						Price:
-																					</span>{' '}
-																					{Format.money(changeLog.lot.price)}
-																				</p>
-																				<p className="text-xs">
-																					<span className="text-muted-foreground">
-																						Acquired:
-																					</span>{' '}
-																					{new Date(
-																						changeLog.lot.acquiredDate,
-																					).toLocaleDateString()}
-																				</p>
-																			</div>
-																		)}
-																	</td>
-																	<td className="p-2">
-																		{changeLog.transaction && (
-																			<div className="space-y-1">
-																				<p className="text-xs">
-																					<span className="text-muted-foreground">
-																						Type:
-																					</span>{' '}
-																					{changeLog.transaction.type}
-																				</p>
-																				<p className="text-xs">
-																					<span className="text-muted-foreground">
-																						Qty:
-																					</span>{' '}
-																					{changeLog.transaction.quantity || 'N/A'}
-																				</p>
-																				<p className="text-xs">
-																					<span className="text-muted-foreground">
-																						Price:
-																					</span>{' '}
-																					{changeLog.transaction.price
-																						? Format.money(
-																								changeLog.transaction.price,
-																							)
-																						: 'N/A'}
-																				</p>
-																			</div>
-																		)}
-																	</td>
-																	<td className="p-2 text-xs">
-																		{new Date(changeLog.createdAt).toLocaleString()}
-																	</td>
-																</tr>
-															))}
+															{batch.lotChangeLog.map(
+																(changeLog, _logIndex) => (
+																	<tr key={changeLog.id} className="border-b">
+																		<td className="p-2">
+																			<Badge
+																				variant={
+																					changeLog.operationType === 'create'
+																						? 'default'
+																						: changeLog.operationType ===
+																								'update'
+																							? 'secondary'
+																							: 'destructive'
+																				}
+																			>
+																				{changeLog.operationType.toUpperCase()}
+																			</Badge>
+																		</td>
+																		<td className="p-2 font-mono">
+																			{changeLog.lot?.assetSymbol ||
+																				changeLog.transaction?.assetSymbol ||
+																				'N/A'}
+																		</td>
+																		<td className="p-2 font-mono">
+																			{changeLog.quantityChange || 'N/A'}
+																		</td>
+																		<td className="p-2">
+																			{changeLog.source || 'N/A'}
+																		</td>
+																		<td className="p-2">
+																			<Badge
+																				variant={
+																					changeLog.processed
+																						? 'default'
+																						: 'secondary'
+																				}
+																			>
+																				{changeLog.processed ? 'Yes' : 'No'}
+																			</Badge>
+																		</td>
+																		<td className="p-2">
+																			{changeLog.lot && (
+																				<div className="space-y-1">
+																					<p className="text-xs">
+																						<span className="text-muted-foreground">
+																							Remaining:
+																						</span>{' '}
+																						{changeLog.lot.remainingQty}
+																					</p>
+																					<p className="text-xs">
+																						<span className="text-muted-foreground">
+																							Price:
+																						</span>{' '}
+																						{Format.money(changeLog.lot.price)}
+																					</p>
+																					<p className="text-xs">
+																						<span className="text-muted-foreground">
+																							Acquired:
+																						</span>{' '}
+																						{new Date(
+																							changeLog.lot.acquiredDate,
+																						).toLocaleDateString()}
+																					</p>
+																				</div>
+																			)}
+																		</td>
+																		<td className="p-2">
+																			{changeLog.transaction && (
+																				<div className="space-y-1">
+																					<p className="text-xs">
+																						<span className="text-muted-foreground">
+																							Type:
+																						</span>{' '}
+																						{changeLog.transaction.type}
+																					</p>
+																					<p className="text-xs">
+																						<span className="text-muted-foreground">
+																							Qty:
+																						</span>{' '}
+																						{changeLog.transaction.quantity ||
+																							'N/A'}
+																					</p>
+																					<p className="text-xs">
+																						<span className="text-muted-foreground">
+																							Price:
+																						</span>{' '}
+																						{changeLog.transaction.price
+																							? Format.money(
+																									changeLog.transaction.price,
+																								)
+																							: 'N/A'}
+																					</p>
+																				</div>
+																			)}
+																		</td>
+																		<td className="p-2 text-xs">
+																			{new Date(
+																				changeLog.createdAt,
+																			).toLocaleString()}
+																		</td>
+																	</tr>
+																),
+															)}
 														</tbody>
 													</table>
 												</div>

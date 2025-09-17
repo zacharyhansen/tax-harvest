@@ -1,14 +1,15 @@
 'use client';
 
+import { Badge } from '@repo/ui/components/badge';
 import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { RefreshCw } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
+	MergeErrorType,
 	type MultiChangeSetTableItemFragment,
-	useMultiChangeSetsQuery,
+	useMergeErrorsQuery,
 } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
@@ -24,7 +25,7 @@ const AgGridWrapper = dynamic(
 export default function MergeErrorsPage() {
 	const router = useRouter();
 
-	const { data, error, loading } = useMultiChangeSetsQuery();
+	const { data, error, loading } = useMergeErrorsQuery();
 
 	const columnDefs: ColDef<MultiChangeSetTableItemFragment>[] = useMemo(() => {
 		return [
@@ -43,14 +44,53 @@ export default function MergeErrorsPage() {
 				},
 			},
 			{
+				headerName: 'Type',
+				field: 'type',
+				width: 200,
+				valueGetter: (params) => {
+					const type = params.data?.type;
+					if (type === MergeErrorType.PlaidMultiLotSolution) {
+						return 'Multi Lot Solution';
+					} else if (type === MergeErrorType.PlaidNoSolution) {
+						return 'No Solution Found';
+					}
+					return type;
+				},
+				// biome-ignore lint/suspicious/noExplicitAny: <ok>
+				cellRenderer: (params: any) => {
+					const type = params.data.type;
+					const isMultiLot = type === MergeErrorType.PlaidMultiLotSolution;
+					const isNoSolution = type === MergeErrorType.PlaidNoSolution;
+
+					let displayText = type;
+					if (isMultiLot) {
+						displayText = 'Multi Lot Solution';
+					} else if (isNoSolution) {
+						displayText = 'No Solution Found';
+					}
+
+					return (
+						<span
+							className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+								isMultiLot
+									? 'bg-blue-100 text-blue-700'
+									: 'bg-orange-100 text-orange-700'
+							}`}
+						>
+							{displayText}
+						</span>
+					);
+				},
+			},
+			{
 				headerName: 'Asset',
 				field: 'assetSymbol',
 				width: 120,
-			},
-			{
-				headerName: 'Asset Name',
-				field: 'assetSymbol',
-				flex: 1,
+				//@ts-expect-error <ok>
+				cellRenderer: (params) => {
+					console.log(params.data);
+					return <Badge>{params.data?.assetSymbol}</Badge>;
+				},
 			},
 			{
 				headerName: 'Target Value',
@@ -58,7 +98,7 @@ export default function MergeErrorsPage() {
 				width: 150,
 				valueGetter: (params) => {
 					const value = params.data?.targetValue;
-					if (value === null || value === undefined) return 'N/A';
+					if (value === null || value === undefined) return '';
 					return new Intl.NumberFormat('en-US', {
 						style: 'currency',
 						currency: 'USD',
@@ -102,7 +142,7 @@ export default function MergeErrorsPage() {
 			<AgGridWrapper>
 				<AgGridReact
 					loading={loading}
-					rowData={data?.multiChangeSets || []}
+					rowData={data?.mergeErrors || []}
 					columnDefs={columnDefs}
 					defaultColDef={{
 						sortable: true,

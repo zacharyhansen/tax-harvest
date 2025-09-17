@@ -5,6 +5,12 @@ fragment Log on Log {
 	responseStatus
 	source
 	type
+	mergeError {
+		id
+		assetSymbol
+		type
+		resolved
+	}
 }
 
 query Logs($pagination: PaginationProps) {
@@ -23,6 +29,14 @@ fragment LogDetails on Log {
 	source
 	type
 	data
+	mergeError {
+		id
+		assetSymbol
+		type
+		resolved
+		targetValue
+		targetQuantity
+	}
 }
 
 query Log($logId: Int!) {

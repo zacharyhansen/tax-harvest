@@ -1,16 +1,6 @@
 'use client';
 
 import ReactJson from '@microlink/react-json-view';
-import {
-	AlertDialog,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from '@repo/ui/components/alert-dialog';
 import { Button } from '@repo/ui/components/button';
 import {
 	Card,
@@ -27,14 +17,15 @@ import {
 import { toast } from '@repo/ui/components/toast-sonner';
 import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { AlertTriangle, ArrowLeft, CheckCircle } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, CheckCircle, FileText } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import {
+	MergeErrorType,
 	type MultiChangeSetDetailFragment,
-	useMultiChangeSetQuery,
-	useUpdateMultiChangeSetMutation,
+	useMergeErrorQuery,
+	useUpdateMergeErrorMutation,
 } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
@@ -55,20 +46,20 @@ export default function MergeErrorDetailPage({
 	const router = useRouter();
 	const mergeErrorId = params.mergeErrorId;
 
-	const { data, error, loading, refetch } = useMultiChangeSetQuery({
+	const { data, error, loading, refetch } = useMergeErrorQuery({
 		variables: {
-			id: parseInt(mergeErrorId, 10),
+			id: mergeErrorId,
 		},
 		skip: !mergeErrorId,
 	});
 
-	const [updateMultiChangeSet] = useUpdateMultiChangeSetMutation();
+	const [updateMultiChangeSet] = useUpdateMergeErrorMutation();
 
 	const columnDefs: ColDef<
 		NonNullable<
 			NonNullable<
-				MultiChangeSetDetailFragment['MultiChangeSetOption']
-			>[number]['MultiChangeSetOptionItem']
+				MultiChangeSetDetailFragment['multiChangeSetOption']
+			>[number]['multiChangeSetOptionItem']
 		>[number]
 	>[] = useMemo(() => {
 		return [
@@ -106,14 +97,14 @@ export default function MergeErrorDetailPage({
 	}, []);
 
 	const handleToggleResolved = async () => {
-		if (!data?.multiChangeSet) return;
+		if (!data?.mergeError) return;
 
 		try {
-			const newResolvedStatus = !data.multiChangeSet.resolved;
+			const newResolvedStatus = !data.mergeError.resolved;
 			await toast.promise(
 				updateMultiChangeSet({
 					variables: {
-						id: parseInt(mergeErrorId, 10),
+						id: mergeErrorId,
 						data: {
 							resolved: { set: newResolvedStatus },
 						},
@@ -133,10 +124,10 @@ export default function MergeErrorDetailPage({
 
 	if (loading) return <LoadingPage />;
 	if (error) return <ErrorPage message={JSON.stringify(error)} />;
-	if (!data?.multiChangeSet)
+	if (!data?.mergeError)
 		return <ErrorPage message="MultiChangeSet not found" />;
 
-	const changeSet = data.multiChangeSet;
+	const changeSet = data.mergeError;
 
 	return (
 		<PageWrapper
@@ -162,8 +153,26 @@ export default function MergeErrorDetailPage({
 				<Card>
 					<CardHeader>
 						<CardTitle className="flex items-center justify-between">
-							<span>MultiChangeSet Information</span>
+							<span>Merge Error Information</span>
 							<div className="flex items-center gap-2">
+								<Button
+									onClick={handleToggleResolved}
+									variant={changeSet.resolved ? 'outline' : 'default'}
+									size="sm"
+								>
+									{changeSet.resolved
+										? 'Mark as Unresolved'
+										: 'Mark as Resolved'}
+								</Button>
+								{changeSet.type === MergeErrorType.PlaidMultiLotSolution ? (
+									<span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+										Multi Lot Solution
+									</span>
+								) : (
+									<span className="inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-700">
+										No Solution Found
+									</span>
+								)}
 								{changeSet.resolved ? (
 									<span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
 										<CheckCircle className="h-4 w-4 mr-1" />
@@ -180,6 +189,16 @@ export default function MergeErrorDetailPage({
 					</CardHeader>
 					<CardContent>
 						<div className="grid grid-cols-2 gap-4">
+							<div>
+								<p className="text-sm font-medium text-muted-foreground">
+									Error Type
+								</p>
+								<p className="text-base">
+									{changeSet.type === MergeErrorType.PlaidMultiLotSolution
+										? 'Multiple Lot Solutions Available'
+										: 'No Valid Solution Found'}
+								</p>
+							</div>
 							<div>
 								<p className="text-sm font-medium text-muted-foreground">
 									Asset
@@ -217,73 +236,100 @@ export default function MergeErrorDetailPage({
 									{new Date(changeSet.createdAt).toLocaleString()}
 								</p>
 							</div>
+							<div>
+								<p className="text-sm font-medium text-muted-foreground">
+									Updated At
+								</p>
+								<p className="text-base">
+									{new Date(changeSet.updatedAt).toLocaleString()}
+								</p>
+							</div>
 						</div>
 
-						<div className="mt-6 flex gap-2">
-							<Button
-								onClick={handleToggleResolved}
-								variant={changeSet.resolved ? 'outline' : 'default'}
-							>
-								{changeSet.resolved ? 'Mark as Unresolved' : 'Mark as Resolved'}
-							</Button>
-							<AlertDialog>
-								<AlertDialogTrigger asChild>
-									<Button variant="destructive">Delete</Button>
-								</AlertDialogTrigger>
-								<AlertDialogContent>
-									<AlertDialogHeader>
-										<AlertDialogTitle>Are you sure?</AlertDialogTitle>
-										<AlertDialogDescription>
-											This action cannot be undone. This will permanently delete
-											the MultiChangeSet record.
-										</AlertDialogDescription>
-									</AlertDialogHeader>
-									<AlertDialogFooter>
-										<AlertDialogCancel>Cancel</AlertDialogCancel>
-									</AlertDialogFooter>
-								</AlertDialogContent>
-							</AlertDialog>
+						<div className="col-span-2 border-t pt-4">
+							<p className="text-sm font-medium text-muted-foreground">
+								Associated Log
+							</p>
+							<div className="flex items-center gap-4 mt-2">
+								<Button
+									onClick={() =>
+										router.push(
+											TypedRoutes.log({ logId: Number(changeSet.log.id) }),
+										)
+									}
+									variant="link"
+									size="sm"
+								>
+									<FileText className="h-4 w-4 mr-2" />
+									<span className="text-base">Log ID: {changeSet.log.id}</span>
+								</Button>
+								<span>
+									Type: {changeSet.log.type} | Status:{' '}
+									{changeSet.log.responseStatus || 'N/A'}
+								</span>
+							</div>
 						</div>
 					</CardContent>
 				</Card>
 
 				{/* Tabs for Options and Lots Data */}
-				<Tabs defaultValue="options" className="w-full">
+				<Tabs
+					defaultValue={
+						changeSet.type === MergeErrorType.PlaidMultiLotSolution
+							? 'options'
+							: 'lotsData'
+					}
+					className="w-full"
+				>
 					<TabsList>
-						<TabsTrigger value="options">
-							Related Options ({changeSet.MultiChangeSetOption?.length || 0})
-						</TabsTrigger>
+						{changeSet.type === MergeErrorType.PlaidMultiLotSolution && (
+							<TabsTrigger value="options">
+								Solution Options ({changeSet.multiChangeSetOption?.length || 0})
+							</TabsTrigger>
+						)}
 						<TabsTrigger value="lotsData">Lots Data (JSON)</TabsTrigger>
 					</TabsList>
 
-					<TabsContent value="options">
-						{changeSet.MultiChangeSetOption?.map((option) => (
-							<Card key={option.id}>
-								<CardHeader>
-									<CardTitle>MultiChangeSet Options</CardTitle>
-								</CardHeader>
-								<CardContent>
-									{option.MultiChangeSetOptionItem && (
-										<div style={{ height: '400px', width: '100%' }}>
-											<AgGridWrapper>
-												<AgGridReact
-													rowData={option.MultiChangeSetOptionItem || []}
-													columnDefs={columnDefs}
-													defaultColDef={{
-														sortable: true,
-														resizable: true,
-														filter: true,
-													}}
-													animateRows={true}
-													domLayout="normal"
-												/>
-											</AgGridWrapper>
-										</div>
-									)}
-								</CardContent>
-							</Card>
-						))}
-					</TabsContent>
+					{changeSet.type === MergeErrorType.PlaidMultiLotSolution && (
+						<TabsContent value="options">
+							{changeSet.multiChangeSetOption?.length ? (
+								changeSet.multiChangeSetOption.map((option) => (
+									<Card key={option.id}>
+										<CardHeader>
+											<CardTitle>Lot Adjustment Options</CardTitle>
+										</CardHeader>
+										<CardContent>
+											{option.multiChangeSetOptionItem && (
+												<div style={{ height: '400px', width: '100%' }}>
+													<AgGridWrapper>
+														<AgGridReact
+															rowData={option.multiChangeSetOptionItem || []}
+															columnDefs={columnDefs}
+															defaultColDef={{
+																sortable: true,
+																resizable: true,
+																filter: true,
+															}}
+															animateRows={true}
+															domLayout="normal"
+														/>
+													</AgGridWrapper>
+												</div>
+											)}
+										</CardContent>
+									</Card>
+								))
+							) : (
+								<Card>
+									<CardContent className="text-center py-8">
+										<p className="text-muted-foreground">
+											No solution options available
+										</p>
+									</CardContent>
+								</Card>
+							)}
+						</TabsContent>
+					)}
 
 					<TabsContent value="lotsData">
 						<Card>
