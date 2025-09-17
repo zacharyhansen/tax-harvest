@@ -773,8 +773,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.9(vitest@3.2.4(@types/node@22.18.4)(happy-dom@15.11.7)(lightningcss@1.30.1)(terser@5.44.0))
       chromatic:
-        specifier: ^11.20.2
-        version: 11.29.0
+        specifier: ^13.1.5
+        version: 13.1.5
       happy-dom:
         specifier: ^15.7.4
         version: 15.11.7
@@ -5819,8 +5819,8 @@ packages:
     resolution: {integrity: sha512-+IxzY9BZOQd/XuYPRmrvEVjF/nqj5kgT4kEq7VofrDoM1MxoRjEWkrCC3EtLi59TVawxTAn+orJwFQcrqEN1+g==}
     engines: {node: '>=18'}
 
-  chromatic@11.29.0:
-    resolution: {integrity: sha512-yisBlntp9hHVj19lIQdpTlcYIXuU9H/DbFuu6tyWHmj6hWT2EtukCCcxYXL78XdQt1vm2GfIrtgtKpj/Rzmo4A==}
+  chromatic@12.2.0:
+    resolution: {integrity: sha512-GswmBW9ZptAoTns1BMyjbm55Z7EsIJnUvYKdQqXIBZIKbGErmpA+p4c0BYA+nzw5B0M+rb3Iqp1IaH8TFwIQew==}
     hasBin: true
     peerDependencies:
       '@chromatic-com/cypress': ^0.*.* || ^1.0.0
@@ -5831,8 +5831,8 @@ packages:
       '@chromatic-com/playwright':
         optional: true
 
-  chromatic@12.2.0:
-    resolution: {integrity: sha512-GswmBW9ZptAoTns1BMyjbm55Z7EsIJnUvYKdQqXIBZIKbGErmpA+p4c0BYA+nzw5B0M+rb3Iqp1IaH8TFwIQew==}
+  chromatic@13.1.5:
+    resolution: {integrity: sha512-xYVcgC3Ian/WDW9UZXGTBKfDUySqGronhuMS+UkzdoWiBO9DTO/kwMAC0i1tjiA0Fzw8A6aGWBB4PwHFZCCa9g==}
     hasBin: true
     peerDependencies:
       '@chromatic-com/cypress': ^0.*.* || ^1.0.0
@@ -17614,9 +17614,9 @@ snapshots:
 
   chownr@3.0.0: {}
 
-  chromatic@11.29.0: {}
-
   chromatic@12.2.0: {}
+
+  chromatic@13.1.5: {}
 
   chrome-trace-event@1.0.4: {}
 
