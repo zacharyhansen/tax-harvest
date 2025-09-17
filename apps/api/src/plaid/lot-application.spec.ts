@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
 import Decimal from 'decimal.js';
 
 import {
@@ -1087,7 +1088,9 @@ describe('sell transaction allocation strategies', () => {
 					expect(lotChange.upsert.id).toBe(lotChange.lotId);
 					expect(lotChange.upsert.portfolio?.connect?.id).toBe(portfolioId);
 					expect(lotChange.upsert.asset?.connect?.symbol).toBe('ATUS');
-					expect(lotChange.upsert.account?.connect?.id).toBe('aeec08d8-e163-4b20-b6ac-89b52fc2fd67');
+					expect(lotChange.upsert.account?.connect?.id).toBe(
+						'aeec08d8-e163-4b20-b6ac-89b52fc2fd67',
+					);
 				}
 
 				// Calculate total quantity change
@@ -1194,7 +1197,12 @@ describe('sell transaction allocation strategies', () => {
 
 				// Verify that each upsert's remainingQty matches the quantityFinal
 				for (const lotChange of result.lotChanges) {
-					expect(lotChange.upsert.remainingQty.eq(lotChange.quantityFinal)).toBe(true);
+					expect(
+						// @ts-expect-error decicmal
+						new Decimal(lotChange.upsert.remainingQty).eq(
+							lotChange.quantityFinal,
+						),
+					).toBe(true);
 				}
 			});
 
@@ -1212,7 +1220,9 @@ describe('sell transaction allocation strategies', () => {
 
 				// Verify that original lot data is preserved
 				for (const lotChange of result.lotChanges) {
-					const originalLot = atusLotsData.find((lot) => lot.lotId === lotChange.lotId);
+					const originalLot = atusLotsData.find(
+						(lot) => lot.lotId === lotChange.lotId,
+					);
 					expect(originalLot).toBeDefined();
 					if (originalLot) {
 						expect(lotChange.price.eq(originalLot.price)).toBe(true);
@@ -1340,7 +1350,9 @@ describe('sell transaction allocation strategies', () => {
 				expect(result).toBe(changeSets[1]);
 
 				// Verify it has the most zeroed-out lots
-				const zeroedCount = result.filter((change) => change.quantityFinal.eq(0)).length;
+				const zeroedCount = result.filter((change) =>
+					change.quantityFinal.eq(0),
+				).length;
 				expect(zeroedCount).toBe(2);
 			});
 

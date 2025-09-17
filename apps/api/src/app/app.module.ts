@@ -3,6 +3,7 @@ import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import GraphQLJSON from 'graphql-type-json';
@@ -43,6 +44,7 @@ import { errorFormatPlugin } from '../plugins/error-format';
 			validate: (env) => envSchema.parse(env),
 			isGlobal: true,
 		}),
+		EventEmitterModule.forRoot(),
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			autoSchemaFile:
 				process.env.NODE_ENV === 'development' ? './schema.graphql' : true,

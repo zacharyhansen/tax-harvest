@@ -46,7 +46,7 @@ export class AuthConnectionResolver {
 			.value;
 
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId))
+			.rlsPortfolioClient(currentUser.metadata.portfolioId)
 			.authConnection.findUnique({
 				select,
 				where: {
@@ -86,7 +86,7 @@ export class AuthConnectionResolver {
 			.value;
 
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId))
+			.rlsPortfolioClient(currentUser.metadata.portfolioId)
 			.authConnection.findMany({
 				select,
 				where: {

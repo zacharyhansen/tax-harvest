@@ -514,7 +514,7 @@ export class PortfolioService {
 			}),
 			this.lotService.lotCurrent({ portfolioId }),
 			this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.portfolio.findUniqueOrThrow({
 					where: {
 						id: portfolioId,
@@ -564,7 +564,7 @@ export class PortfolioService {
 	}) {
 		const [portfolio, lots] = await Promise.all([
 			this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.portfolio.findUniqueOrThrow({
 					where: {
 						id: portfolioId,
@@ -634,7 +634,7 @@ export class PortfolioService {
 		)!;
 
 		const portfolio = await this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.portfolio.findUniqueOrThrow({
 				where: {
 					id: portfolioId,
@@ -654,7 +654,7 @@ export class PortfolioService {
 			}),
 			this.getUniqueAssetSymbols({ portfolioId }),
 			this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.portfolio.findUniqueOrThrow({
 					where: {
 						id: portfolioId,
@@ -1085,7 +1085,7 @@ export class PortfolioService {
 	// 	portfolioId: string;
 	// }): Promise<FiniteHarvestResult> {
 	// 	const portfolio = await this.prismaService
-	// 		.$extends(PrismaService.forPortfolio(portfolioId))
+	// 		.rlsPortfolioClient(portfolioId)
 	// 		.portfolio.findUniqueOrThrow({
 	// 			where: {
 	// 				id: portfolioId,
@@ -1101,7 +1101,7 @@ export class PortfolioService {
 	// 			minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
 	// 		}),
 	// 		this.prismaService
-	// 			.$extends(PrismaService.forPortfolio(portfolioId))
+	// 			.rlsPortfolioClient(portfolioId)
 	// 			.portfolio.findUniqueOrThrow({
 	// 				where: {
 	// 					id: portfolioId,

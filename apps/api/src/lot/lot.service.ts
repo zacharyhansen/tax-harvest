@@ -31,7 +31,7 @@ export class LotService {
 		portfolioId: string;
 	}) {
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.$transaction(async (trx) => {
 				await trx.account.update({
 					data: {

@@ -28,7 +28,7 @@ export class RealizedPandLService {
 				// biome-ignore lint/suspicious/noTsIgnore: <excessive types>
 				// @ts-ignore - ignore types
 				await this.prismaService
-					.$extends(PrismaService.forPortfolio(portfolioId))
+					.rlsPortfolioClient(portfolioId)
 					.realizedPAndL.findUniqueOrThrow({
 						select: select as Prisma.RealizedPAndLSelect,
 						where: {
@@ -41,7 +41,7 @@ export class RealizedPandLService {
 			return realizedPAndL;
 		} catch {
 			return this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.$transaction(async (trx) => {
 					await trx.account.update({
 						data: {

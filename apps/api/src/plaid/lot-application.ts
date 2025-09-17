@@ -30,6 +30,13 @@ export interface TMultiChangeSet {
 	symbol: string;
 }
 
+export interface TNoResultsForAsset {
+	targetValue?: Decimal;
+	targetQuantity?: Decimal;
+	symbol: string;
+	results: LotData[][];
+}
+
 interface FindSubsetHybridArgs {
 	lotsData: LotData[];
 	targetQuantity?: Decimal;
@@ -86,22 +93,7 @@ export function findSubsetHybrid({
 		time,
 	});
 
-	// Deduplicate equivalent solutions
-	if (allResults.length === 0) {
-		console.error(
-			`No results found: ${JSON.stringify(
-				{
-					targetQuantity: targetQuantity.toString(),
-					targetValue: targetValue.toString(),
-				},
-				null,
-				2,
-			)} lots: ${tuples.map((t) => JSON.stringify({ ...t, lotId: t.lotId }, null, 2)).join(', ')}`,
-		);
-		throw new Error('No results found');
-	} else {
-		return allResults;
-	}
+	return allResults;
 }
 
 export function findLotChangeSets(
@@ -110,9 +102,10 @@ export function findLotChangeSets(
 ): {
 	lotChanges: LotChange[];
 	multiChangeSet: TMultiChangeSet | null;
+	noResultsForAsset: TNoResultsForAsset | null;
 } {
 	if (params.targetQuantity === undefined && params.targetValue === undefined) {
-		return { lotChanges: [], multiChangeSet: null };
+		return { lotChanges: [], multiChangeSet: null, noResultsForAsset: null };
 	}
 
 	const results = findSubsetHybrid({ ...params });
@@ -161,7 +154,18 @@ export function findLotChangeSets(
 	// Deduplicate the lot changes based on the signature of changes
 	const uniqueLotChangeSolutions = deduplicateEquivalentChangeSets(lotChanges);
 
-	if (uniqueLotChangeSolutions.length > 1) {
+	if (results.length === 0) {
+		return {
+			lotChanges: [],
+			multiChangeSet: null,
+			noResultsForAsset: {
+				results,
+				targetValue: params.targetValue,
+				targetQuantity: params.targetQuantity,
+				symbol: params.symbol,
+			},
+		};
+	} else if (uniqueLotChangeSolutions.length > 1) {
 		return {
 			lotChanges: processMultiChangeSet(uniqueLotChangeSolutions),
 			multiChangeSet: {
@@ -170,11 +174,16 @@ export function findLotChangeSets(
 				targetQuantity: params.targetQuantity,
 				symbol: params.symbol,
 			},
+			noResultsForAsset: null,
 		};
 		// throw err;
 	}
 
-	return { lotChanges: uniqueLotChangeSolutions[0], multiChangeSet: null };
+	return {
+		lotChanges: uniqueLotChangeSolutions[0],
+		multiChangeSet: null,
+		noResultsForAsset: null,
+	};
 }
 
 export function processMultiChangeSet(

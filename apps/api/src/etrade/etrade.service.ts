@@ -90,7 +90,7 @@ export class EtradeService implements ConnectionProvider {
 		try {
 			// If we already have a request auth and its valid lets return that
 			const existingRequestAuth = await this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.authConnection.findFirst({
 					where: {
 						source: 'ETRADE_REQUEST',
@@ -110,7 +110,7 @@ export class EtradeService implements ConnectionProvider {
 			const { token, tokenSecret } = await this.getRequestToken();
 			const verificationUrl = this.getAuthorizeUrl(token);
 			const existing = await this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.authConnection.findFirst({
 					where: {
 						portfolioId,
@@ -119,7 +119,7 @@ export class EtradeService implements ConnectionProvider {
 					},
 				});
 			const requestAuth = await this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.authConnection.upsert({
 					create: {
 						externalId: crypto.randomUUID(),
@@ -162,7 +162,7 @@ export class EtradeService implements ConnectionProvider {
 	}): Promise<AuthConnection> {
 		try {
 			const requestAuth = await this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.authConnection.findFirst({
 					where: {
 						portfolioId,
@@ -186,7 +186,7 @@ export class EtradeService implements ConnectionProvider {
 								reject(err);
 							}
 							const existing = await this.prismaService
-								.$extends(PrismaService.forPortfolio(portfolioId))
+								.rlsPortfolioClient(portfolioId)
 								.authConnection.findFirst({
 									where: {
 										portfolioId,
@@ -196,7 +196,7 @@ export class EtradeService implements ConnectionProvider {
 								});
 							resolve(
 								this.prismaService
-									.$extends(PrismaService.forPortfolio(portfolioId))
+									.rlsPortfolioClient(portfolioId)
 									.authConnection.upsert({
 										create: {
 											authedAt: new Date(),

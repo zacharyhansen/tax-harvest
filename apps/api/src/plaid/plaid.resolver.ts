@@ -161,7 +161,7 @@ export class PlaidResolver {
 	): Promise<boolean> {
 		// Fetch the auth connection without portfolio restrictions
 		const authConnection = await this.prismaService
-			.rlsPortfolioClient(currentUser.metadata.portfolioId)
+			.$extends(PrismaService.forPortfolio(currentUser.metadata.portfolioId))
 			.authConnection.findUniqueOrThrow({
 				where: { id: authConnectionId },
 			});

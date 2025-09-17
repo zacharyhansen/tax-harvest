@@ -7,6 +7,7 @@ type Account {
   LotTransactionBatch: [LotTransactionBatch!]
   MultiChangeSetOptionItem: [MultiChangeSetOptionItem!]
   Notification: [Notification!]
+  PortfolioBalanceSnapshot: [PortfolioBalanceSnapshot!]
   _count: AccountCount!
   _realizedProfitAndLoss(year: Float): RealizedPAndL!
   accountValueTotal: Decimal
@@ -130,6 +131,7 @@ type AccountCount {
   LotTransactionBatch: Int!
   MultiChangeSetOptionItem: Int!
   Notification: Int!
+  PortfolioBalanceSnapshot: Int!
   files: Int!
   lots: Int!
   positions: Int!
@@ -191,6 +193,7 @@ input AccountCreateInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -451,6 +454,12 @@ input AccountCreateNestedOneWithoutNotificationInput {
   create: AccountCreateWithoutNotificationInput
 }
 
+input AccountCreateNestedOneWithoutPortfolioBalanceSnapshotInput {
+  connect: AccountWhereUniqueInput
+  connectOrCreate: AccountCreateOrConnectWithoutPortfolioBalanceSnapshotInput
+  create: AccountCreateWithoutPortfolioBalanceSnapshotInput
+}
+
 input AccountCreateNestedOneWithoutPositionsInput {
   connect: AccountWhereUniqueInput
   connectOrCreate: AccountCreateOrConnectWithoutPositionsInput
@@ -504,6 +513,11 @@ input AccountCreateOrConnectWithoutNotificationInput {
   where: AccountWhereUniqueInput!
 }
 
+input AccountCreateOrConnectWithoutPortfolioBalanceSnapshotInput {
+  create: AccountCreateWithoutPortfolioBalanceSnapshotInput!
+  where: AccountWhereUniqueInput!
+}
+
 input AccountCreateOrConnectWithoutPortfolioInput {
   create: AccountCreateWithoutPortfolioInput!
   where: AccountWhereUniqueInput!
@@ -528,6 +542,7 @@ input AccountCreateWithoutAuthConnectionInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   balanceAccount: Decimal
   balanceMoneyMarket: Decimal
@@ -583,6 +598,7 @@ input AccountCreateWithoutCreatedByInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -639,6 +655,7 @@ input AccountCreateWithoutFilesInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -693,6 +710,7 @@ input AccountCreateWithoutFilesInput {
 input AccountCreateWithoutLotTransactionBatchInput {
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -749,6 +767,7 @@ input AccountCreateWithoutLotsInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -803,6 +822,7 @@ input AccountCreateWithoutLotsInput {
 input AccountCreateWithoutMultiChangeSetOptionItemInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -858,6 +878,63 @@ input AccountCreateWithoutMultiChangeSetOptionItemInput {
 input AccountCreateWithoutNotificationInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
+  accountValueTotal: Decimal
+  authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
+  balanceAccount: Decimal
+  balanceMoneyMarket: Decimal
+  balanceShortAdjustment: Decimal
+  cashAvailableForInvestment: Decimal
+  cashBalance: Decimal
+  cashBuyingPower: Decimal
+  cashForOpenOrders: Decimal
+  cashNet: Decimal
+  cashOpenOrderReserveDT: Decimal
+  cashSettledForInvestment: Decimal
+  cashUnsettledForInvestment: Decimal
+  closedDate: DateTime
+  createdAt: DateTime
+  description: String
+  equityRegt: Decimal
+  equityRegtPercent: Decimal
+  externalId: String
+  files: FileCreateNestedManyWithoutAccountInput
+  fundsWithheldFromPurchasingPower: Decimal
+  fundsWithheldFromWithdrawal: Decimal
+  id: String
+  institution: AccountInstitution
+  key: String
+  liveURL: String
+  liveURLCreated: DateTime
+  lotSeededDate: DateTime
+  lots: LotCreateNestedManyWithoutAccountInput
+  marginBuyingPower: Decimal
+  marginBuyingPowerDT: Decimal
+  marginOpenOrderReserveDT: Decimal
+  marketValueTotal: Decimal
+  mode: AccountMode
+  name: String
+  optionLevel: OptionLevel
+  plaidAccountMask: String
+  portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  positions: PositionCreateNestedManyWithoutAccountInput
+  provider: AccountProvider
+  raw: JSON
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutAccountInput
+  setRealizedValues: Boolean
+  skipSetup: Boolean
+  status: AccountStatus
+  subType: String
+  transactions: TransactionCreateNestedManyWithoutAccountInput
+  type: String
+  updatedAt: DateTime
+  uploadedPositions: Boolean
+}
+
+input AccountCreateWithoutPortfolioBalanceSnapshotInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
+  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
+  Notification: NotificationCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -914,6 +991,7 @@ input AccountCreateWithoutPortfolioInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -969,6 +1047,7 @@ input AccountCreateWithoutPositionsInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -1024,6 +1103,7 @@ input AccountCreateWithoutRealizedPAndLInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -1079,6 +1159,7 @@ input AccountCreateWithoutTransactionsInput {
   LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutAccountInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput
   Notification: NotificationCreateNestedManyWithoutAccountInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput
   accountValueTotal: Decimal
   authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
   balanceAccount: Decimal
@@ -1369,6 +1450,7 @@ input AccountUpdateInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1557,6 +1639,14 @@ input AccountUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput {
   upsert: AccountUpsertWithoutMultiChangeSetOptionItemInput
 }
 
+input AccountUpdateOneRequiredWithoutPortfolioBalanceSnapshotNestedInput {
+  connect: AccountWhereUniqueInput
+  connectOrCreate: AccountCreateOrConnectWithoutPortfolioBalanceSnapshotInput
+  create: AccountCreateWithoutPortfolioBalanceSnapshotInput
+  update: AccountUpdateToOneWithWhereWithoutPortfolioBalanceSnapshotInput
+  upsert: AccountUpsertWithoutPortfolioBalanceSnapshotInput
+}
+
 input AccountUpdateOneRequiredWithoutPositionsNestedInput {
   connect: AccountWhereUniqueInput
   connectOrCreate: AccountCreateOrConnectWithoutPositionsInput
@@ -1616,6 +1706,11 @@ input AccountUpdateToOneWithWhereWithoutNotificationInput {
   where: AccountWhereInput
 }
 
+input AccountUpdateToOneWithWhereWithoutPortfolioBalanceSnapshotInput {
+  data: AccountUpdateWithoutPortfolioBalanceSnapshotInput!
+  where: AccountWhereInput
+}
+
 input AccountUpdateToOneWithWhereWithoutPositionsInput {
   data: AccountUpdateWithoutPositionsInput!
   where: AccountWhereInput
@@ -1650,6 +1745,7 @@ input AccountUpdateWithoutAuthConnectionInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
   balanceMoneyMarket: NullableDecimalFieldUpdateOperationsInput
@@ -1706,6 +1802,7 @@ input AccountUpdateWithoutCreatedByInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1762,6 +1859,7 @@ input AccountUpdateWithoutFilesInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1817,6 +1915,7 @@ input AccountUpdateWithoutFilesInput {
 input AccountUpdateWithoutLotTransactionBatchInput {
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1874,6 +1973,7 @@ input AccountUpdateWithoutLotsInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1929,6 +2029,7 @@ input AccountUpdateWithoutLotsInput {
 input AccountUpdateWithoutMultiChangeSetOptionItemInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -1985,6 +2086,64 @@ input AccountUpdateWithoutMultiChangeSetOptionItemInput {
 input AccountUpdateWithoutNotificationInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
+  accountValueTotal: NullableDecimalFieldUpdateOperationsInput
+  authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
+  balanceAccount: NullableDecimalFieldUpdateOperationsInput
+  balanceMoneyMarket: NullableDecimalFieldUpdateOperationsInput
+  balanceShortAdjustment: NullableDecimalFieldUpdateOperationsInput
+  cashAvailableForInvestment: NullableDecimalFieldUpdateOperationsInput
+  cashBalance: NullableDecimalFieldUpdateOperationsInput
+  cashBuyingPower: NullableDecimalFieldUpdateOperationsInput
+  cashForOpenOrders: NullableDecimalFieldUpdateOperationsInput
+  cashNet: NullableDecimalFieldUpdateOperationsInput
+  cashOpenOrderReserveDT: NullableDecimalFieldUpdateOperationsInput
+  cashSettledForInvestment: NullableDecimalFieldUpdateOperationsInput
+  cashUnsettledForInvestment: NullableDecimalFieldUpdateOperationsInput
+  closedDate: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutAccountNestedInput
+  description: NullableStringFieldUpdateOperationsInput
+  equityRegt: NullableDecimalFieldUpdateOperationsInput
+  equityRegtPercent: NullableDecimalFieldUpdateOperationsInput
+  externalId: NullableStringFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutAccountNestedInput
+  fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
+  fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
+  key: NullableStringFieldUpdateOperationsInput
+  liveURL: NullableStringFieldUpdateOperationsInput
+  liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
+  lotSeededDate: NullableDateTimeFieldUpdateOperationsInput
+  lots: LotUpdateManyWithoutAccountNestedInput
+  marginBuyingPower: NullableDecimalFieldUpdateOperationsInput
+  marginBuyingPowerDT: NullableDecimalFieldUpdateOperationsInput
+  marginOpenOrderReserveDT: NullableDecimalFieldUpdateOperationsInput
+  marketValueTotal: NullableDecimalFieldUpdateOperationsInput
+  mode: NullableEnumAccountModeFieldUpdateOperationsInput
+  name: NullableStringFieldUpdateOperationsInput
+  optionLevel: NullableEnumOptionLevelFieldUpdateOperationsInput
+  plaidAccountMask: NullableStringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  positions: PositionUpdateManyWithoutAccountNestedInput
+  provider: EnumAccountProviderFieldUpdateOperationsInput
+  raw: JSON
+  realizedPAndL: RealizedPAndLUpdateManyWithoutAccountNestedInput
+  setRealizedValues: BoolFieldUpdateOperationsInput
+  skipSetup: BoolFieldUpdateOperationsInput
+  status: EnumAccountStatusFieldUpdateOperationsInput
+  subType: NullableStringFieldUpdateOperationsInput
+  transactions: TransactionUpdateManyWithoutAccountNestedInput
+  type: StringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  uploadedPositions: BoolFieldUpdateOperationsInput
+}
+
+input AccountUpdateWithoutPortfolioBalanceSnapshotInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
+  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
+  Notification: NotificationUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -2042,6 +2201,7 @@ input AccountUpdateWithoutPortfolioInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -2098,6 +2258,7 @@ input AccountUpdateWithoutPositionsInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -2154,6 +2315,7 @@ input AccountUpdateWithoutRealizedPAndLInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -2210,6 +2372,7 @@ input AccountUpdateWithoutTransactionsInput {
   LotTransactionBatch: LotTransactionBatchUpdateManyWithoutAccountNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput
   Notification: NotificationUpdateManyWithoutAccountNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput
   accountValueTotal: NullableDecimalFieldUpdateOperationsInput
   authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
   balanceAccount: NullableDecimalFieldUpdateOperationsInput
@@ -2310,6 +2473,12 @@ input AccountUpsertWithoutNotificationInput {
   where: AccountWhereInput
 }
 
+input AccountUpsertWithoutPortfolioBalanceSnapshotInput {
+  create: AccountCreateWithoutPortfolioBalanceSnapshotInput!
+  update: AccountUpdateWithoutPortfolioBalanceSnapshotInput!
+  where: AccountWhereInput
+}
+
 input AccountUpsertWithoutPositionsInput {
   create: AccountCreateWithoutPositionsInput!
   update: AccountUpdateWithoutPositionsInput!
@@ -2335,6 +2504,7 @@ input AccountWhereInput {
   NOT: [AccountWhereInput!]
   Notification: NotificationListRelationFilter
   OR: [AccountWhereInput!]
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotListRelationFilter
   accountValueTotal: DecimalNullableFilter
   authConnection: AuthConnectionNullableScalarRelationFilter
   authConnectionId: UuidNullableFilter
@@ -2398,6 +2568,7 @@ input AccountWhereUniqueInput {
   NOT: [AccountWhereInput!]
   Notification: NotificationListRelationFilter
   OR: [AccountWhereInput!]
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotListRelationFilter
   accountValueTotal: DecimalNullableFilter
   authConnection: AuthConnectionNullableScalarRelationFilter
   authConnectionId: UuidNullableFilter
@@ -2456,7 +2627,6 @@ input AccountWhereUniqueInput {
 }
 
 type Asset {
-  MultiChangeSet: [MultiChangeSet!]
   _count: AssetCount!
   active: Boolean!
   assetClass: AssetClass!
@@ -2484,6 +2654,7 @@ type Asset {
   logoUrl: String
   lots: [Lot!]
   marketCap: Decimal
+  mergeError: [MergeError!]
   name: String
   plaid_security_id: String
   positions: [Position!]
@@ -2528,10 +2699,10 @@ enum AssetClass {
 }
 
 type AssetCount {
-  MultiChangeSet: Int!
   favoritedBy: Int!
   harvestTransactionItems: Int!
   lots: Int!
+  mergeError: Int!
   positions: Int!
   priceHourly: Int!
   priceHourlyVectors: Int!
@@ -2594,10 +2765,10 @@ input AssetCreateNestedOneWithoutLotsInput {
   create: AssetCreateWithoutLotsInput
 }
 
-input AssetCreateNestedOneWithoutMultiChangeSetInput {
+input AssetCreateNestedOneWithoutMergeErrorInput {
   connect: AssetWhereUniqueInput
-  connectOrCreate: AssetCreateOrConnectWithoutMultiChangeSetInput
-  create: AssetCreateWithoutMultiChangeSetInput
+  connectOrCreate: AssetCreateOrConnectWithoutMergeErrorInput
+  create: AssetCreateWithoutMergeErrorInput
 }
 
 input AssetCreateNestedOneWithoutPositionsInput {
@@ -2639,8 +2810,8 @@ input AssetCreateOrConnectWithoutLotsInput {
   where: AssetWhereUniqueInput!
 }
 
-input AssetCreateOrConnectWithoutMultiChangeSetInput {
-  create: AssetCreateWithoutMultiChangeSetInput!
+input AssetCreateOrConnectWithoutMergeErrorInput {
+  create: AssetCreateWithoutMergeErrorInput!
   where: AssetWhereUniqueInput!
 }
 
@@ -2665,7 +2836,6 @@ input AssetCreateOrConnectWithoutVectorGraphsInput {
 }
 
 input AssetCreateWithoutFavoritedByInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -2690,6 +2860,7 @@ input AssetCreateWithoutFavoritedByInput {
   logoUrl: String
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAssetInput
   name: String
   plaid_security_id: String
   positions: PositionCreateNestedManyWithoutAssetInput
@@ -2709,7 +2880,6 @@ input AssetCreateWithoutFavoritedByInput {
 }
 
 input AssetCreateWithoutHarvestTransactionItemsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -2734,6 +2904,7 @@ input AssetCreateWithoutHarvestTransactionItemsInput {
   logoUrl: String
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAssetInput
   name: String
   plaid_security_id: String
   positions: PositionCreateNestedManyWithoutAssetInput
@@ -2753,7 +2924,6 @@ input AssetCreateWithoutHarvestTransactionItemsInput {
 }
 
 input AssetCreateWithoutLotsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -2778,6 +2948,7 @@ input AssetCreateWithoutLotsInput {
   locale: AssetLocale
   logoUrl: String
   marketCap: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAssetInput
   name: String
   plaid_security_id: String
   positions: PositionCreateNestedManyWithoutAssetInput
@@ -2796,7 +2967,7 @@ input AssetCreateWithoutLotsInput {
   vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
 }
 
-input AssetCreateWithoutMultiChangeSetInput {
+input AssetCreateWithoutMergeErrorInput {
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -2841,7 +3012,6 @@ input AssetCreateWithoutMultiChangeSetInput {
 }
 
 input AssetCreateWithoutPositionsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -2867,6 +3037,7 @@ input AssetCreateWithoutPositionsInput {
   logoUrl: String
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAssetInput
   name: String
   plaid_security_id: String
   priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
@@ -2885,7 +3056,6 @@ input AssetCreateWithoutPositionsInput {
 }
 
 input AssetCreateWithoutPriceHourlyVectorsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -2911,6 +3081,7 @@ input AssetCreateWithoutPriceHourlyVectorsInput {
   logoUrl: String
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAssetInput
   name: String
   plaid_security_id: String
   positions: PositionCreateNestedManyWithoutAssetInput
@@ -2929,7 +3100,6 @@ input AssetCreateWithoutPriceHourlyVectorsInput {
 }
 
 input AssetCreateWithoutTransactionsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -2955,6 +3125,7 @@ input AssetCreateWithoutTransactionsInput {
   logoUrl: String
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAssetInput
   name: String
   plaid_security_id: String
   positions: PositionCreateNestedManyWithoutAssetInput
@@ -2973,7 +3144,6 @@ input AssetCreateWithoutTransactionsInput {
 }
 
 input AssetCreateWithoutVectorGraphsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -2999,6 +3169,7 @@ input AssetCreateWithoutVectorGraphsInput {
   logoUrl: String
   lots: LotCreateNestedManyWithoutAssetInput
   marketCap: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAssetInput
   name: String
   plaid_security_id: String
   positions: PositionCreateNestedManyWithoutAssetInput
@@ -3335,12 +3506,12 @@ input AssetUpdateOneRequiredWithoutLotsNestedInput {
   upsert: AssetUpsertWithoutLotsInput
 }
 
-input AssetUpdateOneRequiredWithoutMultiChangeSetNestedInput {
+input AssetUpdateOneRequiredWithoutMergeErrorNestedInput {
   connect: AssetWhereUniqueInput
-  connectOrCreate: AssetCreateOrConnectWithoutMultiChangeSetInput
-  create: AssetCreateWithoutMultiChangeSetInput
-  update: AssetUpdateToOneWithWhereWithoutMultiChangeSetInput
-  upsert: AssetUpsertWithoutMultiChangeSetInput
+  connectOrCreate: AssetCreateOrConnectWithoutMergeErrorInput
+  create: AssetCreateWithoutMergeErrorInput
+  update: AssetUpdateToOneWithWhereWithoutMergeErrorInput
+  upsert: AssetUpsertWithoutMergeErrorInput
 }
 
 input AssetUpdateOneRequiredWithoutPositionsNestedInput {
@@ -3385,8 +3556,8 @@ input AssetUpdateToOneWithWhereWithoutLotsInput {
   where: AssetWhereInput
 }
 
-input AssetUpdateToOneWithWhereWithoutMultiChangeSetInput {
-  data: AssetUpdateWithoutMultiChangeSetInput!
+input AssetUpdateToOneWithWhereWithoutMergeErrorInput {
+  data: AssetUpdateWithoutMergeErrorInput!
   where: AssetWhereInput
 }
 
@@ -3416,7 +3587,6 @@ input AssetUpdateWithWhereUniqueWithoutFavoritedByInput {
 }
 
 input AssetUpdateWithoutFavoritedByInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -3441,6 +3611,7 @@ input AssetUpdateWithoutFavoritedByInput {
   logoUrl: NullableStringFieldUpdateOperationsInput
   lots: LotUpdateManyWithoutAssetNestedInput
   marketCap: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAssetNestedInput
   name: NullableStringFieldUpdateOperationsInput
   plaid_security_id: NullableStringFieldUpdateOperationsInput
   positions: PositionUpdateManyWithoutAssetNestedInput
@@ -3460,7 +3631,6 @@ input AssetUpdateWithoutFavoritedByInput {
 }
 
 input AssetUpdateWithoutHarvestTransactionItemsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -3485,6 +3655,7 @@ input AssetUpdateWithoutHarvestTransactionItemsInput {
   logoUrl: NullableStringFieldUpdateOperationsInput
   lots: LotUpdateManyWithoutAssetNestedInput
   marketCap: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAssetNestedInput
   name: NullableStringFieldUpdateOperationsInput
   plaid_security_id: NullableStringFieldUpdateOperationsInput
   positions: PositionUpdateManyWithoutAssetNestedInput
@@ -3504,7 +3675,6 @@ input AssetUpdateWithoutHarvestTransactionItemsInput {
 }
 
 input AssetUpdateWithoutLotsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -3529,6 +3699,7 @@ input AssetUpdateWithoutLotsInput {
   locale: EnumAssetLocaleFieldUpdateOperationsInput
   logoUrl: NullableStringFieldUpdateOperationsInput
   marketCap: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAssetNestedInput
   name: NullableStringFieldUpdateOperationsInput
   plaid_security_id: NullableStringFieldUpdateOperationsInput
   positions: PositionUpdateManyWithoutAssetNestedInput
@@ -3547,7 +3718,7 @@ input AssetUpdateWithoutLotsInput {
   vectorGraphs: VectorGraphUpdateManyWithoutAssetNestedInput
 }
 
-input AssetUpdateWithoutMultiChangeSetInput {
+input AssetUpdateWithoutMergeErrorInput {
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -3592,7 +3763,6 @@ input AssetUpdateWithoutMultiChangeSetInput {
 }
 
 input AssetUpdateWithoutPositionsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -3618,6 +3788,7 @@ input AssetUpdateWithoutPositionsInput {
   logoUrl: NullableStringFieldUpdateOperationsInput
   lots: LotUpdateManyWithoutAssetNestedInput
   marketCap: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAssetNestedInput
   name: NullableStringFieldUpdateOperationsInput
   plaid_security_id: NullableStringFieldUpdateOperationsInput
   priceHourly: PriceHourlyUpdateManyWithoutAsssetNestedInput
@@ -3636,7 +3807,6 @@ input AssetUpdateWithoutPositionsInput {
 }
 
 input AssetUpdateWithoutPriceHourlyVectorsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -3662,6 +3832,7 @@ input AssetUpdateWithoutPriceHourlyVectorsInput {
   logoUrl: NullableStringFieldUpdateOperationsInput
   lots: LotUpdateManyWithoutAssetNestedInput
   marketCap: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAssetNestedInput
   name: NullableStringFieldUpdateOperationsInput
   plaid_security_id: NullableStringFieldUpdateOperationsInput
   positions: PositionUpdateManyWithoutAssetNestedInput
@@ -3680,7 +3851,6 @@ input AssetUpdateWithoutPriceHourlyVectorsInput {
 }
 
 input AssetUpdateWithoutTransactionsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -3706,6 +3876,7 @@ input AssetUpdateWithoutTransactionsInput {
   logoUrl: NullableStringFieldUpdateOperationsInput
   lots: LotUpdateManyWithoutAssetNestedInput
   marketCap: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAssetNestedInput
   name: NullableStringFieldUpdateOperationsInput
   plaid_security_id: NullableStringFieldUpdateOperationsInput
   positions: PositionUpdateManyWithoutAssetNestedInput
@@ -3724,7 +3895,6 @@ input AssetUpdateWithoutTransactionsInput {
 }
 
 input AssetUpdateWithoutVectorGraphsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -3750,6 +3920,7 @@ input AssetUpdateWithoutVectorGraphsInput {
   logoUrl: NullableStringFieldUpdateOperationsInput
   lots: LotUpdateManyWithoutAssetNestedInput
   marketCap: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAssetNestedInput
   name: NullableStringFieldUpdateOperationsInput
   plaid_security_id: NullableStringFieldUpdateOperationsInput
   positions: PositionUpdateManyWithoutAssetNestedInput
@@ -3785,9 +3956,9 @@ input AssetUpsertWithoutLotsInput {
   where: AssetWhereInput
 }
 
-input AssetUpsertWithoutMultiChangeSetInput {
-  create: AssetCreateWithoutMultiChangeSetInput!
-  update: AssetUpdateWithoutMultiChangeSetInput!
+input AssetUpsertWithoutMergeErrorInput {
+  create: AssetCreateWithoutMergeErrorInput!
+  update: AssetUpdateWithoutMergeErrorInput!
   where: AssetWhereInput
 }
 
@@ -3817,7 +3988,6 @@ input AssetUpsertWithoutVectorGraphsInput {
 
 input AssetWhereInput {
   AND: [AssetWhereInput!]
-  MultiChangeSet: MultiChangeSetListRelationFilter
   NOT: [AssetWhereInput!]
   OR: [AssetWhereInput!]
   active: BoolFilter
@@ -3846,6 +4016,7 @@ input AssetWhereInput {
   logoUrl: StringNullableFilter
   lots: LotListRelationFilter
   marketCap: DecimalNullableFilter
+  mergeError: MergeErrorListRelationFilter
   name: StringNullableFilter
   plaid_security_id: StringNullableFilter
   positions: PositionListRelationFilter
@@ -3866,7 +4037,6 @@ input AssetWhereInput {
 
 input AssetWhereUniqueInput {
   AND: [AssetWhereInput!]
-  MultiChangeSet: MultiChangeSetListRelationFilter
   NOT: [AssetWhereInput!]
   OR: [AssetWhereInput!]
   active: BoolFilter
@@ -3895,6 +4065,7 @@ input AssetWhereUniqueInput {
   logoUrl: StringNullableFilter
   lots: LotListRelationFilter
   marketCap: DecimalNullableFilter
+  mergeError: MergeErrorListRelationFilter
   name: StringNullableFilter
   plaid_security_id: StringNullableFilter
   positions: PositionListRelationFilter
@@ -4721,6 +4892,17 @@ input EnumLogTypeFilter {
   notIn: [LogType!]
 }
 
+input EnumMergeErrorTypeFieldUpdateOperationsInput {
+  set: MergeErrorType
+}
+
+input EnumMergeErrorTypeFilter {
+  equals: MergeErrorType
+  in: [MergeErrorType!]
+  not: NestedEnumMergeErrorTypeFilter
+  notIn: [MergeErrorType!]
+}
+
 input EnumNotificationLevelFieldUpdateOperationsInput {
   set: NotificationLevel
 }
@@ -5163,6 +5345,25 @@ input FileWhereUniqueInput {
   type: StringFilter
   updatedAt: DateTimeFilter
   uploadedBy: StringFilter
+}
+
+input FloatFieldUpdateOperationsInput {
+  decrement: Float
+  divide: Float
+  increment: Float
+  multiply: Float
+  set: Float
+}
+
+input FloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
 }
 
 input GCPUploadFile {
@@ -7454,6 +7655,7 @@ type Log {
   data: JSON!
   description: String
   id: ID!
+  mergeError: [MergeError!]
   portfolio: Portfolio!
   portfolioId: String!
   responseStatus: Int
@@ -7468,6 +7670,7 @@ type LogAvgAggregate {
 
 type LogCount {
   LotTransactionBatch: Int!
+  mergeError: Int!
 }
 
 type LogCountAggregate {
@@ -7510,8 +7713,19 @@ input LogCreateNestedOneWithoutLotTransactionBatchInput {
   create: LogCreateWithoutLotTransactionBatchInput
 }
 
+input LogCreateNestedOneWithoutMergeErrorInput {
+  connect: LogWhereUniqueInput
+  connectOrCreate: LogCreateOrConnectWithoutMergeErrorInput
+  create: LogCreateWithoutMergeErrorInput
+}
+
 input LogCreateOrConnectWithoutLotTransactionBatchInput {
   create: LogCreateWithoutLotTransactionBatchInput!
+  where: LogWhereUniqueInput!
+}
+
+input LogCreateOrConnectWithoutMergeErrorInput {
+  create: LogCreateWithoutMergeErrorInput!
   where: LogWhereUniqueInput!
 }
 
@@ -7521,6 +7735,19 @@ input LogCreateOrConnectWithoutPortfolioInput {
 }
 
 input LogCreateWithoutLotTransactionBatchInput {
+  createdAt: DateTime
+  data: JSON!
+  description: String
+  id: String
+  mergeError: MergeErrorCreateNestedManyWithoutLogInput
+  portfolio: PortfolioCreateNestedOneWithoutLogInput!
+  responseStatus: Int
+  source: AuthSource
+  type: LogType!
+}
+
+input LogCreateWithoutMergeErrorInput {
+  LotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutLogTrxMergeInput
   createdAt: DateTime
   data: JSON!
   description: String
@@ -7537,6 +7764,7 @@ input LogCreateWithoutPortfolioInput {
   data: JSON!
   description: String
   id: String
+  mergeError: MergeErrorCreateNestedManyWithoutLogInput
   responseStatus: Int
   source: AuthSource
   type: LogType!
@@ -7575,6 +7803,11 @@ input LogNullableScalarRelationFilter {
 
 input LogOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input LogScalarRelationFilter {
+  is: LogWhereInput
+  isNot: LogWhereInput
 }
 
 input LogScalarWhereInput {
@@ -7635,6 +7868,14 @@ input LogUpdateManyWithoutPortfolioNestedInput {
   upsert: [LogUpsertWithWhereUniqueWithoutPortfolioInput!]
 }
 
+input LogUpdateOneRequiredWithoutMergeErrorNestedInput {
+  connect: LogWhereUniqueInput
+  connectOrCreate: LogCreateOrConnectWithoutMergeErrorInput
+  create: LogCreateWithoutMergeErrorInput
+  update: LogUpdateToOneWithWhereWithoutMergeErrorInput
+  upsert: LogUpsertWithoutMergeErrorInput
+}
+
 input LogUpdateOneWithoutLotTransactionBatchNestedInput {
   connect: LogWhereUniqueInput
   connectOrCreate: LogCreateOrConnectWithoutLotTransactionBatchInput
@@ -7650,12 +7891,30 @@ input LogUpdateToOneWithWhereWithoutLotTransactionBatchInput {
   where: LogWhereInput
 }
 
+input LogUpdateToOneWithWhereWithoutMergeErrorInput {
+  data: LogUpdateWithoutMergeErrorInput!
+  where: LogWhereInput
+}
+
 input LogUpdateWithWhereUniqueWithoutPortfolioInput {
   data: LogUpdateWithoutPortfolioInput!
   where: LogWhereUniqueInput!
 }
 
 input LogUpdateWithoutLotTransactionBatchInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  data: JSON
+  description: NullableStringFieldUpdateOperationsInput
+  id: BigIntFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutLogNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutLogNestedInput
+  responseStatus: NullableIntFieldUpdateOperationsInput
+  source: NullableEnumAuthSourceFieldUpdateOperationsInput
+  type: EnumLogTypeFieldUpdateOperationsInput
+}
+
+input LogUpdateWithoutMergeErrorInput {
+  LotTransactionBatch: LotTransactionBatchUpdateManyWithoutLogTrxMergeNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   data: JSON
   description: NullableStringFieldUpdateOperationsInput
@@ -7672,6 +7931,7 @@ input LogUpdateWithoutPortfolioInput {
   data: JSON
   description: NullableStringFieldUpdateOperationsInput
   id: BigIntFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutLogNestedInput
   responseStatus: NullableIntFieldUpdateOperationsInput
   source: NullableEnumAuthSourceFieldUpdateOperationsInput
   type: EnumLogTypeFieldUpdateOperationsInput
@@ -7689,6 +7949,12 @@ input LogUpsertWithoutLotTransactionBatchInput {
   where: LogWhereInput
 }
 
+input LogUpsertWithoutMergeErrorInput {
+  create: LogCreateWithoutMergeErrorInput!
+  update: LogUpdateWithoutMergeErrorInput!
+  where: LogWhereInput
+}
+
 input LogWhereInput {
   AND: [LogWhereInput!]
   LotTransactionBatch: LotTransactionBatchListRelationFilter
@@ -7698,6 +7964,7 @@ input LogWhereInput {
   data: JsonFilter
   description: StringNullableFilter
   id: BigIntFilter
+  mergeError: MergeErrorListRelationFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   responseStatus: IntNullableFilter
@@ -7714,6 +7981,7 @@ input LogWhereUniqueInput {
   data: JsonFilter
   description: StringNullableFilter
   id: String
+  mergeError: MergeErrorListRelationFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   responseStatus: IntNullableFilter
@@ -7722,7 +7990,6 @@ input LogWhereUniqueInput {
 }
 
 type Lot {
-  MultiChangeSetOptionItem: [MultiChangeSetOptionItem!]
   _count: LotCount!
   account: Account!
   accountId: String!
@@ -8323,7 +8590,6 @@ input LotChangeLogWhereUniqueInput {
 }
 
 type LotCount {
-  MultiChangeSetOptionItem: Int!
   harvestTransactionItems: Int!
   lotChangeLog: Int!
 }
@@ -8612,12 +8878,6 @@ input LotCreateNestedOneWithoutLotChangeLogInput {
   create: LotCreateWithoutLotChangeLogInput
 }
 
-input LotCreateNestedOneWithoutMultiChangeSetOptionItemInput {
-  connect: LotWhereUniqueInput
-  connectOrCreate: LotCreateOrConnectWithoutMultiChangeSetOptionItemInput
-  create: LotCreateWithoutMultiChangeSetOptionItemInput
-}
-
 input LotCreateOrConnectWithoutAccountInput {
   create: LotCreateWithoutAccountInput!
   where: LotWhereUniqueInput!
@@ -8643,11 +8903,6 @@ input LotCreateOrConnectWithoutLotChangeLogInput {
   where: LotWhereUniqueInput!
 }
 
-input LotCreateOrConnectWithoutMultiChangeSetOptionItemInput {
-  create: LotCreateWithoutMultiChangeSetOptionItemInput!
-  where: LotWhereUniqueInput!
-}
-
 input LotCreateOrConnectWithoutPortfolioInput {
   create: LotCreateWithoutPortfolioInput!
   where: LotWhereUniqueInput!
@@ -8659,7 +8914,6 @@ input LotCreateOrConnectWithoutPositionInput {
 }
 
 input LotCreateWithoutAccountInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutLotInput
   acquiredDate: DateTime!
   adjPrice: Decimal
   asset: AssetCreateNestedOneWithoutLotsInput!
@@ -8697,7 +8951,6 @@ input LotCreateWithoutAccountInput {
 }
 
 input LotCreateWithoutAssetInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutLotInput
   account: AccountCreateNestedOneWithoutLotsInput!
   acquiredDate: DateTime!
   adjPrice: Decimal
@@ -8735,7 +8988,6 @@ input LotCreateWithoutAssetInput {
 }
 
 input LotCreateWithoutFileInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutLotInput
   account: AccountCreateNestedOneWithoutLotsInput!
   acquiredDate: DateTime!
   adjPrice: Decimal
@@ -8773,7 +9025,6 @@ input LotCreateWithoutFileInput {
 }
 
 input LotCreateWithoutHarvestTransactionItemsInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutLotInput
   account: AccountCreateNestedOneWithoutLotsInput!
   acquiredDate: DateTime!
   adjPrice: Decimal
@@ -8811,7 +9062,6 @@ input LotCreateWithoutHarvestTransactionItemsInput {
 }
 
 input LotCreateWithoutLotChangeLogInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutLotInput
   account: AccountCreateNestedOneWithoutLotsInput!
   acquiredDate: DateTime!
   adjPrice: Decimal
@@ -8832,44 +9082,6 @@ input LotCreateWithoutLotChangeLogInput {
   id: String
   legNo: Int
   locationCode: Int
-  lotSourceCode: Int
-  marketValue: Decimal
-  orderNo: Decimal
-  originalQty: Decimal
-  paymentCurrency: String
-  portfolio: PortfolioCreateNestedOneWithoutLotsInput!
-  position: PositionCreateNestedOneWithoutLotsInput
-  price: Decimal!
-  remainingQty: Decimal!
-  settlementCurrency: String
-  shortType: Int
-  termCode: Int
-  totalCostForGainPct: Decimal
-  updatedAt: DateTime
-}
-
-input LotCreateWithoutMultiChangeSetOptionItemInput {
-  account: AccountCreateNestedOneWithoutLotsInput!
-  acquiredDate: DateTime!
-  adjPrice: Decimal
-  asset: AssetCreateNestedOneWithoutLotsInput!
-  availableQty: Decimal
-  commPerShare: Decimal
-  costTotal: Decimal
-  createdAt: DateTime
-  exchangeRate: Decimal
-  excludeFromHarvest: Int
-  externalId: String
-  feesPerShare: Decimal
-  file: FileCreateNestedOneWithoutLotsInput
-  gainDay: Decimal
-  gainDayPct: Decimal
-  gainTotal: Decimal
-  harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutLotSoldInput
-  id: String
-  legNo: Int
-  locationCode: Int
-  lotChangeLog: LotChangeLogCreateNestedManyWithoutLotInput
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
@@ -8887,7 +9099,6 @@ input LotCreateWithoutMultiChangeSetOptionItemInput {
 }
 
 input LotCreateWithoutPortfolioInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutLotInput
   account: AccountCreateNestedOneWithoutLotsInput!
   acquiredDate: DateTime!
   adjPrice: Decimal
@@ -8925,7 +9136,6 @@ input LotCreateWithoutPortfolioInput {
 }
 
 input LotCreateWithoutPositionInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutLotInput
   account: AccountCreateNestedOneWithoutLotsInput!
   acquiredDate: DateTime!
   adjPrice: Decimal
@@ -9075,11 +9285,6 @@ input LotNullableScalarRelationFilter {
 input LotPositionIdExternalIdCompoundUniqueInput {
   externalId: String!
   positionId: String!
-}
-
-input LotScalarRelationFilter {
-  is: LotWhereInput
-  isNot: LotWhereInput
 }
 
 input LotScalarWhereInput {
@@ -9849,14 +10054,6 @@ input LotUpdateManyWithoutPositionNestedInput {
   upsert: [LotUpsertWithWhereUniqueWithoutPositionInput!]
 }
 
-input LotUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput {
-  connect: LotWhereUniqueInput
-  connectOrCreate: LotCreateOrConnectWithoutMultiChangeSetOptionItemInput
-  create: LotCreateWithoutMultiChangeSetOptionItemInput
-  update: LotUpdateToOneWithWhereWithoutMultiChangeSetOptionItemInput
-  upsert: LotUpsertWithoutMultiChangeSetOptionItemInput
-}
-
 input LotUpdateOneWithoutHarvestTransactionItemsNestedInput {
   connect: LotWhereUniqueInput
   connectOrCreate: LotCreateOrConnectWithoutHarvestTransactionItemsInput
@@ -9887,11 +10084,6 @@ input LotUpdateToOneWithWhereWithoutLotChangeLogInput {
   where: LotWhereInput
 }
 
-input LotUpdateToOneWithWhereWithoutMultiChangeSetOptionItemInput {
-  data: LotUpdateWithoutMultiChangeSetOptionItemInput!
-  where: LotWhereInput
-}
-
 input LotUpdateWithWhereUniqueWithoutAccountInput {
   data: LotUpdateWithoutAccountInput!
   where: LotWhereUniqueInput!
@@ -9918,7 +10110,6 @@ input LotUpdateWithWhereUniqueWithoutPositionInput {
 }
 
 input LotUpdateWithoutAccountInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutLotNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   adjPrice: NullableDecimalFieldUpdateOperationsInput
   asset: AssetUpdateOneRequiredWithoutLotsNestedInput
@@ -9956,7 +10147,6 @@ input LotUpdateWithoutAccountInput {
 }
 
 input LotUpdateWithoutAssetInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutLotNestedInput
   account: AccountUpdateOneRequiredWithoutLotsNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   adjPrice: NullableDecimalFieldUpdateOperationsInput
@@ -9994,7 +10184,6 @@ input LotUpdateWithoutAssetInput {
 }
 
 input LotUpdateWithoutFileInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutLotNestedInput
   account: AccountUpdateOneRequiredWithoutLotsNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   adjPrice: NullableDecimalFieldUpdateOperationsInput
@@ -10032,7 +10221,6 @@ input LotUpdateWithoutFileInput {
 }
 
 input LotUpdateWithoutHarvestTransactionItemsInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutLotNestedInput
   account: AccountUpdateOneRequiredWithoutLotsNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   adjPrice: NullableDecimalFieldUpdateOperationsInput
@@ -10070,7 +10258,6 @@ input LotUpdateWithoutHarvestTransactionItemsInput {
 }
 
 input LotUpdateWithoutLotChangeLogInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutLotNestedInput
   account: AccountUpdateOneRequiredWithoutLotsNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   adjPrice: NullableDecimalFieldUpdateOperationsInput
@@ -10091,44 +10278,6 @@ input LotUpdateWithoutLotChangeLogInput {
   id: StringFieldUpdateOperationsInput
   legNo: NullableIntFieldUpdateOperationsInput
   locationCode: NullableIntFieldUpdateOperationsInput
-  lotSourceCode: NullableIntFieldUpdateOperationsInput
-  marketValue: NullableDecimalFieldUpdateOperationsInput
-  orderNo: NullableDecimalFieldUpdateOperationsInput
-  originalQty: NullableDecimalFieldUpdateOperationsInput
-  paymentCurrency: NullableStringFieldUpdateOperationsInput
-  portfolio: PortfolioUpdateOneRequiredWithoutLotsNestedInput
-  position: PositionUpdateOneWithoutLotsNestedInput
-  price: DecimalFieldUpdateOperationsInput
-  remainingQty: DecimalFieldUpdateOperationsInput
-  settlementCurrency: NullableStringFieldUpdateOperationsInput
-  shortType: NullableIntFieldUpdateOperationsInput
-  termCode: NullableIntFieldUpdateOperationsInput
-  totalCostForGainPct: NullableDecimalFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input LotUpdateWithoutMultiChangeSetOptionItemInput {
-  account: AccountUpdateOneRequiredWithoutLotsNestedInput
-  acquiredDate: DateTimeFieldUpdateOperationsInput
-  adjPrice: NullableDecimalFieldUpdateOperationsInput
-  asset: AssetUpdateOneRequiredWithoutLotsNestedInput
-  availableQty: NullableDecimalFieldUpdateOperationsInput
-  commPerShare: NullableDecimalFieldUpdateOperationsInput
-  costTotal: NullableDecimalFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  exchangeRate: NullableDecimalFieldUpdateOperationsInput
-  excludeFromHarvest: IntFieldUpdateOperationsInput
-  externalId: NullableStringFieldUpdateOperationsInput
-  feesPerShare: NullableDecimalFieldUpdateOperationsInput
-  file: FileUpdateOneWithoutLotsNestedInput
-  gainDay: NullableDecimalFieldUpdateOperationsInput
-  gainDayPct: NullableDecimalFieldUpdateOperationsInput
-  gainTotal: NullableDecimalFieldUpdateOperationsInput
-  harvestTransactionItems: HarvestTransactionItemUpdateManyWithoutLotSoldNestedInput
-  id: StringFieldUpdateOperationsInput
-  legNo: NullableIntFieldUpdateOperationsInput
-  locationCode: NullableIntFieldUpdateOperationsInput
-  lotChangeLog: LotChangeLogUpdateManyWithoutLotNestedInput
   lotSourceCode: NullableIntFieldUpdateOperationsInput
   marketValue: NullableDecimalFieldUpdateOperationsInput
   orderNo: NullableDecimalFieldUpdateOperationsInput
@@ -10146,7 +10295,6 @@ input LotUpdateWithoutMultiChangeSetOptionItemInput {
 }
 
 input LotUpdateWithoutPortfolioInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutLotNestedInput
   account: AccountUpdateOneRequiredWithoutLotsNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   adjPrice: NullableDecimalFieldUpdateOperationsInput
@@ -10184,7 +10332,6 @@ input LotUpdateWithoutPortfolioInput {
 }
 
 input LotUpdateWithoutPositionInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutLotNestedInput
   account: AccountUpdateOneRequiredWithoutLotsNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   adjPrice: NullableDecimalFieldUpdateOperationsInput
@@ -10263,12 +10410,6 @@ input LotUpsertWithoutLotChangeLogInput {
   where: LotWhereInput
 }
 
-input LotUpsertWithoutMultiChangeSetOptionItemInput {
-  create: LotCreateWithoutMultiChangeSetOptionItemInput!
-  update: LotUpdateWithoutMultiChangeSetOptionItemInput!
-  where: LotWhereInput
-}
-
 enum LotValueType {
   GAIN
   LOSS
@@ -10276,7 +10417,6 @@ enum LotValueType {
 
 input LotWhereInput {
   AND: [LotWhereInput!]
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemListRelationFilter
   NOT: [LotWhereInput!]
   OR: [LotWhereInput!]
   account: AccountScalarRelationFilter
@@ -10323,7 +10463,6 @@ input LotWhereInput {
 
 input LotWhereUniqueInput {
   AND: [LotWhereInput!]
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemListRelationFilter
   NOT: [LotWhereInput!]
   OR: [LotWhereInput!]
   account: AccountScalarRelationFilter
@@ -10369,46 +10508,70 @@ input LotWhereUniqueInput {
   updatedAt: DateTimeFilter
 }
 
-type MultiChangeSet {
-  MultiChangeSetOption: [MultiChangeSetOption!]
-  _count: MultiChangeSetCount!
+type MergeError {
+  _count: MergeErrorCount!
   asset: Asset!
   assetSymbol: String!
   createdAt: DateTime!
   id: ID!
+  log: Log!
+  logId: String!
   lotsData: JSON!
+  multiChangeSetOption: [MultiChangeSetOption!]
   portfolio: Portfolio!
   portfolioId: String!
   resolved: Boolean!
   targetQuantity: Decimal
   targetValue: Decimal
+  type: MergeErrorType!
   updatedAt: DateTime!
 }
 
-type MultiChangeSetAvgAggregate {
-  id: Float
+type MergeErrorAvgAggregate {
+  logId: Float
   targetQuantity: Decimal
   targetValue: Decimal
 }
 
-type MultiChangeSetCount {
-  MultiChangeSetOption: Int!
+type MergeErrorCount {
+  multiChangeSetOption: Int!
 }
 
-type MultiChangeSetCountAggregate {
+type MergeErrorCountAggregate {
   _all: Int!
   assetSymbol: Int!
   createdAt: Int!
   id: Int!
+  logId: Int!
   lotsData: Int!
   portfolioId: Int!
   resolved: Int!
   targetQuantity: Int!
   targetValue: Int!
+  type: Int!
   updatedAt: Int!
 }
 
-input MultiChangeSetCreateManyAssetInput {
+input MergeErrorCreateManyAssetInput {
+  createdAt: DateTime
+  id: String
+  logId: String!
+  lotsData: JSON!
+  portfolioId: String!
+  resolved: Boolean
+  targetQuantity: Decimal
+  targetValue: Decimal
+  type: MergeErrorType!
+  updatedAt: DateTime
+}
+
+input MergeErrorCreateManyAssetInputEnvelope {
+  data: [MergeErrorCreateManyAssetInput!]!
+  skipDuplicates: Boolean
+}
+
+input MergeErrorCreateManyLogInput {
+  assetSymbol: String!
   createdAt: DateTime
   id: String
   lotsData: JSON!
@@ -10416,148 +10579,448 @@ input MultiChangeSetCreateManyAssetInput {
   resolved: Boolean
   targetQuantity: Decimal
   targetValue: Decimal
+  type: MergeErrorType!
   updatedAt: DateTime
 }
 
-input MultiChangeSetCreateManyAssetInputEnvelope {
-  data: [MultiChangeSetCreateManyAssetInput!]!
+input MergeErrorCreateManyLogInputEnvelope {
+  data: [MergeErrorCreateManyLogInput!]!
   skipDuplicates: Boolean
 }
 
-input MultiChangeSetCreateManyPortfolioInput {
+input MergeErrorCreateManyPortfolioInput {
   assetSymbol: String!
   createdAt: DateTime
   id: String
+  logId: String!
   lotsData: JSON!
   resolved: Boolean
   targetQuantity: Decimal
   targetValue: Decimal
+  type: MergeErrorType!
   updatedAt: DateTime
 }
 
-input MultiChangeSetCreateManyPortfolioInputEnvelope {
-  data: [MultiChangeSetCreateManyPortfolioInput!]!
+input MergeErrorCreateManyPortfolioInputEnvelope {
+  data: [MergeErrorCreateManyPortfolioInput!]!
   skipDuplicates: Boolean
 }
 
-input MultiChangeSetCreateNestedManyWithoutAssetInput {
-  connect: [MultiChangeSetWhereUniqueInput!]
-  connectOrCreate: [MultiChangeSetCreateOrConnectWithoutAssetInput!]
-  create: [MultiChangeSetCreateWithoutAssetInput!]
-  createMany: MultiChangeSetCreateManyAssetInputEnvelope
+input MergeErrorCreateNestedManyWithoutAssetInput {
+  connect: [MergeErrorWhereUniqueInput!]
+  connectOrCreate: [MergeErrorCreateOrConnectWithoutAssetInput!]
+  create: [MergeErrorCreateWithoutAssetInput!]
+  createMany: MergeErrorCreateManyAssetInputEnvelope
 }
 
-input MultiChangeSetCreateNestedManyWithoutPortfolioInput {
-  connect: [MultiChangeSetWhereUniqueInput!]
-  connectOrCreate: [MultiChangeSetCreateOrConnectWithoutPortfolioInput!]
-  create: [MultiChangeSetCreateWithoutPortfolioInput!]
-  createMany: MultiChangeSetCreateManyPortfolioInputEnvelope
+input MergeErrorCreateNestedManyWithoutLogInput {
+  connect: [MergeErrorWhereUniqueInput!]
+  connectOrCreate: [MergeErrorCreateOrConnectWithoutLogInput!]
+  create: [MergeErrorCreateWithoutLogInput!]
+  createMany: MergeErrorCreateManyLogInputEnvelope
 }
 
-input MultiChangeSetCreateNestedOneWithoutMultiChangeSetOptionInput {
-  connect: MultiChangeSetWhereUniqueInput
-  connectOrCreate: MultiChangeSetCreateOrConnectWithoutMultiChangeSetOptionInput
-  create: MultiChangeSetCreateWithoutMultiChangeSetOptionInput
+input MergeErrorCreateNestedManyWithoutPortfolioInput {
+  connect: [MergeErrorWhereUniqueInput!]
+  connectOrCreate: [MergeErrorCreateOrConnectWithoutPortfolioInput!]
+  create: [MergeErrorCreateWithoutPortfolioInput!]
+  createMany: MergeErrorCreateManyPortfolioInputEnvelope
 }
 
-input MultiChangeSetCreateOrConnectWithoutAssetInput {
-  create: MultiChangeSetCreateWithoutAssetInput!
-  where: MultiChangeSetWhereUniqueInput!
+input MergeErrorCreateNestedOneWithoutMultiChangeSetOptionInput {
+  connect: MergeErrorWhereUniqueInput
+  connectOrCreate: MergeErrorCreateOrConnectWithoutMultiChangeSetOptionInput
+  create: MergeErrorCreateWithoutMultiChangeSetOptionInput
 }
 
-input MultiChangeSetCreateOrConnectWithoutMultiChangeSetOptionInput {
-  create: MultiChangeSetCreateWithoutMultiChangeSetOptionInput!
-  where: MultiChangeSetWhereUniqueInput!
+input MergeErrorCreateOrConnectWithoutAssetInput {
+  create: MergeErrorCreateWithoutAssetInput!
+  where: MergeErrorWhereUniqueInput!
 }
 
-input MultiChangeSetCreateOrConnectWithoutPortfolioInput {
-  create: MultiChangeSetCreateWithoutPortfolioInput!
-  where: MultiChangeSetWhereUniqueInput!
+input MergeErrorCreateOrConnectWithoutLogInput {
+  create: MergeErrorCreateWithoutLogInput!
+  where: MergeErrorWhereUniqueInput!
 }
 
-input MultiChangeSetCreateWithoutAssetInput {
-  MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutMultiChangeSetInput
+input MergeErrorCreateOrConnectWithoutMultiChangeSetOptionInput {
+  create: MergeErrorCreateWithoutMultiChangeSetOptionInput!
+  where: MergeErrorWhereUniqueInput!
+}
+
+input MergeErrorCreateOrConnectWithoutPortfolioInput {
+  create: MergeErrorCreateWithoutPortfolioInput!
+  where: MergeErrorWhereUniqueInput!
+}
+
+input MergeErrorCreateWithoutAssetInput {
   createdAt: DateTime
   id: String
+  log: LogCreateNestedOneWithoutMergeErrorInput!
   lotsData: JSON!
-  portfolio: PortfolioCreateNestedOneWithoutMultiChangeSetInput!
+  multiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutMergeErrorInput
+  portfolio: PortfolioCreateNestedOneWithoutMergeErrorInput!
   resolved: Boolean
   targetQuantity: Decimal
   targetValue: Decimal
+  type: MergeErrorType!
   updatedAt: DateTime
 }
 
-input MultiChangeSetCreateWithoutMultiChangeSetOptionInput {
-  asset: AssetCreateNestedOneWithoutMultiChangeSetInput!
+input MergeErrorCreateWithoutLogInput {
+  asset: AssetCreateNestedOneWithoutMergeErrorInput!
   createdAt: DateTime
   id: String
   lotsData: JSON!
-  portfolio: PortfolioCreateNestedOneWithoutMultiChangeSetInput!
+  multiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutMergeErrorInput
+  portfolio: PortfolioCreateNestedOneWithoutMergeErrorInput!
   resolved: Boolean
   targetQuantity: Decimal
   targetValue: Decimal
+  type: MergeErrorType!
   updatedAt: DateTime
 }
 
-input MultiChangeSetCreateWithoutPortfolioInput {
-  MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutMultiChangeSetInput
-  asset: AssetCreateNestedOneWithoutMultiChangeSetInput!
+input MergeErrorCreateWithoutMultiChangeSetOptionInput {
+  asset: AssetCreateNestedOneWithoutMergeErrorInput!
   createdAt: DateTime
   id: String
+  log: LogCreateNestedOneWithoutMergeErrorInput!
   lotsData: JSON!
+  portfolio: PortfolioCreateNestedOneWithoutMergeErrorInput!
   resolved: Boolean
   targetQuantity: Decimal
   targetValue: Decimal
+  type: MergeErrorType!
   updatedAt: DateTime
 }
 
-input MultiChangeSetListRelationFilter {
-  every: MultiChangeSetWhereInput
-  none: MultiChangeSetWhereInput
-  some: MultiChangeSetWhereInput
+input MergeErrorCreateWithoutPortfolioInput {
+  asset: AssetCreateNestedOneWithoutMergeErrorInput!
+  createdAt: DateTime
+  id: String
+  log: LogCreateNestedOneWithoutMergeErrorInput!
+  lotsData: JSON!
+  multiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutMergeErrorInput
+  resolved: Boolean
+  targetQuantity: Decimal
+  targetValue: Decimal
+  type: MergeErrorType!
+  updatedAt: DateTime
 }
 
-type MultiChangeSetMaxAggregate {
+input MergeErrorListRelationFilter {
+  every: MergeErrorWhereInput
+  none: MergeErrorWhereInput
+  some: MergeErrorWhereInput
+}
+
+type MergeErrorMaxAggregate {
   assetSymbol: String
   createdAt: DateTime
   id: String
+  logId: String
   portfolioId: String
   resolved: Boolean
   targetQuantity: Decimal
   targetValue: Decimal
+  type: MergeErrorType
   updatedAt: DateTime
 }
 
-type MultiChangeSetMinAggregate {
+type MergeErrorMinAggregate {
   assetSymbol: String
   createdAt: DateTime
   id: String
+  logId: String
   portfolioId: String
   resolved: Boolean
   targetQuantity: Decimal
   targetValue: Decimal
+  type: MergeErrorType
   updatedAt: DateTime
+}
+
+input MergeErrorScalarRelationFilter {
+  is: MergeErrorWhereInput
+  isNot: MergeErrorWhereInput
+}
+
+input MergeErrorScalarWhereInput {
+  AND: [MergeErrorScalarWhereInput!]
+  NOT: [MergeErrorScalarWhereInput!]
+  OR: [MergeErrorScalarWhereInput!]
+  assetSymbol: StringFilter
+  createdAt: DateTimeFilter
+  id: UuidFilter
+  logId: BigIntFilter
+  lotsData: JsonFilter
+  portfolioId: UuidFilter
+  resolved: BoolFilter
+  targetQuantity: DecimalNullableFilter
+  targetValue: DecimalNullableFilter
+  type: EnumMergeErrorTypeFilter
+  updatedAt: DateTimeFilter
+}
+
+type MergeErrorSumAggregate {
+  logId: String
+  targetQuantity: Decimal
+  targetValue: Decimal
+}
+
+enum MergeErrorType {
+  PLAID_MULTI_LOT_SOLUTION
+  PLAID_NO_SOLUTION
+}
+
+input MergeErrorUpdateInput {
+  asset: AssetUpdateOneRequiredWithoutMergeErrorNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  log: LogUpdateOneRequiredWithoutMergeErrorNestedInput
+  lotsData: JSON
+  multiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutMergeErrorNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutMergeErrorNestedInput
+  resolved: BoolFieldUpdateOperationsInput
+  targetQuantity: NullableDecimalFieldUpdateOperationsInput
+  targetValue: NullableDecimalFieldUpdateOperationsInput
+  type: EnumMergeErrorTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input MergeErrorUpdateManyMutationInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  lotsData: JSON
+  resolved: BoolFieldUpdateOperationsInput
+  targetQuantity: NullableDecimalFieldUpdateOperationsInput
+  targetValue: NullableDecimalFieldUpdateOperationsInput
+  type: EnumMergeErrorTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input MergeErrorUpdateManyWithWhereWithoutAssetInput {
+  data: MergeErrorUpdateManyMutationInput!
+  where: MergeErrorScalarWhereInput!
+}
+
+input MergeErrorUpdateManyWithWhereWithoutLogInput {
+  data: MergeErrorUpdateManyMutationInput!
+  where: MergeErrorScalarWhereInput!
+}
+
+input MergeErrorUpdateManyWithWhereWithoutPortfolioInput {
+  data: MergeErrorUpdateManyMutationInput!
+  where: MergeErrorScalarWhereInput!
+}
+
+input MergeErrorUpdateManyWithoutAssetNestedInput {
+  connect: [MergeErrorWhereUniqueInput!]
+  connectOrCreate: [MergeErrorCreateOrConnectWithoutAssetInput!]
+  create: [MergeErrorCreateWithoutAssetInput!]
+  createMany: MergeErrorCreateManyAssetInputEnvelope
+  delete: [MergeErrorWhereUniqueInput!]
+  deleteMany: [MergeErrorScalarWhereInput!]
+  disconnect: [MergeErrorWhereUniqueInput!]
+  set: [MergeErrorWhereUniqueInput!]
+  update: [MergeErrorUpdateWithWhereUniqueWithoutAssetInput!]
+  updateMany: [MergeErrorUpdateManyWithWhereWithoutAssetInput!]
+  upsert: [MergeErrorUpsertWithWhereUniqueWithoutAssetInput!]
+}
+
+input MergeErrorUpdateManyWithoutLogNestedInput {
+  connect: [MergeErrorWhereUniqueInput!]
+  connectOrCreate: [MergeErrorCreateOrConnectWithoutLogInput!]
+  create: [MergeErrorCreateWithoutLogInput!]
+  createMany: MergeErrorCreateManyLogInputEnvelope
+  delete: [MergeErrorWhereUniqueInput!]
+  deleteMany: [MergeErrorScalarWhereInput!]
+  disconnect: [MergeErrorWhereUniqueInput!]
+  set: [MergeErrorWhereUniqueInput!]
+  update: [MergeErrorUpdateWithWhereUniqueWithoutLogInput!]
+  updateMany: [MergeErrorUpdateManyWithWhereWithoutLogInput!]
+  upsert: [MergeErrorUpsertWithWhereUniqueWithoutLogInput!]
+}
+
+input MergeErrorUpdateManyWithoutPortfolioNestedInput {
+  connect: [MergeErrorWhereUniqueInput!]
+  connectOrCreate: [MergeErrorCreateOrConnectWithoutPortfolioInput!]
+  create: [MergeErrorCreateWithoutPortfolioInput!]
+  createMany: MergeErrorCreateManyPortfolioInputEnvelope
+  delete: [MergeErrorWhereUniqueInput!]
+  deleteMany: [MergeErrorScalarWhereInput!]
+  disconnect: [MergeErrorWhereUniqueInput!]
+  set: [MergeErrorWhereUniqueInput!]
+  update: [MergeErrorUpdateWithWhereUniqueWithoutPortfolioInput!]
+  updateMany: [MergeErrorUpdateManyWithWhereWithoutPortfolioInput!]
+  upsert: [MergeErrorUpsertWithWhereUniqueWithoutPortfolioInput!]
+}
+
+input MergeErrorUpdateOneRequiredWithoutMultiChangeSetOptionNestedInput {
+  connect: MergeErrorWhereUniqueInput
+  connectOrCreate: MergeErrorCreateOrConnectWithoutMultiChangeSetOptionInput
+  create: MergeErrorCreateWithoutMultiChangeSetOptionInput
+  update: MergeErrorUpdateToOneWithWhereWithoutMultiChangeSetOptionInput
+  upsert: MergeErrorUpsertWithoutMultiChangeSetOptionInput
+}
+
+input MergeErrorUpdateToOneWithWhereWithoutMultiChangeSetOptionInput {
+  data: MergeErrorUpdateWithoutMultiChangeSetOptionInput!
+  where: MergeErrorWhereInput
+}
+
+input MergeErrorUpdateWithWhereUniqueWithoutAssetInput {
+  data: MergeErrorUpdateWithoutAssetInput!
+  where: MergeErrorWhereUniqueInput!
+}
+
+input MergeErrorUpdateWithWhereUniqueWithoutLogInput {
+  data: MergeErrorUpdateWithoutLogInput!
+  where: MergeErrorWhereUniqueInput!
+}
+
+input MergeErrorUpdateWithWhereUniqueWithoutPortfolioInput {
+  data: MergeErrorUpdateWithoutPortfolioInput!
+  where: MergeErrorWhereUniqueInput!
+}
+
+input MergeErrorUpdateWithoutAssetInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  log: LogUpdateOneRequiredWithoutMergeErrorNestedInput
+  lotsData: JSON
+  multiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutMergeErrorNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutMergeErrorNestedInput
+  resolved: BoolFieldUpdateOperationsInput
+  targetQuantity: NullableDecimalFieldUpdateOperationsInput
+  targetValue: NullableDecimalFieldUpdateOperationsInput
+  type: EnumMergeErrorTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input MergeErrorUpdateWithoutLogInput {
+  asset: AssetUpdateOneRequiredWithoutMergeErrorNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  lotsData: JSON
+  multiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutMergeErrorNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutMergeErrorNestedInput
+  resolved: BoolFieldUpdateOperationsInput
+  targetQuantity: NullableDecimalFieldUpdateOperationsInput
+  targetValue: NullableDecimalFieldUpdateOperationsInput
+  type: EnumMergeErrorTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input MergeErrorUpdateWithoutMultiChangeSetOptionInput {
+  asset: AssetUpdateOneRequiredWithoutMergeErrorNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  log: LogUpdateOneRequiredWithoutMergeErrorNestedInput
+  lotsData: JSON
+  portfolio: PortfolioUpdateOneRequiredWithoutMergeErrorNestedInput
+  resolved: BoolFieldUpdateOperationsInput
+  targetQuantity: NullableDecimalFieldUpdateOperationsInput
+  targetValue: NullableDecimalFieldUpdateOperationsInput
+  type: EnumMergeErrorTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input MergeErrorUpdateWithoutPortfolioInput {
+  asset: AssetUpdateOneRequiredWithoutMergeErrorNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  log: LogUpdateOneRequiredWithoutMergeErrorNestedInput
+  lotsData: JSON
+  multiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutMergeErrorNestedInput
+  resolved: BoolFieldUpdateOperationsInput
+  targetQuantity: NullableDecimalFieldUpdateOperationsInput
+  targetValue: NullableDecimalFieldUpdateOperationsInput
+  type: EnumMergeErrorTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input MergeErrorUpsertWithWhereUniqueWithoutAssetInput {
+  create: MergeErrorCreateWithoutAssetInput!
+  update: MergeErrorUpdateWithoutAssetInput!
+  where: MergeErrorWhereUniqueInput!
+}
+
+input MergeErrorUpsertWithWhereUniqueWithoutLogInput {
+  create: MergeErrorCreateWithoutLogInput!
+  update: MergeErrorUpdateWithoutLogInput!
+  where: MergeErrorWhereUniqueInput!
+}
+
+input MergeErrorUpsertWithWhereUniqueWithoutPortfolioInput {
+  create: MergeErrorCreateWithoutPortfolioInput!
+  update: MergeErrorUpdateWithoutPortfolioInput!
+  where: MergeErrorWhereUniqueInput!
+}
+
+input MergeErrorUpsertWithoutMultiChangeSetOptionInput {
+  create: MergeErrorCreateWithoutMultiChangeSetOptionInput!
+  update: MergeErrorUpdateWithoutMultiChangeSetOptionInput!
+  where: MergeErrorWhereInput
+}
+
+input MergeErrorWhereInput {
+  AND: [MergeErrorWhereInput!]
+  NOT: [MergeErrorWhereInput!]
+  OR: [MergeErrorWhereInput!]
+  asset: AssetScalarRelationFilter
+  assetSymbol: StringFilter
+  createdAt: DateTimeFilter
+  id: UuidFilter
+  log: LogScalarRelationFilter
+  logId: BigIntFilter
+  lotsData: JsonFilter
+  multiChangeSetOption: MultiChangeSetOptionListRelationFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  resolved: BoolFilter
+  targetQuantity: DecimalNullableFilter
+  targetValue: DecimalNullableFilter
+  type: EnumMergeErrorTypeFilter
+  updatedAt: DateTimeFilter
+}
+
+input MergeErrorWhereUniqueInput {
+  AND: [MergeErrorWhereInput!]
+  NOT: [MergeErrorWhereInput!]
+  OR: [MergeErrorWhereInput!]
+  asset: AssetScalarRelationFilter
+  assetSymbol: StringFilter
+  createdAt: DateTimeFilter
+  id: String
+  log: LogScalarRelationFilter
+  logId: BigIntFilter
+  lotsData: JsonFilter
+  multiChangeSetOption: MultiChangeSetOptionListRelationFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  resolved: BoolFilter
+  targetQuantity: DecimalNullableFilter
+  targetValue: DecimalNullableFilter
+  type: EnumMergeErrorTypeFilter
+  updatedAt: DateTimeFilter
 }
 
 type MultiChangeSetOption {
-  MultiChangeSetOptionItem: [MultiChangeSetOptionItem!]
   _count: MultiChangeSetOptionCount!
   createdAt: DateTime!
   id: ID!
-  multiChangeSet: MultiChangeSet!
+  mergeError: MergeError!
   multiChangeSetId: String!
+  multiChangeSetOptionItem: [MultiChangeSetOptionItem!]
   portfolio: Portfolio!
   portfolioId: String!
   updatedAt: DateTime!
 }
 
-type MultiChangeSetOptionAvgAggregate {
-  id: Float
-  multiChangeSetId: Float
-}
-
 type MultiChangeSetOptionCount {
-  MultiChangeSetOptionItem: Int!
+  multiChangeSetOptionItem: Int!
 }
 
 type MultiChangeSetOptionCountAggregate {
@@ -10569,15 +11032,15 @@ type MultiChangeSetOptionCountAggregate {
   updatedAt: Int!
 }
 
-input MultiChangeSetOptionCreateManyMultiChangeSetInput {
+input MultiChangeSetOptionCreateManyMergeErrorInput {
   createdAt: DateTime
   id: String
   portfolioId: String!
   updatedAt: DateTime
 }
 
-input MultiChangeSetOptionCreateManyMultiChangeSetInputEnvelope {
-  data: [MultiChangeSetOptionCreateManyMultiChangeSetInput!]!
+input MultiChangeSetOptionCreateManyMergeErrorInputEnvelope {
+  data: [MultiChangeSetOptionCreateManyMergeErrorInput!]!
   skipDuplicates: Boolean
 }
 
@@ -10593,11 +11056,11 @@ input MultiChangeSetOptionCreateManyPortfolioInputEnvelope {
   skipDuplicates: Boolean
 }
 
-input MultiChangeSetOptionCreateNestedManyWithoutMultiChangeSetInput {
+input MultiChangeSetOptionCreateNestedManyWithoutMergeErrorInput {
   connect: [MultiChangeSetOptionWhereUniqueInput!]
-  connectOrCreate: [MultiChangeSetOptionCreateOrConnectWithoutMultiChangeSetInput!]
-  create: [MultiChangeSetOptionCreateWithoutMultiChangeSetInput!]
-  createMany: MultiChangeSetOptionCreateManyMultiChangeSetInputEnvelope
+  connectOrCreate: [MultiChangeSetOptionCreateOrConnectWithoutMergeErrorInput!]
+  create: [MultiChangeSetOptionCreateWithoutMergeErrorInput!]
+  createMany: MultiChangeSetOptionCreateManyMergeErrorInputEnvelope
 }
 
 input MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput {
@@ -10613,8 +11076,8 @@ input MultiChangeSetOptionCreateNestedOneWithoutMultiChangeSetOptionItemInput {
   create: MultiChangeSetOptionCreateWithoutMultiChangeSetOptionItemInput
 }
 
-input MultiChangeSetOptionCreateOrConnectWithoutMultiChangeSetInput {
-  create: MultiChangeSetOptionCreateWithoutMultiChangeSetInput!
+input MultiChangeSetOptionCreateOrConnectWithoutMergeErrorInput {
+  create: MultiChangeSetOptionCreateWithoutMergeErrorInput!
   where: MultiChangeSetOptionWhereUniqueInput!
 }
 
@@ -10628,10 +11091,10 @@ input MultiChangeSetOptionCreateOrConnectWithoutPortfolioInput {
   where: MultiChangeSetOptionWhereUniqueInput!
 }
 
-input MultiChangeSetOptionCreateWithoutMultiChangeSetInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutMultiChangeSetOptionInput
+input MultiChangeSetOptionCreateWithoutMergeErrorInput {
   createdAt: DateTime
   id: String
+  multiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutMultiChangeSetOptionInput
   portfolio: PortfolioCreateNestedOneWithoutMultiChangeSetOptionInput!
   updatedAt: DateTime
 }
@@ -10639,16 +11102,16 @@ input MultiChangeSetOptionCreateWithoutMultiChangeSetInput {
 input MultiChangeSetOptionCreateWithoutMultiChangeSetOptionItemInput {
   createdAt: DateTime
   id: String
-  multiChangeSet: MultiChangeSetCreateNestedOneWithoutMultiChangeSetOptionInput!
+  mergeError: MergeErrorCreateNestedOneWithoutMultiChangeSetOptionInput!
   portfolio: PortfolioCreateNestedOneWithoutMultiChangeSetOptionInput!
   updatedAt: DateTime
 }
 
 input MultiChangeSetOptionCreateWithoutPortfolioInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutMultiChangeSetOptionInput
   createdAt: DateTime
   id: String
-  multiChangeSet: MultiChangeSetCreateNestedOneWithoutMultiChangeSetOptionInput!
+  mergeError: MergeErrorCreateNestedOneWithoutMultiChangeSetOptionInput!
+  multiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutMultiChangeSetOptionInput
   updatedAt: DateTime
 }
 
@@ -10659,8 +11122,7 @@ type MultiChangeSetOptionItem {
   createdAt: DateTime!
   id: ID!
   isNewBuy: Boolean!
-  lot: Lot!
-  lotId: String!
+  lotId: String
   multiChangeSetOption: MultiChangeSetOption!
   multiChangeSetOptionId: String!
   portfolio: Portfolio!
@@ -10672,8 +11134,6 @@ type MultiChangeSetOptionItem {
 }
 
 type MultiChangeSetOptionItemAvgAggregate {
-  id: Float
-  multiChangeSetOptionId: Float
   price: Decimal
   quantityChange: Decimal
   quantityFinal: Decimal
@@ -10700,7 +11160,7 @@ input MultiChangeSetOptionItemCreateManyAccountInput {
   createdAt: DateTime
   id: String
   isNewBuy: Boolean
-  lotId: String!
+  lotId: String
   multiChangeSetOptionId: String!
   portfolioId: String!
   price: Decimal
@@ -10714,32 +11174,13 @@ input MultiChangeSetOptionItemCreateManyAccountInputEnvelope {
   skipDuplicates: Boolean
 }
 
-input MultiChangeSetOptionItemCreateManyLotInput {
-  accountId: String!
-  acquiredDate: DateTime!
-  createdAt: DateTime
-  id: String
-  isNewBuy: Boolean
-  multiChangeSetOptionId: String!
-  portfolioId: String!
-  price: Decimal
-  quantityChange: Decimal
-  quantityFinal: Decimal
-  updatedAt: DateTime
-}
-
-input MultiChangeSetOptionItemCreateManyLotInputEnvelope {
-  data: [MultiChangeSetOptionItemCreateManyLotInput!]!
-  skipDuplicates: Boolean
-}
-
 input MultiChangeSetOptionItemCreateManyMultiChangeSetOptionInput {
   accountId: String!
   acquiredDate: DateTime!
   createdAt: DateTime
   id: String
   isNewBuy: Boolean
-  lotId: String!
+  lotId: String
   portfolioId: String!
   price: Decimal
   quantityChange: Decimal
@@ -10758,7 +11199,7 @@ input MultiChangeSetOptionItemCreateManyPortfolioInput {
   createdAt: DateTime
   id: String
   isNewBuy: Boolean
-  lotId: String!
+  lotId: String
   multiChangeSetOptionId: String!
   price: Decimal
   quantityChange: Decimal
@@ -10776,13 +11217,6 @@ input MultiChangeSetOptionItemCreateNestedManyWithoutAccountInput {
   connectOrCreate: [MultiChangeSetOptionItemCreateOrConnectWithoutAccountInput!]
   create: [MultiChangeSetOptionItemCreateWithoutAccountInput!]
   createMany: MultiChangeSetOptionItemCreateManyAccountInputEnvelope
-}
-
-input MultiChangeSetOptionItemCreateNestedManyWithoutLotInput {
-  connect: [MultiChangeSetOptionItemWhereUniqueInput!]
-  connectOrCreate: [MultiChangeSetOptionItemCreateOrConnectWithoutLotInput!]
-  create: [MultiChangeSetOptionItemCreateWithoutLotInput!]
-  createMany: MultiChangeSetOptionItemCreateManyLotInputEnvelope
 }
 
 input MultiChangeSetOptionItemCreateNestedManyWithoutMultiChangeSetOptionInput {
@@ -10804,11 +11238,6 @@ input MultiChangeSetOptionItemCreateOrConnectWithoutAccountInput {
   where: MultiChangeSetOptionItemWhereUniqueInput!
 }
 
-input MultiChangeSetOptionItemCreateOrConnectWithoutLotInput {
-  create: MultiChangeSetOptionItemCreateWithoutLotInput!
-  where: MultiChangeSetOptionItemWhereUniqueInput!
-}
-
 input MultiChangeSetOptionItemCreateOrConnectWithoutMultiChangeSetOptionInput {
   create: MultiChangeSetOptionItemCreateWithoutMultiChangeSetOptionInput!
   where: MultiChangeSetOptionItemWhereUniqueInput!
@@ -10824,21 +11253,7 @@ input MultiChangeSetOptionItemCreateWithoutAccountInput {
   createdAt: DateTime
   id: String
   isNewBuy: Boolean
-  lot: LotCreateNestedOneWithoutMultiChangeSetOptionItemInput!
-  multiChangeSetOption: MultiChangeSetOptionCreateNestedOneWithoutMultiChangeSetOptionItemInput!
-  portfolio: PortfolioCreateNestedOneWithoutMultiChangeSetOptionItemInput!
-  price: Decimal
-  quantityChange: Decimal
-  quantityFinal: Decimal
-  updatedAt: DateTime
-}
-
-input MultiChangeSetOptionItemCreateWithoutLotInput {
-  account: AccountCreateNestedOneWithoutMultiChangeSetOptionItemInput!
-  acquiredDate: DateTime!
-  createdAt: DateTime
-  id: String
-  isNewBuy: Boolean
+  lotId: String
   multiChangeSetOption: MultiChangeSetOptionCreateNestedOneWithoutMultiChangeSetOptionItemInput!
   portfolio: PortfolioCreateNestedOneWithoutMultiChangeSetOptionItemInput!
   price: Decimal
@@ -10853,7 +11268,7 @@ input MultiChangeSetOptionItemCreateWithoutMultiChangeSetOptionInput {
   createdAt: DateTime
   id: String
   isNewBuy: Boolean
-  lot: LotCreateNestedOneWithoutMultiChangeSetOptionItemInput!
+  lotId: String
   portfolio: PortfolioCreateNestedOneWithoutMultiChangeSetOptionItemInput!
   price: Decimal
   quantityChange: Decimal
@@ -10867,7 +11282,7 @@ input MultiChangeSetOptionItemCreateWithoutPortfolioInput {
   createdAt: DateTime
   id: String
   isNewBuy: Boolean
-  lot: LotCreateNestedOneWithoutMultiChangeSetOptionItemInput!
+  lotId: String
   multiChangeSetOption: MultiChangeSetOptionCreateNestedOneWithoutMultiChangeSetOptionItemInput!
   price: Decimal
   quantityChange: Decimal
@@ -10918,10 +11333,10 @@ input MultiChangeSetOptionItemScalarWhereInput {
   accountId: UuidFilter
   acquiredDate: DateTimeFilter
   createdAt: DateTimeFilter
-  id: BigIntFilter
+  id: UuidFilter
   isNewBuy: BoolFilter
-  lotId: UuidFilter
-  multiChangeSetOptionId: BigIntFilter
+  lotId: UuidNullableFilter
+  multiChangeSetOptionId: UuidFilter
   portfolioId: UuidFilter
   price: DecimalNullableFilter
   quantityChange: DecimalNullableFilter
@@ -10930,8 +11345,6 @@ input MultiChangeSetOptionItemScalarWhereInput {
 }
 
 type MultiChangeSetOptionItemSumAggregate {
-  id: String
-  multiChangeSetOptionId: String
   price: Decimal
   quantityChange: Decimal
   quantityFinal: Decimal
@@ -10940,8 +11353,9 @@ type MultiChangeSetOptionItemSumAggregate {
 input MultiChangeSetOptionItemUpdateManyMutationInput {
   acquiredDate: DateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
   isNewBuy: BoolFieldUpdateOperationsInput
+  lotId: NullableStringFieldUpdateOperationsInput
   price: NullableDecimalFieldUpdateOperationsInput
   quantityChange: NullableDecimalFieldUpdateOperationsInput
   quantityFinal: NullableDecimalFieldUpdateOperationsInput
@@ -10949,11 +11363,6 @@ input MultiChangeSetOptionItemUpdateManyMutationInput {
 }
 
 input MultiChangeSetOptionItemUpdateManyWithWhereWithoutAccountInput {
-  data: MultiChangeSetOptionItemUpdateManyMutationInput!
-  where: MultiChangeSetOptionItemScalarWhereInput!
-}
-
-input MultiChangeSetOptionItemUpdateManyWithWhereWithoutLotInput {
   data: MultiChangeSetOptionItemUpdateManyMutationInput!
   where: MultiChangeSetOptionItemScalarWhereInput!
 }
@@ -10980,20 +11389,6 @@ input MultiChangeSetOptionItemUpdateManyWithoutAccountNestedInput {
   update: [MultiChangeSetOptionItemUpdateWithWhereUniqueWithoutAccountInput!]
   updateMany: [MultiChangeSetOptionItemUpdateManyWithWhereWithoutAccountInput!]
   upsert: [MultiChangeSetOptionItemUpsertWithWhereUniqueWithoutAccountInput!]
-}
-
-input MultiChangeSetOptionItemUpdateManyWithoutLotNestedInput {
-  connect: [MultiChangeSetOptionItemWhereUniqueInput!]
-  connectOrCreate: [MultiChangeSetOptionItemCreateOrConnectWithoutLotInput!]
-  create: [MultiChangeSetOptionItemCreateWithoutLotInput!]
-  createMany: MultiChangeSetOptionItemCreateManyLotInputEnvelope
-  delete: [MultiChangeSetOptionItemWhereUniqueInput!]
-  deleteMany: [MultiChangeSetOptionItemScalarWhereInput!]
-  disconnect: [MultiChangeSetOptionItemWhereUniqueInput!]
-  set: [MultiChangeSetOptionItemWhereUniqueInput!]
-  update: [MultiChangeSetOptionItemUpdateWithWhereUniqueWithoutLotInput!]
-  updateMany: [MultiChangeSetOptionItemUpdateManyWithWhereWithoutLotInput!]
-  upsert: [MultiChangeSetOptionItemUpsertWithWhereUniqueWithoutLotInput!]
 }
 
 input MultiChangeSetOptionItemUpdateManyWithoutMultiChangeSetOptionNestedInput {
@@ -11029,11 +11424,6 @@ input MultiChangeSetOptionItemUpdateWithWhereUniqueWithoutAccountInput {
   where: MultiChangeSetOptionItemWhereUniqueInput!
 }
 
-input MultiChangeSetOptionItemUpdateWithWhereUniqueWithoutLotInput {
-  data: MultiChangeSetOptionItemUpdateWithoutLotInput!
-  where: MultiChangeSetOptionItemWhereUniqueInput!
-}
-
 input MultiChangeSetOptionItemUpdateWithWhereUniqueWithoutMultiChangeSetOptionInput {
   data: MultiChangeSetOptionItemUpdateWithoutMultiChangeSetOptionInput!
   where: MultiChangeSetOptionItemWhereUniqueInput!
@@ -11047,23 +11437,9 @@ input MultiChangeSetOptionItemUpdateWithWhereUniqueWithoutPortfolioInput {
 input MultiChangeSetOptionItemUpdateWithoutAccountInput {
   acquiredDate: DateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
   isNewBuy: BoolFieldUpdateOperationsInput
-  lot: LotUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
-  multiChangeSetOption: MultiChangeSetOptionUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
-  portfolio: PortfolioUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
-  price: NullableDecimalFieldUpdateOperationsInput
-  quantityChange: NullableDecimalFieldUpdateOperationsInput
-  quantityFinal: NullableDecimalFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input MultiChangeSetOptionItemUpdateWithoutLotInput {
-  account: AccountUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
-  acquiredDate: DateTimeFieldUpdateOperationsInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
-  isNewBuy: BoolFieldUpdateOperationsInput
+  lotId: NullableStringFieldUpdateOperationsInput
   multiChangeSetOption: MultiChangeSetOptionUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
   price: NullableDecimalFieldUpdateOperationsInput
@@ -11076,9 +11452,9 @@ input MultiChangeSetOptionItemUpdateWithoutMultiChangeSetOptionInput {
   account: AccountUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
   isNewBuy: BoolFieldUpdateOperationsInput
-  lot: LotUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
+  lotId: NullableStringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
   price: NullableDecimalFieldUpdateOperationsInput
   quantityChange: NullableDecimalFieldUpdateOperationsInput
@@ -11090,9 +11466,9 @@ input MultiChangeSetOptionItemUpdateWithoutPortfolioInput {
   account: AccountUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
   isNewBuy: BoolFieldUpdateOperationsInput
-  lot: LotUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
+  lotId: NullableStringFieldUpdateOperationsInput
   multiChangeSetOption: MultiChangeSetOptionUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput
   price: NullableDecimalFieldUpdateOperationsInput
   quantityChange: NullableDecimalFieldUpdateOperationsInput
@@ -11103,12 +11479,6 @@ input MultiChangeSetOptionItemUpdateWithoutPortfolioInput {
 input MultiChangeSetOptionItemUpsertWithWhereUniqueWithoutAccountInput {
   create: MultiChangeSetOptionItemCreateWithoutAccountInput!
   update: MultiChangeSetOptionItemUpdateWithoutAccountInput!
-  where: MultiChangeSetOptionItemWhereUniqueInput!
-}
-
-input MultiChangeSetOptionItemUpsertWithWhereUniqueWithoutLotInput {
-  create: MultiChangeSetOptionItemCreateWithoutLotInput!
-  update: MultiChangeSetOptionItemUpdateWithoutLotInput!
   where: MultiChangeSetOptionItemWhereUniqueInput!
 }
 
@@ -11132,12 +11502,11 @@ input MultiChangeSetOptionItemWhereInput {
   accountId: UuidFilter
   acquiredDate: DateTimeFilter
   createdAt: DateTimeFilter
-  id: BigIntFilter
+  id: UuidFilter
   isNewBuy: BoolFilter
-  lot: LotScalarRelationFilter
-  lotId: UuidFilter
+  lotId: UuidNullableFilter
   multiChangeSetOption: MultiChangeSetOptionScalarRelationFilter
-  multiChangeSetOptionId: BigIntFilter
+  multiChangeSetOptionId: UuidFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   price: DecimalNullableFilter
@@ -11156,10 +11525,9 @@ input MultiChangeSetOptionItemWhereUniqueInput {
   createdAt: DateTimeFilter
   id: String
   isNewBuy: BoolFilter
-  lot: LotScalarRelationFilter
-  lotId: UuidFilter
+  lotId: UuidNullableFilter
   multiChangeSetOption: MultiChangeSetOptionScalarRelationFilter
-  multiChangeSetOptionId: BigIntFilter
+  multiChangeSetOptionId: UuidFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   price: DecimalNullableFilter
@@ -11200,24 +11568,19 @@ input MultiChangeSetOptionScalarWhereInput {
   NOT: [MultiChangeSetOptionScalarWhereInput!]
   OR: [MultiChangeSetOptionScalarWhereInput!]
   createdAt: DateTimeFilter
-  id: BigIntFilter
-  multiChangeSetId: BigIntFilter
+  id: UuidFilter
+  multiChangeSetId: UuidFilter
   portfolioId: UuidFilter
   updatedAt: DateTimeFilter
 }
 
-type MultiChangeSetOptionSumAggregate {
-  id: String
-  multiChangeSetId: String
-}
-
 input MultiChangeSetOptionUpdateManyMutationInput {
   createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
-input MultiChangeSetOptionUpdateManyWithWhereWithoutMultiChangeSetInput {
+input MultiChangeSetOptionUpdateManyWithWhereWithoutMergeErrorInput {
   data: MultiChangeSetOptionUpdateManyMutationInput!
   where: MultiChangeSetOptionScalarWhereInput!
 }
@@ -11227,18 +11590,18 @@ input MultiChangeSetOptionUpdateManyWithWhereWithoutPortfolioInput {
   where: MultiChangeSetOptionScalarWhereInput!
 }
 
-input MultiChangeSetOptionUpdateManyWithoutMultiChangeSetNestedInput {
+input MultiChangeSetOptionUpdateManyWithoutMergeErrorNestedInput {
   connect: [MultiChangeSetOptionWhereUniqueInput!]
-  connectOrCreate: [MultiChangeSetOptionCreateOrConnectWithoutMultiChangeSetInput!]
-  create: [MultiChangeSetOptionCreateWithoutMultiChangeSetInput!]
-  createMany: MultiChangeSetOptionCreateManyMultiChangeSetInputEnvelope
+  connectOrCreate: [MultiChangeSetOptionCreateOrConnectWithoutMergeErrorInput!]
+  create: [MultiChangeSetOptionCreateWithoutMergeErrorInput!]
+  createMany: MultiChangeSetOptionCreateManyMergeErrorInputEnvelope
   delete: [MultiChangeSetOptionWhereUniqueInput!]
   deleteMany: [MultiChangeSetOptionScalarWhereInput!]
   disconnect: [MultiChangeSetOptionWhereUniqueInput!]
   set: [MultiChangeSetOptionWhereUniqueInput!]
-  update: [MultiChangeSetOptionUpdateWithWhereUniqueWithoutMultiChangeSetInput!]
-  updateMany: [MultiChangeSetOptionUpdateManyWithWhereWithoutMultiChangeSetInput!]
-  upsert: [MultiChangeSetOptionUpsertWithWhereUniqueWithoutMultiChangeSetInput!]
+  update: [MultiChangeSetOptionUpdateWithWhereUniqueWithoutMergeErrorInput!]
+  updateMany: [MultiChangeSetOptionUpdateManyWithWhereWithoutMergeErrorInput!]
+  upsert: [MultiChangeSetOptionUpsertWithWhereUniqueWithoutMergeErrorInput!]
 }
 
 input MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput {
@@ -11268,8 +11631,8 @@ input MultiChangeSetOptionUpdateToOneWithWhereWithoutMultiChangeSetOptionItemInp
   where: MultiChangeSetOptionWhereInput
 }
 
-input MultiChangeSetOptionUpdateWithWhereUniqueWithoutMultiChangeSetInput {
-  data: MultiChangeSetOptionUpdateWithoutMultiChangeSetInput!
+input MultiChangeSetOptionUpdateWithWhereUniqueWithoutMergeErrorInput {
+  data: MultiChangeSetOptionUpdateWithoutMergeErrorInput!
   where: MultiChangeSetOptionWhereUniqueInput!
 }
 
@@ -11278,33 +11641,33 @@ input MultiChangeSetOptionUpdateWithWhereUniqueWithoutPortfolioInput {
   where: MultiChangeSetOptionWhereUniqueInput!
 }
 
-input MultiChangeSetOptionUpdateWithoutMultiChangeSetInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutMultiChangeSetOptionNestedInput
+input MultiChangeSetOptionUpdateWithoutMergeErrorInput {
   createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  multiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutMultiChangeSetOptionNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutMultiChangeSetOptionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
 input MultiChangeSetOptionUpdateWithoutMultiChangeSetOptionItemInput {
   createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
-  multiChangeSet: MultiChangeSetUpdateOneRequiredWithoutMultiChangeSetOptionNestedInput
+  id: StringFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateOneRequiredWithoutMultiChangeSetOptionNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutMultiChangeSetOptionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
 input MultiChangeSetOptionUpdateWithoutPortfolioInput {
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutMultiChangeSetOptionNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
-  multiChangeSet: MultiChangeSetUpdateOneRequiredWithoutMultiChangeSetOptionNestedInput
+  id: StringFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateOneRequiredWithoutMultiChangeSetOptionNestedInput
+  multiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutMultiChangeSetOptionNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
-input MultiChangeSetOptionUpsertWithWhereUniqueWithoutMultiChangeSetInput {
-  create: MultiChangeSetOptionCreateWithoutMultiChangeSetInput!
-  update: MultiChangeSetOptionUpdateWithoutMultiChangeSetInput!
+input MultiChangeSetOptionUpsertWithWhereUniqueWithoutMergeErrorInput {
+  create: MultiChangeSetOptionCreateWithoutMergeErrorInput!
+  update: MultiChangeSetOptionUpdateWithoutMergeErrorInput!
   where: MultiChangeSetOptionWhereUniqueInput!
 }
 
@@ -11322,13 +11685,13 @@ input MultiChangeSetOptionUpsertWithoutMultiChangeSetOptionItemInput {
 
 input MultiChangeSetOptionWhereInput {
   AND: [MultiChangeSetOptionWhereInput!]
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemListRelationFilter
   NOT: [MultiChangeSetOptionWhereInput!]
   OR: [MultiChangeSetOptionWhereInput!]
   createdAt: DateTimeFilter
-  id: BigIntFilter
-  multiChangeSet: MultiChangeSetScalarRelationFilter
-  multiChangeSetId: BigIntFilter
+  id: UuidFilter
+  mergeError: MergeErrorScalarRelationFilter
+  multiChangeSetId: UuidFilter
+  multiChangeSetOptionItem: MultiChangeSetOptionItemListRelationFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   updatedAt: DateTimeFilter
@@ -11336,215 +11699,15 @@ input MultiChangeSetOptionWhereInput {
 
 input MultiChangeSetOptionWhereUniqueInput {
   AND: [MultiChangeSetOptionWhereInput!]
-  MultiChangeSetOptionItem: MultiChangeSetOptionItemListRelationFilter
   NOT: [MultiChangeSetOptionWhereInput!]
   OR: [MultiChangeSetOptionWhereInput!]
   createdAt: DateTimeFilter
   id: String
-  multiChangeSet: MultiChangeSetScalarRelationFilter
-  multiChangeSetId: BigIntFilter
+  mergeError: MergeErrorScalarRelationFilter
+  multiChangeSetId: UuidFilter
+  multiChangeSetOptionItem: MultiChangeSetOptionItemListRelationFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
-  updatedAt: DateTimeFilter
-}
-
-input MultiChangeSetScalarRelationFilter {
-  is: MultiChangeSetWhereInput
-  isNot: MultiChangeSetWhereInput
-}
-
-input MultiChangeSetScalarWhereInput {
-  AND: [MultiChangeSetScalarWhereInput!]
-  NOT: [MultiChangeSetScalarWhereInput!]
-  OR: [MultiChangeSetScalarWhereInput!]
-  assetSymbol: StringFilter
-  createdAt: DateTimeFilter
-  id: BigIntFilter
-  lotsData: JsonFilter
-  portfolioId: UuidFilter
-  resolved: BoolFilter
-  targetQuantity: DecimalNullableFilter
-  targetValue: DecimalNullableFilter
-  updatedAt: DateTimeFilter
-}
-
-type MultiChangeSetSumAggregate {
-  id: String
-  targetQuantity: Decimal
-  targetValue: Decimal
-}
-
-input MultiChangeSetUpdateInput {
-  MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutMultiChangeSetNestedInput
-  asset: AssetUpdateOneRequiredWithoutMultiChangeSetNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
-  lotsData: JSON
-  portfolio: PortfolioUpdateOneRequiredWithoutMultiChangeSetNestedInput
-  resolved: BoolFieldUpdateOperationsInput
-  targetQuantity: NullableDecimalFieldUpdateOperationsInput
-  targetValue: NullableDecimalFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input MultiChangeSetUpdateManyMutationInput {
-  createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
-  lotsData: JSON
-  resolved: BoolFieldUpdateOperationsInput
-  targetQuantity: NullableDecimalFieldUpdateOperationsInput
-  targetValue: NullableDecimalFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input MultiChangeSetUpdateManyWithWhereWithoutAssetInput {
-  data: MultiChangeSetUpdateManyMutationInput!
-  where: MultiChangeSetScalarWhereInput!
-}
-
-input MultiChangeSetUpdateManyWithWhereWithoutPortfolioInput {
-  data: MultiChangeSetUpdateManyMutationInput!
-  where: MultiChangeSetScalarWhereInput!
-}
-
-input MultiChangeSetUpdateManyWithoutAssetNestedInput {
-  connect: [MultiChangeSetWhereUniqueInput!]
-  connectOrCreate: [MultiChangeSetCreateOrConnectWithoutAssetInput!]
-  create: [MultiChangeSetCreateWithoutAssetInput!]
-  createMany: MultiChangeSetCreateManyAssetInputEnvelope
-  delete: [MultiChangeSetWhereUniqueInput!]
-  deleteMany: [MultiChangeSetScalarWhereInput!]
-  disconnect: [MultiChangeSetWhereUniqueInput!]
-  set: [MultiChangeSetWhereUniqueInput!]
-  update: [MultiChangeSetUpdateWithWhereUniqueWithoutAssetInput!]
-  updateMany: [MultiChangeSetUpdateManyWithWhereWithoutAssetInput!]
-  upsert: [MultiChangeSetUpsertWithWhereUniqueWithoutAssetInput!]
-}
-
-input MultiChangeSetUpdateManyWithoutPortfolioNestedInput {
-  connect: [MultiChangeSetWhereUniqueInput!]
-  connectOrCreate: [MultiChangeSetCreateOrConnectWithoutPortfolioInput!]
-  create: [MultiChangeSetCreateWithoutPortfolioInput!]
-  createMany: MultiChangeSetCreateManyPortfolioInputEnvelope
-  delete: [MultiChangeSetWhereUniqueInput!]
-  deleteMany: [MultiChangeSetScalarWhereInput!]
-  disconnect: [MultiChangeSetWhereUniqueInput!]
-  set: [MultiChangeSetWhereUniqueInput!]
-  update: [MultiChangeSetUpdateWithWhereUniqueWithoutPortfolioInput!]
-  updateMany: [MultiChangeSetUpdateManyWithWhereWithoutPortfolioInput!]
-  upsert: [MultiChangeSetUpsertWithWhereUniqueWithoutPortfolioInput!]
-}
-
-input MultiChangeSetUpdateOneRequiredWithoutMultiChangeSetOptionNestedInput {
-  connect: MultiChangeSetWhereUniqueInput
-  connectOrCreate: MultiChangeSetCreateOrConnectWithoutMultiChangeSetOptionInput
-  create: MultiChangeSetCreateWithoutMultiChangeSetOptionInput
-  update: MultiChangeSetUpdateToOneWithWhereWithoutMultiChangeSetOptionInput
-  upsert: MultiChangeSetUpsertWithoutMultiChangeSetOptionInput
-}
-
-input MultiChangeSetUpdateToOneWithWhereWithoutMultiChangeSetOptionInput {
-  data: MultiChangeSetUpdateWithoutMultiChangeSetOptionInput!
-  where: MultiChangeSetWhereInput
-}
-
-input MultiChangeSetUpdateWithWhereUniqueWithoutAssetInput {
-  data: MultiChangeSetUpdateWithoutAssetInput!
-  where: MultiChangeSetWhereUniqueInput!
-}
-
-input MultiChangeSetUpdateWithWhereUniqueWithoutPortfolioInput {
-  data: MultiChangeSetUpdateWithoutPortfolioInput!
-  where: MultiChangeSetWhereUniqueInput!
-}
-
-input MultiChangeSetUpdateWithoutAssetInput {
-  MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutMultiChangeSetNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
-  lotsData: JSON
-  portfolio: PortfolioUpdateOneRequiredWithoutMultiChangeSetNestedInput
-  resolved: BoolFieldUpdateOperationsInput
-  targetQuantity: NullableDecimalFieldUpdateOperationsInput
-  targetValue: NullableDecimalFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input MultiChangeSetUpdateWithoutMultiChangeSetOptionInput {
-  asset: AssetUpdateOneRequiredWithoutMultiChangeSetNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
-  lotsData: JSON
-  portfolio: PortfolioUpdateOneRequiredWithoutMultiChangeSetNestedInput
-  resolved: BoolFieldUpdateOperationsInput
-  targetQuantity: NullableDecimalFieldUpdateOperationsInput
-  targetValue: NullableDecimalFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input MultiChangeSetUpdateWithoutPortfolioInput {
-  MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutMultiChangeSetNestedInput
-  asset: AssetUpdateOneRequiredWithoutMultiChangeSetNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  id: BigIntFieldUpdateOperationsInput
-  lotsData: JSON
-  resolved: BoolFieldUpdateOperationsInput
-  targetQuantity: NullableDecimalFieldUpdateOperationsInput
-  targetValue: NullableDecimalFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-}
-
-input MultiChangeSetUpsertWithWhereUniqueWithoutAssetInput {
-  create: MultiChangeSetCreateWithoutAssetInput!
-  update: MultiChangeSetUpdateWithoutAssetInput!
-  where: MultiChangeSetWhereUniqueInput!
-}
-
-input MultiChangeSetUpsertWithWhereUniqueWithoutPortfolioInput {
-  create: MultiChangeSetCreateWithoutPortfolioInput!
-  update: MultiChangeSetUpdateWithoutPortfolioInput!
-  where: MultiChangeSetWhereUniqueInput!
-}
-
-input MultiChangeSetUpsertWithoutMultiChangeSetOptionInput {
-  create: MultiChangeSetCreateWithoutMultiChangeSetOptionInput!
-  update: MultiChangeSetUpdateWithoutMultiChangeSetOptionInput!
-  where: MultiChangeSetWhereInput
-}
-
-input MultiChangeSetWhereInput {
-  AND: [MultiChangeSetWhereInput!]
-  MultiChangeSetOption: MultiChangeSetOptionListRelationFilter
-  NOT: [MultiChangeSetWhereInput!]
-  OR: [MultiChangeSetWhereInput!]
-  asset: AssetScalarRelationFilter
-  assetSymbol: StringFilter
-  createdAt: DateTimeFilter
-  id: BigIntFilter
-  lotsData: JsonFilter
-  portfolio: PortfolioScalarRelationFilter
-  portfolioId: UuidFilter
-  resolved: BoolFilter
-  targetQuantity: DecimalNullableFilter
-  targetValue: DecimalNullableFilter
-  updatedAt: DateTimeFilter
-}
-
-input MultiChangeSetWhereUniqueInput {
-  AND: [MultiChangeSetWhereInput!]
-  MultiChangeSetOption: MultiChangeSetOptionListRelationFilter
-  NOT: [MultiChangeSetWhereInput!]
-  OR: [MultiChangeSetWhereInput!]
-  asset: AssetScalarRelationFilter
-  assetSymbol: StringFilter
-  createdAt: DateTimeFilter
-  id: String
-  lotsData: JsonFilter
-  portfolio: PortfolioScalarRelationFilter
-  portfolioId: UuidFilter
-  resolved: BoolFilter
-  targetQuantity: DecimalNullableFilter
-  targetValue: DecimalNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -11617,7 +11780,7 @@ type Mutation {
 
   """Pull hourly price data for all assets within the window."""
   updateHourlyAssetPrices(from: DateTime!, to: DateTime!): String!
-  updateMultiChangeSet(data: MultiChangeSetUpdateInput!, id: Float!): MultiChangeSet!
+  updateMergeError(data: MergeErrorUpdateInput!, id: String!): MergeError!
 
   """Update a portfolio"""
   updatePortfolio(data: PortfolioUpdateInput!): Portfolio!
@@ -11811,6 +11974,13 @@ input NestedEnumLogTypeFilter {
   notIn: [LogType!]
 }
 
+input NestedEnumMergeErrorTypeFilter {
+  equals: MergeErrorType
+  in: [MergeErrorType!]
+  not: NestedEnumMergeErrorTypeFilter
+  notIn: [MergeErrorType!]
+}
+
 input NestedEnumNotificationLevelFilter {
   equals: NotificationLevel
   in: [NotificationLevel!]
@@ -11851,6 +12021,17 @@ input NestedEnumVectorWindowFilter {
   in: [VectorWindow!]
   not: NestedEnumVectorWindowFilter
   notIn: [VectorWindow!]
+}
+
+input NestedFloatFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatFilter
+  notIn: [Float!]
 }
 
 input NestedIntFilter {
@@ -12336,10 +12517,10 @@ type PolygonStockData {
 }
 
 type Portfolio {
-  MultiChangeSet: [MultiChangeSet!]
   MultiChangeSetOption: [MultiChangeSetOption!]
   MultiChangeSetOptionItem: [MultiChangeSetOptionItem!]
   Notification: [Notification!]
+  PortfolioBalanceSnapshot: [PortfolioBalanceSnapshot!]
   _count: PortfolioCount!
   accounts: [Account!]
   authConnections: [AuthConnection!]
@@ -12380,6 +12561,7 @@ type Portfolio {
   lotChangeLog: [LotChangeLog!]
   lotTransactionBatch: [LotTransactionBatch!]
   lots: [Lot!]
+  mergeError: [MergeError!]
 
   """Minimum p and l for a lot to be considered harvestable"""
   minimumLotPAndL: Decimal!
@@ -12402,11 +12584,285 @@ type PortfolioAvgAggregate {
   minimumLotPAndL: Decimal
 }
 
+type PortfolioBalanceSnapshot {
+  account: Account!
+  accountId: String!
+  createdAt: DateTime!
+  id: ID!
+  portfolio: Portfolio!
+  portfolioId: String!
+  positions: JSON!
+  valueAssets: Float!
+  valueCash: Float!
+  valueTotal: Float!
+}
+
+type PortfolioBalanceSnapshotAvgAggregate {
+  id: Float
+  valueAssets: Float
+  valueCash: Float
+  valueTotal: Float
+}
+
+type PortfolioBalanceSnapshotCountAggregate {
+  _all: Int!
+  accountId: Int!
+  createdAt: Int!
+  id: Int!
+  portfolioId: Int!
+  positions: Int!
+  valueAssets: Int!
+  valueCash: Int!
+  valueTotal: Int!
+}
+
+input PortfolioBalanceSnapshotCreateManyAccountInput {
+  createdAt: DateTime
+  id: String
+  portfolioId: String!
+  positions: JSON!
+  valueAssets: Float!
+  valueCash: Float!
+  valueTotal: Float!
+}
+
+input PortfolioBalanceSnapshotCreateManyAccountInputEnvelope {
+  data: [PortfolioBalanceSnapshotCreateManyAccountInput!]!
+  skipDuplicates: Boolean
+}
+
+input PortfolioBalanceSnapshotCreateManyPortfolioInput {
+  accountId: String!
+  createdAt: DateTime
+  id: String
+  positions: JSON!
+  valueAssets: Float!
+  valueCash: Float!
+  valueTotal: Float!
+}
+
+input PortfolioBalanceSnapshotCreateManyPortfolioInputEnvelope {
+  data: [PortfolioBalanceSnapshotCreateManyPortfolioInput!]!
+  skipDuplicates: Boolean
+}
+
+input PortfolioBalanceSnapshotCreateNestedManyWithoutAccountInput {
+  connect: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  connectOrCreate: [PortfolioBalanceSnapshotCreateOrConnectWithoutAccountInput!]
+  create: [PortfolioBalanceSnapshotCreateWithoutAccountInput!]
+  createMany: PortfolioBalanceSnapshotCreateManyAccountInputEnvelope
+}
+
+input PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput {
+  connect: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  connectOrCreate: [PortfolioBalanceSnapshotCreateOrConnectWithoutPortfolioInput!]
+  create: [PortfolioBalanceSnapshotCreateWithoutPortfolioInput!]
+  createMany: PortfolioBalanceSnapshotCreateManyPortfolioInputEnvelope
+}
+
+input PortfolioBalanceSnapshotCreateOrConnectWithoutAccountInput {
+  create: PortfolioBalanceSnapshotCreateWithoutAccountInput!
+  where: PortfolioBalanceSnapshotWhereUniqueInput!
+}
+
+input PortfolioBalanceSnapshotCreateOrConnectWithoutPortfolioInput {
+  create: PortfolioBalanceSnapshotCreateWithoutPortfolioInput!
+  where: PortfolioBalanceSnapshotWhereUniqueInput!
+}
+
+input PortfolioBalanceSnapshotCreateWithoutAccountInput {
+  createdAt: DateTime
+  id: String
+  portfolio: PortfolioCreateNestedOneWithoutPortfolioBalanceSnapshotInput!
+  positions: JSON!
+  valueAssets: Float!
+  valueCash: Float!
+  valueTotal: Float!
+}
+
+input PortfolioBalanceSnapshotCreateWithoutPortfolioInput {
+  account: AccountCreateNestedOneWithoutPortfolioBalanceSnapshotInput!
+  createdAt: DateTime
+  id: String
+  positions: JSON!
+  valueAssets: Float!
+  valueCash: Float!
+  valueTotal: Float!
+}
+
+input PortfolioBalanceSnapshotListRelationFilter {
+  every: PortfolioBalanceSnapshotWhereInput
+  none: PortfolioBalanceSnapshotWhereInput
+  some: PortfolioBalanceSnapshotWhereInput
+}
+
+type PortfolioBalanceSnapshotMaxAggregate {
+  accountId: String
+  createdAt: DateTime
+  id: String
+  portfolioId: String
+  valueAssets: Float
+  valueCash: Float
+  valueTotal: Float
+}
+
+type PortfolioBalanceSnapshotMinAggregate {
+  accountId: String
+  createdAt: DateTime
+  id: String
+  portfolioId: String
+  valueAssets: Float
+  valueCash: Float
+  valueTotal: Float
+}
+
+input PortfolioBalanceSnapshotScalarWhereInput {
+  AND: [PortfolioBalanceSnapshotScalarWhereInput!]
+  NOT: [PortfolioBalanceSnapshotScalarWhereInput!]
+  OR: [PortfolioBalanceSnapshotScalarWhereInput!]
+  accountId: UuidFilter
+  createdAt: DateTimeFilter
+  id: BigIntFilter
+  portfolioId: UuidFilter
+  positions: JsonFilter
+  valueAssets: FloatFilter
+  valueCash: FloatFilter
+  valueTotal: FloatFilter
+}
+
+type PortfolioBalanceSnapshotSumAggregate {
+  id: String
+  valueAssets: Float
+  valueCash: Float
+  valueTotal: Float
+}
+
+input PortfolioBalanceSnapshotUpdateManyMutationInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: BigIntFieldUpdateOperationsInput
+  positions: JSON
+  valueAssets: FloatFieldUpdateOperationsInput
+  valueCash: FloatFieldUpdateOperationsInput
+  valueTotal: FloatFieldUpdateOperationsInput
+}
+
+input PortfolioBalanceSnapshotUpdateManyWithWhereWithoutAccountInput {
+  data: PortfolioBalanceSnapshotUpdateManyMutationInput!
+  where: PortfolioBalanceSnapshotScalarWhereInput!
+}
+
+input PortfolioBalanceSnapshotUpdateManyWithWhereWithoutPortfolioInput {
+  data: PortfolioBalanceSnapshotUpdateManyMutationInput!
+  where: PortfolioBalanceSnapshotScalarWhereInput!
+}
+
+input PortfolioBalanceSnapshotUpdateManyWithoutAccountNestedInput {
+  connect: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  connectOrCreate: [PortfolioBalanceSnapshotCreateOrConnectWithoutAccountInput!]
+  create: [PortfolioBalanceSnapshotCreateWithoutAccountInput!]
+  createMany: PortfolioBalanceSnapshotCreateManyAccountInputEnvelope
+  delete: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  deleteMany: [PortfolioBalanceSnapshotScalarWhereInput!]
+  disconnect: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  set: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  update: [PortfolioBalanceSnapshotUpdateWithWhereUniqueWithoutAccountInput!]
+  updateMany: [PortfolioBalanceSnapshotUpdateManyWithWhereWithoutAccountInput!]
+  upsert: [PortfolioBalanceSnapshotUpsertWithWhereUniqueWithoutAccountInput!]
+}
+
+input PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput {
+  connect: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  connectOrCreate: [PortfolioBalanceSnapshotCreateOrConnectWithoutPortfolioInput!]
+  create: [PortfolioBalanceSnapshotCreateWithoutPortfolioInput!]
+  createMany: PortfolioBalanceSnapshotCreateManyPortfolioInputEnvelope
+  delete: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  deleteMany: [PortfolioBalanceSnapshotScalarWhereInput!]
+  disconnect: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  set: [PortfolioBalanceSnapshotWhereUniqueInput!]
+  update: [PortfolioBalanceSnapshotUpdateWithWhereUniqueWithoutPortfolioInput!]
+  updateMany: [PortfolioBalanceSnapshotUpdateManyWithWhereWithoutPortfolioInput!]
+  upsert: [PortfolioBalanceSnapshotUpsertWithWhereUniqueWithoutPortfolioInput!]
+}
+
+input PortfolioBalanceSnapshotUpdateWithWhereUniqueWithoutAccountInput {
+  data: PortfolioBalanceSnapshotUpdateWithoutAccountInput!
+  where: PortfolioBalanceSnapshotWhereUniqueInput!
+}
+
+input PortfolioBalanceSnapshotUpdateWithWhereUniqueWithoutPortfolioInput {
+  data: PortfolioBalanceSnapshotUpdateWithoutPortfolioInput!
+  where: PortfolioBalanceSnapshotWhereUniqueInput!
+}
+
+input PortfolioBalanceSnapshotUpdateWithoutAccountInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: BigIntFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutPortfolioBalanceSnapshotNestedInput
+  positions: JSON
+  valueAssets: FloatFieldUpdateOperationsInput
+  valueCash: FloatFieldUpdateOperationsInput
+  valueTotal: FloatFieldUpdateOperationsInput
+}
+
+input PortfolioBalanceSnapshotUpdateWithoutPortfolioInput {
+  account: AccountUpdateOneRequiredWithoutPortfolioBalanceSnapshotNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: BigIntFieldUpdateOperationsInput
+  positions: JSON
+  valueAssets: FloatFieldUpdateOperationsInput
+  valueCash: FloatFieldUpdateOperationsInput
+  valueTotal: FloatFieldUpdateOperationsInput
+}
+
+input PortfolioBalanceSnapshotUpsertWithWhereUniqueWithoutAccountInput {
+  create: PortfolioBalanceSnapshotCreateWithoutAccountInput!
+  update: PortfolioBalanceSnapshotUpdateWithoutAccountInput!
+  where: PortfolioBalanceSnapshotWhereUniqueInput!
+}
+
+input PortfolioBalanceSnapshotUpsertWithWhereUniqueWithoutPortfolioInput {
+  create: PortfolioBalanceSnapshotCreateWithoutPortfolioInput!
+  update: PortfolioBalanceSnapshotUpdateWithoutPortfolioInput!
+  where: PortfolioBalanceSnapshotWhereUniqueInput!
+}
+
+input PortfolioBalanceSnapshotWhereInput {
+  AND: [PortfolioBalanceSnapshotWhereInput!]
+  NOT: [PortfolioBalanceSnapshotWhereInput!]
+  OR: [PortfolioBalanceSnapshotWhereInput!]
+  account: AccountScalarRelationFilter
+  accountId: UuidFilter
+  createdAt: DateTimeFilter
+  id: BigIntFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  positions: JsonFilter
+  valueAssets: FloatFilter
+  valueCash: FloatFilter
+  valueTotal: FloatFilter
+}
+
+input PortfolioBalanceSnapshotWhereUniqueInput {
+  AND: [PortfolioBalanceSnapshotWhereInput!]
+  NOT: [PortfolioBalanceSnapshotWhereInput!]
+  OR: [PortfolioBalanceSnapshotWhereInput!]
+  account: AccountScalarRelationFilter
+  accountId: UuidFilter
+  createdAt: DateTimeFilter
+  id: String
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  positions: JsonFilter
+  valueAssets: FloatFilter
+  valueCash: FloatFilter
+  valueTotal: FloatFilter
+}
+
 type PortfolioCount {
-  MultiChangeSet: Int!
   MultiChangeSetOption: Int!
   MultiChangeSetOptionItem: Int!
   Notification: Int!
+  PortfolioBalanceSnapshot: Int!
   accounts: Int!
   authConnections: Int!
   files: Int!
@@ -12417,6 +12873,7 @@ type PortfolioCount {
   lotChangeLog: Int!
   lotTransactionBatch: Int!
   lots: Int!
+  mergeError: Int!
   positions: Int!
   realizedPAndL: Int!
   transactions: Int!
@@ -12442,10 +12899,10 @@ type PortfolioCountAggregate {
 }
 
 input PortfolioCreateInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -12466,6 +12923,7 @@ input PortfolioCreateInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12564,10 +13022,10 @@ input PortfolioCreateNestedOneWithoutLotsInput {
   create: PortfolioCreateWithoutLotsInput
 }
 
-input PortfolioCreateNestedOneWithoutMultiChangeSetInput {
+input PortfolioCreateNestedOneWithoutMergeErrorInput {
   connect: PortfolioWhereUniqueInput
-  connectOrCreate: PortfolioCreateOrConnectWithoutMultiChangeSetInput
-  create: PortfolioCreateWithoutMultiChangeSetInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutMergeErrorInput
+  create: PortfolioCreateWithoutMergeErrorInput
 }
 
 input PortfolioCreateNestedOneWithoutMultiChangeSetOptionInput {
@@ -12586,6 +13044,12 @@ input PortfolioCreateNestedOneWithoutNotificationInput {
   connect: PortfolioWhereUniqueInput
   connectOrCreate: PortfolioCreateOrConnectWithoutNotificationInput
   create: PortfolioCreateWithoutNotificationInput
+}
+
+input PortfolioCreateNestedOneWithoutPortfolioBalanceSnapshotInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutPortfolioBalanceSnapshotInput
+  create: PortfolioCreateWithoutPortfolioBalanceSnapshotInput
 }
 
 input PortfolioCreateNestedOneWithoutPositionsInput {
@@ -12667,8 +13131,8 @@ input PortfolioCreateOrConnectWithoutLotsInput {
   where: PortfolioWhereUniqueInput!
 }
 
-input PortfolioCreateOrConnectWithoutMultiChangeSetInput {
-  create: PortfolioCreateWithoutMultiChangeSetInput!
+input PortfolioCreateOrConnectWithoutMergeErrorInput {
+  create: PortfolioCreateWithoutMergeErrorInput!
   where: PortfolioWhereUniqueInput!
 }
 
@@ -12684,6 +13148,11 @@ input PortfolioCreateOrConnectWithoutMultiChangeSetOptionItemInput {
 
 input PortfolioCreateOrConnectWithoutNotificationInput {
   create: PortfolioCreateWithoutNotificationInput!
+  where: PortfolioWhereUniqueInput!
+}
+
+input PortfolioCreateOrConnectWithoutPortfolioBalanceSnapshotInput {
+  create: PortfolioCreateWithoutPortfolioBalanceSnapshotInput!
   where: PortfolioWhereUniqueInput!
 }
 
@@ -12708,10 +13177,10 @@ input PortfolioCreateOrConnectWithoutUsersOnPortfoliosInput {
 }
 
 input PortfolioCreateWithoutAccountsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
@@ -12731,6 +13200,7 @@ input PortfolioCreateWithoutAccountsInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12742,10 +13212,10 @@ input PortfolioCreateWithoutAccountsInput {
 }
 
 input PortfolioCreateWithoutAuthConnectionsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
   createdBy: UserCreateNestedOneWithoutPortfolioInput!
@@ -12765,6 +13235,7 @@ input PortfolioCreateWithoutAuthConnectionsInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12776,10 +13247,10 @@ input PortfolioCreateWithoutAuthConnectionsInput {
 }
 
 input PortfolioCreateWithoutCreatedByInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -12799,6 +13270,7 @@ input PortfolioCreateWithoutCreatedByInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12810,10 +13282,10 @@ input PortfolioCreateWithoutCreatedByInput {
 }
 
 input PortfolioCreateWithoutFilesInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -12833,6 +13305,7 @@ input PortfolioCreateWithoutFilesInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12844,10 +13317,10 @@ input PortfolioCreateWithoutFilesInput {
 }
 
 input PortfolioCreateWithoutHarvestTransactionInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -12867,6 +13340,7 @@ input PortfolioCreateWithoutHarvestTransactionInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12878,10 +13352,10 @@ input PortfolioCreateWithoutHarvestTransactionInput {
 }
 
 input PortfolioCreateWithoutHarvestTransactionItemInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -12901,6 +13375,7 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12912,10 +13387,10 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
 }
 
 input PortfolioCreateWithoutHarvestsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -12935,6 +13410,7 @@ input PortfolioCreateWithoutHarvestsInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12946,10 +13422,10 @@ input PortfolioCreateWithoutHarvestsInput {
 }
 
 input PortfolioCreateWithoutLogInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -12969,6 +13445,7 @@ input PortfolioCreateWithoutLogInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -12980,10 +13457,10 @@ input PortfolioCreateWithoutLogInput {
 }
 
 input PortfolioCreateWithoutLotChangeLogInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13003,6 +13480,7 @@ input PortfolioCreateWithoutLotChangeLogInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13014,10 +13492,10 @@ input PortfolioCreateWithoutLotChangeLogInput {
 }
 
 input PortfolioCreateWithoutLotTransactionBatchInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13037,6 +13515,7 @@ input PortfolioCreateWithoutLotTransactionBatchInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13048,10 +13527,10 @@ input PortfolioCreateWithoutLotTransactionBatchInput {
 }
 
 input PortfolioCreateWithoutLotsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13071,6 +13550,7 @@ input PortfolioCreateWithoutLotsInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13081,10 +13561,11 @@ input PortfolioCreateWithoutLotsInput {
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
 
-input PortfolioCreateWithoutMultiChangeSetInput {
+input PortfolioCreateWithoutMergeErrorInput {
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13116,9 +13597,9 @@ input PortfolioCreateWithoutMultiChangeSetInput {
 }
 
 input PortfolioCreateWithoutMultiChangeSetOptionInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13139,6 +13620,7 @@ input PortfolioCreateWithoutMultiChangeSetOptionInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13150,9 +13632,9 @@ input PortfolioCreateWithoutMultiChangeSetOptionInput {
 }
 
 input PortfolioCreateWithoutMultiChangeSetOptionItemInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13173,6 +13655,7 @@ input PortfolioCreateWithoutMultiChangeSetOptionItemInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13184,9 +13667,9 @@ input PortfolioCreateWithoutMultiChangeSetOptionItemInput {
 }
 
 input PortfolioCreateWithoutNotificationInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13207,6 +13690,42 @@ input PortfolioCreateWithoutNotificationInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
+  minimumLotPAndL: Decimal
+  name: String
+  notificationFrequency: HarvestNotificationFrequency
+  positions: PositionCreateNestedManyWithoutPortfolioInput
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
+  transactions: TransactionCreateNestedManyWithoutPortfolioInput
+  updatedAt: DateTime
+  usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
+}
+
+input PortfolioCreateWithoutPortfolioBalanceSnapshotInput {
+  MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
+  MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
+  Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  accounts: AccountCreateNestedManyWithoutPortfolioInput
+  authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
+  createdAt: DateTime
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
+  files: FileCreateNestedManyWithoutPortfolioInput
+  harvestCycleWeeks: Int
+  harvestShareDollarThreshold: Decimal
+  harvestTickerBucketDollarSizeLong: Decimal
+  harvestTickerBucketDollarSizeShort: Decimal
+  harvestTickerBucketLowerLimitLong: Decimal
+  harvestTickerBucketLowerLimitShort: Decimal
+  harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
+  harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
+  harvests: HarvestCreateNestedManyWithoutPortfolioInput
+  id: String
+  log: LogCreateNestedManyWithoutPortfolioInput
+  lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
+  lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
+  lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13218,10 +13737,10 @@ input PortfolioCreateWithoutNotificationInput {
 }
 
 input PortfolioCreateWithoutPositionsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13242,6 +13761,7 @@ input PortfolioCreateWithoutPositionsInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13252,10 +13772,10 @@ input PortfolioCreateWithoutPositionsInput {
 }
 
 input PortfolioCreateWithoutRealizedPAndLInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13276,6 +13796,7 @@ input PortfolioCreateWithoutRealizedPAndLInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13286,10 +13807,10 @@ input PortfolioCreateWithoutRealizedPAndLInput {
 }
 
 input PortfolioCreateWithoutTransactionsInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13310,6 +13831,7 @@ input PortfolioCreateWithoutTransactionsInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13320,10 +13842,10 @@ input PortfolioCreateWithoutTransactionsInput {
 }
 
 input PortfolioCreateWithoutUsersOnPortfoliosInput {
-  MultiChangeSet: MultiChangeSetCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOption: MultiChangeSetOptionCreateNestedManyWithoutPortfolioInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemCreateNestedManyWithoutPortfolioInput
   Notification: NotificationCreateNestedManyWithoutPortfolioInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
   createdAt: DateTime
@@ -13344,6 +13866,7 @@ input PortfolioCreateWithoutUsersOnPortfoliosInput {
   lotChangeLog: LotChangeLogCreateNestedManyWithoutPortfolioInput
   lotTransactionBatch: LotTransactionBatchCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
   minimumLotPAndL: Decimal
   name: String
   notificationFrequency: HarvestNotificationFrequency
@@ -13464,10 +13987,10 @@ type PortfolioSummaryUnrealized {
 }
 
 input PortfolioUpdateInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -13488,6 +14011,7 @@ input PortfolioUpdateInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -13613,12 +14137,12 @@ input PortfolioUpdateOneRequiredWithoutLotsNestedInput {
   upsert: PortfolioUpsertWithoutLotsInput
 }
 
-input PortfolioUpdateOneRequiredWithoutMultiChangeSetNestedInput {
+input PortfolioUpdateOneRequiredWithoutMergeErrorNestedInput {
   connect: PortfolioWhereUniqueInput
-  connectOrCreate: PortfolioCreateOrConnectWithoutMultiChangeSetInput
-  create: PortfolioCreateWithoutMultiChangeSetInput
-  update: PortfolioUpdateToOneWithWhereWithoutMultiChangeSetInput
-  upsert: PortfolioUpsertWithoutMultiChangeSetInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutMergeErrorInput
+  create: PortfolioCreateWithoutMergeErrorInput
+  update: PortfolioUpdateToOneWithWhereWithoutMergeErrorInput
+  upsert: PortfolioUpsertWithoutMergeErrorInput
 }
 
 input PortfolioUpdateOneRequiredWithoutMultiChangeSetOptionItemNestedInput {
@@ -13643,6 +14167,14 @@ input PortfolioUpdateOneRequiredWithoutNotificationNestedInput {
   create: PortfolioCreateWithoutNotificationInput
   update: PortfolioUpdateToOneWithWhereWithoutNotificationInput
   upsert: PortfolioUpsertWithoutNotificationInput
+}
+
+input PortfolioUpdateOneRequiredWithoutPortfolioBalanceSnapshotNestedInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutPortfolioBalanceSnapshotInput
+  create: PortfolioCreateWithoutPortfolioBalanceSnapshotInput
+  update: PortfolioUpdateToOneWithWhereWithoutPortfolioBalanceSnapshotInput
+  upsert: PortfolioUpsertWithoutPortfolioBalanceSnapshotInput
 }
 
 input PortfolioUpdateOneRequiredWithoutPositionsNestedInput {
@@ -13727,8 +14259,8 @@ input PortfolioUpdateToOneWithWhereWithoutLotsInput {
   where: PortfolioWhereInput
 }
 
-input PortfolioUpdateToOneWithWhereWithoutMultiChangeSetInput {
-  data: PortfolioUpdateWithoutMultiChangeSetInput!
+input PortfolioUpdateToOneWithWhereWithoutMergeErrorInput {
+  data: PortfolioUpdateWithoutMergeErrorInput!
   where: PortfolioWhereInput
 }
 
@@ -13744,6 +14276,11 @@ input PortfolioUpdateToOneWithWhereWithoutMultiChangeSetOptionItemInput {
 
 input PortfolioUpdateToOneWithWhereWithoutNotificationInput {
   data: PortfolioUpdateWithoutNotificationInput!
+  where: PortfolioWhereInput
+}
+
+input PortfolioUpdateToOneWithWhereWithoutPortfolioBalanceSnapshotInput {
+  data: PortfolioUpdateWithoutPortfolioBalanceSnapshotInput!
   where: PortfolioWhereInput
 }
 
@@ -13773,10 +14310,10 @@ input PortfolioUpdateWithWhereUniqueWithoutCreatedByInput {
 }
 
 input PortfolioUpdateWithoutAccountsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
@@ -13796,6 +14333,7 @@ input PortfolioUpdateWithoutAccountsInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -13807,10 +14345,10 @@ input PortfolioUpdateWithoutAccountsInput {
 }
 
 input PortfolioUpdateWithoutAuthConnectionsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
@@ -13830,6 +14368,7 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -13841,10 +14380,10 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
 }
 
 input PortfolioUpdateWithoutCreatedByInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -13864,6 +14403,7 @@ input PortfolioUpdateWithoutCreatedByInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -13875,10 +14415,10 @@ input PortfolioUpdateWithoutCreatedByInput {
 }
 
 input PortfolioUpdateWithoutFilesInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -13898,6 +14438,7 @@ input PortfolioUpdateWithoutFilesInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -13909,10 +14450,10 @@ input PortfolioUpdateWithoutFilesInput {
 }
 
 input PortfolioUpdateWithoutHarvestTransactionInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -13932,6 +14473,7 @@ input PortfolioUpdateWithoutHarvestTransactionInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -13943,10 +14485,10 @@ input PortfolioUpdateWithoutHarvestTransactionInput {
 }
 
 input PortfolioUpdateWithoutHarvestTransactionItemInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -13966,6 +14508,7 @@ input PortfolioUpdateWithoutHarvestTransactionItemInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -13977,10 +14520,10 @@ input PortfolioUpdateWithoutHarvestTransactionItemInput {
 }
 
 input PortfolioUpdateWithoutHarvestsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14000,6 +14543,7 @@ input PortfolioUpdateWithoutHarvestsInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14011,10 +14555,10 @@ input PortfolioUpdateWithoutHarvestsInput {
 }
 
 input PortfolioUpdateWithoutLogInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14034,6 +14578,7 @@ input PortfolioUpdateWithoutLogInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14045,10 +14590,10 @@ input PortfolioUpdateWithoutLogInput {
 }
 
 input PortfolioUpdateWithoutLotChangeLogInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14068,6 +14613,7 @@ input PortfolioUpdateWithoutLotChangeLogInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14079,10 +14625,10 @@ input PortfolioUpdateWithoutLotChangeLogInput {
 }
 
 input PortfolioUpdateWithoutLotTransactionBatchInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14102,6 +14648,7 @@ input PortfolioUpdateWithoutLotTransactionBatchInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14113,10 +14660,10 @@ input PortfolioUpdateWithoutLotTransactionBatchInput {
 }
 
 input PortfolioUpdateWithoutLotsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14136,6 +14683,7 @@ input PortfolioUpdateWithoutLotsInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14146,10 +14694,11 @@ input PortfolioUpdateWithoutLotsInput {
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
 
-input PortfolioUpdateWithoutMultiChangeSetInput {
+input PortfolioUpdateWithoutMergeErrorInput {
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14181,9 +14730,9 @@ input PortfolioUpdateWithoutMultiChangeSetInput {
 }
 
 input PortfolioUpdateWithoutMultiChangeSetOptionInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14204,6 +14753,7 @@ input PortfolioUpdateWithoutMultiChangeSetOptionInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14215,9 +14765,9 @@ input PortfolioUpdateWithoutMultiChangeSetOptionInput {
 }
 
 input PortfolioUpdateWithoutMultiChangeSetOptionItemInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14238,6 +14788,7 @@ input PortfolioUpdateWithoutMultiChangeSetOptionItemInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14249,9 +14800,9 @@ input PortfolioUpdateWithoutMultiChangeSetOptionItemInput {
 }
 
 input PortfolioUpdateWithoutNotificationInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14272,6 +14823,42 @@ input PortfolioUpdateWithoutNotificationInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
+  positions: PositionUpdateManyWithoutPortfolioNestedInput
+  realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
+  transactions: TransactionUpdateManyWithoutPortfolioNestedInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
+}
+
+input PortfolioUpdateWithoutPortfolioBalanceSnapshotInput {
+  MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
+  MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
+  Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  accounts: AccountUpdateManyWithoutPortfolioNestedInput
+  authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutPortfolioNestedInput
+  harvestCycleWeeks: IntFieldUpdateOperationsInput
+  harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeShort: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
+  harvestTransaction: HarvestTransactionUpdateManyWithoutPortfolioNestedInput
+  harvestTransactionItem: HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput
+  harvests: HarvestUpdateManyWithoutPortfolioNestedInput
+  id: StringFieldUpdateOperationsInput
+  log: LogUpdateManyWithoutPortfolioNestedInput
+  lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
+  lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
+  lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14283,10 +14870,10 @@ input PortfolioUpdateWithoutNotificationInput {
 }
 
 input PortfolioUpdateWithoutPositionsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14307,6 +14894,7 @@ input PortfolioUpdateWithoutPositionsInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14317,10 +14905,10 @@ input PortfolioUpdateWithoutPositionsInput {
 }
 
 input PortfolioUpdateWithoutRealizedPAndLInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14341,6 +14929,7 @@ input PortfolioUpdateWithoutRealizedPAndLInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14351,10 +14940,10 @@ input PortfolioUpdateWithoutRealizedPAndLInput {
 }
 
 input PortfolioUpdateWithoutTransactionsInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14375,6 +14964,7 @@ input PortfolioUpdateWithoutTransactionsInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14385,10 +14975,10 @@ input PortfolioUpdateWithoutTransactionsInput {
 }
 
 input PortfolioUpdateWithoutUsersOnPortfoliosInput {
-  MultiChangeSet: MultiChangeSetUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOption: MultiChangeSetOptionUpdateManyWithoutPortfolioNestedInput
   MultiChangeSetOptionItem: MultiChangeSetOptionItemUpdateManyWithoutPortfolioNestedInput
   Notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -14409,6 +14999,7 @@ input PortfolioUpdateWithoutUsersOnPortfoliosInput {
   lotChangeLog: LotChangeLogUpdateManyWithoutPortfolioNestedInput
   lotTransactionBatch: LotTransactionBatchUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
   minimumLotPAndL: DecimalFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
@@ -14484,9 +15075,9 @@ input PortfolioUpsertWithoutLotsInput {
   where: PortfolioWhereInput
 }
 
-input PortfolioUpsertWithoutMultiChangeSetInput {
-  create: PortfolioCreateWithoutMultiChangeSetInput!
-  update: PortfolioUpdateWithoutMultiChangeSetInput!
+input PortfolioUpsertWithoutMergeErrorInput {
+  create: PortfolioCreateWithoutMergeErrorInput!
+  update: PortfolioUpdateWithoutMergeErrorInput!
   where: PortfolioWhereInput
 }
 
@@ -14505,6 +15096,12 @@ input PortfolioUpsertWithoutMultiChangeSetOptionItemInput {
 input PortfolioUpsertWithoutNotificationInput {
   create: PortfolioCreateWithoutNotificationInput!
   update: PortfolioUpdateWithoutNotificationInput!
+  where: PortfolioWhereInput
+}
+
+input PortfolioUpsertWithoutPortfolioBalanceSnapshotInput {
+  create: PortfolioCreateWithoutPortfolioBalanceSnapshotInput!
+  update: PortfolioUpdateWithoutPortfolioBalanceSnapshotInput!
   where: PortfolioWhereInput
 }
 
@@ -14534,12 +15131,12 @@ input PortfolioUpsertWithoutUsersOnPortfoliosInput {
 
 input PortfolioWhereInput {
   AND: [PortfolioWhereInput!]
-  MultiChangeSet: MultiChangeSetListRelationFilter
   MultiChangeSetOption: MultiChangeSetOptionListRelationFilter
   MultiChangeSetOptionItem: MultiChangeSetOptionItemListRelationFilter
   NOT: [PortfolioWhereInput!]
   Notification: NotificationListRelationFilter
   OR: [PortfolioWhereInput!]
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotListRelationFilter
   accounts: AccountListRelationFilter
   authConnections: AuthConnectionListRelationFilter
   createdAt: DateTimeFilter
@@ -14561,6 +15158,7 @@ input PortfolioWhereInput {
   lotChangeLog: LotChangeLogListRelationFilter
   lotTransactionBatch: LotTransactionBatchListRelationFilter
   lots: LotListRelationFilter
+  mergeError: MergeErrorListRelationFilter
   minimumLotPAndL: DecimalFilter
   name: StringFilter
   notificationFrequency: EnumHarvestNotificationFrequencyFilter
@@ -14573,12 +15171,12 @@ input PortfolioWhereInput {
 
 input PortfolioWhereUniqueInput {
   AND: [PortfolioWhereInput!]
-  MultiChangeSet: MultiChangeSetListRelationFilter
   MultiChangeSetOption: MultiChangeSetOptionListRelationFilter
   MultiChangeSetOptionItem: MultiChangeSetOptionItemListRelationFilter
   NOT: [PortfolioWhereInput!]
   Notification: NotificationListRelationFilter
   OR: [PortfolioWhereInput!]
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshotListRelationFilter
   accounts: AccountListRelationFilter
   authConnections: AuthConnectionListRelationFilter
   createdAt: DateTimeFilter
@@ -14600,6 +15198,7 @@ input PortfolioWhereUniqueInput {
   lotChangeLog: LotChangeLogListRelationFilter
   lotTransactionBatch: LotTransactionBatchListRelationFilter
   lots: LotListRelationFilter
+  mergeError: MergeErrorListRelationFilter
   minimumLotPAndL: DecimalFilter
   name: StringFilter
   notificationFrequency: EnumHarvestNotificationFrequencyFilter
@@ -15864,7 +16463,7 @@ type Query {
 
   """Get accounts"""
   accounts(where: AccountWhereInput): [Account!]!
-  adminMultiChangeSets: [MultiChangeSet!]!
+  adminMergeErrors: [MergeError!]!
   authConnection(id: String!): AuthConnectionExt!
 
   """Chart data for the past 3 months for a asset"""
@@ -15909,8 +16508,8 @@ type Query {
   lotTransactionBatch(lotTransactionBatchId: String!): LotTransactionBatch
   lotTransactionBatches(orderBy: LotTransactionBatchOrderByRelationAggregateInput): [LotTransactionBatch!]!
   lots(includeTaxAdvantaged: Boolean, where: LotWhereInput): [Lot!]!
-  multiChangeSet(id: Float!): MultiChangeSet
-  multiChangeSets: [MultiChangeSet!]!
+  mergeError(id: String!): MergeError
+  mergeErrors: [MergeError!]!
   plaidAuthConnections: [AuthConnection!]!
 
   """Get institution information from Plaid"""

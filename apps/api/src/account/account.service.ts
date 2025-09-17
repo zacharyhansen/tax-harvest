@@ -1,6 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import type { Prisma } from '@prisma/client';
-
+import Decimal from 'decimal.js';
+import { AccountsSyncedEvent } from '~/events/accounts-synced';
+import { EventId } from '~/events/event-id';
 import { Database } from '../database/database';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -16,14 +19,12 @@ export class AccountService {
 		portfolioId: string,
 		args: Prisma.AccountFindManyArgs,
 	) {
-		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
-			.account.findMany({
-				...args,
-				orderBy: {
-					name: 'asc',
-				},
-			});
+		return this.prismaService.rlsPortfolioClient(portfolioId).account.findMany({
+			...args,
+			orderBy: {
+				name: 'asc',
+			},
+		});
 	}
 
 	async setupAccounts({
@@ -33,44 +34,42 @@ export class AccountService {
 		id: string;
 		select: Prisma.AccountSelect;
 	}) {
-		return this.prismaService
-			.$extends(PrismaService.forPortfolio(id))
-			.account.findMany({
-				where: {
-					AND: [
-						{
-							OR: [
-								{
-									uploadedPositions: false,
-								},
-								{
-									setRealizedValues: false,
-								},
-							],
-						},
-						{
-							portfolioId: id,
-							skipSetup: false,
-						},
-					],
-				},
-				select,
-			});
+		return this.prismaService.rlsPortfolioClient(id).account.findMany({
+			where: {
+				AND: [
+					{
+						OR: [
+							{
+								uploadedPositions: false,
+							},
+							{
+								setRealizedValues: false,
+							},
+						],
+					},
+					{
+						portfolioId: id,
+						skipSetup: false,
+					},
+				],
+			},
+			select,
+		});
 	}
 
 	getAccount(portfolioId: string, args: Prisma.AccountFindUniqueOrThrowArgs) {
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.account.findUniqueOrThrow(args);
 	}
 
 	createAccountForPortfolio(accountInsertObject: Prisma.AccountCreateInput) {
-		return this.prismaService
-			.$extends(
+		return (
+			this.prismaService
 				// biome-ignore lint/style/noNonNullAssertion: <ok>
-				PrismaService.forPortfolio(accountInsertObject.portfolio?.connect?.id!),
-			)
-			.account.create({ data: accountInsertObject });
+				.rlsPortfolioClient(accountInsertObject.portfolio?.connect?.id!)
+				.account.create({ data: accountInsertObject })
+		);
 	}
 
 	updateAccount(
@@ -78,15 +77,13 @@ export class AccountService {
 		accountWhereUniqueInput: Prisma.AccountWhereUniqueInput,
 		portfolioId: string,
 	) {
-		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
-			.account.update({
-				data: accountUpdateInput,
-				where: {
-					...accountWhereUniqueInput,
-					portfolioId,
-				},
-			});
+		return this.prismaService.rlsPortfolioClient(portfolioId).account.update({
+			data: accountUpdateInput,
+			where: {
+				...accountWhereUniqueInput,
+				portfolioId,
+			},
+		});
 	}
 
 	/**
@@ -105,7 +102,7 @@ export class AccountService {
 
 		// First verify the account exists and is UNCONNECTED
 		const account = await this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.account.findUniqueOrThrow({
 				where: {
 					...accountWhereUniqueInput,
@@ -120,7 +117,7 @@ export class AccountService {
 		}
 
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.$transaction(async (trx) => {
 				// First delete all related data
 				// Delete positions
@@ -158,6 +155,60 @@ export class AccountService {
 						portfolioId,
 					},
 				});
+			});
+	}
+
+	@OnEvent(EventId.ACCOUNTS_SYNCED)
+	async handleAccountSynced(event: AccountsSyncedEvent) {
+		this.logger.log(`Accounts ${event.accountIds.join(', ')} synced`);
+
+		const accounts = await this.prismaService
+			.rlsPortfolioClient(event.portfolioId)
+			.account.findMany({
+				where: {
+					id: {
+						in: event.accountIds,
+					},
+				},
+				select: {
+					id: true,
+					marketValueTotal: true,
+					positions: {
+						select: {
+							assetSymbol: true,
+							marketValue: true,
+						},
+					},
+				},
+			});
+
+		const portfolioBalanceSnapshot: Prisma.PortfolioBalanceSnapshotCreateManyInput[] =
+			[];
+
+		for (const account of accounts) {
+			const positiionsTotal = account.positions.reduce(
+				(acc, curr) => acc.plus(curr.marketValue ?? 0),
+				new Decimal(0),
+			);
+			portfolioBalanceSnapshot.push({
+				portfolioId: event.portfolioId,
+				accountId: account.id,
+				valueTotal: account.marketValueTotal?.toNumber() ?? 0,
+				valueCash:
+					account.marketValueTotal?.toNumber() ??
+					0 - positiionsTotal.toNumber(),
+				valueAssets: positiionsTotal.toNumber(),
+				positions: account.positions.map((position) => ({
+					assetSymbol: position.assetSymbol,
+					marketValue: position.marketValue?.toNumber(),
+				})),
+			});
+		}
+
+		return this.prismaService
+			.rlsPortfolioClient(event.portfolioId)
+			.portfolioBalanceSnapshot.createMany({
+				data: portfolioBalanceSnapshot,
 			});
 	}
 }

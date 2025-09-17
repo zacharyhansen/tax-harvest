@@ -85,9 +85,7 @@ export class UserService {
 	}
 
 	async updateUserFavorites(args: Prisma.UserUpdateArgs, portfolioId: string) {
-		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
-			.user.update(args);
+		return this.prismaService.rlsPortfolioClient(portfolioId).user.update(args);
 	}
 
 	async findOneById(id: string) {
