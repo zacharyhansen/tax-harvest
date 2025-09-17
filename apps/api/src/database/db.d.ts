@@ -322,22 +322,24 @@ export interface LotTransactionBatch {
   updatedAt: Generated<Timestamp>;
 }
 
-export interface MultiChangeSet {
+export interface MergeError {
   assetSymbol: string;
   createdAt: Generated<Timestamp>;
-  id: Generated<Int8>;
+  id: Generated<string>;
+  logId: Int8;
   lotsData: Json;
   portfolioId: string;
   resolved: Generated<boolean>;
   targetQuantity: Numeric | null;
   targetValue: Numeric | null;
+  type: "PLAID_MULTI_LOT_SOLUTION" | "PLAID_NO_SOLUTION";
   updatedAt: Generated<Timestamp>;
 }
 
 export interface MultiChangeSetOption {
   createdAt: Generated<Timestamp>;
-  id: Generated<Int8>;
-  multiChangeSetId: Int8;
+  id: Generated<string>;
+  multiChangeSetId: string;
   portfolioId: string;
   updatedAt: Generated<Timestamp>;
 }
@@ -346,10 +348,10 @@ export interface MultiChangeSetOptionItem {
   accountId: string;
   acquiredDate: Timestamp;
   createdAt: Generated<Timestamp>;
-  id: Generated<Int8>;
+  id: Generated<string>;
   isNewBuy: Generated<boolean>;
-  lotId: string;
-  multiChangeSetOptionId: Int8;
+  lotId: string | null;
+  multiChangeSetOptionId: string;
   portfolioId: string;
   price: Numeric | null;
   quantityChange: Numeric | null;
@@ -384,6 +386,17 @@ export interface Portfolio {
   name: Generated<string>;
   notificationFrequency: Generated<"DAILY" | "MONTHLY" | "NEVER" | "QUARTERLY" | "WEEKLY">;
   updatedAt: Generated<Timestamp>;
+}
+
+export interface PortfolioBalanceSnapshot {
+  accountId: string;
+  createdAt: Generated<Timestamp>;
+  id: Generated<Int8>;
+  portfolioId: string;
+  positions: Json;
+  valueAssets: number;
+  valueCash: number;
+  valueTotal: number;
 }
 
 export interface Position {
@@ -525,11 +538,12 @@ export interface DB {
   LotChangeLog: LotChangeLog;
   LotCurrent: LotCurrent;
   LotTransactionBatch: LotTransactionBatch;
-  MultiChangeSet: MultiChangeSet;
+  MergeError: MergeError;
   MultiChangeSetOption: MultiChangeSetOption;
   MultiChangeSetOptionItem: MultiChangeSetOptionItem;
   Notification: Notification;
   Portfolio: Portfolio;
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshot;
   Position: Position;
   PriceHourly: PriceHourly;
   PriceHourlyVector: PriceHourlyVector;

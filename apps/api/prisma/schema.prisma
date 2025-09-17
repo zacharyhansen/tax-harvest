@@ -101,9 +101,10 @@ model Portfolio {
   realizedPAndL            RealizedPAndL[]
   harvestTransactionItem   HarvestTransactionItem[]
   Notification             Notification[]
-  MultiChangeSet           MultiChangeSet[]
+  mergeError               MergeError[]
   MultiChangeSetOption     MultiChangeSetOption[]
   MultiChangeSetOptionItem MultiChangeSetOptionItem[]
+  PortfolioBalanceSnapshot PortfolioBalanceSnapshot[]
 }
 
 enum HarvestType {
@@ -290,6 +291,7 @@ model Account {
   LotTransactionBatch      LotTransactionBatch[]
   Notification             Notification[]
   MultiChangeSetOptionItem MultiChangeSetOptionItem[]
+  PortfolioBalanceSnapshot PortfolioBalanceSnapshot[]
 
   /// This attempts to ensure user doesnt link the same account twice (i.e. same plaid account mask)
   @@unique([authConnectionId, plaidAccountMask, type])
@@ -505,14 +507,13 @@ model Lot {
   locationCode        Int?
   shortType           Int?
 
-  file                     File?                      @relation(fields: [fileId], references: [id], onDelete: SetNull)
-  asset                    Asset                      @relation(fields: [assetSymbol], references: [symbol])
-  position                 Position?                  @relation(fields: [positionId], references: [id], onDelete: Cascade)
-  account                  Account                    @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  harvestTransactionItems  HarvestTransactionItem[]
-  lotChangeLog             LotChangeLog[]
-  portfolio                Portfolio                  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  MultiChangeSetOptionItem MultiChangeSetOptionItem[]
+  file                    File?                    @relation(fields: [fileId], references: [id], onDelete: SetNull)
+  asset                   Asset                    @relation(fields: [assetSymbol], references: [symbol])
+  position                Position?                @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  account                 Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  harvestTransactionItems HarvestTransactionItem[]
+  lotChangeLog            LotChangeLog[]
+  portfolio               Portfolio                @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
   @@unique([positionId, externalId])
   @@index([accountId])
@@ -628,7 +629,7 @@ model Asset {
   transactions            Transaction[]
   lots                    Lot[]
   harvestTransactionItems HarvestTransactionItem[]
-  MultiChangeSet          MultiChangeSet[]
+  mergeError              MergeError[]
 }
 
 model PriceHourly {
@@ -793,46 +794,54 @@ model File {
   portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 }
 
-model MultiChangeSet {
-  id             BigInt   @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now()) @updatedAt
-  portfolioId    String   @db.Uuid
+enum MergeErrorType {
+  PLAID_MULTI_LOT_SOLUTION
+  PLAID_NO_SOLUTION
+}
+
+model MergeError {
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type           MergeErrorType
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt
+  portfolioId    String         @db.Uuid
   assetSymbol    String
-  targetValue    Decimal? @db.Decimal(14, 4)
-  targetQuantity Decimal? @db.Decimal(14, 4)
-  lotsData       Json     @db.JsonB
-  resolved       Boolean  @default(false)
+  targetValue    Decimal?       @db.Decimal(14, 4)
+  targetQuantity Decimal?       @db.Decimal(14, 4)
+  lotsData       Json           @db.JsonB
+  resolved       Boolean        @default(false)
+  logId          BigInt
 
   portfolio            Portfolio              @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   asset                Asset                  @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
-  MultiChangeSetOption MultiChangeSetOption[]
+  multiChangeSetOption MultiChangeSetOption[]
+  log                  Log                    @relation(fields: [logId], references: [id], onDelete: Cascade)
 
-  @@index([portfolioId])
+  @@index([createdAt(sort: Desc)])
 }
 
 model MultiChangeSetOption {
-  id               BigInt   @id @default(autoincrement())
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt        DateTime @default(now())
   updatedAt        DateTime @default(now()) @updatedAt
   portfolioId      String   @db.Uuid
-  multiChangeSetId BigInt
+  multiChangeSetId String   @db.Uuid
 
-  multiChangeSet           MultiChangeSet             @relation(fields: [multiChangeSetId], references: [id], onDelete: Cascade)
+  mergeError               MergeError                 @relation(fields: [multiChangeSetId], references: [id], onDelete: Cascade)
   portfolio                Portfolio                  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  MultiChangeSetOptionItem MultiChangeSetOptionItem[]
+  multiChangeSetOptionItem MultiChangeSetOptionItem[]
 
-  @@index([portfolioId, multiChangeSetId])
+  @@index([multiChangeSetId])
 }
 
 model MultiChangeSetOptionItem {
-  id                     BigInt   @id @default(autoincrement())
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt              DateTime @default(now())
   updatedAt              DateTime @default(now()) @updatedAt
   portfolioId            String   @db.Uuid
   accountId              String   @db.Uuid
-  lotId                  String   @db.Uuid
-  multiChangeSetOptionId BigInt
+  lotId                  String?  @db.Uuid
+  multiChangeSetOptionId String   @db.Uuid
   acquiredDate           DateTime
   quantityFinal          Decimal? @db.Decimal(14, 4)
   quantityChange         Decimal? @db.Decimal(14, 4)
@@ -842,7 +851,6 @@ model MultiChangeSetOptionItem {
   multiChangeSetOption MultiChangeSetOption @relation(fields: [multiChangeSetOptionId], references: [id], onDelete: Cascade)
   account              Account              @relation(fields: [accountId], references: [id], onDelete: Cascade)
   portfolio            Portfolio            @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  lot                  Lot                  @relation(fields: [lotId], references: [id], onDelete: Cascade)
 
   @@index([portfolioId, accountId, multiChangeSetOptionId])
 }
@@ -881,7 +889,6 @@ enum LogType {
 }
 
 model Log {
-  /// @FieldType('String')
   id             BigInt      @id @default(autoincrement())
   type           LogType
   createdAt      DateTime    @default(now())
@@ -893,8 +900,25 @@ model Log {
 
   portfolio           Portfolio             @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   LotTransactionBatch LotTransactionBatch[]
+  mergeError          MergeError[]
 
   @@index([portfolioId, type])
+}
+
+model PortfolioBalanceSnapshot {
+  id          BigInt   @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  portfolioId String   @db.Uuid
+  accountId   String   @db.Uuid
+  valueTotal  Float
+  valueCash   Float
+  valueAssets Float
+  positions   Json     @db.JsonB
+
+  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId, createdAt(desc)])
 }
 
 // ENUMS 
