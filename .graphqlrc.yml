@@ -1,4 +1,2 @@
-projects:
-  taxharvest:
-    schema: ./apps/api/schema.graphql
-    documents: "./apps/web/**/*.graphql"
+schema: ./apps/api/schema.graphql
+documents: "./apps/web/**/*.{graphql,gql}"
