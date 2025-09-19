@@ -1,6 +1,7 @@
 fragment MultiChangeSetTableItem on MergeError {
 	id
 	portfolioId
+	accountId
 	assetSymbol
 	type
 	targetValue
@@ -13,36 +14,85 @@ fragment MultiChangeSetTableItem on MergeError {
 fragment MultiChangeSetDetail on MergeError {
 	id
 	portfolioId
+	accountId
 	assetSymbol
 	type
 	targetValue
 	targetQuantity
 	lotsData
+	lotChangeSetAlgoParams
+	logId
 	resolved
 	createdAt
 	updatedAt
-	# log {
-	# 	id
-	# 	type
-	# 	createdAt
-	# 	description
-	# 	responseStatus
-	# }
-	multiChangeSetOption {
-		...MultiChangeSetOptionItem
-	}
-}
-
-fragment MultiChangeSetOptionItem on MultiChangeSetOption {
-	id
-	multiChangeSetOptionItem {
+	AssetMerge {
 		id
-		lotId
-		acquiredDate
-		quantityFinal
-		quantityChange
-		isNewBuy
-		price
+		targetValue
+		targetQuantity
+		targetPositionSnapshot
+		lotData
+		resolvedLotChange
+		realizedProfitAndLossShortTerm
+		realizedProfitAndLossLongTerm
+		error
+		createdAt
+		updatedAt
+		plaidMerge {
+			id
+			resolveLotsInput
+			createdAt
+			updatedAt
+		}
+		transactionOnAssetMerge {
+			transaction {
+				id
+				externalId
+				type
+				subtype
+				transactionDate
+				description
+				assetSymbol
+				quantity
+				price
+				amount
+			}
+		}
+		usedLotChangeList {
+			id
+			LotChange {
+				id
+				quantityFinal
+				quantityChange
+				assetSymbol
+				shouldDelete
+				upsert
+				operationType
+				lot {
+					id
+					remainingQty
+					price
+					acquiredDate
+				}
+			}
+		}
+		lotChangeList {
+			id
+			LotChange {
+				id
+				quantityFinal
+				quantityChange
+				assetSymbol
+				shouldDelete
+				upsert
+				operationType
+				lot {
+					id
+					remainingQty
+					price
+					acquiredDate
+				}
+			}
+		}
 	}
 }
 

@@ -32,7 +32,7 @@ export default function MergeErrorsPage() {
 			{
 				headerName: 'Created At',
 				field: 'createdAt',
-				width: 200,
+				width: 180,
 				valueGetter: (params) => {
 					return new Date(params.data?.createdAt).toLocaleString('en-US', {
 						year: 'numeric',
@@ -53,6 +53,10 @@ export default function MergeErrorsPage() {
 						return 'Multi Lot Solution';
 					} else if (type === MergeErrorType.PlaidNoSolution) {
 						return 'No Solution Found';
+					} else if (type === MergeErrorType.PlaidMergeTimeout) {
+						return 'Merge Timeout';
+					} else if (type === MergeErrorType.Unknown) {
+						return 'Unknown';
 					}
 					return type;
 				},
@@ -61,21 +65,28 @@ export default function MergeErrorsPage() {
 					const type = params.data.type;
 					const isMultiLot = type === MergeErrorType.PlaidMultiLotSolution;
 					const isNoSolution = type === MergeErrorType.PlaidNoSolution;
+					const isMergeTimeout = type === MergeErrorType.PlaidMergeTimeout;
+					const isUnknown = type === MergeErrorType.Unknown;
 
 					let displayText = type;
+					let colorClasses = 'bg-gray-100 text-gray-700';
+
 					if (isMultiLot) {
 						displayText = 'Multi Lot Solution';
+						colorClasses = 'bg-blue-100 text-blue-700';
 					} else if (isNoSolution) {
 						displayText = 'No Solution Found';
+						colorClasses = 'bg-orange-100 text-orange-700';
+					} else if (isMergeTimeout) {
+						displayText = 'Merge Timeout';
+						colorClasses = 'bg-red-100 text-red-700';
+					} else if (isUnknown) {
+						displayText = 'Unknown';
 					}
 
 					return (
 						<span
-							className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-								isMultiLot
-									? 'bg-blue-100 text-blue-700'
-									: 'bg-orange-100 text-orange-700'
-							}`}
+							className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${colorClasses}`}
 						>
 							{displayText}
 						</span>
@@ -108,12 +119,24 @@ export default function MergeErrorsPage() {
 			{
 				headerName: 'Target Quantity',
 				field: 'targetQuantity',
-				width: 150,
+				width: 140,
+			},
+			{
+				headerName: 'Account',
+				field: 'accountId',
+				width: 100,
+				valueGetter: (params) => {
+					const accountId = params.data?.accountId;
+					if (!accountId) return '';
+					// Display last 8 chars of UUID
+					return `...${accountId.slice(-8)}`;
+				},
+				tooltipField: 'accountId',
 			},
 			{
 				headerName: 'Status',
 				field: 'resolved',
-				width: 120,
+				width: 110,
 				// biome-ignore lint/suspicious/noExplicitAny: <ok>
 				cellRenderer: (params: any) => {
 					const resolved = params.data.resolved;

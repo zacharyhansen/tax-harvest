@@ -6,7 +6,6 @@ import { HarvestSummaryCards } from '~/modules/harvest';
 import { PageWrapper } from '~/modules/layout';
 import { LotsTable } from '~/modules/lot';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-import { PerformanceChart } from './performance-chart';
 
 export default function HomePage() {
 	const { data, loading, error } = usePortfolioSummaryQuery();
@@ -72,7 +71,6 @@ export default function HomePage() {
 				</div>
 			</div>
 			<HarvestSummaryCards />
-			<PerformanceChart />
 			<LotsTable />
 		</PageWrapper>
 	);

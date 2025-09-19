@@ -19,12 +19,14 @@ import type { LucideIcon } from 'lucide-react';
 
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { Badge } from '@repo/ui/components/badge';
 
 export type NavItem = {
 	title: string;
 	url: string;
 	icon?: LucideIcon;
 	isActive?: boolean;
+	beta?: boolean;
 	items?: {
 		title: string;
 		url: string;
@@ -73,6 +75,11 @@ export function NavMain({
 											>
 												{item.icon && <item.icon />}
 												<span>{item.title}</span>
+												{item.beta && (
+													<Badge variant="secondary" className="ml-1.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800 px-1.5 py-0 text-[10px] uppercase">
+														Beta
+													</Badge>
+												)}
 												<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
 											</SidebarMenuButton>
 										</CollapsibleTrigger>
@@ -117,6 +124,11 @@ export function NavMain({
 										>
 											{item.icon && <item.icon />}
 											<span>{item.title}</span>
+											{item.beta && (
+												<Badge variant="secondary" className="ml-1.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800 px-1.5 py-0 text-[10px] uppercase">
+													Beta
+												</Badge>
+											)}
 										</SidebarMenuButton>
 									</Link>
 								)}

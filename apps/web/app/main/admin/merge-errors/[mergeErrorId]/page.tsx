@@ -15,28 +15,26 @@ import {
 	TabsTrigger,
 } from '@repo/ui/components/tabs';
 import { toast } from '@repo/ui/components/toast-sonner';
-import type { ColDef } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
-import { AlertTriangle, ArrowLeft, CheckCircle } from 'lucide-react';
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@repo/ui/components/table';
+import { AlertTriangle, ArrowLeft, CheckCircle, Copy, ExternalLink } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { use, useMemo } from 'react';
+import { use } from 'react';
 import {
 	MergeErrorType,
-	type MultiChangeSetDetailFragment,
 	useMergeErrorQuery,
 	useUpdateMergeErrorMutation,
 } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
-
-const AgGridWrapper = dynamic(
-	() => import('~/modules/client-ag-grid/ag-grid-wrapper'),
-	{
-		ssr: false,
-	},
-);
 
 export default function MergeErrorDetailPage({
 	params,
@@ -54,47 +52,6 @@ export default function MergeErrorDetailPage({
 	});
 
 	const [updateMultiChangeSet] = useUpdateMergeErrorMutation();
-
-	const columnDefs: ColDef<
-		NonNullable<
-			NonNullable<
-				MultiChangeSetDetailFragment['multiChangeSetOption']
-			>[number]['multiChangeSetOptionItem']
-		>[number]
-	>[] = useMemo(() => {
-		return [
-			{
-				headerName: 'Lot ID',
-				field: 'lotId',
-				width: 150,
-			},
-			{
-				headerName: 'Acquired Date',
-				field: 'acquiredDate',
-				width: 150,
-			},
-			{
-				headerName: 'Is New Buy',
-				field: 'isNewBuy',
-				width: 120,
-			},
-			{
-				headerName: 'Price',
-				field: 'price',
-				width: 120,
-			},
-			{
-				headerName: 'Quantity Change',
-				field: 'quantityChange',
-				width: 150,
-			},
-			{
-				headerName: 'Final Quantity',
-				field: 'quantityFinal',
-				width: 150,
-			},
-		];
-	}, []);
 
 	const handleToggleResolved = async () => {
 		if (!data?.mergeError) return;
@@ -246,77 +203,57 @@ export default function MergeErrorDetailPage({
 							</div>
 						</div>
 
-						<div className="col-span-2 border-t pt-4">
-							<p className="text-sm font-medium text-muted-foreground">
-								Associated Log
-							</p>
-						</div>
+						{changeSet.AssetMerge?.[0]?.plaidMerge?.id && (
+							<div className="col-span-2 border-t pt-4">
+								<p className="text-sm font-medium text-muted-foreground mb-2">
+									Associated Plaid Merge
+								</p>
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => {
+										const plaidMergeId = changeSet.AssetMerge?.[0]?.plaidMerge?.id;
+										if (plaidMergeId) {
+											router.push(TypedRoutes.plaidMerge({ plaidMergeId }));
+										}
+									}}
+								>
+									<ExternalLink className="h-4 w-4 mr-2" />
+									View Plaid Merge Details
+								</Button>
+							</div>
+						)}
 					</CardContent>
 				</Card>
 
-				{/* Tabs for Options and Lots Data */}
-				<Tabs
-					defaultValue={
-						changeSet.type === MergeErrorType.PlaidMultiLotSolution
-							? 'options'
-							: 'lotsData'
-					}
-					className="w-full"
-				>
+				{/* Tabs for Lots Data and Algorithm Parameters */}
+				<Tabs defaultValue="lotsData" className="w-full">
 					<TabsList>
-						{changeSet.type === MergeErrorType.PlaidMultiLotSolution && (
-							<TabsTrigger value="options">
-								Solution Options ({changeSet.multiChangeSetOption?.length || 0})
-							</TabsTrigger>
-						)}
 						<TabsTrigger value="lotsData">Lots Data (JSON)</TabsTrigger>
+						{changeSet.lotChangeSetAlgoParams && (
+							<TabsTrigger value="algoParams">Algorithm Parameters</TabsTrigger>
+						)}
 					</TabsList>
-
-					{changeSet.type === MergeErrorType.PlaidMultiLotSolution && (
-						<TabsContent value="options">
-							{changeSet.multiChangeSetOption?.length ? (
-								changeSet.multiChangeSetOption.map((option) => (
-									<Card key={option.id}>
-										<CardHeader>
-											<CardTitle>Lot Adjustment Options</CardTitle>
-										</CardHeader>
-										<CardContent>
-											{option.multiChangeSetOptionItem && (
-												<div style={{ height: '400px', width: '100%' }}>
-													<AgGridWrapper>
-														<AgGridReact
-															rowData={option.multiChangeSetOptionItem || []}
-															columnDefs={columnDefs}
-															defaultColDef={{
-																sortable: true,
-																resizable: true,
-																filter: true,
-															}}
-															animateRows={true}
-															domLayout="normal"
-														/>
-													</AgGridWrapper>
-												</div>
-											)}
-										</CardContent>
-									</Card>
-								))
-							) : (
-								<Card>
-									<CardContent className="text-center py-8">
-										<p className="text-muted-foreground">
-											No solution options available
-										</p>
-									</CardContent>
-								</Card>
-							)}
-						</TabsContent>
-					)}
 
 					<TabsContent value="lotsData">
 						<Card>
 							<CardHeader>
-								<CardTitle>Lots Data</CardTitle>
+								<CardTitle className="flex items-center justify-between">
+									<span>Lots Data</span>
+									<Button
+										size="sm"
+										variant="outline"
+										onClick={() => {
+											navigator.clipboard.writeText(
+												JSON.stringify(changeSet.lotsData, null, 2)
+											);
+											toast.success('Copied lots data to clipboard');
+										}}
+									>
+										<Copy className="h-4 w-4 mr-2" />
+										Copy JSON
+									</Button>
+								</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<div className="max-h-[500px] overflow-auto">
@@ -332,6 +269,28 @@ export default function MergeErrorDetailPage({
 							</CardContent>
 						</Card>
 					</TabsContent>
+
+					{changeSet.lotChangeSetAlgoParams && (
+						<TabsContent value="algoParams">
+							<Card>
+								<CardHeader>
+									<CardTitle>Algorithm Parameters</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<div className="max-h-[500px] overflow-auto">
+										<ReactJson
+											src={changeSet.lotChangeSetAlgoParams || {}}
+											theme="monokai"
+											collapsed={1}
+											displayDataTypes={false}
+											displayObjectSize={true}
+											enableClipboard={true}
+										/>
+									</div>
+								</CardContent>
+							</Card>
+						</TabsContent>
+					)}
 				</Tabs>
 			</div>
 		</PageWrapper>

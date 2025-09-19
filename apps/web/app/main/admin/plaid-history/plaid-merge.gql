@@ -10,7 +10,7 @@ query PlaidMerges {
 			institution
 		}
 		portfolioId
-		lotMerge {
+		assetMerge {
 			id
 			assetSymbol
 			targetValue
@@ -37,7 +37,7 @@ query PlaidMerge($plaidMergeId: String!) {
 			id
 			name
 		}
-		lotMerge {
+		assetMerge {
 			id
 			createdAt
 			assetSymbol
@@ -46,25 +46,60 @@ query PlaidMerge($plaidMergeId: String!) {
 			targetPositionSnapshot
 			lotData
 			resolvedLotChange
+			realizedProfitAndLossShortTerm
+			realizedProfitAndLossLongTerm
+			error
 			asset {
 				symbol
 				name
 				lastPrice
 			}
-			resolvedLotMerge {
+			mergeError {
 				id
-				lotChanges
-				chosenLotChange
-				error
-				realizedProfitAndLossShortTerm
-				realizedProfitAndLossLongTerm
-				mergeError {
+				type
+				resolved
+			}
+			lotChangeList {
+				id
+				LotChange {
 					id
-					type
-					resolved
+					lotId
+					aquiredDate
+					quantityFinal
+					quantityChange
+					price
+					assetSymbol
+					shouldDelete
+					operationType
+					lot {
+						id
+						acquiredDate
+						price
+						remainingQty
+					}
 				}
 			}
-			TransactionOnLotMerge {
+			usedLotChangeList {
+				id
+				LotChange {
+					id
+					lotId
+					aquiredDate
+					quantityFinal
+					quantityChange
+					price
+					assetSymbol
+					shouldDelete
+					operationType
+					lot {
+						id
+						acquiredDate
+						price
+						remainingQty
+					}
+				}
+			}
+			transactionOnAssetMerge {
 				transaction {
 					id
 					externalId

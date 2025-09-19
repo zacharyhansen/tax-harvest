@@ -56,14 +56,14 @@ export const TypedRoutes = {
 		({ mergeErrorId }) => `/main/admin/merge-errors/${mergeErrorId}`,
 		z.object({ mergeErrorId: z.string() }),
 	),
+	performance: makeRoute(() => `/main/admin/performance`),
 	lotTransactionBatch: makeRoute(
 		({ lotTransactionBatchId }) =>
 			`/main/admin/plaid-history/${lotTransactionBatchId}`,
 		z.object({ lotTransactionBatchId: z.string() }),
 	),
 	plaidMerge: makeRoute(
-		({ plaidMergeId }) =>
-			`/main/admin/plaid-history/${plaidMergeId}`,
+		({ plaidMergeId }) => `/main/admin/plaid-history/${plaidMergeId}`,
 		z.object({ plaidMergeId: z.string() }),
 	),
 	plaidHistory: makeRoute(() => `/main/admin/plaid-history`),

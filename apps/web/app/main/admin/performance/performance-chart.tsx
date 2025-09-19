@@ -60,12 +60,12 @@ const performanceTypeLabels: Record<PerformanceViewType, string> = {
 	position: 'By Position',
 };
 
-const chartConfig = {
-	portfolioTotal: {
-		label: 'Portfolio Value',
-		color: 'var(--chart-1)',
-	},
-} satisfies ChartConfig;
+// const chartConfig = {
+// 	portfolioTotal: {
+// 		label: 'Portfolio Value',
+// 		color: 'var(--chart-1)',
+// 	},
+// } satisfies ChartConfig;
 
 /**
  * Generate dynamic chart colors

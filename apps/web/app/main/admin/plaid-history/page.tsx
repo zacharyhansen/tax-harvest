@@ -47,10 +47,10 @@ export default function PlaidHistoryPage() {
 				width: 150,
 			},
 			{
-				headerName: 'Lot Merges',
-				field: 'lotMergeCount',
+				headerName: 'Asset Merges',
+				field: 'assetMergeCount',
 				width: 120,
-				valueGetter: (params) => params.data?.lotMerge?.length || 0,
+				valueGetter: (params) => params.data?.assetMerge?.length || 0,
 			},
 			{
 				headerName: 'Assets',
@@ -60,7 +60,7 @@ export default function PlaidHistoryPage() {
 					const assets = [
 						...new Set(
 							// biome-ignore lint/suspicious/noExplicitAny: <ok>
-							params.data?.lotMerge?.map((lm: any) => lm.assetSymbol) || [],
+							params.data?.assetMerge?.map((am: any) => am.assetSymbol) || [],
 						),
 					];
 					return assets.join(', ');

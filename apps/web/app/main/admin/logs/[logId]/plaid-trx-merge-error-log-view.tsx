@@ -126,7 +126,6 @@ interface FinalPosition {
 interface LotData {
 	lotId?: string;
 	price?: number;
-	isNewBuy?: boolean;
 	quantity?: number;
 	accountId?: string;
 	acquiredDate?: string;
@@ -520,15 +519,6 @@ export function PlaidTrxMergeErrorLogView({
 																		<td className="p-2 font-mono font-medium">
 																			{lot.quantity}
 																		</td>
-																		<td className="p-2">
-																			<Badge
-																				variant={
-																					lot.isNewBuy ? 'default' : 'secondary'
-																				}
-																			>
-																				{lot.isNewBuy ? 'New Buy' : 'Existing'}
-																			</Badge>
-																		</td>
 																		<td className="p-2 font-mono text-xs">
 																			{lot.lotId}
 																		</td>
@@ -794,19 +784,6 @@ export function PlaidTrxMergeErrorLogView({
 																											? '-'
 																											: ''}
 																										{Math.abs(quantityChange)}
-																									</td>
-																									<td className="p-2 border-r">
-																										<Badge
-																											variant={
-																												change.isNewBuy
-																													? 'default'
-																													: 'secondary'
-																											}
-																										>
-																											{change.isNewBuy
-																												? 'New'
-																												: 'Existing'}
-																										</Badge>
 																									</td>
 																									<td className="p-2 font-mono text-xs">
 																										{change.lotId?.substring(

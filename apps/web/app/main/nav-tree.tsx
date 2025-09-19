@@ -1,6 +1,7 @@
 import type { NavGroup } from '@repo/ui/layouts/dashboard';
 import {
 	AlertTriangle,
+	ChartArea,
 	Logs,
 	Merge,
 	NotebookText,
@@ -62,6 +63,12 @@ export const NavTree: NavGroup[] = [
 		title: 'Admin',
 		roles: ['admin'],
 		items: [
+			{
+				title: 'Performance',
+				url: TypedRoutes.performance(),
+				icon: ChartArea,
+				beta: true,
+			},
 			{
 				title: 'Actions',
 				url: TypedRoutes.actions(),

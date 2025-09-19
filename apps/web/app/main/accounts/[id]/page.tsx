@@ -140,8 +140,7 @@ function AccountDetails({ account }: { account: AccountItemFragment }) {
 				<TabsList>
 					<TabsTrigger value="settings">Settings</TabsTrigger>
 					<TabsTrigger value="lots">Lots</TabsTrigger>
-					<TabsTrigger value="files">Files</TabsTrigger>
-					<TabsTrigger value="upload">Upload Data</TabsTrigger>
+					<TabsTrigger value="files-upload">Files & Upload</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="lots" className="space-y-4">
@@ -159,24 +158,7 @@ function AccountDetails({ account }: { account: AccountItemFragment }) {
 					</Card>
 				</TabsContent>
 
-				<TabsContent value="files" className="space-y-4">
-					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center space-x-2">
-								<FileText className="h-5 w-5" />
-								<span>Account Files</span>
-							</CardTitle>
-							<CardDescription>
-								View and manage files attached to this account.
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<AccountFilesTable accountId={account.id} />
-						</CardContent>
-					</Card>
-				</TabsContent>
-
-				<TabsContent value="upload" className="space-y-4">
+				<TabsContent value="files-upload" className="space-y-4">
 					<Card>
 						<CardHeader>
 							<CardTitle className="flex items-center space-x-2">
@@ -190,6 +172,21 @@ function AccountDetails({ account }: { account: AccountItemFragment }) {
 						</CardHeader>
 						<CardContent>
 							<EtradeCSVUpload accountId={account.id} />
+						</CardContent>
+					</Card>
+
+					<Card>
+						<CardHeader>
+							<CardTitle className="flex items-center space-x-2">
+								<FileText className="h-5 w-5" />
+								<span>Account Files</span>
+							</CardTitle>
+							<CardDescription>
+								View and manage files attached to this account.
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<AccountFilesTable accountId={account.id} />
 						</CardContent>
 					</Card>
 				</TabsContent>
