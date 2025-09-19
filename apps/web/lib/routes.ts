@@ -20,6 +20,7 @@ export const TypedRoutes = {
 	),
 	actions: makeRoute(() => `/main/admin/actions`),
 	admin: makeRoute(() => `/main/admin`),
+	aiAdvisor: makeRoute(() => `/main/admin/ai-advisor`),
 	connect: makeRoute(() => `/connect`),
 	explore: makeRoute(() => `/explore`),
 	harvests: makeRoute(() => `/main/harvests`),

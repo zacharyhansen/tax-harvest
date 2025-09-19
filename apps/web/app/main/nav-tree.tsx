@@ -1,6 +1,7 @@
 import type { NavGroup } from '@repo/ui/layouts/dashboard';
 import {
 	AlertTriangle,
+	Bot,
 	ChartArea,
 	Logs,
 	Merge,
@@ -70,6 +71,12 @@ export const NavTree: NavGroup[] = [
 				beta: true,
 			},
 			{
+				title: 'AI Advisor',
+				url: TypedRoutes.aiAdvisor(),
+				icon: Bot,
+				beta: true,
+			},
+			{
 				title: 'Actions',
 				url: TypedRoutes.actions(),
 				icon: Play,
@@ -80,12 +87,7 @@ export const NavTree: NavGroup[] = [
 				icon: Logs,
 			},
 			{
-				title: 'Merge Errors',
-				url: TypedRoutes.mergeErrors(),
-				icon: AlertTriangle,
-			},
-			{
-				title: 'Plaid History',
+				title: 'Plaid Merges',
 				url: TypedRoutes.plaidHistory(),
 				icon: Merge,
 			},
