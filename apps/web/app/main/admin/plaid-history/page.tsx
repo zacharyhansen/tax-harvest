@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@repo/ui/components/badge';
 import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import dynamic from 'next/dynamic';
@@ -53,17 +54,30 @@ export default function PlaidHistoryPage() {
 				valueGetter: (params) => params.data?.assetMerge?.length || 0,
 			},
 			{
-				headerName: 'Assets',
-				field: 'assets',
-				flex: 1,
-				valueGetter: (params) => {
-					const assets = [
-						...new Set(
-							// biome-ignore lint/suspicious/noExplicitAny: <ok>
-							params.data?.assetMerge?.map((am: any) => am.assetSymbol) || [],
-						),
-					];
-					return assets.join(', ');
+				headerName: 'Merge Errors',
+				field: 'mergeErrorCount',
+				width: 120,
+				cellRenderer: (params: any) => {
+					let errorCount = 0;
+					// biome-ignore lint/suspicious/noExplicitAny: <ok>
+					params.data?.assetMerge?.forEach((am: any) => {
+						if (am.mergeError) {
+							// Check if mergeError is an array
+							if (Array.isArray(am.mergeError)) {
+								// biome-ignore lint/suspicious/noExplicitAny: <ok>
+								errorCount += am.mergeError.filter((error: any) => !error.resolved).length;
+							} else if (!am.mergeError.resolved) {
+								// Single error object
+								errorCount += 1;
+							}
+						}
+					});
+					
+					if (errorCount === 0) {
+						return null;
+					}
+					
+					return <Badge variant="destructive">{errorCount}</Badge>;
 				},
 			},
 		] satisfies ColDef[];
@@ -74,7 +88,7 @@ export default function PlaidHistoryPage() {
 	}
 
 	return (
-		<PageWrapper title="Plaid Merge History">
+		<PageWrapper title="Plaid Merges">
 			<AgGridWrapper>
 				<AgGridReact
 					columnDefs={columnDefs}

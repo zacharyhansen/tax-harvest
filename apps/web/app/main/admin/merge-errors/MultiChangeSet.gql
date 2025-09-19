@@ -32,8 +32,6 @@ fragment MultiChangeSetDetail on MergeError {
 		targetPositionSnapshot
 		lotData
 		resolvedLotChange
-		realizedProfitAndLossShortTerm
-		realizedProfitAndLossLongTerm
 		error
 		createdAt
 		updatedAt
@@ -55,24 +53,6 @@ fragment MultiChangeSetDetail on MergeError {
 				quantity
 				price
 				amount
-			}
-		}
-		usedLotChangeList {
-			id
-			LotChange {
-				id
-				quantityFinal
-				quantityChange
-				assetSymbol
-				shouldDelete
-				upsert
-				operationType
-				lot {
-					id
-					remainingQty
-					price
-					acquiredDate
-				}
 			}
 		}
 		lotChangeList {

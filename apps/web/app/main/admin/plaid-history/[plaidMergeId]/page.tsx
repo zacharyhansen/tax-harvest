@@ -237,6 +237,20 @@ export default function PlaidMergePage(props: {
 										// Check if this asset merge has any errors
 										const hasErrors = assetMerge.error || assetMerge.mergeError;
 										const errorCount = hasErrors ? 1 : 0;
+										
+										// Calculate total P&L from the lot changes
+										const activeLotChangeList = 
+											(assetMerge.lotChangeList && assetMerge.lotChangeList.length > 0 ? assetMerge.lotChangeList[0] : null);
+										
+										const totalShortTermPL = activeLotChangeList?.LotChange?.reduce(
+											(sum, change) => sum + Number(change.realizedProfitAndLossShortTerm || 0),
+											0
+										) || 0;
+										
+										const totalLongTermPL = activeLotChangeList?.LotChange?.reduce(
+											(sum, change) => sum + Number(change.realizedProfitAndLossLongTerm || 0),
+											0
+										) || 0;
 
 										return (
 											<div
@@ -325,21 +339,14 @@ export default function PlaidMergePage(props: {
 																			</span>
 																			<span
 																				className={`font-medium ${
-																					Number(
-																						assetMerge.realizedProfitAndLossShortTerm,
-																					) > 0
+																					totalShortTermPL > 0
 																						? 'text-green-600'
-																						: Number(
-																									assetMerge.realizedProfitAndLossShortTerm,
-																								) < 0
+																						: totalShortTermPL < 0
 																							? 'text-destructive'
 																							: ''
 																				}`}
 																			>
-																				$
-																				{Number(
-																					assetMerge.realizedProfitAndLossShortTerm,
-																				).toFixed(2)}
+																				${totalShortTermPL.toFixed(2)}
 																			</span>
 																		</div>
 																		<div>
@@ -348,21 +355,14 @@ export default function PlaidMergePage(props: {
 																			</span>
 																			<span
 																				className={`font-medium ${
-																					Number(
-																						assetMerge.realizedProfitAndLossLongTerm,
-																					) > 0
+																					totalLongTermPL > 0
 																						? 'text-green-600'
-																						: Number(
-																									assetMerge.realizedProfitAndLossLongTerm,
-																								) < 0
+																						: totalLongTermPL < 0
 																							? 'text-destructive'
 																							: ''
 																				}`}
 																			>
-																				$
-																				{Number(
-																					assetMerge.realizedProfitAndLossLongTerm,
-																				).toFixed(2)}
+																				${totalLongTermPL.toFixed(2)}
 																			</span>
 																		</div>
 																	</div>
@@ -410,21 +410,14 @@ export default function PlaidMergePage(props: {
 																	</span>
 																	<span
 																		className={`font-medium ${
-																			Number(
-																				assetMerge.realizedProfitAndLossShortTerm,
-																			) > 0
+																			totalShortTermPL > 0
 																				? 'text-green-600'
-																				: Number(
-																							assetMerge.realizedProfitAndLossShortTerm,
-																						) < 0
+																				: totalShortTermPL < 0
 																					? 'text-destructive'
 																					: ''
 																		}`}
 																	>
-																		$
-																		{Number(
-																			assetMerge.realizedProfitAndLossShortTerm,
-																		).toFixed(2)}
+																		${totalShortTermPL.toFixed(2)}
 																	</span>
 																</div>
 																<div>
@@ -433,21 +426,14 @@ export default function PlaidMergePage(props: {
 																	</span>
 																	<span
 																		className={`font-medium ${
-																			Number(
-																				assetMerge.realizedProfitAndLossLongTerm,
-																			) > 0
+																			totalLongTermPL > 0
 																				? 'text-green-600'
-																				: Number(
-																							assetMerge.realizedProfitAndLossLongTerm,
-																						) < 0
+																				: totalLongTermPL < 0
 																					? 'text-destructive'
 																					: ''
 																		}`}
 																	>
-																		$
-																		{Number(
-																			assetMerge.realizedProfitAndLossLongTerm,
-																		).toFixed(2)}
+																		${totalLongTermPL.toFixed(2)}
 																	</span>
 																</div>
 															</div>
@@ -461,11 +447,6 @@ export default function PlaidMergePage(props: {
 														<h5 className="font-medium text-sm flex items-center gap-2">
 															<GitBranch className="h-4 w-4" />
 															Lot Change Options ({assetMerge.lotChangeList.length} solutions available)
-															{assetMerge.usedLotChangeList && (
-																<Badge variant="default" className="text-xs">
-																	Solution #{assetMerge.lotChangeList.findIndex(lcl => lcl.id === assetMerge.usedLotChangeList?.id) + 1} Used
-																</Badge>
-															)}
 														</h5>
 														<div className="space-y-4">
 															{assetMerge.lotChangeList.map((lotChangeList, optionIndex) => {
@@ -480,6 +461,17 @@ export default function PlaidMergePage(props: {
 																	0
 																) || 0;
 																
+																// Calculate P&L for this option
+																const optionShortTermPL = lotChangeList.LotChange?.reduce(
+																	(sum, item) => sum + Number(item.realizedProfitAndLossShortTerm || 0),
+																	0
+																) || 0;
+																
+																const optionLongTermPL = lotChangeList.LotChange?.reduce(
+																	(sum, item) => sum + Number(item.realizedProfitAndLossLongTerm || 0),
+																	0
+																) || 0;
+																
 																// Calculate deltas from targets
 																const targetQuantity = Number(assetMerge.targetQuantity || 0);
 																const targetValue = Number(assetMerge.targetValue || 0);
@@ -487,7 +479,7 @@ export default function PlaidMergePage(props: {
 																const valueDelta = totalCostBasis - targetValue;
 																const quantityDeltaPercent = targetQuantity !== 0 ? (quantityDelta / targetQuantity * 100) : 0;
 																const valueDeltaPercent = targetValue !== 0 ? (valueDelta / targetValue * 100) : 0;
-																const isUsed = assetMerge.usedLotChangeList?.id === lotChangeList.id;
+																const isUsed = false;
 
 																return (
 																	<div 
@@ -529,6 +521,24 @@ export default function PlaidMergePage(props: {
 																				</p>
 																			</div>
 																		</div>
+																		
+																		{/* P&L Statistics for this option */}
+																		{(optionShortTermPL !== 0 || optionLongTermPL !== 0) && (
+																			<div className="grid grid-cols-2 gap-4 p-3 bg-muted/30 rounded-lg text-sm">
+																				<div>
+																					<p className="text-xs text-muted-foreground">Short Term P&L</p>
+																					<p className={`font-semibold ${optionShortTermPL > 0 ? 'text-green-600' : optionShortTermPL < 0 ? 'text-destructive' : ''}`}>
+																						${optionShortTermPL.toFixed(2)}
+																					</p>
+																				</div>
+																				<div>
+																					<p className="text-xs text-muted-foreground">Long Term P&L</p>
+																					<p className={`font-semibold ${optionLongTermPL > 0 ? 'text-green-600' : optionLongTermPL < 0 ? 'text-destructive' : ''}`}>
+																						${optionLongTermPL.toFixed(2)}
+																					</p>
+																				</div>
+																			</div>
+																		)}
 
 																		{/* Lot Changes Table */}
 																		{lotChangeList.LotChange && lotChangeList.LotChange.length > 0 && (
@@ -546,6 +556,8 @@ export default function PlaidMergePage(props: {
 																								<TableHead className="text-xs text-right">Qty Change</TableHead>
 																								<TableHead className="text-xs text-right">Final Qty</TableHead>
 																								<TableHead className="text-xs text-right">Cost Basis</TableHead>
+																								<TableHead className="text-xs text-right">ST P&L</TableHead>
+																								<TableHead className="text-xs text-right">LT P&L</TableHead>
 																								<TableHead className="text-xs">Action</TableHead>
 																							</TableRow>
 																						</TableHeader>
@@ -574,6 +586,12 @@ export default function PlaidMergePage(props: {
 																										<TableCell className="text-right font-medium">
 																											${costBasis.toFixed(2)}
 																										</TableCell>
+																										<TableCell className={`text-right text-xs ${Number(change.realizedProfitAndLossShortTerm || 0) > 0 ? 'text-green-600' : Number(change.realizedProfitAndLossShortTerm || 0) < 0 ? 'text-destructive' : ''}`}>
+																											{Number(change.realizedProfitAndLossShortTerm || 0) !== 0 ? `$${Number(change.realizedProfitAndLossShortTerm || 0).toFixed(2)}` : '-'}
+																										</TableCell>
+																										<TableCell className={`text-right text-xs ${Number(change.realizedProfitAndLossLongTerm || 0) > 0 ? 'text-green-600' : Number(change.realizedProfitAndLossLongTerm || 0) < 0 ? 'text-destructive' : ''}`}>
+																											{Number(change.realizedProfitAndLossLongTerm || 0) !== 0 ? `$${Number(change.realizedProfitAndLossLongTerm || 0).toFixed(2)}` : '-'}
+																										</TableCell>
 																										<TableCell>
 																											<Badge variant={change.shouldDelete ? 'destructive' : 'outline'} className="text-xs">
 																												{change.operationType}
@@ -592,6 +610,12 @@ export default function PlaidMergePage(props: {
 																								</TableCell>
 																								<TableCell className="text-right text-xs">
 																									${totalCostBasis.toFixed(2)}
+																								</TableCell>
+																								<TableCell className={`text-right text-xs font-semibold ${optionShortTermPL > 0 ? 'text-green-600' : optionShortTermPL < 0 ? 'text-destructive' : ''}`}>
+																									${optionShortTermPL.toFixed(2)}
+																								</TableCell>
+																								<TableCell className={`text-right text-xs font-semibold ${optionLongTermPL > 0 ? 'text-green-600' : optionLongTermPL < 0 ? 'text-destructive' : ''}`}>
+																									${optionLongTermPL.toFixed(2)}
 																								</TableCell>
 																								<TableCell />
 																							</TableRow>

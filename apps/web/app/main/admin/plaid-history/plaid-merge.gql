@@ -12,9 +12,11 @@ query PlaidMerges {
 		portfolioId
 		assetMerge {
 			id
-			assetSymbol
-			targetValue
-			targetQuantity
+			mergeError {
+				id
+				type
+				resolved
+			}
 		}
 	}
 }
@@ -46,8 +48,6 @@ query PlaidMerge($plaidMergeId: String!) {
 			targetPositionSnapshot
 			lotData
 			resolvedLotChange
-			realizedProfitAndLossShortTerm
-			realizedProfitAndLossLongTerm
 			error
 			asset {
 				symbol
@@ -71,26 +71,8 @@ query PlaidMerge($plaidMergeId: String!) {
 					assetSymbol
 					shouldDelete
 					operationType
-					lot {
-						id
-						acquiredDate
-						price
-						remainingQty
-					}
-				}
-			}
-			usedLotChangeList {
-				id
-				LotChange {
-					id
-					lotId
-					aquiredDate
-					quantityFinal
-					quantityChange
-					price
-					assetSymbol
-					shouldDelete
-					operationType
+					realizedProfitAndLossShortTerm
+					realizedProfitAndLossLongTerm
 					lot {
 						id
 						acquiredDate
