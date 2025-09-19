@@ -6,6 +6,7 @@ import { HarvestSummaryCards } from '~/modules/harvest';
 import { PageWrapper } from '~/modules/layout';
 import { LotsTable } from '~/modules/lot';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
+import { PerformanceChart } from './performance-chart';
 
 export default function HomePage() {
 	const { data, loading, error } = usePortfolioSummaryQuery();
@@ -31,7 +32,7 @@ export default function HomePage() {
 	}
 
 	return (
-		<PageWrapper className="mx-auto">
+		<PageWrapper className="w-full flex-col gap-4">
 			<div className="mb-4 w-full">
 				<div className="bg-linear-to-r relative overflow-hidden rounded-lg from-yellow-500 to-green-500">
 					{/* Patterned background */}
@@ -70,13 +71,8 @@ export default function HomePage() {
 					</div>
 				</div>
 			</div>
-			{/* {data?.portfolioSummary.setUpStatus ===
-        SetUpStatus.AccountSetupRequired ? (
-        <div className="space-y-2 py-2">
-          <OutstandingAccountSetupList />
-        </div>
-      ) : null} */}
 			<HarvestSummaryCards />
+			<PerformanceChart />
 			<LotsTable />
 		</PageWrapper>
 	);

@@ -271,20 +271,18 @@ export interface Lot {
   updatedAt: Generated<Timestamp>;
 }
 
-export interface LotChangeLog {
+export interface LotChange {
   accountId: string;
-  createdAt: Generated<Timestamp>;
-  id: string;
-  lotAfter: Json | null;
-  lotBefore: Json | null;
+  assetSymbol: string;
+  id: Generated<string>;
   lotId: string | null;
-  lotTransactionBatchId: string;
-  operationType: "create" | "delete" | "update";
+  operationType: "create" | "delete" | "update" | "upsert";
   portfolioId: string;
-  processed: Generated<boolean>;
-  quantityChange: Numeric | null;
-  source: string | null;
-  transactionId: string | null;
+  quantityChange: Numeric;
+  quantityFinal: Numeric;
+  resolvedLotMergeId: string;
+  shouldDelete: boolean;
+  upsert: Json;
 }
 
 export interface LotCurrent {
@@ -303,22 +301,58 @@ export interface LotCurrent {
   value: Numeric | null;
 }
 
-export interface LotTransactionBatch {
+export interface LotMerge {
   accountId: string;
+  assetSymbol: string;
   createdAt: Generated<Timestamp>;
-  deletedLots: Json | null;
-  holdingsPayload: Json | null;
   id: Generated<string>;
-  initialLots: Json | null;
   logTrxMergeId: Int8 | null;
-  lotTupleMap: Json | null;
-  newBuys: Json | null;
-  newSells: Json | null;
-  newTransactions: Json | null;
+  lotData: Json;
+  plaidMergeId: string;
   portfolioId: string;
-  positionsAfter: Json | null;
-  positionsBefore: Json | null;
-  realizedProfitAndLoss: Numeric | null;
+  resolvedLotChange: Json;
+  targetPositionSnapshot: Json;
+  targetQuantity: Numeric | null;
+  targetValue: Numeric | null;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface MergeError {
+  accountId: string;
+  assetSymbol: string;
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  logId: Int8 | null;
+  lotChangeSetAlgoParams: Json | null;
+  lotsData: Json;
+  portfolioId: string;
+  resolved: Generated<boolean>;
+  targetQuantity: Numeric | null;
+  targetValue: Numeric | null;
+  type: "PLAID_MERGE_TIMEOUT" | "PLAID_MULTI_LOT_SOLUTION" | "PLAID_NO_SOLUTION" | "UNKNOWN";
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface MultiChangeSetOption {
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  multiChangeSetId: string;
+  portfolioId: string;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface MultiChangeSetOptionItem {
+  accountId: string;
+  acquiredDate: Timestamp;
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  isNewBuy: Generated<boolean>;
+  lotId: string | null;
+  multiChangeSetOptionId: string;
+  portfolioId: string;
+  price: Numeric | null;
+  quantityChange: Numeric | null;
+  quantityFinal: Numeric | null;
   updatedAt: Generated<Timestamp>;
 }
 
@@ -332,6 +366,15 @@ export interface Notification {
   level: Generated<"ERROR" | "INFO" | "WARNING">;
   portfolioId: string;
   title: string;
+}
+
+export interface PlaidMerge {
+  accountId: string;
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  portfolioId: string;
+  resolveLotsInput: Json;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface Portfolio {
@@ -349,6 +392,21 @@ export interface Portfolio {
   name: Generated<string>;
   notificationFrequency: Generated<"DAILY" | "MONTHLY" | "NEVER" | "QUARTERLY" | "WEEKLY">;
   updatedAt: Generated<Timestamp>;
+}
+
+export interface PortfolioBalanceSnapshot {
+  accountId: string;
+  createdAt: Generated<Timestamp>;
+  id: Generated<Int8>;
+  portfolioId: string;
+  positions: Json;
+  realizedPAndLLongTerm: Generated<number>;
+  realizedPAndLShortTerm: Generated<number>;
+  unrealizedLoss: Generated<number>;
+  unrealizedProfit: Generated<number>;
+  valueAssets: number;
+  valueCash: number;
+  valueTotal: number;
 }
 
 export interface Position {
@@ -414,6 +472,20 @@ export interface RealizedPAndL {
   year: number;
 }
 
+export interface ResolvedLotMerge {
+  accountId: string;
+  chosenLotChange: Json | null;
+  createdAt: Generated<Timestamp>;
+  error: Json | null;
+  id: Generated<string>;
+  lotChanges: Json;
+  lotMergeId: string;
+  mergeErrorId: string | null;
+  portfolioId: string;
+  realizedProfitAndLossLongTerm: Generated<Numeric>;
+  realizedProfitAndLossShortTerm: Generated<Numeric>;
+}
+
 export interface Transaction {
   accountId: string;
   amount: Numeric | null;
@@ -440,6 +512,13 @@ export interface Transaction {
   transactionDate: Timestamp | null;
   type: string | null;
   updatedAt: Generated<Timestamp>;
+}
+
+export interface TransactionOnLotMerge {
+  accountId: string;
+  lotMergeId: string;
+  portfolioId: string;
+  transactionId: string;
 }
 
 export interface User {
@@ -487,16 +566,23 @@ export interface DB {
   HarvestTransactionItem: HarvestTransactionItem;
   Log: Log;
   Lot: Lot;
-  LotChangeLog: LotChangeLog;
+  LotChange: LotChange;
   LotCurrent: LotCurrent;
-  LotTransactionBatch: LotTransactionBatch;
+  LotMerge: LotMerge;
+  MergeError: MergeError;
+  MultiChangeSetOption: MultiChangeSetOption;
+  MultiChangeSetOptionItem: MultiChangeSetOptionItem;
   Notification: Notification;
+  PlaidMerge: PlaidMerge;
   Portfolio: Portfolio;
+  PortfolioBalanceSnapshot: PortfolioBalanceSnapshot;
   Position: Position;
   PriceHourly: PriceHourly;
   PriceHourlyVector: PriceHourlyVector;
   RealizedPAndL: RealizedPAndL;
+  ResolvedLotMerge: ResolvedLotMerge;
   Transaction: Transaction;
+  TransactionOnLotMerge: TransactionOnLotMerge;
   User: User;
   UsersOnPortfolios: UsersOnPortfolios;
   VectorGraph: VectorGraph;

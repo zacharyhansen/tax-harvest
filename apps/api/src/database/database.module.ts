@@ -1,6 +1,11 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PostgresDialect } from 'kysely';
+import {
+	DeduplicateJoinsPlugin,
+	HandleEmptyInListsPlugin,
+	PostgresDialect,
+	replaceWithNoncontingentExpression,
+} from 'kysely';
 import pg from 'pg';
 
 import { Database } from './database';
@@ -13,7 +18,6 @@ import { Database } from './database';
 			inject: [ConfigService],
 			provide: Database,
 			useFactory: async () => {
-				console.log('DATABASE_URL', process.env.DATABASE_URL);
 				return new Database({
 					log: (event) => {
 						if (event.level === 'error') {
@@ -37,6 +41,12 @@ import { Database } from './database';
 							connectionString: process.env.DATABASE_URL,
 						}),
 					}),
+					plugins: [
+						new HandleEmptyInListsPlugin({
+							strategy: replaceWithNoncontingentExpression,
+						}),
+						new DeduplicateJoinsPlugin(),
+					],
 				});
 			},
 		},

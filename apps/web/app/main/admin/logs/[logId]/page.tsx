@@ -1,7 +1,9 @@
 'use client';
 
 import ReactJsonView from '@microlink/react-json-view';
-
+import { Button } from '@repo/ui/components/button';
+import { AlertTriangle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { use } from 'react';
 
@@ -20,6 +22,7 @@ export default function LogPage(props: {
 }) {
 	const params = use(props.params);
 	const theme = useTheme();
+	const router = useRouter();
 	const safeParams = TypedRoutes.log.parse(params);
 
 	const { data, error, loading } = useLogQuery({
@@ -38,32 +41,64 @@ export default function LogPage(props: {
 		<PageWrapper
 			title="Log Explorer"
 			description={
-				<div className="grid grid-cols-2 gap-2">
-					<div className="flex gap-2">
-						<span className="font-bold">ID:</span>
-						<span>{data?.log?.id}</span>
+				<div className="space-y-4">
+					<div className="grid grid-cols-2 gap-2">
+						<div className="flex gap-2">
+							<span className="font-bold">ID:</span>
+							<span>{data?.log?.id}</span>
+						</div>
+						<div className="flex gap-2">
+							<span className="font-bold">Description:</span>
+							<span>{data?.log?.description}</span>
+						</div>
+						<div className="flex gap-2">
+							<span className="font-bold">Type:</span>
+							<span>{data?.log?.type}</span>
+						</div>
+						<div className="flex gap-2">
+							<span className="font-bold">Source:</span>
+							<span>{data?.log?.source}</span>
+						</div>
 					</div>
-					<div className="flex gap-2">
-						<span className="font-bold">Description:</span>
-						<span>{data?.log?.description}</span>
-					</div>
-					<div className="flex gap-2">
-						<span className="font-bold">Type:</span>
-						<span>{data?.log?.type}</span>
-					</div>
-					<div className="flex gap-2">
-						<span className="font-bold">Source:</span>
-						<span>{data?.log?.source}</span>
-					</div>
+					{data?.log?.mergeError && data.log.mergeError.length > 0 && (
+						<div className="border-t pt-4">
+							<div className="flex items-center gap-4">
+								<div className="flex items-center gap-2">
+									<AlertTriangle className="h-5 w-5 text-yellow-500" />
+									<span className="font-bold">Associated Merge Errors:</span>
+								</div>
+								{data.log.mergeError.map((error) => (
+									<div key={error.id} className="flex items-center gap-2">
+										<span
+											className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${
+												error.resolved
+													? 'bg-green-100 text-green-700'
+													: 'bg-yellow-100 text-yellow-700'
+											}`}
+										>
+											{error.assetSymbol} - {error.type}
+										</span>
+										<Button
+											onClick={() =>
+												router.push(
+													TypedRoutes.mergeError({ mergeErrorId: error.id }),
+												)
+											}
+											variant="outline"
+											size="sm"
+										>
+											View Merge Error
+										</Button>
+									</div>
+								))}
+							</div>
+						</div>
+					)}
 				</div>
 			}
 		>
 			{data?.log?.type === 'PLAID_TRX_MERGE' ? (
-				<PlaidTrxMergeLogView
-					data={data.log.data}
-					// @ts-expect-error - LotTransactionBatch is not defined in the log type
-					LotTransactionBatch={data.log.LotTransactionBatch ?? undefined}
-				/>
+				<PlaidTrxMergeLogView data={data.log.data} />
 			) : data?.log?.type === 'PLAID_TRX_MERGE_ERROR' ? (
 				<PlaidTrxMergeErrorLogView data={data.log.data} />
 			) : data?.log?.type === 'PLAID_TRX_MERGE_SUCCESS' ? (

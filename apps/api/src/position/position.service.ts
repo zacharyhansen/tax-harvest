@@ -15,7 +15,7 @@ export class PositionService {
 		select: Prisma.PositionSelect;
 	}) {
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.position.findMany({
 				select,
 				where: {

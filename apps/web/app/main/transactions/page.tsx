@@ -31,6 +31,12 @@ export default function TransactionsPage() {
 				headerName: 'Date',
 				field: 'transactionDate',
 				width: 120,
+				sort: 'desc',
+				comparator: (valueA: string, valueB: string) => {
+					const dateA = new Date(valueA).getTime();
+					const dateB = new Date(valueB).getTime();
+					return dateA - dateB;
+				},
 				valueGetter: (params) => {
 					return new Date(params.data.transactionDate).toLocaleDateString(
 						'en-US',
@@ -41,14 +47,15 @@ export default function TransactionsPage() {
 				headerName: 'Applied?',
 				field: 'appliedToLots',
 				width: 100,
+				filter: 'agTextColumnFilter',
 				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
 				cellRenderer: (params: any) => {
+					if (params.value) {
+						return <span className="text-xs">Yes</span>;
+					}
 					return (
-						<Badge
-							variant={params.value ? 'secondary' : 'default'}
-							className="text-xs"
-						>
-							{params.value ? 'Yes' : 'No'}
+						<Badge variant="destructive" className="text-xs">
+							No
 						</Badge>
 					);
 				},
@@ -56,7 +63,8 @@ export default function TransactionsPage() {
 			{
 				headerName: 'Account',
 				field: 'account.name',
-				width: 150,
+				width: 180,
+				filter: 'agTextColumnFilter',
 				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
 				cellRenderer: (params: any) => {
 					const colors = [
@@ -87,17 +95,36 @@ export default function TransactionsPage() {
 				headerName: 'Source',
 				field: 'account.authConnection.source',
 				width: 130,
+				filter: 'agTextColumnFilter',
 				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
 				cellRenderer: (params: any) => {
-					return <Badge className="text-xs">{params.value}</Badge>;
+					return <span className="text-xs">{params.value}</span>;
 				},
 			},
 			{
 				headerName: 'Type',
 				field: 'type',
 				width: 100,
+				filter: 'agTextColumnFilter',
 				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
 				cellRenderer: (params: any) => {
+					const isBuy = params.value?.toLowerCase() === 'buy';
+					const isSell = params.value?.toLowerCase() === 'sell';
+
+					if (isBuy) {
+						return (
+							<Badge className="text-xs bg-green-500 hover:bg-green-600 text-white">
+								{params.value}
+							</Badge>
+						);
+					}
+					if (isSell) {
+						return (
+							<Badge className="text-xs bg-red-500 hover:bg-red-600 text-white">
+								{params.value}
+							</Badge>
+						);
+					}
 					return <Badge className="text-xs">{params.value}</Badge>;
 				},
 			},
@@ -105,9 +132,10 @@ export default function TransactionsPage() {
 				headerName: 'Subtype',
 				field: 'subtype',
 				width: 100,
+				filter: 'agTextColumnFilter',
 				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
 				cellRenderer: (params: any) => {
-					return <Badge className="text-xs">{params.value}</Badge>;
+					return <span className="text-xs">{params.value}</span>;
 				},
 			},
 			{
@@ -119,11 +147,14 @@ export default function TransactionsPage() {
 			{
 				headerName: 'Security',
 				field: 'assetSymbol',
-				width: 100,
+				width: 130,
+				filter: 'agTextColumnFilter',
 				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
 				cellRenderer: (params: any) => {
 					return params.value ? (
-						<Badge className="text-xs">{params.value}</Badge>
+						<Badge className="text-xs bg-gray-200 hover:bg-gray-300 text-black">
+							{params.value}
+						</Badge>
 					) : null;
 				},
 			},

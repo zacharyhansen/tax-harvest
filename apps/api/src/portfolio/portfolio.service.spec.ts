@@ -284,9 +284,18 @@ describe('portfolioService', () => {
 			expect(result).toBe(HarvestType.NO_OPPORTUNITY_EMPTY);
 		});
 
-		it('should return NO_OPPORTUNITY_LOSSES when both unrealized and realized are negative', () => {
+		it('should return REDUCE_TAXES when both unrealized and realized are negative but realized is less than NUETRAL_HARVEST_TARGET (the allowable tax income write off)', () => {
 			const result = service.harvestType({
 				realizedGainTotal: -1000,
+				unrealizedGainTotal: -500,
+				unrealizedLossTotal: -2000,
+			});
+			expect(result).toBe(HarvestType.REDUCE_TAXES);
+		});
+
+		it('should return NO_OPPORTUNITY_LOSSES when both unrealized and realized are negative and realized is greater than NUETRAL_HARVEST_TARGET', () => {
+			const result = service.harvestType({
+				realizedGainTotal: -3000,
 				unrealizedGainTotal: -500,
 				unrealizedLossTotal: -2000,
 			});
@@ -302,24 +311,24 @@ describe('portfolioService', () => {
 			expect(result).toBe(HarvestType.NO_OPPORTUNITY_GAINS);
 		});
 
-		it('should return REDUCE_COST_BASIS when realized gain is within neutral threshold', () => {
+		it('should return REDUCE_TAXES when realized is positive and unrealized is negative', () => {
 			// Assuming NUETRAL_HARVEST_THRESHOLD is 1000
 			const result = service.harvestType({
 				realizedGainTotal: 500,
 				unrealizedGainTotal: 2000,
 				unrealizedLossTotal: -1500,
 			});
-			expect(result).toBe(HarvestType.REDUCE_COST_BASIS);
+			expect(result).toBe(HarvestType.REDUCE_TAXES);
 		});
 
-		it('should return REDUCE_COST_BASIS when realized loss is within neutral threshold', () => {
+		it('should return REDUCE_TAXES when realized is negative but within NUETRAL_HARVEST_THRESHOLD', () => {
 			// Assuming NUETRAL_HARVEST_THRESHOLD is 1000
 			const result = service.harvestType({
 				realizedGainTotal: -800,
 				unrealizedGainTotal: 2000,
 				unrealizedLossTotal: -1500,
 			});
-			expect(result).toBe(HarvestType.REDUCE_COST_BASIS);
+			expect(result).toBe(HarvestType.REDUCE_TAXES);
 		});
 
 		it('should return REDUCE_TAXES when realized gain exceeds neutral threshold', () => {
@@ -348,24 +357,6 @@ describe('portfolioService', () => {
 				unrealizedGainTotal: 10000,
 				unrealizedLossTotal: -3000,
 			});
-			expect(result).toBe(HarvestType.REDUCE_TAXES);
-		});
-
-		it('should handle small values near zero correctly', () => {
-			const result = service.harvestType({
-				realizedGainTotal: 0.01,
-				unrealizedGainTotal: 0.01,
-				unrealizedLossTotal: -0.01,
-			});
-			expect(result).toBe(HarvestType.REDUCE_COST_BASIS);
-		});
-
-		it('should handle large unrealized gains with small realized gains correctly', () => {
-			const result = service.harvestType({
-				realizedGainTotal: 100,
-				unrealizedGainTotal: 100000,
-				unrealizedLossTotal: -5000,
-			});
 			expect(result).toBe(HarvestType.REDUCE_COST_BASIS);
 		});
 
@@ -375,12 +366,12 @@ describe('portfolioService', () => {
 				unrealizedGainTotal: 5000,
 				unrealizedLossTotal: -100000,
 			});
-			expect(result).toBe(HarvestType.REDUCE_COST_BASIS);
+			expect(result).toBe(HarvestType.REDUCE_TAXES);
 		});
 
 		it('should return NO_OPPORTUNITY_LOSSES when only losses exist', () => {
 			const result = service.harvestType({
-				realizedGainTotal: -1000,
+				realizedGainTotal: -3000,
 				unrealizedGainTotal: -2000,
 				unrealizedLossTotal: -3000,
 			});
@@ -390,9 +381,9 @@ describe('portfolioService', () => {
 		it('should handle exact threshold boundary correctly', () => {
 			// Assuming NUETRAL_HARVEST_THRESHOLD is 1000
 			const result = service.harvestType({
-				realizedGainTotal: 1000,
+				realizedGainTotal: -3000,
 				unrealizedGainTotal: 2000,
-				unrealizedLossTotal: -1500,
+				unrealizedLossTotal: -3500,
 			});
 			expect(result).toBe(HarvestType.REDUCE_COST_BASIS);
 		});

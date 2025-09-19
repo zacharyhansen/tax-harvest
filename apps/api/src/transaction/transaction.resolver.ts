@@ -31,7 +31,7 @@ export class TransactionResolver {
 		const { select } = new PrismaSelect<Prisma.TransactionSelect>(info).value;
 
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(metadata.portfolioId))
+			.rlsPortfolioClient(metadata.portfolioId)
 			.transaction.findUniqueOrThrow({
 				select,
 				where: {

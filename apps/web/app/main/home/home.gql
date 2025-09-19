@@ -55,3 +55,38 @@ query AccountRealizedPL {
 		}
 	}
 }
+
+query PortfolioPerformanceByAccount($timeSpan: PerformanceTimeSpan!) {
+	portfolioPerformanceByAccount(input: { timeSpan: $timeSpan }) {
+		date
+		portfolioTotal
+		accounts {
+			accountId
+			accountName
+			valueTotal
+			valueCash
+			valueAssets
+			realizedPAndLShortTerm
+			realizedPAndLLongTerm
+			unrealizedProfit
+			unrealizedLoss
+		}
+	}
+}
+
+query PortfolioPerformanceByPosition(
+	$timeSpan: PerformanceTimeSpan!
+	$symbols: [String!]
+) {
+	portfolioPerformanceByPosition(
+		input: { timeSpan: $timeSpan, symbols: $symbols }
+	) {
+		date
+		portfolioTotal
+		positions {
+			symbol
+			value
+			shares
+		}
+	}
+}

@@ -1,7 +1,6 @@
-import { writeFileSync } from 'node:fs';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, PartialGraphHost } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import {
 	FastifyAdapter,
 	type NestFastifyApplication,
@@ -55,6 +54,5 @@ async function bootstrap() {
 
 bootstrap().catch((err) => {
 	console.error(err);
-	writeFileSync('./graph.json', PartialGraphHost.toString() ?? '');
 	process.exit(1);
 });

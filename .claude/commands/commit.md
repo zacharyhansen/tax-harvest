@@ -28,6 +28,7 @@ You are tasked with creating git commits for the changes made during this sessio
 
 ## Important:
 - **NEVER add co-author information or Claude attribution**
+- **NEVER commit the `/specs/`** direrctory
 - Commits should be authored solely by the user
 - Do not include any "Generated with Claude" messages
 - Do not add "Co-Authored-By" lines

@@ -37,13 +37,13 @@ export function useScrollPosition({
 			// Otherwise use the threshold
 			setIsScrolledPast(currentScrollY > threshold);
 		}
-		
+
 		isScheduled.current = false;
 	}, [threshold, targetRef]);
 
 	const handleScroll = useCallback(() => {
 		const now = Date.now();
-		
+
 		// Cancel any pending animation frame
 		if (animationFrameId.current !== null) {
 			cancelAnimationFrame(animationFrameId.current);
@@ -52,7 +52,7 @@ export function useScrollPosition({
 		// Throttle the scroll updates
 		if (now - lastScrollTime.current >= throttleMs) {
 			lastScrollTime.current = now;
-			
+
 			// Use requestAnimationFrame for smooth updates
 			if (!isScheduled.current) {
 				isScheduled.current = true;

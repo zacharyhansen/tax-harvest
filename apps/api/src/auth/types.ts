@@ -6,7 +6,7 @@ export interface ClerkClaims {
 	iss: string;
 	jti: string;
 	// Note: this is technical possibly undefined on login but we enforce this on the sign in flow that it is created
-	metadata: { portfolioId: string };
+	metadata: { portfolioId: string; role: string };
 	nbf: number;
 	sid: string;
 	sub: string;

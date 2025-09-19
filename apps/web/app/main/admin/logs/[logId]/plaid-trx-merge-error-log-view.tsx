@@ -16,7 +16,6 @@ import {
 } from '@repo/ui/components/tabs';
 import { Check, Copy, Eye, EyeOff } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useState } from 'react';
 import { LogViewerLayout } from './log-viewer-layout';
 import { useCopyStates, useJsonVisibility } from './shared-log-components';
 
@@ -221,7 +220,7 @@ export function PlaidTrxMergeErrorLogView({
 						Initial Lots ({totalInitialLots})
 					</TabsTrigger>
 					<TabsTrigger value="transactions">
-						Transactions ({totalTransactions})
+						New Transactions ({totalTransactions})
 					</TabsTrigger>
 					<TabsTrigger value="final-positions">
 						Final Positions ({totalFinalPositions})

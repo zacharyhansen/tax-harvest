@@ -231,32 +231,6 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
 		<Dashboard
 			pathname={pathname}
 			header={<PortfolioSwitcher />}
-			// breadcrumb={
-			//   <Breadcrumb>
-			//     <BreadcrumbList>
-			//       {breadcrumbs.map(({ title, link }, index) => {
-			//         const formattedTitle = capitalCase(title);
-			//         return index === breadcrumbs.length - 1 ? (
-			//           <BreadcrumbItem key={title}>
-			//             <BreadcrumbPage>{formattedTitle}</BreadcrumbPage>
-			//           </BreadcrumbItem>
-			//         ) : (
-			//           <div className="flex items-center gap-x-2" key={title}>
-			//             <BreadcrumbItem className="hidden md:flex">
-			//               <BreadcrumbLink href={link}>
-			//                 {formattedTitle}
-			//               </BreadcrumbLink>
-			//             </BreadcrumbItem>
-			//             <BreadcrumbSeparator
-			//               key={`${title}separtor`}
-			//               className="hidden md:flex"
-			//             />
-			//           </div>
-			//         );
-			//       })}
-			//     </BreadcrumbList>
-			//   </Breadcrumb>
-			// }
 			sidebarOptions={
 				<SignedIn>
 					<UserButton />

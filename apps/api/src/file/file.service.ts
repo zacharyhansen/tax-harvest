@@ -37,12 +37,10 @@ export class FileService {
 		select?: Prisma.FileSelect;
 		portfolioId: string;
 	}) {
-		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
-			.file.findMany({
-				where,
-				select,
-			});
+		return this.prismaService.rlsPortfolioClient(portfolioId).file.findMany({
+			where,
+			select,
+		});
 	}
 
 	async createAndProcessFiles({
@@ -55,7 +53,7 @@ export class FileService {
 		portfolioId: string;
 	}) {
 		const createdFiles = await this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.file.createManyAndReturn({
 				data,
 				select,
@@ -89,7 +87,6 @@ export class FileService {
 								}) satisfies Prisma.LotCreateManyInput,
 						),
 						lotSeededDate,
-						replace: true,
 						portfolioId,
 					});
 				});
@@ -116,7 +113,7 @@ export class FileService {
 		let account: Account;
 		if (accountId) {
 			account = await this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.account.findUniqueOrThrow({
 					where: {
 						id: accountId,
@@ -124,7 +121,7 @@ export class FileService {
 				});
 		} else if (accountCreateInput) {
 			account = await this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.account.create({
 					data: accountCreateInput,
 				});
@@ -144,14 +141,12 @@ export class FileService {
 			select,
 			portfolioId,
 		});
-		await this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
-			.account.update({
-				where: { id: account.id },
-				data: {
-					uploadedPositions: true,
-				},
-			});
+		await this.prismaService.rlsPortfolioClient(portfolioId).account.update({
+			where: { id: account.id },
+			data: {
+				uploadedPositions: true,
+			},
+		});
 
 		return { files, accountId: account.id };
 	}

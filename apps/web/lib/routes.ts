@@ -51,10 +51,20 @@ export const TypedRoutes = {
 		({ logId }) => `/main/admin/logs/${logId}`,
 		z.object({ logId: z.coerce.number() }),
 	),
+	mergeErrors: makeRoute(() => `/main/admin/merge-errors`),
+	mergeError: makeRoute(
+		({ mergeErrorId }) => `/main/admin/merge-errors/${mergeErrorId}`,
+		z.object({ mergeErrorId: z.string() }),
+	),
 	lotTransactionBatch: makeRoute(
 		({ lotTransactionBatchId }) =>
 			`/main/admin/plaid-history/${lotTransactionBatchId}`,
 		z.object({ lotTransactionBatchId: z.string() }),
+	),
+	plaidMerge: makeRoute(
+		({ plaidMergeId }) =>
+			`/main/admin/plaid-history/${plaidMergeId}`,
+		z.object({ plaidMergeId: z.string() }),
 	),
 	plaidHistory: makeRoute(() => `/main/admin/plaid-history`),
 	settings: makeRoute(() => `/main/settings`),

@@ -88,7 +88,7 @@ export class HarvestService {
 			});
 
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.$transaction(async (tx) => {
 				// Create entry transaction items (sales based on selection)
 
@@ -208,7 +208,7 @@ export class HarvestService {
 		portfolioId: string;
 	}) {
 		const transactions = await this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.harvestTransaction.findMany({
 				include: {
 					harvestTransactionItem: true,
@@ -263,7 +263,7 @@ export class HarvestService {
 
 		// Insert them
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.$transaction(async (tx) => {
 				const createdItems =
 					await tx.harvestTransactionItem.createManyAndReturn({

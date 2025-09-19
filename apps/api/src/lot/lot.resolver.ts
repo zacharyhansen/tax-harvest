@@ -63,7 +63,7 @@ export class LotResolver {
 		}
 
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId))
+			.rlsPortfolioClient(clerkContext.metadata.portfolioId)
 			.lot.findMany({
 				orderBy: [
 					{

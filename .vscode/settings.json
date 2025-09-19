@@ -48,5 +48,6 @@
 	},
 	"[ignore]": {
 		"editor.defaultFormatter": "foxundermoon.shell-format"
-	}
+	},
+	"vscode-graphql.useSchemaFileDefinition": true
 }

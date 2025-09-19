@@ -5,6 +5,12 @@ fragment Log on Log {
 	responseStatus
 	source
 	type
+	mergeError {
+		id
+		assetSymbol
+		type
+		resolved
+	}
 }
 
 query Logs($pagination: PaginationProps) {
@@ -23,73 +29,19 @@ fragment LogDetails on Log {
 	source
 	type
 	data
+	mergeError {
+		id
+		assetSymbol
+		type
+		resolved
+		targetValue
+		targetQuantity
+	}
 }
 
 query Log($logId: Int!) {
 	log(logId: $logId) {
 		id
 		...LogDetails
-		LotTransactionBatch {
-			id
-			createdAt
-			updatedAt
-			accountId
-			portfolioId
-			positionsBefore
-			positionsAfter
-			holdingsPayload
-			lotTupleMap
-			initialLots
-			newTransactions
-			newBuys
-			newSells
-			realizedProfitAndLoss
-			deletedLots
-			lotChangeLog {
-				id
-				createdAt
-				operationType
-				lotId
-				accountId
-				portfolioId
-				lotBefore
-				lotAfter
-				quantityChange
-				source
-				processed
-				transactionId
-				lot {
-					id
-					assetSymbol
-					remainingQty
-					price
-					acquiredDate
-					marketValue
-					costTotal
-					gainTotal
-					originalQty
-					availableQty
-				}
-				transaction {
-					id
-					externalId
-					type
-					subtype
-					transactionDate
-					description
-					assetSymbol
-					quantity
-					price
-					amount
-					fee
-				}
-			}
-			account {
-				id
-				name
-				type
-				externalId
-			}
-		}
 	}
 }

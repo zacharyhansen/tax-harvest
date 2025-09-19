@@ -1,0 +1,71 @@
+fragment MultiChangeSetTableItem on MergeError {
+	id
+	portfolioId
+	assetSymbol
+	type
+	targetValue
+	targetQuantity
+	resolved
+	createdAt
+	updatedAt
+}
+
+fragment MultiChangeSetDetail on MergeError {
+	id
+	portfolioId
+	assetSymbol
+	type
+	targetValue
+	targetQuantity
+	lotsData
+	resolved
+	createdAt
+	updatedAt
+	# log {
+	# 	id
+	# 	type
+	# 	createdAt
+	# 	description
+	# 	responseStatus
+	# }
+	multiChangeSetOption {
+		...MultiChangeSetOptionItem
+	}
+}
+
+fragment MultiChangeSetOptionItem on MultiChangeSetOption {
+	id
+	multiChangeSetOptionItem {
+		id
+		lotId
+		acquiredDate
+		quantityFinal
+		quantityChange
+		isNewBuy
+		price
+	}
+}
+
+query MergeErrors {
+	mergeErrors {
+		...MultiChangeSetTableItem
+	}
+}
+
+query AdminMergeErrors {
+	adminMergeErrors {
+		...MultiChangeSetTableItem
+	}
+}
+
+query MergeError($id: String!) {
+	mergeError(id: $id) {
+		...MultiChangeSetDetail
+	}
+}
+
+mutation UpdateMergeError($id: String!, $data: MergeErrorUpdateInput!) {
+	updateMergeError(id: $id, data: $data) {
+		...MultiChangeSetDetail
+	}
+}

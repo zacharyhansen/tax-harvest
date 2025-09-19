@@ -57,6 +57,30 @@ export default function LogsPage() {
 				field: 'source',
 			},
 			{ headerName: 'Type', field: 'type' },
+			{
+				headerName: 'Merge Error',
+				width: 150,
+				// biome-ignore lint/suspicious/noExplicitAny: <ok>
+				cellRenderer: (params: any) => {
+					if (params.data?.mergeError?.length > 0) {
+						const mergeError = params.data.mergeError[0];
+						return (
+							<div className="flex items-center gap-2">
+								<span
+									className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+										mergeError.resolved
+											? 'bg-green-100 text-green-700'
+											: 'bg-yellow-100 text-yellow-700'
+									}`}
+								>
+									{mergeError.assetSymbol}
+								</span>
+							</div>
+						);
+					}
+					return null;
+				},
+			},
 		] satisfies ColDef[];
 	}, []);
 

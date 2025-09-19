@@ -732,11 +732,53 @@
           "hasDefaultValue": false
         },
         {
-          "name": "LotTransactionBatch",
-          "type": "LotTransactionBatch",
+          "name": "LotChange",
+          "type": "LotChange",
           "isRequired": false,
           "kind": "object",
-          "relationName": "LotTransactionBatchToAccount",
+          "relationName": "LotChangeToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "LotMerge",
+          "type": "LotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotMergeToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MergeError",
+          "type": "MergeError",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MergeErrorToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOptionItem",
+          "type": "MultiChangeSetOptionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToAccount",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -751,6 +793,34 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "NotificationToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PlaidMerge",
+          "type": "PlaidMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PlaidMergeToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PortfolioBalanceSnapshot",
+          "type": "PortfolioBalanceSnapshot",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PortfolioBalanceSnapshotToAccount",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -793,6 +863,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "TransactionToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "TransactionOnLotMerge",
+          "type": "TransactionOnLotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "TransactionOnLotMergeToAccount",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -1326,6 +1410,34 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "LotToAsset",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "LotMerge",
+          "type": "LotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotMergeToAsset",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MergeError",
+          "type": "MergeError",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MergeErrorToAsset",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -3104,11 +3216,25 @@
           "hasDefaultValue": false
         },
         {
-          "name": "LotTransactionBatch",
-          "type": "LotTransactionBatch",
+          "name": "LotMerge",
+          "type": "LotMerge",
           "isRequired": false,
           "kind": "object",
-          "relationName": "LotTransactionBatchToLog",
+          "relationName": "LotMergeToLog",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MergeError",
+          "type": "MergeError",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MergeErrorToLog",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -3700,11 +3826,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "LotChangeLog",
-          "type": "LotChangeLog",
+          "name": "LotChange",
+          "type": "LotChange",
           "isRequired": false,
           "kind": "object",
-          "relationName": "LotChangeLogToLot",
+          "relationName": "LotChangeToLot",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -3732,44 +3858,30 @@
         }
       ]
     },
-    "LotChangeLog": {
-      "id": "public.LotChangeLog",
+    "LotChange": {
+      "id": "public.LotChange",
       "schemaName": "public",
-      "tableName": "LotChangeLog",
+      "tableName": "LotChange",
       "fields": [
         {
-          "id": "public.LotChangeLog.id",
+          "id": "public.LotChange.id",
           "name": "id",
           "columnName": "id",
-          "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotChangeLog.createdAt",
-          "name": "createdAt",
-          "columnName": "createdAt",
-          "type": "timestamp",
+          "type": "uuid",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": true,
-          "isId": false,
+          "isId": true,
           "maxLength": null
         },
         {
-          "id": "public.LotChangeLog.operationType",
-          "name": "operationType",
-          "columnName": "operationType",
-          "type": "OperationType",
+          "id": "public.LotChange.resolvedLotMergeId",
+          "name": "resolvedLotMergeId",
+          "columnName": "resolvedLotMergeId",
+          "type": "uuid",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -3780,7 +3892,35 @@
           "maxLength": null
         },
         {
-          "id": "public.LotChangeLog.lotId",
+          "id": "public.LotChange.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotChange.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotChange.lotId",
           "name": "lotId",
           "columnName": "lotId",
           "type": "uuid",
@@ -3794,10 +3934,10 @@
           "maxLength": null
         },
         {
-          "id": "public.LotChangeLog.accountId",
-          "name": "accountId",
-          "columnName": "accountId",
-          "type": "uuid",
+          "id": "public.LotChange.quantityFinal",
+          "name": "quantityFinal",
+          "columnName": "quantityFinal",
+          "type": "numeric",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -3808,53 +3948,11 @@
           "maxLength": null
         },
         {
-          "id": "public.LotChangeLog.portfolioId",
-          "name": "portfolioId",
-          "columnName": "portfolioId",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotChangeLog.lotBefore",
-          "name": "lotBefore",
-          "columnName": "lotBefore",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotChangeLog.lotAfter",
-          "name": "lotAfter",
-          "columnName": "lotAfter",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotChangeLog.quantityChange",
+          "id": "public.LotChange.quantityChange",
           "name": "quantityChange",
           "columnName": "quantityChange",
           "type": "numeric",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -3864,11 +3962,11 @@
           "maxLength": null
         },
         {
-          "id": "public.LotChangeLog.source",
-          "name": "source",
-          "columnName": "source",
+          "id": "public.LotChange.assetSymbol",
+          "name": "assetSymbol",
+          "columnName": "assetSymbol",
           "type": "text",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -3878,24 +3976,24 @@
           "maxLength": null
         },
         {
-          "id": "public.LotChangeLog.processed",
-          "name": "processed",
-          "columnName": "processed",
+          "id": "public.LotChange.shouldDelete",
+          "name": "shouldDelete",
+          "columnName": "shouldDelete",
           "type": "bool",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
           "sequence": false,
-          "hasDefaultValue": true,
+          "hasDefaultValue": false,
           "isId": false,
           "maxLength": null
         },
         {
-          "id": "public.LotChangeLog.lotTransactionBatchId",
-          "name": "lotTransactionBatchId",
-          "columnName": "lotTransactionBatchId",
-          "type": "uuid",
+          "id": "public.LotChange.upsert",
+          "name": "upsert",
+          "columnName": "upsert",
+          "type": "jsonb",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -3906,323 +4004,11 @@
           "maxLength": null
         },
         {
-          "id": "public.LotChangeLog.transactionId",
-          "name": "transactionId",
-          "columnName": "transactionId",
-          "type": "uuid",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "name": "Lot",
-          "type": "Lot",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "LotChangeLogToLot",
-          "relationFromFields": [
-            "lotId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "LotTransactionBatch",
-          "type": "LotTransactionBatch",
+          "id": "public.LotChange.operationType",
+          "name": "operationType",
+          "columnName": "operationType",
+          "type": "OperationType",
           "isRequired": true,
-          "kind": "object",
-          "relationName": "LotChangeLogToLotTransactionBatch",
-          "relationFromFields": [
-            "lotTransactionBatchId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "Portfolio",
-          "type": "Portfolio",
-          "isRequired": true,
-          "kind": "object",
-          "relationName": "LotChangeLogToPortfolio",
-          "relationFromFields": [
-            "portfolioId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        },
-        {
-          "name": "Transaction",
-          "type": "Transaction",
-          "isRequired": false,
-          "kind": "object",
-          "relationName": "LotChangeLogToTransaction",
-          "relationFromFields": [
-            "transactionId"
-          ],
-          "relationToFields": [
-            "id"
-          ],
-          "isList": false,
-          "isId": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false
-        }
-      ],
-      "uniqueConstraints": [
-        {
-          "name": "LotChangeLog_pkey",
-          "fields": [
-            "id"
-          ],
-          "nullNotDistinct": false
-        }
-      ]
-    },
-    "LotTransactionBatch": {
-      "id": "public.LotTransactionBatch",
-      "schemaName": "public",
-      "tableName": "LotTransactionBatch",
-      "fields": [
-        {
-          "id": "public.LotTransactionBatch.id",
-          "name": "id",
-          "columnName": "id",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": true,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.createdAt",
-          "name": "createdAt",
-          "columnName": "createdAt",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.updatedAt",
-          "name": "updatedAt",
-          "columnName": "updatedAt",
-          "type": "timestamp",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": true,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.accountId",
-          "name": "accountId",
-          "columnName": "accountId",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.portfolioId",
-          "name": "portfolioId",
-          "columnName": "portfolioId",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.positionsBefore",
-          "name": "positionsBefore",
-          "columnName": "positionsBefore",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.positionsAfter",
-          "name": "positionsAfter",
-          "columnName": "positionsAfter",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.holdingsPayload",
-          "name": "holdingsPayload",
-          "columnName": "holdingsPayload",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.lotTupleMap",
-          "name": "lotTupleMap",
-          "columnName": "lotTupleMap",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.initialLots",
-          "name": "initialLots",
-          "columnName": "initialLots",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.newTransactions",
-          "name": "newTransactions",
-          "columnName": "newTransactions",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.newBuys",
-          "name": "newBuys",
-          "columnName": "newBuys",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.newSells",
-          "name": "newSells",
-          "columnName": "newSells",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.realizedProfitAndLoss",
-          "name": "realizedProfitAndLoss",
-          "columnName": "realizedProfitAndLoss",
-          "type": "numeric",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.deletedLots",
-          "name": "deletedLots",
-          "columnName": "deletedLots",
-          "type": "jsonb",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotTransactionBatch.logTrxMergeId",
-          "name": "logTrxMergeId",
-          "columnName": "logTrxMergeId",
-          "type": "int8",
-          "isRequired": false,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -4236,7 +4022,7 @@
           "type": "Account",
           "isRequired": true,
           "kind": "object",
-          "relationName": "LotTransactionBatchToAccount",
+          "relationName": "LotChangeToAccount",
           "relationFromFields": [
             "accountId"
           ],
@@ -4250,13 +4036,13 @@
           "hasDefaultValue": false
         },
         {
-          "name": "Log",
-          "type": "Log",
+          "name": "Lot",
+          "type": "Lot",
           "isRequired": false,
           "kind": "object",
-          "relationName": "LotTransactionBatchToLog",
+          "relationName": "LotChangeToLot",
           "relationFromFields": [
-            "logTrxMergeId"
+            "lotId"
           ],
           "relationToFields": [
             "id"
@@ -4272,7 +4058,7 @@
           "type": "Portfolio",
           "isRequired": true,
           "kind": "object",
-          "relationName": "LotTransactionBatchToPortfolio",
+          "relationName": "LotChangeToPortfolio",
           "relationFromFields": [
             "portfolioId"
           ],
@@ -4286,11 +4072,331 @@
           "hasDefaultValue": false
         },
         {
-          "name": "LotChangeLog",
-          "type": "LotChangeLog",
+          "name": "ResolvedLotMerge",
+          "type": "ResolvedLotMerge",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "LotChangeToResolvedLotMerge",
+          "relationFromFields": [
+            "resolvedLotMergeId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "LotChange_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "LotMerge": {
+      "id": "public.LotMerge",
+      "schemaName": "public",
+      "tableName": "LotMerge",
+      "fields": [
+        {
+          "id": "public.LotMerge.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.plaidMergeId",
+          "name": "plaidMergeId",
+          "columnName": "plaidMergeId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.assetSymbol",
+          "name": "assetSymbol",
+          "columnName": "assetSymbol",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.logTrxMergeId",
+          "name": "logTrxMergeId",
+          "columnName": "logTrxMergeId",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.targetValue",
+          "name": "targetValue",
+          "columnName": "targetValue",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.targetQuantity",
+          "name": "targetQuantity",
+          "columnName": "targetQuantity",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.targetPositionSnapshot",
+          "name": "targetPositionSnapshot",
+          "columnName": "targetPositionSnapshot",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.lotData",
+          "name": "lotData",
+          "columnName": "lotData",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotMerge.resolvedLotChange",
+          "name": "resolvedLotChange",
+          "columnName": "resolvedLotChange",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "LotMergeToAccount",
+          "relationFromFields": [
+            "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Asset",
+          "type": "Asset",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "LotMergeToAsset",
+          "relationFromFields": [
+            "assetSymbol"
+          ],
+          "relationToFields": [
+            "symbol"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Log",
+          "type": "Log",
           "isRequired": false,
           "kind": "object",
-          "relationName": "LotChangeLogToLotTransactionBatch",
+          "relationName": "LotMergeToLog",
+          "relationFromFields": [
+            "logTrxMergeId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PlaidMerge",
+          "type": "PlaidMerge",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "LotMergeToPlaidMerge",
+          "relationFromFields": [
+            "plaidMergeId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "LotMergeToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "ResolvedLotMerge",
+          "type": "ResolvedLotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "ResolvedLotMergeToLotMerge",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "TransactionOnLotMerge",
+          "type": "TransactionOnLotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "TransactionOnLotMergeToLotMerge",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4302,7 +4408,679 @@
       ],
       "uniqueConstraints": [
         {
-          "name": "LotTransactionBatch_pkey",
+          "name": "LotMerge_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "MergeError": {
+      "id": "public.MergeError",
+      "schemaName": "public",
+      "tableName": "MergeError",
+      "fields": [
+        {
+          "id": "public.MergeError.type",
+          "name": "type",
+          "columnName": "type",
+          "type": "MergeErrorType",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.assetSymbol",
+          "name": "assetSymbol",
+          "columnName": "assetSymbol",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.targetValue",
+          "name": "targetValue",
+          "columnName": "targetValue",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.targetQuantity",
+          "name": "targetQuantity",
+          "columnName": "targetQuantity",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.lotsData",
+          "name": "lotsData",
+          "columnName": "lotsData",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.resolved",
+          "name": "resolved",
+          "columnName": "resolved",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.logId",
+          "name": "logId",
+          "columnName": "logId",
+          "type": "int8",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.lotChangeSetAlgoParams",
+          "name": "lotChangeSetAlgoParams",
+          "columnName": "lotChangeSetAlgoParams",
+          "type": "jsonb",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MergeError.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MergeErrorToAccount",
+          "relationFromFields": [
+            "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Asset",
+          "type": "Asset",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MergeErrorToAsset",
+          "relationFromFields": [
+            "assetSymbol"
+          ],
+          "relationToFields": [
+            "symbol"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Log",
+          "type": "Log",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MergeErrorToLog",
+          "relationFromFields": [
+            "logId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MergeErrorToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOption",
+          "type": "MultiChangeSetOption",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionToMergeError",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "ResolvedLotMerge",
+          "type": "ResolvedLotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "ResolvedLotMergeToMergeError",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "MergeError_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "MultiChangeSetOption": {
+      "id": "public.MultiChangeSetOption",
+      "schemaName": "public",
+      "tableName": "MultiChangeSetOption",
+      "fields": [
+        {
+          "id": "public.MultiChangeSetOption.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOption.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOption.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOption.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOption.multiChangeSetId",
+          "name": "multiChangeSetId",
+          "columnName": "multiChangeSetId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "MergeError",
+          "type": "MergeError",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionToMergeError",
+          "relationFromFields": [
+            "multiChangeSetId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOptionItem",
+          "type": "MultiChangeSetOptionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToMultiChangeSetOption",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "MultiChangeSetOption_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "MultiChangeSetOptionItem": {
+      "id": "public.MultiChangeSetOptionItem",
+      "schemaName": "public",
+      "tableName": "MultiChangeSetOptionItem",
+      "fields": [
+        {
+          "id": "public.MultiChangeSetOptionItem.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.lotId",
+          "name": "lotId",
+          "columnName": "lotId",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.acquiredDate",
+          "name": "acquiredDate",
+          "columnName": "acquiredDate",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.quantityFinal",
+          "name": "quantityFinal",
+          "columnName": "quantityFinal",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.quantityChange",
+          "name": "quantityChange",
+          "columnName": "quantityChange",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.isNewBuy",
+          "name": "isNewBuy",
+          "columnName": "isNewBuy",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.price",
+          "name": "price",
+          "columnName": "price",
+          "type": "numeric",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.MultiChangeSetOptionItem.multiChangeSetOptionId",
+          "name": "multiChangeSetOptionId",
+          "columnName": "multiChangeSetOptionId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToAccount",
+          "relationFromFields": [
+            "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOption",
+          "type": "MultiChangeSetOption",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToMultiChangeSetOption",
+          "relationFromFields": [
+            "multiChangeSetOptionId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "MultiChangeSetOptionItem_pkey",
           "fields": [
             "id"
           ],
@@ -4485,6 +5263,156 @@
       "uniqueConstraints": [
         {
           "name": "Notification_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "PlaidMerge": {
+      "id": "public.PlaidMerge",
+      "schemaName": "public",
+      "tableName": "PlaidMerge",
+      "fields": [
+        {
+          "id": "public.PlaidMerge.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidMerge.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidMerge.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidMerge.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidMerge.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidMerge.resolveLotsInput",
+          "name": "resolveLotsInput",
+          "columnName": "resolveLotsInput",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PlaidMergeToAccount",
+          "relationFromFields": [
+            "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PlaidMergeToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "LotMerge",
+          "type": "LotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotMergeToPlaidMerge",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "PlaidMerge_pkey",
           "fields": [
             "id"
           ],
@@ -4824,11 +5752,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "LotChangeLog",
-          "type": "LotChangeLog",
+          "name": "LotChange",
+          "type": "LotChange",
           "isRequired": false,
           "kind": "object",
-          "relationName": "LotChangeLogToPortfolio",
+          "relationName": "LotChangeToPortfolio",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4838,11 +5766,53 @@
           "hasDefaultValue": false
         },
         {
-          "name": "LotTransactionBatch",
-          "type": "LotTransactionBatch",
+          "name": "LotMerge",
+          "type": "LotMerge",
           "isRequired": false,
           "kind": "object",
-          "relationName": "LotTransactionBatchToPortfolio",
+          "relationName": "LotMergeToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MergeError",
+          "type": "MergeError",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MergeErrorToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOption",
+          "type": "MultiChangeSetOption",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MultiChangeSetOptionItem",
+          "type": "MultiChangeSetOptionItem",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "MultiChangeSetOptionItemToPortfolio",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4857,6 +5827,34 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "NotificationToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PlaidMerge",
+          "type": "PlaidMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PlaidMergeToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PortfolioBalanceSnapshot",
+          "type": "PortfolioBalanceSnapshot",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PortfolioBalanceSnapshotToPortfolio",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4894,11 +5892,39 @@
           "hasDefaultValue": false
         },
         {
+          "name": "ResolvedLotMerge",
+          "type": "ResolvedLotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "ResolvedLotMergeToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Transaction",
           "type": "Transaction",
           "isRequired": false,
           "kind": "object",
           "relationName": "TransactionToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "TransactionOnLotMerge",
+          "type": "TransactionOnLotMerge",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "TransactionOnLotMergeToPortfolio",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -4925,6 +5951,230 @@
       "uniqueConstraints": [
         {
           "name": "Portfolio_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "PortfolioBalanceSnapshot": {
+      "id": "public.PortfolioBalanceSnapshot",
+      "schemaName": "public",
+      "tableName": "PortfolioBalanceSnapshot",
+      "fields": [
+        {
+          "id": "public.PortfolioBalanceSnapshot.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"PortfolioBalanceSnapshot_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.valueTotal",
+          "name": "valueTotal",
+          "columnName": "valueTotal",
+          "type": "float8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.valueCash",
+          "name": "valueCash",
+          "columnName": "valueCash",
+          "type": "float8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.valueAssets",
+          "name": "valueAssets",
+          "columnName": "valueAssets",
+          "type": "float8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.positions",
+          "name": "positions",
+          "columnName": "positions",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.realizedPAndLLongTerm",
+          "name": "realizedPAndLLongTerm",
+          "columnName": "realizedPAndLLongTerm",
+          "type": "float8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.realizedPAndLShortTerm",
+          "name": "realizedPAndLShortTerm",
+          "columnName": "realizedPAndLShortTerm",
+          "type": "float8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.unrealizedLoss",
+          "name": "unrealizedLoss",
+          "columnName": "unrealizedLoss",
+          "type": "float8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioBalanceSnapshot.unrealizedProfit",
+          "name": "unrealizedProfit",
+          "columnName": "unrealizedProfit",
+          "type": "float8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PortfolioBalanceSnapshotToAccount",
+          "relationFromFields": [
+            "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PortfolioBalanceSnapshotToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "PortfolioBalanceSnapshot_pkey",
           "fields": [
             "id"
           ],
@@ -5890,6 +7140,244 @@
         }
       ]
     },
+    "ResolvedLotMerge": {
+      "id": "public.ResolvedLotMerge",
+      "schemaName": "public",
+      "tableName": "ResolvedLotMerge",
+      "fields": [
+        {
+          "id": "public.ResolvedLotMerge.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.lotMergeId",
+          "name": "lotMergeId",
+          "columnName": "lotMergeId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.lotChanges",
+          "name": "lotChanges",
+          "columnName": "lotChanges",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.chosenLotChange",
+          "name": "chosenLotChange",
+          "columnName": "chosenLotChange",
+          "type": "jsonb",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.error",
+          "name": "error",
+          "columnName": "error",
+          "type": "jsonb",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.realizedProfitAndLossShortTerm",
+          "name": "realizedProfitAndLossShortTerm",
+          "columnName": "realizedProfitAndLossShortTerm",
+          "type": "numeric",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.realizedProfitAndLossLongTerm",
+          "name": "realizedProfitAndLossLongTerm",
+          "columnName": "realizedProfitAndLossLongTerm",
+          "type": "numeric",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.ResolvedLotMerge.mergeErrorId",
+          "name": "mergeErrorId",
+          "columnName": "mergeErrorId",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "LotMerge",
+          "type": "LotMerge",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "ResolvedLotMergeToLotMerge",
+          "relationFromFields": [
+            "lotMergeId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "MergeError",
+          "type": "MergeError",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "ResolvedLotMergeToMergeError",
+          "relationFromFields": [
+            "mergeErrorId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "ResolvedLotMergeToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "LotChange",
+          "type": "LotChange",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotChangeToResolvedLotMerge",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "ResolvedLotMerge_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "Transaction": {
       "id": "public.Transaction",
       "schemaName": "public",
@@ -6300,11 +7788,11 @@
           "hasDefaultValue": false
         },
         {
-          "name": "LotChangeLog",
-          "type": "LotChangeLog",
+          "name": "TransactionOnLotMerge",
+          "type": "TransactionOnLotMerge",
           "isRequired": false,
           "kind": "object",
-          "relationName": "LotChangeLogToTransaction",
+          "relationName": "TransactionOnLotMergeToTransaction",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -6334,6 +7822,151 @@
           "name": "Transaction_externalId_key",
           "fields": [
             "externalId"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "TransactionOnLotMerge": {
+      "id": "public.TransactionOnLotMerge",
+      "schemaName": "public",
+      "tableName": "TransactionOnLotMerge",
+      "fields": [
+        {
+          "id": "public.TransactionOnLotMerge.lotMergeId",
+          "name": "lotMergeId",
+          "columnName": "lotMergeId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.TransactionOnLotMerge.transactionId",
+          "name": "transactionId",
+          "columnName": "transactionId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.TransactionOnLotMerge.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.TransactionOnLotMerge.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "TransactionOnLotMergeToAccount",
+          "relationFromFields": [
+            "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "LotMerge",
+          "type": "LotMerge",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "TransactionOnLotMergeToLotMerge",
+          "relationFromFields": [
+            "lotMergeId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "TransactionOnLotMergeToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Transaction",
+          "type": "Transaction",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "TransactionOnLotMergeToTransaction",
+          "relationFromFields": [
+            "transactionId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "TransactionOnLotMerge_pkey",
+          "fields": [
+            "lotMergeId",
+            "transactionId"
           ],
           "nullNotDistinct": false
         }
@@ -7639,6 +9272,23 @@
         }
       ]
     },
+    "MergeErrorType": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "PLAID_MERGE_TIMEOUT"
+        },
+        {
+          "name": "PLAID_MULTI_LOT_SOLUTION"
+        },
+        {
+          "name": "PLAID_NO_SOLUTION"
+        },
+        {
+          "name": "UNKNOWN"
+        }
+      ]
+    },
     "NotificationLevel": {
       "schemaName": "public",
       "values": [
@@ -7664,6 +9314,9 @@
         },
         {
           "name": "update"
+        },
+        {
+          "name": "upsert"
         }
       ]
     },

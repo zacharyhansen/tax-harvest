@@ -49,19 +49,17 @@ export class PortfolioService {
 	) {}
 
 	getPortfoliosByUserId(userId: string, args: Prisma.PortfolioFindManyArgs) {
-		return this.prismaService
-			.$extends(PrismaService.bypassRLS())
-			.portfolio.findMany({
-				...args,
-				select: undefined, // dont allow nested seelct due to RLS bypass
-				where: {
-					usersOnPortfolios: {
-						some: {
-							userId,
-						},
+		return this.prismaService.rlsBypassClient().portfolio.findMany({
+			...args,
+			select: undefined, // dont allow nested seelct due to RLS bypass
+			where: {
+				usersOnPortfolios: {
+					some: {
+						userId,
 					},
 				},
-			});
+			},
+		});
 	}
 
 	async switchPortfolio(clerkContext: ClerkClaims, portfolioId: string) {
@@ -85,18 +83,16 @@ export class PortfolioService {
 		portfolioId?: string,
 	) {
 		const user = await this.userService.asserUserExists(userId);
-		return this.prismaService
-			.$extends(PrismaService.bypassRLS())
-			.portfolio.findUniqueOrThrow({
-				where: {
-					id: portfolioId,
-					usersOnPortfolios: {
-						some: {
-							userId: user.id,
-						},
+		return this.prismaService.rlsBypassClient().portfolio.findUniqueOrThrow({
+			where: {
+				id: portfolioId,
+				usersOnPortfolios: {
+					some: {
+						userId: user.id,
 					},
 				},
-			});
+			},
+		});
 
 		// .catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId))
 	}
@@ -255,15 +251,13 @@ export class PortfolioService {
 		const [realized, currentLots, accounts, setupAccounts] = await Promise.all([
 			this.summaryRealized({ id }),
 			this.lotService.lotCurrent({ portfolioId: id }),
-			this.prismaService
-				.$extends(PrismaService.forPortfolio(id))
-				.account.count({
-					where: {
-						...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
-							portfolioId: id,
-						}),
-					},
-				}),
+			this.prismaService.rlsPortfolioClient(id).account.count({
+				where: {
+					...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
+						portfolioId: id,
+					}),
+				},
+			}),
 			this.accountService.setupAccounts({
 				id,
 				select: {
@@ -272,7 +266,7 @@ export class PortfolioService {
 			}),
 		]);
 
-		const summaryCurrentLots = this.summaryCurrentLots(currentLots);
+		const summaryCurrentLots = this.lotService.summaryCurrentLots(currentLots);
 
 		return {
 			...PortfolioService.calculateHarvest({
@@ -389,85 +383,13 @@ export class PortfolioService {
 		return summary;
 	}
 
-	summaryCurrentLots(lots: LotCurrent[]) {
-		const totals = {
-			accountCount: new Decimal(0),
-			unrealizedGainTotal: new Decimal(0),
-			unrealizedLossTotal: new Decimal(0),
-			unrealizedGainTotalWithCurrentHarvest: new Decimal(0),
-			unrealizedLossTotalWithCurrentHarvest: new Decimal(0),
-			positionCount: new Decimal(0),
-			realizedDollarChangeFromCurrentHarvest: new Decimal(0),
-		};
-
-		const accountIds = new Set<string>();
-		const lotCounts = new Set<string>();
-
-		for (const lot of lots) {
-			accountIds.add(lot.accountId);
-			lotCounts.add(lot.id);
-
-			totals.realizedDollarChangeFromCurrentHarvest =
-				totals.realizedDollarChangeFromCurrentHarvest.plus(
-					new Decimal(lot.dollarPerSharePnL).mul(
-						new Decimal(lot.currentHarvestQty),
-					),
-				);
-			if (Number(lot.gainTotal) < 0) {
-				totals.unrealizedLossTotal = totals.unrealizedLossTotal.plus(
-					new Decimal(lot.gainTotal),
-				);
-				totals.unrealizedLossTotalWithCurrentHarvest =
-					totals.unrealizedLossTotalWithCurrentHarvest.plus(
-						new Decimal(lot.dollarPerSharePnL).mul(
-							new Decimal(lot.remainingQty).minus(
-								new Decimal(lot.currentHarvestQty),
-							),
-						),
-					);
-			} else {
-				totals.unrealizedGainTotal = totals.unrealizedGainTotal.plus(
-					new Decimal(lot.gainTotal),
-				);
-				totals.unrealizedGainTotalWithCurrentHarvest =
-					totals.unrealizedGainTotalWithCurrentHarvest.plus(
-						new Decimal(lot.dollarPerSharePnL).mul(
-							new Decimal(lot.remainingQty).minus(
-								new Decimal(lot.currentHarvestQty),
-							),
-						),
-					);
-			}
-		}
-
-		return {
-			accountCount: totals.accountCount.toNumber(),
-			positionCount: totals.positionCount.toNumber(),
-			gainTotal: totals.unrealizedGainTotal.toNumber(),
-			lossTotal: totals.unrealizedLossTotal.toNumber(),
-			totalUnrealized: totals.unrealizedGainTotal
-				.plus(totals.unrealizedLossTotal)
-				.toNumber(),
-			realizedDollarChangeFromCurrentHarvest:
-				totals.realizedDollarChangeFromCurrentHarvest.toNumber(),
-			unrealizedGainTotalWithCurrentHarvest:
-				totals.unrealizedGainTotalWithCurrentHarvest.toNumber(),
-			unrealizedLossTotalWithCurrentHarvest:
-				totals.unrealizedLossTotalWithCurrentHarvest.toNumber(),
-			totalUnrealizedWithCurrentHarvest:
-				totals.unrealizedGainTotalWithCurrentHarvest
-					.plus(totals.unrealizedLossTotalWithCurrentHarvest)
-					.toNumber(),
-		};
-	}
-
 	async summaryRealized({
 		id,
 	}: {
 		id: string;
 	}): Promise<PortfolioSummaryRealized> {
 		const pAndL = await this.prismaService
-			.$extends(PrismaService.forPortfolio(id))
+			.rlsPortfolioClient(id)
 			.realizedPAndL.findMany({
 				where: {
 					account: {
@@ -518,7 +440,7 @@ export class PortfolioService {
 			}),
 			this.lotService.lotCurrent({ portfolioId }),
 			this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.portfolio.findUniqueOrThrow({
 					where: {
 						id: portfolioId,
@@ -568,7 +490,7 @@ export class PortfolioService {
 	}) {
 		const [portfolio, lots] = await Promise.all([
 			this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.portfolio.findUniqueOrThrow({
 					where: {
 						id: portfolioId,
@@ -638,7 +560,7 @@ export class PortfolioService {
 		)!;
 
 		const portfolio = await this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.portfolio.findUniqueOrThrow({
 				where: {
 					id: portfolioId,
@@ -658,7 +580,7 @@ export class PortfolioService {
 			}),
 			this.getUniqueAssetSymbols({ portfolioId }),
 			this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.portfolio.findUniqueOrThrow({
 					where: {
 						id: portfolioId,
@@ -1064,7 +986,7 @@ export class PortfolioService {
 			Math.abs(unrealizedGainTotal) +
 			Math.abs(unrealizedLossTotal) +
 			Math.abs(realizedGainTotal);
-		if (combined === target) {
+		if (combined === target || combined === 0) {
 			return HarvestType.NO_OPPORTUNITY_EMPTY;
 		} else if (unrealizedGainTotal <= 0 && realizedGainTotal <= target) {
 			return HarvestType.NO_OPPORTUNITY_LOSSES;
@@ -1089,7 +1011,7 @@ export class PortfolioService {
 	// 	portfolioId: string;
 	// }): Promise<FiniteHarvestResult> {
 	// 	const portfolio = await this.prismaService
-	// 		.$extends(PrismaService.forPortfolio(portfolioId))
+	// 		.rlsPortfolioClient(portfolioId)
 	// 		.portfolio.findUniqueOrThrow({
 	// 			where: {
 	// 				id: portfolioId,
@@ -1105,7 +1027,7 @@ export class PortfolioService {
 	// 			minTotalPAndL: new Decimal(portfolio.minimumLotPAndL),
 	// 		}),
 	// 		this.prismaService
-	// 			.$extends(PrismaService.forPortfolio(portfolioId))
+	// 			.rlsPortfolioClient(portfolioId)
 	// 			.portfolio.findUniqueOrThrow({
 	// 				where: {
 	// 					id: portfolioId,

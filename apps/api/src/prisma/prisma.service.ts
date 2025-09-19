@@ -24,6 +24,16 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 		await this.$connect();
 	}
 
+	rlsPortfolioClient(portfolioId: string): PrismaClient {
+		// @ts-expect-error - this is a valid extension
+		return this.$extends(PrismaService.forPortfolio(portfolioId));
+	}
+
+	rlsBypassClient(): PrismaClient {
+		// @ts-expect-error - this is a valid extension
+		return this.$extends(PrismaService.bypassRLS());
+	}
+
 	static bypassRLS() {
 		return Prisma.defineExtension((prisma) =>
 			prisma.$extends({

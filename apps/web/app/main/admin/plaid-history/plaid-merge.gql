@@ -1,0 +1,82 @@
+query PlaidMerges {
+	plaidMerges {
+		id
+		createdAt
+		updatedAt
+		accountId
+		account {
+			id
+			name
+			institution
+		}
+		portfolioId
+		lotMerge {
+			id
+			assetSymbol
+			targetValue
+			targetQuantity
+		}
+	}
+}
+
+query PlaidMerge($plaidMergeId: String!) {
+	plaidMerge(plaidMergeId: $plaidMergeId) {
+		id
+		createdAt
+		updatedAt
+		accountId
+		portfolioId
+		resolveLotsInput
+		account {
+			id
+			name
+			institution
+			type
+		}
+		portfolio {
+			id
+			name
+		}
+		lotMerge {
+			id
+			createdAt
+			assetSymbol
+			targetValue
+			targetQuantity
+			targetPositionSnapshot
+			lotData
+			resolvedLotChange
+			asset {
+				symbol
+				name
+				lastPrice
+			}
+			resolvedLotMerge {
+				id
+				lotChanges
+				chosenLotChange
+				error
+				realizedProfitAndLossShortTerm
+				realizedProfitAndLossLongTerm
+				mergeError {
+					id
+					type
+					resolved
+				}
+			}
+			TransactionOnLotMerge {
+				transaction {
+					id
+					externalId
+					transactionDate
+					type
+					subtype
+					assetSymbol
+					quantity
+					price
+					amount
+				}
+			}
+		}
+	}
+}

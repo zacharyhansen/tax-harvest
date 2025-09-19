@@ -32,7 +32,7 @@ export class AuthConnectionService {
 		const connection =
 			authConnection ??
 			(await this.prismaService
-				.$extends(PrismaService.forPortfolio(portfolioId))
+				.rlsPortfolioClient(portfolioId)
 				.authConnection.findUniqueOrThrow({
 					where: {
 						id,
@@ -142,7 +142,7 @@ export class AuthConnectionService {
 		portfolioId: string,
 	): Promise<AuthConnection> {
 		const authConnection = await this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.authConnection.findUniqueOrThrow({
 				where: {
 					id: authConnectionId,
@@ -157,7 +157,7 @@ export class AuthConnectionService {
 
 		// Delete the auth connection in a transaction
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.$transaction(async (trx) => {
 				// First delete all related accounts and their data
 				const accounts = await trx.account.findMany({

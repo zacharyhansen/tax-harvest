@@ -21,17 +21,15 @@ export class LotService {
 		lotSeededDate,
 		accountId,
 		lots,
-		replace,
 		portfolioId,
 	}: {
 		accountId: string;
 		lots: Prisma.LotCreateManyInput[];
-		replace: boolean;
 		lotSeededDate?: Date;
 		portfolioId: string;
 	}) {
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.$transaction(async (trx) => {
 				await trx.account.update({
 					data: {
@@ -58,13 +56,35 @@ export class LotService {
 					});
 				}
 
-				if (replace) {
-					await trx.lot.deleteMany({
-						where: {
-							accountId,
+				await trx.lot.deleteMany({
+					where: {
+						accountId,
+					},
+				});
+
+				await trx.mergeError.deleteMany({
+					where: {
+						accountId,
+					},
+				});
+
+				await trx.plaidMerge.deleteMany({
+					where: {
+						accountId,
+					},
+				});
+
+				await trx.transaction.updateMany({
+					where: {
+						accountId,
+						transactionDate: {
+							gt: lotSeededDate,
 						},
-					});
-				}
+					},
+					data: {
+						appliedToLots: false,
+					},
+				});
 
 				return trx.lot.createMany({
 					data: lots.map((lot) => ({
@@ -185,6 +205,78 @@ export class LotService {
 					.toString(),
 			}));
 		});
+	}
+
+	summaryCurrentLots(lots: LotCurrent[]) {
+		const totals = {
+			accountCount: new Decimal(0),
+			unrealizedGainTotal: new Decimal(0),
+			unrealizedLossTotal: new Decimal(0),
+			unrealizedGainTotalWithCurrentHarvest: new Decimal(0),
+			unrealizedLossTotalWithCurrentHarvest: new Decimal(0),
+			positionCount: new Decimal(0),
+			realizedDollarChangeFromCurrentHarvest: new Decimal(0),
+		};
+
+		const accountIds = new Set<string>();
+		const lotCounts = new Set<string>();
+
+		for (const lot of lots) {
+			accountIds.add(lot.accountId);
+			lotCounts.add(lot.id);
+
+			totals.realizedDollarChangeFromCurrentHarvest =
+				totals.realizedDollarChangeFromCurrentHarvest.plus(
+					new Decimal(lot.dollarPerSharePnL).mul(
+						new Decimal(lot.currentHarvestQty),
+					),
+				);
+			if (Number(lot.gainTotal) < 0) {
+				totals.unrealizedLossTotal = totals.unrealizedLossTotal.plus(
+					new Decimal(lot.gainTotal),
+				);
+				totals.unrealizedLossTotalWithCurrentHarvest =
+					totals.unrealizedLossTotalWithCurrentHarvest.plus(
+						new Decimal(lot.dollarPerSharePnL).mul(
+							new Decimal(lot.remainingQty).minus(
+								new Decimal(lot.currentHarvestQty),
+							),
+						),
+					);
+			} else {
+				totals.unrealizedGainTotal = totals.unrealizedGainTotal.plus(
+					new Decimal(lot.gainTotal),
+				);
+				totals.unrealizedGainTotalWithCurrentHarvest =
+					totals.unrealizedGainTotalWithCurrentHarvest.plus(
+						new Decimal(lot.dollarPerSharePnL).mul(
+							new Decimal(lot.remainingQty).minus(
+								new Decimal(lot.currentHarvestQty),
+							),
+						),
+					);
+			}
+		}
+
+		return {
+			accountCount: totals.accountCount.toNumber(),
+			positionCount: totals.positionCount.toNumber(),
+			gainTotal: totals.unrealizedGainTotal.toNumber(),
+			lossTotal: totals.unrealizedLossTotal.toNumber(),
+			totalUnrealized: totals.unrealizedGainTotal
+				.plus(totals.unrealizedLossTotal)
+				.toNumber(),
+			realizedDollarChangeFromCurrentHarvest:
+				totals.realizedDollarChangeFromCurrentHarvest.toNumber(),
+			unrealizedGainTotalWithCurrentHarvest:
+				totals.unrealizedGainTotalWithCurrentHarvest.toNumber(),
+			unrealizedLossTotalWithCurrentHarvest:
+				totals.unrealizedLossTotalWithCurrentHarvest.toNumber(),
+			totalUnrealizedWithCurrentHarvest:
+				totals.unrealizedGainTotalWithCurrentHarvest
+					.plus(totals.unrealizedLossTotalWithCurrentHarvest)
+					.toNumber(),
+		};
 	}
 
 	private static lotCurrentFields: SelectExpression<

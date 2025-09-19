@@ -14,7 +14,8 @@
 		"typecheck": "tsc --noEmit",
 		"check:types": "tsc --noEmit --pretty",
 		"url": "npx next-typesafe-url -w",
-		"codegen:watch": "graphql-codegen --watch"
+		"codegen:watch": "graphql-codegen --watch",
+		"codegen": "graphql-codegen"
 	},
 	"peerDependencies": {
 		"zod": "^3.24.3"
@@ -26,7 +27,7 @@
 		"@hookform/resolvers": "^3.9.0",
 		"@microlink/react-json-view": "^1.26.1",
 		"@number-flow/react": "^0.5.7",
-		"@prisma/client": "6.16.1",
+		"@prisma/client": "6.16.2",
 		"@radix-ui/react-icons": "^1.3.2",
 		"@repo/ui": "workspace:*",
 		"@stripe/react-stripe-js": "^3.6.0",
@@ -55,6 +56,7 @@
 		"react-dom": "19.1.0",
 		"react-hook-form": "^7.57.0",
 		"react-plaid-link": "^4.0.1",
+		"recharts": "^3.2.1",
 		"server-only": "^0.0.1",
 		"stripe": "^18.1.0",
 		"usehooks-ts": "^3.1.1"

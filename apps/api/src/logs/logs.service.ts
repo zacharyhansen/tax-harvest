@@ -9,7 +9,7 @@ export class LogsService {
 
 	logs(portfolioId: string, args: Prisma.LogFindManyArgs) {
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(portfolioId))
+			.rlsPortfolioClient(portfolioId)
 			.log.findMany(args);
 	}
 }

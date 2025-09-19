@@ -295,7 +295,7 @@ function DataTable<TData, TValue>({
 			{header || null}
 			<DataTableToolbar table={table} setGlobalFilter={setGlobalFilter} />
 			<Table className="block min-w-full">
-				<TableHeader className="sticky top-0 bg-secondary">
+				<TableHeader className="sticky top-0 bg-secondary z-10">
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
 							{headerGroup.headers.map((header) => {
