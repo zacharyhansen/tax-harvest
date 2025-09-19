@@ -131,7 +131,7 @@ export class PlaidResolver {
 		accountIds: string[],
 	): Promise<boolean> {
 		for (const accountId of accountIds) {
-			await this.plaidService.applyNewTransactions({
+			await this.plaidService.applyNewPlaidTransactions({
 				accountId,
 				portfolioId: currentUser.metadata.portfolioId,
 			});

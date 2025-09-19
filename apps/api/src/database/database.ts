@@ -11,3 +11,17 @@ export class Database extends Kysely<DB> {
   `.execute(trx);
 	}
 }
+
+export async function executeWithRLS<T>(
+	kyselyClient: Kysely<DB>,
+	portfolioId: string,
+	callback: (trx: Transaction<DB>) => Promise<T>,
+) {
+	return await kyselyClient.transaction().execute(async (trx) => {
+		// set transaction level auth variables and run transaction
+		await sql`
+    SELECT set_config('app.current_portfolio_id', ${portfolioId}::text, TRUE);
+  `.execute(trx);
+		return await callback(trx);
+	});
+}

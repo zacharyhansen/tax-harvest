@@ -17,10 +17,10 @@ import {
 import { toast } from '@repo/ui/components/toast-sonner';
 import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { AlertTriangle, ArrowLeft, CheckCircle, FileText } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, CheckCircle } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { use, useMemo } from 'react';
 import {
 	MergeErrorType,
 	type MultiChangeSetDetailFragment,
@@ -41,10 +41,10 @@ const AgGridWrapper = dynamic(
 export default function MergeErrorDetailPage({
 	params,
 }: {
-	params: { mergeErrorId: string };
+	params: Promise<{ mergeErrorId: string }>;
 }) {
 	const router = useRouter();
-	const mergeErrorId = params.mergeErrorId;
+	const { mergeErrorId } = use(params);
 
 	const { data, error, loading, refetch } = useMergeErrorQuery({
 		variables: {
@@ -123,7 +123,7 @@ export default function MergeErrorDetailPage({
 	};
 
 	if (loading) return <LoadingPage />;
-	if (error) return <ErrorPage message={JSON.stringify(error)} />;
+	if (error) return <ErrorPage message={'Failed to load merge error'} />;
 	if (!data?.mergeError)
 		return <ErrorPage message="MultiChangeSet not found" />;
 
@@ -250,24 +250,6 @@ export default function MergeErrorDetailPage({
 							<p className="text-sm font-medium text-muted-foreground">
 								Associated Log
 							</p>
-							<div className="flex items-center gap-4 mt-2">
-								<Button
-									onClick={() =>
-										router.push(
-											TypedRoutes.log({ logId: Number(changeSet.log.id) }),
-										)
-									}
-									variant="link"
-									size="sm"
-								>
-									<FileText className="h-4 w-4 mr-2" />
-									<span className="text-base">Log ID: {changeSet.log.id}</span>
-								</Button>
-								<span>
-									Type: {changeSet.log.type} | Status:{' '}
-									{changeSet.log.responseStatus || 'N/A'}
-								</span>
-							</div>
 						</div>
 					</CardContent>
 				</Card>

@@ -210,27 +210,30 @@ export class PolygonService {
 			.snapshotAllTickers()
 			.then(async (results) => {
 				const tickers = results.tickers ?? [];
+				this.logger.log(`Updating ${tickers.length} assets`);
 				for (let i = 0; i < tickers.length; i += batchSize) {
 					const batch = tickers.slice(i, i + batchSize);
 					await this.db
 						.insertInto('Asset')
 						.values(
 							batch
-								.map((tickerData) => ({
-									lastClose: tickerData.day?.c,
-									lastHigh: tickerData.day?.h,
-									lastLow: tickerData.day?.l,
-									lastOpen: tickerData.day?.o,
-									lastPrice: tickerData.day?.c,
-									lastUpdated: tickerData.updated
-										? new Date(tickerData.updated / 1000)
-										: new Date(),
-									lastVolume: tickerData.day?.v,
-									lastVolumeWeighted: tickerData.day?.vw,
-									symbol: tickerData.ticker ?? '',
-									todaysChange: tickerData.todaysChange,
-									todaysChangePerc: tickerData.todaysChangePerc,
-								}))
+								.map((tickerData) => {
+									return {
+										lastClose: tickerData.day?.c,
+										lastHigh: tickerData.day?.h,
+										lastLow: tickerData.day?.l,
+										lastOpen: tickerData.day?.o,
+										lastPrice: tickerData.day?.c,
+										lastUpdated: tickerData.updated
+											? new Date(tickerData.updated / 1000)
+											: new Date(),
+										lastVolume: tickerData.day?.v,
+										lastVolumeWeighted: tickerData.day?.vw,
+										symbol: tickerData.ticker ?? '',
+										todaysChange: tickerData.todaysChange,
+										todaysChangePerc: tickerData.todaysChangePerc,
+									};
+								})
 								.filter((insertObjects) => insertObjects.symbol),
 						)
 						.onConflict((oc) =>

@@ -21,13 +21,13 @@ fragment MultiChangeSetDetail on MergeError {
 	resolved
 	createdAt
 	updatedAt
-	log {
-		id
-		type
-		createdAt
-		description
-		responseStatus
-	}
+	# log {
+	# 	id
+	# 	type
+	# 	createdAt
+	# 	description
+	# 	responseStatus
+	# }
 	multiChangeSetOption {
 		...MultiChangeSetOptionItem
 	}

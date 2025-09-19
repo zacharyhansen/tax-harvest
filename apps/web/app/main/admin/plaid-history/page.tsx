@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
-import { useLotTransactionBatchesQuery } from '~/generated/gql';
+import { usePlaidMergesQuery } from '~/generated/gql';
 import { TypedRoutes } from '~/lib/routes';
 import { PageWrapper } from '~/modules/layout';
 import { ErrorPage } from '~/modules/utility-components';
@@ -20,7 +20,7 @@ const AgGridWrapper = dynamic(
 
 export default function PlaidHistoryPage() {
 	const router = useRouter();
-	const { data, error, loading } = useLotTransactionBatchesQuery();
+	const { data, error, loading } = usePlaidMergesQuery();
 
 	const columnDefs: ColDef[] = useMemo(() => {
 		return [
@@ -28,17 +28,43 @@ export default function PlaidHistoryPage() {
 				headerName: 'Created At',
 				field: 'createdAt',
 				cellDataType: 'timeStamp',
-				width: 250,
+				width: 200,
+				sort: 'desc',
 			},
 			{
 				headerName: 'ID',
 				field: 'id',
-				width: 350,
+				width: 300,
 			},
 			{
-				headerName: 'Auth Connection ID',
-				field: 'authConnectionId',
+				headerName: 'Account',
+				field: 'account.name',
+				width: 200,
+			},
+			{
+				headerName: 'Institution',
+				field: 'account.institution',
+				width: 150,
+			},
+			{
+				headerName: 'Lot Merges',
+				field: 'lotMergeCount',
+				width: 120,
+				valueGetter: (params) => params.data?.lotMerge?.length || 0,
+			},
+			{
+				headerName: 'Assets',
+				field: 'assets',
 				flex: 1,
+				valueGetter: (params) => {
+					const assets = [
+						...new Set(
+							// biome-ignore lint/suspicious/noExplicitAny: <ok>
+							params.data?.lotMerge?.map((lm: any) => lm.assetSymbol) || [],
+						),
+					];
+					return assets.join(', ');
+				},
 			},
 		] satisfies ColDef[];
 	}, []);
@@ -48,17 +74,17 @@ export default function PlaidHistoryPage() {
 	}
 
 	return (
-		<PageWrapper title="Plaid History -  Lot Sync Events">
+		<PageWrapper title="Plaid Merge History">
 			<AgGridWrapper>
 				<AgGridReact
 					columnDefs={columnDefs}
-					rowData={data?.lotTransactionBatches}
+					rowData={data?.plaidMerges}
 					rowSelection="single"
 					onRowClicked={(row) => {
 						if (row.data) {
 							router.push(
-								TypedRoutes.lotTransactionBatch({
-									lotTransactionBatchId: row.data.id,
+								TypedRoutes.plaidMerge({
+									plaidMergeId: row.data.id,
 								}),
 							);
 						}

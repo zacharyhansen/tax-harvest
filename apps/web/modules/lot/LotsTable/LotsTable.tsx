@@ -194,6 +194,7 @@ export default function LotsTable() {
 
 	return (
 		<DataTable
+			className="min-h-[700px]"
 			columns={columnDef}
 			data={data?.lots ?? []}
 			noResultsAlert="This portfolio has no positions."

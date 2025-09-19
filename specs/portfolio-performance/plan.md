@@ -135,13 +135,13 @@ export class PortfolioPerformanceDataPoint {
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Type checking passes: `pnpm --filter api check:types`
-- [ ] Linting passes: `pnpm --filter api lint`
-- [ ] GraphQL schema generates successfully: `pnpm --filter api codegen`
+- [x] Type checking passes: `pnpm --filter api check:types`
+- [x] Linting passes: `pnpm --filter api lint`
+- [x] GraphQL schema generates successfully: `pnpm --filter api codegen`
 
 #### Manual Verification:
-- [ ] New types appear in GraphQL schema
-- [ ] Module loads without errors on server start
+- [x] New types appear in GraphQL schema
+- [x] Module loads without errors on server start
 
 ---
 
@@ -222,8 +222,8 @@ export class PortfolioSnapshotService {
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Unit tests pass: `pnpm --filter api test portfolio-snapshot.service`
-- [ ] Type checking passes: `pnpm --filter api check:types`
+- [x] Unit tests pass: `pnpm --filter api test portfolio-snapshot.service`
+- [x] Type checking passes: `pnpm --filter api check:types`
 
 #### Manual Verification:
 - [ ] Service methods handle edge cases (empty data, single day)
@@ -289,8 +289,8 @@ export class PortfolioSnapshotResolver {
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] GraphQL schema updates: `pnpm --filter api codegen`
-- [ ] Type checking passes: `pnpm --filter api check:types`
+- [x] GraphQL schema updates: `pnpm --filter api codegen`
+- [x] Type checking passes: `pnpm --filter api check:types`
 - [ ] Integration tests pass: `pnpm --filter api test:e2e`
 
 #### Manual Verification:
@@ -350,7 +350,7 @@ private async fetchSnapshots(
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Database queries execute without errors
+- [x] Database queries execute without errors
 - [ ] Query performance tests pass (< 500ms for 2 years of data)
 
 #### Manual Verification:
@@ -382,12 +382,12 @@ Add comprehensive unit and integration tests.
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] All unit tests pass: `pnpm --filter api test`
+- [x] All unit tests pass: `pnpm --filter api test`
 - [ ] Integration tests pass: `pnpm --filter api test:e2e`
 - [ ] Test coverage > 80%: `pnpm --filter api test:cov`
 
 #### Manual Verification:
-- [ ] Edge cases are covered (empty portfolio, single snapshot, etc.)
+- [x] Edge cases are covered (empty portfolio, single snapshot, etc.)
 - [ ] Error scenarios are tested
 - [ ] Performance under load is acceptable
 
@@ -400,12 +400,6 @@ Add comprehensive unit and integration tests.
 - Data aggregation logic (oldest per day selection)
 - Transformation logic for both output types
 - Edge cases: empty data, single record, missing positions JSON
-
-### Integration Tests:
-- GraphQL query execution with various inputs
-- Authentication/authorization
-- Error handling for invalid inputs
-- Large dataset handling
 
 ### Manual Testing Steps:
 1. Start development server: `pnpm --filter api dev`

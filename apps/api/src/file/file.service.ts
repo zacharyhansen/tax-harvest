@@ -87,7 +87,6 @@ export class FileService {
 								}) satisfies Prisma.LotCreateManyInput,
 						),
 						lotSeededDate,
-						replace: true,
 						portfolioId,
 					});
 				});

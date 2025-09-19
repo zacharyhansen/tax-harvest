@@ -9,17 +9,14 @@ import {
 	AuthSource,
 	AuthType,
 	LogType,
-	type Lot,
 	MergeErrorType,
 	OperationType,
-	type Position,
 	type Prisma,
-	PrismaClient,
-	type Transaction,
 	type User,
 } from '@prisma/client';
 import type { InputJsonValue } from '@prisma/client/runtime/library';
 import Decimal from 'decimal.js';
+import { Insertable, Selectable } from 'kysely';
 import {
 	type AccountBase,
 	Configuration,
@@ -32,43 +29,26 @@ import {
 	Products,
 	type Security,
 } from 'plaid';
-import { Database } from '~/database/database';
+import { Database, executeWithRLS } from '~/database/database';
+import type {
+	Lot as KyselyLot,
+	Position as KyselyPosition,
+	Transaction as KyselyTransaction,
+	TransactionOnLotMerge,
+} from '~/database/db.d';
 import { AccountsSyncedEvent } from '~/events/accounts-synced';
 import { EventId } from '~/events/event-id';
 import { PrismaService } from '../prisma/prisma.service';
 import { TimeMethod } from '../utilities/time-method';
 import {
-	findLotChangeSets,
-	type LotChange,
-	type LotData,
-	TMultiChangeSet,
-	TNoResultsForAsset,
-} from './lot-application';
+	organizeAssets,
+	ResolvedLotChange,
+	resolveLotChange,
+} from './lot-application/lot-application';
 import type { PlaidLinkOnSuccessMetadata, PlaidWebhook } from './plaid.dto';
 import { taxAdvantadedSubTypes } from './plaid.utils';
 
-function startTimer() {
-	const start = process.hrtime.bigint();
-	return () => {
-		const now = process.hrtime.bigint();
-		return Number(now - start) / 1_000_000_000;
-	};
-}
-
 const plaidTransactionsPerPage = 500;
-
-interface ResolvedLotChangeResults {
-	realizedProfitAndLoss: Decimal;
-	lotUpserts: LotChange[];
-	lotDeletes: LotChange[];
-	newBuys: Transaction[];
-	newSells: Transaction[];
-	newTransactions: Transaction[];
-	lotTupleMap: Map<string, LotData[]>;
-	intitialLotMap: Map<string, Lot>;
-	multiChangeSetResults: TMultiChangeSet[];
-	noResultsForAssetResults: TNoResultsForAsset[];
-}
 
 /**
  * Process an array in batches with sequential batch processing
@@ -107,7 +87,7 @@ export class PlaidService {
 		private readonly configService: ConfigService,
 		private readonly prismaService: PrismaService,
 		private eventEmitter: EventEmitter2,
-		private readonly db: Database,
+		readonly db: Database,
 	) {
 		this.client = new PlaidApi(
 			new Configuration({
@@ -327,7 +307,7 @@ export class PlaidService {
 		});
 
 		await this.prismaService
-			.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+			.rlsPortfolioClient(plaidAuthConnection.portfolioId)
 			.log.create({
 				data: {
 					data: plaidResponse.data as unknown as InputJsonValue,
@@ -343,7 +323,7 @@ export class PlaidService {
 		// Then create them - return the created positions and the unapplied transactions
 
 		await this.prismaService
-			.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+			.rlsPortfolioClient(plaidAuthConnection.portfolioId)
 			.$transaction(async (trx) => {
 				await trx.position.deleteMany({
 					where: {
@@ -370,7 +350,7 @@ export class PlaidService {
 
 		for (const account of accounts) {
 			// Now we attempt to process the unapplied transactions based on initialLots and initialPositions
-			await this.applyNewTransactions({
+			await this.applyNewPlaidTransactions({
 				accountId: account.id,
 				portfolioId: plaidAuthConnection.portfolioId,
 			});
@@ -379,7 +359,7 @@ export class PlaidService {
 		return accounts;
 	}
 
-	async applyNewTransactions({
+	async applyNewPlaidTransactions({
 		accountId,
 		portfolioId,
 	}: {
@@ -388,526 +368,297 @@ export class PlaidService {
 	}): Promise<void> {
 		this.logger.log(`Applying new transactions for account: ${accountId}`);
 		const [finalPositions, initialLots, transactions] = await Promise.all([
-			this.prismaService.rlsPortfolioClient(portfolioId).position.findMany({
-				where: {
-					account: {
-						id: accountId,
-					},
-				},
-				include: {
-					account: {
-						select: {
-							lotSeededDate: true,
-						},
-					},
-				},
-			}),
-			this.prismaService.rlsPortfolioClient(portfolioId).lot.findMany({
-				where: {
-					account: {
-						id: accountId,
-					},
-				},
-			}),
-			this.prismaService.rlsPortfolioClient(portfolioId).transaction.findMany({
-				where: {
-					account: {
-						id: accountId,
-					},
-					appliedToLots: false,
-				},
-				// Important to order by transaction date descending since greedy FIFO assume newest first
-				orderBy: {
-					transactionDate: 'desc',
-				},
-			}),
+			executeWithRLS(this.db, portfolioId, (trx) =>
+				trx
+					.selectFrom('Position')
+					.where('accountId', '=', accountId)
+					.selectAll()
+					.execute(),
+			),
+			executeWithRLS(this.db, portfolioId, (trx) =>
+				trx
+					.selectFrom('Lot')
+					.where('accountId', '=', accountId)
+					.selectAll()
+					.execute(),
+			),
+			executeWithRLS(this.db, portfolioId, (trx) =>
+				trx
+					.selectFrom('Transaction')
+					.where('accountId', '=', accountId)
+					.where('appliedToLots', '=', false)
+					.orderBy('transactionDate', 'desc')
+					.selectAll()
+					.execute(),
+			),
 		]);
 
-		const resolveInput = {
+		const resolveLotsInput = {
 			finalPositions,
 			transactions,
 			initialLots,
-			accountId,
 			portfolioId,
 		};
 
-		const logTrxMerge = await this.prismaService
-			.rlsPortfolioClient(portfolioId)
-			.log.create({
-				data: {
-					data: JSON.parse(JSON.stringify(resolveInput)),
-					description:
-						'Attempting trx merge. Account Last Synced Date: ' +
-						new Date(
-							finalPositions[0]?.account.lotSeededDate ?? '',
-						).toISOString(),
-					source: AuthSource.PLAID,
-					type: LogType.PLAID_TRX_MERGE,
+		const resolvedLotChanges = PlaidService.resolveLots(resolveLotsInput);
+
+		// Create the top level plaid merge
+		const plaidMerge = await executeWithRLS(this.db, portfolioId, (trx) =>
+			trx
+				.insertInto('PlaidMerge')
+				.values({
 					portfolioId,
-				},
-			});
-
-		const {
-			realizedProfitAndLoss,
-			lotUpserts,
-			lotDeletes,
-			newBuys,
-			newSells,
-			newTransactions,
-			lotTupleMap,
-			intitialLotMap,
-			multiChangeSetResults,
-			noResultsForAssetResults,
-		} = PlaidService.resolveLotChanges(resolveInput);
-
-		await this.prismaService.rlsPortfolioClient(portfolioId).$transaction(
-			async (trx) => {
-				const elapsed = startTimer();
-
-				// If for some reason the algo failed for a lot we should not roll the accoount transactions forward
-				// Here we insert the error and exist early (Importantly not update the the account lotSeededDate) so this
-				// Interaction can be retried
-				if (noResultsForAssetResults.length > 0) {
-					this.logger.log(`Start create mergeError: ${elapsed()} seconds`);
-					if (noResultsForAssetResults.length > 0) {
-						const log = await trx.log.create({
-							data: {
-								data: {
-									error: JSON.stringify({
-										name: 'Unable to calculate lot changes for asset',
-										message:
-											'Unable to calculate lot changes for asset. Account transactions will not be applied.',
-										data: noResultsForAssetResults,
-									}),
-									input: JSON.parse(JSON.stringify(resolveInput)),
-								},
-								description: `Trx merge failed. Account Last Synced Date: ${new Date(
-									finalPositions[0]?.account.lotSeededDate ?? '',
-								).toISOString()}`,
-								source: AuthSource.PLAID,
-								type: LogType.PLAID_TRX_MERGE_ERROR,
-								portfolioId,
-							},
-						});
-						for (const noResultsForAsset of noResultsForAssetResults) {
-							await trx.mergeError.create({
-								data: {
-									logId: log.id,
-									type: MergeErrorType.PLAID_NO_SOLUTION,
-									portfolioId,
-									assetSymbol: noResultsForAsset.symbol,
-									lotsData: JSON.parse(
-										JSON.stringify(noResultsForAsset.results),
-									),
-								},
-							});
-						}
-					}
-
-					this.logger.log(`End create mergeError: ${elapsed()} seconds`);
-					return;
-				}
-
-				this.logger.log(`Start lot transaction batch: ${elapsed()} seconds`);
-				const lotTransactionBatch = await trx.lotTransactionBatch.create({
-					data: {
-						accountId,
-						portfolioId,
-						positionsAfter: finalPositions,
-						lotTupleMap: JSON.parse(
-							JSON.stringify(Array.from(lotTupleMap.entries())),
-						),
-						initialLots,
-						newTransactions,
-						newBuys,
-						newSells,
-						realizedProfitAndLoss,
-						// Store lots that were completely sold (zero quantity remaining)
-						deletedLots: JSON.parse(JSON.stringify(lotDeletes)),
-						logTrxMergeId: logTrxMerge.id,
-					},
-				});
-				this.logger.log(`End lot transaction batch: ${elapsed()} seconds`);
-
-				this.logger.log(
-					`Start upsert lots: ${elapsed()} seconds: length ${lotUpserts.length}`,
-				);
-				// Upsert lots that have remaining quantity
-				await Promise.all(
-					lotUpserts.map(({ upsert }) =>
-						trx.lot.upsert({
-							where: {
-								id: upsert.id,
-							},
-							create: upsert,
-							update: upsert,
-						}),
-					),
-				);
-				this.logger.log(`End upsert lots: ${elapsed()} seconds`);
-
-				// Delete lots that have no remaining quantity
-				this.logger.log(`Start delete lots: ${elapsed()} seconds`);
-				await trx.lot.deleteMany({
-					where: {
-						id: {
-							in: lotDeletes.map(({ upsert }) => upsert.id ?? ''),
-						},
-					},
-				});
-				this.logger.log(`End delete lots: ${elapsed()} seconds`);
-
-				this.logger.log(`Start update lotSeededDate: ${elapsed()} seconds`);
-				// update lotSeededDate to the date of the newest transaction so we know we do not need to fetch these again
-				await trx.account.updateMany({
-					where: {
-						id: accountId,
-					},
-					data: {
-						lotSeededDate: transactions[0]?.transactionDate ?? undefined,
-					},
-				});
-				this.logger.log(`End update lotSeededDate: ${elapsed()} seconds`);
-
-				this.logger.log(`Start update appliedToLots: ${elapsed()} seconds`);
-				// update appliedToLots to true so we know we do not need to process these again
-				await trx.transaction.updateMany({
-					where: {
-						account: {
-							id: accountId,
-						},
-					},
-					data: {
-						appliedToLots: true,
-					},
-				});
-				this.logger.log(`End update appliedToLots: ${elapsed()} seconds`);
-
-				this.logger.log(`Start create log: ${elapsed()} seconds`);
-				await trx.log.create({
-					data: {
-						data: JSON.parse(JSON.stringify({ lotTupleMap })),
-						description:
-							'Trx merge results. Account Last Synced Date: ' +
-							new Date(
-								finalPositions[0]?.account.lotSeededDate ?? '',
-							).toISOString(),
-						source: AuthSource.PLAID,
-						type: LogType.PLAID_TRX_MERGE_SUCCESS,
-						portfolioId,
-					},
-				});
-				this.logger.log(`End create log: ${elapsed()} seconds`);
-
-				this.logger.log(`Start create lotChangeLog: ${elapsed()} seconds`);
-				await trx.lotChangeLog.createMany({
-					data: lotUpserts.map(({ upsert, isNewBuy }) => {
-						const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0);
-						const operationType = isNewBuy
-							? OperationType.create
-							: isZeroQuantity
-								? OperationType.delete
-								: OperationType.update;
-						return {
-							lotTransactionBatchId: lotTransactionBatch.id,
-							lotId:
-								operationType === OperationType.delete ? undefined : upsert.id,
-							quantityChange: (
-								intitialLotMap.get(upsert.id ?? '')?.remainingQty ??
-								new Decimal(0)
-							).minus(upsert.remainingQty as Decimal),
-							accountId: upsert.account.connect?.id ?? '',
-							portfolioId,
-							lotBefore: intitialLotMap.get(upsert.id ?? ''),
-							lotAfter: JSON.parse(JSON.stringify(upsert)),
-							operationType,
-						};
-					}),
-				});
-				this.logger.log(`End create lotChangeLog: ${elapsed()} seconds`);
-
-				this.logger.log(`Start create lotChangeLog: ${elapsed()} seconds`);
-				await trx.lotChangeLog.createMany({
-					data: lotDeletes.map(({ upsert, isNewBuy }) => {
-						const isZeroQuantity = (upsert.remainingQty as Decimal).lte(0);
-						const operationType = isNewBuy
-							? OperationType.create
-							: isZeroQuantity
-								? OperationType.delete
-								: OperationType.update;
-						return {
-							lotTransactionBatchId: lotTransactionBatch.id,
-							quantityChange: (
-								intitialLotMap.get(upsert.id ?? '')?.remainingQty ??
-								new Decimal(0)
-							).minus(upsert.remainingQty as Decimal),
-							accountId: upsert.account.connect?.id ?? '',
-							portfolioId,
-							lotBefore: intitialLotMap.get(upsert.id ?? ''),
-							lotAfter: JSON.parse(JSON.stringify(upsert)),
-							operationType,
-						};
-					}),
-				});
-				this.logger.log(`End create lotChangeLog: ${elapsed()} seconds`);
-
-				this.logger.log(`Start create mergeError: ${elapsed()} seconds`);
-				if (multiChangeSetResults.length > 0) {
-					const log = await trx.log.create({
-						data: {
-							data: {
-								error: JSON.stringify({
-									name: 'Multiple lot changes for asset',
-									message:
-										'Multiple lot changes for asset. Account transactions will not be applied but we have selected the best option.',
-									data: multiChangeSetResults,
-								}),
-								input: JSON.parse(JSON.stringify(resolveInput)),
-							},
-							description: `Trx merge failed. Account Last Synced Date: ${new Date(
-								finalPositions[0]?.account.lotSeededDate ?? '',
-							).toISOString()}`,
-							source: AuthSource.PLAID,
-							type: LogType.PLAID_TRX_MERGE_ERROR,
-							portfolioId,
-						},
-					});
-					for (const multiChangeSet of multiChangeSetResults) {
-						const insertedMultiChangeSet = await trx.mergeError.create({
-							data: {
-								logId: log.id,
-								type: MergeErrorType.PLAID_MULTI_LOT_SOLUTION,
-								portfolioId,
-								assetSymbol: multiChangeSet.symbol,
-								lotsData: JSON.parse(JSON.stringify(initialLots)),
-							},
-						});
-						for (const option of multiChangeSet.options) {
-							console.log;
-							await trx.multiChangeSetOption.create({
-								data: {
-									portfolioId,
-									multiChangeSetId: insertedMultiChangeSet.id,
-									multiChangeSetOptionItem: {
-										createMany: {
-											data: option.map((option) => ({
-												portfolioId,
-												lotId: option.lotId,
-												accountId: option.accountId,
-												acquiredDate: option.acquiredDate,
-												quantityFinal: option.quantityFinal,
-												quantityChange: option.quantityChange,
-												isNewBuy: option.isNewBuy,
-												price: option.price,
-											})),
-										},
-									},
-								},
-							});
-						}
-					}
-				}
-				this.logger.log(`End create mergeError: ${elapsed()} seconds`);
-			},
-			{
-				timeout: 60000,
-			},
+					accountId,
+					resolveLotsInput: JSON.stringify(resolveLotsInput),
+				})
+				.returning('id')
+				.executeTakeFirstOrThrow(),
 		);
 
-		// If we succeed produce an event of the successful accounts
+		// Process each of the asset changes
+		for (const resolvedLotChange of resolvedLotChanges) {
+			await executeWithRLS(this.db, portfolioId, async (trx) => {
+				// Insert the merge attempt record
+				const lotMerge = await trx
+					.insertInto('LotMerge')
+					.values({
+						portfolioId,
+						accountId,
+						plaidMergeId: plaidMerge.id,
+						assetSymbol: resolvedLotChange.position.assetSymbol,
+						targetValue: resolvedLotChange.position.costTotal
+							? resolvedLotChange.position.costTotal.toString()
+							: null,
+						targetQuantity: resolvedLotChange.position.quantity
+							? resolvedLotChange.position.quantity.toString()
+							: null,
+						targetPositionSnapshot: JSON.stringify(resolvedLotChange.position),
+						lotData: JSON.stringify(resolvedLotChange.lotData),
+						resolvedLotChange: JSON.stringify(resolvedLotChange),
+					})
+					.returning('id')
+					.executeTakeFirstOrThrow();
+
+				// Insert transaction relations
+				const transactions: Insertable<TransactionOnLotMerge>[] = [
+					...resolvedLotChange.transactionBuys,
+					...resolvedLotChange.transactionSells,
+				].map((transaction) => ({
+					portfolioId,
+					accountId,
+					transactionId: transaction.id,
+					lotMergeId: lotMerge.id,
+				}));
+				if (transactions.length > 0) {
+					await trx
+						.insertInto('TransactionOnLotMerge')
+						.values(transactions)
+						.execute();
+				}
+				// Insert the result
+				const resolvedLotMerge = await trx
+					.insertInto('ResolvedLotMerge')
+					.values({
+						lotMergeId: lotMerge.id,
+						lotChanges: JSON.stringify(resolvedLotChange.lotChanges),
+						chosenLotChange: resolvedLotChange.chosenLotChange
+							? JSON.stringify(resolvedLotChange.chosenLotChange)
+							: null,
+						error: resolvedLotChange.error
+							? JSON.stringify(resolvedLotChange.error)
+							: null,
+						realizedProfitAndLossShortTerm:
+							resolvedLotChange.realizedProfitAndLossShortTerm.toString(),
+						realizedProfitAndLossLongTerm:
+							resolvedLotChange.realizedProfitAndLossLongTerm.toString(),
+						accountId,
+						portfolioId,
+					})
+					.returning('id')
+					.executeTakeFirstOrThrow();
+
+				// Handle multiple lot changes error if we found more than 1 solution
+				if (resolvedLotChange.lotChanges.length > 1) {
+					await trx
+						.insertInto('MergeError')
+						.values({
+							type: MergeErrorType.PLAID_MULTI_LOT_SOLUTION,
+							portfolioId,
+							assetSymbol: resolvedLotChange.position.assetSymbol,
+							lotsData: JSON.stringify(resolvedLotChange.lotData),
+							targetValue: resolvedLotChange.position.costTotal?.toString(),
+							targetQuantity: resolvedLotChange.position.quantity.toString(),
+							accountId,
+						})
+						.executeTakeFirstOrThrow();
+				}
+
+				if (resolvedLotChange.error) {
+					// Handle any unknown errors
+					await trx
+						.insertInto('MergeError')
+						.values({
+							type: MergeErrorType.UNKNOWN,
+							portfolioId,
+							assetSymbol: resolvedLotChange.position.assetSymbol,
+							lotsData: JSON.stringify(resolvedLotChange.lotData),
+							targetValue: resolvedLotChange.position.costTotal?.toString(),
+							targetQuantity: resolvedLotChange.position.quantity.toString(),
+							accountId,
+						})
+						.executeTakeFirstOrThrow();
+				} else if (!resolvedLotChange.chosenLotChange) {
+					// Handle no solution found
+					await trx
+						.insertInto('MergeError')
+						.values({
+							type: MergeErrorType.PLAID_NO_SOLUTION,
+							portfolioId,
+							assetSymbol: resolvedLotChange.position.assetSymbol,
+							lotsData: JSON.stringify(resolvedLotChange.lotData),
+							targetValue: resolvedLotChange.position.costTotal?.toString(),
+							targetQuantity: resolvedLotChange.position.quantity.toString(),
+							accountId,
+						})
+						.executeTakeFirstOrThrow();
+				} else {
+					// We successfully found a lot change! Insert the changes and apply the result to the portfolio
+					// Insert the lot changes
+					await trx
+						.insertInto('LotChange')
+						.values(
+							resolvedLotChange.chosenLotChange.map((lotChange) => ({
+								accountId,
+								portfolioId,
+								resolvedLotMergeId: resolvedLotMerge.id,
+								assetSymbol: resolvedLotChange.position.assetSymbol,
+								quantityFinal: lotChange.quantityFinal.toString(),
+								quantityChange: lotChange.quantityChange.toString(),
+								shouldDelete: lotChange.shouldDelete,
+								upsert: JSON.stringify(lotChange.upsert),
+								operationType: lotChange.shouldDelete
+									? OperationType.delete
+									: OperationType.upsert,
+							})),
+						)
+						.execute();
+
+					// Upsert the lots
+					const upserts = resolvedLotChange.chosenLotChange
+						.filter((change) => !change.shouldDelete)
+						.map((lotChange) => lotChange.upsert);
+					if (upserts.length > 0) {
+						await trx
+							.insertInto('Lot')
+							.values(upserts)
+							.onConflict((oc) =>
+								oc.columns(['id']).doUpdateSet({
+									remainingQty: (eb) => eb.ref('excluded.remainingQty'),
+								}),
+							)
+							.execute();
+					}
+					// Delete the lots with none left
+					const deletes = resolvedLotChange.chosenLotChange
+						.filter((change) => change.shouldDelete)
+						.map((lotChange) => lotChange.lotId);
+					if (deletes.length > 0) {
+						await trx
+							.deleteFrom('Lot')
+							.where('id', 'in', deletes)
+							.where('accountId', '=', accountId)
+							.where('portfolioId', '=', portfolioId)
+							.execute();
+					}
+
+					// Update the account
+					const currentYear = new Date().getFullYear();
+					const currentProfitAndLoss = await trx
+						.selectFrom('RealizedPAndL')
+						.where('accountId', '=', accountId)
+						.where('year', '=', currentYear)
+						.selectAll()
+						.executeTakeFirst();
+
+					await trx
+						.insertInto('RealizedPAndL')
+						.values({
+							accountId,
+							portfolioId,
+							year: currentYear,
+							shortTerm: new Decimal(currentProfitAndLoss?.shortTerm ?? '0')
+								.plus(resolvedLotChange.realizedProfitAndLossShortTerm)
+								.toString(),
+							longTerm: new Decimal(currentProfitAndLoss?.longTerm ?? '0')
+								.plus(resolvedLotChange.realizedProfitAndLossLongTerm)
+								.toString(),
+						})
+						.onConflict((oc) =>
+							oc.columns(['accountId', 'year']).doUpdateSet({
+								shortTerm: (eb) => eb.ref('excluded.shortTerm'),
+								longTerm: (eb) => eb.ref('excluded.longTerm'),
+							}),
+						)
+						.execute();
+
+					// Mark the transactions as applied to lots
+					await trx
+						.updateTable('Transaction')
+						.set({
+							appliedToLots: true,
+						})
+						.where('accountId', '=', accountId)
+						.where('id', 'in', [
+							...resolvedLotChange.transactionBuys.map(
+								(transaction) => transaction.id,
+							),
+							...resolvedLotChange.transactionSells.map(
+								(transaction) => transaction.id,
+							),
+						])
+						.execute();
+				}
+			});
+		}
+		// Once done produce an event of the successful accounts
 		this.eventEmitter.emit(
 			EventId.ACCOUNTS_SYNCED,
 			new AccountsSyncedEvent(portfolioId, [accountId]),
 		);
 	}
 
-	static resolveLotChanges({
+	/**
+	 *
+	 * @param input
+	 * @param input.portfolioId - Portfolio id
+	 * @param input.initialLots - Initial lots (the ucrrent state of the portfolio)
+	 * @param input.finalPositions - End state positions we are geting from plaid that we need to figure out how to get to
+	 * @param input.transactions - New transactions we are getting from plaid that we need to apply to the lots
+	 * (we apply the buys we see then use our algo to determine sales as we need to figure out cost basis which plaid does not have)
+	 */
+	static resolveLots({
 		finalPositions,
 		transactions,
 		initialLots,
-		portfolioId,
 	}: {
-		finalPositions: Position[];
-		transactions: Transaction[];
-		initialLots: Lot[];
+		finalPositions: Selectable<KyselyPosition>[];
+		transactions: Selectable<KyselyTransaction>[];
+		initialLots: Selectable<KyselyLot>[];
 		portfolioId: string;
-	}): ResolvedLotChangeResults {
-		const intitialLotMap = new Map<string, Lot>();
-		for (const lot of initialLots) {
-			intitialLotMap.set(lot.id, lot);
-		}
-
-		const { lotTupleMap, newBuys, newSells, newTransactions } =
-			PlaidService.lotDataMapFromLotsAndTransactions({
-				lots: initialLots,
-				transactions,
-			});
-
-		const multiChangeSetResults: TMultiChangeSet[] = [];
-		const noResultsForAssetResults: TNoResultsForAsset[] = [];
-		// Attempt to generate the change set for each asset
-		const lotResults = Array.from(lotTupleMap.entries()).flatMap(
-			([symbol, lotTuples]) => {
-				const position = finalPositions.find((p) => p.assetSymbol === symbol);
-				const targetQuantity = position?.quantity
-					? position.quantity
-					: undefined;
-				const targetValue = position?.costTotal
-					? position.costTotal
-					: undefined;
-
-				const changeAlgoParams = {
-					lotsData: lotTuples,
-					targetQuantity,
-					targetValue,
-					symbol,
-				};
-				const { lotChanges, multiChangeSet, noResultsForAsset } =
-					findLotChangeSets(changeAlgoParams, portfolioId);
-				if (multiChangeSet) {
-					multiChangeSetResults.push(multiChangeSet);
-				} else if (noResultsForAsset) {
-					noResultsForAssetResults.push(noResultsForAsset);
-				}
-				return lotChanges;
-			},
-		);
-
-		// Calculate the realized profit and loss - we dont need to actually know per share - just total sold and total cost basis
-
-		// Total Sale Dollars
-		const totalSaleDollars = newSells.reduce((acc, sell) => {
-			return acc.plus(sell.amount ?? 0);
-		}, new Decimal(0));
-
-		// Total Sale Cost Basis
-		const totalSaleCostBasis = lotResults.reduce((acc, lot) => {
-			return acc.plus(lot.quantityChange.mul(lot.price));
-		}, new Decimal(0));
-
-		const realizedProfitAndLoss = totalSaleDollars.minus(totalSaleCostBasis);
-
+	}): ResolvedLotChange[] {
 		/**
-		 * Need to return a few things:
-		 * 1. realizedProfitAndLoss - so we can adjust realized P&L
-		 * 2. LotUpserts - so we can upsert the lots
-		 * 3. LotDeletes - (Those lots that are completely sold)
-		 * 4. lotTupleMap - this is just for logging purposes
-		 * 5. newTransactions - so we can mark them as applied to lots
+		 * Organize lots and new transactions into a lotTupleMap which is unique Asset sympbol -> list of lots for that asset
 		 */
+		const assetLots = organizeAssets({
+			lots: initialLots,
+			transactions,
+			finalPositions,
+		});
 
-		return {
-			realizedProfitAndLoss,
-			lotUpserts: lotResults.filter((result) =>
-				(result.upsert.remainingQty as Decimal).gt(0),
-			),
-			lotDeletes: lotResults.filter((result) =>
-				(result.upsert.remainingQty as Decimal).lte(0),
-			),
-			newBuys,
-			newSells,
-			newTransactions,
-			lotTupleMap,
-			intitialLotMap,
-			multiChangeSetResults,
-			noResultsForAssetResults,
-		};
-	}
-
-	static lotDataMapFromLotsAndTransactions({
-		lots,
-		transactions,
-		useTestLotId = false,
-	}: {
-		lots: Lot[];
-		transactions: Transaction[];
-		useTestLotId?: boolean;
-	}): {
-		lotTupleMap: Map<string, LotData[]>;
-		newBuys: Transaction[];
-		newSells: Transaction[];
-		newTransactions: Transaction[];
-	} {
-		const lotTupleMap = new Map<string, LotData[]>();
-		const newTransactions = transactions.filter((trx) => !trx.appliedToLots);
-		const newBuys = newTransactions.filter(
-			(t) => t.type === 'buy' && t.subtype === 'buy',
-		);
-		const newSells = newTransactions.filter(
-			(t) => t.type === 'sell' && t.subtype === 'sell',
-		);
-
-		// Create map of tuple for each lot
-		for (const lot of lots) {
-			if (lotTupleMap.has(lot.assetSymbol)) {
-				lotTupleMap.get(lot.assetSymbol)?.push({
-					quantity: new Decimal(lot.remainingQty.toString()),
-					price: new Decimal(lot.price.toString()),
-					lotId: lot.id,
-					accountId: lot.accountId,
-					acquiredDate: lot.acquiredDate,
-					isNewBuy: false,
-				});
-			} else {
-				lotTupleMap.set(lot.assetSymbol, [
-					{
-						quantity: new Decimal(lot.remainingQty.toString()),
-						price: new Decimal(lot.price.toString()),
-						lotId: lot.id,
-						accountId: lot.accountId,
-						acquiredDate: lot.acquiredDate,
-						isNewBuy: false,
-					},
-				]);
-			}
-		}
-
-		// Add buy transactions with new uuid as lots
-		for (const trx of newBuys) {
-			if (
-				trx.assetSymbol &&
-				trx.type === 'buy' &&
-				trx.subtype === 'buy' &&
-				trx.quantity &&
-				trx.price
-			) {
-				if (!trx.transactionDate) {
-					throw new Error('Transaction date is required for new buys');
-				}
-				if (lotTupleMap.has(trx.assetSymbol)) {
-					lotTupleMap.get(trx.assetSymbol)?.push({
-						quantity: new Decimal(trx.quantity),
-						price: new Decimal(trx.price),
-						lotId: !useTestLotId
-							? (crypto.randomUUID() as string)
-							: 'test lot id',
-						accountId: trx.accountId,
-						acquiredDate: trx.transactionDate,
-						isNewBuy: true,
-					});
-				} else {
-					lotTupleMap.set(trx.assetSymbol, [
-						{
-							quantity: new Decimal(trx.quantity),
-							price: new Decimal(trx.price),
-							lotId: !useTestLotId
-								? (crypto.randomUUID() as string)
-								: 'test lot id',
-							accountId: trx.accountId,
-							acquiredDate: trx.transactionDate,
-							isNewBuy: true,
-						},
-					]);
-				}
-			}
-		}
-
-		return {
-			lotTupleMap,
-			newBuys,
-			newSells,
-			newTransactions,
-		};
+		// Attempt to generate the change set for each asset in the lotTupleMap
+		return Array.from(assetLots.entries()).map(([_symbol, data]) => {
+			return resolveLotChange(data);
+		});
 	}
 
 	async assertUserIsCreatedInPlaid({

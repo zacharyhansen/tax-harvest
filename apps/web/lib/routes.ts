@@ -61,6 +61,11 @@ export const TypedRoutes = {
 			`/main/admin/plaid-history/${lotTransactionBatchId}`,
 		z.object({ lotTransactionBatchId: z.string() }),
 	),
+	plaidMerge: makeRoute(
+		({ plaidMergeId }) =>
+			`/main/admin/plaid-history/${plaidMergeId}`,
+		z.object({ plaidMergeId: z.string() }),
+	),
 	plaidHistory: makeRoute(() => `/main/admin/plaid-history`),
 	settings: makeRoute(() => `/main/settings`),
 	settingsNotifications: makeRoute(() => `/main/settings/notifications`),

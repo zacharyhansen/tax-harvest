@@ -69,15 +69,21 @@ export default function LogPage(props: {
 								</div>
 								{data.log.mergeError.map((error) => (
 									<div key={error.id} className="flex items-center gap-2">
-										<span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${
-											error.resolved 
-												? 'bg-green-100 text-green-700' 
-												: 'bg-yellow-100 text-yellow-700'
-										}`}>
+										<span
+											className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${
+												error.resolved
+													? 'bg-green-100 text-green-700'
+													: 'bg-yellow-100 text-yellow-700'
+											}`}
+										>
 											{error.assetSymbol} - {error.type}
 										</span>
 										<Button
-											onClick={() => router.push(TypedRoutes.mergeError({ mergeErrorId: error.id }))}
+											onClick={() =>
+												router.push(
+													TypedRoutes.mergeError({ mergeErrorId: error.id }),
+												)
+											}
 											variant="outline"
 											size="sm"
 										>
@@ -92,11 +98,7 @@ export default function LogPage(props: {
 			}
 		>
 			{data?.log?.type === 'PLAID_TRX_MERGE' ? (
-				<PlaidTrxMergeLogView
-					data={data.log.data}
-					// @ts-expect-error - LotTransactionBatch is not defined in the log type
-					LotTransactionBatch={data.log.LotTransactionBatch ?? undefined}
-				/>
+				<PlaidTrxMergeLogView data={data.log.data} />
 			) : data?.log?.type === 'PLAID_TRX_MERGE_ERROR' ? (
 				<PlaidTrxMergeErrorLogView data={data.log.data} />
 			) : data?.log?.type === 'PLAID_TRX_MERGE_SUCCESS' ? (

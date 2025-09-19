@@ -1,4 +1,4 @@
-import { Injectable, OnModuleDestroy, type OnModuleInit } from '@nestjs/common';
+import { Injectable, type OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import get from 'lodash.get';
 

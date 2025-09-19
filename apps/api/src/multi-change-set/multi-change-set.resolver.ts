@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Info, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import type { GraphQLResolveInfo } from 'graphql';
 import { ClerkContext } from '~/auth/decorators/clerk-context.decorator';
@@ -49,12 +49,7 @@ export class MultiChangeSetResolver {
 			.mergeError.findUnique({
 				select,
 				where: { id },
-			})
-			.then((mergeError) => ({
-				...mergeError,
-				logId: mergeError?.log?.id.toString(),
-				log: { ...mergeError?.log, id: mergeError?.log?.id.toString() },
-			}));
+			});
 	}
 
 	/**

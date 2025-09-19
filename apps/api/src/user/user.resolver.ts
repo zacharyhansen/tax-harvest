@@ -106,7 +106,7 @@ export class UserResolver {
 	): Promise<User[]> {
 		const { select } = new PrismaSelect<Prisma.UserSelect>(info).value;
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId))
+			.rlsPortfolioClient(clerkContext.metadata.portfolioId)
 			.user.findMany({
 				where: {
 					UsersOnPortfolios: {
