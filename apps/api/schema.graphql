@@ -4088,21 +4088,16 @@ type AssetMerge {
   plaidMergeId: String!
   portfolio: Portfolio!
   portfolioId: String!
-  realizedProfitAndLossLongTerm: Decimal!
-  realizedProfitAndLossShortTerm: Decimal!
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
   transactionOnAssetMerge: [TransactionOnAssetMerge!]
   updatedAt: DateTime!
-  usedLotChangeList: LotChangeList
 }
 
 type AssetMergeAvgAggregate {
   logTrxMergeId: Float
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   targetQuantity: Decimal
   targetValue: Decimal
 }
@@ -4124,8 +4119,6 @@ type AssetMergeCountAggregate {
   mergeErrorId: Int!
   plaidMergeId: Int!
   portfolioId: Int!
-  realizedProfitAndLossLongTerm: Int!
-  realizedProfitAndLossShortTerm: Int!
   resolvedLotChange: Int!
   targetPositionSnapshot: Int!
   targetQuantity: Int!
@@ -4143,8 +4136,6 @@ input AssetMergeCreateManyAccountInput {
   mergeErrorId: String
   plaidMergeId: String!
   portfolioId: String!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
@@ -4167,8 +4158,6 @@ input AssetMergeCreateManyAssetInput {
   mergeErrorId: String
   plaidMergeId: String!
   portfolioId: String!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
@@ -4191,8 +4180,6 @@ input AssetMergeCreateManyLogTrxMergeInput {
   mergeErrorId: String
   plaidMergeId: String!
   portfolioId: String!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
@@ -4215,8 +4202,6 @@ input AssetMergeCreateManyMergeErrorInput {
   lotData: JSON!
   plaidMergeId: String!
   portfolioId: String!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
@@ -4239,8 +4224,6 @@ input AssetMergeCreateManyPlaidMergeInput {
   lotData: JSON!
   mergeErrorId: String
   portfolioId: String!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
@@ -4263,8 +4246,6 @@ input AssetMergeCreateManyPortfolioInput {
   lotData: JSON!
   mergeErrorId: String
   plaidMergeId: String!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
@@ -4331,12 +4312,6 @@ input AssetMergeCreateNestedOneWithoutTransactionOnAssetMergeInput {
   create: AssetMergeCreateWithoutTransactionOnAssetMergeInput
 }
 
-input AssetMergeCreateNestedOneWithoutUsedLotChangeListInput {
-  connect: AssetMergeWhereUniqueInput
-  connectOrCreate: AssetMergeCreateOrConnectWithoutUsedLotChangeListInput
-  create: AssetMergeCreateWithoutUsedLotChangeListInput
-}
-
 input AssetMergeCreateOrConnectWithoutAccountInput {
   create: AssetMergeCreateWithoutAccountInput!
   where: AssetMergeWhereUniqueInput!
@@ -4377,31 +4352,23 @@ input AssetMergeCreateOrConnectWithoutTransactionOnAssetMergeInput {
   where: AssetMergeWhereUniqueInput!
 }
 
-input AssetMergeCreateOrConnectWithoutUsedLotChangeListInput {
-  create: AssetMergeCreateWithoutUsedLotChangeListInput!
-  where: AssetMergeWhereUniqueInput!
-}
-
 input AssetMergeCreateWithoutAccountInput {
   asset: AssetCreateNestedOneWithoutLotMergeInput!
   createdAt: DateTime
   error: JSON
   id: String
   logTrxMerge: LogCreateNestedOneWithoutLotMergeInput
-  lotChangeList: LotChangeListCreateNestedManyWithoutOnAssetMergeInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutAssetMergeInput
   lotData: JSON!
   mergeError: MergeErrorCreateNestedOneWithoutAssetMergeInput
   plaidMerge: PlaidMergeCreateNestedOneWithoutAssetMergeInput
   portfolio: PortfolioCreateNestedOneWithoutAssetMergeInput!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAssetMergeInput
   updatedAt: DateTime
-  usedLotChangeList: LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput
 }
 
 input AssetMergeCreateWithoutAssetInput {
@@ -4410,20 +4377,17 @@ input AssetMergeCreateWithoutAssetInput {
   error: JSON
   id: String
   logTrxMerge: LogCreateNestedOneWithoutLotMergeInput
-  lotChangeList: LotChangeListCreateNestedManyWithoutOnAssetMergeInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutAssetMergeInput
   lotData: JSON!
   mergeError: MergeErrorCreateNestedOneWithoutAssetMergeInput
   plaidMerge: PlaidMergeCreateNestedOneWithoutAssetMergeInput
   portfolio: PortfolioCreateNestedOneWithoutAssetMergeInput!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAssetMergeInput
   updatedAt: DateTime
-  usedLotChangeList: LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput
 }
 
 input AssetMergeCreateWithoutLogTrxMergeInput {
@@ -4432,20 +4396,17 @@ input AssetMergeCreateWithoutLogTrxMergeInput {
   createdAt: DateTime
   error: JSON
   id: String
-  lotChangeList: LotChangeListCreateNestedManyWithoutOnAssetMergeInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutAssetMergeInput
   lotData: JSON!
   mergeError: MergeErrorCreateNestedOneWithoutAssetMergeInput
   plaidMerge: PlaidMergeCreateNestedOneWithoutAssetMergeInput
   portfolio: PortfolioCreateNestedOneWithoutAssetMergeInput!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAssetMergeInput
   updatedAt: DateTime
-  usedLotChangeList: LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput
 }
 
 input AssetMergeCreateWithoutLotChangeListInput {
@@ -4459,15 +4420,12 @@ input AssetMergeCreateWithoutLotChangeListInput {
   mergeError: MergeErrorCreateNestedOneWithoutAssetMergeInput
   plaidMerge: PlaidMergeCreateNestedOneWithoutAssetMergeInput
   portfolio: PortfolioCreateNestedOneWithoutAssetMergeInput!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAssetMergeInput
   updatedAt: DateTime
-  usedLotChangeList: LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput
 }
 
 input AssetMergeCreateWithoutMergeErrorInput {
@@ -4477,19 +4435,16 @@ input AssetMergeCreateWithoutMergeErrorInput {
   error: JSON
   id: String
   logTrxMerge: LogCreateNestedOneWithoutLotMergeInput
-  lotChangeList: LotChangeListCreateNestedManyWithoutOnAssetMergeInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutAssetMergeInput
   lotData: JSON!
   plaidMerge: PlaidMergeCreateNestedOneWithoutAssetMergeInput
   portfolio: PortfolioCreateNestedOneWithoutAssetMergeInput!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAssetMergeInput
   updatedAt: DateTime
-  usedLotChangeList: LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput
 }
 
 input AssetMergeCreateWithoutPlaidMergeInput {
@@ -4499,19 +4454,16 @@ input AssetMergeCreateWithoutPlaidMergeInput {
   error: JSON
   id: String
   logTrxMerge: LogCreateNestedOneWithoutLotMergeInput
-  lotChangeList: LotChangeListCreateNestedManyWithoutOnAssetMergeInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutAssetMergeInput
   lotData: JSON!
   mergeError: MergeErrorCreateNestedOneWithoutAssetMergeInput
   portfolio: PortfolioCreateNestedOneWithoutAssetMergeInput!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAssetMergeInput
   updatedAt: DateTime
-  usedLotChangeList: LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput
 }
 
 input AssetMergeCreateWithoutPortfolioInput {
@@ -4521,19 +4473,16 @@ input AssetMergeCreateWithoutPortfolioInput {
   error: JSON
   id: String
   logTrxMerge: LogCreateNestedOneWithoutLotMergeInput
-  lotChangeList: LotChangeListCreateNestedManyWithoutOnAssetMergeInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutAssetMergeInput
   lotData: JSON!
   mergeError: MergeErrorCreateNestedOneWithoutAssetMergeInput
   plaidMerge: PlaidMergeCreateNestedOneWithoutAssetMergeInput
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAssetMergeInput
   updatedAt: DateTime
-  usedLotChangeList: LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput
 }
 
 input AssetMergeCreateWithoutTransactionOnAssetMergeInput {
@@ -4543,40 +4492,15 @@ input AssetMergeCreateWithoutTransactionOnAssetMergeInput {
   error: JSON
   id: String
   logTrxMerge: LogCreateNestedOneWithoutLotMergeInput
-  lotChangeList: LotChangeListCreateNestedManyWithoutOnAssetMergeInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutAssetMergeInput
   lotData: JSON!
   mergeError: MergeErrorCreateNestedOneWithoutAssetMergeInput
   plaidMerge: PlaidMergeCreateNestedOneWithoutAssetMergeInput
   portfolio: PortfolioCreateNestedOneWithoutAssetMergeInput!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   resolvedLotChange: JSON!
   targetPositionSnapshot: JSON!
   targetQuantity: Decimal
   targetValue: Decimal
-  updatedAt: DateTime
-  usedLotChangeList: LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput
-}
-
-input AssetMergeCreateWithoutUsedLotChangeListInput {
-  account: AccountCreateNestedOneWithoutAssetMergeInput!
-  asset: AssetCreateNestedOneWithoutLotMergeInput!
-  createdAt: DateTime
-  error: JSON
-  id: String
-  logTrxMerge: LogCreateNestedOneWithoutLotMergeInput
-  lotChangeList: LotChangeListCreateNestedManyWithoutOnAssetMergeInput
-  lotData: JSON!
-  mergeError: MergeErrorCreateNestedOneWithoutAssetMergeInput
-  plaidMerge: PlaidMergeCreateNestedOneWithoutAssetMergeInput
-  portfolio: PortfolioCreateNestedOneWithoutAssetMergeInput!
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
-  resolvedLotChange: JSON!
-  targetPositionSnapshot: JSON!
-  targetQuantity: Decimal
-  targetValue: Decimal
-  transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAssetMergeInput
   updatedAt: DateTime
 }
 
@@ -4595,8 +4519,6 @@ type AssetMergeMaxAggregate {
   mergeErrorId: String
   plaidMergeId: String
   portfolioId: String
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   targetQuantity: Decimal
   targetValue: Decimal
   updatedAt: DateTime
@@ -4611,16 +4533,9 @@ type AssetMergeMinAggregate {
   mergeErrorId: String
   plaidMergeId: String
   portfolioId: String
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   targetQuantity: Decimal
   targetValue: Decimal
   updatedAt: DateTime
-}
-
-input AssetMergeNullableScalarRelationFilter {
-  is: AssetMergeWhereInput
-  isNot: AssetMergeWhereInput
 }
 
 input AssetMergeScalarRelationFilter {
@@ -4642,8 +4557,6 @@ input AssetMergeScalarWhereInput {
   mergeErrorId: UuidNullableFilter
   plaidMergeId: UuidFilter
   portfolioId: UuidFilter
-  realizedProfitAndLossLongTerm: DecimalFilter
-  realizedProfitAndLossShortTerm: DecimalFilter
   resolvedLotChange: JsonFilter
   targetPositionSnapshot: JsonFilter
   targetQuantity: DecimalNullableFilter
@@ -4653,8 +4566,6 @@ input AssetMergeScalarWhereInput {
 
 type AssetMergeSumAggregate {
   logTrxMergeId: String
-  realizedProfitAndLossLongTerm: Decimal
-  realizedProfitAndLossShortTerm: Decimal
   targetQuantity: Decimal
   targetValue: Decimal
 }
@@ -4664,8 +4575,6 @@ input AssetMergeUpdateManyMutationInput {
   error: JSON
   id: StringFieldUpdateOperationsInput
   lotData: JSON
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
@@ -4803,16 +4712,6 @@ input AssetMergeUpdateOneRequiredWithoutTransactionOnAssetMergeNestedInput {
   upsert: AssetMergeUpsertWithoutTransactionOnAssetMergeInput
 }
 
-input AssetMergeUpdateOneWithoutUsedLotChangeListNestedInput {
-  connect: AssetMergeWhereUniqueInput
-  connectOrCreate: AssetMergeCreateOrConnectWithoutUsedLotChangeListInput
-  create: AssetMergeCreateWithoutUsedLotChangeListInput
-  delete: AssetMergeWhereInput
-  disconnect: AssetMergeWhereInput
-  update: AssetMergeUpdateToOneWithWhereWithoutUsedLotChangeListInput
-  upsert: AssetMergeUpsertWithoutUsedLotChangeListInput
-}
-
 input AssetMergeUpdateToOneWithWhereWithoutLotChangeListInput {
   data: AssetMergeUpdateWithoutLotChangeListInput!
   where: AssetMergeWhereInput
@@ -4820,11 +4719,6 @@ input AssetMergeUpdateToOneWithWhereWithoutLotChangeListInput {
 
 input AssetMergeUpdateToOneWithWhereWithoutTransactionOnAssetMergeInput {
   data: AssetMergeUpdateWithoutTransactionOnAssetMergeInput!
-  where: AssetMergeWhereInput
-}
-
-input AssetMergeUpdateToOneWithWhereWithoutUsedLotChangeListInput {
-  data: AssetMergeUpdateWithoutUsedLotChangeListInput!
   where: AssetMergeWhereInput
 }
 
@@ -4864,20 +4758,17 @@ input AssetMergeUpdateWithoutAccountInput {
   error: JSON
   id: StringFieldUpdateOperationsInput
   logTrxMerge: LogUpdateOneWithoutLotMergeNestedInput
-  lotChangeList: LotChangeListUpdateManyWithoutOnAssetMergeNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutAssetMergeNestedInput
   lotData: JSON
   mergeError: MergeErrorUpdateOneWithoutAssetMergeNestedInput
   plaidMerge: PlaidMergeUpdateOneWithoutAssetMergeNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
   targetValue: NullableDecimalFieldUpdateOperationsInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAssetMergeNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  usedLotChangeList: LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput
 }
 
 input AssetMergeUpdateWithoutAssetInput {
@@ -4886,20 +4777,17 @@ input AssetMergeUpdateWithoutAssetInput {
   error: JSON
   id: StringFieldUpdateOperationsInput
   logTrxMerge: LogUpdateOneWithoutLotMergeNestedInput
-  lotChangeList: LotChangeListUpdateManyWithoutOnAssetMergeNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutAssetMergeNestedInput
   lotData: JSON
   mergeError: MergeErrorUpdateOneWithoutAssetMergeNestedInput
   plaidMerge: PlaidMergeUpdateOneWithoutAssetMergeNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
   targetValue: NullableDecimalFieldUpdateOperationsInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAssetMergeNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  usedLotChangeList: LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput
 }
 
 input AssetMergeUpdateWithoutLogTrxMergeInput {
@@ -4908,20 +4796,17 @@ input AssetMergeUpdateWithoutLogTrxMergeInput {
   createdAt: DateTimeFieldUpdateOperationsInput
   error: JSON
   id: StringFieldUpdateOperationsInput
-  lotChangeList: LotChangeListUpdateManyWithoutOnAssetMergeNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutAssetMergeNestedInput
   lotData: JSON
   mergeError: MergeErrorUpdateOneWithoutAssetMergeNestedInput
   plaidMerge: PlaidMergeUpdateOneWithoutAssetMergeNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
   targetValue: NullableDecimalFieldUpdateOperationsInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAssetMergeNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  usedLotChangeList: LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput
 }
 
 input AssetMergeUpdateWithoutLotChangeListInput {
@@ -4935,15 +4820,12 @@ input AssetMergeUpdateWithoutLotChangeListInput {
   mergeError: MergeErrorUpdateOneWithoutAssetMergeNestedInput
   plaidMerge: PlaidMergeUpdateOneWithoutAssetMergeNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
   targetValue: NullableDecimalFieldUpdateOperationsInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAssetMergeNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  usedLotChangeList: LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput
 }
 
 input AssetMergeUpdateWithoutMergeErrorInput {
@@ -4953,19 +4835,16 @@ input AssetMergeUpdateWithoutMergeErrorInput {
   error: JSON
   id: StringFieldUpdateOperationsInput
   logTrxMerge: LogUpdateOneWithoutLotMergeNestedInput
-  lotChangeList: LotChangeListUpdateManyWithoutOnAssetMergeNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutAssetMergeNestedInput
   lotData: JSON
   plaidMerge: PlaidMergeUpdateOneWithoutAssetMergeNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
   targetValue: NullableDecimalFieldUpdateOperationsInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAssetMergeNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  usedLotChangeList: LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput
 }
 
 input AssetMergeUpdateWithoutPlaidMergeInput {
@@ -4975,19 +4854,16 @@ input AssetMergeUpdateWithoutPlaidMergeInput {
   error: JSON
   id: StringFieldUpdateOperationsInput
   logTrxMerge: LogUpdateOneWithoutLotMergeNestedInput
-  lotChangeList: LotChangeListUpdateManyWithoutOnAssetMergeNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutAssetMergeNestedInput
   lotData: JSON
   mergeError: MergeErrorUpdateOneWithoutAssetMergeNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
   targetValue: NullableDecimalFieldUpdateOperationsInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAssetMergeNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  usedLotChangeList: LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput
 }
 
 input AssetMergeUpdateWithoutPortfolioInput {
@@ -4997,19 +4873,16 @@ input AssetMergeUpdateWithoutPortfolioInput {
   error: JSON
   id: StringFieldUpdateOperationsInput
   logTrxMerge: LogUpdateOneWithoutLotMergeNestedInput
-  lotChangeList: LotChangeListUpdateManyWithoutOnAssetMergeNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutAssetMergeNestedInput
   lotData: JSON
   mergeError: MergeErrorUpdateOneWithoutAssetMergeNestedInput
   plaidMerge: PlaidMergeUpdateOneWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
   targetValue: NullableDecimalFieldUpdateOperationsInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAssetMergeNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
-  usedLotChangeList: LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput
 }
 
 input AssetMergeUpdateWithoutTransactionOnAssetMergeInput {
@@ -5019,40 +4892,15 @@ input AssetMergeUpdateWithoutTransactionOnAssetMergeInput {
   error: JSON
   id: StringFieldUpdateOperationsInput
   logTrxMerge: LogUpdateOneWithoutLotMergeNestedInput
-  lotChangeList: LotChangeListUpdateManyWithoutOnAssetMergeNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutAssetMergeNestedInput
   lotData: JSON
   mergeError: MergeErrorUpdateOneWithoutAssetMergeNestedInput
   plaidMerge: PlaidMergeUpdateOneWithoutAssetMergeNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   resolvedLotChange: JSON
   targetPositionSnapshot: JSON
   targetQuantity: NullableDecimalFieldUpdateOperationsInput
   targetValue: NullableDecimalFieldUpdateOperationsInput
-  updatedAt: DateTimeFieldUpdateOperationsInput
-  usedLotChangeList: LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput
-}
-
-input AssetMergeUpdateWithoutUsedLotChangeListInput {
-  account: AccountUpdateOneRequiredWithoutAssetMergeNestedInput
-  asset: AssetUpdateOneRequiredWithoutLotMergeNestedInput
-  createdAt: DateTimeFieldUpdateOperationsInput
-  error: JSON
-  id: StringFieldUpdateOperationsInput
-  logTrxMerge: LogUpdateOneWithoutLotMergeNestedInput
-  lotChangeList: LotChangeListUpdateManyWithoutOnAssetMergeNestedInput
-  lotData: JSON
-  mergeError: MergeErrorUpdateOneWithoutAssetMergeNestedInput
-  plaidMerge: PlaidMergeUpdateOneWithoutAssetMergeNestedInput
-  portfolio: PortfolioUpdateOneRequiredWithoutAssetMergeNestedInput
-  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
-  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
-  resolvedLotChange: JSON
-  targetPositionSnapshot: JSON
-  targetQuantity: NullableDecimalFieldUpdateOperationsInput
-  targetValue: NullableDecimalFieldUpdateOperationsInput
-  transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAssetMergeNestedInput
   updatedAt: DateTimeFieldUpdateOperationsInput
 }
 
@@ -5104,12 +4952,6 @@ input AssetMergeUpsertWithoutTransactionOnAssetMergeInput {
   where: AssetMergeWhereInput
 }
 
-input AssetMergeUpsertWithoutUsedLotChangeListInput {
-  create: AssetMergeCreateWithoutUsedLotChangeListInput!
-  update: AssetMergeUpdateWithoutUsedLotChangeListInput!
-  where: AssetMergeWhereInput
-}
-
 input AssetMergeWhereInput {
   AND: [AssetMergeWhereInput!]
   NOT: [AssetMergeWhereInput!]
@@ -5131,15 +4973,12 @@ input AssetMergeWhereInput {
   plaidMergeId: UuidFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
-  realizedProfitAndLossLongTerm: DecimalFilter
-  realizedProfitAndLossShortTerm: DecimalFilter
   resolvedLotChange: JsonFilter
   targetPositionSnapshot: JsonFilter
   targetQuantity: DecimalNullableFilter
   targetValue: DecimalNullableFilter
   transactionOnAssetMerge: TransactionOnAssetMergeListRelationFilter
   updatedAt: DateTimeFilter
-  usedLotChangeList: LotChangeListNullableScalarRelationFilter
 }
 
 input AssetMergeWhereUniqueInput {
@@ -5163,15 +5002,12 @@ input AssetMergeWhereUniqueInput {
   plaidMergeId: UuidFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
-  realizedProfitAndLossLongTerm: DecimalFilter
-  realizedProfitAndLossShortTerm: DecimalFilter
   resolvedLotChange: JsonFilter
   targetPositionSnapshot: JsonFilter
   targetQuantity: DecimalNullableFilter
   targetValue: DecimalNullableFilter
   transactionOnAssetMerge: TransactionOnAssetMergeListRelationFilter
   updatedAt: DateTimeFilter
-  usedLotChangeList: LotChangeListNullableScalarRelationFilter
 }
 
 type AssetMinAggregate {
@@ -6681,6 +6517,11 @@ input BoolFieldUpdateOperationsInput {
 input BoolFilter {
   equals: Boolean
   not: NestedBoolFilter
+}
+
+input BoolNullableFilter {
+  equals: Boolean
+  not: NestedBoolNullableFilter
 }
 
 """
@@ -10092,6 +9933,8 @@ type LotChange {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal!
+  realizedProfitAndLossShortTerm: Decimal!
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10100,6 +9943,8 @@ type LotChangeAvgAggregate {
   price: Decimal
   quantityChange: Decimal
   quantityFinal: Decimal
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
 }
 
 type LotChangeCountAggregate {
@@ -10115,6 +9960,8 @@ type LotChangeCountAggregate {
   price: Int!
   quantityChange: Int!
   quantityFinal: Int!
+  realizedProfitAndLossLongTerm: Int!
+  realizedProfitAndLossShortTerm: Int!
   shouldDelete: Int!
   upsert: Int!
 }
@@ -10130,6 +9977,8 @@ input LotChangeCreateManyAccountInput {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10150,6 +9999,8 @@ input LotChangeCreateManyLotChangeListInput {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10170,6 +10021,8 @@ input LotChangeCreateManyLotInput {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10190,6 +10043,8 @@ input LotChangeCreateManyPortfolioInput {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10258,6 +10113,8 @@ input LotChangeCreateWithoutAccountInput {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10273,6 +10130,8 @@ input LotChangeCreateWithoutLotChangeListInput {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10288,6 +10147,8 @@ input LotChangeCreateWithoutLotInput {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10303,6 +10164,8 @@ input LotChangeCreateWithoutPortfolioInput {
   price: Decimal!
   quantityChange: Decimal!
   quantityFinal: Decimal!
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean!
   upsert: JSON!
 }
@@ -10312,13 +10175,20 @@ type LotChangeList {
   _count: LotChangeListCount!
   account: Account!
   accountId: String!
+
+  """Were the changes from this list applied to the account?"""
+  appliedToAccount: Boolean
+  assetMerge: AssetMerge!
   assetMergeId: String!
   id: ID!
-  onAssetMerge: AssetMerge!
   portfolio: Portfolio!
   portfolioId: String!
-  usedByAssetMerge: AssetMerge
   usedByAssetMergeId: String
+}
+
+input LotChangeListAssetMergeIdAppliedToAccountCompoundUniqueInput {
+  appliedToAccount: Boolean!
+  assetMergeId: String!
 }
 
 type LotChangeListCount {
@@ -10328,6 +10198,7 @@ type LotChangeListCount {
 type LotChangeListCountAggregate {
   _all: Int!
   accountId: Int!
+  appliedToAccount: Int!
   assetMergeId: Int!
   id: Int!
   portfolioId: Int!
@@ -10335,6 +10206,7 @@ type LotChangeListCountAggregate {
 }
 
 input LotChangeListCreateManyAccountInput {
+  appliedToAccount: Boolean
   assetMergeId: String!
   id: String
   portfolioId: String!
@@ -10346,20 +10218,22 @@ input LotChangeListCreateManyAccountInputEnvelope {
   skipDuplicates: Boolean
 }
 
-input LotChangeListCreateManyOnAssetMergeInput {
+input LotChangeListCreateManyAssetMergeInput {
   accountId: String!
+  appliedToAccount: Boolean
   id: String
   portfolioId: String!
   usedByAssetMergeId: String
 }
 
-input LotChangeListCreateManyOnAssetMergeInputEnvelope {
-  data: [LotChangeListCreateManyOnAssetMergeInput!]!
+input LotChangeListCreateManyAssetMergeInputEnvelope {
+  data: [LotChangeListCreateManyAssetMergeInput!]!
   skipDuplicates: Boolean
 }
 
 input LotChangeListCreateManyPortfolioInput {
   accountId: String!
+  appliedToAccount: Boolean
   assetMergeId: String!
   id: String
   usedByAssetMergeId: String
@@ -10377,11 +10251,11 @@ input LotChangeListCreateNestedManyWithoutAccountInput {
   createMany: LotChangeListCreateManyAccountInputEnvelope
 }
 
-input LotChangeListCreateNestedManyWithoutOnAssetMergeInput {
+input LotChangeListCreateNestedManyWithoutAssetMergeInput {
   connect: [LotChangeListWhereUniqueInput!]
-  connectOrCreate: [LotChangeListCreateOrConnectWithoutOnAssetMergeInput!]
-  create: [LotChangeListCreateWithoutOnAssetMergeInput!]
-  createMany: LotChangeListCreateManyOnAssetMergeInputEnvelope
+  connectOrCreate: [LotChangeListCreateOrConnectWithoutAssetMergeInput!]
+  create: [LotChangeListCreateWithoutAssetMergeInput!]
+  createMany: LotChangeListCreateManyAssetMergeInputEnvelope
 }
 
 input LotChangeListCreateNestedManyWithoutPortfolioInput {
@@ -10397,14 +10271,13 @@ input LotChangeListCreateNestedOneWithoutLotChangeInput {
   create: LotChangeListCreateWithoutLotChangeInput
 }
 
-input LotChangeListCreateNestedOneWithoutUsedByAssetMergeInput {
-  connect: LotChangeListWhereUniqueInput
-  connectOrCreate: LotChangeListCreateOrConnectWithoutUsedByAssetMergeInput
-  create: LotChangeListCreateWithoutUsedByAssetMergeInput
-}
-
 input LotChangeListCreateOrConnectWithoutAccountInput {
   create: LotChangeListCreateWithoutAccountInput!
+  where: LotChangeListWhereUniqueInput!
+}
+
+input LotChangeListCreateOrConnectWithoutAssetMergeInput {
+  create: LotChangeListCreateWithoutAssetMergeInput!
   where: LotChangeListWhereUniqueInput!
 }
 
@@ -10413,59 +10286,45 @@ input LotChangeListCreateOrConnectWithoutLotChangeInput {
   where: LotChangeListWhereUniqueInput!
 }
 
-input LotChangeListCreateOrConnectWithoutOnAssetMergeInput {
-  create: LotChangeListCreateWithoutOnAssetMergeInput!
-  where: LotChangeListWhereUniqueInput!
-}
-
 input LotChangeListCreateOrConnectWithoutPortfolioInput {
   create: LotChangeListCreateWithoutPortfolioInput!
   where: LotChangeListWhereUniqueInput!
 }
 
-input LotChangeListCreateOrConnectWithoutUsedByAssetMergeInput {
-  create: LotChangeListCreateWithoutUsedByAssetMergeInput!
-  where: LotChangeListWhereUniqueInput!
-}
-
 input LotChangeListCreateWithoutAccountInput {
   LotChange: LotChangeCreateNestedManyWithoutLotChangeListInput
+  appliedToAccount: Boolean
+  assetMerge: AssetMergeCreateNestedOneWithoutLotChangeListInput!
   id: String
-  onAssetMerge: AssetMergeCreateNestedOneWithoutLotChangeListInput!
   portfolio: PortfolioCreateNestedOneWithoutLotChangeListInput!
-  usedByAssetMerge: AssetMergeCreateNestedOneWithoutUsedLotChangeListInput
+  usedByAssetMergeId: String
+}
+
+input LotChangeListCreateWithoutAssetMergeInput {
+  LotChange: LotChangeCreateNestedManyWithoutLotChangeListInput
+  account: AccountCreateNestedOneWithoutLotChangeListInput!
+  appliedToAccount: Boolean
+  id: String
+  portfolio: PortfolioCreateNestedOneWithoutLotChangeListInput!
+  usedByAssetMergeId: String
 }
 
 input LotChangeListCreateWithoutLotChangeInput {
   account: AccountCreateNestedOneWithoutLotChangeListInput!
-  id: String
-  onAssetMerge: AssetMergeCreateNestedOneWithoutLotChangeListInput!
-  portfolio: PortfolioCreateNestedOneWithoutLotChangeListInput!
-  usedByAssetMerge: AssetMergeCreateNestedOneWithoutUsedLotChangeListInput
-}
-
-input LotChangeListCreateWithoutOnAssetMergeInput {
-  LotChange: LotChangeCreateNestedManyWithoutLotChangeListInput
-  account: AccountCreateNestedOneWithoutLotChangeListInput!
+  appliedToAccount: Boolean
+  assetMerge: AssetMergeCreateNestedOneWithoutLotChangeListInput!
   id: String
   portfolio: PortfolioCreateNestedOneWithoutLotChangeListInput!
-  usedByAssetMerge: AssetMergeCreateNestedOneWithoutUsedLotChangeListInput
+  usedByAssetMergeId: String
 }
 
 input LotChangeListCreateWithoutPortfolioInput {
   LotChange: LotChangeCreateNestedManyWithoutLotChangeListInput
   account: AccountCreateNestedOneWithoutLotChangeListInput!
+  appliedToAccount: Boolean
+  assetMerge: AssetMergeCreateNestedOneWithoutLotChangeListInput!
   id: String
-  onAssetMerge: AssetMergeCreateNestedOneWithoutLotChangeListInput!
-  usedByAssetMerge: AssetMergeCreateNestedOneWithoutUsedLotChangeListInput
-}
-
-input LotChangeListCreateWithoutUsedByAssetMergeInput {
-  LotChange: LotChangeCreateNestedManyWithoutLotChangeListInput
-  account: AccountCreateNestedOneWithoutLotChangeListInput!
-  id: String
-  onAssetMerge: AssetMergeCreateNestedOneWithoutLotChangeListInput!
-  portfolio: PortfolioCreateNestedOneWithoutLotChangeListInput!
+  usedByAssetMergeId: String
 }
 
 input LotChangeListListRelationFilter {
@@ -10476,6 +10335,7 @@ input LotChangeListListRelationFilter {
 
 type LotChangeListMaxAggregate {
   accountId: String
+  appliedToAccount: Boolean
   assetMergeId: String
   id: String
   portfolioId: String
@@ -10484,6 +10344,7 @@ type LotChangeListMaxAggregate {
 
 type LotChangeListMinAggregate {
   accountId: String
+  appliedToAccount: Boolean
   assetMergeId: String
   id: String
   portfolioId: String
@@ -10506,6 +10367,7 @@ input LotChangeListScalarWhereInput {
   NOT: [LotChangeListScalarWhereInput!]
   OR: [LotChangeListScalarWhereInput!]
   accountId: UuidFilter
+  appliedToAccount: BoolNullableFilter
   assetMergeId: UuidFilter
   id: UuidFilter
   portfolioId: UuidFilter
@@ -10513,7 +10375,9 @@ input LotChangeListScalarWhereInput {
 }
 
 input LotChangeListUpdateManyMutationInput {
+  appliedToAccount: NullableBoolFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
+  usedByAssetMergeId: NullableStringFieldUpdateOperationsInput
 }
 
 input LotChangeListUpdateManyWithWhereWithoutAccountInput {
@@ -10521,7 +10385,7 @@ input LotChangeListUpdateManyWithWhereWithoutAccountInput {
   where: LotChangeListScalarWhereInput!
 }
 
-input LotChangeListUpdateManyWithWhereWithoutOnAssetMergeInput {
+input LotChangeListUpdateManyWithWhereWithoutAssetMergeInput {
   data: LotChangeListUpdateManyMutationInput!
   where: LotChangeListScalarWhereInput!
 }
@@ -10545,18 +10409,18 @@ input LotChangeListUpdateManyWithoutAccountNestedInput {
   upsert: [LotChangeListUpsertWithWhereUniqueWithoutAccountInput!]
 }
 
-input LotChangeListUpdateManyWithoutOnAssetMergeNestedInput {
+input LotChangeListUpdateManyWithoutAssetMergeNestedInput {
   connect: [LotChangeListWhereUniqueInput!]
-  connectOrCreate: [LotChangeListCreateOrConnectWithoutOnAssetMergeInput!]
-  create: [LotChangeListCreateWithoutOnAssetMergeInput!]
-  createMany: LotChangeListCreateManyOnAssetMergeInputEnvelope
+  connectOrCreate: [LotChangeListCreateOrConnectWithoutAssetMergeInput!]
+  create: [LotChangeListCreateWithoutAssetMergeInput!]
+  createMany: LotChangeListCreateManyAssetMergeInputEnvelope
   delete: [LotChangeListWhereUniqueInput!]
   deleteMany: [LotChangeListScalarWhereInput!]
   disconnect: [LotChangeListWhereUniqueInput!]
   set: [LotChangeListWhereUniqueInput!]
-  update: [LotChangeListUpdateWithWhereUniqueWithoutOnAssetMergeInput!]
-  updateMany: [LotChangeListUpdateManyWithWhereWithoutOnAssetMergeInput!]
-  upsert: [LotChangeListUpsertWithWhereUniqueWithoutOnAssetMergeInput!]
+  update: [LotChangeListUpdateWithWhereUniqueWithoutAssetMergeInput!]
+  updateMany: [LotChangeListUpdateManyWithWhereWithoutAssetMergeInput!]
+  upsert: [LotChangeListUpsertWithWhereUniqueWithoutAssetMergeInput!]
 }
 
 input LotChangeListUpdateManyWithoutPortfolioNestedInput {
@@ -10583,23 +10447,8 @@ input LotChangeListUpdateOneWithoutLotChangeNestedInput {
   upsert: LotChangeListUpsertWithoutLotChangeInput
 }
 
-input LotChangeListUpdateOneWithoutUsedByAssetMergeNestedInput {
-  connect: LotChangeListWhereUniqueInput
-  connectOrCreate: LotChangeListCreateOrConnectWithoutUsedByAssetMergeInput
-  create: LotChangeListCreateWithoutUsedByAssetMergeInput
-  delete: LotChangeListWhereInput
-  disconnect: LotChangeListWhereInput
-  update: LotChangeListUpdateToOneWithWhereWithoutUsedByAssetMergeInput
-  upsert: LotChangeListUpsertWithoutUsedByAssetMergeInput
-}
-
 input LotChangeListUpdateToOneWithWhereWithoutLotChangeInput {
   data: LotChangeListUpdateWithoutLotChangeInput!
-  where: LotChangeListWhereInput
-}
-
-input LotChangeListUpdateToOneWithWhereWithoutUsedByAssetMergeInput {
-  data: LotChangeListUpdateWithoutUsedByAssetMergeInput!
   where: LotChangeListWhereInput
 }
 
@@ -10608,8 +10457,8 @@ input LotChangeListUpdateWithWhereUniqueWithoutAccountInput {
   where: LotChangeListWhereUniqueInput!
 }
 
-input LotChangeListUpdateWithWhereUniqueWithoutOnAssetMergeInput {
-  data: LotChangeListUpdateWithoutOnAssetMergeInput!
+input LotChangeListUpdateWithWhereUniqueWithoutAssetMergeInput {
+  data: LotChangeListUpdateWithoutAssetMergeInput!
   where: LotChangeListWhereUniqueInput!
 }
 
@@ -10620,42 +10469,38 @@ input LotChangeListUpdateWithWhereUniqueWithoutPortfolioInput {
 
 input LotChangeListUpdateWithoutAccountInput {
   LotChange: LotChangeUpdateManyWithoutLotChangeListNestedInput
+  appliedToAccount: NullableBoolFieldUpdateOperationsInput
+  assetMerge: AssetMergeUpdateOneRequiredWithoutLotChangeListNestedInput
   id: StringFieldUpdateOperationsInput
-  onAssetMerge: AssetMergeUpdateOneRequiredWithoutLotChangeListNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutLotChangeListNestedInput
-  usedByAssetMerge: AssetMergeUpdateOneWithoutUsedLotChangeListNestedInput
+  usedByAssetMergeId: NullableStringFieldUpdateOperationsInput
+}
+
+input LotChangeListUpdateWithoutAssetMergeInput {
+  LotChange: LotChangeUpdateManyWithoutLotChangeListNestedInput
+  account: AccountUpdateOneRequiredWithoutLotChangeListNestedInput
+  appliedToAccount: NullableBoolFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutLotChangeListNestedInput
+  usedByAssetMergeId: NullableStringFieldUpdateOperationsInput
 }
 
 input LotChangeListUpdateWithoutLotChangeInput {
   account: AccountUpdateOneRequiredWithoutLotChangeListNestedInput
-  id: StringFieldUpdateOperationsInput
-  onAssetMerge: AssetMergeUpdateOneRequiredWithoutLotChangeListNestedInput
-  portfolio: PortfolioUpdateOneRequiredWithoutLotChangeListNestedInput
-  usedByAssetMerge: AssetMergeUpdateOneWithoutUsedLotChangeListNestedInput
-}
-
-input LotChangeListUpdateWithoutOnAssetMergeInput {
-  LotChange: LotChangeUpdateManyWithoutLotChangeListNestedInput
-  account: AccountUpdateOneRequiredWithoutLotChangeListNestedInput
+  appliedToAccount: NullableBoolFieldUpdateOperationsInput
+  assetMerge: AssetMergeUpdateOneRequiredWithoutLotChangeListNestedInput
   id: StringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutLotChangeListNestedInput
-  usedByAssetMerge: AssetMergeUpdateOneWithoutUsedLotChangeListNestedInput
+  usedByAssetMergeId: NullableStringFieldUpdateOperationsInput
 }
 
 input LotChangeListUpdateWithoutPortfolioInput {
   LotChange: LotChangeUpdateManyWithoutLotChangeListNestedInput
   account: AccountUpdateOneRequiredWithoutLotChangeListNestedInput
+  appliedToAccount: NullableBoolFieldUpdateOperationsInput
+  assetMerge: AssetMergeUpdateOneRequiredWithoutLotChangeListNestedInput
   id: StringFieldUpdateOperationsInput
-  onAssetMerge: AssetMergeUpdateOneRequiredWithoutLotChangeListNestedInput
-  usedByAssetMerge: AssetMergeUpdateOneWithoutUsedLotChangeListNestedInput
-}
-
-input LotChangeListUpdateWithoutUsedByAssetMergeInput {
-  LotChange: LotChangeUpdateManyWithoutLotChangeListNestedInput
-  account: AccountUpdateOneRequiredWithoutLotChangeListNestedInput
-  id: StringFieldUpdateOperationsInput
-  onAssetMerge: AssetMergeUpdateOneRequiredWithoutLotChangeListNestedInput
-  portfolio: PortfolioUpdateOneRequiredWithoutLotChangeListNestedInput
+  usedByAssetMergeId: NullableStringFieldUpdateOperationsInput
 }
 
 input LotChangeListUpsertWithWhereUniqueWithoutAccountInput {
@@ -10664,9 +10509,9 @@ input LotChangeListUpsertWithWhereUniqueWithoutAccountInput {
   where: LotChangeListWhereUniqueInput!
 }
 
-input LotChangeListUpsertWithWhereUniqueWithoutOnAssetMergeInput {
-  create: LotChangeListCreateWithoutOnAssetMergeInput!
-  update: LotChangeListUpdateWithoutOnAssetMergeInput!
+input LotChangeListUpsertWithWhereUniqueWithoutAssetMergeInput {
+  create: LotChangeListCreateWithoutAssetMergeInput!
+  update: LotChangeListUpdateWithoutAssetMergeInput!
   where: LotChangeListWhereUniqueInput!
 }
 
@@ -10682,12 +10527,6 @@ input LotChangeListUpsertWithoutLotChangeInput {
   where: LotChangeListWhereInput
 }
 
-input LotChangeListUpsertWithoutUsedByAssetMergeInput {
-  create: LotChangeListCreateWithoutUsedByAssetMergeInput!
-  update: LotChangeListUpdateWithoutUsedByAssetMergeInput!
-  where: LotChangeListWhereInput
-}
-
 input LotChangeListWhereInput {
   AND: [LotChangeListWhereInput!]
   LotChange: LotChangeListRelationFilter
@@ -10695,12 +10534,12 @@ input LotChangeListWhereInput {
   OR: [LotChangeListWhereInput!]
   account: AccountScalarRelationFilter
   accountId: UuidFilter
+  appliedToAccount: BoolNullableFilter
+  assetMerge: AssetMergeScalarRelationFilter
   assetMergeId: UuidFilter
   id: UuidFilter
-  onAssetMerge: AssetMergeScalarRelationFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
-  usedByAssetMerge: AssetMergeNullableScalarRelationFilter
   usedByAssetMergeId: UuidNullableFilter
 }
 
@@ -10711,12 +10550,13 @@ input LotChangeListWhereUniqueInput {
   OR: [LotChangeListWhereInput!]
   account: AccountScalarRelationFilter
   accountId: UuidFilter
+  appliedToAccount: BoolNullableFilter
+  assetMerge: AssetMergeScalarRelationFilter
   assetMergeId: UuidFilter
+  assetMergeId_appliedToAccount: LotChangeListAssetMergeIdAppliedToAccountCompoundUniqueInput
   id: String
-  onAssetMerge: AssetMergeScalarRelationFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
-  usedByAssetMerge: AssetMergeNullableScalarRelationFilter
   usedByAssetMergeId: String
 }
 
@@ -10732,6 +10572,8 @@ type LotChangeMaxAggregate {
   price: Decimal
   quantityChange: Decimal
   quantityFinal: Decimal
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean
 }
 
@@ -10747,6 +10589,8 @@ type LotChangeMinAggregate {
   price: Decimal
   quantityChange: Decimal
   quantityFinal: Decimal
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
   shouldDelete: Boolean
 }
 
@@ -10765,6 +10609,8 @@ input LotChangeScalarWhereInput {
   price: DecimalFilter
   quantityChange: DecimalFilter
   quantityFinal: DecimalFilter
+  realizedProfitAndLossLongTerm: DecimalFilter
+  realizedProfitAndLossShortTerm: DecimalFilter
   shouldDelete: BoolFilter
   upsert: JsonFilter
 }
@@ -10773,6 +10619,8 @@ type LotChangeSumAggregate {
   price: Decimal
   quantityChange: Decimal
   quantityFinal: Decimal
+  realizedProfitAndLossLongTerm: Decimal
+  realizedProfitAndLossShortTerm: Decimal
 }
 
 input LotChangeUpdateManyMutationInput {
@@ -10783,6 +10631,8 @@ input LotChangeUpdateManyMutationInput {
   price: DecimalFieldUpdateOperationsInput
   quantityChange: DecimalFieldUpdateOperationsInput
   quantityFinal: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   shouldDelete: BoolFieldUpdateOperationsInput
   upsert: JSON
 }
@@ -10894,6 +10744,8 @@ input LotChangeUpdateWithoutAccountInput {
   price: DecimalFieldUpdateOperationsInput
   quantityChange: DecimalFieldUpdateOperationsInput
   quantityFinal: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   shouldDelete: BoolFieldUpdateOperationsInput
   upsert: JSON
 }
@@ -10909,6 +10761,8 @@ input LotChangeUpdateWithoutLotChangeListInput {
   price: DecimalFieldUpdateOperationsInput
   quantityChange: DecimalFieldUpdateOperationsInput
   quantityFinal: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   shouldDelete: BoolFieldUpdateOperationsInput
   upsert: JSON
 }
@@ -10924,6 +10778,8 @@ input LotChangeUpdateWithoutLotInput {
   price: DecimalFieldUpdateOperationsInput
   quantityChange: DecimalFieldUpdateOperationsInput
   quantityFinal: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   shouldDelete: BoolFieldUpdateOperationsInput
   upsert: JSON
 }
@@ -10939,6 +10795,8 @@ input LotChangeUpdateWithoutPortfolioInput {
   price: DecimalFieldUpdateOperationsInput
   quantityChange: DecimalFieldUpdateOperationsInput
   quantityFinal: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossLongTerm: DecimalFieldUpdateOperationsInput
+  realizedProfitAndLossShortTerm: DecimalFieldUpdateOperationsInput
   shouldDelete: BoolFieldUpdateOperationsInput
   upsert: JSON
 }
@@ -10986,6 +10844,8 @@ input LotChangeWhereInput {
   price: DecimalFilter
   quantityChange: DecimalFilter
   quantityFinal: DecimalFilter
+  realizedProfitAndLossLongTerm: DecimalFilter
+  realizedProfitAndLossShortTerm: DecimalFilter
   shouldDelete: BoolFilter
   upsert: JsonFilter
 }
@@ -11009,6 +10869,8 @@ input LotChangeWhereUniqueInput {
   price: DecimalFilter
   quantityChange: DecimalFilter
   quantityFinal: DecimalFilter
+  realizedProfitAndLossLongTerm: DecimalFilter
+  realizedProfitAndLossShortTerm: DecimalFilter
   shouldDelete: BoolFilter
   upsert: JsonFilter
 }
@@ -13105,6 +12967,11 @@ input NestedBoolFilter {
   not: NestedBoolFilter
 }
 
+input NestedBoolNullableFilter {
+  equals: Boolean
+  not: NestedBoolNullableFilter
+}
+
 input NestedDateTimeFilter {
   equals: DateTime
   gt: DateTime
@@ -13669,6 +13536,10 @@ input NotificationWhereUniqueInput {
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   title: StringFilter
+}
+
+input NullableBoolFieldUpdateOperationsInput {
+  set: Boolean
 }
 
 input NullableDateTimeFieldUpdateOperationsInput {

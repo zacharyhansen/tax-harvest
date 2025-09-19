@@ -147,8 +147,6 @@ export interface AssetMerge {
   mergeErrorId: string | null;
   plaidMergeId: string;
   portfolioId: string;
-  realizedProfitAndLossLongTerm: Generated<Numeric>;
-  realizedProfitAndLossShortTerm: Generated<Numeric>;
   resolvedLotChange: Json;
   targetPositionSnapshot: Json;
   targetQuantity: Numeric | null;
@@ -303,12 +301,15 @@ export interface LotChange {
   price: Numeric;
   quantityChange: Numeric;
   quantityFinal: Numeric;
+  realizedProfitAndLossLongTerm: Generated<Numeric>;
+  realizedProfitAndLossShortTerm: Generated<Numeric>;
   shouldDelete: boolean;
   upsert: Json;
 }
 
 export interface LotChangeList {
   accountId: string;
+  appliedToAccount: boolean | null;
   assetMergeId: string;
   id: Generated<string>;
   portfolioId: string;

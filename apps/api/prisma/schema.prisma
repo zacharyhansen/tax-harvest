@@ -373,23 +373,21 @@ model PlaidMerge {
 }
 
 model AssetMerge {
-  id                             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt                      DateTime @default(now())
-  updatedAt                      DateTime @default(now()) @updatedAt
-  accountId                      String   @db.Uuid
-  portfolioId                    String   @db.Uuid
-  plaidMergeId                   String   @db.Uuid
-  assetSymbol                    String
-  logTrxMergeId                  BigInt?  @db.BigInt
-  targetValue                    Decimal? @db.Decimal(14, 4)
-  targetQuantity                 Decimal? @db.Decimal(14, 4)
-  targetPositionSnapshot         Json     @db.JsonB
-  lotData                        Json     @db.JsonB
-  resolvedLotChange              Json     @db.JsonB
-  realizedProfitAndLossShortTerm Decimal  @default(0) @db.Decimal(14, 4)
-  realizedProfitAndLossLongTerm  Decimal  @default(0) @db.Decimal(14, 4)
-  mergeErrorId                   String?  @db.Uuid
-  error                          Json?    @db.JsonB
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @default(now()) @updatedAt
+  accountId              String   @db.Uuid
+  portfolioId            String   @db.Uuid
+  plaidMergeId           String   @db.Uuid
+  assetSymbol            String
+  logTrxMergeId          BigInt?  @db.BigInt
+  targetValue            Decimal? @db.Decimal(14, 4)
+  targetQuantity         Decimal? @db.Decimal(14, 4)
+  targetPositionSnapshot Json     @db.JsonB
+  lotData                Json     @db.JsonB
+  resolvedLotChange      Json     @db.JsonB
+  mergeErrorId           String?  @db.Uuid
+  error                  Json?    @db.JsonB
 
   mergeError              MergeError?               @relation(fields: [mergeErrorId], references: [id], onDelete: Cascade)
   account                 Account                   @relation(fields: [accountId], references: [id], onDelete: Cascade)
@@ -398,8 +396,7 @@ model AssetMerge {
   plaidMerge              PlaidMerge?               @relation(fields: [plaidMergeId], references: [id], onDelete: Cascade)
   asset                   Asset                     @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
   transactionOnAssetMerge TransactionOnAssetMerge[]
-  lotChangeList           LotChangeList[]           @relation(name: "allLotChangeLists")
-  usedLotChangeList       LotChangeList?            @relation(name: "usedLotChangeList")
+  lotChangeList           LotChangeList[]
 
   @@index([portfolioId, createdAt(sort: Desc)])
 }
@@ -419,33 +416,38 @@ model TransactionOnAssetMerge {
 }
 
 model LotChangeList {
-  id                 String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  assetMergeId       String  @db.Uuid
-  portfolioId        String  @db.Uuid
-  accountId          String  @db.Uuid
-  usedByAssetMergeId String? @unique @db.Uuid
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assetMergeId       String   @db.Uuid
+  portfolioId        String   @db.Uuid
+  accountId          String   @db.Uuid
+  usedByAssetMergeId String?  @unique @db.Uuid
+  /// Were the changes from this list applied to the account?
+  appliedToAccount   Boolean?
 
-  portfolio        Portfolio   @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  account          Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  usedByAssetMerge AssetMerge? @relation(name: "usedLotChangeList", fields: [usedByAssetMergeId], references: [id], onDelete: Cascade)
-  onAssetMerge     AssetMerge  @relation(name: "allLotChangeLists", fields: [assetMergeId], references: [id], onDelete: Cascade)
-  LotChange        LotChange[]
+  portfolio  Portfolio   @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account    Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  assetMerge AssetMerge  @relation(fields: [assetMergeId], references: [id], onDelete: Cascade)
+  LotChange  LotChange[]
+
+  @@unique([assetMergeId, appliedToAccount]) // Only one of the lot changes of the asset merge can be applied to the account
 }
 
 model LotChange {
-  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  portfolioId     String        @db.Uuid
-  accountId       String        @db.Uuid
-  lotId           String?       @db.Uuid
-  aquiredDate     DateTime
-  quantityFinal   Decimal       @db.Decimal(14, 4)
-  quantityChange  Decimal       @db.Decimal(14, 4)
-  price           Decimal       @db.Decimal(14, 4)
-  assetSymbol     String
-  shouldDelete    Boolean
-  upsert          Json          @db.JsonB
-  operationType   OperationType
-  lotChangeListId String?       @db.Uuid
+  id                             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  portfolioId                    String        @db.Uuid
+  accountId                      String        @db.Uuid
+  lotId                          String?       @db.Uuid
+  aquiredDate                    DateTime
+  quantityFinal                  Decimal       @db.Decimal(14, 4)
+  quantityChange                 Decimal       @db.Decimal(14, 4)
+  price                          Decimal       @db.Decimal(14, 4)
+  assetSymbol                    String
+  shouldDelete                   Boolean
+  upsert                         Json          @db.JsonB
+  operationType                  OperationType
+  lotChangeListId                String?       @db.Uuid
+  realizedProfitAndLossShortTerm Decimal       @default(0) @db.Decimal(14, 4)
+  realizedProfitAndLossLongTerm  Decimal       @default(0) @db.Decimal(14, 4)
 
   lotChangeList LotChangeList? @relation(fields: [lotChangeListId], references: [id], onDelete: Cascade)
   lot           Lot?           @relation(fields: [lotId], references: [id], onDelete: SetNull)
