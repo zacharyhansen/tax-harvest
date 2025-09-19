@@ -449,6 +449,10 @@ export class PlaidService {
 		for (const resolvedLotChange of resolvedLotChanges) {
 			await executeWithRLS(this.db, portfolioId, async (trx) => {
 				let mergeErrorId: { id: string } | undefined;
+				const relevantTransactions = [
+					...resolvedLotChange.transactionBuys,
+					...resolvedLotChange.transactionSells,
+				];
 				// Insert the merge attempt record
 				const assetMerge = await trx
 					.insertInto('AssetMerge')
@@ -466,10 +470,6 @@ export class PlaidService {
 						targetPositionSnapshot: JSON.stringify(resolvedLotChange.position),
 						lotData: JSON.stringify(resolvedLotChange.lotData),
 						resolvedLotChange: JSON.stringify(resolvedLotChange),
-						realizedProfitAndLossShortTerm:
-							resolvedLotChange.realizedProfitAndLossShortTerm.toString(),
-						realizedProfitAndLossLongTerm:
-							resolvedLotChange.realizedProfitAndLossLongTerm.toString(),
 						error: resolvedLotChange.error
 							? JSON.stringify(resolvedLotChange.error)
 							: null,
@@ -487,19 +487,21 @@ export class PlaidService {
 						accountId,
 						assetMergeId: assetMerge.id,
 						assetSymbol: resolvedLotChange.position.assetSymbol,
+						chosenLotChangeIndex: resolvedLotChange.chosenLotChangeIndex,
+						transactionIds: relevantTransactions.map(
+							(transaction) => transaction.id,
+						),
 					});
 				}
 
 				// Insert transaction relations
-				const transactions: Insertable<TransactionOnAssetMerge>[] = [
-					...resolvedLotChange.transactionBuys,
-					...resolvedLotChange.transactionSells,
-				].map((transaction) => ({
-					portfolioId,
-					accountId,
-					transactionId: transaction.id,
-					assetMergeId: assetMerge.id,
-				}));
+				const transactions: Insertable<TransactionOnAssetMerge>[] =
+					relevantTransactions.map((transaction) => ({
+						portfolioId,
+						accountId,
+						transactionId: transaction.id,
+						assetMergeId: assetMerge.id,
+					}));
 				if (transactions.length > 0) {
 					await trx
 						.insertInto('TransactionOnAssetMerge')
@@ -507,12 +509,22 @@ export class PlaidService {
 						.execute();
 				}
 
-				// Handle multiple lot changes error if we found more than 1 solution
-				if (resolvedLotChange.lotChanges.length > 1) {
+				// Handle merge error if we found one
+				// Importantly merge errro can still exist for multi solution even if we have chosenLotChangeIndex
+				const mergeError =
+					resolvedLotChange.lotChanges.length > 1
+						? MergeErrorType.PLAID_MULTI_LOT_SOLUTION
+						: resolvedLotChange.error
+							? MergeErrorType.UNKNOWN
+							: resolvedLotChange.chosenLotChangeIndex === null
+								? MergeErrorType.PLAID_NO_SOLUTION
+								: undefined;
+
+				if (mergeError) {
 					mergeErrorId = await trx
 						.insertInto('MergeError')
 						.values({
-							type: MergeErrorType.PLAID_MULTI_LOT_SOLUTION,
+							type: mergeError,
 							portfolioId,
 							assetSymbol: resolvedLotChange.position.assetSymbol,
 							lotsData: JSON.stringify(resolvedLotChange.lotData),
@@ -522,138 +534,17 @@ export class PlaidService {
 						})
 						.returning('id')
 						.executeTakeFirstOrThrow();
-				}
 
-				if (resolvedLotChange.error) {
-					// Handle any unknown errors
-					mergeErrorId = await trx
-						.insertInto('MergeError')
-						.values({
-							type: MergeErrorType.UNKNOWN,
-							portfolioId,
-							assetSymbol: resolvedLotChange.position.assetSymbol,
-							lotsData: JSON.stringify(resolvedLotChange.lotData),
-							targetValue: resolvedLotChange.position.costTotal?.toString(),
-							targetQuantity: resolvedLotChange.position.quantity.toString(),
-							accountId,
-						})
-						.returning('id')
-						.executeTakeFirstOrThrow();
-				} else if (!resolvedLotChange.chosenLotChange) {
-					// Handle no solution found
-					mergeErrorId = await trx
-						.insertInto('MergeError')
-						.values({
-							type: MergeErrorType.PLAID_NO_SOLUTION,
-							portfolioId,
-							assetSymbol: resolvedLotChange.position.assetSymbol,
-							lotsData: JSON.stringify(resolvedLotChange.lotData),
-							targetValue: resolvedLotChange.position.costTotal?.toString(),
-							targetQuantity: resolvedLotChange.position.quantity.toString(),
-							accountId,
-						})
-						.returning('id')
-						.executeTakeFirstOrThrow();
-				} else {
-					{
-						// We successfully found a lot change! Insert the changes and apply the result to the portfolio
-						// Insert the lot changes
-						await this.insertLotChangeList({
-							trx,
-							lotChanges: resolvedLotChange.chosenLotChange,
-							portfolioId,
-							accountId,
-							assetMergeId: assetMerge.id,
-							assetSymbol: resolvedLotChange.position.assetSymbol,
-							usedByAssetMergeId: assetMerge.id,
-						});
-
-						// Upsert the lots
-						const upserts = resolvedLotChange.chosenLotChange
-							.filter((change) => !change.shouldDelete)
-							.map((lotChange) => lotChange.upsert);
-						if (upserts.length > 0) {
-							await trx
-								.insertInto('Lot')
-								.values(upserts)
-								.onConflict((oc) =>
-									oc.columns(['id']).doUpdateSet({
-										remainingQty: (eb) => eb.ref('excluded.remainingQty'),
-									}),
-								)
-								.execute();
-						}
-						// Delete the lots with none left
-						const deletes = resolvedLotChange.chosenLotChange
-							.filter((change) => change.shouldDelete)
-							.map((lotChange) => lotChange.lotId);
-						if (deletes.length > 0) {
-							await trx
-								.deleteFrom('Lot')
-								.where('id', 'in', deletes)
-								.where('accountId', '=', accountId)
-								.where('portfolioId', '=', portfolioId)
-								.execute();
-						}
-
-						// Update the account
-						const currentYear = new Date().getFullYear();
-						const currentProfitAndLoss = await trx
-							.selectFrom('RealizedPAndL')
-							.where('accountId', '=', accountId)
-							.where('year', '=', currentYear)
-							.selectAll()
-							.executeTakeFirst();
-
+					// Connect the asset merge to the merge error if we found one
+					if (mergeErrorId) {
 						await trx
-							.insertInto('RealizedPAndL')
-							.values({
-								accountId,
-								portfolioId,
-								year: currentYear,
-								shortTerm: new Decimal(currentProfitAndLoss?.shortTerm ?? '0')
-									.plus(resolvedLotChange.realizedProfitAndLossShortTerm)
-									.toString(),
-								longTerm: new Decimal(currentProfitAndLoss?.longTerm ?? '0')
-									.plus(resolvedLotChange.realizedProfitAndLossLongTerm)
-									.toString(),
-							})
-							.onConflict((oc) =>
-								oc.columns(['accountId', 'year']).doUpdateSet({
-									shortTerm: (eb) => eb.ref('excluded.shortTerm'),
-									longTerm: (eb) => eb.ref('excluded.longTerm'),
-								}),
-							)
-							.execute();
-
-						// Mark the transactions as applied to lots
-						await trx
-							.updateTable('Transaction')
+							.updateTable('AssetMerge')
 							.set({
-								appliedToLots: true,
+								mergeErrorId: mergeErrorId.id,
 							})
-							.where('accountId', '=', accountId)
-							.where('id', 'in', [
-								...resolvedLotChange.transactionBuys.map(
-									(transaction) => transaction.id,
-								),
-								...resolvedLotChange.transactionSells.map(
-									(transaction) => transaction.id,
-								),
-							])
+							.where('id', '=', assetMerge.id)
 							.execute();
 					}
-				}
-
-				// Connect the asset merge to the merge error if we found one
-				if (mergeErrorId) {
-					await trx
-						.updateTable('AssetMerge')
-						.set({
-							mergeErrorId: mergeErrorId.id,
-						})
-						.where('id', '=', assetMerge.id)
-						.execute();
 				}
 			});
 		}
@@ -672,6 +563,8 @@ export class PlaidService {
 		assetMergeId,
 		assetSymbol,
 		usedByAssetMergeId,
+		chosenLotChangeIndex,
+		transactionIds,
 	}: {
 		trx: Transaction<DB>;
 		lotChanges: LotChangeKysely[];
@@ -680,6 +573,8 @@ export class PlaidService {
 		assetMergeId: string;
 		assetSymbol: string;
 		usedByAssetMergeId?: string;
+		chosenLotChangeIndex: number | null;
+		transactionIds: string[];
 	}): Promise<string> {
 		const insertedLotChangeList = await trx
 			.insertInto('LotChangeList')
@@ -713,7 +608,105 @@ export class PlaidService {
 			)
 			.execute();
 
+		// If we were actually able to get chosenLotChangeIndex we can apply the lot changes to the account
+		if (chosenLotChangeIndex) {
+			await this.applyLotChangesToAccount({
+				trx,
+				portfolioId,
+				accountId,
+				lotChanges,
+			});
+
+			// Mark the transactions as applied to lots
+			await trx
+				.updateTable('Transaction')
+				.set({
+					appliedToLots: true,
+				})
+				.where('accountId', '=', accountId)
+				.where('id', 'in', transactionIds)
+				.execute();
+		}
+
 		return insertedLotChangeList.id;
+	}
+
+	async applyLotChangesToAccount({
+		trx,
+		portfolioId,
+		accountId,
+		lotChanges,
+	}: {
+		trx: Transaction<DB>;
+		lotChanges: LotChangeKysely[];
+		portfolioId: string;
+		accountId: string;
+	}) {
+		// Upsert the lots
+		const upserts = lotChanges
+			.filter((change) => !change.shouldDelete)
+			.map((lotChange) => lotChange.upsert);
+
+		if (upserts.length > 0) {
+			await trx
+				.insertInto('Lot')
+				.values(upserts)
+				.onConflict((oc) =>
+					oc.columns(['id']).doUpdateSet({
+						remainingQty: (eb) => eb.ref('excluded.remainingQty'),
+					}),
+				)
+				.execute();
+		}
+
+		// Delete the lots with none left
+		const deletes = lotChanges
+			.filter((change) => change.shouldDelete)
+			.map((lotChange) => lotChange.lotId);
+		if (deletes.length > 0) {
+			await trx
+				.deleteFrom('Lot')
+				.where('id', 'in', deletes)
+				.where('accountId', '=', accountId)
+				.where('portfolioId', '=', portfolioId)
+				.execute();
+		}
+
+		// Update the account
+		const currentYear = new Date().getFullYear();
+		const currentProfitAndLoss = await trx
+			.selectFrom('RealizedPAndL')
+			.where('accountId', '=', accountId)
+			.where('year', '=', currentYear)
+			.selectAll()
+			.executeTakeFirst();
+
+		await trx
+			.insertInto('RealizedPAndL')
+			.values({
+				accountId,
+				portfolioId,
+				year: currentYear,
+				shortTerm: lotChanges
+					.reduce(
+						(acc, change) => acc.plus(change.realizedProfitAndLossShortTerm),
+						new Decimal(currentProfitAndLoss?.shortTerm ?? 0),
+					)
+					.toString(),
+				longTerm: lotChanges
+					.reduce(
+						(acc, change) => acc.plus(change.realizedProfitAndLossLongTerm),
+						new Decimal(currentProfitAndLoss?.longTerm ?? 0),
+					)
+					.toString(),
+			})
+			.onConflict((oc) =>
+				oc.columns(['accountId', 'year']).doUpdateSet({
+					shortTerm: (eb) => eb.ref('excluded.shortTerm'),
+					longTerm: (eb) => eb.ref('excluded.longTerm'),
+				}),
+			)
+			.execute();
 	}
 
 	/**

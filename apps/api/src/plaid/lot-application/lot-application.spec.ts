@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: <test file> */
+/** biome-ignore-all lint/style/noNonNullAssertion: <test file> */
 import Decimal from 'decimal.js';
 import { Selectable } from 'kysely';
 import { Position } from '~/database/db';
@@ -806,6 +807,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2024-05-23T07:00:00.000Z',
 							remainingQty: '2',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -826,6 +829,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2024-06-26T07:00:00.000Z',
 							remainingQty: '2',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -846,6 +851,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: new Date('2025-04-16T00:00:00.000Z'),
 							remainingQty: '0',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -866,6 +873,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: new Date('2025-04-16T00:00:00.000Z'),
 							remainingQty: '2',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 				],
 				[
@@ -888,6 +897,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2024-05-23T07:00:00.000Z',
 							remainingQty: '2',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -908,6 +919,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2024-06-26T07:00:00.000Z',
 							remainingQty: '2',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -928,6 +941,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2025-04-16T00:00:00.000Z',
 							remainingQty: '2',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -948,6 +963,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2025-04-16T00:00:00.000Z',
 							remainingQty: '0',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 				],
 				[
@@ -970,6 +987,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2024-05-23T07:00:00.000Z',
 							remainingQty: '2',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -990,6 +1009,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2024-06-26T07:00:00.000Z',
 							remainingQty: '2',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -1010,6 +1031,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2025-04-16T00:00:00.000Z',
 							remainingQty: '1',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 					{
 						quantity: D(2),
@@ -1030,6 +1053,8 @@ describe('sell transaction allocation strategies', () => {
 							acquiredDate: '2025-04-16T00:00:00.000Z',
 							remainingQty: '1',
 						},
+						realizedProfitAndLossShortTerm: D(0),
+						realizedProfitAndLossLongTerm: D(0),
 					},
 				],
 			]);
@@ -1195,8 +1220,9 @@ describe('sell transaction allocation strategies', () => {
 					transactionSells: [],
 				});
 
+				expect(result.chosenLotChangeIndex).toBeDefined();
 				expect(
-					result.chosenLotChange?.map((l) => ({
+					result.lotChanges[result.chosenLotChangeIndex!]?.map((l) => ({
 						quantity: l.quantity.toString(),
 						price: l.price.toString(),
 						lotId: l.lotId,
@@ -1285,7 +1311,7 @@ describe('sell transaction allocation strategies', () => {
 				});
 
 				expect(result.lotChanges.length).toBe(0);
-				expect(result.chosenLotChange).toBeNull();
+				expect(result.lotChanges[result.chosenLotChangeIndex!]).toBeNull();
 			});
 		});
 	});
@@ -1341,10 +1367,14 @@ describe('sell transaction allocation strategies', () => {
 				// Should return both lotChanges and multiChangeSet
 				expect(result.lotChanges).toBeDefined();
 				expect(Array.isArray(result.lotChanges)).toBe(true);
-				expect(result.chosenLotChange?.length).toBeGreaterThan(0);
+				expect(
+					result.lotChanges[result.chosenLotChangeIndex!]?.length,
+				).toBeGreaterThan(0);
 
 				// Verify each lot change has the required properties
-				for (const lotChange of result.chosenLotChange ?? []) {
+				for (const lotChange of result.lotChanges[
+					result.chosenLotChangeIndex!
+				] ?? []) {
 					expect(lotChange.lotId).toBeDefined();
 					expect(lotChange.symbol).toBe('ATUS');
 					expect(lotChange.quantityChange).toBeDefined();
@@ -1354,19 +1384,17 @@ describe('sell transaction allocation strategies', () => {
 				}
 
 				// Calculate total quantity change
-				const totalQuantityChange = result.chosenLotChange?.reduce(
-					(sum, change) => sum.plus(change.quantityChange),
-					D(0),
-				);
+				const totalQuantityChange = result.lotChanges[
+					result.chosenLotChangeIndex!
+				]?.reduce((sum, change) => sum.plus(change.quantityChange), D(0));
 
 				// Total quantity change should be 45 - 37 = 8
 				expect(totalQuantityChange?.eq(D(8))).toBe(true);
 
 				// Calculate remaining quantity
-				const remainingQuantity = result.chosenLotChange?.reduce(
-					(sum, change) => sum.plus(change.quantityFinal),
-					D(0),
-				);
+				const remainingQuantity = result.lotChanges[
+					result.chosenLotChangeIndex!
+				]?.reduce((sum, change) => sum.plus(change.quantityFinal), D(0));
 
 				// Remaining quantity should equal target quantity
 				expect(remainingQuantity?.eq(D(37))).toBe(true);
@@ -1417,8 +1445,10 @@ describe('sell transaction allocation strategies', () => {
 				});
 
 				// Verify that original lot data is preserved
-				expect(result.chosenLotChange).toBeDefined();
-				for (const lotChange of result.chosenLotChange ?? []) {
+				expect(result.lotChanges[result.chosenLotChangeIndex!]).toBeDefined();
+				for (const lotChange of result.lotChanges[
+					result.chosenLotChangeIndex!
+				] ?? []) {
 					const originalLot = atusLotsData.find(
 						(lot) => lot.lotId === lotChange.lotId,
 					);
@@ -1451,6 +1481,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 						{
 							lotId: 'lot2',
@@ -1463,6 +1495,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 					],
 					// Change set 2: 2 lots zeroed out
@@ -1478,6 +1512,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 						{
 							lotId: 'lot2',
@@ -1490,6 +1526,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 						{
 							lotId: 'lot3',
@@ -1502,6 +1540,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 					],
 					// Change set 3: No lots zeroed out
@@ -1517,6 +1557,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 						{
 							lotId: 'lot2',
@@ -1529,6 +1571,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 					],
 				];
@@ -1539,7 +1583,7 @@ describe('sell transaction allocation strategies', () => {
 				expect(result).toBe(changeSets[1]);
 
 				// Verify it has the most zeroed-out lots
-				const zeroedCount = result.filter((change) =>
+				const zeroedCount = changeSets[result!].filter((change) =>
 					change.quantityFinal.eq(0),
 				).length;
 				expect(zeroedCount).toBe(2);
@@ -1559,6 +1603,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 					],
 				];
@@ -1588,6 +1634,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 					],
 					// Change set 2: Also 1 lot zeroed out
@@ -1603,6 +1651,8 @@ describe('sell transaction allocation strategies', () => {
 							symbol: 'TEST',
 							upsert: {} as any,
 							shouldDelete: false,
+							realizedProfitAndLossShortTerm: D(0),
+							realizedProfitAndLossLongTerm: D(0),
 						},
 					],
 				];
@@ -1711,14 +1761,14 @@ describe('sell transaction allocation strategies', () => {
 				});
 				expect(lotChanges.lotChanges.length).toBe(3);
 				expect(
-					lotChanges.chosenLotChange
+					lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]
 						?.find(
 							(lot) => lot.lotId === '40ec54fd-0972-4e61-8734-bf293ef44ef2',
 						)
 						?.quantityFinal.toNumber(),
 				).toBe(0);
 				expect(
-					lotChanges.chosenLotChange
+					lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]
 						?.find(
 							(lot) => lot.lotId === 'd2747dca-f5af-48cf-ac65-3872523d104c',
 						)
@@ -1765,11 +1815,27 @@ describe('sell transaction allocation strategies', () => {
 				transactionSells: [],
 			});
 			expect(lotChanges.lotChanges.length).toBe(1);
-			expect(lotChanges.chosenLotChange?.length).toBe(2);
-			expect(lotChanges.chosenLotChange?.[0].quantityFinal.toNumber()).toBe(0);
-			expect(lotChanges.chosenLotChange?.[0].shouldDelete).toBe(true);
-			expect(lotChanges.chosenLotChange?.[1].quantityFinal.toNumber()).toBe(0);
-			expect(lotChanges.chosenLotChange?.[1].shouldDelete).toBe(true);
+			expect(
+				lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]?.length,
+			).toBe(2);
+			expect(
+				lotChanges.lotChanges[
+					lotChanges.chosenLotChangeIndex!
+				]?.[0].quantityFinal.toNumber(),
+			).toBe(0);
+			expect(
+				lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]?.[0]
+					.shouldDelete,
+			).toBe(true);
+			expect(
+				lotChanges.lotChanges[
+					lotChanges.chosenLotChangeIndex!
+				]?.[1].quantityFinal.toNumber(),
+			).toBe(0);
+			expect(
+				lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]?.[1]
+					.shouldDelete,
+			).toBe(true);
 		});
 	});
 });

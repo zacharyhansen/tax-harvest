@@ -42,10 +42,8 @@ export interface LotDataWithMeta {
  */
 export interface ResolvedLotChange extends LotDataWithMeta {
 	lotChanges: LotChangeKysely[][];
-	chosenLotChange: LotChangeKysely[] | null;
+	chosenLotChangeIndex: number | null;
 	error?: Error;
-	realizedProfitAndLossShortTerm: Decimal;
-	realizedProfitAndLossLongTerm: Decimal;
 }
 
 export interface LotDataKysely {
@@ -63,6 +61,8 @@ export interface LotChangeKysely extends LotDataKysely {
 	shouldDelete: boolean;
 	symbol: string;
 	lotId: string;
+	realizedProfitAndLossShortTerm: Decimal;
+	realizedProfitAndLossLongTerm: Decimal;
 }
 
 /**
@@ -147,9 +147,7 @@ export function resolveLotChange(
 		return {
 			...lotDataWithMeta,
 			lotChanges: [],
-			chosenLotChange: null,
-			realizedProfitAndLossShortTerm: new Decimal(0),
-			realizedProfitAndLossLongTerm: new Decimal(0),
+			chosenLotChangeIndex: null,
 		};
 	}
 
@@ -167,10 +165,8 @@ export function resolveLotChange(
 		return {
 			...lotDataWithMeta,
 			lotChanges: [],
-			chosenLotChange: null,
+			chosenLotChangeIndex: null,
 			error: error as Error,
-			realizedProfitAndLossShortTerm: new Decimal(0),
-			realizedProfitAndLossLongTerm: new Decimal(0),
 		};
 	}
 
@@ -196,9 +192,13 @@ export function resolveLotChange(
 					acquiredDate: resultLot.acquiredDate,
 					remainingQty: resultLot.quantity.toString(),
 				},
+				realizedProfitAndLossShortTerm: new Decimal(0),
+				realizedProfitAndLossLongTerm: new Decimal(0),
 			};
 
-			lotChangesForResult.push(lotChange);
+			lotChangesForResult.push(
+				processLotChangePAndL(lotChange, lotDataWithMeta.transactionSells),
+			);
 		}
 
 		lotChanges.push(lotChangesForResult);
@@ -209,83 +209,21 @@ export function resolveLotChange(
 		return {
 			...lotDataWithMeta,
 			lotChanges: [],
-			chosenLotChange: null,
-			realizedProfitAndLossShortTerm: new Decimal(0),
-			realizedProfitAndLossLongTerm: new Decimal(0),
+			chosenLotChangeIndex: null,
 		};
 	}
 
 	// Deduplicate the lot changes based on the signature of changes
 	const deduplicatedLotChanges =
 		deduplicateEquivalentChangeSetsKysely(lotChanges);
-	const chosenLotChange = processMultiChangeSetKysely(deduplicatedLotChanges);
-
-	// Calculate the realized profit and loss - we dont need to actually know per share - just total sold and total cost basis
-	// Total Sale Dollars derived from plaid transactions
-	let totalSaleDollarsShortTerm = new Decimal(0);
-	let totalSaleDollarsLongTerm = new Decimal(0);
-
-	lotDataWithMeta.transactionSells.forEach((sell) => {
-		if (isLongTerm(sell.transactionDate ?? sell.postDate ?? sell.createdAt)) {
-			totalSaleDollarsLongTerm = totalSaleDollarsLongTerm.plus(
-				new Decimal(sell.amount ?? 0).abs(),
-			);
-		} else {
-			totalSaleDollarsShortTerm = totalSaleDollarsShortTerm.plus(
-				new Decimal(sell.amount ?? 0).abs(),
-			);
-		}
-	}, new Decimal(0));
-
-	// Total Sale Cost Basis derived from our algo results (since we now know which lots were sold tp get cost basis)
-	let totalSaleCostBasisShortTerm = new Decimal(0);
-	let totalSaleCostBasisLongTerm = new Decimal(0);
-	chosenLotChange.forEach((lot) => {
-		if (isLongTerm(lot.acquiredDate)) {
-			totalSaleCostBasisLongTerm = totalSaleCostBasisLongTerm.plus(
-				lot.quantityChange.mul(lot.price).abs(),
-			);
-		} else {
-			totalSaleCostBasisShortTerm = totalSaleCostBasisShortTerm.plus(
-				lot.quantityChange.mul(lot.price).abs(),
-			);
-		}
-	});
-
-	if (assetSymbol === 'JBL') {
-		console.log(
-			'totalSaleDollarsShortTerm',
-			totalSaleDollarsShortTerm.toString(),
-		);
-		console.log(
-			'totalSaleDollarsLongTerm',
-			totalSaleDollarsLongTerm.toString(),
-		);
-		console.log(
-			'totalSaleCostBasisShortTerm',
-			totalSaleCostBasisShortTerm.toString(),
-		);
-		console.log(
-			'totalSaleCostBasisLongTerm',
-			totalSaleCostBasisLongTerm.toString(),
-		);
-		console.log('chosenLotChange', JSON.stringify(chosenLotChange));
-		console.log(
-			'transactionSells',
-			JSON.stringify(lotDataWithMeta.transactionSells),
-		);
-	}
+	const chosenLotChangeIndex = processMultiChangeSetKysely(
+		deduplicatedLotChanges,
+	);
 
 	return {
 		...lotDataWithMeta,
 		lotChanges: deduplicatedLotChanges,
-		chosenLotChange,
-		realizedProfitAndLossShortTerm: totalSaleDollarsShortTerm.minus(
-			totalSaleCostBasisShortTerm,
-		),
-		realizedProfitAndLossLongTerm: totalSaleDollarsLongTerm.minus(
-			totalSaleCostBasisLongTerm,
-		),
+		chosenLotChangeIndex,
 	};
 }
 
@@ -414,7 +352,7 @@ function isLongTerm(acquiredDate: Date) {
 
 export function processMultiChangeSetKysely(
 	uniqueLotChangeSolutions: LotChangeKysely[][],
-): LotChangeKysely[] {
+): number | null {
 	// find the lot change with the highest number of zeroed out lots
 	const indexMap = new Map<string, number>();
 	for (const [index, lotChanges] of uniqueLotChangeSolutions.entries()) {
@@ -436,7 +374,52 @@ export function processMultiChangeSetKysely(
 		{ index: 0, count: 0 },
 	);
 
-	return uniqueLotChangeSolutions[maxIndex.index];
+	return maxIndex.index;
+}
+
+export function processLotChangePAndL(
+	lotChange: LotChangeKysely,
+	transactionSells: Selectable<Transaction>[],
+): LotChangeKysely {
+	// Calculate the realized profit and loss - we dont need to actually know per share - just total sold and total cost basis
+	// Total Sale Dollars derived from plaid transactions
+	let totalSaleDollarsShortTerm = new Decimal(0);
+	let totalSaleDollarsLongTerm = new Decimal(0);
+
+	transactionSells.forEach((sell) => {
+		if (isLongTerm(sell.transactionDate ?? sell.postDate ?? sell.createdAt)) {
+			totalSaleDollarsLongTerm = totalSaleDollarsLongTerm.plus(
+				new Decimal(sell.amount ?? 0).abs(),
+			);
+		} else {
+			totalSaleDollarsShortTerm = totalSaleDollarsShortTerm.plus(
+				new Decimal(sell.amount ?? 0).abs(),
+			);
+		}
+	}, new Decimal(0));
+
+	// Total Sale Cost Basis derived from our algo results (since we now know which lots were sold tp get cost basis)
+	let totalSaleCostBasisShortTerm = new Decimal(0);
+	let totalSaleCostBasisLongTerm = new Decimal(0);
+	if (isLongTerm(lotChange.acquiredDate)) {
+		totalSaleCostBasisLongTerm = totalSaleCostBasisLongTerm.plus(
+			lotChange.quantityChange.mul(lotChange.price).abs(),
+		);
+	} else {
+		totalSaleCostBasisShortTerm = totalSaleCostBasisShortTerm.plus(
+			lotChange.quantityChange.mul(lotChange.price).abs(),
+		);
+	}
+
+	return {
+		...lotChange,
+		realizedProfitAndLossShortTerm: totalSaleDollarsShortTerm.minus(
+			totalSaleCostBasisShortTerm,
+		),
+		realizedProfitAndLossLongTerm: totalSaleDollarsLongTerm.minus(
+			totalSaleCostBasisLongTerm,
+		),
+	};
 }
 
 /**
