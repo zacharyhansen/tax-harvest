@@ -57,7 +57,7 @@ export class LogsResolver {
 		clerkContext: ClerkClaims,
 	) {
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId))
+			.rlsPortfolioClient(clerkContext.metadata.portfolioId)
 			.log.count({
 				where: {
 					portfolioId: clerkContext.metadata.portfolioId,
@@ -72,7 +72,7 @@ export class LogsResolver {
 		clerkContext: ClerkClaims,
 	) {
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId))
+			.rlsPortfolioClient(clerkContext.metadata.portfolioId)
 			.log.findUniqueOrThrow({
 				where: { id: logId, portfolioId: clerkContext.metadata.portfolioId },
 			})

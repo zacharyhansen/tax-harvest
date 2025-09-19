@@ -32,7 +32,7 @@ export class RealizedPandLResolver {
 		const { select } = new PrismaSelect(info).value;
 
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId))
+			.rlsPortfolioClient(clerkContext.metadata.portfolioId)
 			.realizedPAndL.update({
 				data: input,
 				select: select as Prisma.RealizedPAndLSelect,

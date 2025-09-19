@@ -55,7 +55,7 @@ export class UserResolver {
 		try {
 			const user = await this.userService.findOneByEmail(email);
 			await this.prismaService
-				.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId))
+				.rlsPortfolioClient(clerkContext.metadata.portfolioId)
 				.usersOnPortfolios.create({
 					data: {
 						userId: user.id,
@@ -81,7 +81,7 @@ export class UserResolver {
 		clerkContext: ClerkClaims,
 	): Promise<boolean> {
 		await this.prismaService
-			.$extends(PrismaService.forPortfolio(clerkContext.metadata.portfolioId))
+			.rlsPortfolioClient(clerkContext.metadata.portfolioId)
 			.usersOnPortfolios.delete({
 				where: {
 					userId_portfolioId: {
