@@ -609,7 +609,7 @@ export class PlaidService {
 			.execute();
 
 		// If we were actually able to get chosenLotChangeIndex we can apply the lot changes to the account
-		if (chosenLotChangeIndex) {
+		if (chosenLotChangeIndex !== null) {
 			await this.applyLotChangesToAccount({
 				trx,
 				portfolioId,
