@@ -44,6 +44,20 @@ export default function TransactionsPage() {
 				},
 			},
 			{
+				headerName: 'Security',
+				field: 'assetSymbol',
+				width: 130,
+				filter: 'agTextColumnFilter',
+				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
+				cellRenderer: (params: any) => {
+					return params.value ? (
+						<Badge className="text-xs bg-gray-200 hover:bg-gray-300 text-black">
+							{params.value}
+						</Badge>
+					) : null;
+				},
+			},
+			{
 				headerName: 'Applied?',
 				field: 'appliedToLots',
 				width: 100,
@@ -143,20 +157,6 @@ export default function TransactionsPage() {
 				field: 'memo',
 				flex: 1,
 				minWidth: 300,
-			},
-			{
-				headerName: 'Security',
-				field: 'assetSymbol',
-				width: 130,
-				filter: 'agTextColumnFilter',
-				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
-				cellRenderer: (params: any) => {
-					return params.value ? (
-						<Badge className="text-xs bg-gray-200 hover:bg-gray-300 text-black">
-							{params.value}
-						</Badge>
-					) : null;
-				},
 			},
 			{
 				headerName: 'Price',
