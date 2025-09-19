@@ -91,8 +91,8 @@ model Portfolio {
   authConnections          AuthConnection[]
   harvests                 Harvest[]
   log                      Log[]
-  lotMerge                 LotMerge[]
-  resolvedLotMerge         ResolvedLotMerge[]
+  assetMerge               AssetMerge[]
+  lotChange                LotChange[]
   harvestTransaction       HarvestTransaction[]
   files                    File[]
   lots                     Lot[]
@@ -100,14 +100,12 @@ model Portfolio {
   transactions             Transaction[]
   realizedPAndL            RealizedPAndL[]
   harvestTransactionItem   HarvestTransactionItem[]
-  Notification             Notification[]
+  notification             Notification[]
   mergeError               MergeError[]
-  MultiChangeSetOption     MultiChangeSetOption[]
-  MultiChangeSetOptionItem MultiChangeSetOptionItem[]
-  PortfolioBalanceSnapshot PortfolioBalanceSnapshot[]
-  PlaidMerge               PlaidMerge[]
-  TransactionOnLotMerge    TransactionOnLotMerge[]
-  LotChange                LotChange[]
+  portfolioBalanceSnapshot PortfolioBalanceSnapshot[]
+  plaidMerge               PlaidMerge[]
+  transactionOnAssetMerge  TransactionOnAssetMerge[]
+  lotChangeList            LotChangeList[]
 }
 
 enum HarvestType {
@@ -291,14 +289,14 @@ model Account {
   realizedPAndL            RealizedPAndL[]
   lots                     Lot[]
   files                    File[]
-  lotMerge                 LotMerge[]
-  Notification             Notification[]
-  MultiChangeSetOptionItem MultiChangeSetOptionItem[]
-  PortfolioBalanceSnapshot PortfolioBalanceSnapshot[]
-  PlaidMerge               PlaidMerge[]
-  LotChange                LotChange[]
-  TransactionOnLotMerge    TransactionOnLotMerge[]
-  MergeError               MergeError[]
+  assetMerge               AssetMerge[]
+  notification             Notification[]
+  portfolioBalanceSnapshot PortfolioBalanceSnapshot[]
+  plaidMerge               PlaidMerge[]
+  lotChange                LotChange[]
+  transactionOnAssetMerge  TransactionOnAssetMerge[]
+  mergeError               MergeError[]
+  lotChangeList            LotChangeList[]
 
   /// This attempts to ensure user doesnt link the same account twice (i.e. same plaid account mask)
   @@unique([authConnectionId, plaidAccountMask, type])
@@ -353,10 +351,10 @@ model Transaction {
   appliedToLots      Boolean   @default(false)
   portfolioId        String    @db.Uuid
 
-  portfolio             Portfolio               @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  asset                 Asset                   @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
-  account               Account                 @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  TransactionOnLotMerge TransactionOnLotMerge[]
+  portfolio               Portfolio                 @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  asset                   Asset                     @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  account                 Account                   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  transactionOnAssetMerge TransactionOnAssetMerge[]
 
   @@unique([accountId, externalId])
 }
@@ -369,92 +367,92 @@ model PlaidMerge {
   portfolioId      String   @db.Uuid
   resolveLotsInput Json     @db.JsonB
 
-  account   Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  portfolio Portfolio  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  lotMerge  LotMerge[]
+  account    Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  portfolio  Portfolio    @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  assetMerge AssetMerge[]
 }
 
-model LotMerge {
-  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @default(now()) @updatedAt
-  accountId              String   @db.Uuid
-  portfolioId            String   @db.Uuid
-  plaidMergeId           String   @db.Uuid
-  assetSymbol            String
-  logTrxMergeId          BigInt?  @db.BigInt
-  targetValue            Decimal? @db.Decimal(14, 4)
-  targetQuantity         Decimal? @db.Decimal(14, 4)
-  targetPositionSnapshot Json     @db.JsonB
-  lotData                Json     @db.JsonB
-  resolvedLotChange      Json     @db.JsonB
+model AssetMerge {
+  id                             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt                      DateTime @default(now())
+  updatedAt                      DateTime @default(now()) @updatedAt
+  accountId                      String   @db.Uuid
+  portfolioId                    String   @db.Uuid
+  plaidMergeId                   String   @db.Uuid
+  assetSymbol                    String
+  logTrxMergeId                  BigInt?  @db.BigInt
+  targetValue                    Decimal? @db.Decimal(14, 4)
+  targetQuantity                 Decimal? @db.Decimal(14, 4)
+  targetPositionSnapshot         Json     @db.JsonB
+  lotData                        Json     @db.JsonB
+  resolvedLotChange              Json     @db.JsonB
+  realizedProfitAndLossShortTerm Decimal  @default(0) @db.Decimal(14, 4)
+  realizedProfitAndLossLongTerm  Decimal  @default(0) @db.Decimal(14, 4)
+  mergeErrorId                   String?  @db.Uuid
+  error                          Json?    @db.JsonB
 
-  account               Account                 @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  portfolio             Portfolio               @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  logTrxMerge           Log?                    @relation(fields: [logTrxMergeId], references: [id], onDelete: SetNull)
-  plaidMerge            PlaidMerge?             @relation(fields: [plaidMergeId], references: [id], onDelete: Cascade)
-  asset                 Asset                   @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
-  resolvedLotMerge      ResolvedLotMerge[]
-  TransactionOnLotMerge TransactionOnLotMerge[]
+  mergeError              MergeError?               @relation(fields: [mergeErrorId], references: [id], onDelete: Cascade)
+  account                 Account                   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  portfolio               Portfolio                 @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  logTrxMerge             Log?                      @relation(fields: [logTrxMergeId], references: [id], onDelete: SetNull)
+  plaidMerge              PlaidMerge?               @relation(fields: [plaidMergeId], references: [id], onDelete: Cascade)
+  asset                   Asset                     @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  transactionOnAssetMerge TransactionOnAssetMerge[]
+  lotChangeList           LotChangeList[]           @relation(name: "allLotChangeLists")
+  usedLotChangeList       LotChangeList?            @relation(name: "usedLotChangeList")
 
   @@index([portfolioId, createdAt(sort: Desc)])
 }
 
-model TransactionOnLotMerge {
-  lotMergeId    String @db.Uuid
+model TransactionOnAssetMerge {
+  assetMergeId  String @db.Uuid
   transactionId String @db.Uuid
   portfolioId   String @db.Uuid
   accountId     String @db.Uuid
 
-  lotMerge    LotMerge    @relation(fields: [lotMergeId], references: [id], onDelete: Cascade)
+  assetMerge  AssetMerge  @relation(fields: [assetMergeId], references: [id], onDelete: Cascade)
   transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
   portfolio   Portfolio   @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   account     Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
-  @@id([lotMergeId, transactionId])
+  @@id([assetMergeId, transactionId])
 }
 
-/// The result of the lot change algorithm for a given asset (if we found any)
-model ResolvedLotMerge {
-  id                             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt                      DateTime @default(now())
-  accountId                      String   @db.Uuid
-  portfolioId                    String   @db.Uuid
-  lotMergeId                     String   @db.Uuid
-  lotChanges                     Json     @db.JsonB
-  chosenLotChange                Json?    @db.JsonB
-  error                          Json?    @db.JsonB
-  realizedProfitAndLossShortTerm Decimal  @default(0) @db.Decimal(14, 4)
-  realizedProfitAndLossLongTerm  Decimal  @default(0) @db.Decimal(14, 4)
-  mergeErrorId                   String?  @db.Uuid
+model LotChangeList {
+  id                 String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assetMergeId       String  @db.Uuid
+  portfolioId        String  @db.Uuid
+  accountId          String  @db.Uuid
+  usedByAssetMergeId String? @unique @db.Uuid
 
-  lotMerge   LotMerge    @relation(fields: [lotMergeId], references: [id], onDelete: Cascade)
-  portfolio  Portfolio   @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  mergeError MergeError? @relation(fields: [mergeErrorId], references: [id], onDelete: Cascade)
-  LotChange  LotChange[]
-
-  @@index([lotMergeId])
+  portfolio        Portfolio   @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account          Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  usedByAssetMerge AssetMerge? @relation(name: "usedLotChangeList", fields: [usedByAssetMergeId], references: [id], onDelete: Cascade)
+  onAssetMerge     AssetMerge  @relation(name: "allLotChangeLists", fields: [assetMergeId], references: [id], onDelete: Cascade)
+  LotChange        LotChange[]
 }
 
 model LotChange {
-  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  resolvedLotMergeId String        @db.Uuid
-  portfolioId        String        @db.Uuid
-  accountId          String        @db.Uuid
-  lotId              String?       @db.Uuid
-  quantityFinal      Decimal       @db.Decimal(14, 4)
-  quantityChange     Decimal       @db.Decimal(14, 4)
-  assetSymbol        String
-  shouldDelete       Boolean
-  upsert             Json          @db.JsonB
-  operationType      OperationType
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  portfolioId     String        @db.Uuid
+  accountId       String        @db.Uuid
+  lotId           String?       @db.Uuid
+  aquiredDate     DateTime
+  quantityFinal   Decimal       @db.Decimal(14, 4)
+  quantityChange  Decimal       @db.Decimal(14, 4)
+  price           Decimal       @db.Decimal(14, 4)
+  assetSymbol     String
+  shouldDelete    Boolean
+  upsert          Json          @db.JsonB
+  operationType   OperationType
+  lotChangeListId String?       @db.Uuid
 
-  resolvedLotMerge ResolvedLotMerge @relation(fields: [resolvedLotMergeId], references: [id], onDelete: Cascade)
-  lot              Lot?             @relation(fields: [lotId], references: [id], onDelete: SetNull)
-  portfolio        Portfolio        @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  account          Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  lotChangeList LotChangeList? @relation(fields: [lotChangeListId], references: [id], onDelete: Cascade)
+  lot           Lot?           @relation(fields: [lotId], references: [id], onDelete: SetNull)
+  portfolio     Portfolio      @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account       Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
-  @@index([resolvedLotMergeId])
+  @@index([lotChangeListId])
 }
 
 enum OperationType {
@@ -675,7 +673,7 @@ model Asset {
   lots                    Lot[]
   harvestTransactionItems HarvestTransactionItem[]
   mergeError              MergeError[]
-  lotMerge                LotMerge[]
+  lotMerge                AssetMerge[]
 }
 
 model PriceHourly {
@@ -862,49 +860,13 @@ model MergeError {
   logId                  BigInt?
   accountId              String         @db.Uuid
 
-  portfolio            Portfolio              @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  asset                Asset                  @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
-  multiChangeSetOption MultiChangeSetOption[]
-  log                  Log?                   @relation(fields: [logId], references: [id], onDelete: Cascade)
-  ResolvedLotMerge     ResolvedLotMerge[]
-  account              Account                @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  portfolio  Portfolio    @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  asset      Asset        @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  log        Log?         @relation(fields: [logId], references: [id], onDelete: Cascade)
+  account    Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  AssetMerge AssetMerge[]
 
   @@index([createdAt(sort: Desc)])
-}
-
-model MultiChangeSetOption {
-  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now()) @updatedAt
-  portfolioId      String   @db.Uuid
-  multiChangeSetId String   @db.Uuid
-
-  mergeError               MergeError                 @relation(fields: [multiChangeSetId], references: [id], onDelete: Cascade)
-  portfolio                Portfolio                  @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  multiChangeSetOptionItem MultiChangeSetOptionItem[]
-
-  @@index([multiChangeSetId])
-}
-
-model MultiChangeSetOptionItem {
-  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @default(now()) @updatedAt
-  portfolioId            String   @db.Uuid
-  accountId              String   @db.Uuid
-  lotId                  String?  @db.Uuid
-  multiChangeSetOptionId String   @db.Uuid
-  acquiredDate           DateTime
-  quantityFinal          Decimal? @db.Decimal(14, 4)
-  quantityChange         Decimal? @db.Decimal(14, 4)
-  isNewBuy               Boolean  @default(false)
-  price                  Decimal? @db.Decimal(14, 4)
-
-  multiChangeSetOption MultiChangeSetOption @relation(fields: [multiChangeSetOptionId], references: [id], onDelete: Cascade)
-  account              Account              @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  portfolio            Portfolio            @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-
-  @@index([portfolioId, accountId, multiChangeSetOptionId])
 }
 
 enum NotificationLevel {
@@ -951,7 +913,7 @@ model Log {
   portfolioId    String      @db.Uuid
 
   portfolio  Portfolio    @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  lotMerge   LotMerge[]
+  lotMerge   AssetMerge[]
   mergeError MergeError[]
 
   @@index([portfolioId, type])

@@ -136,6 +136,26 @@ export interface Asset {
   type: Generated<string>;
 }
 
+export interface AssetMerge {
+  accountId: string;
+  assetSymbol: string;
+  createdAt: Generated<Timestamp>;
+  error: Json | null;
+  id: Generated<string>;
+  logTrxMergeId: Int8 | null;
+  lotData: Json;
+  mergeErrorId: string | null;
+  plaidMergeId: string;
+  portfolioId: string;
+  realizedProfitAndLossLongTerm: Generated<Numeric>;
+  realizedProfitAndLossShortTerm: Generated<Numeric>;
+  resolvedLotChange: Json;
+  targetPositionSnapshot: Json;
+  targetQuantity: Numeric | null;
+  targetValue: Numeric | null;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface AssetType {
   assetClass: "cryto" | "fx" | "indices" | "otc" | "stocks" | "UNKNOWN";
   code: string;
@@ -273,16 +293,26 @@ export interface Lot {
 
 export interface LotChange {
   accountId: string;
+  aquiredDate: Timestamp;
   assetSymbol: string;
   id: Generated<string>;
+  lotChangeListId: string | null;
   lotId: string | null;
   operationType: "create" | "delete" | "update" | "upsert";
   portfolioId: string;
+  price: Numeric;
   quantityChange: Numeric;
   quantityFinal: Numeric;
-  resolvedLotMergeId: string;
   shouldDelete: boolean;
   upsert: Json;
+}
+
+export interface LotChangeList {
+  accountId: string;
+  assetMergeId: string;
+  id: Generated<string>;
+  portfolioId: string;
+  usedByAssetMergeId: string | null;
 }
 
 export interface LotCurrent {
@@ -301,22 +331,6 @@ export interface LotCurrent {
   value: Numeric | null;
 }
 
-export interface LotMerge {
-  accountId: string;
-  assetSymbol: string;
-  createdAt: Generated<Timestamp>;
-  id: Generated<string>;
-  logTrxMergeId: Int8 | null;
-  lotData: Json;
-  plaidMergeId: string;
-  portfolioId: string;
-  resolvedLotChange: Json;
-  targetPositionSnapshot: Json;
-  targetQuantity: Numeric | null;
-  targetValue: Numeric | null;
-  updatedAt: Generated<Timestamp>;
-}
-
 export interface MergeError {
   accountId: string;
   assetSymbol: string;
@@ -330,29 +344,6 @@ export interface MergeError {
   targetQuantity: Numeric | null;
   targetValue: Numeric | null;
   type: "PLAID_MERGE_TIMEOUT" | "PLAID_MULTI_LOT_SOLUTION" | "PLAID_NO_SOLUTION" | "UNKNOWN";
-  updatedAt: Generated<Timestamp>;
-}
-
-export interface MultiChangeSetOption {
-  createdAt: Generated<Timestamp>;
-  id: Generated<string>;
-  multiChangeSetId: string;
-  portfolioId: string;
-  updatedAt: Generated<Timestamp>;
-}
-
-export interface MultiChangeSetOptionItem {
-  accountId: string;
-  acquiredDate: Timestamp;
-  createdAt: Generated<Timestamp>;
-  id: Generated<string>;
-  isNewBuy: Generated<boolean>;
-  lotId: string | null;
-  multiChangeSetOptionId: string;
-  portfolioId: string;
-  price: Numeric | null;
-  quantityChange: Numeric | null;
-  quantityFinal: Numeric | null;
   updatedAt: Generated<Timestamp>;
 }
 
@@ -472,20 +463,6 @@ export interface RealizedPAndL {
   year: number;
 }
 
-export interface ResolvedLotMerge {
-  accountId: string;
-  chosenLotChange: Json | null;
-  createdAt: Generated<Timestamp>;
-  error: Json | null;
-  id: Generated<string>;
-  lotChanges: Json;
-  lotMergeId: string;
-  mergeErrorId: string | null;
-  portfolioId: string;
-  realizedProfitAndLossLongTerm: Generated<Numeric>;
-  realizedProfitAndLossShortTerm: Generated<Numeric>;
-}
-
 export interface Transaction {
   accountId: string;
   amount: Numeric | null;
@@ -514,9 +491,9 @@ export interface Transaction {
   updatedAt: Generated<Timestamp>;
 }
 
-export interface TransactionOnLotMerge {
+export interface TransactionOnAssetMerge {
   accountId: string;
-  lotMergeId: string;
+  assetMergeId: string;
   portfolioId: string;
   transactionId: string;
 }
@@ -558,6 +535,7 @@ export interface DB {
   _prisma_migrations: _PrismaMigrations;
   Account: Account;
   Asset: Asset;
+  AssetMerge: AssetMerge;
   AssetType: AssetType;
   AuthConnection: AuthConnection;
   File: File;
@@ -567,11 +545,9 @@ export interface DB {
   Log: Log;
   Lot: Lot;
   LotChange: LotChange;
+  LotChangeList: LotChangeList;
   LotCurrent: LotCurrent;
-  LotMerge: LotMerge;
   MergeError: MergeError;
-  MultiChangeSetOption: MultiChangeSetOption;
-  MultiChangeSetOptionItem: MultiChangeSetOptionItem;
   Notification: Notification;
   PlaidMerge: PlaidMerge;
   Portfolio: Portfolio;
@@ -580,9 +556,8 @@ export interface DB {
   PriceHourly: PriceHourly;
   PriceHourlyVector: PriceHourlyVector;
   RealizedPAndL: RealizedPAndL;
-  ResolvedLotMerge: ResolvedLotMerge;
   Transaction: Transaction;
-  TransactionOnLotMerge: TransactionOnLotMerge;
+  TransactionOnAssetMerge: TransactionOnAssetMerge;
   User: User;
   UsersOnPortfolios: UsersOnPortfolios;
   VectorGraph: VectorGraph;
