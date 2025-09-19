@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import type { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
+import { AccountsLotResetEvent } from '~/events/accounts-lot-reset';
 import { AccountsSyncedEvent } from '~/events/accounts-synced';
 import { EventId } from '~/events/event-id';
 import { Database } from '../database/database';

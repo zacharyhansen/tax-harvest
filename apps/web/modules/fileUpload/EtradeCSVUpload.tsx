@@ -27,25 +27,31 @@ export default function EtradeCSVUpload({ accountId }: EtradeCSVUploadProps) {
 		},
 		onFileUploaded: async (fileInput) => {
 			setError(null);
-			createFiles({
-				onCompleted: () => {
-					toast.success('Files uploaded successfully');
+			toast.promise(
+				createFiles({
+					onCompleted: () => {
+						return Promise.resolve();
+					},
+					onError: (err) => {
+						throw err;
+					},
+					variables: {
+						data: fileInput.map((file, i) => ({
+							accountId,
+							displayName: fileInput[i]?.displayName ?? '',
+							gcpFilename: file.fileName,
+							type: file.type,
+							uploadedBy: user.id,
+							portfolioId: portfolio.id,
+						})),
+					},
+				}),
+				{
+					loading: 'Uploading files...',
+					success: 'Files uploaded successfully',
+					error: 'Failed to upload files',
 				},
-				onError: (err) => {
-					console.error(err);
-					toast.error(getErrorMessage(err));
-				},
-				variables: {
-					data: fileInput.map((file, i) => ({
-						accountId,
-						displayName: fileInput[i]?.displayName ?? '',
-						gcpFilename: file.fileName,
-						type: file.type,
-						uploadedBy: user.id,
-						portfolioId: portfolio.id,
-					})),
-				},
-			});
+			);
 		},
 	});
 

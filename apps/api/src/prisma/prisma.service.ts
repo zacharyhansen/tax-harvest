@@ -1,4 +1,4 @@
-import { Injectable, type OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, type OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import get from 'lodash.get';
 
@@ -12,7 +12,10 @@ const byPassSql = Prisma.sql`
 `;
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit {
+export class PrismaService
+	extends PrismaClient
+	implements OnModuleInit, OnModuleDestroy
+{
 	constructor() {
 		super({
 			errorFormat: 'pretty',
@@ -155,5 +158,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 				},
 			}),
 		);
+	}
+
+	async onModuleDestroy() {
+		await this.$disconnect();
 	}
 }

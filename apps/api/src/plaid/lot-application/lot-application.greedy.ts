@@ -99,6 +99,5 @@ export function findGreedySubset({
 	if (time) {
 		console.timeEnd('findGreedySubset:total');
 	}
-	console.log('result', result);
 	return found ? result : null; // Greedy failed to hit the target
 }

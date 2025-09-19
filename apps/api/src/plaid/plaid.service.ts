@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import {
 	type Account,
 	AccountInstitution,
@@ -16,7 +16,7 @@ import {
 } from '@prisma/client';
 import type { InputJsonValue } from '@prisma/client/runtime/library';
 import Decimal from 'decimal.js';
-import { Insertable, Selectable } from 'kysely';
+import { Insertable, Selectable, Transaction } from 'kysely';
 import {
 	type AccountBase,
 	Configuration,
@@ -31,16 +31,19 @@ import {
 } from 'plaid';
 import { Database, executeWithRLS } from '~/database/database';
 import type {
+	DB,
 	Lot as KyselyLot,
 	Position as KyselyPosition,
 	Transaction as KyselyTransaction,
-	TransactionOnLotMerge,
+	TransactionOnAssetMerge,
 } from '~/database/db.d';
+import { AccountsLotResetEvent } from '~/events/accounts-lot-reset';
 import { AccountsSyncedEvent } from '~/events/accounts-synced';
 import { EventId } from '~/events/event-id';
 import { PrismaService } from '../prisma/prisma.service';
 import { TimeMethod } from '../utilities/time-method';
 import {
+	LotChangeKysely,
 	organizeAssets,
 	ResolvedLotChange,
 	resolveLotChange,
@@ -103,6 +106,32 @@ export class PlaidService {
 		// Default to 5 for connection pool limit
 		this.dbBatchSize = this.configService.get<number>('DB_BATCH_SIZE') ?? 5;
 		this.logger.log(`Database batch size set to: ${this.dbBatchSize}`);
+	}
+
+	@OnEvent(EventId.ACCOUNTS_LOT_RESET)
+	async handleAccountLotReset(event: AccountsLotResetEvent) {
+		this.logger.log(`Accounts ${event.accountId} lot reset`);
+
+		const account = await this.prismaService
+			.rlsBypassClient()
+			.account.findUniqueOrThrow({
+				where: {
+					id: event.accountId,
+				},
+				select: {
+					authConnection: true,
+				},
+			});
+
+		if (account.authConnection) {
+			await this.syncPlaidItem({
+				plaidAuthConnection: account.authConnection,
+			});
+		} else {
+			this.logger.error(
+				`No auth connection found for account: ${event.accountId}`,
+			);
+		}
 	}
 
 	async linkToken({
@@ -206,6 +235,7 @@ export class PlaidService {
 			secret: accessToken,
 			source: AuthSource.PLAID,
 			type: AuthType.PLAID_LINK,
+			token: publicToken,
 			plaidInstitutionId: metaData.institution?.institution_id,
 			user: {
 				connect: {
@@ -418,9 +448,10 @@ export class PlaidService {
 		// Process each of the asset changes
 		for (const resolvedLotChange of resolvedLotChanges) {
 			await executeWithRLS(this.db, portfolioId, async (trx) => {
+				let mergeErrorId: { id: string } | undefined;
 				// Insert the merge attempt record
-				const lotMerge = await trx
-					.insertInto('LotMerge')
+				const assetMerge = await trx
+					.insertInto('AssetMerge')
 					.values({
 						portfolioId,
 						accountId,
@@ -435,51 +466,50 @@ export class PlaidService {
 						targetPositionSnapshot: JSON.stringify(resolvedLotChange.position),
 						lotData: JSON.stringify(resolvedLotChange.lotData),
 						resolvedLotChange: JSON.stringify(resolvedLotChange),
+						realizedProfitAndLossShortTerm:
+							resolvedLotChange.realizedProfitAndLossShortTerm.toString(),
+						realizedProfitAndLossLongTerm:
+							resolvedLotChange.realizedProfitAndLossLongTerm.toString(),
+						error: resolvedLotChange.error
+							? JSON.stringify(resolvedLotChange.error)
+							: null,
 					})
 					.returning('id')
 					.executeTakeFirstOrThrow();
 
+				// Insert all possible lot changes for the asset merge that we got from the algorithm and the chosen lot change
+				// if there is one
+				for (const lotChangeList of resolvedLotChange.lotChanges) {
+					await this.insertLotChangeList({
+						trx,
+						lotChanges: lotChangeList,
+						portfolioId,
+						accountId,
+						assetMergeId: assetMerge.id,
+						assetSymbol: resolvedLotChange.position.assetSymbol,
+					});
+				}
+
 				// Insert transaction relations
-				const transactions: Insertable<TransactionOnLotMerge>[] = [
+				const transactions: Insertable<TransactionOnAssetMerge>[] = [
 					...resolvedLotChange.transactionBuys,
 					...resolvedLotChange.transactionSells,
 				].map((transaction) => ({
 					portfolioId,
 					accountId,
 					transactionId: transaction.id,
-					lotMergeId: lotMerge.id,
+					assetMergeId: assetMerge.id,
 				}));
 				if (transactions.length > 0) {
 					await trx
-						.insertInto('TransactionOnLotMerge')
+						.insertInto('TransactionOnAssetMerge')
 						.values(transactions)
 						.execute();
 				}
-				// Insert the result
-				const resolvedLotMerge = await trx
-					.insertInto('ResolvedLotMerge')
-					.values({
-						lotMergeId: lotMerge.id,
-						lotChanges: JSON.stringify(resolvedLotChange.lotChanges),
-						chosenLotChange: resolvedLotChange.chosenLotChange
-							? JSON.stringify(resolvedLotChange.chosenLotChange)
-							: null,
-						error: resolvedLotChange.error
-							? JSON.stringify(resolvedLotChange.error)
-							: null,
-						realizedProfitAndLossShortTerm:
-							resolvedLotChange.realizedProfitAndLossShortTerm.toString(),
-						realizedProfitAndLossLongTerm:
-							resolvedLotChange.realizedProfitAndLossLongTerm.toString(),
-						accountId,
-						portfolioId,
-					})
-					.returning('id')
-					.executeTakeFirstOrThrow();
 
 				// Handle multiple lot changes error if we found more than 1 solution
 				if (resolvedLotChange.lotChanges.length > 1) {
-					await trx
+					mergeErrorId = await trx
 						.insertInto('MergeError')
 						.values({
 							type: MergeErrorType.PLAID_MULTI_LOT_SOLUTION,
@@ -490,12 +520,13 @@ export class PlaidService {
 							targetQuantity: resolvedLotChange.position.quantity.toString(),
 							accountId,
 						})
+						.returning('id')
 						.executeTakeFirstOrThrow();
 				}
 
 				if (resolvedLotChange.error) {
 					// Handle any unknown errors
-					await trx
+					mergeErrorId = await trx
 						.insertInto('MergeError')
 						.values({
 							type: MergeErrorType.UNKNOWN,
@@ -506,10 +537,11 @@ export class PlaidService {
 							targetQuantity: resolvedLotChange.position.quantity.toString(),
 							accountId,
 						})
+						.returning('id')
 						.executeTakeFirstOrThrow();
 				} else if (!resolvedLotChange.chosenLotChange) {
 					// Handle no solution found
-					await trx
+					mergeErrorId = await trx
 						.insertInto('MergeError')
 						.values({
 							type: MergeErrorType.PLAID_NO_SOLUTION,
@@ -520,102 +552,107 @@ export class PlaidService {
 							targetQuantity: resolvedLotChange.position.quantity.toString(),
 							accountId,
 						})
+						.returning('id')
 						.executeTakeFirstOrThrow();
 				} else {
-					// We successfully found a lot change! Insert the changes and apply the result to the portfolio
-					// Insert the lot changes
-					await trx
-						.insertInto('LotChange')
-						.values(
-							resolvedLotChange.chosenLotChange.map((lotChange) => ({
+					{
+						// We successfully found a lot change! Insert the changes and apply the result to the portfolio
+						// Insert the lot changes
+						await this.insertLotChangeList({
+							trx,
+							lotChanges: resolvedLotChange.chosenLotChange,
+							portfolioId,
+							accountId,
+							assetMergeId: assetMerge.id,
+							assetSymbol: resolvedLotChange.position.assetSymbol,
+							usedByAssetMergeId: assetMerge.id,
+						});
+
+						// Upsert the lots
+						const upserts = resolvedLotChange.chosenLotChange
+							.filter((change) => !change.shouldDelete)
+							.map((lotChange) => lotChange.upsert);
+						if (upserts.length > 0) {
+							await trx
+								.insertInto('Lot')
+								.values(upserts)
+								.onConflict((oc) =>
+									oc.columns(['id']).doUpdateSet({
+										remainingQty: (eb) => eb.ref('excluded.remainingQty'),
+									}),
+								)
+								.execute();
+						}
+						// Delete the lots with none left
+						const deletes = resolvedLotChange.chosenLotChange
+							.filter((change) => change.shouldDelete)
+							.map((lotChange) => lotChange.lotId);
+						if (deletes.length > 0) {
+							await trx
+								.deleteFrom('Lot')
+								.where('id', 'in', deletes)
+								.where('accountId', '=', accountId)
+								.where('portfolioId', '=', portfolioId)
+								.execute();
+						}
+
+						// Update the account
+						const currentYear = new Date().getFullYear();
+						const currentProfitAndLoss = await trx
+							.selectFrom('RealizedPAndL')
+							.where('accountId', '=', accountId)
+							.where('year', '=', currentYear)
+							.selectAll()
+							.executeTakeFirst();
+
+						await trx
+							.insertInto('RealizedPAndL')
+							.values({
 								accountId,
 								portfolioId,
-								resolvedLotMergeId: resolvedLotMerge.id,
-								assetSymbol: resolvedLotChange.position.assetSymbol,
-								quantityFinal: lotChange.quantityFinal.toString(),
-								quantityChange: lotChange.quantityChange.toString(),
-								shouldDelete: lotChange.shouldDelete,
-								upsert: JSON.stringify(lotChange.upsert),
-								operationType: lotChange.shouldDelete
-									? OperationType.delete
-									: OperationType.upsert,
-							})),
-						)
-						.execute();
-
-					// Upsert the lots
-					const upserts = resolvedLotChange.chosenLotChange
-						.filter((change) => !change.shouldDelete)
-						.map((lotChange) => lotChange.upsert);
-					if (upserts.length > 0) {
-						await trx
-							.insertInto('Lot')
-							.values(upserts)
+								year: currentYear,
+								shortTerm: new Decimal(currentProfitAndLoss?.shortTerm ?? '0')
+									.plus(resolvedLotChange.realizedProfitAndLossShortTerm)
+									.toString(),
+								longTerm: new Decimal(currentProfitAndLoss?.longTerm ?? '0')
+									.plus(resolvedLotChange.realizedProfitAndLossLongTerm)
+									.toString(),
+							})
 							.onConflict((oc) =>
-								oc.columns(['id']).doUpdateSet({
-									remainingQty: (eb) => eb.ref('excluded.remainingQty'),
+								oc.columns(['accountId', 'year']).doUpdateSet({
+									shortTerm: (eb) => eb.ref('excluded.shortTerm'),
+									longTerm: (eb) => eb.ref('excluded.longTerm'),
 								}),
 							)
 							.execute();
-					}
-					// Delete the lots with none left
-					const deletes = resolvedLotChange.chosenLotChange
-						.filter((change) => change.shouldDelete)
-						.map((lotChange) => lotChange.lotId);
-					if (deletes.length > 0) {
+
+						// Mark the transactions as applied to lots
 						await trx
-							.deleteFrom('Lot')
-							.where('id', 'in', deletes)
+							.updateTable('Transaction')
+							.set({
+								appliedToLots: true,
+							})
 							.where('accountId', '=', accountId)
-							.where('portfolioId', '=', portfolioId)
+							.where('id', 'in', [
+								...resolvedLotChange.transactionBuys.map(
+									(transaction) => transaction.id,
+								),
+								...resolvedLotChange.transactionSells.map(
+									(transaction) => transaction.id,
+								),
+							])
 							.execute();
 					}
+				}
 
-					// Update the account
-					const currentYear = new Date().getFullYear();
-					const currentProfitAndLoss = await trx
-						.selectFrom('RealizedPAndL')
-						.where('accountId', '=', accountId)
-						.where('year', '=', currentYear)
-						.selectAll()
-						.executeTakeFirst();
-
+				// Connect the asset merge to the merge error if we found one
+				if (mergeErrorId) {
 					await trx
-						.insertInto('RealizedPAndL')
-						.values({
-							accountId,
-							portfolioId,
-							year: currentYear,
-							shortTerm: new Decimal(currentProfitAndLoss?.shortTerm ?? '0')
-								.plus(resolvedLotChange.realizedProfitAndLossShortTerm)
-								.toString(),
-							longTerm: new Decimal(currentProfitAndLoss?.longTerm ?? '0')
-								.plus(resolvedLotChange.realizedProfitAndLossLongTerm)
-								.toString(),
-						})
-						.onConflict((oc) =>
-							oc.columns(['accountId', 'year']).doUpdateSet({
-								shortTerm: (eb) => eb.ref('excluded.shortTerm'),
-								longTerm: (eb) => eb.ref('excluded.longTerm'),
-							}),
-						)
-						.execute();
-
-					// Mark the transactions as applied to lots
-					await trx
-						.updateTable('Transaction')
+						.updateTable('AssetMerge')
 						.set({
-							appliedToLots: true,
+							mergeErrorId: mergeErrorId.id,
 						})
-						.where('accountId', '=', accountId)
-						.where('id', 'in', [
-							...resolvedLotChange.transactionBuys.map(
-								(transaction) => transaction.id,
-							),
-							...resolvedLotChange.transactionSells.map(
-								(transaction) => transaction.id,
-							),
-						])
+						.where('id', '=', assetMerge.id)
 						.execute();
 				}
 			});
@@ -625,6 +662,58 @@ export class PlaidService {
 			EventId.ACCOUNTS_SYNCED,
 			new AccountsSyncedEvent(portfolioId, [accountId]),
 		);
+	}
+
+	async insertLotChangeList({
+		trx,
+		lotChanges,
+		portfolioId,
+		accountId,
+		assetMergeId,
+		assetSymbol,
+		usedByAssetMergeId,
+	}: {
+		trx: Transaction<DB>;
+		lotChanges: LotChangeKysely[];
+		portfolioId: string;
+		accountId: string;
+		assetMergeId: string;
+		assetSymbol: string;
+		usedByAssetMergeId?: string;
+	}): Promise<string> {
+		const insertedLotChangeList = await trx
+			.insertInto('LotChangeList')
+			.values({
+				portfolioId,
+				accountId,
+				assetMergeId,
+				usedByAssetMergeId,
+			})
+			.returning('id')
+			.executeTakeFirstOrThrow();
+
+		await trx
+			.insertInto('LotChange')
+			.values(
+				lotChanges.map((lotChange) => ({
+					accountId,
+					portfolioId,
+					assetSymbol,
+					quantityFinal: lotChange.quantityFinal.toString(),
+					quantityChange: lotChange.quantityChange.toString(),
+					price: lotChange.price.toString(),
+					aquiredDate: lotChange.acquiredDate,
+					shouldDelete: lotChange.shouldDelete,
+					upsert: JSON.stringify(lotChange.upsert),
+					operationType: lotChange.shouldDelete
+						? OperationType.delete
+						: OperationType.upsert,
+					lotChangeListId: insertedLotChangeList.id,
+				})),
+			)
+			.execute();
+
+		return insertedLotChangeList.id;
 	}
 
 	/**
@@ -801,7 +890,7 @@ export class PlaidService {
 		});
 
 		await this.prismaService
-			.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+			.rlsPortfolioClient(plaidAuthConnection.portfolioId)
 			.log.create({
 				data: {
 					data: plaidResponse.data as unknown as InputJsonValue,
@@ -814,7 +903,7 @@ export class PlaidService {
 			});
 
 		const accounts = await this.prismaService
-			.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+			.rlsPortfolioClient(plaidAuthConnection.portfolioId)
 			.account.findMany({
 				where: {
 					externalId: {
@@ -825,16 +914,19 @@ export class PlaidService {
 
 		const lastTransOfPage = plaidResponse.data.investment_transactions.at(-1);
 
+		const accountId = accounts.find(
+			(a) => a.externalId === lastTransOfPage?.account_id,
+		)?.id;
+		if (!accountId) {
+			throw new Error('Account not found');
+		}
 		// Only fetch more pages if the last transaction of the current page is not already in the DB
 		const currentTransactionsAreNew = !(await this.prismaService
-			.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+			.rlsPortfolioClient(plaidAuthConnection.portfolioId)
 			.transaction.findUnique({
 				where: {
 					accountId_externalId: {
-						// biome-ignore lint/style/noNonNullAssertion: <ok>
-						accountId: accounts.find(
-							(a) => a.externalId === lastTransOfPage?.account_id,
-						)?.id!,
+						accountId,
 						externalId: lastTransOfPage?.investment_transaction_id ?? '',
 					},
 				},
@@ -844,34 +936,38 @@ export class PlaidService {
 			investmentsTransactionsGetResponse: plaidResponse.data,
 			accounts,
 			plaidAuthConnection,
+			accountId,
 		});
 
 		await processBatch(
 			transactionsToUpsert,
 			this.dbBatchSize,
 			async (input) => {
-				return this.prismaService
-					.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
-					.transaction.upsert({
-						create: input,
-						update: input,
-						where: {
-							accountId_externalId: {
-								// biome-ignore lint/style/noNonNullAssertion: <ok>
-								accountId: accounts.find(
-									(a) =>
-										a.plaidAccountMask ===
-											input.account.connect
-												?.authConnectionId_plaidAccountMask_type
-												?.plaidAccountMask &&
-										a.type ===
-											input.account.connect
-												?.authConnectionId_plaidAccountMask_type?.type,
-								)?.id!,
-								externalId: input.externalId,
-							},
-						},
-					});
+				return executeWithRLS(this.db, plaidAuthConnection.portfolioId, (trx) =>
+					trx
+						.insertInto('Transaction')
+						.values(input)
+						.onConflict((oc) =>
+							// !IMPORANT: DO NOT UPDATE THE appliedToLots ELSE IT WILL TRIED OT INSERTED ON THE NET SYNC AGAIN
+							oc
+								.columns(['accountId', 'externalId'])
+								.doUpdateSet({
+									amount: (eb) => eb.ref('excluded.amount'),
+									assetSymbol: (eb) => eb.ref('excluded.assetSymbol'),
+									fee: (eb) => eb.ref('excluded.fee'),
+									memo: (eb) => eb.ref('excluded.memo'),
+									paymentCurrency: (eb) => eb.ref('excluded.paymentCurrency'),
+									price: (eb) => eb.ref('excluded.price'),
+									quantity: (eb) => eb.ref('excluded.quantity'),
+									settlementCurrency: (eb) =>
+										eb.ref('excluded.settlementCurrency'),
+									subtype: (eb) => eb.ref('excluded.subtype'),
+									transactionDate: (eb) => eb.ref('excluded.transactionDate'),
+									type: (eb) => eb.ref('excluded.type'),
+								}),
+						)
+						.execute(),
+				);
 			},
 		);
 
@@ -931,7 +1027,7 @@ export class PlaidService {
 			plaidAuthConnection,
 		});
 		return this.prismaService
-			.$extends(PrismaService.forPortfolio(plaidAuthConnection.portfolioId))
+			.rlsPortfolioClient(plaidAuthConnection.portfolioId)
 			.$transaction(async (trx) => {
 				const upsertedAccounts = [];
 				for (let i = 0; i < accounts.length; i++) {
@@ -972,7 +1068,7 @@ export class PlaidService {
 
 	private async handleHoldingsUpdate(webhookData: PlaidWebhook): Promise<void> {
 		const authConnection = await this.prismaService
-			.$extends(PrismaService.bypassRLS())
+			.rlsBypassClient()
 			.authConnection.findUniqueOrThrow({
 				where: { externalId: webhookData.item_id },
 				include: {
@@ -984,7 +1080,7 @@ export class PlaidService {
 				},
 			});
 		await this.prismaService
-			.$extends(PrismaService.forPortfolio(authConnection.portfolioId))
+			.rlsPortfolioClient(authConnection.portfolioId)
 			.log.create({
 				data: {
 					data: webhookData as unknown as InputJsonValue,
@@ -1090,11 +1186,13 @@ export class PlaidService {
 		investmentsTransactionsGetResponse,
 		accounts,
 		plaidAuthConnection,
+		accountId,
 	}: {
 		investmentsTransactionsGetResponse: InvestmentsTransactionsGetResponse;
 		accounts: (Account | Prisma.AccountCreateInput)[];
 		plaidAuthConnection: AuthConnection;
-	}): Prisma.TransactionCreateInput[] {
+		accountId: string;
+	}): Insertable<KyselyTransaction>[] {
 		const securityMap = new Map<string, string>();
 		for (const security of investmentsTransactionsGetResponse.securities) {
 			securityMap.set(
@@ -1115,38 +1213,17 @@ export class PlaidService {
 						);
 					}
 
-					const input: Prisma.TransactionCreateInput = {
-						account: {
-							connect: {
-								authConnectionId_plaidAccountMask_type: {
-									authConnectionId: plaidAuthConnection.id,
-									plaidAccountMask: account.plaidAccountMask,
-									type: account.type,
-								},
-								// provider_externalId: {
-								//   externalId: transaction.account_id,
-								//   provider: AccountProvider.PLAID,
-								// },
-							},
-						},
-						portfolio: {
-							connect: {
-								id: plaidAuthConnection.portfolioId,
-							},
-						},
+					const input: Insertable<KyselyTransaction> = {
+						accountId,
+						portfolioId: plaidAuthConnection.portfolioId,
 						amount: transaction.amount,
 						// Consider the transaction applied if its after the account was seeded
 						appliedToLots: Boolean(
 							account.lotSeededDate &&
-								account.lotSeededDate >= new Date(transaction.date),
+								new Date(account.lotSeededDate) >= new Date(transaction.date),
 						),
-						asset: {
-							// these should already exist due to the assert
-							connect: {
-								symbol:
-									securityMap.get(transaction.security_id ?? '') ?? 'UNKNOWN',
-							},
-						},
+						assetSymbol:
+							securityMap.get(transaction.security_id ?? '') ?? 'UNKNOWN',
 						externalId: transaction.investment_transaction_id,
 						fee: transaction.fees,
 						memo: transaction.name,

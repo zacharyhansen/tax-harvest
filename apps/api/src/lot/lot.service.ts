@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import type { Prisma } from '@prisma/client';
 import { Decimal } from 'decimal.js';
-
 import { type SelectExpression, sql } from 'kysely';
-
+import { AccountsLotResetEvent } from '~/events/accounts-lot-reset';
+import { EventId } from '~/events/event-id';
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils';
 import { Database } from '../database/database';
 import type { DB } from '../database/db.d';
@@ -15,6 +16,7 @@ export class LotService {
 	constructor(
 		private readonly prismaService: PrismaService,
 		private readonly db: Database,
+		private eventEmitter: EventEmitter2,
 	) {}
 
 	resetLotsForAccount({
@@ -86,12 +88,18 @@ export class LotService {
 					},
 				});
 
-				return trx.lot.createMany({
+				await trx.lot.createMany({
 					data: lots.map((lot) => ({
 						...lot,
 						accountId,
 					})),
 				});
+
+				// Once done produce an event of the successful accounts
+				this.eventEmitter.emit(
+					EventId.ACCOUNTS_LOT_RESET,
+					new AccountsLotResetEvent(accountId),
+				);
 			});
 	}
 
