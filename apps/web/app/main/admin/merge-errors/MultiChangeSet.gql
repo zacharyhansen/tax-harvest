@@ -62,7 +62,6 @@ fragment MultiChangeSetDetail on MergeError {
 				quantityFinal
 				quantityChange
 				assetSymbol
-				shouldDelete
 				upsert
 				operationType
 				lot {

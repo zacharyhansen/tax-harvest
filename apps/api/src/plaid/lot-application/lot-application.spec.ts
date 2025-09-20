@@ -797,7 +797,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(0),
 						quantityFinal: D(2),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: '3665b214-2259-44c5-9080-4b580dbf0b62',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -819,7 +819,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(0),
 						quantityFinal: D(2),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: '8b663053-a8dd-48b1-b83b-82e9d19fce37',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -841,7 +841,6 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(2),
 						quantityFinal: D(0),
 						symbol: 'TEST',
-						shouldDelete: true,
 						upsert: {
 							id: 'b4a3feaf-e2be-4542-a571-d9b75bc4e34e',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -863,7 +862,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(0),
 						quantityFinal: D(2),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: '80ddb1a5-627d-4ddf-ab82-077ecf71df5d',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -887,7 +886,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(0),
 						quantityFinal: D(2),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: '3665b214-2259-44c5-9080-4b580dbf0b62',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -909,7 +908,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(0),
 						quantityFinal: D(2),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: '8b663053-a8dd-48b1-b83b-82e9d19fce37',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -931,7 +930,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(0),
 						quantityFinal: D(2),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: 'b4a3feaf-e2be-4542-a571-d9b75bc4e34e',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -953,7 +952,6 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(2),
 						quantityFinal: D(0),
 						symbol: 'TEST',
-						shouldDelete: true,
 						upsert: {
 							id: '80ddb1a5-627d-4ddf-ab82-077ecf71df5d',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -977,7 +975,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(0),
 						quantityFinal: D(2),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: '3665b214-2259-44c5-9080-4b580dbf0b62',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -999,7 +997,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(0),
 						quantityFinal: D(2),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: '8b663053-a8dd-48b1-b83b-82e9d19fce37',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -1021,7 +1019,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(1),
 						quantityFinal: D(1),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: 'b4a3feaf-e2be-4542-a571-d9b75bc4e34e',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -1043,7 +1041,7 @@ describe('sell transaction allocation strategies', () => {
 						quantityChange: D(1),
 						quantityFinal: D(1),
 						symbol: 'TEST',
-						shouldDelete: false,
+
 						upsert: {
 							id: '80ddb1a5-627d-4ddf-ab82-077ecf71df5d',
 							accountId: '70d400b4-4b28-4fde-b9a3-180cbdb10be5',
@@ -1311,7 +1309,8 @@ describe('sell transaction allocation strategies', () => {
 				});
 
 				expect(result.lotChanges.length).toBe(0);
-				expect(result.lotChanges[result.chosenLotChangeIndex!]).toBeNull();
+				expect(result.chosenLotChangeIndex).toBeNull();
+				expect(result.lotChanges[result.chosenLotChangeIndex!]).toBeUndefined();
 			});
 		});
 	});
@@ -1480,7 +1479,7 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(10),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
+
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1494,7 +1493,7 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(5),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
+
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1511,7 +1510,7 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(10),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
+
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1525,7 +1524,7 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(10),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
+
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1539,7 +1538,7 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(5),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
+
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1556,7 +1555,7 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(5),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
+
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1570,7 +1569,7 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(5),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
+
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1580,7 +1579,7 @@ describe('sell transaction allocation strategies', () => {
 				const result = processMultiChangeSetKysely(changeSets);
 
 				// Should select change set 2 (index 1) with 2 zeroed-out lots
-				expect(result).toBe(changeSets[1]);
+				expect(result).toBe(1);
 
 				// Verify it has the most zeroed-out lots
 				const zeroedCount = changeSets[result!].filter((change) =>
@@ -1602,7 +1601,7 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(5),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
+
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1610,13 +1609,13 @@ describe('sell transaction allocation strategies', () => {
 				];
 
 				const result = processMultiChangeSetKysely(singleChangeSet);
-				expect(result).toBe(singleChangeSet[0]);
+				expect(result).toBe(0);
 			});
 
 			it('should handle empty change set array', () => {
 				const emptyChangeSets: LotChangeKysely[][] = [];
 				const result = processMultiChangeSetKysely(emptyChangeSets);
-				expect(result).toBeUndefined();
+				expect(result).toBeNull();
 			});
 
 			it('should return first change set when all have equal zeroed-out lots', () => {
@@ -1633,7 +1632,6 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(10),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1650,7 +1648,6 @@ describe('sell transaction allocation strategies', () => {
 							quantityChange: D(10),
 							symbol: 'TEST',
 							upsert: {} as any,
-							shouldDelete: false,
 							realizedProfitAndLossShortTerm: D(0),
 							realizedProfitAndLossLongTerm: D(0),
 						},
@@ -1659,7 +1656,7 @@ describe('sell transaction allocation strategies', () => {
 
 				const result = processMultiChangeSetKysely(changeSets);
 				// When tied, should return the first one
-				expect(result).toBe(changeSets[0]);
+				expect(result).toBe(0);
 			});
 		});
 	});
@@ -1824,18 +1821,10 @@ describe('sell transaction allocation strategies', () => {
 				]?.[0].quantityFinal.toNumber(),
 			).toBe(0);
 			expect(
-				lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]?.[0]
-					.shouldDelete,
-			).toBe(true);
-			expect(
 				lotChanges.lotChanges[
 					lotChanges.chosenLotChangeIndex!
 				]?.[1].quantityFinal.toNumber(),
 			).toBe(0);
-			expect(
-				lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]?.[1]
-					.shouldDelete,
-			).toBe(true);
 		});
 	});
 });

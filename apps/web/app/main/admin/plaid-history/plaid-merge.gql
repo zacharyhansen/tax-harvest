@@ -61,6 +61,7 @@ query PlaidMerge($plaidMergeId: String!) {
 			}
 			lotChangeList {
 				id
+				appliedToAccount
 				LotChange {
 					id
 					lotId
@@ -69,7 +70,6 @@ query PlaidMerge($plaidMergeId: String!) {
 					quantityChange
 					price
 					assetSymbol
-					shouldDelete
 					operationType
 					realizedProfitAndLossShortTerm
 					realizedProfitAndLossLongTerm

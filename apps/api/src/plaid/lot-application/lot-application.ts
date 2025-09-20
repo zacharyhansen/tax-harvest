@@ -58,7 +58,6 @@ export interface LotChangeKysely extends LotDataKysely {
 	quantityFinal: Decimal;
 	quantityChange: Decimal;
 	upsert: Insertable<Lot>;
-	shouldDelete: boolean;
 	symbol: string;
 	lotId: string;
 	realizedProfitAndLossShortTerm: Decimal;
@@ -182,7 +181,6 @@ export function resolveLotChange(
 				quantityChange: originalLot.quantity.minus(resultLot.quantity),
 				quantityFinal: resultLot.quantity,
 				symbol: assetSymbol,
-				shouldDelete: resultLot.quantity.lte(0),
 				upsert: {
 					id: resultLot.lotId,
 					accountId: resultLot.accountId,
@@ -357,24 +355,22 @@ export function processMultiChangeSetKysely(
 	const indexMap = new Map<string, number>();
 	for (const [index, lotChanges] of uniqueLotChangeSolutions.entries()) {
 		for (const lotChangeList of lotChanges) {
-			if (lotChangeList.quantityFinal.eq(0)) {
-				indexMap.set(
-					index.toString(),
-					(indexMap.get(index.toString()) ?? 0) + 1,
-				);
-			}
+			indexMap.set(
+				index.toString(),
+				(indexMap.get(index.toString()) ?? 0) +
+					(lotChangeList.quantityFinal.eq(0) ? 1 : 0),
+			);
 		}
 	}
-
 	// return the LotChange with the highest number of zeroed out lots
 	const maxIndex = Array.from(indexMap.entries()).reduce(
 		(max, [index, count]) => {
 			return count > max.count ? { index: Number(index), count } : max;
 		},
-		{ index: 0, count: 0 },
+		{ index: -1, count: -1 },
 	);
 
-	return maxIndex.index;
+	return maxIndex.index === -1 ? null : maxIndex.index;
 }
 
 export function processLotChangePAndL(

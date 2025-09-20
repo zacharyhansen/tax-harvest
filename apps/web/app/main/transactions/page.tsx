@@ -4,6 +4,7 @@ import { Badge } from '@repo/ui/components/badge';
 import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { useTransactionsQuery } from '~/generated/gql';
 import { PageWrapper } from '~/modules/layout';
@@ -23,6 +24,7 @@ const AgGridWrapper = dynamic(
  * <TransactionsPage />
  */
 export default function TransactionsPage() {
+	const router = useRouter();
 	const { data, error, loading } = useTransactionsQuery();
 
 	const columnDefs: ColDef[] = useMemo(() => {
@@ -237,6 +239,11 @@ export default function TransactionsPage() {
 					rowData={data?.transactions}
 					rowSelection="single"
 					loading={loading}
+					onRowClicked={(event) => {
+						if (event.data?.id) {
+							router.push(`/main/transactions/${event.data.id}`);
+						}
+					}}
 				/>
 			</AgGridWrapper>
 		</PageWrapper>

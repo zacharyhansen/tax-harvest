@@ -598,12 +598,10 @@ export class PlaidService {
 					quantityChange: lotChange.quantityChange.toString(),
 					price: lotChange.price.toString(),
 					aquiredDate: lotChange.acquiredDate,
-					shouldDelete: lotChange.shouldDelete,
 					upsert: JSON.stringify(lotChange.upsert),
-					operationType: lotChange.shouldDelete
-						? OperationType.delete
-						: OperationType.upsert,
+					operationType: OperationType.upsert,
 					lotChangeListId: insertedLotChangeList.id,
+					lotId: lotChange.lotId,
 				})),
 			)
 			.execute();
@@ -643,9 +641,7 @@ export class PlaidService {
 		accountId: string;
 	}) {
 		// Upsert the lots
-		const upserts = lotChanges
-			.filter((change) => !change.shouldDelete)
-			.map((lotChange) => lotChange.upsert);
+		const upserts = lotChanges.map((lotChange) => lotChange.upsert);
 
 		if (upserts.length > 0) {
 			await trx
@@ -656,19 +652,6 @@ export class PlaidService {
 						remainingQty: (eb) => eb.ref('excluded.remainingQty'),
 					}),
 				)
-				.execute();
-		}
-
-		// Delete the lots with none left
-		const deletes = lotChanges
-			.filter((change) => change.shouldDelete)
-			.map((lotChange) => lotChange.lotId);
-		if (deletes.length > 0) {
-			await trx
-				.deleteFrom('Lot')
-				.where('id', 'in', deletes)
-				.where('accountId', '=', accountId)
-				.where('portfolioId', '=', portfolioId)
 				.execute();
 		}
 

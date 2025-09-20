@@ -100,6 +100,22 @@ export interface Account {
   uploadedPositions: Generated<boolean>;
 }
 
+export interface AccountRealizedPAndLHistory {
+  accountId: string;
+  createdAt: Generated<Timestamp>;
+  deferredLossChange: Generated<Numeric>;
+  dividendChange: Generated<Numeric>;
+  id: Generated<Int8>;
+  longTermChange: Generated<Numeric>;
+  lotId: string | null;
+  portfolioId: string;
+  realizedPAndLId: string;
+  shortTermChange: Generated<Numeric>;
+  transactionId: string | null;
+  updatedAt: Generated<Timestamp>;
+  uuid: string;
+}
+
 export interface Asset {
   active: Generated<boolean>;
   assetClass: Generated<"cryto" | "fx" | "indices" | "otc" | "stocks" | "UNKNOWN">;
@@ -295,7 +311,7 @@ export interface LotChange {
   assetSymbol: string;
   id: Generated<string>;
   lotChangeListId: string | null;
-  lotId: string | null;
+  lotId: string;
   operationType: "create" | "delete" | "update" | "upsert";
   portfolioId: string;
   price: Numeric;
@@ -303,7 +319,6 @@ export interface LotChange {
   quantityFinal: Numeric;
   realizedProfitAndLossLongTerm: Generated<Numeric>;
   realizedProfitAndLossShortTerm: Generated<Numeric>;
-  shouldDelete: boolean;
   upsert: Json;
 }
 
@@ -535,6 +550,7 @@ export interface DB {
   _AssetToUser: _AssetToUser;
   _prisma_migrations: _PrismaMigrations;
   Account: Account;
+  AccountRealizedPAndLHistory: AccountRealizedPAndLHistory;
   Asset: Asset;
   AssetMerge: AssetMerge;
   AssetType: AssetType;

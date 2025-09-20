@@ -237,20 +237,29 @@ export default function PlaidMergePage(props: {
 										// Check if this asset merge has any errors
 										const hasErrors = assetMerge.error || assetMerge.mergeError;
 										const errorCount = hasErrors ? 1 : 0;
-										
+
 										// Calculate total P&L from the lot changes
-										const activeLotChangeList = 
-											(assetMerge.lotChangeList && assetMerge.lotChangeList.length > 0 ? assetMerge.lotChangeList[0] : null);
-										
-										const totalShortTermPL = activeLotChangeList?.LotChange?.reduce(
-											(sum, change) => sum + Number(change.realizedProfitAndLossShortTerm || 0),
-											0
-										) || 0;
-										
-										const totalLongTermPL = activeLotChangeList?.LotChange?.reduce(
-											(sum, change) => sum + Number(change.realizedProfitAndLossLongTerm || 0),
-											0
-										) || 0;
+										const activeLotChangeList =
+											assetMerge.lotChangeList &&
+											assetMerge.lotChangeList.length > 0
+												? assetMerge.lotChangeList[0]
+												: null;
+
+										const totalShortTermPL =
+											activeLotChangeList?.LotChange?.reduce(
+												(sum, change) =>
+													sum +
+													Number(change.realizedProfitAndLossShortTerm || 0),
+												0,
+											) || 0;
+
+										const totalLongTermPL =
+											activeLotChangeList?.LotChange?.reduce(
+												(sum, change) =>
+													sum +
+													Number(change.realizedProfitAndLossLongTerm || 0),
+												0,
+											) || 0;
 
 										return (
 											<div
@@ -442,194 +451,356 @@ export default function PlaidMergePage(props: {
 												</div>
 
 												{/* Lot Change Options - Show when multiple solutions exist */}
-												{assetMerge.lotChangeList && assetMerge.lotChangeList.length > 1 && (
-													<div className="space-y-3">
-														<h5 className="font-medium text-sm flex items-center gap-2">
-															<GitBranch className="h-4 w-4" />
-															Lot Change Options ({assetMerge.lotChangeList.length} solutions available)
-														</h5>
-														<div className="space-y-4">
-															{assetMerge.lotChangeList.map((lotChangeList, optionIndex) => {
-																// Calculate totals for this option
-																const totalFinalQuantity = lotChangeList.LotChange?.reduce(
-																	(sum, item) => sum + Number(item.quantityFinal || 0),
-																	0
-																) || 0;
-																
-																const totalCostBasis = lotChangeList.LotChange?.reduce(
-																	(sum, item) => sum + (Number(item.price || 0) * Number(item.quantityFinal || 0)),
-																	0
-																) || 0;
-																
-																// Calculate P&L for this option
-																const optionShortTermPL = lotChangeList.LotChange?.reduce(
-																	(sum, item) => sum + Number(item.realizedProfitAndLossShortTerm || 0),
-																	0
-																) || 0;
-																
-																const optionLongTermPL = lotChangeList.LotChange?.reduce(
-																	(sum, item) => sum + Number(item.realizedProfitAndLossLongTerm || 0),
-																	0
-																) || 0;
-																
-																// Calculate deltas from targets
-																const targetQuantity = Number(assetMerge.targetQuantity || 0);
-																const targetValue = Number(assetMerge.targetValue || 0);
-																const quantityDelta = totalFinalQuantity - targetQuantity;
-																const valueDelta = totalCostBasis - targetValue;
-																const quantityDeltaPercent = targetQuantity !== 0 ? (quantityDelta / targetQuantity * 100) : 0;
-																const valueDeltaPercent = targetValue !== 0 ? (valueDelta / targetValue * 100) : 0;
-																const isUsed = false;
+												{assetMerge.lotChangeList &&
+													assetMerge.lotChangeList.length > 1 && (
+														<div className="space-y-3">
+															<h5 className="font-medium text-sm flex items-center gap-2">
+																<GitBranch className="h-4 w-4" />
+																Lot Change Options (
+																{assetMerge.lotChangeList.length} solutions
+																available)
+															</h5>
+															<div className="space-y-4">
+																{assetMerge.lotChangeList.map(
+																	(lotChangeList, optionIndex) => {
+																		// Calculate totals for this option
+																		const totalFinalQuantity =
+																			lotChangeList.LotChange?.reduce(
+																				(sum, item) =>
+																					sum + Number(item.quantityFinal || 0),
+																				0,
+																			) || 0;
 
-																return (
-																	<div 
-																		key={lotChangeList.id} 
-																		className={`border rounded-lg p-4 space-y-3 ${isUsed ? 'border-primary bg-primary/5' : 'border-border'}`}
-																	>
-																		<div className="flex items-center justify-between">
-																			<div className="flex items-center gap-2">
-																				<span className="text-sm font-medium">
-																					Option {optionIndex + 1} of {assetMerge.lotChangeList?.length || 0}
-																				</span>
-																				{isUsed && (
-																					<Badge variant="default" className="text-xs">
-																						Applied
-																					</Badge>
+																		const totalCostBasis =
+																			lotChangeList.LotChange?.reduce(
+																				(sum, item) =>
+																					sum +
+																					Number(item.price || 0) *
+																						Number(item.quantityFinal || 0),
+																				0,
+																			) || 0;
+
+																		// Calculate P&L for this option
+																		const optionShortTermPL =
+																			lotChangeList.LotChange?.reduce(
+																				(sum, item) =>
+																					sum +
+																					Number(
+																						item.realizedProfitAndLossShortTerm ||
+																							0,
+																					),
+																				0,
+																			) || 0;
+
+																		const optionLongTermPL =
+																			lotChangeList.LotChange?.reduce(
+																				(sum, item) =>
+																					sum +
+																					Number(
+																						item.realizedProfitAndLossLongTerm ||
+																							0,
+																					),
+																				0,
+																			) || 0;
+
+																		// Calculate deltas from targets
+																		const targetQuantity = Number(
+																			assetMerge.targetQuantity || 0,
+																		);
+																		const targetValue = Number(
+																			assetMerge.targetValue || 0,
+																		);
+																		const quantityDelta =
+																			totalFinalQuantity - targetQuantity;
+																		const valueDelta =
+																			totalCostBasis - targetValue;
+																		const quantityDeltaPercent =
+																			targetQuantity !== 0
+																				? (quantityDelta / targetQuantity) * 100
+																				: 0;
+																		const valueDeltaPercent =
+																			targetValue !== 0
+																				? (valueDelta / targetValue) * 100
+																				: 0;
+																		const isApplied =
+																			lotChangeList.appliedToAccount === true;
+
+																		return (
+																			<div
+																				key={lotChangeList.id}
+																				className={`border rounded-lg p-4 space-y-3 ${isApplied ? 'border-primary bg-primary/5 ring-2 ring-primary/20' : 'border-border'}`}
+																			>
+																				<div className="flex items-center justify-between">
+																					<div className="flex items-center gap-2">
+																						<span className="text-sm font-medium">
+																							Option {optionIndex + 1} of{' '}
+																							{assetMerge.lotChangeList
+																								?.length || 0}
+																						</span>
+																						{isApplied && (
+																							<Badge
+																								variant="default"
+																								className="text-xs bg-primary text-primary-foreground"
+																							>
+																								Applied to Account
+																							</Badge>
+																						)}
+																					</div>
+																					<div className="text-xs text-muted-foreground">
+																						{lotChangeList.LotChange?.length ||
+																							0}{' '}
+																						lot changes
+																					</div>
+																				</div>
+
+																				{/* Summary Statistics */}
+																				<div className="grid grid-cols-2 gap-4 p-3 bg-muted/30 rounded-lg text-sm">
+																					<div>
+																						<p className="text-xs text-muted-foreground">
+																							Final Quantity
+																						</p>
+																						<p className="font-semibold">
+																							{totalFinalQuantity.toFixed(4)}
+																						</p>
+																						<p
+																							className={`text-xs ${Math.abs(quantityDelta) < 0.0001 ? 'text-green-600' : 'text-orange-600'}`}
+																						>
+																							Δ: {quantityDelta >= 0 ? '+' : ''}
+																							{quantityDelta.toFixed(4)} (
+																							{quantityDeltaPercent >= 0
+																								? '+'
+																								: ''}
+																							{quantityDeltaPercent.toFixed(2)}
+																							%)
+																						</p>
+																					</div>
+																					<div>
+																						<p className="text-xs text-muted-foreground">
+																							Total Cost Basis
+																						</p>
+																						<p className="font-semibold">
+																							${totalCostBasis.toFixed(2)}
+																						</p>
+																						<p
+																							className={`text-xs ${Math.abs(valueDelta) < 0.01 ? 'text-green-600' : 'text-orange-600'}`}
+																						>
+																							Δ: {valueDelta >= 0 ? '+' : ''}$
+																							{valueDelta.toFixed(2)} (
+																							{valueDeltaPercent >= 0
+																								? '+'
+																								: ''}
+																							{valueDeltaPercent.toFixed(2)}%)
+																						</p>
+																					</div>
+																				</div>
+
+																				{/* P&L Statistics for this option */}
+																				{(optionShortTermPL !== 0 ||
+																					optionLongTermPL !== 0) && (
+																					<div className="grid grid-cols-2 gap-4 p-3 bg-muted/30 rounded-lg text-sm">
+																						<div>
+																							<p className="text-xs text-muted-foreground">
+																								Short Term P&L
+																							</p>
+																							<p
+																								className={`font-semibold ${optionShortTermPL > 0 ? 'text-green-600' : optionShortTermPL < 0 ? 'text-destructive' : ''}`}
+																							>
+																								${optionShortTermPL.toFixed(2)}
+																							</p>
+																						</div>
+																						<div>
+																							<p className="text-xs text-muted-foreground">
+																								Long Term P&L
+																							</p>
+																							<p
+																								className={`font-semibold ${optionLongTermPL > 0 ? 'text-green-600' : optionLongTermPL < 0 ? 'text-destructive' : ''}`}
+																							>
+																								${optionLongTermPL.toFixed(2)}
+																							</p>
+																						</div>
+																					</div>
 																				)}
-																			</div>
-																			<div className="text-xs text-muted-foreground">
-																				{lotChangeList.LotChange?.length || 0} lot changes
-																			</div>
-																		</div>
 
-																		{/* Summary Statistics */}
-																		<div className="grid grid-cols-2 gap-4 p-3 bg-muted/30 rounded-lg text-sm">
-																			<div>
-																				<p className="text-xs text-muted-foreground">Final Quantity</p>
-																				<p className="font-semibold">{totalFinalQuantity.toFixed(4)}</p>
-																				<p className={`text-xs ${Math.abs(quantityDelta) < 0.0001 ? 'text-green-600' : 'text-orange-600'}`}>
-																					Δ: {quantityDelta >= 0 ? '+' : ''}{quantityDelta.toFixed(4)} ({quantityDeltaPercent >= 0 ? '+' : ''}{quantityDeltaPercent.toFixed(2)}%)
-																				</p>
+																				{/* Lot Changes Table */}
+																				{lotChangeList.LotChange &&
+																					lotChangeList.LotChange.length >
+																						0 && (
+																						<details className="cursor-pointer">
+																							<summary className="text-xs text-muted-foreground hover:text-foreground">
+																								View lot changes details
+																							</summary>
+																							<div className="mt-3 overflow-x-auto">
+																								<Table>
+																									<TableHeader>
+																										<TableRow>
+																											<TableHead className="text-xs">
+																												Lot ID
+																											</TableHead>
+																											<TableHead className="text-xs">
+																												Acquired
+																											</TableHead>
+																											<TableHead className="text-xs text-right">
+																												Price
+																											</TableHead>
+																											<TableHead className="text-xs text-right">
+																												Qty Change
+																											</TableHead>
+																											<TableHead className="text-xs text-right">
+																												Final Qty
+																											</TableHead>
+																											<TableHead className="text-xs text-right">
+																												Cost Basis
+																											</TableHead>
+																											<TableHead className="text-xs text-right">
+																												ST P&L
+																											</TableHead>
+																											<TableHead className="text-xs text-right">
+																												LT P&L
+																											</TableHead>
+																											<TableHead className="text-xs">
+																												Action
+																											</TableHead>
+																										</TableRow>
+																									</TableHeader>
+																									<TableBody>
+																										{lotChangeList.LotChange.map(
+																											(change) => {
+																												const costBasis =
+																													Number(
+																														change.price || 0,
+																													) *
+																													Number(
+																														change.quantityFinal ||
+																															0,
+																													);
+																												return (
+																													<TableRow
+																														key={change.id}
+																														className="text-xs"
+																													>
+																														<TableCell className="font-mono">
+																															{change.lotId?.substring(
+																																0,
+																																8,
+																															) || 'NEW'}
+																														</TableCell>
+																														<TableCell>
+																															{change.aquiredDate
+																																? new Date(
+																																		change.aquiredDate,
+																																	).toLocaleDateString()
+																																: 'N/A'}
+																														</TableCell>
+																														<TableCell className="text-right">
+																															$
+																															{Number(
+																																change.price ||
+																																	0,
+																															).toFixed(4)}
+																														</TableCell>
+																														<TableCell className="text-right">
+																															{Number(
+																																change.quantityChange ||
+																																	0,
+																															).toFixed(4)}
+																														</TableCell>
+																														<TableCell className="text-right">
+																															{Number(
+																																change.quantityFinal ||
+																																	0,
+																															).toFixed(4)}
+																														</TableCell>
+																														<TableCell className="text-right font-medium">
+																															$
+																															{costBasis.toFixed(
+																																2,
+																															)}
+																														</TableCell>
+																														<TableCell
+																															className={`text-right text-xs ${Number(change.realizedProfitAndLossShortTerm || 0) > 0 ? 'text-green-600' : Number(change.realizedProfitAndLossShortTerm || 0) < 0 ? 'text-destructive' : ''}`}
+																														>
+																															{Number(
+																																change.realizedProfitAndLossShortTerm ||
+																																	0,
+																															) !== 0
+																																? `$${Number(change.realizedProfitAndLossShortTerm || 0).toFixed(2)}`
+																																: '-'}
+																														</TableCell>
+																														<TableCell
+																															className={`text-right text-xs ${Number(change.realizedProfitAndLossLongTerm || 0) > 0 ? 'text-green-600' : Number(change.realizedProfitAndLossLongTerm || 0) < 0 ? 'text-destructive' : ''}`}
+																														>
+																															{Number(
+																																change.realizedProfitAndLossLongTerm ||
+																																	0,
+																															) !== 0
+																																? `$${Number(change.realizedProfitAndLossLongTerm || 0).toFixed(2)}`
+																																: '-'}
+																														</TableCell>
+																														<TableCell>
+																															<Badge
+																																variant={
+																																	'outline'
+																																}
+																																className="text-xs"
+																															>
+																																{
+																																	change.operationType
+																																}
+																															</Badge>
+																														</TableCell>
+																													</TableRow>
+																												);
+																											},
+																										)}
+																										{/* Totals Row */}
+																										<TableRow className="font-semibold border-t">
+																											<TableCell
+																												colSpan={4}
+																												className="text-right text-xs"
+																											>
+																												Totals
+																											</TableCell>
+																											<TableCell className="text-right text-xs">
+																												{totalFinalQuantity.toFixed(
+																													4,
+																												)}
+																											</TableCell>
+																											<TableCell className="text-right text-xs">
+																												$
+																												{totalCostBasis.toFixed(
+																													2,
+																												)}
+																											</TableCell>
+																											<TableCell
+																												className={`text-right text-xs font-semibold ${optionShortTermPL > 0 ? 'text-green-600' : optionShortTermPL < 0 ? 'text-destructive' : ''}`}
+																											>
+																												$
+																												{optionShortTermPL.toFixed(
+																													2,
+																												)}
+																											</TableCell>
+																											<TableCell
+																												className={`text-right text-xs font-semibold ${optionLongTermPL > 0 ? 'text-green-600' : optionLongTermPL < 0 ? 'text-destructive' : ''}`}
+																											>
+																												$
+																												{optionLongTermPL.toFixed(
+																													2,
+																												)}
+																											</TableCell>
+																											<TableCell />
+																										</TableRow>
+																									</TableBody>
+																								</Table>
+																							</div>
+																						</details>
+																					)}
 																			</div>
-																			<div>
-																				<p className="text-xs text-muted-foreground">Total Cost Basis</p>
-																				<p className="font-semibold">
-																					${totalCostBasis.toFixed(2)}
-																				</p>
-																				<p className={`text-xs ${Math.abs(valueDelta) < 0.01 ? 'text-green-600' : 'text-orange-600'}`}>
-																					Δ: {valueDelta >= 0 ? '+' : ''}${valueDelta.toFixed(2)} ({valueDeltaPercent >= 0 ? '+' : ''}{valueDeltaPercent.toFixed(2)}%)
-																				</p>
-																			</div>
-																		</div>
-																		
-																		{/* P&L Statistics for this option */}
-																		{(optionShortTermPL !== 0 || optionLongTermPL !== 0) && (
-																			<div className="grid grid-cols-2 gap-4 p-3 bg-muted/30 rounded-lg text-sm">
-																				<div>
-																					<p className="text-xs text-muted-foreground">Short Term P&L</p>
-																					<p className={`font-semibold ${optionShortTermPL > 0 ? 'text-green-600' : optionShortTermPL < 0 ? 'text-destructive' : ''}`}>
-																						${optionShortTermPL.toFixed(2)}
-																					</p>
-																				</div>
-																				<div>
-																					<p className="text-xs text-muted-foreground">Long Term P&L</p>
-																					<p className={`font-semibold ${optionLongTermPL > 0 ? 'text-green-600' : optionLongTermPL < 0 ? 'text-destructive' : ''}`}>
-																						${optionLongTermPL.toFixed(2)}
-																					</p>
-																				</div>
-																			</div>
-																		)}
-
-																		{/* Lot Changes Table */}
-																		{lotChangeList.LotChange && lotChangeList.LotChange.length > 0 && (
-																			<details className="cursor-pointer">
-																				<summary className="text-xs text-muted-foreground hover:text-foreground">
-																					View lot changes details
-																				</summary>
-																				<div className="mt-3 overflow-x-auto">
-																					<Table>
-																						<TableHeader>
-																							<TableRow>
-																								<TableHead className="text-xs">Lot ID</TableHead>
-																								<TableHead className="text-xs">Acquired</TableHead>
-																								<TableHead className="text-xs text-right">Price</TableHead>
-																								<TableHead className="text-xs text-right">Qty Change</TableHead>
-																								<TableHead className="text-xs text-right">Final Qty</TableHead>
-																								<TableHead className="text-xs text-right">Cost Basis</TableHead>
-																								<TableHead className="text-xs text-right">ST P&L</TableHead>
-																								<TableHead className="text-xs text-right">LT P&L</TableHead>
-																								<TableHead className="text-xs">Action</TableHead>
-																							</TableRow>
-																						</TableHeader>
-																						<TableBody>
-																							{lotChangeList.LotChange.map((change) => {
-																								const costBasis = Number(change.price || 0) * Number(change.quantityFinal || 0);
-																								return (
-																									<TableRow key={change.id} className="text-xs">
-																										<TableCell className="font-mono">
-																											{change.lotId?.substring(0, 8) || 'NEW'}
-																										</TableCell>
-																										<TableCell>
-																											{change.aquiredDate
-																												? new Date(change.aquiredDate).toLocaleDateString()
-																												: 'N/A'}
-																										</TableCell>
-																										<TableCell className="text-right">
-																											${Number(change.price || 0).toFixed(4)}
-																										</TableCell>
-																										<TableCell className="text-right">
-																											{Number(change.quantityChange || 0).toFixed(4)}
-																										</TableCell>
-																										<TableCell className="text-right">
-																											{Number(change.quantityFinal || 0).toFixed(4)}
-																										</TableCell>
-																										<TableCell className="text-right font-medium">
-																											${costBasis.toFixed(2)}
-																										</TableCell>
-																										<TableCell className={`text-right text-xs ${Number(change.realizedProfitAndLossShortTerm || 0) > 0 ? 'text-green-600' : Number(change.realizedProfitAndLossShortTerm || 0) < 0 ? 'text-destructive' : ''}`}>
-																											{Number(change.realizedProfitAndLossShortTerm || 0) !== 0 ? `$${Number(change.realizedProfitAndLossShortTerm || 0).toFixed(2)}` : '-'}
-																										</TableCell>
-																										<TableCell className={`text-right text-xs ${Number(change.realizedProfitAndLossLongTerm || 0) > 0 ? 'text-green-600' : Number(change.realizedProfitAndLossLongTerm || 0) < 0 ? 'text-destructive' : ''}`}>
-																											{Number(change.realizedProfitAndLossLongTerm || 0) !== 0 ? `$${Number(change.realizedProfitAndLossLongTerm || 0).toFixed(2)}` : '-'}
-																										</TableCell>
-																										<TableCell>
-																											<Badge variant={change.shouldDelete ? 'destructive' : 'outline'} className="text-xs">
-																												{change.operationType}
-																											</Badge>
-																										</TableCell>
-																									</TableRow>
-																								);
-																							})}
-																							{/* Totals Row */}
-																							<TableRow className="font-semibold border-t">
-																								<TableCell colSpan={4} className="text-right text-xs">
-																									Totals
-																								</TableCell>
-																								<TableCell className="text-right text-xs">
-																									{totalFinalQuantity.toFixed(4)}
-																								</TableCell>
-																								<TableCell className="text-right text-xs">
-																									${totalCostBasis.toFixed(2)}
-																								</TableCell>
-																								<TableCell className={`text-right text-xs font-semibold ${optionShortTermPL > 0 ? 'text-green-600' : optionShortTermPL < 0 ? 'text-destructive' : ''}`}>
-																									${optionShortTermPL.toFixed(2)}
-																								</TableCell>
-																								<TableCell className={`text-right text-xs font-semibold ${optionLongTermPL > 0 ? 'text-green-600' : optionLongTermPL < 0 ? 'text-destructive' : ''}`}>
-																									${optionLongTermPL.toFixed(2)}
-																								</TableCell>
-																								<TableCell />
-																							</TableRow>
-																						</TableBody>
-																					</Table>
-																				</div>
-																			</details>
-																		)}
-																	</div>
-																);
-															})}
+																		);
+																	},
+																)}
+															</div>
 														</div>
-													</div>
-												)}
+													)}
 
 												{/* Transactions */}
 												{assetMerge.transactionOnAssetMerge &&

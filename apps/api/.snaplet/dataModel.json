@@ -704,6 +704,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "AccountRealizedPAndLHistory",
+          "type": "AccountRealizedPAndLHistory",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToAccount",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "AssetMerge",
           "type": "AssetMerge",
           "isRequired": false,
@@ -900,6 +914,305 @@
             "authConnectionId",
             "plaidAccountMask",
             "type"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "AccountRealizedPAndLHistory": {
+      "id": "public.AccountRealizedPAndLHistory",
+      "schemaName": "public",
+      "tableName": "AccountRealizedPAndLHistory",
+      "fields": [
+        {
+          "id": "public.AccountRealizedPAndLHistory.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "int8",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": {
+            "identifier": "\"public\".\"AccountRealizedPAndLHistory_id_seq\"",
+            "increment": 1,
+            "start": 1
+          },
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.uuid",
+          "name": "uuid",
+          "columnName": "uuid",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.accountId",
+          "name": "accountId",
+          "columnName": "accountId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.realizedPAndLId",
+          "name": "realizedPAndLId",
+          "columnName": "realizedPAndLId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.shortTermChange",
+          "name": "shortTermChange",
+          "columnName": "shortTermChange",
+          "type": "numeric",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.longTermChange",
+          "name": "longTermChange",
+          "columnName": "longTermChange",
+          "type": "numeric",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.dividendChange",
+          "name": "dividendChange",
+          "columnName": "dividendChange",
+          "type": "numeric",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.deferredLossChange",
+          "name": "deferredLossChange",
+          "columnName": "deferredLossChange",
+          "type": "numeric",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.lotId",
+          "name": "lotId",
+          "columnName": "lotId",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.AccountRealizedPAndLHistory.transactionId",
+          "name": "transactionId",
+          "columnName": "transactionId",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToAccount",
+          "relationFromFields": [
+            "accountId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Lot",
+          "type": "Lot",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToLot",
+          "relationFromFields": [
+            "lotId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "RealizedPAndL",
+          "type": "RealizedPAndL",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToRealizedPAndL",
+          "relationFromFields": [
+            "realizedPAndLId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Transaction",
+          "type": "Transaction",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToTransaction",
+          "relationFromFields": [
+            "transactionId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "AccountRealizedPAndLHistory_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "AccountRealizedPAndLHistory_uuid_key",
+          "fields": [
+            "uuid"
           ],
           "nullNotDistinct": false
         }
@@ -4174,6 +4487,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "AccountRealizedPAndLHistory",
+          "type": "AccountRealizedPAndLHistory",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToLot",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "HarvestTransactionItem",
           "type": "HarvestTransactionItem",
           "isRequired": false,
@@ -4272,7 +4599,7 @@
           "name": "lotId",
           "columnName": "lotId",
           "type": "uuid",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -4314,20 +4641,6 @@
           "name": "assetSymbol",
           "columnName": "assetSymbol",
           "type": "text",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
-          "id": "public.LotChange.shouldDelete",
-          "name": "shouldDelete",
-          "columnName": "shouldDelete",
-          "type": "bool",
           "isRequired": true,
           "kind": "scalar",
           "isList": false,
@@ -4456,7 +4769,7 @@
         {
           "name": "Lot",
           "type": "Lot",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "object",
           "relationName": "LotChangeToLot",
           "relationFromFields": [
@@ -5542,6 +5855,20 @@
           "isRequired": false,
           "kind": "object",
           "relationName": "AccountToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "AccountRealizedPAndLHistory",
+          "type": "AccountRealizedPAndLHistory",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToPortfolio",
           "relationFromFields": [],
           "relationToFields": [],
           "isList": true,
@@ -6989,6 +7316,20 @@
           "isGenerated": false,
           "sequence": false,
           "hasDefaultValue": false
+        },
+        {
+          "name": "AccountRealizedPAndLHistory",
+          "type": "AccountRealizedPAndLHistory",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToRealizedPAndL",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
         }
       ],
       "uniqueConstraints": [
@@ -7413,6 +7754,20 @@
             "id"
           ],
           "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "AccountRealizedPAndLHistory",
+          "type": "AccountRealizedPAndLHistory",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AccountRealizedPAndLHistoryToTransaction",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
           "isId": false,
           "isGenerated": false,
           "sequence": false,
