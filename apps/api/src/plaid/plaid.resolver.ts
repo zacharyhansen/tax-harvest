@@ -8,7 +8,10 @@ import type { ClerkClaims } from '../auth/types';
 import { Account } from '../generated/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaSelect } from '../utilities/prisma/prisma-select';
-import { PlaidInstitutionInfo, PlaidLinkOnSuccessMetadata } from './plaid.dto';
+import {
+	PlaidInstitutionInfo,
+	PlaidLinkOnSuccessMetadata,
+} from './constants/plaid.dto';
 import { PlaidService } from './plaid.service';
 
 @Resolver()

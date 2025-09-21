@@ -33,26 +33,6 @@ export class AccountResolver {
 		private readonly realizedPAndLService: RealizedPandLService,
 	) {}
 
-	// @ResolveField(() => AuthConnectionExt, {
-	//   description: "Auth Connection of the account with computed fields",
-	//   name: "authConnectionExt",
-	// })
-	// authConnectionExt(
-	//   @Info()
-	//   info: GraphQLResolveInfo,
-	//   @Parent() { authConnectionId }: Account,
-	// ) {
-	//   const { select } = new PrismaSelect<Prisma.AuthConnectionSelect>(info)
-	//     .value;
-	//   if (!authConnectionId) {
-	//     throw new Error("Account has no auth connection");
-	//   }
-	//   return this.authConnectionService.getAuthConnection({
-	//     id: authConnectionId,
-	//     select,
-	//   });
-	// }
-
 	@Query(() => [Account], {
 		description: 'Get accounts that need setup',
 		name: 'setupAccounts',

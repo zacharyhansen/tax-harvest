@@ -15,7 +15,6 @@ import type { ClerkClaims } from '../auth/types';
 import {
 	File,
 	FileCreateManyInput,
-	FileType,
 	FileWhereInput,
 } from '../generated/graphql';
 import { GCPUploadFile } from '../google-storage/google-storage.dto';
@@ -34,9 +33,6 @@ class InitFileUploadPayload {
 
 	@Field(() => String)
 	type: string;
-
-	@Field(() => FileType)
-	fileType: FileType;
 }
 
 export
@@ -52,10 +48,10 @@ class InitAccountFileUploadPayload {
 	dividend: number;
 
 	@Field(() => Number)
-	longTerm: number;
+	longTermCapitalGain: number;
 
 	@Field(() => Number)
-	shortTerm: number;
+	shortTermCapitalGain: number;
 
 	@Field(() => String, { nullable: true })
 	description?: string;
@@ -185,11 +181,11 @@ export class FileResolver {
 						realizedPAndL: {
 							create: [
 								{
-									deferredLoss: accountData.deferredLoss.toString(),
 									dividend: accountData.dividend.toString(),
-									longTerm: accountData.longTerm.toString(),
-									shortTerm: accountData.shortTerm.toString(),
-									year: new Date().getFullYear(),
+									longTermCapitalGain:
+										accountData.longTermCapitalGain.toString(),
+									shortTermCapitalGain:
+										accountData.shortTermCapitalGain.toString(),
 									portfolioId: clerkContext.metadata.portfolioId,
 								},
 							],

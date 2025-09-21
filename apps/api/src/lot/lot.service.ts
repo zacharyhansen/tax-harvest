@@ -5,6 +5,7 @@ import { Decimal } from 'decimal.js';
 import { type SelectExpression, sql } from 'kysely';
 import { AccountsLotResetEvent } from '~/events/accounts-lot-reset';
 import { EventId } from '~/events/event-id';
+import { LotApplicationService } from '~/lot-application/lot-application.service';
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils';
 import { Database } from '../database/database';
 import type { DB } from '../database/db.d';
@@ -17,6 +18,7 @@ export class LotService {
 		private readonly prismaService: PrismaService,
 		private readonly db: Database,
 		private eventEmitter: EventEmitter2,
+		private readonly lotApplicationService: LotApplicationService,
 	) {}
 
 	resetLotsForAccount({
@@ -84,7 +86,7 @@ export class LotService {
 						},
 					},
 					data: {
-						appliedToLots: false,
+						merged: false,
 					},
 				});
 
@@ -223,7 +225,8 @@ export class LotService {
 			unrealizedGainTotalWithCurrentHarvest: new Decimal(0),
 			unrealizedLossTotalWithCurrentHarvest: new Decimal(0),
 			positionCount: new Decimal(0),
-			realizedDollarChangeFromCurrentHarvest: new Decimal(0),
+			realizedLongTermDollarChangeFromCurrentHarvest: new Decimal(0),
+			realizedShortTermDollarChangeFromCurrentHarvest: new Decimal(0),
 		};
 
 		const accountIds = new Set<string>();
@@ -233,12 +236,23 @@ export class LotService {
 			accountIds.add(lot.accountId);
 			lotCounts.add(lot.id);
 
-			totals.realizedDollarChangeFromCurrentHarvest =
-				totals.realizedDollarChangeFromCurrentHarvest.plus(
-					new Decimal(lot.dollarPerSharePnL).mul(
-						new Decimal(lot.currentHarvestQty),
-					),
-				);
+			// Calculate the dollar change from the current harvest
+			const dollarChange = new Decimal(lot.dollarPerSharePnL).mul(
+				new Decimal(lot.currentHarvestQty),
+			);
+			if (this.lotApplicationService.isLongTerm(lot.acquiredDate)) {
+				totals.realizedLongTermDollarChangeFromCurrentHarvest =
+					totals.realizedLongTermDollarChangeFromCurrentHarvest.plus(
+						dollarChange,
+					);
+			} else {
+				totals.realizedShortTermDollarChangeFromCurrentHarvest =
+					totals.realizedShortTermDollarChangeFromCurrentHarvest.plus(
+						dollarChange,
+					);
+			}
+
+			// Calculate the unrealized gain and loss
 			if (Number(lot.gainTotal) < 0) {
 				totals.unrealizedLossTotal = totals.unrealizedLossTotal.plus(
 					new Decimal(lot.gainTotal),
@@ -274,8 +288,10 @@ export class LotService {
 			totalUnrealized: totals.unrealizedGainTotal
 				.plus(totals.unrealizedLossTotal)
 				.toNumber(),
-			realizedDollarChangeFromCurrentHarvest:
-				totals.realizedDollarChangeFromCurrentHarvest.toNumber(),
+			realizedLongTermDollarChangeFromCurrentHarvest:
+				totals.realizedLongTermDollarChangeFromCurrentHarvest.toNumber(),
+			realizedShortTermDollarChangeFromCurrentHarvest:
+				totals.realizedShortTermDollarChangeFromCurrentHarvest.toNumber(),
 			unrealizedGainTotalWithCurrentHarvest:
 				totals.unrealizedGainTotalWithCurrentHarvest.toNumber(),
 			unrealizedLossTotalWithCurrentHarvest:

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 
 import { Injectable } from '@nestjs/common';
-import type { Lot } from '@prisma/client';
+import type { Lot, LotUploadFileType } from '@prisma/client';
 import { parse } from 'csv-parse/sync';
 import Decimal from 'decimal.js';
 import type { Insertable } from 'kysely';
@@ -17,6 +17,36 @@ export interface EtradeCSVLotRecord {
 	'Total Gain $': string;
 	'Total Gain %': string;
 	'Value $': string;
+}
+
+export interface SchwabPositionRecord {
+	Symbol: string;
+	Description: string;
+	'Qty (Quantity)': string;
+	Price: string;
+	'Price Chng $ (Price Change $)': string;
+	'Price Chng % (Price Change %)': string;
+	'Mkt Val (Market Value)': string;
+	'Day Chng $ (Day Change $)': string;
+	'Day Chng % (Day Change %)': string;
+	'Cost Basis': string;
+	'Gain $ (Gain/Loss $)': string;
+	'Gain % (Gain/Loss %)': string;
+	'Reinvest?': string;
+	'Reinvest Capital Gains?': string;
+	'Security Type': string;
+}
+
+export interface SchwabLotDetailRecord {
+	'Open Date': string;
+	Quantity: string;
+	Price: string;
+	'Cost/Share': string;
+	'Market Value': string;
+	'Cost Basis': string;
+	'Gain/Loss ($)': string;
+	'Gain/Loss (%)': string;
+	'Holding Period': string;
 }
 
 @Injectable()
@@ -259,5 +289,293 @@ export class CsvService {
 
 	static csvToString(filePath: string): string {
 		return readFileSync(filePath, 'utf8');
+	}
+
+	/**
+	 * Detects the type of CSV file based on its content
+	 * @param content - The CSV content as a string
+	 * @returns The detected CSV file type or null if unrecognized
+	 * @example
+	 * ```typescript
+	 * const csvType = CsvService.detectCSVType(csvContent);
+	 * if (csvType === 'ETRADE_LOTS') {
+	 *   // Process as E*Trade lots file
+	 * }
+	 * ```
+	 */
+	static detectCSVType(content: string): LotUploadFileType | null {
+		const lines = content.split('\n').slice(0, 30); // Check first 30 lines
+
+		// Check for E*Trade CSV markers
+		if (
+			lines.some((line) => line.includes('Account Summary')) &&
+			lines.some((line) => line.includes('Price Paid $')) &&
+			lines.some((line) => /Symbol.*Last Price \$.*Change \$/.test(line))
+		) {
+			return 'ETRADE_LOTS';
+		}
+
+		// Check for Schwab Positions CSV markers
+		if (
+			lines.some((line) => line.includes('Positions for')) &&
+			lines.some((line) =>
+				/Symbol.*Qty \(Quantity\).*Cost Basis.*Security Type/.test(line),
+			)
+		) {
+			return 'SCHWAB_POSITIONS';
+		}
+
+		// Check for Schwab Lot Details CSV markers
+		if (
+			lines.some((line) => line.includes('Lot Details for')) &&
+			lines.some((line) =>
+				/Open Date.*Quantity.*Cost\/Share.*Holding Period/.test(line),
+			)
+		) {
+			return 'SCHWAB_LOTS';
+		}
+
+		return null;
+	}
+
+	/**
+	 * Parses Schwab positions CSV and returns structured data
+	 * @param content - The CSV content as a string
+	 * @returns Object containing parsed positions and account information
+	 */
+	async schwabPositionsToRecords(content: string): Promise<{
+		accounts: Array<{
+			accountName: string;
+			positions: SchwabPositionRecord[];
+		}>;
+		generatedAt?: Date;
+	}> {
+		const lines = content.split('\n');
+		const accounts: Array<{
+			accountName: string;
+			positions: SchwabPositionRecord[];
+		}> = [];
+
+		// Extract generation date if available
+		let generatedAt: Date | undefined;
+		const firstLine = lines[0];
+		const dateMatch = firstLine.match(
+			/as of (\d{2}:\d{2} [AP]M [A-Z]{2,3}), (\d{2}\/\d{2}\/\d{4})/,
+		);
+		if (dateMatch) {
+			try {
+				generatedAt = new Date(`${dateMatch[2]} ${dateMatch[1]}`);
+			} catch {
+				// Ignore parse errors
+			}
+		}
+
+		let currentAccount: string | null = null;
+		let currentPositions: SchwabPositionRecord[] = [];
+		let headerLineIndex = -1;
+
+		for (let i = 0; i < lines.length; i++) {
+			const line = lines[i];
+
+			// Skip empty lines and lines with just commas
+			if (!line || line.trim() === '' || /^[",\s]+$/.test(line)) {
+				continue;
+			}
+
+			// Check for account name (e.g., "Roth_Contributory_IRA ...040","","",...)
+			// Account names appear as first cell followed by empty cells
+			if (
+				!line.startsWith('"Symbol') &&
+				!line.startsWith('"Positions') &&
+				!line.startsWith('"Account Total') &&
+				!line.startsWith('"Cash')
+			) {
+				// Try to parse first cell
+				const firstCellMatch = line.match(/^"([^"]+)"/);
+				if (firstCellMatch) {
+					const potentialAccount = firstCellMatch[1].trim();
+					// Verify it's an account name pattern (contains underscore or dots)
+					// and the rest of the line is empty cells
+					if (
+						(potentialAccount.includes('_') ||
+							potentialAccount.includes('...')) &&
+						line.includes('","","","')
+					) {
+						// Save previous account if exists
+						if (currentAccount) {
+							accounts.push({
+								accountName: currentAccount,
+								positions: currentPositions,
+							});
+						}
+						currentAccount = potentialAccount;
+						currentPositions = [];
+						headerLineIndex = -1;
+					}
+				}
+			}
+
+			// Check for header line
+			if (line.includes('"Symbol"') && line.includes('Security Type')) {
+				headerLineIndex = i;
+				continue;
+			}
+
+			// Parse position data
+			if (headerLineIndex >= 0 && i > headerLineIndex && currentAccount) {
+				// Skip totals and cash lines
+				if (
+					line.includes('"Account Total') ||
+					line.includes('"Cash & Cash Investments')
+				) {
+					continue;
+				}
+
+				try {
+					const records = parse(line, {
+						columns: [
+							'Symbol',
+							'Description',
+							'Qty (Quantity)',
+							'Price',
+							'Price Chng $ (Price Change $)',
+							'Price Chng % (Price Change %)',
+							'Mkt Val (Market Value)',
+							'Day Chng $ (Day Change $)',
+							'Day Chng % (Day Change %)',
+							'Cost Basis',
+							'Gain $ (Gain/Loss $)',
+							'Gain % (Gain/Loss %)',
+							'Reinvest?',
+							'Reinvest Capital Gains?',
+							'Security Type',
+						],
+						skip_empty_lines: true,
+						trim: true,
+						relax_quotes: true,
+					});
+
+					if (records?.[0]?.Symbol && !records[0].Symbol.includes('--')) {
+						currentPositions.push(records[0]);
+					}
+				} catch {
+					// Skip unparseable lines
+				}
+			}
+		}
+
+		// Save last account (even if no positions - might be cash only)
+		if (currentAccount) {
+			accounts.push({
+				accountName: currentAccount,
+				positions: currentPositions,
+			});
+		}
+
+		return { accounts, generatedAt };
+	}
+
+	/**
+	 * Parses Schwab lot detail CSV and returns structured lot data
+	 * @param content - The CSV content as a string
+	 * @returns Object containing parsed lots and metadata
+	 */
+	async schwabLotDetailsToLots(content: string): Promise<{
+		symbol: string;
+		accountName: string;
+		lots: Array<{
+			acquiredDate: Date;
+			assetSymbol: string;
+			price: Decimal;
+			remainingQty: Decimal;
+		}>;
+		generatedAt?: Date;
+	}> {
+		const lines = content.split('\n');
+
+		// Extract symbol and account from first line
+		// Format: "RIVN Lot Details for ...040 as of 01:44 PM ET, 09/20/2025"
+		const firstLine = lines[0];
+		const symbolMatch = firstLine.match(/^"?([A-Z]+) Lot Details/);
+		const accountMatch = firstLine.match(/for\s+([^"]+)\s+as of/);
+
+		const symbol = symbolMatch?.[1] || '';
+		const accountName = accountMatch?.[1]?.trim() || '';
+
+		// Extract generation date
+		let generatedAt: Date | undefined;
+		const dateMatch = firstLine.match(
+			/as of (\d{2}:\d{2} [AP]M [A-Z]{2,3}), (\d{2}\/\d{2}\/\d{4})/,
+		);
+		if (dateMatch) {
+			try {
+				generatedAt = new Date(`${dateMatch[2]} ${dateMatch[1]}`);
+			} catch {
+				// Ignore parse errors
+			}
+		}
+
+		// Find header line
+		const headerLineIndex = lines.findIndex((line) =>
+			line.includes('Open Date'),
+		);
+
+		if (headerLineIndex === -1) {
+			return { symbol, accountName, lots: [], generatedAt };
+		}
+
+		const lots: Array<{
+			acquiredDate: Date;
+			assetSymbol: string;
+			price: Decimal;
+			remainingQty: Decimal;
+		}> = [];
+
+		// Parse lot records
+		for (let i = headerLineIndex + 1; i < lines.length; i++) {
+			const line = lines[i];
+
+			// Skip total line and empty lines
+			if (line.startsWith('"Total') || line.trim() === '' || line === '""') {
+				continue;
+			}
+
+			try {
+				const record = parse(line, {
+					columns: [
+						'Open Date',
+						'Quantity',
+						'Price',
+						'Cost/Share',
+						'Market Value',
+						'Cost Basis',
+						'Gain/Loss ($)',
+						'Gain/Loss (%)',
+						'Holding Period',
+					],
+					skip_empty_lines: true,
+					trim: true,
+				})[0] as SchwabLotDetailRecord;
+
+				if (record?.['Open Date']) {
+					// Parse date (MM/DD/YYYY format)
+					const [month, day, year] = record['Open Date']
+						.split('/')
+						.map((n) => parseInt(n, 10));
+					const acquiredDate = new Date(year, month - 1, day, 12, 0, 0);
+
+					lots.push({
+						acquiredDate,
+						assetSymbol: symbol,
+						price: new Decimal(record['Cost/Share'].replace(/[$,]/g, '')),
+						remainingQty: new Decimal(record.Quantity.replace(/,/g, '')),
+					});
+				}
+			} catch {
+				// Skip unparseable lines
+			}
+		}
+
+		return { symbol, accountName, lots, generatedAt };
 	}
 }

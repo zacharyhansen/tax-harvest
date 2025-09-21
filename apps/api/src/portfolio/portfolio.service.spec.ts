@@ -3,6 +3,7 @@ import { Test, type TestingModule } from '@nestjs/testing';
 import { HarvestType } from '@prisma/client';
 import { AppModule } from '~/app/app.module';
 import { type LotCurrent, TaxGain } from '~/lot/lot.dto';
+import { PortfolioSummaryRealized } from './portfolio.dto';
 import Harvest from './portfolio.harvest';
 import { PortfolioService } from './portfolio.service';
 import HarvestInput_1 from './test/harvest_1/input.json';
@@ -18,6 +19,43 @@ import HarvestInput_3 from './test/harvest_3/input.json';
 import HarvestRealizedOrders_3 from './test/harvest_3/realizedOrders.json';
 import HarvestUnrealizedOrders_3 from './test/harvest_3/unrealizedOrders.json';
 
+const mockRealized = (
+	input: Partial<PortfolioSummaryRealized> = {},
+): PortfolioSummaryRealized => {
+	return {
+		// Derived fields -------------------------------------------------------------
+		gainTotal: input.gainTotal ?? 0,
+		// 1-1 databse column fields --------------------------------------------------
+		current: input.current ?? 0,
+		available: input.available ?? 0,
+		shortTermCapitalGain: input.shortTermCapitalGain ?? 0,
+		longTermCapitalGain: input.longTermCapitalGain ?? 0,
+		dividend: input.dividend ?? 0,
+		qualifiedDividend: input.qualifiedDividend ?? 0,
+		nonQualifiedDividend: input.nonQualifiedDividend ?? 0,
+		dividendReinvestment: input.dividendReinvestment ?? 0,
+		interest: input.interest ?? 0,
+		interestReinvestment: input.interestReinvestment ?? 0,
+		distribution: input.distribution ?? 0,
+		accountFee: input.accountFee ?? 0,
+		managementFee: input.managementFee ?? 0,
+		fundFee: input.fundFee ?? 0,
+		taxWithheld: input.taxWithheld ?? 0,
+		nonResidentTax: input.nonResidentTax ?? 0,
+		deposit: input.deposit ?? 0,
+		withdrawal: input.withdrawal ?? 0,
+		contribution: input.contribution ?? 0,
+		returnOfPrincipal: input.returnOfPrincipal ?? 0,
+		loanPayment: input.loanPayment ?? 0,
+		marginExpense: input.marginExpense ?? 0,
+		stockDistribution: input.stockDistribution ?? 0,
+		unqualifiedGain: input.unqualifiedGain ?? 0,
+		unrealizedProfit: input.unrealizedProfit ?? 0,
+		unrealizedLoss: input.unrealizedLoss ?? 0,
+		...input,
+	};
+};
+
 describe('portfolioService', () => {
 	let service: PortfolioService;
 
@@ -29,13 +67,12 @@ describe('portfolioService', () => {
 	});
 
 	it('should handle a positive realized gain and a larger unrealized gain', () => {
-		const realized = {
-			accountCount: 1,
+		const realized = mockRealized({
 			dividend: 200,
-			gainLongTerm: 400,
-			gainShortTerm: 400,
+			longTermCapitalGain: 400,
+			shortTermCapitalGain: 400,
 			gainTotal: 1000,
-		};
+		});
 		const unrealized = {
 			accountCount: 1,
 			gainTotal: 84_048,
@@ -57,13 +94,12 @@ describe('portfolioService', () => {
 	});
 
 	it('should handle a negative realized gain and a larger unrealized gain', () => {
-		const realized = {
-			accountCount: 1,
+		const realized = mockRealized({
 			dividend: 200,
-			gainLongTerm: -300,
-			gainShortTerm: -400,
+			longTermCapitalGain: -300,
+			shortTermCapitalGain: -400,
 			gainTotal: -500,
-		};
+		});
 		const unrealized = {
 			accountCount: 1,
 			gainTotal: 10_000,
@@ -85,13 +121,12 @@ describe('portfolioService', () => {
 	});
 
 	it('should handle a negative realized gain and a smaller unrealized gain', () => {
-		const realized = {
-			accountCount: 1,
+		const realized = mockRealized({
 			dividend: 200,
-			gainLongTerm: -300,
-			gainShortTerm: -400,
+			longTermCapitalGain: -300,
+			shortTermCapitalGain: -400,
 			gainTotal: -500,
-		};
+		});
 		const unrealized = {
 			accountCount: 1,
 			gainTotal: 200,
@@ -113,13 +148,12 @@ describe('portfolioService', () => {
 	});
 
 	it('should handle a positive realized gain and a smaller unrealized gain', () => {
-		const realized = {
-			accountCount: 1,
+		const realized = mockRealized({
 			dividend: 200,
-			gainLongTerm: 400,
-			gainShortTerm: 400,
+			longTermCapitalGain: 400,
+			shortTermCapitalGain: 400,
 			gainTotal: 1000,
-		};
+		});
 		const unrealized = {
 			accountCount: 1,
 			gainTotal: 500,
@@ -141,13 +175,12 @@ describe('portfolioService', () => {
 	});
 
 	it('should handle unrealized calculation', () => {
-		const realized = {
-			accountCount: 2,
+		const realized = mockRealized({
 			dividend: 234,
-			gainLongTerm: -520,
-			gainShortTerm: -312,
+			longTermCapitalGain: -520,
+			shortTermCapitalGain: -312,
 			gainTotal: -598,
-		};
+		});
 		const unrealized = {
 			accountCount: 2,
 			gainTotal: 168_097,

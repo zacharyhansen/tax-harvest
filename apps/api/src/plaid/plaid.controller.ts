@@ -1,7 +1,7 @@
 import { Body, Controller, Logger, Post, Res } from '@nestjs/common';
 import type { FastifyReply } from 'fastify';
 import { Public } from '../auth/decorators/public.decorator';
-import type { PlaidWebhook } from './plaid.dto';
+import type { PlaidWebhook } from './constants/plaid.dto';
 import { PlaidService } from './plaid.service';
 
 @Controller('plaid')

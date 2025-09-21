@@ -3,19 +3,19 @@
  * Please do not edit it manually.
  */
 
-import type { ColumnType } from "kysely";
+import type { ColumnType } from 'kysely';
 
 export type ArrayType<T> = ArrayTypeImpl<T> extends (infer U)[]
-  ? U[]
-  : ArrayTypeImpl<T>;
+	? U[]
+	: ArrayTypeImpl<T>;
 
 export type ArrayTypeImpl<T> = T extends ColumnType<infer S, infer I, infer U>
-  ? ColumnType<S[], I[], U[]>
-  : T[];
+	? ColumnType<S[], I[], U[]>
+	: T[];
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
-  ? ColumnType<S, I | undefined, U>
-  : ColumnType<T, T | undefined, T>;
+	? ColumnType<S, I | undefined, U>
+	: ColumnType<T, T | undefined, T>;
 
 export type Int8 = ColumnType<string, bigint | number | string>;
 
@@ -24,7 +24,7 @@ export type Json = JsonValue;
 export type JsonArray = JsonValue[];
 
 export type JsonObject = {
-  [x: string]: JsonValue | undefined;
+	[x: string]: JsonValue | undefined;
 };
 
 export type JsonPrimitive = boolean | number | string | null;
@@ -36,546 +36,706 @@ export type Numeric = ColumnType<string, number | string>;
 export type Timestamp = ColumnType<Date, Date | string>;
 
 export interface _AssetToUser {
-  A: string;
-  B: string;
+	A: string;
+	B: string;
 }
 
 export interface _PrismaMigrations {
-  applied_steps_count: Generated<number>;
-  checksum: string;
-  finished_at: Timestamp | null;
-  id: string;
-  logs: string | null;
-  migration_name: string;
-  rolled_back_at: Timestamp | null;
-  started_at: Generated<Timestamp>;
+	applied_steps_count: Generated<number>;
+	checksum: string;
+	finished_at: Timestamp | null;
+	id: string;
+	logs: string | null;
+	migration_name: string;
+	rolled_back_at: Timestamp | null;
+	started_at: Generated<Timestamp>;
 }
 
 export interface Account {
-  accountValueTotal: Numeric | null;
-  authConnectionId: string | null;
-  balanceAccount: Numeric | null;
-  balanceMoneyMarket: Numeric | null;
-  balanceShortAdjustment: Numeric | null;
-  cashAvailableForInvestment: Numeric | null;
-  cashBalance: Numeric | null;
-  cashBuyingPower: Numeric | null;
-  cashForOpenOrders: Numeric | null;
-  cashNet: Numeric | null;
-  cashOpenOrderReserveDT: Numeric | null;
-  cashSettledForInvestment: Numeric | null;
-  cashUnsettledForInvestment: Numeric | null;
-  closedDate: Timestamp | null;
-  createdAt: Generated<Timestamp>;
-  createdById: string;
-  description: string | null;
-  equityRegt: Numeric | null;
-  equityRegtPercent: Numeric | null;
-  externalId: string | null;
-  fundsWithheldFromPurchasingPower: Numeric | null;
-  fundsWithheldFromWithdrawal: Numeric | null;
-  id: Generated<string>;
-  institution: "AUTO" | "AUTOLOAN" | "BETA" | "BROKERAGE" | "CC_BALANCETRANSFER" | "EXTERNAL" | "FUTURES" | "GANIS" | "GENPACT" | "GENPACT_LEAD" | "GLOBALTRADING" | "HEIL" | "HELOC" | "LENDING" | "LOYALTY" | "MORTGAGE" | "NONUS" | "ONTRACK" | "RJO" | "SBASKET" | "STOCKPLAN" | "VISA" | "WDBH" | null;
-  key: string | null;
-  liveURL: string | null;
-  liveURLCreated: Timestamp | null;
-  lotSeededDate: Timestamp | null;
-  marginBuyingPower: Numeric | null;
-  marginBuyingPowerDT: Numeric | null;
-  marginOpenOrderReserveDT: Numeric | null;
-  marketValueTotal: Numeric | null;
-  mode: "CASH" | "CD" | "CHECKING" | "IRA" | "MARGIN" | "SAVINGS" | null;
-  name: string | null;
-  optionLevel: "LEVEL_1" | "LEVEL_2" | "LEVEL_3" | "LEVEL_4" | "NO_OPTIONS" | null;
-  plaidAccountMask: string | null;
-  portfolioId: string;
-  provider: Generated<"ETRADE" | "PLAID" | "SYSTEM" | "UNCONNECTED">;
-  raw: Json | null;
-  setRealizedValues: Generated<boolean>;
-  skipSetup: Generated<boolean>;
-  status: Generated<"ACTIVE" | "CLOSED">;
-  subType: string | null;
-  type: Generated<string>;
-  updatedAt: Generated<Timestamp>;
-  uploadedPositions: Generated<boolean>;
+	accountValueTotal: Numeric | null;
+	authConnectionId: string | null;
+	available: Generated<Numeric>;
+	balanceAccount: Numeric | null;
+	balanceMoneyMarket: Numeric | null;
+	balanceShortAdjustment: Numeric | null;
+	cashAvailableForInvestment: Numeric | null;
+	cashBalance: Numeric | null;
+	cashBuyingPower: Numeric | null;
+	cashForOpenOrders: Numeric | null;
+	cashNet: Numeric | null;
+	cashOpenOrderReserveDT: Numeric | null;
+	cashSettledForInvestment: Numeric | null;
+	cashUnsettledForInvestment: Numeric | null;
+	closedDate: Timestamp | null;
+	createdAt: Generated<Timestamp>;
+	createdById: string;
+	current: Generated<Numeric>;
+	description: string | null;
+	equityRegt: Numeric | null;
+	equityRegtPercent: Numeric | null;
+	externalId: string | null;
+	fundsWithheldFromPurchasingPower: Numeric | null;
+	fundsWithheldFromWithdrawal: Numeric | null;
+	id: Generated<string>;
+	institution:
+		| 'AUTO'
+		| 'AUTOLOAN'
+		| 'BETA'
+		| 'BROKERAGE'
+		| 'CC_BALANCETRANSFER'
+		| 'EXTERNAL'
+		| 'FUTURES'
+		| 'GANIS'
+		| 'GENPACT'
+		| 'GENPACT_LEAD'
+		| 'GLOBALTRADING'
+		| 'HEIL'
+		| 'HELOC'
+		| 'LENDING'
+		| 'LOYALTY'
+		| 'MORTGAGE'
+		| 'NONUS'
+		| 'ONTRACK'
+		| 'RJO'
+		| 'SBASKET'
+		| 'STOCKPLAN'
+		| 'VISA'
+		| 'WDBH'
+		| null;
+	key: string | null;
+	liveURL: string | null;
+	liveURLCreated: Timestamp | null;
+	lotSeededDate: Timestamp | null;
+	marginBuyingPower: Numeric | null;
+	marginBuyingPowerDT: Numeric | null;
+	marginOpenOrderReserveDT: Numeric | null;
+	marketValueTotal: Numeric | null;
+	mode: 'CASH' | 'CD' | 'CHECKING' | 'IRA' | 'MARGIN' | 'SAVINGS' | null;
+	name: string | null;
+	optionLevel:
+		| 'LEVEL_1'
+		| 'LEVEL_2'
+		| 'LEVEL_3'
+		| 'LEVEL_4'
+		| 'NO_OPTIONS'
+		| null;
+	plaidAccountMask: string | null;
+	portfolioId: string;
+	provider: Generated<'ETRADE' | 'PLAID' | 'SYSTEM' | 'UNCONNECTED'>;
+	raw: Json | null;
+	setRealizedValues: Generated<boolean>;
+	skipSetup: Generated<boolean>;
+	status: Generated<'ACTIVE' | 'CLOSED'>;
+	subType: string | null;
+	supportedLotProvider: Generated<'ETRADE' | 'SCHWAB' | null>;
+	type: Generated<string>;
+	updatedAt: Generated<Timestamp>;
+	uploadedPositions: Generated<boolean>;
 }
 
 export interface AccountRealizedPAndLHistory {
-  accountId: string;
-  createdAt: Generated<Timestamp>;
-  deferredLossChange: Generated<Numeric>;
-  dividendChange: Generated<Numeric>;
-  id: Generated<Int8>;
-  longTermChange: Generated<Numeric>;
-  lotId: string | null;
-  portfolioId: string;
-  realizedPAndLId: string;
-  shortTermChange: Generated<Numeric>;
-  transactionId: string | null;
-  updatedAt: Generated<Timestamp>;
-  uuid: string;
+	accountId: string;
+	assetMergeId: string;
+	createdAt: Generated<Timestamp>;
+	id: Generated<Int8>;
+	lotChangeListId: string | null;
+	portfolioId: string;
+	profitAndLossType:
+		| 'ACCOUNT_FEE'
+		| 'CONTRIBUTION'
+		| 'DEPOSIT'
+		| 'DISTRIBUTION'
+		| 'DIVIDEND'
+		| 'DIVIDEND_REINVESTMENT'
+		| 'FUND_FEE'
+		| 'INTEREST'
+		| 'INTEREST_REINVESTMENT'
+		| 'LOAN_PAYMENT'
+		| 'LONG_TERM_CAPITAL_GAIN'
+		| 'MANAGEMENT_FEE'
+		| 'MARGIN_EXPENSE'
+		| 'NON_QUALIFIED_DIVIDEND'
+		| 'NON_RESIDENT_TAX'
+		| 'QUALIFIED_DIVIDEND'
+		| 'RETURN_OF_PRINCIPAL'
+		| 'SHORT_TERM_CAPITAL_GAIN'
+		| 'STOCK_DISTRIBUTION'
+		| 'TAX_WITHHELD'
+		| 'UNQUALIFIED_GAIN'
+		| 'WITHDRAWAL';
+	realizedPAndLId: string | null;
+	transactionId: string | null;
+	updatedAt: Generated<Timestamp>;
+	uuid: Generated<string>;
+	value: Generated<Numeric>;
 }
 
 export interface Asset {
-  active: Generated<boolean>;
-  assetClass: Generated<"cryto" | "fx" | "indices" | "otc" | "stocks" | "UNKNOWN">;
-  assetTypeCode: string | null;
-  cik: string | null;
-  compositeFigi: string | null;
-  currencyName: string | null;
-  delistedDate: Timestamp | null;
-  description: string | null;
-  homepageUrl: string | null;
-  iconUrl: string | null;
-  lastClose: Generated<Numeric>;
-  lastHigh: Generated<Numeric>;
-  lastLow: Generated<Numeric>;
-  lastOpen: Generated<Numeric>;
-  lastPrice: Generated<Numeric>;
-  lastUpdated: Generated<Timestamp>;
-  lastVolume: Generated<Numeric>;
-  lastVolumeWeighted: Generated<Numeric>;
-  listDate: Timestamp | null;
-  locale: Generated<"global" | "us">;
-  logoUrl: string | null;
-  marketCap: Numeric | null;
-  name: string | null;
-  plaid_security_id: string | null;
-  primaryExchange: string | null;
-  shareClassSharesOutstanding: Numeric | null;
-  sicCode: string | null;
-  sicDescription: string | null;
-  symbol: string;
-  todaysChange: Generated<Numeric>;
-  todaysChangePerc: Generated<Numeric>;
-  totalEmployees: number | null;
-  type: Generated<string>;
+	active: Generated<boolean>;
+	assetClass: Generated<
+		'cryto' | 'fx' | 'indices' | 'otc' | 'stocks' | 'UNKNOWN'
+	>;
+	assetTypeCode: string | null;
+	cik: string | null;
+	compositeFigi: string | null;
+	currencyName: string | null;
+	delistedDate: Timestamp | null;
+	description: string | null;
+	homepageUrl: string | null;
+	iconUrl: string | null;
+	lastClose: Generated<Numeric>;
+	lastHigh: Generated<Numeric>;
+	lastLow: Generated<Numeric>;
+	lastOpen: Generated<Numeric>;
+	lastPrice: Generated<Numeric>;
+	lastUpdated: Generated<Timestamp>;
+	lastVolume: Generated<Numeric>;
+	lastVolumeWeighted: Generated<Numeric>;
+	listDate: Timestamp | null;
+	locale: Generated<'global' | 'us'>;
+	logoUrl: string | null;
+	marketCap: Numeric | null;
+	name: string | null;
+	plaid_security_id: string | null;
+	primaryExchange: string | null;
+	shareClassSharesOutstanding: Numeric | null;
+	sicCode: string | null;
+	sicDescription: string | null;
+	symbol: string;
+	todaysChange: Generated<Numeric>;
+	todaysChangePerc: Generated<Numeric>;
+	totalEmployees: number | null;
+	type: Generated<string>;
 }
 
 export interface AssetMerge {
-  accountId: string;
-  assetSymbol: string;
-  createdAt: Generated<Timestamp>;
-  error: Json | null;
-  id: Generated<string>;
-  logTrxMergeId: Int8 | null;
-  lotData: Json;
-  mergeErrorId: string | null;
-  plaidMergeId: string;
-  portfolioId: string;
-  resolvedLotChange: Json;
-  targetPositionSnapshot: Json;
-  targetQuantity: Numeric | null;
-  targetValue: Numeric | null;
-  updatedAt: Generated<Timestamp>;
+	accountId: string;
+	assetSymbol: string;
+	createdAt: Generated<Timestamp>;
+	error: Json | null;
+	id: Generated<string>;
+	logTrxMergeId: Int8 | null;
+	lotData: Json;
+	mergeErrorId: string | null;
+	plaidMergeId: string;
+	portfolioId: string;
+	positionSnapshotId: string | null;
+	resolvedLotChange: Json;
+	targetQuantity: Numeric | null;
+	targetValue: Numeric | null;
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface AssetType {
-  assetClass: "cryto" | "fx" | "indices" | "otc" | "stocks" | "UNKNOWN";
-  code: string;
-  description: string;
-  locale: "global" | "us";
+	assetClass: 'cryto' | 'fx' | 'indices' | 'otc' | 'stocks' | 'UNKNOWN';
+	code: string;
+	description: string;
+	locale: 'global' | 'us';
 }
 
 export interface AuthConnection {
-  authedAt: Generated<Timestamp>;
-  createdAt: Generated<Timestamp>;
-  externalId: string;
-  id: Generated<string>;
-  isSyncing: Generated<boolean>;
-  lastTransactionSyncedAtPlaid: Timestamp | null;
-  plaidInstitutionId: string | null;
-  portfolioId: string;
-  secret: string | null;
-  source: "ETRADE_ACCESS" | "ETRADE_REQUEST" | "LOCAL" | "PLAID";
-  syncedAt: Timestamp | null;
-  token: string | null;
-  type: "OAUTH_1" | "PLAID_LINK";
-  updatedAt: Generated<Timestamp>;
-  userId: string;
-  verificationUrl: string | null;
-  verifier: string | null;
+	authedAt: Generated<Timestamp>;
+	createdAt: Generated<Timestamp>;
+	externalId: string;
+	id: Generated<string>;
+	isSyncing: Generated<boolean>;
+	lastTransactionSyncedAtPlaid: Timestamp | null;
+	plaidInstitutionId: string | null;
+	portfolioId: string;
+	secret: string | null;
+	source: 'ETRADE_ACCESS' | 'ETRADE_REQUEST' | 'LOCAL' | 'PLAID';
+	syncedAt: Timestamp | null;
+	token: string | null;
+	type: 'OAUTH_1' | 'PLAID_LINK';
+	updatedAt: Generated<Timestamp>;
+	userId: string;
+	verificationUrl: string | null;
+	verifier: string | null;
 }
 
 export interface File {
-  accountId: string;
-  createdAt: Generated<Timestamp>;
-  displayName: string;
-  fileType: Generated<"ETRADE_LOTS">;
-  gcpFilename: string;
-  id: Generated<string>;
-  portfolioId: string;
-  type: string;
-  updatedAt: Generated<Timestamp>;
-  uploadedBy: string;
+	accountId: string;
+	createdAt: Generated<Timestamp>;
+	displayName: string;
+	gcpFilename: string;
+	id: Generated<string>;
+	portfolioId: string;
+	type: string;
+	updatedAt: Generated<Timestamp>;
+	uploadedBy: string;
 }
 
 export interface Harvest {
-  afterWashRevertDate: Generated<Timestamp>;
-  amount: Numeric;
-  createdAt: Generated<Timestamp>;
-  createdById: string;
-  date: Generated<Timestamp>;
-  id: Generated<string>;
-  label: string;
-  notify: Generated<boolean>;
-  portfolioId: string;
-  recommendationExpiresDate: Generated<Timestamp>;
-  step: Generated<"COMPLETE" | "CONFIGURE" | "REVIEW">;
-  type: "CAPTURE_GAINS_TAX_FREE" | "NO_OPPORTUNITY_EMPTY" | "NO_OPPORTUNITY_GAINS" | "NO_OPPORTUNITY_LOSSES" | "REDUCE_COST_BASIS" | "REDUCE_TAXES" | "SELL";
-  updatedAt: Generated<Timestamp>;
+	afterWashRevertDate: Generated<Timestamp>;
+	amount: Numeric;
+	createdAt: Generated<Timestamp>;
+	createdById: string;
+	date: Generated<Timestamp>;
+	id: Generated<string>;
+	label: string;
+	notify: Generated<boolean>;
+	portfolioId: string;
+	recommendationExpiresDate: Generated<Timestamp>;
+	step: Generated<'COMPLETE' | 'CONFIGURE' | 'REVIEW'>;
+	type:
+		| 'CAPTURE_GAINS_TAX_FREE'
+		| 'NO_OPPORTUNITY_EMPTY'
+		| 'NO_OPPORTUNITY_GAINS'
+		| 'NO_OPPORTUNITY_LOSSES'
+		| 'REDUCE_COST_BASIS'
+		| 'REDUCE_TAXES'
+		| 'SELL';
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface HarvestTransaction {
-  counterTransaction: Generated<boolean>;
-  createdAt: Generated<Timestamp>;
-  harvestId: string;
-  harvestTransactionItemId: string;
-  id: Generated<string>;
-  portfolioId: string;
-  replacementTransactionItemId: string | null;
-  revert: Generated<boolean>;
-  revertHarvestTransactionItemId: string | null;
-  revertReplacementTransactionItemId: string | null;
-  updatedAt: Generated<Timestamp>;
+	counterTransaction: Generated<boolean>;
+	createdAt: Generated<Timestamp>;
+	harvestId: string;
+	harvestTransactionItemId: string;
+	id: Generated<string>;
+	portfolioId: string;
+	replacementTransactionItemId: string | null;
+	revert: Generated<boolean>;
+	revertHarvestTransactionItemId: string | null;
+	revertReplacementTransactionItemId: string | null;
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface HarvestTransactionItem {
-  assetSymbol: string;
-  completedDate: Timestamp | null;
-  createdAt: Generated<Timestamp>;
-  date: Generated<Timestamp>;
-  harvestId: string;
-  id: Generated<string>;
-  lotAcquiredDate: Timestamp;
-  lotId: string | null;
-  lotPriceAtHarvest: Numeric;
-  lotPricePaid: Numeric;
-  orderType: "BUY" | "BUY_TO_CLOSE" | "BUY_TO_OPEN" | "SELL" | "SELL_TO_CLOSE" | "SELL_TO_OPEN";
-  portfolioId: string;
-  price: Numeric;
-  quantity: Numeric;
-  updatedAt: Generated<Timestamp>;
+	assetSymbol: string;
+	completedDate: Timestamp | null;
+	createdAt: Generated<Timestamp>;
+	date: Generated<Timestamp>;
+	harvestId: string;
+	id: Generated<string>;
+	lotAcquiredDate: Timestamp;
+	lotId: string | null;
+	lotPriceAtHarvest: Numeric;
+	lotPricePaid: Numeric;
+	orderType:
+		| 'BUY'
+		| 'BUY_TO_CLOSE'
+		| 'BUY_TO_OPEN'
+		| 'SELL'
+		| 'SELL_TO_CLOSE'
+		| 'SELL_TO_OPEN';
+	portfolioId: string;
+	price: Numeric;
+	quantity: Numeric;
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface Log {
-  createdAt: Generated<Timestamp>;
-  data: Json;
-  description: string | null;
-  id: Generated<Int8>;
-  portfolioId: string;
-  responseStatus: number | null;
-  source: "ETRADE_ACCESS" | "ETRADE_REQUEST" | "LOCAL" | "PLAID" | null;
-  type: "AUTH" | "EXTERNAL_SYNC" | "PLAID_TRX_MERGE" | "PLAID_TRX_MERGE_ERROR" | "PLAID_TRX_MERGE_SUCCESS" | "PLAID_WEBHOOK" | "SUBSET_HYBRID_CALCULATION";
+	createdAt: Generated<Timestamp>;
+	data: Json;
+	description: string | null;
+	id: Generated<Int8>;
+	portfolioId: string;
+	responseStatus: number | null;
+	source: 'ETRADE_ACCESS' | 'ETRADE_REQUEST' | 'LOCAL' | 'PLAID' | null;
+	type:
+		| 'AUTH'
+		| 'EXTERNAL_SYNC'
+		| 'PLAID_TRX_MERGE'
+		| 'PLAID_TRX_MERGE_ERROR'
+		| 'PLAID_TRX_MERGE_SUCCESS'
+		| 'PLAID_WEBHOOK'
+		| 'SUBSET_HYBRID_CALCULATION';
 }
 
 export interface Lot {
-  accountId: string;
-  acquiredDate: Timestamp;
-  adjPrice: Numeric | null;
-  assetSymbol: string;
-  availableQty: Numeric | null;
-  commPerShare: Numeric | null;
-  costTotal: Numeric | null;
-  createdAt: Generated<Timestamp>;
-  exchangeRate: Numeric | null;
-  excludeFromHarvest: Generated<number>;
-  externalId: string | null;
-  feesPerShare: Numeric | null;
-  fileId: string | null;
-  gainDay: Numeric | null;
-  gainDayPct: Numeric | null;
-  gainTotal: Numeric | null;
-  id: Generated<string>;
-  legNo: number | null;
-  locationCode: number | null;
-  lotSourceCode: number | null;
-  marketValue: Numeric | null;
-  orderNo: Numeric | null;
-  originalQty: Numeric | null;
-  paymentCurrency: Generated<string | null>;
-  portfolioId: string;
-  positionId: string | null;
-  price: Numeric;
-  remainingQty: Numeric;
-  settlementCurrency: Generated<string | null>;
-  shortType: number | null;
-  termCode: number | null;
-  totalCostForGainPct: Numeric | null;
-  updatedAt: Generated<Timestamp>;
+	accountId: string;
+	acquiredDate: Timestamp;
+	adjPrice: Numeric | null;
+	assetSymbol: string;
+	availableQty: Numeric | null;
+	commPerShare: Numeric | null;
+	costTotal: Numeric | null;
+	createdAt: Generated<Timestamp>;
+	exchangeRate: Numeric | null;
+	excludeFromHarvest: Generated<number>;
+	externalId: string | null;
+	feesPerShare: Numeric | null;
+	fileId: string | null;
+	gainDay: Numeric | null;
+	gainDayPct: Numeric | null;
+	gainTotal: Numeric | null;
+	id: Generated<string>;
+	legNo: number | null;
+	locationCode: number | null;
+	lotSourceCode: number | null;
+	marketValue: Numeric | null;
+	orderNo: Numeric | null;
+	originalQty: Numeric | null;
+	paymentCurrency: Generated<string | null>;
+	portfolioId: string;
+	positionId: string | null;
+	price: Numeric;
+	remainingQty: Numeric;
+	settlementCurrency: Generated<string | null>;
+	shortType: number | null;
+	termCode: number | null;
+	totalCostForGainPct: Numeric | null;
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface LotChange {
-  accountId: string;
-  aquiredDate: Timestamp;
-  assetSymbol: string;
-  id: Generated<string>;
-  lotChangeListId: string | null;
-  lotId: string;
-  operationType: "create" | "delete" | "update" | "upsert";
-  portfolioId: string;
-  price: Numeric;
-  quantityChange: Numeric;
-  quantityFinal: Numeric;
-  realizedProfitAndLossLongTerm: Generated<Numeric>;
-  realizedProfitAndLossShortTerm: Generated<Numeric>;
-  upsert: Json;
+	accountId: string;
+	aquiredDate: Timestamp;
+	assetSymbol: string;
+	id: Generated<string>;
+	lotChangeListId: string | null;
+	lotId: string;
+	operationType: 'create' | 'delete' | 'update' | 'upsert';
+	portfolioId: string;
+	price: Numeric;
+	quantityChange: Numeric;
+	quantityFinal: Numeric;
+	realizedProfitAndLossLongTerm: Generated<Numeric>;
+	realizedProfitAndLossShortTerm: Generated<Numeric>;
+	upsert: Json;
 }
 
 export interface LotChangeList {
-  accountId: string;
-  appliedToAccount: boolean | null;
-  assetMergeId: string;
-  id: Generated<string>;
-  portfolioId: string;
-  usedByAssetMergeId: string | null;
+	accountId: string;
+	appliedToAccount: boolean | null;
+	assetMergeId: string;
+	id: Generated<string>;
+	portfolioId: string;
+	usedByAssetMergeId: string | null;
 }
 
 export interface LotCurrent {
-  accountId: string | null;
-  acquiredDate: Timestamp | null;
-  costBasis: Numeric | null;
-  dollarPerSharePnL: Numeric | null;
-  gainTotal: Numeric | null;
-  gainTotalPct: Numeric | null;
-  id: string | null;
-  lastPrice: Numeric | null;
-  price: Numeric | null;
-  remainingQty: Numeric | null;
-  symbol: string | null;
-  taxGain: "LONG" | "SHORT" | null;
-  value: Numeric | null;
+	accountId: string | null;
+	acquiredDate: Timestamp | null;
+	costBasis: Numeric | null;
+	dollarPerSharePnL: Numeric | null;
+	gainTotal: Numeric | null;
+	gainTotalPct: Numeric | null;
+	id: string | null;
+	lastPrice: Numeric | null;
+	price: Numeric | null;
+	remainingQty: Numeric | null;
+	symbol: string | null;
+	taxGain: 'LONG' | 'SHORT' | null;
+	value: Numeric | null;
+}
+
+export interface LotUpload {
+	accountId: string;
+	applied: Generated<boolean>;
+	createdAt: Generated<Timestamp>;
+	fileId: string;
+	id: Generated<string>;
+	portfolioId: string;
+	supportedAccountLotProvider: 'ETRADE' | 'SCHWAB';
+	updatedAt: Generated<Timestamp>;
+}
+
+export interface LotUploadFile {
+	accountId: string;
+	createdAt: Generated<Timestamp>;
+	fileId: string | null;
+	id: Generated<string>;
+	lotUploadId: string;
+	portfolioId: string;
+	type: 'ETRADE_LOTS' | 'SCHWAB_LOTS' | 'SCHWAB_POSITIONS';
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface MergeError {
-  accountId: string;
-  assetSymbol: string;
-  createdAt: Generated<Timestamp>;
-  id: Generated<string>;
-  logId: Int8 | null;
-  lotChangeSetAlgoParams: Json | null;
-  lotsData: Json;
-  portfolioId: string;
-  resolved: Generated<boolean>;
-  targetQuantity: Numeric | null;
-  targetValue: Numeric | null;
-  type: "PLAID_MERGE_TIMEOUT" | "PLAID_MULTI_LOT_SOLUTION" | "PLAID_NO_SOLUTION" | "UNKNOWN";
-  updatedAt: Generated<Timestamp>;
+	accountId: string;
+	assetSymbol: string;
+	createdAt: Generated<Timestamp>;
+	id: Generated<string>;
+	logId: Int8 | null;
+	lotChangeSetAlgoParams: Json | null;
+	lotsData: Json;
+	portfolioId: string;
+	resolved: Generated<boolean>;
+	targetQuantity: Numeric | null;
+	targetValue: Numeric | null;
+	type:
+		| 'PLAID_MERGE_TIMEOUT'
+		| 'PLAID_MULTI_LOT_SOLUTION'
+		| 'PLAID_NO_SOLUTION'
+		| 'UNKNOWN';
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface Notification {
-  accountId: string | null;
-  acked: Generated<boolean>;
-  body: string | null;
-  createdAt: Generated<Timestamp>;
-  description: string | null;
-  id: Generated<number>;
-  level: Generated<"ERROR" | "INFO" | "WARNING">;
-  portfolioId: string;
-  title: string;
+	accountId: string | null;
+	acked: Generated<boolean>;
+	body: string | null;
+	createdAt: Generated<Timestamp>;
+	description: string | null;
+	id: Generated<number>;
+	level: Generated<'ERROR' | 'INFO' | 'WARNING'>;
+	portfolioId: string;
+	title: string;
 }
 
 export interface PlaidMerge {
-  accountId: string;
-  createdAt: Generated<Timestamp>;
-  id: Generated<string>;
-  portfolioId: string;
-  resolveLotsInput: Json;
-  updatedAt: Generated<Timestamp>;
+	accountId: string;
+	createdAt: Generated<Timestamp>;
+	id: Generated<string>;
+	portfolioId: string;
+	resolveLotsInput: Json;
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface Portfolio {
-  createdAt: Generated<Timestamp>;
-  createdById: string;
-  endOfYearTaxOpportunityNotification: Generated<boolean>;
-  harvestCycleWeeks: Generated<number>;
-  harvestShareDollarThreshold: Generated<Numeric>;
-  harvestTickerBucketDollarSizeLong: Generated<Numeric>;
-  harvestTickerBucketDollarSizeShort: Generated<Numeric>;
-  harvestTickerBucketLowerLimitLong: Generated<Numeric>;
-  harvestTickerBucketLowerLimitShort: Generated<Numeric>;
-  id: Generated<string>;
-  minimumLotPAndL: Generated<Numeric>;
-  name: Generated<string>;
-  notificationFrequency: Generated<"DAILY" | "MONTHLY" | "NEVER" | "QUARTERLY" | "WEEKLY">;
-  updatedAt: Generated<Timestamp>;
+	createdAt: Generated<Timestamp>;
+	createdById: string;
+	endOfYearTaxOpportunityNotification: Generated<boolean>;
+	harvestCycleWeeks: Generated<number>;
+	harvestShareDollarThreshold: Generated<Numeric>;
+	harvestTickerBucketDollarSizeLong: Generated<Numeric>;
+	harvestTickerBucketDollarSizeShort: Generated<Numeric>;
+	harvestTickerBucketLowerLimitLong: Generated<Numeric>;
+	harvestTickerBucketLowerLimitShort: Generated<Numeric>;
+	id: Generated<string>;
+	minimumLotPAndL: Generated<Numeric>;
+	name: Generated<string>;
+	notificationFrequency: Generated<
+		'DAILY' | 'MONTHLY' | 'NEVER' | 'QUARTERLY' | 'WEEKLY'
+	>;
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface PortfolioBalanceSnapshot {
-  accountId: string;
-  createdAt: Generated<Timestamp>;
-  id: Generated<Int8>;
-  portfolioId: string;
-  positions: Json;
-  realizedPAndLLongTerm: Generated<number>;
-  realizedPAndLShortTerm: Generated<number>;
-  unrealizedLoss: Generated<number>;
-  unrealizedProfit: Generated<number>;
-  valueAssets: number;
-  valueCash: number;
-  valueTotal: number;
+	accountId: string;
+	createdAt: Generated<Timestamp>;
+	id: Generated<Int8>;
+	portfolioId: string;
+	positions: Json;
+	realizedPAndLLongTerm: Generated<number>;
+	realizedPAndLShortTerm: Generated<number>;
+	unrealizedLoss: Generated<number>;
+	unrealizedProfit: Generated<number>;
+	valueAssets: number;
+	valueCash: number;
+	valueTotal: number;
 }
 
 export interface Position {
-  accountId: string;
-  assetSymbol: string;
-  change: Numeric | null;
-  changePCT: Numeric | null;
-  commissionDay: Numeric | null;
-  commissionTotal: Numeric | null;
-  costPerShare: Numeric | null;
-  costTotal: Numeric | null;
-  createdAt: Generated<Timestamp>;
-  dateAcquired: Timestamp | null;
-  dateExpiration: Timestamp | null;
-  externalId: string | null;
-  feesDay: Numeric | null;
-  feesOther: Numeric | null;
-  gainDay: Numeric | null;
-  gainTotal: Numeric | null;
-  gainTotalPCT: Numeric | null;
-  id: Generated<string>;
-  marketValue: Numeric | null;
-  portfolioId: string;
-  pricePaid: Numeric | null;
-  quantity: Numeric;
-  quoteStatus: string | null;
-  type: string | null;
-  updatedAt: Generated<Timestamp>;
+	accountId: string;
+	assetSymbol: string;
+	change: Numeric | null;
+	changePCT: Numeric | null;
+	commissionDay: Numeric | null;
+	commissionTotal: Numeric | null;
+	costPerShare: Numeric | null;
+	costTotal: Numeric | null;
+	createdAt: Generated<Timestamp>;
+	dateAcquired: Timestamp | null;
+	dateExpiration: Timestamp | null;
+	externalId: string | null;
+	feesDay: Numeric | null;
+	feesOther: Numeric | null;
+	gainDay: Numeric | null;
+	gainTotal: Numeric | null;
+	gainTotalPCT: Numeric | null;
+	id: Generated<string>;
+	marketValue: Numeric | null;
+	portfolioId: string;
+	positionSnapshotId: string;
+	pricePaid: Numeric | null;
+	quantity: Numeric;
+	quoteStatus: string | null;
+	type: string | null;
+	updatedAt: Generated<Timestamp>;
+}
+
+export interface PositionSnapshot {
+	authConnectionId: string;
+	createdAt: Generated<Timestamp>;
+	id: Generated<string>;
+	portfolioId: string;
 }
 
 export interface PriceHourly {
-  assetSymbol: string;
-  close: number;
-  high: number;
-  low: number;
-  numberOfTransactions: number | null;
-  open: number;
-  startDate: Timestamp;
-  volume: number;
-  volumeWeightAverage: number;
+	assetSymbol: string;
+	close: number;
+	high: number;
+	low: number;
+	numberOfTransactions: number | null;
+	open: number;
+	startDate: Timestamp;
+	volume: number;
+	volumeWeightAverage: number;
 }
 
 export interface PriceHourlyVector {
-  assetSymbol: string;
-  createdAt: Generated<Timestamp>;
-  id: Generated<string>;
-  startDate: Timestamp;
-  updatedAt: Generated<Timestamp>;
-  vector: string | null;
-  vectorWindow: "MONTH_1" | "MONTH_3" | "MONTH_6" | "YEAR_1" | "YEAR_2";
+	assetSymbol: string;
+	createdAt: Generated<Timestamp>;
+	id: Generated<string>;
+	startDate: Timestamp;
+	updatedAt: Generated<Timestamp>;
+	vector: string | null;
+	vectorWindow: 'MONTH_1' | 'MONTH_3' | 'MONTH_6' | 'YEAR_1' | 'YEAR_2';
 }
 
 export interface RealizedPAndL {
-  accountId: string;
-  createdAt: Generated<Timestamp>;
-  deferredLoss: Generated<Numeric>;
-  dividend: Generated<Numeric>;
-  id: Generated<string>;
-  longTerm: Generated<Numeric>;
-  portfolioId: string;
-  shortTerm: Generated<Numeric>;
-  updatedAt: Generated<Timestamp>;
-  year: number;
+	accountFee: Generated<Numeric>;
+	accountId: string;
+	available: Generated<Numeric>;
+	contribution: Generated<Numeric>;
+	createdAt: Generated<Timestamp>;
+	current: Generated<Numeric>;
+	deposit: Generated<Numeric>;
+	distribution: Generated<Numeric>;
+	dividend: Generated<Numeric>;
+	dividendReinvestment: Generated<Numeric>;
+	fundFee: Generated<Numeric>;
+	id: Generated<string>;
+	interest: Generated<Numeric>;
+	interestReinvestment: Generated<Numeric>;
+	lastUpdatedDatetime: Timestamp | null;
+	loanPayment: Generated<Numeric>;
+	longTermCapitalGain: Generated<Numeric>;
+	managementFee: Generated<Numeric>;
+	marginExpense: Generated<Numeric>;
+	nonQualifiedDividend: Generated<Numeric>;
+	nonResidentTax: Generated<Numeric>;
+	portfolioId: string;
+	positionSnapshotId: string | null;
+	qualifiedDividend: Generated<Numeric>;
+	returnOfPrincipal: Generated<Numeric>;
+	shortTermCapitalGain: Generated<Numeric>;
+	stockDistribution: Generated<Numeric>;
+	taxWithheld: Generated<Numeric>;
+	unqualifiedGain: Generated<Numeric>;
+	unrealizedLoss: Generated<Numeric>;
+	unrealizedProfit: Generated<Numeric>;
+	withdrawal: Generated<Numeric>;
 }
 
 export interface Transaction {
-  accountId: string;
-  amount: Numeric | null;
-  appliedToLots: Generated<boolean>;
-  assetSymbol: string;
-  createdAt: Generated<Timestamp>;
-  datailsURI: string | null;
-  description: string | null;
-  detailsURI: string | null;
-  displaySymbol: string | null;
-  externalId: string;
-  fee: Numeric | null;
-  id: Generated<string>;
-  memo: string | null;
-  paymentCurrency: string | null;
-  portfolioId: string;
-  postDate: Timestamp | null;
-  price: Numeric | null;
-  quantity: Numeric | null;
-  securityType: string | null;
-  settlementCurrency: string | null;
-  settlementDate: Timestamp | null;
-  subtype: string | null;
-  transactionDate: Timestamp | null;
-  type: string | null;
-  updatedAt: Generated<Timestamp>;
+	accountId: string;
+	amount: Numeric | null;
+	assetSymbol: string;
+	createdAt: Generated<Timestamp>;
+	datailsURI: string | null;
+	description: string | null;
+	detailsURI: string | null;
+	displaySymbol: string | null;
+	externalId: string;
+	fee: Numeric | null;
+	id: Generated<string>;
+	memo: string | null;
+	merged: Generated<boolean>;
+	paymentCurrency: string | null;
+	portfolioId: string;
+	postDate: Timestamp | null;
+	price: Numeric | null;
+	profitAndLossType:
+		| 'ACCOUNT_FEE'
+		| 'CONTRIBUTION'
+		| 'DEPOSIT'
+		| 'DISTRIBUTION'
+		| 'DIVIDEND'
+		| 'DIVIDEND_REINVESTMENT'
+		| 'FUND_FEE'
+		| 'INTEREST'
+		| 'INTEREST_REINVESTMENT'
+		| 'LOAN_PAYMENT'
+		| 'LONG_TERM_CAPITAL_GAIN'
+		| 'MANAGEMENT_FEE'
+		| 'MARGIN_EXPENSE'
+		| 'NON_QUALIFIED_DIVIDEND'
+		| 'NON_RESIDENT_TAX'
+		| 'QUALIFIED_DIVIDEND'
+		| 'RETURN_OF_PRINCIPAL'
+		| 'SHORT_TERM_CAPITAL_GAIN'
+		| 'STOCK_DISTRIBUTION'
+		| 'TAX_WITHHELD'
+		| 'UNQUALIFIED_GAIN'
+		| 'WITHDRAWAL'
+		| null;
+	quantity: Numeric | null;
+	securityType: string | null;
+	settlementCurrency: string | null;
+	settlementDate: Timestamp | null;
+	subtype: string | null;
+	transactionDate: Timestamp | null;
+	type: string | null;
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface TransactionOnAssetMerge {
-  accountId: string;
-  assetMergeId: string;
-  portfolioId: string;
-  transactionId: string;
+	accountId: string;
+	assetMergeId: string;
+	portfolioId: string;
+	transactionId: string;
 }
 
 export interface User {
-  createdAt: Generated<Timestamp>;
-  email: string | null;
-  hashedRefreshToken: string | null;
-  id: string;
-  name: string | null;
-  phoneNumber: string | null;
-  photo: string | null;
-  plaidCustomerId: string | null;
-  plaidUserToken: string | null;
-  stripeCustomerId: string;
-  updatedAt: Generated<Timestamp>;
+	createdAt: Generated<Timestamp>;
+	email: string | null;
+	hashedRefreshToken: string | null;
+	id: string;
+	name: string | null;
+	phoneNumber: string | null;
+	photo: string | null;
+	plaidCustomerId: string | null;
+	plaidUserToken: string | null;
+	stripeCustomerId: string;
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface UsersOnPortfolios {
-  createdAt: Generated<Timestamp>;
-  portfolioId: string;
-  role: Generated<"ADMIN" | "VIEWER">;
-  updatedAt: Generated<Timestamp>;
-  userId: string;
+	createdAt: Generated<Timestamp>;
+	portfolioId: string;
+	role: Generated<'ADMIN' | 'VIEWER'>;
+	updatedAt: Generated<Timestamp>;
+	userId: string;
 }
 
 export interface VectorGraph {
-  assetSymbol: string;
-  createdAt: Generated<Timestamp>;
-  data: ArrayType<Json> | null;
-  id: Generated<string>;
-  priceHourlyVectorId: string;
-  type: "RETURN_PCT_LINE";
-  updatedAt: Generated<Timestamp>;
+	assetSymbol: string;
+	createdAt: Generated<Timestamp>;
+	data: ArrayType<Json> | null;
+	id: Generated<string>;
+	priceHourlyVectorId: string;
+	type: 'RETURN_PCT_LINE';
+	updatedAt: Generated<Timestamp>;
 }
 
 export interface DB {
-  _AssetToUser: _AssetToUser;
-  _prisma_migrations: _PrismaMigrations;
-  Account: Account;
-  AccountRealizedPAndLHistory: AccountRealizedPAndLHistory;
-  Asset: Asset;
-  AssetMerge: AssetMerge;
-  AssetType: AssetType;
-  AuthConnection: AuthConnection;
-  File: File;
-  Harvest: Harvest;
-  HarvestTransaction: HarvestTransaction;
-  HarvestTransactionItem: HarvestTransactionItem;
-  Log: Log;
-  Lot: Lot;
-  LotChange: LotChange;
-  LotChangeList: LotChangeList;
-  LotCurrent: LotCurrent;
-  MergeError: MergeError;
-  Notification: Notification;
-  PlaidMerge: PlaidMerge;
-  Portfolio: Portfolio;
-  PortfolioBalanceSnapshot: PortfolioBalanceSnapshot;
-  Position: Position;
-  PriceHourly: PriceHourly;
-  PriceHourlyVector: PriceHourlyVector;
-  RealizedPAndL: RealizedPAndL;
-  Transaction: Transaction;
-  TransactionOnAssetMerge: TransactionOnAssetMerge;
-  User: User;
-  UsersOnPortfolios: UsersOnPortfolios;
-  VectorGraph: VectorGraph;
+	_AssetToUser: _AssetToUser;
+	_prisma_migrations: _PrismaMigrations;
+	Account: Account;
+	AccountRealizedPAndLHistory: AccountRealizedPAndLHistory;
+	Asset: Asset;
+	AssetMerge: AssetMerge;
+	AssetType: AssetType;
+	AuthConnection: AuthConnection;
+	File: File;
+	Harvest: Harvest;
+	HarvestTransaction: HarvestTransaction;
+	HarvestTransactionItem: HarvestTransactionItem;
+	Log: Log;
+	Lot: Lot;
+	LotChange: LotChange;
+	LotChangeList: LotChangeList;
+	LotCurrent: LotCurrent;
+	LotUpload: LotUpload;
+	LotUploadFile: LotUploadFile;
+	MergeError: MergeError;
+	Notification: Notification;
+	PlaidMerge: PlaidMerge;
+	Portfolio: Portfolio;
+	PortfolioBalanceSnapshot: PortfolioBalanceSnapshot;
+	Position: Position;
+	PositionSnapshot: PositionSnapshot;
+	PriceHourly: PriceHourly;
+	PriceHourlyVector: PriceHourlyVector;
+	RealizedPAndL: RealizedPAndL;
+	Transaction: Transaction;
+	TransactionOnAssetMerge: TransactionOnAssetMerge;
+	User: User;
+	UsersOnPortfolios: UsersOnPortfolios;
+	VectorGraph: VectorGraph;
 }

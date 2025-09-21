@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { Test, type TestingModule } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 
 import { CsvService } from './csv.service';
 import lotRecordsFromEtradePortfolioDownload from './test/lotRecordsFromEtradePortfolioDownload.json';
@@ -16,6 +16,134 @@ describe('csvService', () => {
 		}).compile();
 
 		service = csvModule.get<CsvService>(CsvService);
+	});
+
+	describe('CSV Type Detection', () => {
+		it('should detect E*Trade CSV format', () => {
+			const content = readFileSync(
+				resolve(__dirname, './test/etradePortfolioDownload.csv'),
+				'utf-8',
+			);
+			expect(CsvService.detectCSVType(content)).toEqual('ETRADE_LOTS');
+		});
+
+		it('should detect Schwab positions CSV format', () => {
+			const content = readFileSync(
+				resolve(
+					__dirname,
+					'./test/schwab/01/All-Accounts-Positions-{0}-Positions-2025-09-20-134641.csv',
+				),
+				'utf-8',
+			);
+			expect(CsvService.detectCSVType(content)).toEqual('SCHWAB_POSITIONS');
+		});
+
+		it('should detect Schwab lot details CSV format', () => {
+			const content = readFileSync(
+				resolve(__dirname, './test/schwab/01/Lot-Details.csv'),
+				'utf-8',
+			);
+			expect(CsvService.detectCSVType(content)).toEqual('SCHWAB_LOTS');
+		});
+
+		it('should return null for unrecognized CSV format', () => {
+			const content = 'Random,CSV,Content\n1,2,3\n4,5,6';
+			expect(CsvService.detectCSVType(content)).toBeNull();
+		});
+	});
+
+	describe('Schwab CSV Parsing', () => {
+		it('should parse Schwab positions CSV correctly', async () => {
+			const content = readFileSync(
+				resolve(
+					__dirname,
+					'./test/schwab/01/All-Accounts-Positions-{0}-Positions-2025-09-20-134641.csv',
+				),
+				'utf-8',
+			);
+
+			const result = await service.schwabPositionsToRecords(content);
+
+			expect(result.accounts).toHaveLength(3);
+
+			// Check first account
+			const rothAccount = result.accounts.find((a) =>
+				a.accountName.includes('Roth_Contributory_IRA'),
+			);
+			expect(rothAccount).toBeDefined();
+			expect(rothAccount?.positions).toHaveLength(2); // GOOG and RIVN
+
+			const googPosition = rothAccount?.positions.find(
+				(p) => p.Symbol === 'GOOG',
+			);
+			expect(googPosition).toBeDefined();
+			expect(googPosition?.['Qty (Quantity)']).toBe('181');
+			expect(googPosition?.['Cost Basis']).toBe('$31891.74');
+
+			// Check second account
+			const individualAccount = result.accounts.find((a) =>
+				a.accountName.includes('Individual'),
+			);
+			expect(individualAccount).toBeDefined();
+			expect(individualAccount?.positions).toHaveLength(3); // 767CVR020, GOOG, U
+
+			// Check third account (Rollover)
+			const rolloverAccount = result.accounts.find((a) =>
+				a.accountName.includes('Rollover_IRA'),
+			);
+			expect(rolloverAccount).toBeDefined();
+			expect(rolloverAccount?.positions).toHaveLength(0); // Only has cash
+		});
+
+		it('should parse Schwab lot details CSV correctly', async () => {
+			const content = readFileSync(
+				resolve(__dirname, './test/schwab/01/Lot-Details.csv'),
+				'utf-8',
+			);
+
+			const result = await service.schwabLotDetailsToLots(content);
+
+			expect(result.symbol).toBe('RIVN');
+			expect(result.accountName).toBe('...040');
+			expect(result.lots).toHaveLength(1);
+
+			const lot = result.lots[0];
+			expect(lot.assetSymbol).toBe('RIVN');
+			expect(lot.remainingQty.toString()).toBe('343');
+			expect(lot.price.toString()).toBe('14.565014577259');
+			expect(lot.acquiredDate.toISOString()).toContain('2024-07-05');
+		});
+
+		it('should parse Schwab lot details with multiple lots', async () => {
+			const content = readFileSync(
+				resolve(__dirname, './test/schwab/01/Lot-Details (1).csv'),
+				'utf-8',
+			);
+
+			const result = await service.schwabLotDetailsToLots(content);
+
+			expect(result.symbol).toBe('GOOG');
+			expect(result.accountName).toBe('...040');
+			expect(result.lots).toHaveLength(4);
+
+			// Check first lot
+			const firstLot = result.lots[0];
+			expect(firstLot.assetSymbol).toBe('GOOG');
+			expect(firstLot.remainingQty.toString()).toBe('36');
+			expect(firstLot.price.toString()).toBe('204.705');
+
+			// Check that dates are parsed correctly (dates are at noon local time)
+			const dates = result.lots.map((l) => {
+				const year = l.acquiredDate.getFullYear();
+				const month = String(l.acquiredDate.getMonth() + 1).padStart(2, '0');
+				const day = String(l.acquiredDate.getDate()).padStart(2, '0');
+				return `${year}-${month}-${day}`;
+			});
+			expect(dates).toContain('2025-08-14');
+			expect(dates).toContain('2025-06-03');
+			expect(dates).toContain('2024-07-05');
+			expect(dates).toContain('2024-04-09');
+		});
 	});
 
 	it('should detect correct lot header line for etrade csv', () => {

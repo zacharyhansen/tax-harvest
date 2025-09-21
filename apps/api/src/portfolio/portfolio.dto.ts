@@ -39,20 +39,94 @@ export class PortfolioSummaryUnrealized {
 
 @ObjectType()
 export class PortfolioSummaryRealized {
-	@Field()
-	accountCount: number;
-
-	@Field()
+	// Derived fields -------------------------------------------------------------
+	@Field({
+		description: 'Total realized gain or loss derived from the relevant fields',
+	})
 	gainTotal: number;
 
-	@Field()
-	gainShortTerm: number;
+	// 1-1 databse column fields --------------------------------------------------
+	@Field({ description: 'Total current plaid amount' })
+	current: number;
+
+	@Field({ description: 'Total available plaid amount' })
+	available: number;
 
 	@Field()
-	gainLongTerm: number;
+	shortTermCapitalGain: number;
+
+	@Field()
+	longTermCapitalGain: number;
 
 	@Field()
 	dividend: number;
+
+	@Field()
+	qualifiedDividend: number;
+
+	@Field()
+	nonQualifiedDividend: number;
+
+	@Field()
+	dividendReinvestment: number;
+
+	@Field()
+	interest: number;
+
+	@Field()
+	interestReinvestment: number;
+
+	@Field()
+	distribution: number;
+
+	@Field()
+	accountFee: number;
+
+	@Field()
+	managementFee: number;
+
+	@Field()
+	fundFee: number;
+
+	@Field()
+	taxWithheld: number;
+
+	@Field()
+	nonResidentTax: number;
+
+	@Field()
+	deposit: number;
+
+	@Field()
+	withdrawal: number;
+
+	@Field()
+	contribution: number;
+
+	@Field()
+	returnOfPrincipal: number;
+
+	@Field()
+	loanPayment: number;
+
+	@Field()
+	marginExpense: number;
+
+	@Field()
+	stockDistribution: number;
+
+	@Field()
+	unqualifiedGain: number;
+
+	@Field({
+		description: 'The unrealized profit from RealizedPAndL (Not real time)',
+	})
+	unrealizedProfit: number;
+
+	@Field({
+		description: 'The unrealized loss from RealizedPAndL (Not real time)',
+	})
+	unrealizedLoss: number;
 }
 
 @ObjectType()

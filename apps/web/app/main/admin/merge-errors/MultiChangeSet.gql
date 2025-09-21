@@ -29,7 +29,9 @@ fragment MultiChangeSetDetail on MergeError {
 		id
 		targetValue
 		targetQuantity
-		targetPositionSnapshot
+		positionSnapshot {
+			id
+		}
 		lotData
 		resolvedLotChange
 		error

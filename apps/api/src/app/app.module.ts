@@ -22,6 +22,8 @@ import { FileModule } from '~/file/file.module';
 import { HealthModule } from '~/health/health.module';
 import { LogsModule } from '~/logs/logs.module';
 import { LotModule } from '~/lot/lot.module';
+import { LotApplicationModule } from '~/lot-application/lot-application.module';
+import { LotUploadModule } from '~/lot-upload/lot-upload.module';
 import { MultiChangeSetModule } from '~/multi-change-set/multi-change-set.module';
 import { NotificationModule } from '~/notification/notification.module';
 import { OauthModule } from '~/oauth/oauth.module';
@@ -72,6 +74,7 @@ import { errorFormatPlugin } from '../plugins/error-format';
 		PolygonModule,
 		OauthModule,
 		EtradeModule,
+		LotApplicationModule,
 		AssetModule,
 		TransactionModule,
 		AuthConnectionModule,
@@ -79,6 +82,7 @@ import { errorFormatPlugin } from '../plugins/error-format';
 		PriceHourlyVectorModule,
 		VectorGraphModule,
 		LotModule,
+		LotUploadModule,
 		HealthModule,
 		FileModule,
 		LogsModule,

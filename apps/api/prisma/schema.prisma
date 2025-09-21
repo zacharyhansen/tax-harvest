@@ -106,7 +106,10 @@ model Portfolio {
   plaidMerge                  PlaidMerge[]
   transactionOnAssetMerge     TransactionOnAssetMerge[]
   lotChangeList               LotChangeList[]
-  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
+  accountRealizedPAndLHistory AccountRealizedPAndLHistory[]
+  lotUpload                   LotUpload[]
+  lotUploadFile               LotUploadFile[]
+  PositionSnapshot            PositionSnapshot[]
 }
 
 enum HarvestType {
@@ -213,40 +216,42 @@ model HarvestTransactionItem {
 /// Unless unconnected, these are always plaid accounts
 model Account {
   /// Internal account identifier
-  id               String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @default(now()) @updatedAt
+  id                   String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt            DateTime                     @default(now())
+  updatedAt            DateTime                     @default(now()) @updatedAt
   /// External provider of the account - null if its an system generated account
-  provider         AccountProvider     @default(UNCONNECTED)
+  provider             AccountProvider              @default(UNCONNECTED)
+  // External provider of the account for lot uploads / lot identification / etc.
+  supportedLotProvider SupportedAccountLotProvider? @default(ETRADE)
   /// The auth connection the account has been provided from 
-  authConnectionId String?             @db.Uuid
+  authConnectionId     String?                      @db.Uuid
   /// The unique id in the external system for the account
-  externalId       String?
-  name             String?
-  plaidAccountMask String?
-  key              String?
+  externalId           String?
+  name                 String?
+  plaidAccountMask     String?
+  key                  String?
   /// Who created the model
-  createdById      String
+  createdById          String
   /// The description of the account
-  description      String?
+  description          String?
   /// What institution does this account fall under
-  institution      AccountInstitution?
+  institution          AccountInstitution?
   /// The type of account
-  type             String              @default("Unconnected")
-  subType          String?
+  type                 String                       @default("Unconnected")
+  subType              String?
   /// The mode of the account
-  mode             AccountMode?
+  mode                 AccountMode?
   /// Is this account archived
-  status           AccountStatus       @default(ACTIVE)
+  status               AccountStatus                @default(ACTIVE)
   /// Which portfolio does this account belong to
   /// @HideField({ match: '@(Account)Create*Input' })
-  portfolioId      String              @db.Uuid
+  portfolioId          String                       @db.Uuid
   /// If the account was closed
-  closedDate       DateTime?
+  closedDate           DateTime?
   /// Option level for the account
-  optionLevel      OptionLevel?
+  optionLevel          OptionLevel?
   /// The date the account was seeded with lots using a CSV or other import - transactions after this date will be applied using our algorithim
-  lotSeededDate    DateTime?
+  lotSeededDate        DateTime?
 
   // Setup fields
   uploadedPositions Boolean @default(false)
@@ -257,6 +262,11 @@ model Account {
   liveURL        String?
   liveURLCreated DateTime?
 
+  // Plaid account info
+  current   Decimal @default(0) @db.Decimal(14, 4)
+  available Decimal @default(0) @db.Decimal(14, 4)
+
+  // All of this is likely legacy - we should consider removing these since we are not connecting to etrade directly 
   // Balance fields
   cashForOpenOrders                Decimal? @db.Decimal(14, 4)
   balanceMoneyMarket               Decimal? @db.Decimal(14, 4)
@@ -298,7 +308,9 @@ model Account {
   transactionOnAssetMerge     TransactionOnAssetMerge[]
   mergeError                  MergeError[]
   lotChangeList               LotChangeList[]
-  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
+  accountRealizedPAndLHistory AccountRealizedPAndLHistory[]
+  lotUpload                   LotUpload[]
+  lotUploadFile               LotUploadFile[]
 
   /// This attempts to ensure user doesnt link the same account twice (i.e. same plaid account mask)
   @@unique([authConnectionId, plaidAccountMask, type])
@@ -306,57 +318,115 @@ model Account {
   @@index([portfolioId])
 }
 
-model RealizedPAndL {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now()) @updatedAt
-  accountId    String   @db.Uuid
-  year         Int
-  shortTerm    Decimal  @default(0) @db.Decimal(14, 4)
-  longTerm     Decimal  @default(0) @db.Decimal(14, 4)
-  dividend     Decimal  @default(0) @db.Decimal(14, 4)
-  deferredLoss Decimal  @default(0) @db.Decimal(14, 4)
-  portfolioId  String   @db.Uuid
-
-  portfolio                   Portfolio                     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  account                     Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
-
-  @@unique([accountId, year])
+enum ProfitAndLossType {
+  SHORT_TERM_CAPITAL_GAIN
+  LONG_TERM_CAPITAL_GAIN
+  DIVIDEND
+  QUALIFIED_DIVIDEND
+  NON_QUALIFIED_DIVIDEND
+  DIVIDEND_REINVESTMENT
+  INTEREST
+  INTEREST_REINVESTMENT
+  DISTRIBUTION
+  ACCOUNT_FEE
+  MANAGEMENT_FEE
+  FUND_FEE
+  TAX_WITHHELD
+  NON_RESIDENT_TAX
+  DEPOSIT
+  WITHDRAWAL
+  CONTRIBUTION
+  RETURN_OF_PRINCIPAL
+  LOAN_PAYMENT
+  MARGIN_EXPENSE
+  STOCK_DISTRIBUTION
+  UNQUALIFIED_GAIN
 }
 
-model AccountRealizedPAndLHistory {
-  id                 BigInt   @id @default(autoincrement())
-  uuid               String   @unique @db.Uuid
+model RealizedPAndL {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt          DateTime @default(now())
-  updatedAt          DateTime @default(now()) @updatedAt
   accountId          String   @db.Uuid
-  realizedPAndLId    String   @db.Uuid
   portfolioId        String   @db.Uuid
-  shortTermChange    Decimal  @default(0) @db.Decimal(14, 4)
-  longTermChange     Decimal  @default(0) @db.Decimal(14, 4)
-  dividendChange     Decimal  @default(0) @db.Decimal(14, 4)
-  deferredLossChange Decimal  @default(0) @db.Decimal(14, 4)
-  lotId              String?  @db.Uuid
-  transactionId      String?  @db.Uuid
+  /// The positions at the point and time of the realized p&l - this can be null if the acocunt is created before we have connected to plaid
+  positionSnapshotId String?  @db.Uuid
 
-  realizedPAndL RealizedPAndL @relation(fields: [realizedPAndLId], references: [id], onDelete: Cascade)
-  account       Account       @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  portfolio     Portfolio     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  lot           Lot?          @relation(fields: [lotId], references: [id], onDelete: SetNull)
-  transaction   Transaction?  @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  // Fields controlled by the plaid/investments/holdings/get https://plaid.com/docs/api/products/investments/#investmentsholdingsget
+  current             Decimal   @default(0) @db.Decimal(14, 4)
+  available           Decimal   @default(0) @db.Decimal(14, 4)
+  lastUpdatedDatetime DateTime?
+
+  // Fields we track (1 to 1 with ProfitAndLossType) using plaid/investments/transactions/get https://plaid.com/docs/api/products/investments/#investmentstransactionsget
+  shortTermCapitalGain Decimal @default(0) @db.Decimal(14, 4)
+  longTermCapitalGain  Decimal @default(0) @db.Decimal(14, 4)
+  dividend             Decimal @default(0) @db.Decimal(14, 4)
+  qualifiedDividend    Decimal @default(0) @db.Decimal(14, 4)
+  nonQualifiedDividend Decimal @default(0) @db.Decimal(14, 4)
+  dividendReinvestment Decimal @default(0) @db.Decimal(14, 4)
+  interest             Decimal @default(0) @db.Decimal(14, 4)
+  interestReinvestment Decimal @default(0) @db.Decimal(14, 4)
+  distribution         Decimal @default(0) @db.Decimal(14, 4)
+  accountFee           Decimal @default(0) @db.Decimal(14, 4)
+  managementFee        Decimal @default(0) @db.Decimal(14, 4)
+  fundFee              Decimal @default(0) @db.Decimal(14, 4)
+  taxWithheld          Decimal @default(0) @db.Decimal(14, 4)
+  nonResidentTax       Decimal @default(0) @db.Decimal(14, 4)
+  deposit              Decimal @default(0) @db.Decimal(14, 4)
+  withdrawal           Decimal @default(0) @db.Decimal(14, 4)
+  contribution         Decimal @default(0) @db.Decimal(14, 4)
+  returnOfPrincipal    Decimal @default(0) @db.Decimal(14, 4)
+  loanPayment          Decimal @default(0) @db.Decimal(14, 4)
+  marginExpense        Decimal @default(0) @db.Decimal(14, 4)
+  stockDistribution    Decimal @default(0) @db.Decimal(14, 4)
+  unqualifiedGain      Decimal @default(0) @db.Decimal(14, 4)
+
+  // Derived info we roll up for efficiency
+  unrealizedProfit Decimal @default(0) @db.Decimal(14, 4)
+  unrealizedLoss   Decimal @default(0) @db.Decimal(14, 4)
+
+  positionSnapshot            PositionSnapshot?             @relation(fields: [positionSnapshotId], references: [id], onDelete: Cascade)
+  portfolio                   Portfolio                     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account                     Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountRealizedPAndLHistory AccountRealizedPAndLHistory[]
+
+  @@index([accountId, createdAt(sort: Desc)])
+}
+
+// This tracks the result of processing a single lot change or a non lot plaid transaction
+model AccountRealizedPAndLHistory {
+  id                BigInt            @id @default(autoincrement())
+  uuid              String            @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @default(now()) @updatedAt
+  accountId         String            @db.Uuid
+  /// This will be null if we ahve not created a new P and L with this transaction included yet (means it still needs to be applied)
+  realizedPAndLId   String?           @db.Uuid
+  portfolioId       String            @db.Uuid
+  profitAndLossType ProfitAndLossType
+  value             Decimal           @default(0) @db.Decimal(14, 4)
+  assetMergeId      String            @db.Uuid
+  // One of the two will be set
+  lotChangeListId   String?           @db.Uuid
+  transactionId     String?           @db.Uuid
+
+  assetMerge    AssetMerge     @relation(fields: [assetMergeId], references: [id], onDelete: Cascade)
+  realizedPAndL RealizedPAndL? @relation(fields: [realizedPAndLId], references: [id], onDelete: Cascade)
+  account       Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  portfolio     Portfolio      @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  lotChangeList LotChangeList? @relation(fields: [lotChangeListId], references: [id], onDelete: SetNull)
+  transaction   Transaction?   @relation(fields: [transactionId], references: [id], onDelete: SetNull)
 
   @@index([accountId, realizedPAndLId])
 }
 
 model Transaction {
   /// Internal transaction identifier
-  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @default(now()) @updatedAt
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @default(now()) @updatedAt
   /// PLaid investment_transaction_id
-  externalId         String    @unique
-  accountId          String    @db.Uuid
+  externalId         String             @unique
+  accountId          String             @db.Uuid
   securityType       String?
   type               String?
   subtype            String?
@@ -367,22 +437,24 @@ model Transaction {
   datailsURI         String?
   memo               String?
   assetSymbol        String
-  quantity           Decimal?  @db.Decimal(14, 4)
-  price              Decimal?  @db.Decimal(14, 4)
-  amount             Decimal?  @db.Decimal(14, 4)
+  quantity           Decimal?           @db.Decimal(14, 4)
+  price              Decimal?           @db.Decimal(14, 4)
+  amount             Decimal?           @db.Decimal(14, 4)
   settlementCurrency String?
   paymentCurrency    String?
-  fee                Decimal?  @db.Decimal(14, 4)
+  fee                Decimal?           @db.Decimal(14, 4)
   displaySymbol      String?
   detailsURI         String?
-  appliedToLots      Boolean   @default(false)
-  portfolioId        String    @db.Uuid
+  merged             Boolean            @default(false)
+  portfolioId        String             @db.Uuid
+  /// This being null should me either we havent applied it yet or we were unable to apply it (essentially an error in transaction categorization)
+  profitAndLossType  ProfitAndLossType?
 
   portfolio                   Portfolio                     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   asset                       Asset                         @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
   account                     Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
   transactionOnAssetMerge     TransactionOnAssetMerge[]
-  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
+  accountRealizedPAndLHistory AccountRealizedPAndLHistory[]
 
   @@unique([accountId, externalId])
 }
@@ -401,30 +473,33 @@ model PlaidMerge {
 }
 
 model AssetMerge {
-  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @default(now()) @updatedAt
-  accountId              String   @db.Uuid
-  portfolioId            String   @db.Uuid
-  plaidMergeId           String   @db.Uuid
-  assetSymbol            String
-  logTrxMergeId          BigInt?  @db.BigInt
-  targetValue            Decimal? @db.Decimal(14, 4)
-  targetQuantity         Decimal? @db.Decimal(14, 4)
-  targetPositionSnapshot Json     @db.JsonB
-  lotData                Json     @db.JsonB
-  resolvedLotChange      Json     @db.JsonB
-  mergeErrorId           String?  @db.Uuid
-  error                  Json?    @db.JsonB
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+  accountId          String   @db.Uuid
+  portfolioId        String   @db.Uuid
+  plaidMergeId       String   @db.Uuid
+  assetSymbol        String
+  logTrxMergeId      BigInt?  @db.BigInt
+  targetValue        Decimal? @db.Decimal(14, 4)
+  targetQuantity     Decimal? @db.Decimal(14, 4)
+  /// Will be null for sells of entire assets where plaid does nto return a position
+  positionSnapshotId String?  @db.Uuid
+  lotData            Json     @db.JsonB
+  resolvedLotChange  Json     @db.JsonB
+  mergeErrorId       String?  @db.Uuid
+  error              Json?    @db.JsonB
 
-  mergeError              MergeError?               @relation(fields: [mergeErrorId], references: [id], onDelete: Cascade)
-  account                 Account                   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  portfolio               Portfolio                 @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  logTrxMerge             Log?                      @relation(fields: [logTrxMergeId], references: [id], onDelete: SetNull)
-  plaidMerge              PlaidMerge?               @relation(fields: [plaidMergeId], references: [id], onDelete: Cascade)
-  asset                   Asset                     @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
-  transactionOnAssetMerge TransactionOnAssetMerge[]
-  lotChangeList           LotChangeList[]
+  mergeError                  MergeError?                   @relation(fields: [mergeErrorId], references: [id], onDelete: Cascade)
+  account                     Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  portfolio                   Portfolio                     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  logTrxMerge                 Log?                          @relation(fields: [logTrxMergeId], references: [id], onDelete: SetNull)
+  plaidMerge                  PlaidMerge?                   @relation(fields: [plaidMergeId], references: [id], onDelete: Cascade)
+  asset                       Asset                         @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  transactionOnAssetMerge     TransactionOnAssetMerge[]
+  lotChangeList               LotChangeList[]
+  positionSnapshot            PositionSnapshot?             @relation(fields: [positionSnapshotId], references: [id], onDelete: Cascade)
+  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
 
   @@index([portfolioId, createdAt(sort: Desc)])
 }
@@ -449,13 +524,14 @@ model LotChangeList {
   portfolioId        String   @db.Uuid
   accountId          String   @db.Uuid
   usedByAssetMergeId String?  @unique @db.Uuid
-  /// Were the changes from this list applied to the account?
+  /// Were the changes from this list chosen to be applied to the account?
   appliedToAccount   Boolean?
 
-  portfolio  Portfolio   @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  account    Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  assetMerge AssetMerge  @relation(fields: [assetMergeId], references: [id], onDelete: Cascade)
-  LotChange  LotChange[]
+  portfolio                   Portfolio                     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account                     Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  assetMerge                  AssetMerge                    @relation(fields: [assetMergeId], references: [id], onDelete: Cascade)
+  LotChange                   LotChange[]
+  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
 
   @@unique([assetMergeId, appliedToAccount]) // Only one of the lot changes of the asset merge can be applied to the account
 }
@@ -491,23 +567,40 @@ enum OperationType {
   update
 }
 
+/// Point in time data from plaid auth connection for positions
+model PositionSnapshot {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt        DateTime @default(now())
+  portfolioId      String   @db.Uuid
+  authConnectionId String   @db.Uuid
+
+  authConnection AuthConnection  @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
+  portfolio      Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  position       Position[]
+  assetMerge     AssetMerge[]
+  realizedPAndL  RealizedPAndL[]
+
+  @@index([portfolioId, createdAt(sort: Desc)])
+}
+
 /// This model really should never be shown to the user - most api's have it but its
 /// just a grouping of open lots. We track it as its needed for calculations derived from plaid 
 /// but user facing tables etc. and harvest calc's should roll up lots 
 model Position {
-  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @default(now()) @updatedAt
-  accountId      String    @db.Uuid
-  portfolioId    String    @db.Uuid
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @default(now()) @updatedAt
+  positionSnapshotId String    @db.Uuid
+  accountId          String    @db.Uuid
+  portfolioId        String    @db.Uuid
   /// The unique id in the external system for the position
-  externalId     String?
-  dateAcquired   DateTime?
-  dateExpiration DateTime?
-  assetSymbol    String
-  pricePaid      Decimal?  @db.Decimal(14, 4)
-  quantity       Decimal   @db.Decimal(14, 4)
-  type           String?
+  externalId         String?
+  dateAcquired       DateTime?
+  dateExpiration     DateTime?
+  assetSymbol        String
+  pricePaid          Decimal?  @db.Decimal(14, 4)
+  quantity           Decimal   @db.Decimal(14, 4)
+  type               String?
 
   commissionTotal Decimal? @db.Decimal(14, 4)
   feesOther       Decimal? @db.Decimal(14, 4)
@@ -523,13 +616,13 @@ model Position {
   change          Decimal? @db.Decimal(14, 4)
   quoteStatus     String?
 
-  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  asset     Asset     @relation(fields: [assetSymbol], references: [symbol])
-  lots      Lot[]
-  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account          Account          @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  asset            Asset            @relation(fields: [assetSymbol], references: [symbol])
+  lots             Lot[]
+  portfolio        Portfolio        @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  positionSnapshot PositionSnapshot @relation(fields: [positionSnapshotId], references: [id], onDelete: Cascade)
 
-  @@unique([accountId, externalId])
-  @@index([accountId])
+  @@index([positionSnapshotId])
 }
 
 enum TaxGain {
@@ -579,14 +672,13 @@ model Lot {
   locationCode        Int?
   shortType           Int?
 
-  file                        File?                         @relation(fields: [fileId], references: [id], onDelete: SetNull)
-  asset                       Asset                         @relation(fields: [assetSymbol], references: [symbol])
-  position                    Position?                     @relation(fields: [positionId], references: [id], onDelete: Cascade)
-  account                     Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  harvestTransactionItems     HarvestTransactionItem[]
-  portfolio                   Portfolio                     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  LotChange                   LotChange[]
-  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
+  file                    File?                    @relation(fields: [fileId], references: [id], onDelete: SetNull)
+  asset                   Asset                    @relation(fields: [assetSymbol], references: [symbol])
+  position                Position?                @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  account                 Account                  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  harvestTransactionItems HarvestTransactionItem[]
+  portfolio               Portfolio                @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  LotChange               LotChange[]
 
   @@unique([positionId, externalId])
   @@index([accountId])
@@ -835,9 +927,10 @@ model AuthConnection {
   /// @HideField({ output: true, input: true })
   verifier String?
 
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  accounts  Account[]
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  portfolio        Portfolio          @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  accounts         Account[]
+  PositionSnapshot PositionSnapshot[]
 
   /// Only one link per user per portfolio per source (importantly a user can only have 1 plaid link per portfolio in a given institution)
   /// We must enforce this else transactions lots etc. will be duplicated in portfolios from plaid (trx ids change depending on the plaid link)
@@ -845,10 +938,6 @@ model AuthConnection {
   @@unique([source, userId, portfolioId, plaidInstitutionId])
   @@index([portfolioId])
   @@index([externalId])
-}
-
-enum FileType {
-  ETRADE_LOTS
 }
 
 model File {
@@ -860,12 +949,50 @@ model File {
   uploadedBy  String
   accountId   String   @db.Uuid
   displayName String
-  fileType    FileType @default(ETRADE_LOTS)
   portfolioId String   @db.Uuid
 
-  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  lots      Lot[]
+  account       Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  lots          Lot[]
+  portfolio     Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  LotUploadFile LotUploadFile[]
+}
+
+enum LotUploadFileType {
+  ETRADE_LOTS
+  SCHWAB_LOTS
+  SCHWAB_POSITIONS
+}
+
+model LotUpload {
+  id                          String                      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt                   DateTime                    @default(now())
+  updatedAt                   DateTime                    @default(now()) @updatedAt
+  portfolioId                 String                      @db.Uuid
+  accountId                   String                      @db.Uuid
+  fileId                      String                      @db.Uuid
+  applied                     Boolean                     @default(false)
+  supportedAccountLotProvider SupportedAccountLotProvider
+
+  portfolio     Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account       Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  LotUploadFile LotUploadFile[]
+}
+
+model LotUploadFile {
+  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now()) @updatedAt
+  portfolioId String            @db.Uuid
+  accountId   String            @db.Uuid
+  /// Optional - we use this as validation that a file must be attached before the LotUplaod can be applied
+  fileId      String?           @db.Uuid
+  type        LotUploadFileType
+  lotUploadId String            @db.Uuid
+
+  file      File?     @relation(fields: [fileId], references: [id], onDelete: Cascade)
   portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  lotUpload LotUpload @relation(fields: [lotUploadId], references: [id], onDelete: Cascade)
 }
 
 enum MergeErrorType {
@@ -1100,6 +1227,12 @@ enum AccountMode {
   IRA
   SAVINGS
   CD
+}
+
+/// Which providers we support for lot uploads / lot identification / etc.
+enum SupportedAccountLotProvider {
+  ETRADE
+  SCHWAB
 }
 
 /// The provider of the account

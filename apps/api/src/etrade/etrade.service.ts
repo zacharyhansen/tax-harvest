@@ -742,6 +742,7 @@ export class EtradeService implements ConnectionProvider {
 										quoteStatus: position.quoteStatus,
 										type: position.positionType ?? 'Unkown',
 										portfolioId: internalAccount.portfolioId,
+										positionSnapshotId: position.positionId.toString(),
 									} satisfies Prisma.PositionCreateManyInput;
 								}) ?? []
 							);

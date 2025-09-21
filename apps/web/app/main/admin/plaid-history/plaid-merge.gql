@@ -45,7 +45,9 @@ query PlaidMerge($plaidMergeId: String!) {
 			assetSymbol
 			targetValue
 			targetQuantity
-			targetPositionSnapshot
+			positionSnapshot {
+				id
+			}
 			lotData
 			resolvedLotChange
 			error

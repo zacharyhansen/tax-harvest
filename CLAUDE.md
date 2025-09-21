@@ -7,3 +7,5 @@
 
 ## GraphQL
 - Gql schema changes should auto update when files are saved.
+- apps/api should be tested using `npx vitest <file>
+- use `pnpm --filter <app> check:types` for type checking

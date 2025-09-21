@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import type { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
-import { AccountsLotResetEvent } from '~/events/accounts-lot-reset';
 import { AccountsSyncedEvent } from '~/events/accounts-synced';
 import { EventId } from '~/events/event-id';
 import { Database } from '../database/database';
@@ -17,6 +16,83 @@ export class AccountService {
 		private readonly prismaService: PrismaService,
 		private readonly lotService: LotService,
 	) {}
+
+	@OnEvent(EventId.ACCOUNTS_SYNCED)
+	async handleAccountSynced(event: AccountsSyncedEvent) {
+		this.logger.log(`Accounts ${event.accountIds.join(', ')} synced`);
+
+		const [accounts, lotsCurrent] = await Promise.all([
+			this.prismaService
+				.rlsPortfolioClient(event.portfolioId)
+				.account.findMany({
+					where: {
+						id: {
+							in: event.accountIds,
+						},
+					},
+					select: {
+						id: true,
+						marketValueTotal: true,
+						positions: {
+							select: {
+								assetSymbol: true,
+								marketValue: true,
+							},
+						},
+						realizedPAndL: {
+							select: {
+								shortTermCapitalGain: true,
+								longTermCapitalGain: true,
+							},
+							orderBy: {
+								createdAt: 'desc',
+							},
+							take: 1,
+						},
+					},
+				}),
+			this.lotService.lotCurrent({ portfolioId: event.portfolioId }),
+		]);
+
+		const portfolioBalanceSnapshot: Prisma.PortfolioBalanceSnapshotCreateManyInput[] =
+			[];
+
+		for (const account of accounts) {
+			const summaryCurrentLots = this.lotService.summaryCurrentLots(
+				lotsCurrent.filter((lot) => lot.accountId === account.id),
+			);
+
+			const positiionsTotal = account.positions.reduce(
+				(acc, curr) => acc.plus(curr.marketValue ?? 0),
+				new Decimal(0),
+			);
+			portfolioBalanceSnapshot.push({
+				portfolioId: event.portfolioId,
+				accountId: account.id,
+				valueTotal: account.marketValueTotal?.toNumber() ?? 0,
+				valueCash:
+					account.marketValueTotal?.toNumber() ??
+					0 - positiionsTotal.toNumber(),
+				valueAssets: positiionsTotal.toNumber(),
+				positions: account.positions.map((position) => ({
+					assetSymbol: position.assetSymbol,
+					marketValue: position.marketValue?.toNumber(),
+				})),
+				realizedPAndLShortTerm:
+					account.realizedPAndL?.[0]?.shortTermCapitalGain.toNumber() ?? 0,
+				realizedPAndLLongTerm:
+					account.realizedPAndL?.[0]?.longTermCapitalGain.toNumber() ?? 0,
+				unrealizedProfit: summaryCurrentLots.gainTotal,
+				unrealizedLoss: summaryCurrentLots.lossTotal,
+			});
+		}
+
+		return this.prismaService
+			.rlsPortfolioClient(event.portfolioId)
+			.portfolioBalanceSnapshot.createMany({
+				data: portfolioBalanceSnapshot,
+			});
+	}
 
 	getAccountsWithPortfolioId(
 		portfolioId: string,
@@ -158,83 +234,6 @@ export class AccountService {
 						portfolioId,
 					},
 				});
-			});
-	}
-
-	@OnEvent(EventId.ACCOUNTS_SYNCED)
-	async handleAccountSynced(event: AccountsSyncedEvent) {
-		this.logger.log(`Accounts ${event.accountIds.join(', ')} synced`);
-
-		const [accounts, lotsCurrent] = await Promise.all([
-			this.prismaService
-				.rlsPortfolioClient(event.portfolioId)
-				.account.findMany({
-					where: {
-						id: {
-							in: event.accountIds,
-						},
-					},
-					select: {
-						id: true,
-						marketValueTotal: true,
-						positions: {
-							select: {
-								assetSymbol: true,
-								marketValue: true,
-							},
-						},
-						realizedPAndL: {
-							select: {
-								shortTerm: true,
-								longTerm: true,
-							},
-							orderBy: {
-								year: 'desc',
-							},
-							take: 1,
-						},
-					},
-				}),
-			this.lotService.lotCurrent({ portfolioId: event.portfolioId }),
-		]);
-
-		const portfolioBalanceSnapshot: Prisma.PortfolioBalanceSnapshotCreateManyInput[] =
-			[];
-
-		for (const account of accounts) {
-			const summaryCurrentLots = this.lotService.summaryCurrentLots(
-				lotsCurrent.filter((lot) => lot.accountId === account.id),
-			);
-
-			const positiionsTotal = account.positions.reduce(
-				(acc, curr) => acc.plus(curr.marketValue ?? 0),
-				new Decimal(0),
-			);
-			portfolioBalanceSnapshot.push({
-				portfolioId: event.portfolioId,
-				accountId: account.id,
-				valueTotal: account.marketValueTotal?.toNumber() ?? 0,
-				valueCash:
-					account.marketValueTotal?.toNumber() ??
-					0 - positiionsTotal.toNumber(),
-				valueAssets: positiionsTotal.toNumber(),
-				positions: account.positions.map((position) => ({
-					assetSymbol: position.assetSymbol,
-					marketValue: position.marketValue?.toNumber(),
-				})),
-				realizedPAndLShortTerm:
-					account.realizedPAndL?.[0]?.shortTerm.toNumber() ?? 0,
-				realizedPAndLLongTerm:
-					account.realizedPAndL?.[0]?.longTerm.toNumber() ?? 0,
-				unrealizedProfit: summaryCurrentLots.gainTotal,
-				unrealizedLoss: summaryCurrentLots.lossTotal,
-			});
-		}
-
-		return this.prismaService
-			.rlsPortfolioClient(event.portfolioId)
-			.portfolioBalanceSnapshot.createMany({
-				data: portfolioBalanceSnapshot,
 			});
 	}
 }

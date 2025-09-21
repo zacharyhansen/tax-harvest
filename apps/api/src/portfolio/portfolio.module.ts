@@ -5,6 +5,7 @@ import { ClerkModule } from '../clerk/clerk.module';
 import { DatabaseModule } from '../database/database.module';
 import { HarvestModule } from '../harvest/harvest.module';
 import { LotModule } from '../lot/lot.module';
+import { RealizedPandLModule } from '../realized-p-and-l/realized-p-and-l.module';
 import { UserModule } from '../user/user.module';
 import { PortfolioResolver } from './portfolio.resolver';
 import { PortfolioService } from './portfolio.service';
@@ -18,6 +19,7 @@ import { PortfolioService } from './portfolio.service';
 		ClerkModule,
 		LotModule,
 		HarvestModule,
+		RealizedPandLModule,
 	],
 	providers: [PortfolioService, PortfolioResolver],
 })

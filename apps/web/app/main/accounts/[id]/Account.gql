@@ -32,11 +32,30 @@ fragment AccountItem on Account {
 	}
 	_realizedProfitAndLoss {
 		id
-		longTerm
-		shortTerm
+		shortTermCapitalGain
+		longTermCapitalGain
 		dividend
-		year
-		deferredLoss
+		qualifiedDividend
+		nonQualifiedDividend
+		dividendReinvestment
+		interest
+		interestReinvestment
+		distribution
+		accountFee
+		managementFee
+		fundFee
+		taxWithheld
+		nonResidentTax
+		deposit
+		withdrawal
+		contribution
+		returnOfPrincipal
+		loanPayment
+		marginExpense
+		stockDistribution
+		unqualifiedGain
+		unrealizedLoss
+		unrealizedProfit
 	}
 }
 
@@ -62,16 +81,33 @@ mutation UpdateAccount(
 	}
 }
 
-mutation UpdateAccountRealizedPAndL(
-	$id: String!
-	$input: RealizedPAndLUpdateInput!
-) {
-	updateRealizedPAndL(id: $id, input: $input) {
+mutation InsertAccountRealizedPAndL($input: RealizedPAndLCreateInput!) {
+	insertRealizedPAndL(input: $input) {
 		id
-		shortTerm
-		longTerm
-		deferredLoss
+		shortTermCapitalGain
+		longTermCapitalGain
 		dividend
+		qualifiedDividend
+		nonQualifiedDividend
+		dividendReinvestment
+		interest
+		interestReinvestment
+		distribution
+		accountFee
+		managementFee
+		fundFee
+		taxWithheld
+		nonResidentTax
+		deposit
+		withdrawal
+		contribution
+		returnOfPrincipal
+		loanPayment
+		marginExpense
+		stockDistribution
+		unqualifiedGain
+		unrealizedLoss
+		unrealizedProfit
 	}
 }
 

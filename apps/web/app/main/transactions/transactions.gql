@@ -24,7 +24,7 @@ fragment TransactionTableItem on Transaction {
 	price
 	subtype
 	transactionDate
-	appliedToLots
+	merged
 	account {
 		id
 		...AccountTransactionItem

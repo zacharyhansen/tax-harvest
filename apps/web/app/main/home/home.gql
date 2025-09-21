@@ -12,10 +12,9 @@ fragment AccountSummary on Account {
 query PortfolioSummary {
 	portfolioSummary {
 		realized {
-			accountCount
 			dividend
-			gainLongTerm
-			gainShortTerm
+			longTermCapitalGain
+			shortTermCapitalGain
 			gainTotal
 		}
 		unrealized {
@@ -46,12 +45,10 @@ query AccountRealizedPL {
 		name
 		realizedPAndL {
 			id
-			year
-			shortTerm
-			longTerm
+			shortTermCapitalGain
+			longTermCapitalGain
 			dividend
-			deferredLoss
-			updatedAt
+			createdAt
 		}
 	}
 }

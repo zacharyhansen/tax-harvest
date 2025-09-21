@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import type { GraphQLResolveInfo } from 'graphql';
 import { ClerkContext } from '~/auth/decorators/clerk-context.decorator';
 import type { ClerkClaims } from '~/auth/types';
-import { RealizedPAndL, RealizedPAndLUpdateInput } from '../generated/graphql';
+import { RealizedPAndL, RealizedPAndLCreateInput } from '../generated/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaSelect } from '../utilities/prisma/prisma-select';
 
@@ -12,20 +12,16 @@ export class RealizedPandLResolver {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	@Mutation(() => RealizedPAndL, {
-		description: 'Update RealizedPAndL',
-		name: 'updateRealizedPAndL',
+		description: 'Insert RealizedPAndL',
+		name: 'insertRealizedPAndL',
 	})
-	async updateRealizedPAndL(
+	async insertRealizedPAndL(
 		@Info()
 		info: GraphQLResolveInfo,
-		@Args('id', {
-			type: () => String,
-		})
-		id: string,
 		@Args('input', {
-			type: () => RealizedPAndLUpdateInput,
+			type: () => RealizedPAndLCreateInput,
 		})
-		input: Prisma.RealizedPAndLUpdateInput,
+		input: Prisma.RealizedPAndLCreateInput,
 		@ClerkContext()
 		clerkContext: ClerkClaims,
 	): Promise<RealizedPAndL> {
@@ -33,10 +29,9 @@ export class RealizedPandLResolver {
 
 		return this.prismaService
 			.rlsPortfolioClient(clerkContext.metadata.portfolioId)
-			.realizedPAndL.update({
+			.realizedPAndL.create({
 				data: input,
 				select: select as Prisma.RealizedPAndLSelect,
-				where: { id, portfolioId: clerkContext.metadata.portfolioId },
 			});
 	}
 }

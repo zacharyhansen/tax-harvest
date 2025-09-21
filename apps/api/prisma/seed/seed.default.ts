@@ -125,7 +125,7 @@ async function main() {
 								skipSetup: true,
 								RealizedPAndL: () => [
 									{
-										shortTerm: -3000,
+										shortTermCapitalGain: -3000,
 										year: new Date().getFullYear(),
 									},
 								],
@@ -154,7 +154,7 @@ async function main() {
 								skipSetup: true,
 								RealizedPAndL: () => [
 									{
-										shortTerm: 10000,
+										shortTermCapitalGain: 10000,
 										year: new Date().getFullYear(),
 									},
 								],
@@ -184,7 +184,7 @@ async function main() {
 								skipSetup: true,
 								RealizedPAndL: () => [
 									{
-										shortTerm: 300,
+										shortTermCapitalGain: 300,
 										year: new Date().getFullYear(),
 									},
 								],
@@ -218,7 +218,7 @@ async function main() {
 								skipSetup: true,
 								RealizedPAndL: () => [
 									{
-										shortTerm: 300,
+										shortTermCapitalGain: 300,
 										year: new Date().getFullYear(),
 									},
 								],
@@ -248,7 +248,7 @@ async function main() {
 								skipSetup: true,
 								RealizedPAndL: () => [
 									{
-										shortTerm: 300,
+										shortTermCapitalGain: 300,
 										year: new Date().getFullYear(),
 									},
 								],
@@ -278,7 +278,7 @@ async function main() {
 								skipSetup: true,
 								RealizedPAndL: () => [
 									{
-										shortTerm: -300,
+										shortTermCapitalGain: -300,
 										year: new Date().getFullYear(),
 									},
 								],

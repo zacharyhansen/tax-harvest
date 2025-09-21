@@ -1,62 +1,62 @@
 query TransactionDetail($transactionId: String!) {
-  transaction(id: $transactionId) {
-    id
-    quantity
-    type
-    description
-    assetSymbol
-    settlementDate
-    securityType
-    displaySymbol
-    amount
-    externalId
-    fee
-    memo
-    price
-    subtype
-    transactionDate
-    appliedToLots
-    createdAt
-    updatedAt
-    paymentCurrency
-    settlementCurrency
-    postDate
-    detailsURI
-    account {
-      id
-      name
-      institution
-      type
-      authConnection {
-        id
-        source
-      }
-    }
-    asset {
-      symbol
-      name
-      assetType {
-        code
-        description
-      }
-    }
-    portfolio {
-      id
-      name
-    }
-    transactionOnAssetMerge {
-      assetMerge {
-        id
-        assetSymbol
-        targetValue
-        targetQuantity
-        error
-        mergeError {
-          id
-          type
-          resolved
-        }
-      }
-    }
-  }
+	transaction(id: $transactionId) {
+		id
+		quantity
+		type
+		description
+		assetSymbol
+		settlementDate
+		securityType
+		displaySymbol
+		amount
+		externalId
+		fee
+		memo
+		price
+		subtype
+		transactionDate
+		merged
+		createdAt
+		updatedAt
+		paymentCurrency
+		settlementCurrency
+		postDate
+		detailsURI
+		account {
+			id
+			name
+			institution
+			type
+			authConnection {
+				id
+				source
+			}
+		}
+		asset {
+			symbol
+			name
+			assetType {
+				code
+				description
+			}
+		}
+		portfolio {
+			id
+			name
+		}
+		transactionOnAssetMerge {
+			assetMerge {
+				id
+				assetSymbol
+				targetValue
+				targetQuantity
+				error
+				mergeError {
+					id
+					type
+					resolved
+				}
+			}
+		}
+	}
 }

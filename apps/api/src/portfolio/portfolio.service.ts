@@ -16,6 +16,7 @@ import {
 	LotValueType,
 } from '~/lot/lot.dto';
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils';
+import { RealizedPandLService } from '~/realized-p-and-l/realized-p-and-l.service';
 import { AccountService } from '../account/account.service';
 import { ClerkService } from '../clerk/clerk.service';
 import { Database } from '../database/database';
@@ -39,13 +40,14 @@ import Harvest, { type LotHarvestInput } from './portfolio.harvest';
 export class PortfolioService {
 	constructor(
 		private readonly db: Database,
-		private readonly prismaService: PrismaService,
-		private readonly clerkService: ClerkService,
-		private readonly userService: UserService,
 		private readonly lotService: LotService,
 		readonly _harvestService: HarvestService,
-		private readonly accountService: AccountService,
+		private readonly userService: UserService,
+		private readonly clerkService: ClerkService,
+		private readonly prismaService: PrismaService,
 		private readonly configService: ConfigService,
+		private readonly accountService: AccountService,
+		private readonly realizedPAndLService: RealizedPandLService,
 	) {}
 
 	getPortfoliosByUserId(userId: string, args: Prisma.PortfolioFindManyArgs) {
@@ -249,7 +251,7 @@ export class PortfolioService {
 
 	async summary({ id }: { id: string }): Promise<PortfolioSummary> {
 		const [realized, currentLots, accounts, setupAccounts] = await Promise.all([
-			this.summaryRealized({ id }),
+			this.realizedPAndLService.porfolioRealizedPAndL({ portfolioId: id }),
 			this.lotService.lotCurrent({ portfolioId: id }),
 			this.prismaService.rlsPortfolioClient(id).account.count({
 				where: {
@@ -268,15 +270,16 @@ export class PortfolioService {
 
 		const summaryCurrentLots = this.lotService.summaryCurrentLots(currentLots);
 
+		const shortTermCapitalGainWithHarvest = new Decimal(
+			realized.shortTermCapitalGain,
+		).plus(summaryCurrentLots.realizedShortTermDollarChangeFromCurrentHarvest);
+		const longTermCapitalGainWithHarvest = new Decimal(
+			realized.longTermCapitalGain,
+		).plus(summaryCurrentLots.realizedLongTermDollarChangeFromCurrentHarvest);
+
 		return {
 			...PortfolioService.calculateHarvest({
-				realized: {
-					accountCount: realized.accountCount,
-					gainTotal: realized.gainTotal,
-					gainShortTerm: realized.gainShortTerm,
-					gainLongTerm: realized.gainLongTerm,
-					dividend: realized.dividend,
-				},
+				realized,
 				unrealized: {
 					gainTotal: summaryCurrentLots.gainTotal,
 					lossTotal: summaryCurrentLots.lossTotal,
@@ -288,15 +291,13 @@ export class PortfolioService {
 			includingCurrentHarvest: {
 				...PortfolioService.calculateHarvest({
 					realized: {
-						accountCount: realized.accountCount,
+						...realized,
 						gainTotal: new Decimal(realized.gainTotal)
-							.plus(summaryCurrentLots.realizedDollarChangeFromCurrentHarvest)
+							.plus(shortTermCapitalGainWithHarvest)
+							.plus(longTermCapitalGainWithHarvest)
 							.toNumber(),
-						gainShortTerm: new Decimal(realized.gainShortTerm)
-							.plus(summaryCurrentLots.realizedDollarChangeFromCurrentHarvest)
-							.toNumber(),
-						gainLongTerm: realized.gainLongTerm,
-						dividend: realized.dividend,
+						shortTermCapitalGain: shortTermCapitalGainWithHarvest.toNumber(),
+						longTermCapitalGain: longTermCapitalGainWithHarvest.toNumber(),
 					},
 					unrealized: {
 						gainTotal: summaryCurrentLots.unrealizedGainTotalWithCurrentHarvest,
@@ -381,47 +382,6 @@ export class PortfolioService {
 		};
 
 		return summary;
-	}
-
-	async summaryRealized({
-		id,
-	}: {
-		id: string;
-	}): Promise<PortfolioSummaryRealized> {
-		const pAndL = await this.prismaService
-			.rlsPortfolioClient(id)
-			.realizedPAndL.findMany({
-				where: {
-					account: {
-						...PortfolioService.RELEVANT_HARVEST_ACCOUNTS_WHERE({
-							portfolioId: id,
-						}),
-					},
-					year: {
-						equals: new Date().getFullYear(),
-					},
-				},
-			});
-
-		const gainShortTerm = pAndL.reduce((acc, curr) => {
-			return (acc += Number(curr.shortTerm));
-		}, 0);
-
-		const gainLongTerm = pAndL.reduce((acc, curr) => {
-			return (acc += Number(curr.longTerm));
-		}, 0);
-
-		const dividend = pAndL.reduce((acc, curr) => {
-			return (acc += Number(curr.dividend));
-		}, 0);
-
-		return {
-			accountCount: pAndL.length,
-			dividend,
-			gainLongTerm,
-			gainShortTerm,
-			gainTotal: gainLongTerm + gainShortTerm + dividend,
-		};
 	}
 
 	/**

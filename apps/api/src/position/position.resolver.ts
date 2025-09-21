@@ -1,10 +1,10 @@
 import { Info, Query, Resolver } from '@nestjs/graphql';
 import type { Prisma } from '@prisma/client';
 import type { GraphQLResolveInfo } from 'graphql';
+import { PrismaSelect } from '~/utilities/prisma/prisma-select';
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator';
 import type { ClerkClaims } from '../auth/types';
 import { Position } from '../generated/graphql';
-import { PrismaSelect } from '../utilities/prisma/prisma-select';
 import { PositionService } from './position.service';
 
 @Resolver(() => Position)
