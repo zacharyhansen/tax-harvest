@@ -1,13 +1,23 @@
 import {
 	Args,
 	Field,
+	Info,
 	InputType,
 	Mutation,
 	ObjectType,
 	Query,
 	Resolver,
 } from '@nestjs/graphql';
-import { LotUpload } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import type { GraphQLResolveInfo } from 'graphql';
+import {
+	FileCreateManyInput,
+	LotUpload,
+	LotUploadFile,
+	LotUploadFileCreateManyInput,
+	LotUploadWhereInput,
+} from '~/generated/graphql';
+import { PrismaSelect } from '~/utilities/prisma/prisma-select';
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator';
 import type { ClerkClaims } from '../auth/types';
 import { CsvService } from '../csv/csv.service';
@@ -16,45 +26,12 @@ import { PrismaService } from '../prisma/prisma.service';
 import { LotUploadService } from './lot-upload.service';
 
 @InputType()
-class InitLotUploadInput {
-	@Field(() => String)
-	accountId: string;
-
-	@Field(() => String)
-	gcpFileName: string;
-
-	@Field(() => String)
-	displayName: string;
-}
-
-@InputType()
 class UploadLotFileInput {
-	@Field(() => String)
-	lotUploadId: string;
+	@Field(() => FileCreateManyInput)
+	fileInput: FileCreateManyInput;
 
-	@Field(() => String)
-	gcpFileName: string;
-
-	@Field(() => String)
-	displayName: string;
-
-	@Field(() => String)
-	symbol: string;
-}
-
-@ObjectType()
-class LotUploadStatus {
-	@Field(() => String)
-	id: string;
-
-	@Field(() => Boolean)
-	applied: boolean;
-
-	@Field(() => Number)
-	missingFilesCount: number;
-
-	@Field(() => Boolean)
-	isReady: boolean;
+	@Field(() => LotUploadFileCreateManyInput)
+	lotUploadFileInput: LotUploadFileCreateManyInput;
 }
 
 /**
@@ -64,10 +41,10 @@ class LotUploadStatus {
 @Resolver()
 export class LotUploadResolver {
 	constructor(
-		private readonly lotUploadService: LotUploadService,
 		readonly _csvService: CsvService,
-		private readonly googleStorageService: GoogleStorageService,
 		private readonly prismaService: PrismaService,
+		private readonly lotUploadService: LotUploadService,
+		private readonly googleStorageService: GoogleStorageService,
 	) {}
 
 	/**
@@ -76,20 +53,22 @@ export class LotUploadResolver {
 	 * For Schwab positions: Creates lot upload with placeholders for lot files
 	 * For Schwab lots: Returns error directing to upload positions first
 	 */
-	@Mutation(() => LotUploadStatus, {
+	@Mutation(() => [LotUpload], {
 		name: 'initLotUpload',
 		description: 'Initialize a lot upload from a CSV file',
 	})
 	async initLotUpload(
+		@Info() info: GraphQLResolveInfo,
 		@ClerkContext() clerkContext: ClerkClaims,
-		@Args('input') input: InitLotUploadInput,
-	): Promise<LotUploadStatus> {
+		@Args('input') input: FileCreateManyInput,
+	): Promise<LotUpload[]> {
+		const { select } = new PrismaSelect<Prisma.LotUploadSelect>(info).value;
 		const portfolioId = clerkContext.metadata.portfolioId;
 		const userId = clerkContext.sub;
 
 		// Get CSV content
 		const content = await this.googleStorageService.getGCPFileAsString({
-			gcpFileName: input.gcpFileName,
+			gcpFileName: input.gcpFilename,
 		});
 
 		// Detect CSV type
@@ -101,26 +80,25 @@ export class LotUploadResolver {
 			);
 		}
 
+		let upload: LotUpload;
 		// First, create the file record
 		const file = await this.prismaService
 			.rlsPortfolioClient(portfolioId)
 			.file.create({
 				data: {
-					gcpFilename: input.gcpFileName,
+					gcpFilename: input.gcpFilename,
 					displayName: input.displayName,
-					type: csvType,
+					type: input.type,
 					uploadedBy: userId,
 					accountId: input.accountId,
 					portfolioId,
 				},
 			});
 
-		let lotUpload: LotUpload | null = null;
-
 		switch (csvType) {
 			case 'ETRADE_LOTS': {
 				// Create lot upload and mark ready immediately
-				lotUpload = await this.prismaService
+				upload = await this.prismaService
 					.rlsPortfolioClient(portfolioId)
 					.$transaction(async (trx) => {
 						const upload = await trx.lotUpload.create({
@@ -143,12 +121,6 @@ export class LotUploadResolver {
 							},
 						});
 
-						// Auto-apply E*Trade uploads
-						await this.lotUploadService.applyLotUpload({
-							lotUploadId: upload.id,
-							portfolioId,
-						});
-
 						return upload;
 					});
 				break;
@@ -156,7 +128,7 @@ export class LotUploadResolver {
 
 			case 'SCHWAB_POSITIONS': {
 				// Initialize Schwab upload with placeholders
-				lotUpload = await this.lotUploadService.initSchwabPositionsUpload({
+				upload = await this.lotUploadService.initSchwabPositionsUpload({
 					content,
 					accountId: input.accountId,
 					portfolioId,
@@ -175,10 +147,19 @@ export class LotUploadResolver {
 				throw new Error(`Unsupported CSV type: ${csvType}`);
 		}
 
+		if (csvType === 'ETRADE_LOTS' && upload) {
+			// Auto-apply E*Trade uploads
+			await this.lotUploadService.applyLotUpload({
+				lotUploadId: upload.id,
+				portfolioId,
+			});
+		}
+
 		// Get status
-		return this.lotUploadService.getLotUploadStatus({
-			lotUploadId: lotUpload.id,
+		return this.lotUploadService.lotUpload({
 			portfolioId,
+			accountId: input.accountId,
+			select,
 		});
 	}
 
@@ -186,20 +167,21 @@ export class LotUploadResolver {
 	 * Uploads an individual lot file for Schwab
 	 * Updates the placeholder created during initialization
 	 */
-	@Mutation(() => LotUploadStatus, {
-		name: 'uploadLotFile',
+	@Mutation(() => LotUploadFile, {
+		name: 'uploadLotFileSchwab',
 		description: 'Upload an individual lot file for a Schwab lot upload',
 	})
-	async uploadLotFile(
+	async uploadLotFileSchwab(
 		@ClerkContext() clerkContext: ClerkClaims,
 		@Args('input') input: UploadLotFileInput,
-	): Promise<LotUploadStatus> {
+	): Promise<LotUploadFile> {
+		const { fileInput, lotUploadFileInput } = input;
 		const portfolioId = clerkContext.metadata.portfolioId;
 		const userId = clerkContext.sub;
 
 		// Verify this is a Schwab lot details file
 		const content = await this.googleStorageService.getGCPFileAsString({
-			gcpFileName: input.gcpFileName,
+			gcpFileName: fileInput.gcpFilename,
 		});
 
 		const csvType = CsvService.detectCSVType(content);
@@ -213,7 +195,7 @@ export class LotUploadResolver {
 		const lotUpload = await this.prismaService
 			.rlsPortfolioClient(portfolioId)
 			.lotUpload.findUniqueOrThrow({
-				where: { id: input.lotUploadId },
+				where: { id: lotUploadFileInput.lotUploadId },
 			});
 
 		// Create file record
@@ -221,9 +203,9 @@ export class LotUploadResolver {
 			.rlsPortfolioClient(portfolioId)
 			.file.create({
 				data: {
-					gcpFilename: input.gcpFileName,
-					displayName: input.displayName,
-					type: 'SCHWAB_LOTS',
+					gcpFilename: fileInput.gcpFilename,
+					displayName: fileInput.displayName,
+					type: fileInput.type,
 					uploadedBy: userId,
 					accountId: lotUpload.accountId,
 					portfolioId,
@@ -231,18 +213,19 @@ export class LotUploadResolver {
 			});
 
 		// Update the placeholder
-		await this.lotUploadService.uploadSchwabLotFile({
-			lotUploadId: input.lotUploadId,
-			fileId: file.id,
-			symbol: input.symbol,
-			portfolioId,
-		});
+		await this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.lotUploadFile.update({
+				where: { id: lotUploadFileInput.id },
+				data: { fileId: file.id },
+			});
 
 		// Return updated status
-		return this.lotUploadService.getLotUploadStatus({
-			lotUploadId: input.lotUploadId,
-			portfolioId,
-		});
+		return this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.lotUploadFile.findUniqueOrThrow({
+				where: { id: lotUploadFileInput.id },
+			});
 	}
 
 	/**
@@ -267,22 +250,21 @@ export class LotUploadResolver {
 		return true;
 	}
 
-	/**
-	 * Gets the status of a lot upload including missing files
-	 */
-	@Query(() => LotUploadStatus, {
-		name: 'lotUploadStatus',
-		description: 'Get the status of a lot upload',
+	@Query(() => [LotUpload], {
+		name: 'lotUploads',
+		description: 'Get all lot uploads',
 	})
-	async lotUploadStatus(
+	async lotUploads(
 		@ClerkContext() clerkContext: ClerkClaims,
-		@Args('lotUploadId') lotUploadId: string,
-	): Promise<LotUploadStatus> {
+		@Info() info: GraphQLResolveInfo,
+		@Args('where', { type: () => LotUploadWhereInput })
+		where: Prisma.LotUploadWhereInput,
+	) {
+		const { select } = new PrismaSelect<Prisma.LotUploadSelect>(info).value;
 		const portfolioId = clerkContext.metadata.portfolioId;
 
-		return this.lotUploadService.getLotUploadStatus({
-			lotUploadId,
-			portfolioId,
-		});
+		return this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.lotUpload.findMany({ select, orderBy: { createdAt: 'desc' }, where });
 	}
 }

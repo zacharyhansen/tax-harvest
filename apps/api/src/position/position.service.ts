@@ -23,23 +23,15 @@ export class PositionService {
 			const latestSnapshot = await trx
 				.selectFrom('PositionSnapshot')
 				.where('portfolioId', '=', portfolioId)
-				.select((eb) => eb.fn.max('createdAt').as('latest'))
+				.select('id')
+				.orderBy('createdAt', 'desc')
 				.executeTakeFirstOrThrow();
 
 			return trx
-				.selectFrom('PositionSnapshot')
-				.innerJoin(
-					'Position',
-					'PositionSnapshot.id',
-					'Position.positionSnapshotId',
-				)
-				.where('PositionSnapshot.portfolioId', '=', portfolioId)
+				.selectFrom('Position')
+				.where('Position.portfolioId', '=', portfolioId)
 				.where('Position.accountId', '=', accountId)
-				.whereRef(
-					'PositionSnapshot.createdAt',
-					'=',
-					sql`${latestSnapshot.latest}`,
-				)
+				.where('Position.positionSnapshotId', '=', latestSnapshot.id)
 				.selectAll('Position')
 				.execute();
 		});

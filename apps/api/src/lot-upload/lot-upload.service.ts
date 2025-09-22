@@ -1,6 +1,6 @@
+import { notEqual } from 'node:assert';
 import { Injectable } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
-
 import { CsvService } from '../csv/csv.service';
 import { GoogleStorageService } from '../google-storage/google-storage.service';
 import { LotService } from '../lot/lot.service';
@@ -99,48 +99,6 @@ export class LotUploadService {
 			});
 	}
 
-	/**
-	 * Uploads a Schwab lot detail file and associates it with the lot upload
-	 * @param params - File upload parameters
-	 * @returns Updated lot upload file entry
-	 */
-	async uploadSchwabLotFile({
-		lotUploadId,
-		fileId,
-		symbol,
-		portfolioId,
-	}: {
-		lotUploadId: string;
-		fileId: string;
-		symbol: string;
-		portfolioId: string;
-	}) {
-		// Find the placeholder entry for this symbol
-		const placeholder = await this.prismaService
-			.rlsPortfolioClient(portfolioId)
-			.lotUploadFile.findFirst({
-				where: {
-					lotUploadId,
-					type: 'SCHWAB_LOTS',
-					fileId: null,
-				},
-			});
-
-		if (!placeholder) {
-			throw new Error(
-				`No placeholder found for symbol ${symbol} in lot upload ${lotUploadId}`,
-			);
-		}
-
-		// Update the placeholder with the actual file ID
-		return this.prismaService
-			.rlsPortfolioClient(portfolioId)
-			.lotUploadFile.update({
-				where: { id: placeholder.id },
-				data: { fileId },
-			});
-	}
-
 	async getLotUploadWithFiles({
 		lotUploadId,
 		portfolioId,
@@ -152,7 +110,13 @@ export class LotUploadService {
 			.rlsPortfolioClient(portfolioId)
 			.lotUpload.findUniqueOrThrow({
 				where: { id: lotUploadId },
-				include: { LotUploadFile: true },
+				include: {
+					LotUploadFile: {
+						include: {
+							file: true,
+						},
+					},
+				},
 			});
 	}
 
@@ -174,10 +138,6 @@ export class LotUploadService {
 			portfolioId,
 		});
 
-		if (lotUpload.applied) {
-			throw new Error('Lot upload has already been applied');
-		}
-
 		// Validate based on provider
 		if (lotUpload.supportedAccountLotProvider === 'SCHWAB') {
 			await this.applySchwabLotUpload(lotUpload, portfolioId);
@@ -194,6 +154,37 @@ export class LotUploadService {
 			where: { id: lotUploadId },
 			data: { applied: true },
 		});
+
+		await this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.lotUpload.updateMany({
+				where: {
+					id: {
+						not: lotUploadId,
+					},
+				},
+				data: { applied: false },
+			});
+	}
+
+	async lotUpload({
+		portfolioId,
+		accountId,
+		select,
+	}: {
+		portfolioId: string;
+		accountId: string;
+		select: Prisma.LotUploadSelect;
+	}) {
+		return this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.lotUpload.findMany({
+				where: { accountId },
+				select,
+				orderBy: {
+					createdAt: 'desc',
+				},
+			});
 	}
 
 	/**
@@ -254,14 +245,16 @@ export class LotUploadService {
 		lotUpload: Awaited<ReturnType<typeof this.getLotUploadWithFiles>>,
 		portfolioId: string,
 	) {
-		const file = lotUpload.LotUploadFile.find((f) => f.type === 'ETRADE_LOTS');
+		const lotUploadFile = lotUpload.LotUploadFile.find(
+			(f) => f.type === 'ETRADE_LOTS',
+		);
 
-		if (!file || !file.fileId) {
+		if (!lotUploadFile?.file?.gcpFilename) {
 			throw new Error('E*Trade lots file not found');
 		}
 
 		const content = await this.googleStorageService.getGCPFileAsString({
-			gcpFileName: file.fileId,
+			gcpFileName: lotUploadFile.file.gcpFilename,
 		});
 
 		const { records, lotSeededDate } = await this.csvService.etradeCSVToLots({
@@ -279,7 +272,7 @@ export class LotUploadService {
 			remainingQty: lot.remainingQty.toString(),
 			accountId: lotUpload.accountId,
 			portfolioId,
-			fileId: file.fileId,
+			fileId: lotUploadFile.fileId,
 		}));
 
 		await this.lotService.resetLotsForAccount({
@@ -288,43 +281,5 @@ export class LotUploadService {
 			lotSeededDate,
 			portfolioId,
 		});
-	}
-
-	/**
-	 * Gets lot upload status including missing files
-	 * @param params - Query parameters
-	 * @returns Lot upload with file status
-	 */
-	async getLotUploadStatus({
-		lotUploadId,
-		portfolioId,
-	}: {
-		lotUploadId: string;
-		portfolioId: string;
-	}) {
-		const lotUpload = await this.prismaService
-			.rlsPortfolioClient(portfolioId)
-			.lotUpload.findUniqueOrThrow({
-				where: { id: lotUploadId },
-				include: {
-					LotUploadFile: {
-						include: {
-							file: true,
-						},
-					},
-				},
-			});
-
-		const missingFiles = lotUpload.LotUploadFile.filter(
-			(f) => f.type === 'SCHWAB_LOTS' && !f.fileId,
-		);
-
-		return {
-			...lotUpload,
-			missingFilesCount: missingFiles.length,
-			isReady:
-				lotUpload.supportedAccountLotProvider === 'ETRADE' ||
-				missingFiles.length === 0,
-		};
 	}
 }

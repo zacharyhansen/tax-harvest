@@ -6,6 +6,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
+import { GraphQLScalarType, Kind } from 'graphql';
+import { BigIntResolver } from 'graphql-scalars';
 import GraphQLJSON from 'graphql-type-json';
 import { AccountModule } from '~/account/account.module';
 import { AssetModule } from '~/asset/asset.module';
@@ -41,6 +43,26 @@ import { UserModule } from '~/user/user.module';
 import { VectorGraphModule } from '~/vector-graph/vector-graph.module';
 import { errorFormatPlugin } from '../plugins/error-format';
 
+// Custom ID scalar that handles bigint → string
+const BigIntID = new GraphQLScalarType({
+	name: 'ID',
+	description: 'Custom ID scalar that coerces bigint → string',
+	serialize(value: unknown) {
+		if (typeof value === 'bigint') return value.toString();
+		if (typeof value === 'number') return value.toString();
+		return String(value);
+	},
+	parseValue(value: unknown) {
+		return value; // keep as string for input
+	},
+	parseLiteral(ast) {
+		if (ast.kind === Kind.INT || ast.kind === Kind.STRING) {
+			return ast.value;
+		}
+		return null;
+	},
+});
+
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -56,7 +78,11 @@ import { errorFormatPlugin } from '../plugins/error-format';
 			introspection: process.env.NODE_ENV === 'development',
 			playground: false,
 			plugins: [ApolloServerPluginLandingPageLocalDefault(), errorFormatPlugin],
-			resolvers: { JSON: GraphQLJSON },
+			resolvers: {
+				JSON: GraphQLJSON,
+				BigInt: BigIntResolver,
+				ID: BigIntID, // override built-in ID globally
+			},
 			sortSchema: true,
 			useGlobalPrefix: true,
 		}),

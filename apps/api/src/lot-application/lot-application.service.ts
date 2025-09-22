@@ -132,7 +132,7 @@ export class LotApplicationService {
 		targetQuantity = new Decimal(0),
 		targetValue = new Decimal(0),
 		maxResults = 5,
-		time = true,
+		time = false,
 	}: FindSubsetHybridArgs): LotDataKysely[][] {
 		const greedyResultFIFO = findGreedySubset({
 			tuples,
@@ -393,7 +393,7 @@ export class LotApplicationService {
 						portfolioId: trx.portfolioId,
 						transactionId: trx.id,
 						profitAndLossType: trxType,
-						assetMergeId: plaidMergeId,
+						plaidMergeId: plaidMergeId,
 						value: new Decimal(trx.amount ?? 0).toString(),
 					});
 					break;

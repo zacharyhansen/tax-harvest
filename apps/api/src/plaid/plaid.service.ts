@@ -109,7 +109,7 @@ export class PlaidService {
 			}),
 		);
 		// Default to 5 for connection pool limit
-		this.dbBatchSize = this.configService.get<number>('DB_BATCH_SIZE') ?? 5;
+		this.dbBatchSize = this.configService.get<number>('DB_BATCH_SIZE') ?? 50;
 		this.logger.log(`Database batch size set to: ${this.dbBatchSize}`);
 	}
 
@@ -458,12 +458,14 @@ export class PlaidService {
 		this.logger.error(JSON.stringify(unknownTransactions, null, 2));
 
 		// Insert nonLotAccountRealizedPAndLHistory
-		await executeWithRLS(this.db, portfolioId, (trx) =>
-			trx
-				.insertInto('AccountRealizedPAndLHistory')
-				.values(nonLotAccountRealizedPAndLHistory)
-				.execute(),
-		);
+		if (nonLotAccountRealizedPAndLHistory.length > 0) {
+			await executeWithRLS(this.db, portfolioId, (trx) =>
+				trx
+					.insertInto('AccountRealizedPAndLHistory')
+					.values(nonLotAccountRealizedPAndLHistory)
+					.execute(),
+			);
+		}
 
 		// Mark these transactions as applied
 		await executeWithRLS(this.db, portfolioId, (trx) =>
@@ -519,6 +521,7 @@ export class PlaidService {
 						portfolioId,
 						accountId,
 						assetMergeId: assetMerge.id,
+						plaidMergeId: plaidMerge.id,
 						assetSymbol: resolvedLotChange.position.assetSymbol,
 						chosenLotChangeIndex: resolvedLotChange.chosenLotChangeIndex,
 						transactionIds: relevantTransactions.map(
@@ -588,11 +591,13 @@ export class PlaidService {
 		);
 	}
 
+	@TimeMethod()
 	async insertLotChangeList({
 		trx,
 		lotChanges,
 		portfolioId,
 		accountId,
+		plaidMergeId,
 		assetMergeId,
 		assetSymbol,
 		usedByAssetMergeId,
@@ -603,6 +608,7 @@ export class PlaidService {
 		lotChanges: LotChangeKysely[];
 		portfolioId: string;
 		accountId: string;
+		plaidMergeId: string;
 		assetMergeId: string;
 		assetSymbol: string;
 		usedByAssetMergeId?: string;
@@ -620,25 +626,6 @@ export class PlaidService {
 			.returning('id')
 			.executeTakeFirstOrThrow();
 
-		await trx
-			.insertInto('LotChange')
-			.values(
-				lotChanges.map((lotChange) => ({
-					accountId,
-					portfolioId,
-					assetSymbol,
-					quantityFinal: lotChange.quantityFinal.toString(),
-					quantityChange: lotChange.quantityChange.toString(),
-					price: lotChange.price.toString(),
-					aquiredDate: lotChange.acquiredDate,
-					upsert: JSON.stringify(lotChange.upsert),
-					operationType: OperationType.upsert,
-					lotChangeListId: insertedLotChangeList.id,
-					lotId: lotChange.lotId,
-				})),
-			)
-			.execute();
-
 		// If we were actually able to get chosenLotChangeIndex we can apply the lot changes to the account
 		if (chosenLotChangeIndex !== null) {
 			await this.applyLotChangesToAccounts({
@@ -648,13 +635,35 @@ export class PlaidService {
 				lotChanges,
 				transactionIds,
 				lotChangeListId: insertedLotChangeList.id,
-				assetMergeId,
+				plaidMergeId,
 			});
+		}
+
+		if (lotChanges.length > 0) {
+			await trx
+				.insertInto('LotChange')
+				.values(
+					lotChanges.map((lotChange) => ({
+						accountId,
+						portfolioId,
+						assetSymbol,
+						quantityFinal: lotChange.quantityFinal.toString(),
+						quantityChange: lotChange.quantityChange.toString(),
+						price: lotChange.price.toString(),
+						aquiredDate: lotChange.acquiredDate,
+						upsert: JSON.stringify(lotChange.upsert),
+						operationType: OperationType.upsert,
+						lotChangeListId: insertedLotChangeList.id,
+						lotId: lotChange.lotId,
+					})),
+				)
+				.execute();
 		}
 
 		return insertedLotChangeList.id;
 	}
 
+	@TimeMethod()
 	async applyLotChangesToAccounts({
 		trx,
 		portfolioId,
@@ -662,7 +671,7 @@ export class PlaidService {
 		lotChanges,
 		transactionIds,
 		lotChangeListId,
-		assetMergeId,
+		plaidMergeId,
 	}: {
 		trx: Transaction<DB>;
 		lotChanges: LotChangeKysely[];
@@ -670,7 +679,7 @@ export class PlaidService {
 		accountId: string;
 		transactionIds: string[];
 		lotChangeListId: string;
-		assetMergeId: string;
+		plaidMergeId: string;
 	}) {
 		// Upsert the lots
 		const upserts = lotChanges.map((lotChange) => lotChange.upsert);
@@ -693,9 +702,9 @@ export class PlaidService {
 				{
 					lotChangeListId,
 					profitAndLossType: ProfitAndLossType.SHORT_TERM_CAPITAL_GAIN,
-					assetMergeId,
 					portfolioId,
 					accountId,
+					plaidMergeId,
 					value: lotChanges
 						.reduce(
 							(sum, change) => sum.plus(change.realizedProfitAndLossShortTerm),
@@ -706,7 +715,7 @@ export class PlaidService {
 				{
 					lotChangeListId,
 					profitAndLossType: ProfitAndLossType.LONG_TERM_CAPITAL_GAIN,
-					assetMergeId,
+					plaidMergeId,
 					portfolioId,
 					accountId,
 					value: lotChanges

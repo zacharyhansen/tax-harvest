@@ -11,14 +11,10 @@ import {
 	PositionPerformanceInput,
 } from './portfolio-snapshot.dto';
 
-interface SnapshotData {
-	id: string;
-	createdAt: Date;
-	accountId: string;
-	valueTotal: number;
-	valueCash: number;
-	valueAssets: number;
-	positions: unknown;
+interface PositionData {
+	assetSymbol: string;
+	quantity: string | null;
+	marketValue: string | null;
 }
 
 /**
@@ -67,7 +63,11 @@ export class PortfolioSnapshotService {
 		const snapshots = await this.fetchSnapshots(portfolioId, dateFrom);
 		const dailyData = this.aggregateByDay(snapshots);
 
-		return this.transformToTypedPositionFormat(dailyData, input.symbols);
+		return this.transformToTypedPositionFormat(
+			dailyData,
+			portfolioId,
+			input.symbols,
+		);
 	}
 
 	/**
@@ -166,6 +166,40 @@ export class PortfolioSnapshotService {
 	}
 
 	/**
+	 * Fetch positions for a specific balance snapshot
+	 */
+	private async fetchPositionsForSnapshot(
+		portfolioId: string,
+		balanceSnapshotId: string,
+	): Promise<PositionData[]> {
+		return executeWithRLS(this.db, portfolioId, (trx) =>
+			trx
+				.selectFrom('PositionSnapshotOnPortfolioBalanceSnapshot')
+				.innerJoin(
+					'PositionSnapshot',
+					'PositionSnapshot.id',
+					'PositionSnapshotOnPortfolioBalanceSnapshot.positionSnapshotId',
+				)
+				.innerJoin(
+					'Position',
+					'Position.positionSnapshotId',
+					'PositionSnapshot.id',
+				)
+				.select([
+					'Position.assetSymbol',
+					'Position.quantity',
+					'Position.marketValue',
+				])
+				.where(
+					'PositionSnapshotOnPortfolioBalanceSnapshot.portfolioBalanceSnapshotId',
+					'=',
+					balanceSnapshotId,
+				)
+				.execute(),
+		);
+	}
+
+	/**
 	 * Transform daily data to typed account format
 	 */
 	private transformToTypedAccountFormat(
@@ -176,28 +210,33 @@ export class PortfolioSnapshotService {
 
 		for (const [date, snapshots] of dailyData.entries()) {
 			let portfolioTotal = 0;
-			const accounts = [];
+			// const accounts = [];
 
 			for (const snapshot of snapshots) {
-				portfolioTotal += snapshot.valueTotal;
-				accounts.push({
-					accountId: snapshot.accountId,
-					accountName:
-						accountNames.get(snapshot.accountId) || 'Unknown Account',
-					valueTotal: snapshot.valueTotal,
-					valueCash: snapshot.valueCash,
-					valueAssets: snapshot.valueAssets,
-					realizedPAndLShortTerm: snapshot.realizedPAndLShortTerm,
-					realizedPAndLLongTerm: snapshot.realizedPAndLLongTerm,
-					unrealizedProfit: snapshot.unrealizedProfit,
-					unrealizedLoss: snapshot.unrealizedLoss,
-				});
+				// Calculate total value as current (cash) + market value of assets
+				const valueTotal =
+					Number(snapshot.current) + Number(snapshot.available);
+				// const valueCash = Number(snapshot.current);
+				// const valueAssets = Number(snapshot.available);
+
+				portfolioTotal += valueTotal;
+				// accounts.push({
+				// 	accountName:
+				// 		accountNames.get(snapshot.accountId) || 'Unknown Account',
+				// 	valueTotal: valueTotal,
+				// 	valueCash: valueCash,
+				// 	valueAssets: valueAssets,
+				// 	realizedPAndLShortTerm: Number(snapshot.shortTermCapitalGain),
+				// 	realizedPAndLLongTerm: Number(snapshot.longTermCapitalGain),
+				// 	unrealizedProfit: Number(snapshot.unrealizedProfit),
+				// 	unrealizedLoss: Number(snapshot.unrealizedLoss),
+				// });
 			}
 
 			result.push({
 				date,
 				portfolioTotal,
-				accounts,
+				accounts: [],
 			});
 		}
 
@@ -207,40 +246,49 @@ export class PortfolioSnapshotService {
 	/**
 	 * Transform daily data to typed position format
 	 */
-	private transformToTypedPositionFormat(
-		dailyData: Map<string, SnapshotData[]>,
+	private async transformToTypedPositionFormat(
+		dailyData: Map<string, Selectable<PortfolioBalanceSnapshot>[]>,
+		portfolioId: string,
 		symbols?: string[],
-	): PositionPerformanceDataPoint[] {
+	): Promise<PositionPerformanceDataPoint[]> {
 		const result: PositionPerformanceDataPoint[] = [];
 		const symbolFilter = symbols ? new Set(symbols) : null;
 
+		// Get position data for each day
 		for (const [date, snapshots] of dailyData.entries()) {
 			let portfolioTotal = 0;
 			const positionMap = new Map<string, { value: number; shares: number }>();
 
 			for (const snapshot of snapshots) {
-				portfolioTotal += snapshot.valueTotal;
+				// Calculate total value
+				const valueTotal =
+					Number(snapshot.current) + Number(snapshot.available);
+				portfolioTotal += valueTotal;
+
+				// Get positions for this snapshot through the join table
+				const positionData = await this.fetchPositionsForSnapshot(
+					portfolioId,
+					String(snapshot.id),
+				);
 
 				// Aggregate positions by symbol
-				if (snapshot.positions && Array.isArray(snapshot.positions)) {
-					for (const position of snapshot.positions) {
-						if (position.assetSymbol && position.marketValue) {
-							const symbol = position.assetSymbol;
+				for (const position of positionData) {
+					if (position.assetSymbol && position.marketValue) {
+						const symbol = position.assetSymbol;
 
-							// Skip if we have a filter and this symbol isn't in it
-							if (symbolFilter && !symbolFilter.has(symbol)) {
-								continue;
-							}
-
-							const existing = positionMap.get(symbol) || {
-								value: 0,
-								shares: 0,
-							};
-							positionMap.set(symbol, {
-								value: existing.value + position.marketValue,
-								shares: existing.shares + (position.quantity || 0),
-							});
+						// Skip if we have a filter and this symbol isn't in it
+						if (symbolFilter && !symbolFilter.has(symbol)) {
+							continue;
 						}
+
+						const existing = positionMap.get(symbol) || {
+							value: 0,
+							shares: 0,
+						};
+						positionMap.set(symbol, {
+							value: existing.value + Number(position.marketValue || 0),
+							shares: existing.shares + Number(position.quantity || 0),
+						});
 					}
 				}
 			}

@@ -46,6 +46,7 @@ export class LotService {
 				});
 
 				const assets = new Set(lots.map((lot) => lot.assetSymbol));
+				// Create the new assets to make sure they exist
 				for (const asset of assets) {
 					await trx.asset.upsert({
 						create: {
@@ -60,24 +61,24 @@ export class LotService {
 					});
 				}
 
+				// Clean up old data that doesnt mantter anymore
 				await trx.lot.deleteMany({
 					where: {
 						accountId,
 					},
 				});
-
 				await trx.mergeError.deleteMany({
 					where: {
 						accountId,
 					},
 				});
-
 				await trx.plaidMerge.deleteMany({
 					where: {
 						accountId,
 					},
 				});
 
+				// Reset merged transactions
 				await trx.transaction.updateMany({
 					where: {
 						accountId,
@@ -89,7 +90,19 @@ export class LotService {
 						merged: false,
 					},
 				});
+				await trx.transaction.updateMany({
+					where: {
+						accountId,
+						transactionDate: {
+							lte: lotSeededDate,
+						},
+					},
+					data: {
+						merged: true,
+					},
+				});
 
+				// Create the new lots
 				await trx.lot.createMany({
 					data: lots.map((lot) => ({
 						...lot,
