@@ -4,9 +4,11 @@ generator client {
 }
 
 generator nestgraphql {
-  provider   = "prisma-nestjs-graphql"
-  output     = "../src/generated/graphql"
-  emitSingle = true
+  provider                        = "prisma-nestjs-graphql"
+  output                          = "../src/generated/graphql"
+  emitSingle                      = true
+  graphqlScalars_BigInt_name      = "GraphQLBigInt"
+  graphqlScalars_BigInt_specifier = "graphql-scalars"
 }
 
 datasource db {
@@ -302,7 +304,6 @@ model Account {
   files                       File[]
   assetMerge                  AssetMerge[]
   notification                Notification[]
-  portfolioBalanceSnapshot    PortfolioBalanceSnapshot[]
   plaidMerge                  PlaidMerge[]
   lotChange                   LotChange[]
   transactionOnAssetMerge     TransactionOnAssetMerge[]
@@ -399,17 +400,17 @@ model AccountRealizedPAndLHistory {
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @default(now()) @updatedAt
   accountId         String            @db.Uuid
-  /// This will be null if we ahve not created a new P and L with this transaction included yet (means it still needs to be applied)
+  /// This will be null if we have not created a new P and L with this transaction included yet (means it still needs to be applied)
   realizedPAndLId   String?           @db.Uuid
   portfolioId       String            @db.Uuid
   profitAndLossType ProfitAndLossType
   value             Decimal           @default(0) @db.Decimal(14, 4)
-  assetMergeId      String            @db.Uuid
+  plaidMergeId      String            @db.Uuid
   // One of the two will be set
   lotChangeListId   String?           @db.Uuid
   transactionId     String?           @db.Uuid
 
-  assetMerge    AssetMerge     @relation(fields: [assetMergeId], references: [id], onDelete: Cascade)
+  plaidMerge    PlaidMerge     @relation(fields: [plaidMergeId], references: [id], onDelete: Cascade)
   realizedPAndL RealizedPAndL? @relation(fields: [realizedPAndLId], references: [id], onDelete: Cascade)
   account       Account        @relation(fields: [accountId], references: [id], onDelete: Cascade)
   portfolio     Portfolio      @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
@@ -467,9 +468,10 @@ model PlaidMerge {
   portfolioId      String   @db.Uuid
   resolveLotsInput Json     @db.JsonB
 
-  account    Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  portfolio  Portfolio    @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  assetMerge AssetMerge[]
+  account                     Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  portfolio                   Portfolio                     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  assetMerge                  AssetMerge[]
+  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
 }
 
 model AssetMerge {
@@ -490,16 +492,15 @@ model AssetMerge {
   mergeErrorId       String?  @db.Uuid
   error              Json?    @db.JsonB
 
-  mergeError                  MergeError?                   @relation(fields: [mergeErrorId], references: [id], onDelete: Cascade)
-  account                     Account                       @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  portfolio                   Portfolio                     @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  logTrxMerge                 Log?                          @relation(fields: [logTrxMergeId], references: [id], onDelete: SetNull)
-  plaidMerge                  PlaidMerge?                   @relation(fields: [plaidMergeId], references: [id], onDelete: Cascade)
-  asset                       Asset                         @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
-  transactionOnAssetMerge     TransactionOnAssetMerge[]
-  lotChangeList               LotChangeList[]
-  positionSnapshot            PositionSnapshot?             @relation(fields: [positionSnapshotId], references: [id], onDelete: Cascade)
-  AccountRealizedPAndLHistory AccountRealizedPAndLHistory[]
+  mergeError              MergeError?               @relation(fields: [mergeErrorId], references: [id], onDelete: Cascade)
+  account                 Account                   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  portfolio               Portfolio                 @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  logTrxMerge             Log?                      @relation(fields: [logTrxMergeId], references: [id], onDelete: SetNull)
+  plaidMerge              PlaidMerge?               @relation(fields: [plaidMergeId], references: [id], onDelete: Cascade)
+  asset                   Asset                     @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
+  transactionOnAssetMerge TransactionOnAssetMerge[]
+  lotChangeList           LotChangeList[]
+  positionSnapshot        PositionSnapshot?         @relation(fields: [positionSnapshotId], references: [id], onDelete: Cascade)
 
   @@index([portfolioId, createdAt(sort: Desc)])
 }
@@ -574,11 +575,12 @@ model PositionSnapshot {
   portfolioId      String   @db.Uuid
   authConnectionId String   @db.Uuid
 
-  authConnection AuthConnection  @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
-  portfolio      Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  position       Position[]
-  assetMerge     AssetMerge[]
-  realizedPAndL  RealizedPAndL[]
+  authConnection                             AuthConnection                               @relation(fields: [authConnectionId], references: [id], onDelete: Cascade)
+  portfolio                                  Portfolio                                    @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  position                                   Position[]
+  assetMerge                                 AssetMerge[]
+  realizedPAndL                              RealizedPAndL[]
+  PositionSnapshotOnPortfolioBalanceSnapshot PositionSnapshotOnPortfolioBalanceSnapshot[]
 
   @@index([portfolioId, createdAt(sort: Desc)])
 }
@@ -587,7 +589,7 @@ model PositionSnapshot {
 /// just a grouping of open lots. We track it as its needed for calculations derived from plaid 
 /// but user facing tables etc. and harvest calc's should roll up lots 
 model Position {
-  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                 BigInt    @id @default(autoincrement())
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @default(now()) @updatedAt
   positionSnapshotId String    @db.Uuid
@@ -622,6 +624,7 @@ model Position {
   portfolio        Portfolio        @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   positionSnapshot PositionSnapshot @relation(fields: [positionSnapshotId], references: [id], onDelete: Cascade)
 
+  @@unique([positionSnapshotId, externalId]) // Each position should only be on a snapshot once
   @@index([positionSnapshotId])
 }
 
@@ -634,7 +637,7 @@ model Lot {
   id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt          DateTime @default(now())
   updatedAt          DateTime @default(now()) @updatedAt
-  positionId         String?  @db.Uuid
+  positionId         BigInt?
   accountId          String   @db.Uuid
   portfolioId        String   @db.Uuid
   assetSymbol        String
@@ -1076,24 +1079,59 @@ model Log {
   @@index([portfolioId, type])
 }
 
+/// Basically one to one with AccountRealizedPAndLHistory (just rolled up)
 model PortfolioBalanceSnapshot {
-  id                     BigInt   @id @default(autoincrement())
-  createdAt              DateTime @default(now())
-  portfolioId            String   @db.Uuid
-  accountId              String   @db.Uuid
-  valueTotal             Float
-  valueCash              Float
-  valueAssets            Float
-  realizedPAndLShortTerm Float    @default(0)
-  realizedPAndLLongTerm  Float    @default(0)
-  unrealizedProfit       Float    @default(0)
-  unrealizedLoss         Float    @default(0)
-  positions              Json     @db.JsonB
+  id          BigInt   @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  portfolioId String   @db.Uuid
 
-  portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  // Fields controlled by the plaid/investments/holdings/get https://plaid.com/docs/api/products/investments/#investmentsholdingsget
+  current             Decimal   @default(0) @db.Decimal(14, 4)
+  available           Decimal   @default(0) @db.Decimal(14, 4)
+  lastUpdatedDatetime DateTime?
+
+  // Fields we track (1 to 1 with ProfitAndLossType) using plaid/investments/transactions/get https://plaid.com/docs/api/products/investments/#investmentstransactionsget
+  shortTermCapitalGain Decimal @default(0) @db.Decimal(14, 4)
+  longTermCapitalGain  Decimal @default(0) @db.Decimal(14, 4)
+  dividend             Decimal @default(0) @db.Decimal(14, 4)
+  qualifiedDividend    Decimal @default(0) @db.Decimal(14, 4)
+  nonQualifiedDividend Decimal @default(0) @db.Decimal(14, 4)
+  dividendReinvestment Decimal @default(0) @db.Decimal(14, 4)
+  interest             Decimal @default(0) @db.Decimal(14, 4)
+  interestReinvestment Decimal @default(0) @db.Decimal(14, 4)
+  distribution         Decimal @default(0) @db.Decimal(14, 4)
+  accountFee           Decimal @default(0) @db.Decimal(14, 4)
+  managementFee        Decimal @default(0) @db.Decimal(14, 4)
+  fundFee              Decimal @default(0) @db.Decimal(14, 4)
+  taxWithheld          Decimal @default(0) @db.Decimal(14, 4)
+  nonResidentTax       Decimal @default(0) @db.Decimal(14, 4)
+  deposit              Decimal @default(0) @db.Decimal(14, 4)
+  withdrawal           Decimal @default(0) @db.Decimal(14, 4)
+  contribution         Decimal @default(0) @db.Decimal(14, 4)
+  returnOfPrincipal    Decimal @default(0) @db.Decimal(14, 4)
+  loanPayment          Decimal @default(0) @db.Decimal(14, 4)
+  marginExpense        Decimal @default(0) @db.Decimal(14, 4)
+  stockDistribution    Decimal @default(0) @db.Decimal(14, 4)
+  unqualifiedGain      Decimal @default(0) @db.Decimal(14, 4)
+
+  // Derived info we roll up for efficiency
+  unrealizedProfit Decimal @default(0) @db.Decimal(14, 4)
+  unrealizedLoss   Decimal @default(0) @db.Decimal(14, 4)
+
+  portfolio                                  Portfolio                                    @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  PositionSnapshotOnPortfolioBalanceSnapshot PositionSnapshotOnPortfolioBalanceSnapshot[]
 
   @@index([portfolioId, createdAt(desc)])
+}
+
+model PositionSnapshotOnPortfolioBalanceSnapshot {
+  positionSnapshotId         String @db.Uuid
+  portfolioBalanceSnapshotId BigInt
+
+  positionSnapshot         PositionSnapshot         @relation(fields: [positionSnapshotId], references: [id], onDelete: Cascade)
+  portfolioBalanceSnapshot PortfolioBalanceSnapshot @relation(fields: [portfolioBalanceSnapshotId], references: [id], onDelete: Cascade)
+
+  @@id([positionSnapshotId, portfolioBalanceSnapshotId])
 }
 
 // ENUMS 
