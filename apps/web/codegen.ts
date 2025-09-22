@@ -20,6 +20,7 @@ const config: CodegenConfig = {
 				withHOC: false,
 				scalars: {
 					Decimal: 'string',
+					BigInt: 'string',
 				},
 			},
 		},

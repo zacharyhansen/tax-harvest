@@ -4,7 +4,7 @@ import { toast } from '@repo/ui/components/toast-sonner';
 import { AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useUser } from '~/app/main/user.provider';
-import { useCreateFilesMutation } from '~/generated/gql';
+import { LotUploadsDocument, useInitLotUploadMutation } from '~/generated/gql';
 import { usePortfolio } from '../portfolio';
 import { getErrorMessage } from '../utils/get-error-message';
 import { CSVUploadHelper } from './CSVUploadHelper';
@@ -16,7 +16,7 @@ interface EtradeCSVUploadProps {
 
 export default function EtradeCSVUpload({ accountId }: EtradeCSVUploadProps) {
 	const [error, setError] = useState<string | null>(null);
-	const [createFiles] = useCreateFilesMutation();
+	const [createFiles] = useInitLotUploadMutation();
 	const { portfolio } = usePortfolio();
 	const { user } = useUser();
 	const { isUploading, onUpload } = useUploadFiles({
@@ -27,6 +27,11 @@ export default function EtradeCSVUpload({ accountId }: EtradeCSVUploadProps) {
 		},
 		onFileUploaded: async (fileInput) => {
 			setError(null);
+			const file = fileInput[0];
+			if (!file) {
+				toast.error('No file uploaded');
+				return;
+			}
 			toast.promise(
 				createFiles({
 					onCompleted: () => {
@@ -36,15 +41,16 @@ export default function EtradeCSVUpload({ accountId }: EtradeCSVUploadProps) {
 						throw err;
 					},
 					variables: {
-						data: fileInput.map((file, i) => ({
+						input: {
 							accountId,
-							displayName: fileInput[i]?.displayName ?? '',
+							displayName: file.displayName,
 							gcpFilename: file.fileName,
 							type: file.type,
 							uploadedBy: user.id,
 							portfolioId: portfolio.id,
-						})),
+						},
 					},
+					refetchQueries: [LotUploadsDocument],
 				}),
 				{
 					loading: 'Uploading files...',
@@ -70,6 +76,7 @@ export default function EtradeCSVUpload({ accountId }: EtradeCSVUploadProps) {
 				accept={{
 					'text/csv': [],
 				}}
+				multiple={false}
 			/>
 			{error && (
 				<Alert variant="destructive">

@@ -1,0 +1,21 @@
+query LotUploads($where: LotUploadWhereInput!) {
+  lotUploads(where: $where) {
+    id
+    createdAt
+    applied
+    supportedAccountLotProvider
+    LotUploadFile {
+      id
+      type
+      fileId
+      file {
+        id
+        displayName
+      }
+    }
+  }
+}
+
+mutation ApplyLotUpload($lotUploadId: String!) {
+  applyLotUpload(lotUploadId: $lotUploadId)
+}

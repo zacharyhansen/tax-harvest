@@ -18,10 +18,20 @@ fragment FileItem on File {
 	type
 }
 
-mutation CreateFiles($data: [FileCreateManyInput!]!) {
-	createFiles(data: $data) {
-		id
-		...FileItem
+fragment LotUploadItem on LotUpload {
+	id
+	createdAt
+	updatedAt
+	portfolioId
+	accountId
+	fileId
+	applied
+	supportedAccountLotProvider
+}
+
+mutation InitLotUpload($input: FileCreateManyInput!) {
+	initLotUpload(input: $input) {
+		...LotUploadItem
 	}
 }
 

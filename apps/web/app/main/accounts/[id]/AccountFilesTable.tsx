@@ -155,16 +155,17 @@ function FileRow({ file }: FileRowProps) {
 				</span>
 			</TableCell>
 			<TableCell className="text-muted-foreground">
-				{DateFormatter.shortDay(file.createdAt)}
+				{DateFormatter.shortDayTime(file.createdAt)}
 			</TableCell>
-			<TableCell className="text-right">
-				<Button
-					variant="outline"
-					size="sm"
-					onClick={handleDownload}
-					disabled={isDownloading}
-					className="flex items-center space-x-1"
-				>
+			<TableCell>
+				<div className="flex justify-end">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={handleDownload}
+						disabled={isDownloading}
+						className="flex items-center space-x-1"
+					>
 					{isDownloading ? (
 						<Loader2 className="h-3 w-3 animate-spin" />
 					) : (
@@ -172,6 +173,7 @@ function FileRow({ file }: FileRowProps) {
 					)}
 					<span>{isDownloading ? 'Downloading...' : 'Download'}</span>
 				</Button>
+				</div>
 			</TableCell>
 		</TableRow>
 	);

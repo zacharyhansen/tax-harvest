@@ -12,8 +12,7 @@ fragment AccountTableItem on Account {
 	optionLevel
 	cashForOpenOrders
 	balanceMoneyMarket
-	cashAvailableForInvestment
-	accountValueTotal
+	current
 	cashNet
 	cashBalance
 	balanceAccount

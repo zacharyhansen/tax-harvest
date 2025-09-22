@@ -10,6 +10,12 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@repo/ui/components/card';
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@repo/ui/components/tabs';
 import { Label } from '@repo/ui/components/label';
 import { Separator } from '@repo/ui/components/separator';
 import { Switch } from '@repo/ui/components/switch';
@@ -22,11 +28,15 @@ import {
 	TableRow,
 } from '@repo/ui/components/table';
 import {
+	Activity,
 	CheckCircle2,
+	Clock,
 	Copy,
 	DollarSign,
 	FileText,
 	GitBranch,
+	Layers,
+	TrendingUp,
 	XCircle,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -72,6 +82,11 @@ export default function PlaidMergePage(props: {
 		) || [];
 	const totalAssetMerges = plaidMerge.assetMerge?.length || 0;
 
+	// Sort P&L History by createdAt descending
+	const pAndLHistory = [...(plaidMerge.AccountRealizedPAndLHistory || [])].sort(
+		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+	);
+
 	return (
 		<PageWrapper
 			title="PlaidMerge Details"
@@ -85,7 +100,20 @@ export default function PlaidMergePage(props: {
 				</div>
 			}
 		>
-			<div className="grid gap-6">
+			<Tabs defaultValue="overview" className="space-y-4">
+				<TabsList className="w-full justify-start">
+					<TabsTrigger value="overview">
+						<GitBranch className="h-4 w-4 mr-2" />
+						Overview & Lot Merges
+					</TabsTrigger>
+					<TabsTrigger value="pandl-history">
+						<Activity className="h-4 w-4 mr-2" />
+						P&L History ({pAndLHistory.length})
+					</TabsTrigger>
+				</TabsList>
+
+				<TabsContent value="overview" className="space-y-6">
+					<div className="grid gap-6">
 				{/* Overview Cards */}
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 					<Card>
@@ -1113,11 +1141,11 @@ export default function PlaidMergePage(props: {
 														</div>
 													)}
 												{/* Position Snapshot & Resolved Lot Change - Horizontal Layout */}
-												{(assetMerge.targetPositionSnapshot ||
+												{(assetMerge.positionSnapshot ||
 													assetMerge.resolvedLotChange) && (
 													<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 														{/* Raw Position Data */}
-														{assetMerge.targetPositionSnapshot && (
+														{assetMerge.positionSnapshot && (
 															<div className="space-y-3">
 																<div className="flex items-center justify-between">
 																	<h5 className="font-medium text-sm flex items-center gap-2">
@@ -1130,7 +1158,7 @@ export default function PlaidMergePage(props: {
 																		onClick={() => {
 																			navigator.clipboard.writeText(
 																				JSON.stringify(
-																					assetMerge.targetPositionSnapshot,
+																					assetMerge.positionSnapshot,
 																					null,
 																					2,
 																				),
@@ -1146,7 +1174,7 @@ export default function PlaidMergePage(props: {
 																	</summary>
 																	<div className="mt-2">
 																		<ReactJsonView
-																			src={assetMerge.targetPositionSnapshot}
+																			src={assetMerge.positionSnapshot}
 																			theme={
 																				theme.theme === 'dark'
 																					? 'ashes'
@@ -1214,6 +1242,333 @@ export default function PlaidMergePage(props: {
 					</Card>
 				)}
 			</div>
+				</TabsContent>
+
+				<TabsContent value="pandl-history" className="space-y-6">
+					{/* P&L History Summary Card */}
+					<Card>
+						<CardHeader>
+							<CardTitle className="flex items-center gap-2">
+								<TrendingUp className="h-5 w-5" />
+								Realized P&L History Summary
+							</CardTitle>
+							<CardDescription>
+								Transaction and lot change history with realized gains/losses
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+								<div className="bg-muted/50 rounded-lg p-4">
+									<p className="text-sm text-muted-foreground mb-1">Total Records</p>
+									<p className="text-2xl font-bold">{pAndLHistory.length}</p>
+								</div>
+								<div className="bg-muted/50 rounded-lg p-4">
+									<p className="text-sm text-muted-foreground mb-1">Short Term P&L</p>
+									<p className={`text-2xl font-bold ${
+										pAndLHistory
+											.filter(h => h.profitAndLossType === 'SHORT_TERM_CAPITAL_GAIN')
+											.reduce((sum, h) => sum + Number(h.value || 0), 0) > 0
+											? 'text-green-600'
+											: pAndLHistory
+												.filter(h => h.profitAndLossType === 'SHORT_TERM_CAPITAL_GAIN')
+												.reduce((sum, h) => sum + Number(h.value || 0), 0) < 0
+												? 'text-destructive'
+												: ''
+									}`}>
+										${
+											pAndLHistory
+												.filter(h => h.profitAndLossType === 'SHORT_TERM_CAPITAL_GAIN')
+												.reduce((sum, h) => sum + Number(h.value || 0), 0)
+												.toFixed(2)
+										}
+									</p>
+								</div>
+								<div className="bg-muted/50 rounded-lg p-4">
+									<p className="text-sm text-muted-foreground mb-1">Long Term P&L</p>
+									<p className={`text-2xl font-bold ${
+										pAndLHistory
+											.filter(h => h.profitAndLossType === 'LONG_TERM_CAPITAL_GAIN')
+											.reduce((sum, h) => sum + Number(h.value || 0), 0) > 0
+											? 'text-green-600'
+											: pAndLHistory
+												.filter(h => h.profitAndLossType === 'LONG_TERM_CAPITAL_GAIN')
+												.reduce((sum, h) => sum + Number(h.value || 0), 0) < 0
+												? 'text-destructive'
+												: ''
+									}`}>
+										${
+											pAndLHistory
+												.filter(h => h.profitAndLossType === 'LONG_TERM_CAPITAL_GAIN')
+												.reduce((sum, h) => sum + Number(h.value || 0), 0)
+												.toFixed(2)
+										}
+									</p>
+								</div>
+								<div className="bg-muted/50 rounded-lg p-4">
+									<p className="text-sm text-muted-foreground mb-1">Total P&L</p>
+									<p className={`text-2xl font-bold ${
+										pAndLHistory.reduce((sum, h) => sum + Number(h.value || 0), 0) > 0
+											? 'text-green-600'
+											: pAndLHistory.reduce((sum, h) => sum + Number(h.value || 0), 0) < 0
+												? 'text-destructive'
+												: ''
+									}`}>
+										${
+											pAndLHistory
+												.reduce((sum, h) => sum + Number(h.value || 0), 0)
+												.toFixed(2)
+										}
+									</p>
+								</div>
+							</div>
+						</CardContent>
+					</Card>
+
+					{/* P&L History Records */}
+					{pAndLHistory.length > 0 ? (
+						<div className="space-y-4">
+							{pAndLHistory.map((history) => (
+								<Card key={history.id} className="overflow-hidden">
+									<CardHeader className="bg-muted/30">
+										<div className="flex items-start justify-between">
+											<div>
+												<div className="flex items-center gap-2">
+													<Clock className="h-4 w-4 text-muted-foreground" />
+													<span className="text-sm text-muted-foreground">
+														{new Date(history.createdAt).toLocaleString()}
+													</span>
+												</div>
+												<div className="flex items-center gap-2 mt-2">
+													<Badge
+														variant={history.profitAndLossType === 'SHORT_TERM_CAPITAL_GAIN' ? 'outline' : 'secondary'}
+													>
+														{history.profitAndLossType === 'SHORT_TERM_CAPITAL_GAIN' ? 'Short Term' : 'Long Term'}
+													</Badge>
+													<span className={`font-bold text-lg ${
+														Number(history.value) > 0
+															? 'text-green-600'
+															: Number(history.value) < 0
+																? 'text-destructive'
+																: ''
+													}`}>
+														${Number(history.value || 0).toFixed(2)}
+													</span>
+												</div>
+											</div>
+											<div className="text-right">
+												<p className="text-xs text-muted-foreground">Record ID</p>
+												<p className="text-xs font-mono">{history.uuid?.substring(0, 8)}...</p>
+											</div>
+										</div>
+									</CardHeader>
+									<CardContent className="pt-6 space-y-6">
+										{/* Transaction Details */}
+										{history.transaction && (
+											<div className="space-y-3">
+												<h4 className="font-medium text-sm flex items-center gap-2">
+													<FileText className="h-4 w-4" />
+													Transaction Details
+												</h4>
+												<div className="bg-muted/50 rounded-lg p-4">
+													<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+														<div>
+															<p className="text-xs text-muted-foreground">Symbol</p>
+															<Badge className="font-semibold mt-1">
+																{history.transaction.assetSymbol}
+															</Badge>
+														</div>
+														<div>
+															<p className="text-xs text-muted-foreground">Type</p>
+															<Badge
+																variant={history.transaction.type?.toLowerCase().includes('sell') ? 'destructive' : 'outline'}
+																className="text-xs mt-1"
+															>
+																{history.transaction.type}
+															</Badge>
+														</div>
+														<div>
+															<p className="text-xs text-muted-foreground">Date</p>
+															<p className="text-sm font-medium">
+																{history.transaction.transactionDate
+																	? new Date(history.transaction.transactionDate).toLocaleDateString()
+																	: 'N/A'}
+															</p>
+														</div>
+														<div>
+															<p className="text-xs text-muted-foreground">Quantity</p>
+															<p className="text-sm font-medium">
+																{Number(history.transaction.quantity || 0).toFixed(4)}
+															</p>
+														</div>
+														<div>
+															<p className="text-xs text-muted-foreground">Price</p>
+															<p className="text-sm font-medium">
+																${Number(history.transaction.price || 0).toFixed(4)}
+															</p>
+														</div>
+														<div>
+															<p className="text-xs text-muted-foreground">Amount</p>
+															<p className="text-sm font-bold">
+																${Number(history.transaction.amount || 0).toFixed(2)}
+															</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										)}
+
+										{/* Lot Change List */}
+										{history.lotChangeList && history.lotChangeList.LotChange && history.lotChangeList.LotChange.length > 0 ? (
+											<div className="space-y-3">
+													<h4 className="font-medium text-sm flex items-center gap-2">
+														<Layers className="h-4 w-4" />
+														Lot Changes ({history.lotChangeList.LotChange.length})
+													</h4>
+													<div className="overflow-x-auto">
+														<Table>
+															<TableHeader>
+																<TableRow>
+																	<TableHead className="text-xs">Symbol</TableHead>
+																	<TableHead className="text-xs">Acquired</TableHead>
+																	<TableHead className="text-xs text-right">Price</TableHead>
+																	<TableHead className="text-xs text-right">Qty Change</TableHead>
+																	<TableHead className="text-xs text-right">Final Qty</TableHead>
+																	<TableHead className="text-xs text-right">Cost Basis</TableHead>
+																	<TableHead className="text-xs text-right">ST P&L</TableHead>
+																	<TableHead className="text-xs text-right">LT P&L</TableHead>
+																	<TableHead className="text-xs">Action</TableHead>
+																</TableRow>
+															</TableHeader>
+															<TableBody>
+																{history.lotChangeList.LotChange.map((lotChange) => {
+																	const costBasis = Number(lotChange.price || 0) * Number(lotChange.quantityFinal || 0);
+																	return (
+																		<TableRow key={lotChange.id} className="text-xs">
+																			<TableCell>
+																				<Badge className="text-xs">
+																					{lotChange.assetSymbol}
+																				</Badge>
+																			</TableCell>
+																			<TableCell>
+																				{lotChange.lot?.acquiredDate
+																					? new Date(lotChange.lot.acquiredDate).toLocaleDateString()
+																					: lotChange.aquiredDate
+																					? new Date(lotChange.aquiredDate).toLocaleDateString()
+																					: 'N/A'}
+																			</TableCell>
+																			<TableCell className="text-right">
+																				${Number(lotChange.price || 0).toFixed(4)}
+																			</TableCell>
+																			<TableCell className="text-right font-medium">
+																				{Number(lotChange.quantityChange || 0).toFixed(4)}
+																			</TableCell>
+																			<TableCell className="text-right font-medium">
+																				{Number(lotChange.quantityFinal || 0).toFixed(4)}
+																			</TableCell>
+																			<TableCell className="text-right font-medium">
+																				${costBasis.toFixed(2)}
+																			</TableCell>
+																			<TableCell className={`text-right font-medium ${
+																				Number(lotChange.realizedProfitAndLossShortTerm || 0) > 0
+																					? 'text-green-600'
+																					: Number(lotChange.realizedProfitAndLossShortTerm || 0) < 0
+																					? 'text-destructive'
+																					: ''
+																			}`}>
+																				{Number(lotChange.realizedProfitAndLossShortTerm || 0) !== 0
+																					? `$${Number(lotChange.realizedProfitAndLossShortTerm).toFixed(2)}`
+																					: '-'}
+																			</TableCell>
+																			<TableCell className={`text-right font-medium ${
+																				Number(lotChange.realizedProfitAndLossLongTerm || 0) > 0
+																					? 'text-green-600'
+																					: Number(lotChange.realizedProfitAndLossLongTerm || 0) < 0
+																					? 'text-destructive'
+																					: ''
+																			}`}>
+																				{Number(lotChange.realizedProfitAndLossLongTerm || 0) !== 0
+																					? `$${Number(lotChange.realizedProfitAndLossLongTerm).toFixed(2)}`
+																					: '-'}
+																			</TableCell>
+																			<TableCell>
+																				<Badge variant="outline" className="text-xs">
+																					{lotChange.operationType}
+																				</Badge>
+																			</TableCell>
+																		</TableRow>
+																	);
+																})}
+																{/* Totals Row */}
+																{(() => {
+																	const totals = history.lotChangeList.LotChange.reduce(
+																		(acc, change) => ({
+																			quantityChange: acc.quantityChange + Number(change.quantityChange || 0),
+																			quantityFinal: acc.quantityFinal + Number(change.quantityFinal || 0),
+																			costBasis: acc.costBasis + (Number(change.price || 0) * Number(change.quantityFinal || 0)),
+																			stPnL: acc.stPnL + Number(change.realizedProfitAndLossShortTerm || 0),
+																			ltPnL: acc.ltPnL + Number(change.realizedProfitAndLossLongTerm || 0)
+																		}),
+																		{ quantityChange: 0, quantityFinal: 0, costBasis: 0, stPnL: 0, ltPnL: 0 }
+																	);
+																	
+																	return (
+																		<TableRow className="font-semibold border-t-2">
+																			<TableCell colSpan={3} className="text-right text-xs">
+																				Totals
+																			</TableCell>
+																			<TableCell className="text-right text-xs">
+																				{totals.quantityChange.toFixed(4)}
+																			</TableCell>
+																			<TableCell className="text-right text-xs">
+																				{totals.quantityFinal.toFixed(4)}
+																			</TableCell>
+																			<TableCell className="text-right text-xs">
+																				${totals.costBasis.toFixed(2)}
+																			</TableCell>
+																			<TableCell className={`text-right text-xs ${
+																				totals.stPnL > 0 ? 'text-green-600' : totals.stPnL < 0 ? 'text-destructive' : ''
+																			}`}>
+																				{totals.stPnL !== 0 ? `$${totals.stPnL.toFixed(2)}` : '-'}
+																			</TableCell>
+																			<TableCell className={`text-right text-xs ${
+																				totals.ltPnL > 0 ? 'text-green-600' : totals.ltPnL < 0 ? 'text-destructive' : ''
+																			}`}>
+																				{totals.ltPnL !== 0 ? `$${totals.ltPnL.toFixed(2)}` : '-'}
+																			</TableCell>
+																			<TableCell />
+																		</TableRow>
+																	);
+																})()}
+															</TableBody>
+														</Table>
+													</div>
+												</div>
+										) : history.lotChangeList ? (
+											<div className="space-y-3">
+												<h4 className="font-medium text-sm flex items-center gap-2">
+													<Layers className="h-4 w-4" />
+													Lot Changes
+												</h4>
+												<p className="text-sm text-muted-foreground">No lot changes</p>
+											</div>
+										) : null}
+									</CardContent>
+								</Card>
+							))}
+						</div>
+					) : (
+						<Card>
+							<CardContent className="flex flex-col items-center justify-center py-12">
+								<Activity className="h-12 w-12 text-muted-foreground mb-4" />
+								<p className="text-lg font-medium text-muted-foreground">No P&L History</p>
+								<p className="text-sm text-muted-foreground mt-2">
+									No realized profit and loss history records found for this PlaidMerge.
+								</p>
+							</CardContent>
+						</Card>
+					)}
+				</TabsContent>
+			</Tabs>
 		</PageWrapper>
 	);
 }

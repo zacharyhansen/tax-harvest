@@ -35,8 +35,8 @@ import { z } from 'zod';
 import type { AccountItemFragment } from '~/generated/gql';
 import {
 	useAccountQuery,
+	useInsertAccountRealizedPAndLMutation,
 	useUpdateAccountMutation,
-	useUpdateAccountRealizedPAndLMutation,
 } from '~/generated/gql';
 import { EtradeCSVUpload } from '~/modules/fileUpload';
 import { PageWrapper } from '~/modules/layout';
@@ -45,6 +45,7 @@ import { Format } from '~/modules/utils';
 import { zodNumber } from '~/modules/utils/zod-utils';
 import AccountFilesTable from './AccountFilesTable';
 import AccountLotsTable from './AccountLotsTable';
+import LotUploadTable from './LotUploadTable';
 import DeleteAccountDialog from './DeleteAccountDialog';
 
 export default function AccountPage(props: {
@@ -77,11 +78,10 @@ export default function AccountPage(props: {
 }
 
 const accountFormSchema = z.object({
-	deferredLoss: zodNumber,
 	description: z.string().nullable().optional(),
 	dividend: zodNumber,
-	longTerm: zodNumber,
-	shortTerm: zodNumber,
+	longTermCapitalGain: zodNumber,
+	shortTermCapitalGain: zodNumber,
 });
 
 function AccountDetails({ account }: { account: AccountItemFragment }) {
@@ -103,34 +103,18 @@ function AccountDetails({ account }: { account: AccountItemFragment }) {
 					</div>
 				</div>
 
-				{/* Account Summary Cards */}
-				<div className="grid gap-4 md:grid-cols-2">
-					<Card>
-						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium">Total Value</CardTitle>
-							<TrendingUp className="text-muted-foreground h-4 w-4" />
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">
-								{Format.money(account.accountValueTotal || 0)}
-							</div>
-						</CardContent>
-					</Card>
-
-					<Card>
-						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium">
-								Available Cash
-							</CardTitle>
-							<Building2 className="text-muted-foreground h-4 w-4" />
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">
-								{Format.money(account.cashAvailableForInvestment || 0)}
-							</div>
-						</CardContent>
-					</Card>
-				</div>
+				{/* Account Summary Card */}
+				<Card>
+					<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+						<CardTitle className="text-sm font-medium">Total Value</CardTitle>
+						<TrendingUp className="text-muted-foreground h-4 w-4" />
+					</CardHeader>
+					<CardContent>
+						<div className="text-2xl font-bold">
+							{Format.money(account.current || 0)}
+						</div>
+					</CardContent>
+				</Card>
 			</div>
 
 			<Separator />
@@ -140,7 +124,8 @@ function AccountDetails({ account }: { account: AccountItemFragment }) {
 				<TabsList>
 					<TabsTrigger value="settings">Settings</TabsTrigger>
 					<TabsTrigger value="lots">Lots</TabsTrigger>
-					<TabsTrigger value="files-upload">Files & Upload</TabsTrigger>
+					<TabsTrigger value="upload-lots">Upload Lots</TabsTrigger>
+					<TabsTrigger value="all-files">All Files</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="lots" className="space-y-4">
@@ -158,12 +143,12 @@ function AccountDetails({ account }: { account: AccountItemFragment }) {
 					</Card>
 				</TabsContent>
 
-				<TabsContent value="files-upload" className="space-y-4">
+				<TabsContent value="upload-lots" className="space-y-4">
 					<Card>
 						<CardHeader>
 							<CardTitle className="flex items-center space-x-2">
 								<Upload className="h-5 w-5" />
-								<span>Upload Data</span>
+								<span>Upload Lot Data</span>
 							</CardTitle>
 							<CardDescription>
 								Upload transaction data from your brokerage to keep your lots up
@@ -179,10 +164,27 @@ function AccountDetails({ account }: { account: AccountItemFragment }) {
 						<CardHeader>
 							<CardTitle className="flex items-center space-x-2">
 								<FileText className="h-5 w-5" />
-								<span>Account Files</span>
+								<span>Lot Uploads</span>
 							</CardTitle>
 							<CardDescription>
-								View and manage files attached to this account.
+								View and manage lot uploads for this account.
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<LotUploadTable accountId={account.id} />
+						</CardContent>
+					</Card>
+				</TabsContent>
+
+				<TabsContent value="all-files" className="space-y-4">
+					<Card>
+						<CardHeader>
+							<CardTitle className="flex items-center space-x-2">
+								<FileText className="h-5 w-5" />
+								<span>All Files</span>
+							</CardTitle>
+							<CardDescription>
+								View and download all files attached to this account.
 							</CardDescription>
 						</CardHeader>
 						<CardContent>
@@ -206,8 +208,8 @@ function AccountSettingsForm({ account }: { account: AccountItemFragment }) {
 		},
 	});
 
-	const [updateRealizedPAndL, { loading: loadingUpdateRealizedPAndL }] =
-		useUpdateAccountRealizedPAndLMutation({
+	const [insertRealizedPAndL, { loading: loadingInsertRealizedPAndL }] =
+		useInsertAccountRealizedPAndLMutation({
 			onError: () => {
 				toast.error('Unable to update account.');
 			},
@@ -217,19 +219,21 @@ function AccountSettingsForm({ account }: { account: AccountItemFragment }) {
 		z.infer<typeof accountFormSchema>
 	>({
 		defaultValues: {
-			deferredLoss: Number(account._realizedProfitAndLoss.deferredLoss),
 			description: account.description ?? '',
 			dividend: Number(account._realizedProfitAndLoss.dividend),
-			longTerm: Number(account._realizedProfitAndLoss.longTerm),
-			shortTerm: Number(account._realizedProfitAndLoss.shortTerm),
+			longTermCapitalGain: Number(
+				account._realizedProfitAndLoss.longTermCapitalGain,
+			),
+			shortTermCapitalGain: Number(
+				account._realizedProfitAndLoss.shortTermCapitalGain,
+			),
 		},
 		resolver: zodResolver(accountFormSchema),
 		handleSubmit: ({
-			deferredLoss,
 			description,
 			dividend,
-			longTerm,
-			shortTerm,
+			longTermCapitalGain,
+			shortTermCapitalGain,
 		}) => {
 			return toast.promise(
 				Promise.all([
@@ -248,39 +252,37 @@ function AccountSettingsForm({ account }: { account: AccountItemFragment }) {
 							},
 						},
 					}),
-					updateRealizedPAndL({
+					insertRealizedPAndL({
 						variables: {
-							id: account._realizedProfitAndLoss.id,
 							input: {
-								deferredLoss: {
-									set: deferredLoss.toString(),
+								account: {
+									connect: {
+										id: account.id,
+									},
 								},
-								dividend: {
-									set: dividend.toString(),
+								portfolio: {
+									connect: {
+										id: account.portfolioId,
+									},
 								},
-								longTerm: {
-									set: longTerm.toString(),
-								},
-								shortTerm: {
-									set: shortTerm.toString(),
-								},
+								dividend: dividend.toString(),
+								longTermCapitalGain: longTermCapitalGain.toString(),
+								shortTermCapitalGain: shortTermCapitalGain.toString(),
 							},
 						},
 					}),
-				]).then(([updateAccount, updateRealizedPAndL]) => {
+				]).then(([updateAccount, insertRealizedPAndL]) => {
 					form.reset({
-						deferredLoss: Number(
-							updateRealizedPAndL.data?.updateRealizedPAndL.deferredLoss,
-						),
 						description: updateAccount.data?.updateAccount.description,
 						dividend: Number(
-							updateRealizedPAndL.data?.updateRealizedPAndL.dividend,
+							insertRealizedPAndL.data?.insertRealizedPAndL.dividend,
 						),
-						longTerm: Number(
-							updateRealizedPAndL.data?.updateRealizedPAndL.longTerm,
+						longTermCapitalGain: Number(
+							insertRealizedPAndL.data?.insertRealizedPAndL.longTermCapitalGain,
 						),
-						shortTerm: Number(
-							updateRealizedPAndL.data?.updateRealizedPAndL.shortTerm,
+						shortTermCapitalGain: Number(
+							insertRealizedPAndL.data?.insertRealizedPAndL
+								.shortTermCapitalGain,
 						),
 					});
 				}),
@@ -328,13 +330,13 @@ function AccountSettingsForm({ account }: { account: AccountItemFragment }) {
 							<CardContent className="space-y-4">
 								<InputField
 									startIcon={DollarSign}
-									name="shortTerm"
+									name="shortTermCapitalGain"
 									label="Short Term Realized P & L"
 									type="number"
 								/>
 								<InputField
 									startIcon={DollarSign}
-									name="longTerm"
+									name="longTermCapitalGain"
 									label="Long Term Realized P & L"
 									type="number"
 								/>
@@ -344,17 +346,11 @@ function AccountSettingsForm({ account }: { account: AccountItemFragment }) {
 									label="Dividend"
 									type="number"
 								/>
-								<InputField
-									startIcon={DollarSign}
-									name="deferredLoss"
-									label="Deferred Loss"
-									type="number"
-								/>
 								<Button
 									type="submit"
 									className="w-full"
 									disabled={!form.formState.isDirty}
-									loading={loading || loadingUpdateRealizedPAndL}
+									loading={loading || loadingInsertRealizedPAndL}
 								>
 									Save Changes
 								</Button>

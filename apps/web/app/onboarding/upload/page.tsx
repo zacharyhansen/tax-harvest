@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { z } from 'zod';
-import { FileType, useInitAccountFileUploadMutation } from '~/generated/gql';
+import { useInitAccountFileUploadMutation } from '~/generated/gql';
 import { CSVUploadHelper } from '~/modules/fileUpload/CSVUploadHelper';
 import { useUploadFiles } from '~/modules/fileUpload/useUploadFiles';
 import { zodNumber } from '~/modules/utils/zod-utils';
@@ -29,8 +29,8 @@ const accountFormSchema = z.object({
 	deferredLoss: zodNumber,
 	description: z.string().nullable().optional(),
 	dividend: zodNumber,
-	longTerm: zodNumber,
-	shortTerm: zodNumber,
+	longTermCapitalGain: zodNumber,
+	shortTermCapitalGain: zodNumber,
 	accountName: z.string(),
 });
 
@@ -50,8 +50,8 @@ export default function UploadPage() {
 			deferredLoss: 0,
 			description: '',
 			dividend: 0,
-			longTerm: 0,
-			shortTerm: 0,
+			longTermCapitalGain: 0,
+			shortTermCapitalGain: 0,
 			accountName: 'My First Account',
 		},
 		resolver: zodResolver(accountFormSchema),
@@ -69,22 +69,26 @@ export default function UploadPage() {
 				toast.error('Please fill out all fields');
 				return;
 			}
-			const { deferredLoss, dividend, longTerm, shortTerm, accountName } =
-				accountFormSchema.parse(form.getValues());
+			const {
+				deferredLoss,
+				dividend,
+				longTermCapitalGain,
+				shortTermCapitalGain,
+				accountName,
+			} = accountFormSchema.parse(form.getValues());
 			await createFiles({
 				variables: {
 					fileData: files.map((file) => ({
 						displayName: file.displayName,
 						gcpFilename: file.fileName,
 						type: file.type,
-						fileType: FileType.EtradeLots,
 					})),
 					accountData: {
 						name: accountName,
 						deferredLoss,
 						dividend,
-						longTerm,
-						shortTerm,
+						longTermCapitalGain,
+						shortTermCapitalGain,
 					},
 				},
 				onError: () => {
@@ -189,7 +193,7 @@ export default function UploadPage() {
 							<div>
 								<InputField
 									startIcon={DollarSign}
-									name="shortTerm"
+									name="shortTermCapitalGain"
 									label="Short Term Realized P & L"
 									type="number"
 									description="Find yours by navigating to your Etrade Settings"
@@ -198,7 +202,7 @@ export default function UploadPage() {
 							<div>
 								<InputField
 									startIcon={DollarSign}
-									name="longTerm"
+									name="longTermCapitalGain"
 									label="Long Term Realized P & L"
 									type="number"
 									description="Find yours by navigating to your Etrade Settings"
@@ -209,15 +213,6 @@ export default function UploadPage() {
 									startIcon={DollarSign}
 									name="dividend"
 									label="Dividend"
-									type="number"
-									description="Find yours by navigating to your Etrade Settings"
-								/>
-							</div>
-							<div>
-								<InputField
-									startIcon={DollarSign}
-									name="deferredLoss"
-									label="Deferred Loss"
 									type="number"
 									description="Find yours by navigating to your Etrade Settings"
 								/>

@@ -110,7 +110,6 @@ export default function TransactionDetailPage(props: {
 		paymentCurrency: transaction.paymentCurrency,
 		settlementCurrency: transaction.settlementCurrency,
 		detailsURI: transaction.detailsURI,
-		appliedToLots: transaction.appliedToLots,
 		createdAt: transaction.createdAt,
 		updatedAt: transaction.updatedAt,
 		account: {
@@ -260,15 +259,15 @@ export default function TransactionDetailPage(props: {
 						</CardHeader>
 						<CardContent className="space-y-3">
 							<div className="flex items-center gap-2">
-								{transaction.appliedToLots ? (
+								{transaction.merged ? (
 									<>
 										<CheckCircle2 className="h-4 w-4 text-green-600" />
-										<span className="text-sm font-medium">Applied to Lots</span>
+										<span className="text-sm font-medium">Merged</span>
 									</>
 								) : (
 									<>
 										<XCircle className="h-4 w-4 text-destructive" />
-										<span className="text-sm font-medium">Not Applied</span>
+										<span className="text-sm font-medium">Not Merged</span>
 									</>
 								)}
 							</div>

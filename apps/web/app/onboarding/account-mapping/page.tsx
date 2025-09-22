@@ -30,7 +30,6 @@ import { FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import {
 	AccountProvider,
-	FileType,
 	useAccountMappingQuery,
 	useInitAccountFileUploadMutation,
 	useProcessCsvAccountsMutation,
@@ -43,8 +42,8 @@ const accountFormSchema = z.object({
 	deferredLoss: zodNumber,
 	description: z.string().nullable().optional(),
 	dividend: zodNumber,
-	longTerm: zodNumber,
-	shortTerm: zodNumber,
+	longTermCapitalGain: zodNumber,
+	shortTermCapitalGain: zodNumber,
 	accountName: z.string(),
 });
 
@@ -107,8 +106,8 @@ export default function AccountMappingPage() {
 			deferredLoss: 0,
 			description: '',
 			dividend: 0,
-			longTerm: 0,
-			shortTerm: 0,
+			longTermCapitalGain: 0,
+			shortTermCapitalGain: 0,
 			accountName: '',
 		},
 		resolver: zodResolver(accountFormSchema),
@@ -139,8 +138,13 @@ export default function AccountMappingPage() {
 				return;
 			}
 
-			const { deferredLoss, dividend, longTerm, shortTerm, accountName } =
-				accountFormSchema.parse(form.getValues());
+			const {
+				deferredLoss,
+				dividend,
+				longTermCapitalGain,
+				shortTermCapitalGain,
+				accountName,
+			} = accountFormSchema.parse(form.getValues());
 
 			updateAccountMapping(currentAccountId, { uploadProgress: 'uploading' });
 
@@ -150,15 +154,14 @@ export default function AccountMappingPage() {
 						displayName: file.displayName,
 						gcpFilename: file.fileName,
 						type: file.type,
-						fileType: FileType.EtradeLots,
 					})),
 					accountId: currentAccountId,
 					accountData: {
 						name: accountName,
 						deferredLoss,
 						dividend,
-						longTerm,
-						shortTerm,
+						longTermCapitalGain,
+						shortTermCapitalGain,
 					},
 				},
 				onError: () => {
@@ -527,7 +530,7 @@ export default function AccountMappingPage() {
 													<div>
 														<InputField
 															startIcon={DollarSign}
-															name="shortTerm"
+															name="shortTermCapitalGain"
 															label="Short Term Realized P & L"
 															type="number"
 															description="Find yours by navigating to your brokerage settings"
@@ -536,7 +539,7 @@ export default function AccountMappingPage() {
 													<div>
 														<InputField
 															startIcon={DollarSign}
-															name="longTerm"
+															name="longTermCapitalGain"
 															label="Long Term Realized P & L"
 															type="number"
 															description="Find yours by navigating to your brokerage settings"
@@ -547,15 +550,6 @@ export default function AccountMappingPage() {
 															startIcon={DollarSign}
 															name="dividend"
 															label="Dividend"
-															type="number"
-															description="Find yours by navigating to your brokerage settings"
-														/>
-													</div>
-													<div>
-														<InputField
-															startIcon={DollarSign}
-															name="deferredLoss"
-															label="Deferred Loss"
 															type="number"
 															description="Find yours by navigating to your brokerage settings"
 														/>

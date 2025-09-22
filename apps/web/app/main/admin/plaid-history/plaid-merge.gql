@@ -39,6 +39,47 @@ query PlaidMerge($plaidMergeId: String!) {
 			id
 			name
 		}
+		AccountRealizedPAndLHistory {
+			id
+			uuid
+			createdAt
+			value
+			profitAndLossType
+			transaction {
+				id
+				externalId
+				transactionDate
+				type
+				subtype
+				assetSymbol
+				quantity
+				price
+				amount
+			}
+			lotChangeList {
+				id
+				appliedToAccount
+				LotChange {
+					id
+					lotId
+					aquiredDate
+					quantityFinal
+					quantityChange
+					price
+					assetSymbol
+					operationType
+					realizedProfitAndLossShortTerm
+					realizedProfitAndLossLongTerm
+					lot {
+						id
+						acquiredDate
+						price
+						remainingQty
+						assetSymbol
+					}
+				}
+			}
+		}
 		assetMerge {
 			id
 			createdAt

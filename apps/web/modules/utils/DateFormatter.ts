@@ -8,6 +8,16 @@ export class DateFormatter {
 		});
 	}
 
+	public static shortDayTime(dateString: string): string {
+		return new Date(dateString).toLocaleString('en-US', {
+			day: '2-digit',
+			month: 'short',
+			year: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit',
+		});
+	}
+
 	public static timestamp(dateString: string): string {
 		return new Date(dateString).toLocaleString('en-US', {
 			day: '2-digit',

@@ -61,7 +61,7 @@ export default function TransactionsPage() {
 			},
 			{
 				headerName: 'Applied?',
-				field: 'appliedToLots',
+				field: 'merged',
 				width: 100,
 				filter: 'agTextColumnFilter',
 				/** biome-ignore lint/suspicious/noExplicitAny: <ok> */
