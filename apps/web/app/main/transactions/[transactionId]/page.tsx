@@ -10,7 +10,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@repo/ui/components/card';
-import { Separator } from '@repo/ui/components/separator';
 import {
 	Table,
 	TableBody,
@@ -22,12 +21,10 @@ import {
 import {
 	AlertCircle,
 	Building2,
-	Calendar,
 	CheckCircle2,
 	Copy,
 	DollarSign,
 	FileText,
-	Hash,
 	TrendingUp,
 	XCircle,
 } from 'lucide-react';
@@ -55,7 +52,9 @@ export default function TransactionDetailPage(props: {
 	});
 
 	if (error) {
-		return <ErrorPage message={`Failed to load transaction: ${error.message}`} />;
+		return (
+			<ErrorPage message={`Failed to load transaction: ${error.message}`} />
+		);
 	}
 
 	if (loading) {
@@ -119,15 +118,22 @@ export default function TransactionDetailPage(props: {
 			type: transaction.account?.type,
 			source: transaction.account?.authConnection?.source,
 		},
-		asset: transaction.asset ? {
-			symbol: transaction.asset.symbol,
-			name: transaction.asset.name,
-			type: transaction.asset.assetType?.description || transaction.asset.assetType?.code || null,
-		} : null,
-		portfolio: transaction.portfolio ? {
-			id: transaction.portfolio.id,
-			name: transaction.portfolio.name,
-		} : null,
+		asset: transaction.asset
+			? {
+					symbol: transaction.asset.symbol,
+					name: transaction.asset.name,
+					type:
+						transaction.asset.assetType?.description ||
+						transaction.asset.assetType?.code ||
+						null,
+				}
+			: null,
+		portfolio: transaction.portfolio
+			? {
+					id: transaction.portfolio.id,
+					name: transaction.portfolio.name,
+				}
+			: null,
 	};
 
 	return (
@@ -156,7 +162,9 @@ export default function TransactionDetailPage(props: {
 							<div>
 								<div className="flex items-center gap-2 mb-1">
 									<Badge
-										variant={isSell ? 'destructive' : isBuy ? 'default' : 'outline'}
+										variant={
+											isSell ? 'destructive' : isBuy ? 'default' : 'outline'
+										}
 										className={`${isBuy ? 'bg-green-500 hover:bg-green-600' : ''}`}
 									>
 										{transaction.type}
@@ -168,7 +176,9 @@ export default function TransactionDetailPage(props: {
 									)}
 								</div>
 								<div className="text-xl font-bold">
-									{transaction.assetSymbol || transaction.displaySymbol || 'N/A'}
+									{transaction.assetSymbol ||
+										transaction.displaySymbol ||
+										'N/A'}
 								</div>
 								{transaction.asset && (
 									<p className="text-xs text-muted-foreground">
@@ -198,24 +208,32 @@ export default function TransactionDetailPage(props: {
 						<CardContent className="space-y-3">
 							<div>
 								<p className="text-xs text-muted-foreground">Amount</p>
-								<div className={`text-xl font-bold ${isSell ? 'text-destructive' : isBuy ? 'text-green-600' : ''}`}>
+								<div
+									className={`text-xl font-bold ${isSell ? 'text-destructive' : isBuy ? 'text-green-600' : ''}`}
+								>
 									{formatCurrency(transaction.amount)}
 								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-2 pt-2 border-t">
 								<div>
 									<p className="text-xs text-muted-foreground">Quantity</p>
-									<p className="text-sm font-medium">{formatQuantity(transaction.quantity)}</p>
+									<p className="text-sm font-medium">
+										{formatQuantity(transaction.quantity)}
+									</p>
 								</div>
 								<div>
 									<p className="text-xs text-muted-foreground">Price</p>
-									<p className="text-sm font-medium">{formatCurrency(transaction.price)}</p>
+									<p className="text-sm font-medium">
+										{formatCurrency(transaction.price)}
+									</p>
 								</div>
 							</div>
 							{transaction.fee && parseFloat(transaction.fee) !== 0 && (
 								<div className="pt-2 border-t">
 									<p className="text-xs text-muted-foreground">Fee</p>
-									<p className="text-sm font-medium">{formatCurrency(transaction.fee)}</p>
+									<p className="text-sm font-medium">
+										{formatCurrency(transaction.fee)}
+									</p>
 								</div>
 							)}
 						</CardContent>
@@ -236,14 +254,17 @@ export default function TransactionDetailPage(props: {
 								</p>
 								{transaction.account && (
 									<p className="text-xs text-muted-foreground">
-										{transaction.account.type} • {transaction.account.authConnection?.source}
+										{transaction.account.type} •{' '}
+										{transaction.account.authConnection?.source}
 									</p>
 								)}
 							</div>
 							{transaction.portfolio && (
 								<div className="pt-2 border-t">
 									<p className="text-xs text-muted-foreground">Portfolio</p>
-									<p className="text-sm font-medium">{transaction.portfolio.name}</p>
+									<p className="text-sm font-medium">
+										{transaction.portfolio.name}
+									</p>
 								</div>
 							)}
 						</CardContent>
@@ -291,64 +312,597 @@ export default function TransactionDetailPage(props: {
 					</Card>
 				</div>
 
-
 				{/* Asset Merge Information */}
-				{transaction.transactionOnAssetMerge && transaction.transactionOnAssetMerge.length > 0 && (
-					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center gap-2">
-								<FileText className="h-5 w-5" />
-								Related Asset Merges
-							</CardTitle>
-							<CardDescription>
-								Asset merges associated with this transaction
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<Table>
-								<TableHeader>
-									<TableRow>
-										<TableHead>Asset Symbol</TableHead>
-										<TableHead className="text-right">Target Value</TableHead>
-										<TableHead className="text-right">Target Quantity</TableHead>
-										<TableHead>Status</TableHead>
-									</TableRow>
-								</TableHeader>
-								<TableBody>
-									{transaction.transactionOnAssetMerge.map((item) => (
-										<TableRow key={item.assetMerge.id}>
-											<TableCell className="font-medium">
-												<Badge>{item.assetMerge.assetSymbol}</Badge>
-											</TableCell>
-											<TableCell className="text-right">
-												{formatCurrency(item.assetMerge.targetValue)}
-											</TableCell>
-											<TableCell className="text-right">
-												{formatQuantity(item.assetMerge.targetQuantity)}
-											</TableCell>
-											<TableCell>
-												{item.assetMerge.error || item.assetMerge.mergeError ? (
-													<div className="flex items-center gap-2">
-														<XCircle className="h-4 w-4 text-destructive" />
-														<span className="text-sm text-destructive">
-															{item.assetMerge.mergeError?.type || 'Error'}
-															{item.assetMerge.mergeError?.resolved && ' (Resolved)'}
+				{transaction.transactionOnAssetMerge &&
+					transaction.transactionOnAssetMerge.length > 0 && (
+						<div className="space-y-4">
+							{transaction.transactionOnAssetMerge.map((item) => (
+								<Card key={item.assetMerge.id}>
+									<CardHeader>
+										<CardTitle className="flex items-center justify-between">
+											<div className="flex items-center gap-4">
+												<div className="flex items-center gap-2">
+													<FileText className="h-5 w-5" />
+													<span>
+														Asset Merge: {item.assetMerge.assetSymbol}
+													</span>
+												</div>
+												<div className="flex items-center gap-3 text-sm">
+													<div className="flex items-center gap-1">
+														<span className="text-muted-foreground font-normal">
+															Target Value:
+														</span>
+														<span className="font-semibold">
+															{formatCurrency(item.assetMerge.targetValue)}
 														</span>
 													</div>
-												) : (
-													<div className="flex items-center gap-2">
-														<CheckCircle2 className="h-4 w-4 text-green-600" />
-														<span className="text-sm text-green-600">Success</span>
+													<div className="flex items-center gap-1">
+														<span className="text-muted-foreground font-normal">
+															Target Qty:
+														</span>
+														<span className="font-semibold">
+															{formatQuantity(item.assetMerge.targetQuantity)}
+														</span>
 													</div>
-												)}
-											</TableCell>
+												</div>
+											</div>
+											{item.assetMerge.error || item.assetMerge.mergeError ? (
+												<Badge variant="destructive">
+													{item.assetMerge.mergeError?.type || 'Error'}
+													{item.assetMerge.mergeError?.resolved &&
+														' (Resolved)'}
+												</Badge>
+											) : (
+												<Badge variant="default" className="bg-green-500">
+													Success
+												</Badge>
+											)}
+										</CardTitle>
+									</CardHeader>
+									<CardContent>
+										{item.assetMerge.lotChangeList &&
+										item.assetMerge.lotChangeList.length > 0 ? (
+											<div className="space-y-4">
+												{item.assetMerge.lotChangeList.map((changeList) => (
+													<div
+														key={changeList.id}
+														className="border rounded-lg p-4"
+													>
+														<div className="flex items-center justify-between mb-3">
+															<h4 className="font-semibold text-sm">
+																Lot Change List
+															</h4>
+															<div className="flex items-center gap-2">
+																{(!changeList.AccountRealizedPAndLHistory ||
+																	changeList.AccountRealizedPAndLHistory
+																		.length === 0) && (
+																	<Badge
+																		variant="destructive"
+																		className="text-xs"
+																	>
+																		<AlertCircle className="h-3 w-3 mr-1" />
+																		No P&L History
+																	</Badge>
+																)}
+																{changeList.AccountRealizedPAndLHistory &&
+																	changeList.AccountRealizedPAndLHistory
+																		.length > 0 && (
+																		<Badge
+																			variant="secondary"
+																			className="text-xs"
+																		>
+																			{
+																				changeList.AccountRealizedPAndLHistory
+																					.length
+																			}{' '}
+																			P&L Record
+																			{changeList.AccountRealizedPAndLHistory
+																				.length > 1
+																				? 's'
+																				: ''}
+																		</Badge>
+																	)}
+																<Badge
+																	variant={
+																		changeList.appliedToAccount
+																			? 'default'
+																			: 'outline'
+																	}
+																>
+																	{changeList.appliedToAccount
+																		? 'Applied'
+																		: 'Not Applied'}
+																</Badge>
+															</div>
+														</div>
+														{changeList.AccountRealizedPAndLHistory &&
+															changeList.AccountRealizedPAndLHistory.length >
+																0 && (
+																<div className="mb-4">
+																	<h5 className="text-xs font-medium mb-2">
+																		Realized P&L History
+																	</h5>
+																	<Table>
+																		<TableHeader>
+																			<TableRow>
+																				<TableHead className="text-xs">
+																					Type
+																				</TableHead>
+																				<TableHead className="text-xs text-right">
+																					Value
+																				</TableHead>
+																			</TableRow>
+																		</TableHeader>
+																		<TableBody>
+																			{changeList.AccountRealizedPAndLHistory.map(
+																				(pnl) => (
+																					<TableRow key={pnl.id}>
+																						<TableCell className="py-1">
+																							<Badge className="text-xs">
+																								{pnl.profitAndLossType}
+																							</Badge>
+																						</TableCell>
+																						<TableCell className="text-right py-1">
+																							<span
+																								className={
+																									parseFloat(
+																										pnl.value || '0',
+																									) >= 0
+																										? 'text-green-600 font-medium'
+																										: 'text-destructive font-medium'
+																								}
+																							>
+																								{formatCurrency(pnl.value)}
+																							</span>
+																						</TableCell>
+																					</TableRow>
+																				),
+																			)}
+																		</TableBody>
+																	</Table>
+																</div>
+															)}
+														{changeList.LotChange &&
+															changeList.LotChange.length > 0 && (
+																<div>
+																	<h5 className="text-xs font-medium mb-2">
+																		Lot Changes
+																	</h5>
+																	<Table>
+																		<TableHeader>
+																			<TableRow>
+																				<TableHead>Asset</TableHead>
+																				<TableHead>Acquired</TableHead>
+																				<TableHead className="text-right">
+																					Lot Price
+																				</TableHead>
+																				<TableHead className="text-right">
+																					Price
+																				</TableHead>
+																				<TableHead className="text-right">
+																					Initial Quantity
+																				</TableHead>
+																				<TableHead className="text-right">
+																					Final Qty
+																				</TableHead>
+																				<TableHead className="text-right">
+																					Qty Change
+																				</TableHead>
+																				<TableHead className="text-right">
+																					Realized P&L
+																				</TableHead>
+																			</TableRow>
+																		</TableHeader>
+																		<TableBody>
+																			{changeList.LotChange.map((change) => (
+																				<TableRow key={change.id}>
+																					<TableCell>
+																						<span className="font-medium">
+																							{change.assetSymbol}
+																						</span>
+																					</TableCell>
+																					<TableCell>
+																						<span className="text-xs">
+																							{new Date(
+																								change.aquiredDate,
+																							).toLocaleDateString()}
+																						</span>
+																					</TableCell>
+																					<TableCell className="text-right">
+																						{change.lot && (
+																							<span className="text-xs">
+																								{formatCurrency(
+																									change.lot.price,
+																								)}
+																							</span>
+																						)}
+																					</TableCell>
+																					<TableCell className="text-right">
+																						{formatCurrency(change.price)}
+																					</TableCell>
+																					<TableCell className="text-right">
+																						{change.lot && (
+																							<span className="text-xs">
+																								{formatQuantity(
+																									change.lot.remainingQty,
+																								)}
+																							</span>
+																						)}
+																					</TableCell>
+																					<TableCell className="text-right">
+																						{formatQuantity(
+																							change.quantityFinal,
+																						)}
+																					</TableCell>
+																					<TableCell className="text-right">
+																						<span
+																							className={
+																								parseFloat(
+																									change.quantityChange,
+																								) < 0
+																									? 'text-destructive'
+																									: 'text-green-600'
+																							}
+																						>
+																							{formatQuantity(
+																								change.quantityChange,
+																							)}
+																						</span>
+																					</TableCell>
+																					<TableCell className="text-right">
+																						<div className="space-y-1">
+																							{change.realizedProfitAndLossShortTerm &&
+																								parseFloat(
+																									change.realizedProfitAndLossShortTerm,
+																								) !== 0 && (
+																									<div className="text-xs">
+																										<span className="text-muted-foreground">
+																											ST:{' '}
+																										</span>
+																										<span
+																											className={
+																												parseFloat(
+																													change.realizedProfitAndLossShortTerm,
+																												) >= 0
+																													? 'text-green-600'
+																													: 'text-destructive'
+																											}
+																										>
+																											{formatCurrency(
+																												change.realizedProfitAndLossShortTerm,
+																											)}
+																										</span>
+																									</div>
+																								)}
+																							{change.realizedProfitAndLossLongTerm &&
+																								parseFloat(
+																									change.realizedProfitAndLossLongTerm,
+																								) !== 0 && (
+																									<div className="text-xs">
+																										<span className="text-muted-foreground">
+																											LT:{' '}
+																										</span>
+																										<span
+																											className={
+																												parseFloat(
+																													change.realizedProfitAndLossLongTerm,
+																												) >= 0
+																													? 'text-green-600'
+																													: 'text-destructive'
+																											}
+																										>
+																											{formatCurrency(
+																												change.realizedProfitAndLossLongTerm,
+																											)}
+																										</span>
+																									</div>
+																								)}
+																						</div>
+																					</TableCell>
+																				</TableRow>
+																			))}
+																		</TableBody>
+																	</Table>
+																</div>
+															)}
+													</div>
+												))}
+											</div>
+										) : (
+											<p className="text-muted-foreground text-sm">
+												No lot changes available
+											</p>
+										)}
+										{/* Transactions Table for this Asset Merge */}
+										{item.assetMerge.transactionOnAssetMerge &&
+											item.assetMerge.transactionOnAssetMerge.length > 0 && (
+												<div className="mt-4">
+													<h5 className="text-sm font-semibold mb-2">
+														New Transactions in this Asset Merge
+													</h5>
+													<Table>
+														<TableHeader>
+															<TableRow>
+																<TableHead>Type</TableHead>
+																<TableHead>Symbol</TableHead>
+																<TableHead>Description</TableHead>
+																<TableHead>Date</TableHead>
+																<TableHead className="text-right">
+																	Quantity
+																</TableHead>
+																<TableHead className="text-right">
+																	Price
+																</TableHead>
+																<TableHead className="text-right">
+																	Amount
+																</TableHead>
+																<TableHead className="text-right">
+																	Fee
+																</TableHead>
+															</TableRow>
+														</TableHeader>
+														<TableBody>
+															{item.assetMerge.transactionOnAssetMerge
+																.slice()
+																.sort((a, b) => {
+																	const dateA = a.transaction.transactionDate
+																		? new Date(
+																				a.transaction.transactionDate,
+																			).getTime()
+																		: 0;
+																	const dateB = b.transaction.transactionDate
+																		? new Date(
+																				b.transaction.transactionDate,
+																			).getTime()
+																		: 0;
+																	return dateB - dateA; // Sort descending (newest first)
+																})
+																.map((mergeItem) => {
+																	const t = mergeItem.transaction;
+																	return (
+																		<TableRow
+																			key={t.id}
+																			className={
+																				t.id === transaction.id
+																					? 'bg-muted/50'
+																					: ''
+																			}
+																		>
+																			<TableCell>
+																				<Badge
+																					variant={
+																						t.type?.toLowerCase() === 'sell'
+																							? 'destructive'
+																							: t.type?.toLowerCase() === 'buy'
+																								? 'default'
+																								: 'outline'
+																					}
+																					className={`${t.type?.toLowerCase() === 'buy' ? 'bg-green-500 hover:bg-green-600' : ''}`}
+																				>
+																					{t.type}
+																				</Badge>
+																			</TableCell>
+																			<TableCell className="font-medium">
+																				{t.assetSymbol}
+																			</TableCell>
+																			<TableCell className="max-w-[200px] truncate">
+																				{t.description}
+																			</TableCell>
+																			<TableCell>
+																				{t.transactionDate
+																					? new Date(
+																							t.transactionDate,
+																						).toLocaleDateString()
+																					: 'N/A'}
+																			</TableCell>
+																			<TableCell className="text-right">
+																				{formatQuantity(t.quantity)}
+																			</TableCell>
+																			<TableCell className="text-right">
+																				{formatCurrency(t.price)}
+																			</TableCell>
+																			<TableCell className="text-right">
+																				<span
+																					className={
+																						t.type?.toLowerCase() === 'sell'
+																							? 'text-destructive'
+																							: t.type?.toLowerCase() === 'buy'
+																								? 'text-green-600'
+																								: ''
+																					}
+																				>
+																					{formatCurrency(t.amount)}
+																				</span>
+																			</TableCell>
+																			<TableCell className="text-right">
+																				{formatCurrency(t.fee)}
+																			</TableCell>
+																		</TableRow>
+																	);
+																})}
+														</TableBody>
+													</Table>
+												</div>
+											)}
+										{/* Initial Lots Table from lotData */}
+										{item.assetMerge.lotData &&
+											Array.isArray(item.assetMerge.lotData) &&
+											item.assetMerge.lotData.length > 0 && (
+												<div className="mt-4">
+													<h5 className="text-sm font-semibold mb-2">
+														Initial Lots Before Merge
+													</h5>
+													<Table>
+														<TableHeader>
+															<TableRow>
+																<TableHead>Symbol</TableHead>
+																<TableHead>Acquired Date</TableHead>
+																<TableHead className="text-right">
+																	Price
+																</TableHead>
+																<TableHead className="text-right">
+																	Remaining Qty
+																</TableHead>
+																<TableHead className="text-right">
+																	Total Cost
+																</TableHead>
+																<TableHead>Payment Currency</TableHead>
+															</TableRow>
+														</TableHeader>
+														<TableBody>
+															{/* biome-ignore lint/suspicious/noExplicitAny: <ok> */}
+															{(item.assetMerge.lotData as any[])
+																.sort((a, b) => {
+																	const dateA = a.acquiredDate
+																		? new Date(a.acquiredDate).getTime()
+																		: 0;
+																	const dateB = b.acquiredDate
+																		? new Date(b.acquiredDate).getTime()
+																		: 0;
+																	return dateB - dateA; // Sort descending (newest first)
+																})
+																// biome-ignore lint/suspicious/noExplicitAny: <ok>
+																.map((lot: any, index: number) => (
+																	<TableRow key={lot.id || index}>
+																		<TableCell className="font-medium">
+																			{lot.assetSymbol}
+																		</TableCell>
+																		<TableCell>
+																			{lot.acquiredDate
+																				? new Date(
+																						lot.acquiredDate,
+																					).toLocaleDateString()
+																				: 'N/A'}
+																		</TableCell>
+																		<TableCell className="text-right">
+																			{formatCurrency(lot.price)}
+																		</TableCell>
+																		<TableCell className="text-right">
+																			{formatQuantity(lot.remainingQty)}
+																		</TableCell>
+																		<TableCell className="text-right">
+																			{formatCurrency(
+																				parseFloat(lot.price || '0') *
+																					parseFloat(lot.remainingQty || '0'),
+																			)}
+																		</TableCell>
+																		<TableCell>
+																			{lot.paymentCurrency || 'USD'}
+																		</TableCell>
+																	</TableRow>
+																))}
+														</TableBody>
+													</Table>
+												</div>
+											)}
+									</CardContent>
+								</Card>
+							))}
+						</div>
+					)}
+
+				{/* Account Realized P&L History */}
+				{transaction.accountRealizedPAndLHistory &&
+					transaction.accountRealizedPAndLHistory.length > 0 && (
+						<Card>
+							<CardHeader>
+								<CardTitle className="flex items-center gap-2">
+									<TrendingUp className="h-5 w-5" />
+									Account Realized P&L History
+								</CardTitle>
+								<CardDescription>
+									Realized gains and losses associated with this transaction
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Table>
+									<TableHeader>
+										<TableRow>
+											<TableHead>Date</TableHead>
+											<TableHead>Type</TableHead>
+											<TableHead className="text-right">Value</TableHead>
+											<TableHead className="text-right">
+												Short Term Gain
+											</TableHead>
+											<TableHead className="text-right">
+												Long Term Gain
+											</TableHead>
+											<TableHead className="text-right">
+												Unrealized P&L
+											</TableHead>
 										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</CardContent>
-					</Card>
-				)}
+									</TableHeader>
+									<TableBody>
+										{transaction.accountRealizedPAndLHistory.map((record) => (
+											<TableRow key={record.id}>
+												<TableCell>
+													{new Date(record.createdAt).toLocaleDateString()}
+												</TableCell>
+												<TableCell>
+													<Badge>{record.profitAndLossType}</Badge>
+												</TableCell>
+												<TableCell className="text-right">
+													<span
+														className={
+															parseFloat(record.value || '0') >= 0
+																? 'text-green-600'
+																: 'text-destructive'
+														}
+													>
+														{formatCurrency(record.value)}
+													</span>
+												</TableCell>
+												<TableCell className="text-right">
+													{record.realizedPAndL && (
+														<span className="text-green-600">
+															{formatCurrency(
+																record.realizedPAndL.shortTermCapitalGain,
+															)}
+														</span>
+													)}
+												</TableCell>
+												<TableCell className="text-right">
+													{record.realizedPAndL && (
+														<span className="text-green-600">
+															{formatCurrency(
+																record.realizedPAndL.longTermCapitalGain,
+															)}
+														</span>
+													)}
+												</TableCell>
+												<TableCell className="text-right">
+													{record.realizedPAndL && (
+														<span
+															className={
+																parseFloat(
+																	record.realizedPAndL.unrealizedProfit || '0',
+																) -
+																	parseFloat(
+																		record.realizedPAndL.unrealizedLoss || '0',
+																	) >=
+																0
+																	? 'text-green-600'
+																	: 'text-destructive'
+															}
+														>
+															{formatCurrency(
+																parseFloat(
+																	record.realizedPAndL.unrealizedProfit || '0',
+																) -
+																	parseFloat(
+																		record.realizedPAndL.unrealizedLoss || '0',
+																	),
+															)}
+														</span>
+													)}
+												</TableCell>
+											</TableRow>
+										))}
+									</TableBody>
+								</Table>
+							</CardContent>
+						</Card>
+					)}
 
 				{/* Full Payload JSON */}
 				<Card>
@@ -363,7 +917,7 @@ export default function TransactionDetailPage(props: {
 								variant="outline"
 								onClick={() => {
 									navigator.clipboard.writeText(
-										JSON.stringify(fullPayload, null, 2)
+										JSON.stringify(fullPayload, null, 2),
 									);
 								}}
 							>
@@ -407,7 +961,9 @@ export default function TransactionDetailPage(props: {
 							{transaction.detailsURI && (
 								<div className="col-span-2">
 									<span className="text-muted-foreground">Details URI: </span>
-									<span className="font-mono text-xs">{transaction.detailsURI}</span>
+									<span className="font-mono text-xs">
+										{transaction.detailsURI}
+									</span>
 								</div>
 							)}
 						</div>

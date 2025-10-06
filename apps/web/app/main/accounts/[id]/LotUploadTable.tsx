@@ -2,6 +2,12 @@
 
 import { Button } from '@repo/ui/components/button';
 import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from '@repo/ui/components/collapsible';
+import { FileUploader } from '@repo/ui/components/file-uploader';
+import {
 	Table,
 	TableBody,
 	TableCell,
@@ -10,12 +16,22 @@ import {
 	TableRow,
 } from '@repo/ui/components/table';
 import { toast } from '@repo/ui/components/toast-sonner';
-import { FileText, Loader2, RefreshCcw } from 'lucide-react';
+import {
+	ChevronDown,
+	ChevronRight,
+	FileText,
+	Loader2,
+	RefreshCcw,
+	Upload,
+} from 'lucide-react';
 import { useState } from 'react';
 import {
+	LotUploadFileType,
 	useApplyLotUploadMutation,
 	useLotUploadsQuery,
+	useUploadLotFileSchwabMutation,
 } from '~/generated/gql';
+import { useUploadFiles } from '~/modules/fileUpload/useUploadFiles';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { DateFormatter } from '~/modules/utils/DateFormatter';
 
@@ -24,7 +40,7 @@ interface LotUploadTableProps {
 }
 
 /**
- * Component that displays a table of lot uploads for an account
+ * Component that displays a table of lot uploads for an account with expandable rows for file uploads
  * @param accountId - The ID of the account to show lot uploads for
  * @example
  * <LotUploadTable accountId="account-123" />
@@ -69,6 +85,7 @@ export default function LotUploadTable({ accountId }: LotUploadTableProps) {
 			<Table>
 				<TableHeader>
 					<TableRow>
+						<TableHead className="w-12"></TableHead>
 						<TableHead>Provider</TableHead>
 						<TableHead>Files</TableHead>
 						<TableHead>Created</TableHead>
@@ -80,8 +97,26 @@ export default function LotUploadTable({ accountId }: LotUploadTableProps) {
 					{lotUploads.map((upload) => (
 						<LotUploadRow
 							key={upload.id}
-							upload={upload}
+							upload={{
+								id: upload.id,
+								createdAt: upload.createdAt,
+								applied: upload.applied,
+								supportedAccountLotProvider: upload.supportedAccountLotProvider,
+								LotUploadFile: (upload.LotUploadFile || []).map((file) => ({
+									id: file.id,
+									type: file.type,
+									fileId: file.fileId || null,
+									file: file.file
+										? {
+												id: file.file.id,
+												displayName: file.file.displayName,
+										  }
+										: null,
+								})),
+							}}
+							accountId={accountId}
 							onApplied={() => refetch()}
+							onFileUploaded={() => refetch()}
 						/>
 					))}
 				</TableBody>
@@ -106,18 +141,28 @@ interface LotUploadRowProps {
 			} | null;
 		}>;
 	};
+	accountId: string;
 	onApplied: () => void;
+	onFileUploaded: () => void;
 }
 
 /**
- * Individual row component for displaying lot upload information
+ * Individual row component for displaying lot upload information with expandable sub-rows
  * @param upload - The lot upload data to display
+ * @param accountId - The account ID for file uploads
  * @param onApplied - Callback when lot upload is applied
+ * @param onFileUploaded - Callback when a file is uploaded
  * @example
- * <LotUploadRow upload={upload} onApplied={() => refetch()} />
+ * <LotUploadRow upload={upload} accountId="123" onApplied={() => refetch()} onFileUploaded={() => refetch()} />
  */
-function LotUploadRow({ upload, onApplied }: LotUploadRowProps) {
+function LotUploadRow({
+	upload,
+	accountId,
+	onApplied,
+	onFileUploaded,
+}: LotUploadRowProps) {
 	const [isApplying, setIsApplying] = useState(false);
+	const [isExpanded, setIsExpanded] = useState(false);
 	const [applyLotUpload] = useApplyLotUploadMutation();
 
 	/**
@@ -158,62 +203,206 @@ function LotUploadRow({ upload, onApplied }: LotUploadRowProps) {
 	const uploadedFiles = upload.LotUploadFile.filter((f) => f.fileId).length;
 	const totalFiles = upload.LotUploadFile.length;
 	const isReady = uploadedFiles === totalFiles;
+	const hasPendingFiles = uploadedFiles < totalFiles;
+
+	// Check if this is a Schwab upload (which needs individual file uploads)
+	const isSchwab = upload.supportedAccountLotProvider === 'SCHWAB';
 
 	return (
-		<TableRow>
-			<TableCell>
-				<span className="font-medium">{upload.supportedAccountLotProvider}</span>
-			</TableCell>
-			<TableCell>
-				<div className="flex flex-col space-y-1">
-					<span className="text-sm">
-						{uploadedFiles} / {totalFiles} files
-					</span>
-					{upload.LotUploadFile.map((file) => (
-						<div key={file.id} className="text-xs text-muted-foreground">
-							{file.type}: {file.file?.displayName || 'Pending upload'}
-						</div>
-					))}
-				</div>
-			</TableCell>
-			<TableCell className="text-muted-foreground">
-				{DateFormatter.shortDay(upload.createdAt)}
-			</TableCell>
-			<TableCell>
-				{upload.applied ? (
-					<span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium">
-						Applied
-					</span>
-				) : isReady ? (
-					<span className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium">
-						Ready to Apply
-					</span>
-				) : (
-					<span className="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium">
-						Incomplete
-					</span>
-				)}
-			</TableCell>
-			<TableCell className="text-right">
-				{isReady && (
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={handleApply}
-						disabled={isApplying}
-						className="flex items-center space-x-1"
-					>
-						{isApplying ? (
-							<Loader2 className="h-3 w-3 animate-spin" />
-						) : (
-							<RefreshCcw className="h-3 w-3" />
-						)}
-						<span>
-							{isApplying ? 'Applying...' : upload.applied ? 'Reapply' : 'Apply'}
+		<>
+			<TableRow>
+				<TableCell>
+					{isSchwab && hasPendingFiles && (
+						<CollapsibleTrigger asChild>
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => setIsExpanded(!isExpanded)}
+								className="p-0 h-6 w-6"
+							>
+								{isExpanded ? (
+									<ChevronDown className="h-4 w-4" />
+								) : (
+									<ChevronRight className="h-4 w-4" />
+								)}
+							</Button>
+						</CollapsibleTrigger>
+					)}
+				</TableCell>
+				<TableCell>
+					<span className="font-medium">{upload.supportedAccountLotProvider}</span>
+				</TableCell>
+				<TableCell>
+					<div className="flex flex-col space-y-1">
+						<span className="text-sm">
+							{uploadedFiles} / {totalFiles} files
 						</span>
-					</Button>
-				)}
-			</TableCell>
-		</TableRow>
+						<div className="text-xs text-muted-foreground">
+							{upload.LotUploadFile.map((file) => (
+								<div key={file.id}>
+									{file.type}: {file.file?.displayName || 'Pending upload'}
+								</div>
+							)).slice(0, 2)}
+							{upload.LotUploadFile.length > 2 && (
+								<div>...and {upload.LotUploadFile.length - 2} more</div>
+							)}
+						</div>
+					</div>
+				</TableCell>
+				<TableCell className="text-muted-foreground">
+					{DateFormatter.shortDay(upload.createdAt)}
+				</TableCell>
+				<TableCell>
+					{upload.applied ? (
+						<span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium">
+							Applied
+						</span>
+					) : isReady ? (
+						<span className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium">
+							Ready to Apply
+						</span>
+					) : (
+						<span className="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200 inline-flex items-center rounded-full px-2 py-1 text-xs font-medium">
+							Incomplete
+						</span>
+					)}
+				</TableCell>
+				<TableCell className="text-right">
+					{isReady && (
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={handleApply}
+							disabled={isApplying}
+							className="flex items-center space-x-1"
+						>
+							{isApplying ? (
+								<Loader2 className="h-3 w-3 animate-spin" />
+							) : (
+								<RefreshCcw className="h-3 w-3" />
+							)}
+							<span>
+								{isApplying ? 'Applying...' : upload.applied ? 'Reapply' : 'Apply'}
+							</span>
+						</Button>
+					)}
+				</TableCell>
+			</TableRow>
+			{isSchwab && hasPendingFiles && (
+				<Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+					<CollapsibleContent asChild>
+						<>
+							{upload.LotUploadFile.filter((file) => !file.fileId).map((file) => (
+								<TableRow key={file.id} className="bg-muted/20">
+									<TableCell></TableCell>
+									<TableCell colSpan={2}>
+										<div className="flex items-center space-x-2 pl-4">
+											<FileText className="h-4 w-4 text-muted-foreground" />
+											<span className="text-sm font-medium">{file.type}</span>
+										</div>
+									</TableCell>
+									<TableCell colSpan={3}>
+										<LotFileUploader
+											lotUploadFileId={file.id}
+											lotUploadId={upload.id}
+											fileType={file.type}
+											accountId={accountId}
+											onUploaded={onFileUploaded}
+										/>
+									</TableCell>
+								</TableRow>
+							))}
+						</>
+					</CollapsibleContent>
+				</Collapsible>
+			)}
+		</>
+	);
+}
+
+interface LotFileUploaderProps {
+	lotUploadFileId: string;
+	lotUploadId: string;
+	fileType: string;
+	accountId: string;
+	onUploaded: () => void;
+}
+
+/**
+ * Component for uploading individual lot files for Schwab
+ * @param lotUploadFileId - The ID of the lot upload file placeholder
+ * @param lotUploadId - The ID of the parent lot upload
+ * @param fileType - The type of file expected
+ * @param accountId - The account ID
+ * @param onUploaded - Callback when file is uploaded
+ */
+function LotFileUploader({
+	lotUploadFileId,
+	lotUploadId,
+	fileType,
+	accountId,
+	onUploaded,
+}: LotFileUploaderProps) {
+	const [uploadLotFileSchwab] = useUploadLotFileSchwabMutation();
+	const { isUploading, onUpload } = useUploadFiles({
+		accountId,
+		defaultUploadedFiles: [],
+		onUploadError: (err) => {
+			toast.error(`Failed to upload file: ${err.message}`);
+		},
+		onFileUploaded: async (uploadedFiles) => {
+			const file = uploadedFiles[0];
+			if (!file) return;
+
+			try {
+				await uploadLotFileSchwab({
+					variables: {
+						input: {
+							fileInput: {
+								gcpFilename: file.fileName,
+								displayName: file.displayName,
+								type: file.type,
+								accountId,
+								portfolioId: '', // This will be set by the backend
+								uploadedBy: '', // This will be set by the backend
+							},
+							lotUploadFileInput: {
+								id: lotUploadFileId,
+								lotUploadId,
+								accountId,
+								portfolioId: '', // This will be set by the backend
+								type: fileType as LotUploadFileType,
+							},
+						},
+					},
+				});
+
+				toast.success(`${fileType} file uploaded successfully`);
+				onUploaded();
+			} catch (error) {
+				console.error('Upload error:', error);
+				toast.error(`Failed to upload ${fileType} file`);
+			}
+		},
+	});
+
+	return (
+		<div className="w-full">
+			<FileUploader
+				title=""
+				description={`Upload ${fileType} file`}
+				maxSize={1024 * 1024 * 2}
+				onUpload={async (files: File[]) => {
+					await onUpload(files);
+					return;
+				}}
+				loading={isUploading}
+				accept={{
+					'text/csv': [],
+				}}
+				multiple={false}
+				className="w-full"
+			/>
+		</div>
 	);
 }

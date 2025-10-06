@@ -25,7 +25,7 @@ export const TypedRoutes = {
 	explore: makeRoute(() => `/explore`),
 	harvests: makeRoute(() => `/main/harvests`),
 	harvest: makeRoute(
-		({ id }) => `/main/harvests/${id}`,
+		({ id }) => `/main/harvest/${id}`,
 		z.object({ id: z.string() }),
 	),
 	harvestFlowRoot: makeRoute(() => `/main/harvest-flow`),
@@ -68,6 +68,7 @@ export const TypedRoutes = {
 		z.object({ plaidMergeId: z.string() }),
 	),
 	plaidHistory: makeRoute(() => `/main/admin/plaid-history`),
+	accountPnlHistory: makeRoute(() => `/main/admin/account-pnl-history`),
 	settings: makeRoute(() => `/main/settings`),
 	settingsNotifications: makeRoute(() => `/main/settings/notifications`),
 	settingsPortfolio: makeRoute(() => `/main/settings/portfolio`),

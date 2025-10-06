@@ -1328,9 +1328,8 @@ describe('LotApplicationService', () => {
 						transactionSells: [],
 					});
 
-					expect(result.chosenLotChangeIndex).toBeDefined();
 					expect(
-						result.lotChanges[result.chosenLotChangeIndex!]?.map((l) => ({
+						result.lotChanges[0]?.map((l) => ({
 							quantity: l.quantity.toString(),
 							price: l.price.toString(),
 							lotId: l.lotId,
@@ -1419,10 +1418,7 @@ describe('LotApplicationService', () => {
 					});
 
 					expect(result.lotChanges.length).toBe(0);
-					expect(result.chosenLotChangeIndex).toBeNull();
-					expect(
-						result.lotChanges[result.chosenLotChangeIndex!],
-					).toBeUndefined();
+					expect(result.lotChanges[0]).toBeUndefined();
 				});
 			});
 		});
@@ -1478,14 +1474,10 @@ describe('LotApplicationService', () => {
 					// Should return both lotChanges and multiChangeSet
 					expect(result.lotChanges).toBeDefined();
 					expect(Array.isArray(result.lotChanges)).toBe(true);
-					expect(
-						result.lotChanges[result.chosenLotChangeIndex!]?.length,
-					).toBeGreaterThan(0);
+					expect(result.lotChanges[0]?.length).toBeGreaterThan(0);
 
 					// Verify each lot change has the required properties
-					for (const lotChange of result.lotChanges[
-						result.chosenLotChangeIndex!
-					] ?? []) {
+					for (const lotChange of result.lotChanges[0] ?? []) {
 						expect(lotChange.lotId).toBeDefined();
 						expect(lotChange.symbol).toBe('ATUS');
 						expect(lotChange.quantityChange).toBeDefined();
@@ -1495,17 +1487,19 @@ describe('LotApplicationService', () => {
 					}
 
 					// Calculate total quantity change
-					const totalQuantityChange = result.lotChanges[
-						result.chosenLotChangeIndex!
-					]?.reduce((sum, change) => sum.plus(change.quantityChange), D(0));
+					const totalQuantityChange = result.lotChanges[0]?.reduce(
+						(sum, change) => sum.plus(change.quantityChange),
+						D(0),
+					);
 
 					// Total quantity change should be 45 - 37 = 8
 					expect(totalQuantityChange?.eq(D(8))).toBe(true);
 
 					// Calculate remaining quantity
-					const remainingQuantity = result.lotChanges[
-						result.chosenLotChangeIndex!
-					]?.reduce((sum, change) => sum.plus(change.quantityFinal), D(0));
+					const remainingQuantity = result.lotChanges[0]?.reduce(
+						(sum, change) => sum.plus(change.quantityFinal),
+						D(0),
+					);
 
 					// Remaining quantity should equal target quantity
 					expect(remainingQuantity?.eq(D(37))).toBe(true);
@@ -1558,10 +1552,8 @@ describe('LotApplicationService', () => {
 					});
 
 					// Verify that original lot data is preserved
-					expect(result.lotChanges[result.chosenLotChangeIndex!]).toBeDefined();
-					for (const lotChange of result.lotChanges[
-						result.chosenLotChangeIndex!
-					] ?? []) {
+					expect(result.lotChanges[0]).toBeDefined();
+					for (const lotChange of result.lotChanges[0] ?? []) {
 						const originalLot = atusLotsData.find(
 							(lot) => lot.lotId === lotChange.lotId,
 						);
@@ -1872,14 +1864,14 @@ describe('LotApplicationService', () => {
 					});
 					expect(lotChanges.lotChanges.length).toBe(3);
 					expect(
-						lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]
+						lotChanges.lotChanges[0]
 							?.find(
 								(lot) => lot.lotId === '40ec54fd-0972-4e61-8734-bf293ef44ef2',
 							)
 							?.quantityFinal.toNumber(),
 					).toBe(0);
 					expect(
-						lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]
+						lotChanges.lotChanges[0]
 							?.find(
 								(lot) => lot.lotId === 'd2747dca-f5af-48cf-ac65-3872523d104c',
 							)
@@ -1926,19 +1918,9 @@ describe('LotApplicationService', () => {
 					transactionSells: [],
 				});
 				expect(lotChanges.lotChanges.length).toBe(1);
-				expect(
-					lotChanges.lotChanges[lotChanges.chosenLotChangeIndex!]?.length,
-				).toBe(2);
-				expect(
-					lotChanges.lotChanges[
-						lotChanges.chosenLotChangeIndex!
-					]?.[0].quantityFinal.toNumber(),
-				).toBe(0);
-				expect(
-					lotChanges.lotChanges[
-						lotChanges.chosenLotChangeIndex!
-					]?.[1].quantityFinal.toNumber(),
-				).toBe(0);
+				expect(lotChanges.lotChanges[0]?.length).toBe(2);
+				expect(lotChanges.lotChanges[0]?.[0].quantityFinal.toNumber()).toBe(0);
+				expect(lotChanges.lotChanges[0]?.[1].quantityFinal.toNumber()).toBe(0);
 			});
 		});
 	});

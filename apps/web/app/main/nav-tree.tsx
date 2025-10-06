@@ -9,6 +9,7 @@ import {
 	Play,
 	Scissors,
 	Settings,
+	TrendingUpDown,
 	UserPlus,
 	Users,
 	Wallet2,
@@ -90,6 +91,11 @@ export const NavTree: NavGroup[] = [
 				title: 'Plaid Merges',
 				url: TypedRoutes.plaidHistory(),
 				icon: Merge,
+			},
+			{
+				title: 'Account P&L History',
+				url: TypedRoutes.accountPnlHistory(),
+				icon: TrendingUpDown,
 			},
 			{
 				title: 'Users',

@@ -19,3 +19,15 @@ query LotUploads($where: LotUploadWhereInput!) {
 mutation ApplyLotUpload($lotUploadId: String!) {
   applyLotUpload(lotUploadId: $lotUploadId)
 }
+
+mutation UploadLotFileSchwab($input: UploadLotFileInput!) {
+  uploadLotFileSchwab(input: $input) {
+    id
+    type
+    fileId
+    file {
+      id
+      displayName
+    }
+  }
+}

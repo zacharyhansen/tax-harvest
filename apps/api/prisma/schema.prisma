@@ -487,9 +487,9 @@ model AssetMerge {
   targetQuantity     Decimal? @db.Decimal(14, 4)
   /// Will be null for sells of entire assets where plaid does nto return a position
   positionSnapshotId String?  @db.Uuid
+  mergeErrorId       String?  @db.Uuid
   lotData            Json     @db.JsonB
   resolvedLotChange  Json     @db.JsonB
-  mergeErrorId       String?  @db.Uuid
   error              Json?    @db.JsonB
 
   mergeError              MergeError?               @relation(fields: [mergeErrorId], references: [id], onDelete: Cascade)
@@ -799,6 +799,7 @@ model Asset {
   harvestTransactionItems HarvestTransactionItem[]
   mergeError              MergeError[]
   lotMerge                AssetMerge[]
+  LotUploadFile           LotUploadFile[]
 }
 
 model PriceHourly {
@@ -991,11 +992,13 @@ model LotUploadFile {
   fileId      String?           @db.Uuid
   type        LotUploadFileType
   lotUploadId String            @db.Uuid
+  assetSymbol String?
 
   file      File?     @relation(fields: [fileId], references: [id], onDelete: Cascade)
   portfolio Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
   lotUpload LotUpload @relation(fields: [lotUploadId], references: [id], onDelete: Cascade)
+  asset     Asset?    @relation(fields: [assetSymbol], references: [symbol], onDelete: Restrict)
 }
 
 enum MergeErrorType {

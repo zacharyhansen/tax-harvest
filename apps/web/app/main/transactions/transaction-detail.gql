@@ -51,11 +51,67 @@ query TransactionDetail($transactionId: String!) {
 				targetValue
 				targetQuantity
 				error
+				createdAt
+				updatedAt
+				lotData
 				mergeError {
 					id
 					type
 					resolved
 				}
+				transactionOnAssetMerge {
+					transaction {
+						id
+						type
+						assetSymbol
+						quantity
+						price
+						amount
+						fee
+						transactionDate
+						description
+					}
+				}
+				lotChangeList {
+					id
+					appliedToAccount
+					AccountRealizedPAndLHistory {
+						id
+						value
+						profitAndLossType
+					}
+					LotChange {
+						id
+						assetSymbol
+						aquiredDate
+						operationType
+						price
+						quantityChange
+						quantityFinal
+						realizedProfitAndLossShortTerm
+						realizedProfitAndLossLongTerm
+						lot {
+							id
+							assetSymbol
+							remainingQty
+							acquiredDate
+							price
+						}
+					}
+				}
+			}
+		}
+		accountRealizedPAndLHistory {
+			id
+			value
+			profitAndLossType
+			createdAt
+			realizedPAndL {
+				id
+				shortTermCapitalGain
+				longTermCapitalGain
+				unrealizedLoss
+				unrealizedProfit
 			}
 		}
 	}

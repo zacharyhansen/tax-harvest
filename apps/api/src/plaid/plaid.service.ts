@@ -17,7 +17,7 @@ import {
 } from '@prisma/client';
 import type { InputJsonValue } from '@prisma/client/runtime/library';
 import Decimal from 'decimal.js';
-import { Insertable, Transaction } from 'kysely';
+import { Insertable, Selectable, Transaction } from 'kysely';
 import {
 	type AccountBase,
 	Configuration,
@@ -32,7 +32,9 @@ import {
 } from 'plaid';
 import { Database, executeWithRLS } from '~/database/database';
 import type {
+	Asset,
 	DB,
+	Account as KyselyAccount,
 	Transaction as KyselyTransaction,
 	Position,
 	PositionSnapshot,
@@ -220,7 +222,7 @@ export class PlaidService {
 		portfolioId: string;
 		metaData: PlaidLinkOnSuccessMetadata;
 		existingAccountId?: string;
-	}): Promise<Account[]> {
+	}): Promise<Selectable<KyselyAccount>[]> {
 		const response = await this.client.itemPublicTokenExchange({
 			public_token: publicToken,
 		});
@@ -297,7 +299,7 @@ export class PlaidService {
 		plaidAuthConnection: AuthConnection;
 		asReversableOperations?: boolean;
 		existingAccountId?: string;
-	}): Promise<Account[]> {
+	}): Promise<Selectable<KyselyAccount>[]> {
 		this.logger.log(`Syncing Plaid item: ${plaidAuthConnection.id}`);
 		if (plaidAuthConnection.type !== AuthType.PLAID_LINK) {
 			throw new Error('This is not a plaid auth connection');
@@ -503,7 +505,12 @@ export class PlaidService {
 							? resolvedLotChange.position.quantity.toString()
 							: null,
 						positionSnapshotId: resolvedLotChange.position.positionSnapshotId,
-						lotData: JSON.stringify(resolvedLotChange.lotData),
+						lotData: JSON.stringify(
+							initialLots.filter(
+								(lot) =>
+									lot.assetSymbol === resolvedLotChange.position.assetSymbol,
+							),
+						),
 						resolvedLotChange: JSON.stringify(resolvedLotChange),
 						error: resolvedLotChange.error
 							? JSON.stringify(resolvedLotChange.error)
@@ -514,7 +521,10 @@ export class PlaidService {
 
 				// Insert all possible lot changes for the asset merge that we got from the algorithm and the chosen lot change
 				// if there is one
-				for (const lotChangeList of resolvedLotChange.lotChanges) {
+				for (const [
+					index,
+					lotChangeList,
+				] of resolvedLotChange.lotChanges.entries()) {
 					await this.insertLotChangeList({
 						trx,
 						lotChanges: lotChangeList,
@@ -523,10 +533,11 @@ export class PlaidService {
 						assetMergeId: assetMerge.id,
 						plaidMergeId: plaidMerge.id,
 						assetSymbol: resolvedLotChange.position.assetSymbol,
-						chosenLotChangeIndex: resolvedLotChange.chosenLotChangeIndex,
 						transactionIds: relevantTransactions.map(
 							(transaction) => transaction.id,
 						),
+						// Must always apply the first lot change list to the account so the lots exists for other change set relations
+						applyToAccount: index === 0,
 					});
 				}
 
@@ -552,7 +563,7 @@ export class PlaidService {
 						? MergeErrorType.PLAID_MULTI_LOT_SOLUTION
 						: resolvedLotChange.error
 							? MergeErrorType.UNKNOWN
-							: resolvedLotChange.chosenLotChangeIndex === null
+							: resolvedLotChange.lotChanges.length === 0
 								? MergeErrorType.PLAID_NO_SOLUTION
 								: undefined;
 
@@ -601,8 +612,8 @@ export class PlaidService {
 		assetMergeId,
 		assetSymbol,
 		usedByAssetMergeId,
-		chosenLotChangeIndex,
 		transactionIds,
+		applyToAccount,
 	}: {
 		trx: Transaction<DB>;
 		lotChanges: LotChangeKysely[];
@@ -612,8 +623,8 @@ export class PlaidService {
 		assetMergeId: string;
 		assetSymbol: string;
 		usedByAssetMergeId?: string;
-		chosenLotChangeIndex: number | null;
 		transactionIds: string[];
+		applyToAccount: boolean;
 	}): Promise<string> {
 		const insertedLotChangeList = await trx
 			.insertInto('LotChangeList')
@@ -627,7 +638,7 @@ export class PlaidService {
 			.executeTakeFirstOrThrow();
 
 		// If we were actually able to get chosenLotChangeIndex we can apply the lot changes to the account
-		if (chosenLotChangeIndex !== null) {
+		if (applyToAccount === true) {
 			await this.applyLotChangesToAccounts({
 				trx,
 				portfolioId,
@@ -681,6 +692,13 @@ export class PlaidService {
 		lotChangeListId: string;
 		plaidMergeId: string;
 	}) {
+		// Mark the lot change list as applied
+		await trx
+			.updateTable('LotChangeList')
+			.set({ appliedToAccount: true })
+			.where('id', '=', lotChangeListId)
+			.execute();
+
 		// Upsert the lots
 		const upserts = lotChanges.map((lotChange) => lotChange.upsert);
 
@@ -827,6 +845,7 @@ export class PlaidService {
 	 * @param {number} [params.page] - The page number to fetch
 	 * @returns {Promise<void>}
 	 */
+	@TimeMethod()
 	async syncPlaidTransactions({
 		endDate,
 		page = 1,
@@ -936,7 +955,7 @@ export class PlaidService {
 						.insertInto('Transaction')
 						.values(input)
 						.onConflict((oc) =>
-							// !IMPORANT: DO NOT UPDATE THE appliedToLots ELSE IT WILL TRIED OT INSERTED ON THE NET SYNC AGAIN
+							// !IMPORANT: DO NOT UPDATE THE appliedToLots ELSE IT WILL TRY TO INSERTE ON THE NEXT SYNC AGAIN
 							oc
 								.columns(['accountId', 'externalId'])
 								.doUpdateSet({
@@ -976,6 +995,7 @@ export class PlaidService {
 		}
 	}
 
+	@TimeMethod()
 	async assertPlaidSecuritiesExist({
 		securities,
 		portfolioId,
@@ -992,14 +1012,17 @@ export class PlaidService {
 			),
 		});
 
-		return processBatch(assetsToUpsert, this.dbBatchSize, async (input) => {
-			return this.prismaService.rlsPortfolioClient(portfolioId).asset.upsert({
-				create: input,
-				update: input,
-				where: {
-					symbol: input.symbol,
-				},
-			});
+		return executeWithRLS(this.db, portfolioId, async (trx) => {
+			return trx
+				.insertInto('Asset')
+				.values(assetsToUpsert)
+				.onConflict((oc) =>
+					oc.columns(['symbol']).doUpdateSet({
+						plaid_security_id: (eb) => eb.ref('excluded.plaid_security_id'),
+						type: (eb) => eb.ref('excluded.type'),
+					}),
+				)
+				.execute();
 		});
 	}
 
@@ -1011,49 +1034,49 @@ export class PlaidService {
 		plaidAccounts: AccountBase[];
 		plaidAuthConnection: AuthConnection;
 		existingAccountId?: string;
-	}): Promise<Account[]> {
+	}): Promise<Selectable<KyselyAccount>[]> {
 		const accounts = PlaidService.convertPlaidAccounts({
 			plaidAccounts,
 			plaidAuthConnection,
 		});
-		return this.prismaService
-			.rlsPortfolioClient(plaidAuthConnection.portfolioId)
-			.$transaction(async (trx) => {
-				const upsertedAccounts = [];
-				for (let i = 0; i < accounts.length; i++) {
-					const input = accounts[i];
-					// Not pretty but we want to tie the account created in the upload file step to one of the linekd ones
-					// existingAccountId is th eone that came from the onbaording flow of uploading a csv file
-					if (
-						existingAccountId &&
-						i === 0 &&
-						(await trx.account.findUnique({
-							where: { id: existingAccountId },
-						}))
-					) {
-						const account = await trx.account.update({
-							where: { id: existingAccountId },
-							data: input,
-						});
-						upsertedAccounts.push(account);
-					} else {
-						const account = await trx.account.upsert({
-							create: input,
-							update: input,
-							where: {
-								authConnectionId_plaidAccountMask_type: {
-									authConnectionId: plaidAuthConnection.id,
-									plaidAccountMask: input.plaidAccountMask ?? '',
-									type: input.type ?? '',
-								},
-							},
-						});
-						upsertedAccounts.push(account);
-					}
+
+		return executeWithRLS(
+			this.db,
+			plaidAuthConnection.portfolioId,
+			async (trx) => {
+				// Not pretty but if a user has set up their account  via onboarding and has not connected plaid yet
+				// we need to update/connect the account with the plaid account data before upserting by adding the plaidAccountMask
+				if (existingAccountId && accounts[0]) {
+					await trx
+						.updateTable('Account')
+						// @ts-expect-error not sure
+						.set(accounts[0])
+						.where('id', '=', existingAccountId)
+						.execute();
 				}
 
-				return upsertedAccounts;
-			});
+				return await trx
+					.insertInto('Account')
+					.values(accounts)
+					.onConflict((oc) =>
+						oc
+							.columns(['authConnectionId', 'plaidAccountMask', 'type'])
+							.doUpdateSet({
+								name: (eb) => eb.ref('excluded.name'),
+								description: (eb) => eb.ref('excluded.description'),
+								institution: (eb) => eb.ref('excluded.institution'),
+								type: (eb) => eb.ref('excluded.type'),
+								subType: (eb) => eb.ref('excluded.subType'),
+								mode: (eb) => eb.ref('excluded.mode'),
+								status: (eb) => eb.ref('excluded.status'),
+								createdById: (eb) => eb.ref('excluded.createdById'),
+								portfolioId: (eb) => eb.ref('excluded.portfolioId'),
+							}),
+					)
+					.returningAll()
+					.execute();
+			},
+		);
 	}
 
 	private async handleHoldingsUpdate(webhookData: PlaidWebhook): Promise<void> {
@@ -1115,14 +1138,14 @@ export class PlaidService {
 		securities,
 	}: {
 		securities: Security[];
-	}): Prisma.AssetCreateInput[] {
+	}): Insertable<Asset>[] {
 		return securities.map((security) => {
 			const symbol =
 				security.ticker_symbol ??
 				security.name ??
 				security.market_identifier_code;
 			// Only upsert minimum here - polygon should be source of other data
-			const input: Prisma.AssetCreateInput = {
+			const input: Insertable<Asset> = {
 				plaid_security_id: security.security_id,
 				symbol: symbol ?? '',
 				type: security.type ?? undefined,
@@ -1137,12 +1160,12 @@ export class PlaidService {
 	}: {
 		plaidAccounts: AccountBase[];
 		plaidAuthConnection: AuthConnection;
-	}): Prisma.AccountCreateInput[] {
+	}): Insertable<KyselyAccount>[] {
 		return plaidAccounts.map((plaidAccount) => {
-			const upsertAccount: Prisma.AccountCreateInput = {
+			const upsertAccount: Insertable<KyselyAccount> = {
 				name: plaidAccount.name,
-				available: new Decimal(plaidAccount.balances.available ?? 0),
-				current: new Decimal(plaidAccount.balances.current ?? 0),
+				available: new Decimal(plaidAccount.balances.available ?? 0).toString(),
+				current: new Decimal(plaidAccount.balances.current ?? 0).toString(),
 				externalId: plaidAccount.account_id,
 				institution: AccountInstitution.BROKERAGE,
 				plaidAccountMask: plaidAccount.mask,
@@ -1150,22 +1173,10 @@ export class PlaidService {
 				skipSetup: taxAdvantadedSubTypes.has(plaidAccount.subtype ?? ''),
 				subType: plaidAccount.subtype,
 				type: plaidAccount.type,
-				authConnection: {
-					connect: {
-						id: plaidAuthConnection.id,
-					},
-				},
-				createdBy: {
-					connect: {
-						id: plaidAuthConnection.userId,
-					},
-				},
+				authConnectionId: plaidAuthConnection.id,
+				createdById: plaidAuthConnection.userId,
 				// !IMPORTANT - This changes if you reauth to the same account - we never weant to be recreating links to an account in a portfolio
-				portfolio: {
-					connect: {
-						id: plaidAuthConnection.portfolioId,
-					},
-				},
+				portfolioId: plaidAuthConnection.portfolioId,
 			};
 			return upsertAccount;
 		});
@@ -1244,7 +1255,7 @@ export class PlaidService {
 		authConnectionId,
 	}: {
 		holdingsResponse: InvestmentsHoldingsGetResponse;
-		accounts: Account[];
+		accounts: Selectable<KyselyAccount>[];
 		portfolioId: string;
 		authConnectionId: string;
 	}): {

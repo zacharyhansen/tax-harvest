@@ -40,8 +40,10 @@ import { formatDate, withMonthAndDayFormatter } from '~/modules/utils';
 
 export function HarvestCard({
 	harvest,
+	open = false,
 }: {
 	harvest: HarvestSingleItemFragment;
+	open?: boolean;
 }) {
 	const [updateHarvest] = useUpdateHarvestSingleMutation();
 	const [deleteHarvest] = useDeleteHarvestsMutation({
@@ -49,7 +51,7 @@ export function HarvestCard({
 		awaitRefetchQueries: true,
 	});
 	const [showNotificationDialog, setShowNotificationDialog] = useState(false);
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(open);
 
 	const progressStep =
 		new Date(harvest.afterWashRevertDate) < new Date()

@@ -52,7 +52,6 @@ export interface LotDataWithMeta {
  */
 export interface ResolvedLotChange extends LotDataWithMeta {
 	lotChanges: LotChangeKysely[][];
-	chosenLotChangeIndex: number | null;
 	error?: Error;
 }
 
@@ -182,7 +181,6 @@ export class LotApplicationService {
 			return {
 				...lotDataWithMeta,
 				lotChanges: [],
-				chosenLotChangeIndex: null,
 			};
 		}
 
@@ -200,7 +198,6 @@ export class LotApplicationService {
 			return {
 				...lotDataWithMeta,
 				lotChanges: [],
-				chosenLotChangeIndex: null,
 				error: error as Error,
 			};
 		}
@@ -246,7 +243,6 @@ export class LotApplicationService {
 			return {
 				...lotDataWithMeta,
 				lotChanges: [],
-				chosenLotChangeIndex: null,
 			};
 		}
 
@@ -257,10 +253,20 @@ export class LotApplicationService {
 			deduplicatedLotChanges,
 		);
 
+		// move the chosen lot change to the first index
+		if (chosenLotChangeIndex !== null) {
+			[
+				deduplicatedLotChanges[chosenLotChangeIndex],
+				deduplicatedLotChanges[0],
+			] = [
+				deduplicatedLotChanges[0],
+				deduplicatedLotChanges[chosenLotChangeIndex],
+			];
+		}
+
 		return {
 			...lotDataWithMeta,
 			lotChanges: deduplicatedLotChanges,
-			chosenLotChangeIndex,
 		};
 	}
 
@@ -394,7 +400,8 @@ export class LotApplicationService {
 						transactionId: trx.id,
 						profitAndLossType: trxType,
 						plaidMergeId: plaidMergeId,
-						value: new Decimal(trx.amount ?? 0).toString(),
+						// Plaid is wack and negative means into account
+						value: new Decimal(trx.amount ?? 0).mul(-1).toString(),
 					});
 					break;
 			}

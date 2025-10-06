@@ -4629,6 +4629,7 @@ input AccountWhereUniqueInput {
 }
 
 type Asset {
+  LotUploadFile: [LotUploadFile!]
   _count: AssetCount!
   active: Boolean!
   assetClass: AssetClass!
@@ -4702,6 +4703,7 @@ enum AssetClass {
 }
 
 type AssetCount {
+  LotUploadFile: Int!
   favoritedBy: Int!
   harvestTransactionItems: Int!
   lotMerge: Int!
@@ -4769,6 +4771,12 @@ input AssetCreateNestedOneWithoutLotMergeInput {
   create: AssetCreateWithoutLotMergeInput
 }
 
+input AssetCreateNestedOneWithoutLotUploadFileInput {
+  connect: AssetWhereUniqueInput
+  connectOrCreate: AssetCreateOrConnectWithoutLotUploadFileInput
+  create: AssetCreateWithoutLotUploadFileInput
+}
+
 input AssetCreateNestedOneWithoutLotsInput {
   connect: AssetWhereUniqueInput
   connectOrCreate: AssetCreateOrConnectWithoutLotsInput
@@ -4820,6 +4828,11 @@ input AssetCreateOrConnectWithoutLotMergeInput {
   where: AssetWhereUniqueInput!
 }
 
+input AssetCreateOrConnectWithoutLotUploadFileInput {
+  create: AssetCreateWithoutLotUploadFileInput!
+  where: AssetWhereUniqueInput!
+}
+
 input AssetCreateOrConnectWithoutLotsInput {
   create: AssetCreateWithoutLotsInput!
   where: AssetWhereUniqueInput!
@@ -4851,6 +4864,7 @@ input AssetCreateOrConnectWithoutVectorGraphsInput {
 }
 
 input AssetCreateWithoutFavoritedByInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -4896,6 +4910,7 @@ input AssetCreateWithoutFavoritedByInput {
 }
 
 input AssetCreateWithoutHarvestTransactionItemsInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -4941,6 +4956,7 @@ input AssetCreateWithoutHarvestTransactionItemsInput {
 }
 
 input AssetCreateWithoutLotMergeInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -4985,7 +5001,54 @@ input AssetCreateWithoutLotMergeInput {
   vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
 }
 
+input AssetCreateWithoutLotUploadFileInput {
+  active: Boolean
+  assetClass: AssetClass
+  assetType: AssetTypeCreateNestedOneWithoutAssetsInput
+  cik: String
+  compositeFigi: String
+  currencyName: String
+  delistedDate: DateTime
+  description: String
+  favoritedBy: UserCreateNestedManyWithoutFavoritesInput
+  harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutAssetInput
+  homepageUrl: String
+  iconUrl: String
+  lastClose: Decimal
+  lastHigh: Decimal
+  lastLow: Decimal
+  lastOpen: Decimal
+  lastPrice: Decimal
+  lastUpdated: DateTime
+  lastVolume: Decimal
+  lastVolumeWeighted: Decimal
+  listDate: DateTime
+  locale: AssetLocale
+  logoUrl: String
+  lotMerge: AssetMergeCreateNestedManyWithoutAssetInput
+  lots: LotCreateNestedManyWithoutAssetInput
+  marketCap: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAssetInput
+  name: String
+  plaid_security_id: String
+  positions: PositionCreateNestedManyWithoutAssetInput
+  priceHourly: PriceHourlyCreateNestedManyWithoutAsssetInput
+  priceHourlyVectors: PriceHourlyVectorCreateNestedManyWithoutAssetInput
+  primaryExchange: String
+  shareClassSharesOutstanding: Decimal
+  sicCode: String
+  sicDescription: String
+  symbol: String!
+  todaysChange: Decimal
+  todaysChangePerc: Decimal
+  totalEmployees: Int
+  transactions: TransactionCreateNestedManyWithoutAssetInput
+  type: String
+  vectorGraphs: VectorGraphCreateNestedManyWithoutAssetInput
+}
+
 input AssetCreateWithoutLotsInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -5031,6 +5094,7 @@ input AssetCreateWithoutLotsInput {
 }
 
 input AssetCreateWithoutMergeErrorInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -5076,6 +5140,7 @@ input AssetCreateWithoutMergeErrorInput {
 }
 
 input AssetCreateWithoutPositionsInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -5121,6 +5186,7 @@ input AssetCreateWithoutPositionsInput {
 }
 
 input AssetCreateWithoutPriceHourlyVectorsInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -5166,6 +5232,7 @@ input AssetCreateWithoutPriceHourlyVectorsInput {
 }
 
 input AssetCreateWithoutTransactionsInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -5211,6 +5278,7 @@ input AssetCreateWithoutTransactionsInput {
 }
 
 input AssetCreateWithoutVectorGraphsInput {
+  LotUploadFile: LotUploadFileCreateNestedManyWithoutAssetInput
   active: Boolean
   assetClass: AssetClass
   assetType: AssetTypeCreateNestedOneWithoutAssetsInput
@@ -6389,6 +6457,11 @@ type AssetMinAggregate {
   type: String
 }
 
+input AssetNullableScalarRelationFilter {
+  is: AssetWhereInput
+  isNot: AssetWhereInput
+}
+
 input AssetScalarRelationFilter {
   is: AssetWhereInput
   isNot: AssetWhereInput
@@ -6673,6 +6746,16 @@ input AssetUpdateOneRequiredWithoutVectorGraphsNestedInput {
   upsert: AssetUpsertWithoutVectorGraphsInput
 }
 
+input AssetUpdateOneWithoutLotUploadFileNestedInput {
+  connect: AssetWhereUniqueInput
+  connectOrCreate: AssetCreateOrConnectWithoutLotUploadFileInput
+  create: AssetCreateWithoutLotUploadFileInput
+  delete: AssetWhereInput
+  disconnect: AssetWhereInput
+  update: AssetUpdateToOneWithWhereWithoutLotUploadFileInput
+  upsert: AssetUpsertWithoutLotUploadFileInput
+}
+
 input AssetUpdateToOneWithWhereWithoutHarvestTransactionItemsInput {
   data: AssetUpdateWithoutHarvestTransactionItemsInput!
   where: AssetWhereInput
@@ -6680,6 +6763,11 @@ input AssetUpdateToOneWithWhereWithoutHarvestTransactionItemsInput {
 
 input AssetUpdateToOneWithWhereWithoutLotMergeInput {
   data: AssetUpdateWithoutLotMergeInput!
+  where: AssetWhereInput
+}
+
+input AssetUpdateToOneWithWhereWithoutLotUploadFileInput {
+  data: AssetUpdateWithoutLotUploadFileInput!
   where: AssetWhereInput
 }
 
@@ -6719,6 +6807,7 @@ input AssetUpdateWithWhereUniqueWithoutFavoritedByInput {
 }
 
 input AssetUpdateWithoutFavoritedByInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -6764,6 +6853,7 @@ input AssetUpdateWithoutFavoritedByInput {
 }
 
 input AssetUpdateWithoutHarvestTransactionItemsInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -6809,6 +6899,7 @@ input AssetUpdateWithoutHarvestTransactionItemsInput {
 }
 
 input AssetUpdateWithoutLotMergeInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -6853,7 +6944,54 @@ input AssetUpdateWithoutLotMergeInput {
   vectorGraphs: VectorGraphUpdateManyWithoutAssetNestedInput
 }
 
+input AssetUpdateWithoutLotUploadFileInput {
+  active: BoolFieldUpdateOperationsInput
+  assetClass: EnumAssetClassFieldUpdateOperationsInput
+  assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
+  cik: NullableStringFieldUpdateOperationsInput
+  compositeFigi: NullableStringFieldUpdateOperationsInput
+  currencyName: NullableStringFieldUpdateOperationsInput
+  delistedDate: NullableDateTimeFieldUpdateOperationsInput
+  description: NullableStringFieldUpdateOperationsInput
+  favoritedBy: UserUpdateManyWithoutFavoritesNestedInput
+  harvestTransactionItems: HarvestTransactionItemUpdateManyWithoutAssetNestedInput
+  homepageUrl: NullableStringFieldUpdateOperationsInput
+  iconUrl: NullableStringFieldUpdateOperationsInput
+  lastClose: DecimalFieldUpdateOperationsInput
+  lastHigh: DecimalFieldUpdateOperationsInput
+  lastLow: DecimalFieldUpdateOperationsInput
+  lastOpen: DecimalFieldUpdateOperationsInput
+  lastPrice: DecimalFieldUpdateOperationsInput
+  lastUpdated: DateTimeFieldUpdateOperationsInput
+  lastVolume: DecimalFieldUpdateOperationsInput
+  lastVolumeWeighted: DecimalFieldUpdateOperationsInput
+  listDate: NullableDateTimeFieldUpdateOperationsInput
+  locale: EnumAssetLocaleFieldUpdateOperationsInput
+  logoUrl: NullableStringFieldUpdateOperationsInput
+  lotMerge: AssetMergeUpdateManyWithoutAssetNestedInput
+  lots: LotUpdateManyWithoutAssetNestedInput
+  marketCap: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAssetNestedInput
+  name: NullableStringFieldUpdateOperationsInput
+  plaid_security_id: NullableStringFieldUpdateOperationsInput
+  positions: PositionUpdateManyWithoutAssetNestedInput
+  priceHourly: PriceHourlyUpdateManyWithoutAsssetNestedInput
+  priceHourlyVectors: PriceHourlyVectorUpdateManyWithoutAssetNestedInput
+  primaryExchange: NullableStringFieldUpdateOperationsInput
+  shareClassSharesOutstanding: NullableDecimalFieldUpdateOperationsInput
+  sicCode: NullableStringFieldUpdateOperationsInput
+  sicDescription: NullableStringFieldUpdateOperationsInput
+  symbol: StringFieldUpdateOperationsInput
+  todaysChange: DecimalFieldUpdateOperationsInput
+  todaysChangePerc: DecimalFieldUpdateOperationsInput
+  totalEmployees: NullableIntFieldUpdateOperationsInput
+  transactions: TransactionUpdateManyWithoutAssetNestedInput
+  type: StringFieldUpdateOperationsInput
+  vectorGraphs: VectorGraphUpdateManyWithoutAssetNestedInput
+}
+
 input AssetUpdateWithoutLotsInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -6899,6 +7037,7 @@ input AssetUpdateWithoutLotsInput {
 }
 
 input AssetUpdateWithoutMergeErrorInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -6944,6 +7083,7 @@ input AssetUpdateWithoutMergeErrorInput {
 }
 
 input AssetUpdateWithoutPositionsInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -6989,6 +7129,7 @@ input AssetUpdateWithoutPositionsInput {
 }
 
 input AssetUpdateWithoutPriceHourlyVectorsInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -7034,6 +7175,7 @@ input AssetUpdateWithoutPriceHourlyVectorsInput {
 }
 
 input AssetUpdateWithoutTransactionsInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -7079,6 +7221,7 @@ input AssetUpdateWithoutTransactionsInput {
 }
 
 input AssetUpdateWithoutVectorGraphsInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutAssetNestedInput
   active: BoolFieldUpdateOperationsInput
   assetClass: EnumAssetClassFieldUpdateOperationsInput
   assetType: AssetTypeUpdateOneWithoutAssetsNestedInput
@@ -7141,6 +7284,12 @@ input AssetUpsertWithoutLotMergeInput {
   where: AssetWhereInput
 }
 
+input AssetUpsertWithoutLotUploadFileInput {
+  create: AssetCreateWithoutLotUploadFileInput!
+  update: AssetUpdateWithoutLotUploadFileInput!
+  where: AssetWhereInput
+}
+
 input AssetUpsertWithoutLotsInput {
   create: AssetCreateWithoutLotsInput!
   update: AssetUpdateWithoutLotsInput!
@@ -7179,6 +7328,7 @@ input AssetUpsertWithoutVectorGraphsInput {
 
 input AssetWhereInput {
   AND: [AssetWhereInput!]
+  LotUploadFile: LotUploadFileListRelationFilter
   NOT: [AssetWhereInput!]
   OR: [AssetWhereInput!]
   active: BoolFilter
@@ -7229,6 +7379,7 @@ input AssetWhereInput {
 
 input AssetWhereUniqueInput {
   AND: [AssetWhereInput!]
+  LotUploadFile: LotUploadFileListRelationFilter
   NOT: [AssetWhereInput!]
   OR: [AssetWhereInput!]
   active: BoolFilter
@@ -13750,6 +13901,8 @@ input LotUploadCreateWithoutPortfolioInput {
 type LotUploadFile {
   account: Account!
   accountId: String!
+  asset: Asset
+  assetSymbol: String
   createdAt: DateTime!
   file: File
 
@@ -13769,6 +13922,7 @@ type LotUploadFile {
 type LotUploadFileCountAggregate {
   _all: Int!
   accountId: Int!
+  assetSymbol: Int!
   createdAt: Int!
   fileId: Int!
   id: Int!
@@ -13779,6 +13933,7 @@ type LotUploadFileCountAggregate {
 }
 
 input LotUploadFileCreateManyAccountInput {
+  assetSymbol: String
   createdAt: DateTime
   fileId: String
   id: String
@@ -13793,8 +13948,25 @@ input LotUploadFileCreateManyAccountInputEnvelope {
   skipDuplicates: Boolean
 }
 
+input LotUploadFileCreateManyAssetInput {
+  accountId: String!
+  createdAt: DateTime
+  fileId: String
+  id: String
+  lotUploadId: String!
+  portfolioId: String!
+  type: LotUploadFileType!
+  updatedAt: DateTime
+}
+
+input LotUploadFileCreateManyAssetInputEnvelope {
+  data: [LotUploadFileCreateManyAssetInput!]!
+  skipDuplicates: Boolean
+}
+
 input LotUploadFileCreateManyFileInput {
   accountId: String!
+  assetSymbol: String
   createdAt: DateTime
   id: String
   lotUploadId: String!
@@ -13810,6 +13982,7 @@ input LotUploadFileCreateManyFileInputEnvelope {
 
 input LotUploadFileCreateManyInput {
   accountId: String!
+  assetSymbol: String
   createdAt: DateTime
   fileId: String
   id: String
@@ -13821,6 +13994,7 @@ input LotUploadFileCreateManyInput {
 
 input LotUploadFileCreateManyLotUploadInput {
   accountId: String!
+  assetSymbol: String
   createdAt: DateTime
   fileId: String
   id: String
@@ -13836,6 +14010,7 @@ input LotUploadFileCreateManyLotUploadInputEnvelope {
 
 input LotUploadFileCreateManyPortfolioInput {
   accountId: String!
+  assetSymbol: String
   createdAt: DateTime
   fileId: String
   id: String
@@ -13854,6 +14029,13 @@ input LotUploadFileCreateNestedManyWithoutAccountInput {
   connectOrCreate: [LotUploadFileCreateOrConnectWithoutAccountInput!]
   create: [LotUploadFileCreateWithoutAccountInput!]
   createMany: LotUploadFileCreateManyAccountInputEnvelope
+}
+
+input LotUploadFileCreateNestedManyWithoutAssetInput {
+  connect: [LotUploadFileWhereUniqueInput!]
+  connectOrCreate: [LotUploadFileCreateOrConnectWithoutAssetInput!]
+  create: [LotUploadFileCreateWithoutAssetInput!]
+  createMany: LotUploadFileCreateManyAssetInputEnvelope
 }
 
 input LotUploadFileCreateNestedManyWithoutFileInput {
@@ -13882,6 +14064,11 @@ input LotUploadFileCreateOrConnectWithoutAccountInput {
   where: LotUploadFileWhereUniqueInput!
 }
 
+input LotUploadFileCreateOrConnectWithoutAssetInput {
+  create: LotUploadFileCreateWithoutAssetInput!
+  where: LotUploadFileWhereUniqueInput!
+}
+
 input LotUploadFileCreateOrConnectWithoutFileInput {
   create: LotUploadFileCreateWithoutFileInput!
   where: LotUploadFileWhereUniqueInput!
@@ -13898,6 +14085,18 @@ input LotUploadFileCreateOrConnectWithoutPortfolioInput {
 }
 
 input LotUploadFileCreateWithoutAccountInput {
+  asset: AssetCreateNestedOneWithoutLotUploadFileInput
+  createdAt: DateTime
+  file: FileCreateNestedOneWithoutLotUploadFileInput
+  id: String
+  lotUpload: LotUploadCreateNestedOneWithoutLotUploadFileInput!
+  portfolio: PortfolioCreateNestedOneWithoutLotUploadFileInput!
+  type: LotUploadFileType!
+  updatedAt: DateTime
+}
+
+input LotUploadFileCreateWithoutAssetInput {
+  account: AccountCreateNestedOneWithoutLotUploadFileInput!
   createdAt: DateTime
   file: FileCreateNestedOneWithoutLotUploadFileInput
   id: String
@@ -13909,6 +14108,7 @@ input LotUploadFileCreateWithoutAccountInput {
 
 input LotUploadFileCreateWithoutFileInput {
   account: AccountCreateNestedOneWithoutLotUploadFileInput!
+  asset: AssetCreateNestedOneWithoutLotUploadFileInput
   createdAt: DateTime
   id: String
   lotUpload: LotUploadCreateNestedOneWithoutLotUploadFileInput!
@@ -13919,6 +14119,7 @@ input LotUploadFileCreateWithoutFileInput {
 
 input LotUploadFileCreateWithoutLotUploadInput {
   account: AccountCreateNestedOneWithoutLotUploadFileInput!
+  asset: AssetCreateNestedOneWithoutLotUploadFileInput
   createdAt: DateTime
   file: FileCreateNestedOneWithoutLotUploadFileInput
   id: String
@@ -13929,6 +14130,7 @@ input LotUploadFileCreateWithoutLotUploadInput {
 
 input LotUploadFileCreateWithoutPortfolioInput {
   account: AccountCreateNestedOneWithoutLotUploadFileInput!
+  asset: AssetCreateNestedOneWithoutLotUploadFileInput
   createdAt: DateTime
   file: FileCreateNestedOneWithoutLotUploadFileInput
   id: String
@@ -13945,6 +14147,7 @@ input LotUploadFileListRelationFilter {
 
 type LotUploadFileMaxAggregate {
   accountId: String
+  assetSymbol: String
   createdAt: DateTime
   fileId: String
   id: String
@@ -13956,6 +14159,7 @@ type LotUploadFileMaxAggregate {
 
 type LotUploadFileMinAggregate {
   accountId: String
+  assetSymbol: String
   createdAt: DateTime
   fileId: String
   id: String
@@ -13970,6 +14174,7 @@ input LotUploadFileScalarWhereInput {
   NOT: [LotUploadFileScalarWhereInput!]
   OR: [LotUploadFileScalarWhereInput!]
   accountId: UuidFilter
+  assetSymbol: StringNullableFilter
   createdAt: DateTimeFilter
   fileId: UuidNullableFilter
   id: UuidFilter
@@ -13993,6 +14198,11 @@ input LotUploadFileUpdateManyMutationInput {
 }
 
 input LotUploadFileUpdateManyWithWhereWithoutAccountInput {
+  data: LotUploadFileUpdateManyMutationInput!
+  where: LotUploadFileScalarWhereInput!
+}
+
+input LotUploadFileUpdateManyWithWhereWithoutAssetInput {
   data: LotUploadFileUpdateManyMutationInput!
   where: LotUploadFileScalarWhereInput!
 }
@@ -14024,6 +14234,20 @@ input LotUploadFileUpdateManyWithoutAccountNestedInput {
   update: [LotUploadFileUpdateWithWhereUniqueWithoutAccountInput!]
   updateMany: [LotUploadFileUpdateManyWithWhereWithoutAccountInput!]
   upsert: [LotUploadFileUpsertWithWhereUniqueWithoutAccountInput!]
+}
+
+input LotUploadFileUpdateManyWithoutAssetNestedInput {
+  connect: [LotUploadFileWhereUniqueInput!]
+  connectOrCreate: [LotUploadFileCreateOrConnectWithoutAssetInput!]
+  create: [LotUploadFileCreateWithoutAssetInput!]
+  createMany: LotUploadFileCreateManyAssetInputEnvelope
+  delete: [LotUploadFileWhereUniqueInput!]
+  deleteMany: [LotUploadFileScalarWhereInput!]
+  disconnect: [LotUploadFileWhereUniqueInput!]
+  set: [LotUploadFileWhereUniqueInput!]
+  update: [LotUploadFileUpdateWithWhereUniqueWithoutAssetInput!]
+  updateMany: [LotUploadFileUpdateManyWithWhereWithoutAssetInput!]
+  upsert: [LotUploadFileUpsertWithWhereUniqueWithoutAssetInput!]
 }
 
 input LotUploadFileUpdateManyWithoutFileNestedInput {
@@ -14073,6 +14297,11 @@ input LotUploadFileUpdateWithWhereUniqueWithoutAccountInput {
   where: LotUploadFileWhereUniqueInput!
 }
 
+input LotUploadFileUpdateWithWhereUniqueWithoutAssetInput {
+  data: LotUploadFileUpdateWithoutAssetInput!
+  where: LotUploadFileWhereUniqueInput!
+}
+
 input LotUploadFileUpdateWithWhereUniqueWithoutFileInput {
   data: LotUploadFileUpdateWithoutFileInput!
   where: LotUploadFileWhereUniqueInput!
@@ -14089,6 +14318,18 @@ input LotUploadFileUpdateWithWhereUniqueWithoutPortfolioInput {
 }
 
 input LotUploadFileUpdateWithoutAccountInput {
+  asset: AssetUpdateOneWithoutLotUploadFileNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  file: FileUpdateOneWithoutLotUploadFileNestedInput
+  id: StringFieldUpdateOperationsInput
+  lotUpload: LotUploadUpdateOneRequiredWithoutLotUploadFileNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutLotUploadFileNestedInput
+  type: EnumLotUploadFileTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotUploadFileUpdateWithoutAssetInput {
+  account: AccountUpdateOneRequiredWithoutLotUploadFileNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   file: FileUpdateOneWithoutLotUploadFileNestedInput
   id: StringFieldUpdateOperationsInput
@@ -14100,6 +14341,7 @@ input LotUploadFileUpdateWithoutAccountInput {
 
 input LotUploadFileUpdateWithoutFileInput {
   account: AccountUpdateOneRequiredWithoutLotUploadFileNestedInput
+  asset: AssetUpdateOneWithoutLotUploadFileNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   lotUpload: LotUploadUpdateOneRequiredWithoutLotUploadFileNestedInput
@@ -14110,6 +14352,7 @@ input LotUploadFileUpdateWithoutFileInput {
 
 input LotUploadFileUpdateWithoutLotUploadInput {
   account: AccountUpdateOneRequiredWithoutLotUploadFileNestedInput
+  asset: AssetUpdateOneWithoutLotUploadFileNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   file: FileUpdateOneWithoutLotUploadFileNestedInput
   id: StringFieldUpdateOperationsInput
@@ -14120,6 +14363,7 @@ input LotUploadFileUpdateWithoutLotUploadInput {
 
 input LotUploadFileUpdateWithoutPortfolioInput {
   account: AccountUpdateOneRequiredWithoutLotUploadFileNestedInput
+  asset: AssetUpdateOneWithoutLotUploadFileNestedInput
   createdAt: DateTimeFieldUpdateOperationsInput
   file: FileUpdateOneWithoutLotUploadFileNestedInput
   id: StringFieldUpdateOperationsInput
@@ -14131,6 +14375,12 @@ input LotUploadFileUpdateWithoutPortfolioInput {
 input LotUploadFileUpsertWithWhereUniqueWithoutAccountInput {
   create: LotUploadFileCreateWithoutAccountInput!
   update: LotUploadFileUpdateWithoutAccountInput!
+  where: LotUploadFileWhereUniqueInput!
+}
+
+input LotUploadFileUpsertWithWhereUniqueWithoutAssetInput {
+  create: LotUploadFileCreateWithoutAssetInput!
+  update: LotUploadFileUpdateWithoutAssetInput!
   where: LotUploadFileWhereUniqueInput!
 }
 
@@ -14158,6 +14408,8 @@ input LotUploadFileWhereInput {
   OR: [LotUploadFileWhereInput!]
   account: AccountScalarRelationFilter
   accountId: UuidFilter
+  asset: AssetNullableScalarRelationFilter
+  assetSymbol: StringNullableFilter
   createdAt: DateTimeFilter
   file: FileNullableScalarRelationFilter
   fileId: UuidNullableFilter
@@ -14176,6 +14428,8 @@ input LotUploadFileWhereUniqueInput {
   OR: [LotUploadFileWhereInput!]
   account: AccountScalarRelationFilter
   accountId: UuidFilter
+  asset: AssetNullableScalarRelationFilter
+  assetSymbol: StringNullableFilter
   createdAt: DateTimeFilter
   file: FileNullableScalarRelationFilter
   fileId: UuidNullableFilter

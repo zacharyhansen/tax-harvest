@@ -1806,6 +1806,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "LotUploadFile",
+          "type": "LotUploadFile",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotUploadFileToAsset",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "MergeError",
           "type": "MergeError",
           "isRequired": false,
@@ -5402,6 +5416,20 @@
           "maxLength": null
         },
         {
+          "id": "public.LotUploadFile.assetSymbol",
+          "name": "assetSymbol",
+          "columnName": "assetSymbol",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "Account",
           "type": "Account",
           "isRequired": true,
@@ -5412,6 +5440,24 @@
           ],
           "relationToFields": [
             "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Asset",
+          "type": "Asset",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "LotUploadFileToAsset",
+          "relationFromFields": [
+            "assetSymbol"
+          ],
+          "relationToFields": [
+            "symbol"
           ],
           "isList": false,
           "isId": false,

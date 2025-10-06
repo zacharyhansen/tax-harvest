@@ -317,19 +317,21 @@ export class RealizedPandLService {
 					.select('id')
 					.where('portfolioId', '=', portfolioId)
 					.execute();
-				trx
-					.insertInto('RealizedPAndL')
-					.values(
-						accounts.map((account) => ({
-							portfolioId,
-							accountId: account.id,
-							shortTermCapitalGain: 0,
-							longTermCapitalGain: 0,
-							dividend: 0,
-							qualifiedDividend: 0,
-						})),
-					)
-					.execute();
+				if (accounts.length > 0) {
+					trx
+						.insertInto('RealizedPAndL')
+						.values(
+							accounts.map((account) => ({
+								portfolioId,
+								accountId: account.id,
+								shortTermCapitalGain: 0,
+								longTermCapitalGain: 0,
+								dividend: 0,
+								qualifiedDividend: 0,
+							})),
+						)
+						.execute();
+				}
 			});
 			return await this.queryRealizedPAndL({
 				portfolioId,

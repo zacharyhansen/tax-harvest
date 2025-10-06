@@ -1,0 +1,61 @@
+fragment AccountPnlHistoryItem on AccountRealizedPAndLHistory {
+	id
+	accountId
+	portfolioId
+	value
+	profitAndLossType
+	createdAt
+	updatedAt
+	transactionId
+	transaction {
+		id
+		description
+		displaySymbol
+		amount
+		price
+		quantity
+		transactionDate
+		memo
+		assetSymbol
+		transactionOnAssetMerge {
+			assetMerge {
+				id
+				assetSymbol
+				targetValue
+				targetQuantity
+			}
+		}
+	}
+	account {
+		id
+		name
+		institution
+		type
+	}
+	plaidMerge {
+		id
+		createdAt
+	}
+}
+
+query AccountWithPnlHistory($accountId: String!) {
+	account(id: $accountId) {
+		id
+		accountRealizedPAndLHistory {
+			id
+			...AccountPnlHistoryItem
+		}
+	}
+}
+
+query AccountsWithPnl {
+	accounts {
+		id
+		name
+		institution
+		type
+		_count {
+			accountRealizedPAndLHistory
+		}
+	}
+}

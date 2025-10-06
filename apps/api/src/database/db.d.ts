@@ -361,6 +361,7 @@ export interface LotUpload {
 
 export interface LotUploadFile {
   accountId: string;
+  assetSymbol: string | null;
   createdAt: Generated<Timestamp>;
   fileId: string | null;
   id: Generated<string>;

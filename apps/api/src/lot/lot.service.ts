@@ -7,6 +7,7 @@ import { AccountsLotResetEvent } from '~/events/accounts-lot-reset';
 import { EventId } from '~/events/event-id';
 import { LotApplicationService } from '~/lot-application/lot-application.service';
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils';
+import { TimeMethod } from '~/utilities/time-method';
 import { Database } from '../database/database';
 import type { DB } from '../database/db.d';
 import { PrismaService } from '../prisma/prisma.service';
@@ -21,7 +22,8 @@ export class LotService {
 		private readonly lotApplicationService: LotApplicationService,
 	) {}
 
-	resetLotsForAccount({
+	@TimeMethod()
+	async resetLotsForAccount({
 		lotSeededDate,
 		accountId,
 		lots,
@@ -32,9 +34,19 @@ export class LotService {
 		lotSeededDate?: Date;
 		portfolioId: string;
 	}) {
-		return this.prismaService
-			.rlsPortfolioClient(portfolioId)
-			.$transaction(async (trx) => {
+		const assets = new Set(lots.map((lot) => lot.assetSymbol));
+		await this.db
+			.insertInto('Asset')
+			.values(
+				Array.from(assets).map((asset) => ({
+					symbol: asset,
+				})),
+			)
+			.onConflict((eb) => eb.doNothing())
+			.execute();
+
+		return this.prismaService.rlsPortfolioClient(portfolioId).$transaction(
+			async (trx) => {
 				await trx.account.update({
 					data: {
 						uploadedPositions: true,
@@ -44,22 +56,6 @@ export class LotService {
 						id: accountId,
 					},
 				});
-
-				const assets = new Set(lots.map((lot) => lot.assetSymbol));
-				// Create the new assets to make sure they exist
-				for (const asset of assets) {
-					await trx.asset.upsert({
-						create: {
-							symbol: asset,
-						},
-						update: {
-							symbol: asset,
-						},
-						where: {
-							symbol: asset,
-						},
-					});
-				}
 
 				// Clean up old data that doesnt mantter anymore
 				await trx.lot.deleteMany({
@@ -77,6 +73,7 @@ export class LotService {
 						accountId,
 					},
 				});
+				console.log({ assets: 'plaid merge delete done' });
 
 				// Reset merged transactions
 				await trx.transaction.updateMany({
@@ -90,6 +87,8 @@ export class LotService {
 						merged: false,
 					},
 				});
+				console.log({ assets: 'transaction update done' });
+
 				await trx.transaction.updateMany({
 					where: {
 						accountId,
@@ -115,7 +114,15 @@ export class LotService {
 					EventId.ACCOUNTS_LOT_RESET,
 					new AccountsLotResetEvent(accountId),
 				);
-			});
+
+				console.log({ assets: 'event done' });
+
+				return;
+			},
+			{
+				timeout: 20000,
+			},
+		);
 	}
 
 	lotCurrent({
