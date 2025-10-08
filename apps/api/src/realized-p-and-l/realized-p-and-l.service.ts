@@ -306,10 +306,11 @@ export class RealizedPandLService {
 			: new Date(new Date().getFullYear(), 0, 1);
 
 		try {
-			return await this.queryRealizedPAndL({
+			const result = await this.queryRealizedPAndL({
 				portfolioId,
 				startOfYear,
 			});
+			return result;
 		} catch {
 			await executeWithRLS(this.db, portfolioId, async (trx) => {
 				const accounts = await trx

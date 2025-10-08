@@ -154,6 +154,47 @@ describe('csvService', () => {
 		expect(CsvService.etradeDetectLotHeaderLine(content)).toEqual(11);
 	});
 
+	describe('etradeExtractAccountName', () => {
+		it('should extract account name from etradePortfolioDownload.csv', () => {
+			const content = readFileSync(
+				resolve(__dirname, './test/etradePortfolioDownload.csv'),
+				'utf-8',
+			);
+			const accountName = CsvService.etradeExtractAccountName(content);
+			expect(accountName).toBe('Individual Brokerage -9871');
+		});
+
+		it('should extract account name from etradePortfolioDownload_2.csv', () => {
+			const content = readFileSync(
+				resolve(__dirname, './test/etradePortfolioDownload_2.csv'),
+				'utf-8',
+			);
+			const accountName = CsvService.etradeExtractAccountName(content);
+			expect(accountName).toBe('Individual Brokerage -4314');
+		});
+
+		it('should extract account name from etradePortfolioDownload_3.csv', () => {
+			const content = readFileSync(
+				resolve(__dirname, './test/etradePortfolioDownload_3.csv'),
+				'utf-8',
+			);
+			const accountName = CsvService.etradeExtractAccountName(content);
+			expect(accountName).toBe('S Corporation -7763');
+		});
+
+		it('should return empty string for content without Account Summary', () => {
+			const content = 'Random,CSV,Content\n1,2,3\n4,5,6';
+			const accountName = CsvService.etradeExtractAccountName(content);
+			expect(accountName).toBe('');
+		});
+
+		it('should return empty string for malformed account data', () => {
+			const content = 'Account Summary\nAccount,Net Account Value\n';
+			const accountName = CsvService.etradeExtractAccountName(content);
+			expect(accountName).toBe('');
+		});
+	});
+
 	it('should detect the correct lot seed date for etrade csv', () => {
 		const content = readFileSync(
 			resolve(__dirname, './test/etradePortfolioDownload.csv'),
@@ -169,19 +210,22 @@ describe('csvService', () => {
 		const content = CsvService.csvToString(
 			resolve(__dirname, './test/etradePortfolioDownload.csv'),
 		);
-		const { records } = await service.etradeCSVToLots({
+		const { records, accountName } = await service.etradeCSVToLots({
 			content,
 		});
 
 		expect(records).toEqual(lotRecordsFromEtradePortfolioDownload);
+		expect(accountName).toBe('Individual Brokerage -9871');
 
 		const content_3 = CsvService.csvToString(
 			resolve(__dirname, './test/etradePortfolioDownload_3.csv'),
 		);
-		const { records: records_3 } = await service.etradeCSVToLots({
-			content: content_3,
-		});
+		const { records: records_3, accountName: accountName_3 } =
+			await service.etradeCSVToLots({
+				content: content_3,
+			});
 		expect(records_3).toEqual(lotRecordsFromEtradePortfolioDownload_3);
+		expect(accountName_3).toBe('S Corporation -7763');
 	});
 
 	describe('etradeTransformCSVRecords', () => {
@@ -295,10 +339,12 @@ describe('csvService', () => {
 		const content = CsvService.csvToString(
 			resolve(__dirname, './test/etradePortfolioDownload_2.csv'),
 		);
-		const { records, lotSeededDate } = await service.etradeCSVToLots({
-			content,
-		});
+		const { records, lotSeededDate, accountName } =
+			await service.etradeCSVToLots({
+				content,
+			});
 		expect(records).toMatchSnapshot();
+		expect(accountName).toBe('Individual Brokerage -4314');
 		const finalRecords = service.etradeTransformCSVRecords({
 			records,
 			lotSeededDate,
@@ -318,13 +364,15 @@ describe('csvService', () => {
 		const content = CsvService.csvToString(
 			resolve(__dirname, './test/etradePortfolioDownload.csv'),
 		);
-		const { records, lotSeededDate } = await service.etradeCSVToLots({
-			content,
-		});
+		const { records, lotSeededDate, accountName } =
+			await service.etradeCSVToLots({
+				content,
+			});
 
 		// Ensure we got a lotSeededDate from the CSV
 		expect(lotSeededDate).toBeDefined();
 		expect(lotSeededDate?.toISOString()).toBe('2024-10-28T04:30:00.000Z');
+		expect(accountName).toBe('Individual Brokerage -9871');
 
 		const finalRecords = service.etradeTransformCSVRecords({
 			records,

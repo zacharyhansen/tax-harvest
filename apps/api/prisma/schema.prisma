@@ -71,7 +71,7 @@ model Portfolio {
   harvestCycleWeeks Int      @default(4)
 
   /// Minimum p and l for a lot to be considered harvestable
-  minimumLotPAndL                     Decimal                      @default(100) @db.Decimal(14, 2)
+  minimumLotPAndL                     Decimal                      @default(10) @db.Decimal(14, 2)
   // Harvest Fields
   /// How much $ amount does a single share need to exceed to be a valid harvest share (i.e. shares with a p/l lower we shouldnt even care about)
   harvestShareDollarThreshold         Decimal                      @default(".01") @db.Decimal(14, 2)
@@ -111,7 +111,34 @@ model Portfolio {
   accountRealizedPAndLHistory AccountRealizedPAndLHistory[]
   lotUpload                   LotUpload[]
   lotUploadFile               LotUploadFile[]
-  PositionSnapshot            PositionSnapshot[]
+  positionSnapshot            PositionSnapshot[]
+  porfolioConnect             PortfolioConnect[]
+}
+
+enum PorfolioConnectState {
+  PENDING
+  COMPLETED
+  ERROR
+}
+
+/// The connect onbaording flow that is initiated by the user for a specific institution. This is controlled by the xstate machine
+model PortfolioConnect {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  portfolioId        String               @db.Uuid
+  createdAt          DateTime             @default(now())
+  persistedSnapshot  Json                 @default("{}") @db.JsonB
+  authConnectionId   String?              @unique @db.Uuid
+  plaidInstitutionId String
+  updatedAt          DateTime             @default(now()) @updatedAt
+  state              PorfolioConnectState @default(PENDING)
+
+  authConnection   AuthConnection?
+  portfolio        Portfolio        @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  account          Account[]
+  plaidInstitution PlaidInstitution @relation(fields: [plaidInstitutionId], references: [id], onDelete: Cascade)
+
+  @@unique([portfolioId, plaidInstitutionId])
+  @@index([portfolioId, state])
 }
 
 enum HarvestType {
@@ -149,7 +176,7 @@ model Harvest {
   notify                    Boolean     @default(true)
 
   createdBy               User                     @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  portfolio               Portfolio                @relation(fields: [portfolioId], references: [id])
+  portfolio               Portfolio                @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   harvestTransactions     HarvestTransaction[]
   harvestTransactionItems HarvestTransactionItem[]
 
@@ -221,6 +248,7 @@ model Account {
   id                   String                       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt            DateTime                     @default(now())
   updatedAt            DateTime                     @default(now()) @updatedAt
+  portfolioConnectId   String                       @db.Uuid
   /// External provider of the account - null if its an system generated account
   provider             AccountProvider              @default(UNCONNECTED)
   // External provider of the account for lot uploads / lot identification / etc.
@@ -236,8 +264,6 @@ model Account {
   createdById          String
   /// The description of the account
   description          String?
-  /// What institution does this account fall under
-  institution          AccountInstitution?
   /// The type of account
   type                 String                       @default("Unconnected")
   subType              String?
@@ -312,6 +338,7 @@ model Account {
   accountRealizedPAndLHistory AccountRealizedPAndLHistory[]
   lotUpload                   LotUpload[]
   lotUploadFile               LotUploadFile[]
+  portfolioConnect            PortfolioConnect              @relation(fields: [portfolioConnectId], references: [id], onDelete: Cascade)
 
   /// This attempts to ensure user doesnt link the same account twice (i.e. same plaid account mask)
   @@unique([authConnectionId, plaidAccountMask, type])
@@ -892,7 +919,7 @@ enum AuthType {
   PLAID_LINK
 }
 
-/// An authorized connection to some external system (pretty much one ot one to a plaid Link/item)
+/// An authorized connection to Plaid (one ot one to a plaid Link/item)
 model AuthConnection {
   /// Internal identifier
   id                           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -920,8 +947,10 @@ model AuthConnection {
   syncedAt                     DateTime?
   /// When was the last transaction sync Plaid
   lastTransactionSyncedAtPlaid DateTime?
-  /// Plaid institution id
-  plaidInstitutionId           String?
+  /// Plaid institution id (from plaid API)
+  plaidInstitutionId           String
+  /// Plaid institution id (from our database)
+  portfolioConnectId           String     @unique @db.Uuid
 
   // Oauth Fields -------
   /// @HideField({ output: true, input: true })
@@ -934,14 +963,41 @@ model AuthConnection {
   user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   portfolio        Portfolio          @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   accounts         Account[]
-  PositionSnapshot PositionSnapshot[]
+  positionSnapshot PositionSnapshot[]
+  portfolioConnect PortfolioConnect   @relation(fields: [portfolioConnectId], references: [id], onDelete: Cascade)
+  plaidInstitution PlaidInstitution   @relation(fields: [plaidInstitutionId], references: [id], onDelete: Cascade)
 
   /// Only one link per user per portfolio per source (importantly a user can only have 1 plaid link per portfolio in a given institution)
   /// We must enforce this else transactions lots etc. will be duplicated in portfolios from plaid (trx ids change depending on the plaid link)
   /// Essentially unique institution per user per portfolio
   @@unique([source, userId, portfolioId, plaidInstitutionId])
+  @@index([portfolioId, plaidInstitutionId])
   @@index([portfolioId])
   @@index([externalId])
+}
+
+/// Plaid institution data synced nightly from Plaid API
+model PlaidInstitution {
+  id               String             @id
+  name             String
+  countryCode      String[] // Array of country codes
+  url              String?
+  primaryColor     String?
+  logo             String? // URL or base64 encoded
+  oauth            Boolean            @default(false)
+  products         String[] // Array of product names
+  routingNumbers   String[]           @default([])
+  dtcNumbers       String[]           @default([])
+  status           Json               @db.JsonB // Nested status data
+  raw              Json?              @db.JsonB // Complete API response (optional)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now()) @updatedAt
+  lastSyncedAt     DateTime           @default(now())
+  portfolioConnect PortfolioConnect[]
+  authConnection   AuthConnection[]
+
+  @@index([name])
+  @@index([lastSyncedAt])
 }
 
 model File {
@@ -973,8 +1029,9 @@ model LotUpload {
   updatedAt                   DateTime                    @default(now()) @updatedAt
   portfolioId                 String                      @db.Uuid
   accountId                   String                      @db.Uuid
-  fileId                      String                      @db.Uuid
   applied                     Boolean                     @default(false)
+  /// If an account is skipped from onboarding, we can use the positions to generate lots
+  usePositionsAsLots          Boolean                     @default(false)
   supportedAccountLotProvider SupportedAccountLotProvider
 
   portfolio     Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
@@ -1233,32 +1290,6 @@ enum EtradeAccountType {
   TRUST
   VARCD
   VARIRACD
-}
-
-enum AccountInstitution {
-  BROKERAGE
-  GLOBALTRADING
-  NONUS
-  STOCKPLAN
-  LENDING
-  HELOC
-  HEIL
-  ONTRACK
-  GENPACT
-  AUTO
-  AUTOLOAN
-  BETA
-  LOYALTY
-  SBASKET
-  CC_BALANCETRANSFER
-  GENPACT_LEAD
-  GANIS
-  MORTGAGE
-  EXTERNAL
-  FUTURES
-  VISA
-  RJO
-  WDBH
 }
 
 enum AccountMode {

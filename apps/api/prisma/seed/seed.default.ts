@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { AccountInstitution, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { copycat } from '@snaplet/copycat';
 import { createSeedClient, type PortfolioRoleEnum } from '@snaplet/seed';
 import { taxAdvantadedSubTypes } from '~/plaid/plaid.utils';
@@ -86,7 +86,6 @@ async function main() {
 								name: 'Etrade Example',
 								provider: 'ETRADE',
 								subType: 'investment',
-								institution: AccountInstitution.BROKERAGE,
 								createdById: mainUserId,
 								Lot: () => exampleLots,
 								skipSetup: taxAdvantadedSubTypes.has('investment'),
@@ -96,7 +95,6 @@ async function main() {
 								name: 'Etrade Example Roth',
 								provider: 'ETRADE',
 								subType: 'roth',
-								institution: AccountInstitution.BROKERAGE,
 								createdById: mainUserId,
 								Lot: () => exampleLots,
 								skipSetup: taxAdvantadedSubTypes.has('roth'),
@@ -119,7 +117,6 @@ async function main() {
 								name: 'Etrade Example',
 								provider: 'ETRADE',
 								subType: 'investment',
-								institution: AccountInstitution.BROKERAGE,
 								createdById: mainUserId,
 								Lot: () => exampleLots,
 								skipSetup: true,
@@ -148,7 +145,6 @@ async function main() {
 								name: 'Etrade Example',
 								provider: 'ETRADE',
 								subType: 'investment',
-								institution: AccountInstitution.BROKERAGE,
 								createdById: mainUserId,
 								Lot: () => exampleLots,
 								skipSetup: true,
@@ -177,7 +173,6 @@ async function main() {
 								name: 'Etrade Example',
 								provider: 'ETRADE',
 								subType: 'investment',
-								institution: AccountInstitution.BROKERAGE,
 								createdById: mainUserId,
 								// portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
 								Lot: () => exampleLots,
@@ -207,7 +202,6 @@ async function main() {
 								name: 'Etrade Example',
 								provider: 'ETRADE',
 								subType: 'investment',
-								institution: AccountInstitution.BROKERAGE,
 								createdById: mainUserId,
 								// portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
 								Lot: () =>
@@ -241,7 +235,6 @@ async function main() {
 								name: 'Etrade Example',
 								provider: 'ETRADE',
 								subType: 'investment',
-								institution: AccountInstitution.BROKERAGE,
 								createdById: mainUserId,
 								// portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
 								Lot: () => allGainLots,
@@ -271,7 +264,6 @@ async function main() {
 								name: 'Etrade Example',
 								provider: 'ETRADE',
 								subType: 'investment',
-								institution: AccountInstitution.BROKERAGE,
 								createdById: mainUserId,
 								// portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
 								Lot: () => allLossLots,
@@ -335,7 +327,6 @@ async function main() {
 	//               name: 'Etrade Example',
 	//               provider: 'ETRADE',
 	//               subType: 'investment',
-	//               institution: AccountInstitution.BROKERAGE,
 	//               createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
 	//               portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
 	//               Lot: () => exampleLots,
@@ -346,7 +337,6 @@ async function main() {
 	//               name: 'Etrade Example Roth',
 	//               provider: 'ETRADE',
 	//               subType: 'roth',
-	//               institution: AccountInstitution.BROKERAGE,
 	//               createdById: 'user_2jFwy6JTTb43hqvtE5pxG2aywe7',
 	//               portfolioId: 'f88f8aa8-5c17-4415-951e-72a6758118c2',
 	//               Lot: () => exampleLots,

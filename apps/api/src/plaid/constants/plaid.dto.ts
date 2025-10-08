@@ -1,7 +1,7 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
 @InputType()
-class PlaidInstitution {
+class PlaidInstitutionInput {
 	@Field(() => String)
 	name: string;
 
@@ -32,8 +32,8 @@ class PlaidAccount {
 
 @InputType()
 export class PlaidLinkOnSuccessMetadata {
-	@Field(() => PlaidInstitution, { nullable: true })
-	institution?: PlaidInstitution;
+	@Field(() => PlaidInstitutionInput, { nullable: true })
+	institution?: PlaidInstitutionInput;
 
 	@Field(() => [PlaidAccount])
 	accounts: PlaidAccount[];

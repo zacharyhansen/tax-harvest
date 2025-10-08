@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import {
 	type Account,
-	AccountInstitution,
 	AccountProvider,
 	type AuthConnection,
 	AuthSource,
@@ -36,6 +35,7 @@ import type {
 	DB,
 	Account as KyselyAccount,
 	Transaction as KyselyTransaction,
+	PortfolioConnect,
 	Position,
 	PositionSnapshot,
 	TransactionOnAssetMerge,
@@ -43,6 +43,7 @@ import type {
 import { AccountsLotResetEvent } from '~/events/accounts-lot-reset';
 import { AccountsSyncedEvent } from '~/events/accounts-synced';
 import { EventId } from '~/events/event-id';
+import { LotUploadService } from '~/lot-upload/lot-upload.service';
 import { PositionService } from '~/position/position.service';
 import {
 	LotApplicationService,
@@ -98,6 +99,7 @@ export class PlaidService {
 		private readonly prismaService: PrismaService,
 		private readonly positionService: PositionService,
 		private readonly lotApplicationService: LotApplicationService,
+		private readonly lotUploadService: LotUploadService,
 	) {
 		this.client = new PlaidApi(
 			new Configuration({
@@ -156,8 +158,7 @@ export class PlaidService {
 			client_id: this.configService.get('PLAID_CLIENT_ID'),
 			client_name: 'TaxHarvest',
 			country_codes: [CountryCode.Us],
-			enable_multi_item_link:
-				!!user.plaidUserToken && user.plaidUserToken !== 'NOT_FOUND',
+			enable_multi_item_link: false, // One institution at a time
 			language: 'en',
 			products: [Products.Investments],
 			user_token:
@@ -203,6 +204,8 @@ export class PlaidService {
 	}
 
 	/**
+	 * This is the plaid "init" flow the user first goes through when connecting their account
+	 *
 	 * Its very important to understand that we NEVER want an external account to exist for 2 separate plaid items in a portfolio
 	 * Plaid creates as many "items" as you request and even if its the same account they will have different account ids in each item.
 	 *
@@ -215,14 +218,61 @@ export class PlaidService {
 		portfolioId,
 		publicToken,
 		userId,
-		existingAccountId,
+		existingPortfolioConnectId,
+		select,
 	}: {
 		userId: string;
 		publicToken: string;
 		portfolioId: string;
 		metaData: PlaidLinkOnSuccessMetadata;
-		existingAccountId?: string;
-	}): Promise<Selectable<KyselyAccount>[]> {
+		existingPortfolioConnectId: string | null;
+		select: Prisma.PortfolioConnectSelect;
+	}): Promise<Selectable<PortfolioConnect>> {
+		let portfolioConnectId = existingPortfolioConnectId;
+		// Validate the plaid institution ID
+		if (!metaData.institution?.institution_id) {
+			throw new Error('Plaid institution ID is required');
+		}
+		if (portfolioConnectId) {
+			const existingPortfolioConnect = await executeWithRLS(
+				this.db,
+				portfolioId,
+				async (trx) => {
+					return trx
+						.selectFrom('PortfolioConnect')
+						.where('PortfolioConnect.id', '=', portfolioConnectId)
+						.selectAll()
+						.executeTakeFirstOrThrow();
+				},
+			);
+			if (
+				existingPortfolioConnect.plaidInstitutionId !==
+				metaData.institution?.institution_id
+			) {
+				this.logger.error(
+					`Plaid institution ID does not match existing portfolio connect`,
+					{
+						existingPortfolioConnect:
+							existingPortfolioConnect.plaidInstitutionId,
+						metaData: metaData.institution?.institution_id,
+					},
+				);
+				throw new Error(
+					'Plaid institution ID does not match existing portfolio connect',
+				);
+			}
+		} else {
+			const portfolioConnect = await this.prismaService
+				.rlsPortfolioClient(portfolioId)
+				.portfolioConnect.create({
+					data: {
+						portfolioId,
+						plaidInstitutionId: metaData.institution.institution_id,
+					},
+				});
+			portfolioConnectId = portfolioConnect.id;
+		}
+
 		const response = await this.client.itemPublicTokenExchange({
 			public_token: publicToken,
 		});
@@ -243,32 +293,22 @@ export class PlaidService {
 			source: AuthSource.PLAID,
 			type: AuthType.PLAID_LINK,
 			token: publicToken,
-			plaidInstitutionId: metaData.institution?.institution_id,
+			portfolioConnect: {
+				connect: {
+					id: portfolioConnectId,
+				},
+			},
+			plaidInstitution: {
+				connect: {
+					id: metaData.institution?.institution_id,
+				},
+			},
 			user: {
 				connect: {
 					id: userId,
 				},
 			},
 		};
-
-		// Remove old Plaid items if we have existing auth connections that will be replaced
-		// if (existingAuthConnections.size > 0) {
-		//   const oldAuthConnectionsToRemove = [...existingAuthConnections.values()]
-		//     .filter(authConn => authConn && authConn.secret)
-
-		//   for (const oldAuthConnection of oldAuthConnectionsToRemove) {
-		//     if (oldAuthConnection?.secret) {
-		//       try {
-		//         await this.removeItem(oldAuthConnection.secret)
-		//         this.logger.log(`Removed old Plaid item for auth connection: ${oldAuthConnection.id}`)
-		//       }
-		//       catch (error) {
-		//         this.logger.warn(`Failed to remove old Plaid item for auth connection ${oldAuthConnection.id}:`, error)
-		//         // Continue processing even if removal fails
-		//       }
-		//     }
-		//   }
-		// }
 
 		const plaidAuthConnection = await this.prismaService
 			.rlsPortfolioClient(portfolioId)
@@ -285,21 +325,35 @@ export class PlaidService {
 				},
 			});
 
+		await this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.portfolioConnect.update({
+				where: {
+					id: portfolioConnectId,
+				},
+				data: {
+					authConnectionId: plaidAuthConnection.id,
+				},
+			});
+
 		return this.syncPlaidItem({
 			plaidAuthConnection,
-			existingAccountId,
+			select,
+			initSchwabPositionsUpload: true,
 		});
 	}
 
 	@TimeMethod()
 	async syncPlaidItem({
 		plaidAuthConnection,
-		existingAccountId,
+		initSchwabPositionsUpload = false,
+		select,
 	}: {
 		plaidAuthConnection: AuthConnection;
-		asReversableOperations?: boolean;
-		existingAccountId?: string;
-	}): Promise<Selectable<KyselyAccount>[]> {
+		initSchwabPositionsUpload?: boolean; // If its the first time we are syncing the item and we want to initialize the schwab positions upload
+		select?: Prisma.PortfolioConnectSelect;
+	}): Promise<Selectable<PortfolioConnect>> {
+		this.logger.log('initSchwabPositionsUpload', { initSchwabPositionsUpload });
 		this.logger.log(`Syncing Plaid item: ${plaidAuthConnection.id}`);
 		if (plaidAuthConnection.type !== AuthType.PLAID_LINK) {
 			throw new Error('This is not a plaid auth connection');
@@ -335,7 +389,6 @@ export class PlaidService {
 		const accounts = await this.resetPlaidAccounts({
 			plaidAccounts: plaidResponse.data.accounts,
 			plaidAuthConnection,
-			existingAccountId,
 		});
 
 		await this.assertPlaidSecuritiesExist({
@@ -390,7 +443,22 @@ export class PlaidService {
 			});
 		}
 
-		return accounts;
+		// If were in schwab setup we need to gnerate the required lot detail file uploads
+		if (initSchwabPositionsUpload) {
+			this.lotUploadService.initSchwabPositionsUploadForOnboarding({
+				accountIds: accounts.map((a) => a.id),
+				portfolioId: plaidAuthConnection.portfolioId,
+			});
+		}
+
+		return this.prismaService
+			.rlsPortfolioClient(plaidAuthConnection.portfolioId)
+			.portfolioConnect.findUniqueOrThrow({
+				where: {
+					authConnectionId: plaidAuthConnection.id,
+				},
+				select,
+			});
 	}
 
 	async applyNewPlaidTransactions({
@@ -1029,11 +1097,9 @@ export class PlaidService {
 	async resetPlaidAccounts({
 		plaidAccounts,
 		plaidAuthConnection,
-		existingAccountId,
 	}: {
 		plaidAccounts: AccountBase[];
 		plaidAuthConnection: AuthConnection;
-		existingAccountId?: string;
 	}): Promise<Selectable<KyselyAccount>[]> {
 		const accounts = PlaidService.convertPlaidAccounts({
 			plaidAccounts,
@@ -1044,15 +1110,39 @@ export class PlaidService {
 			this.db,
 			plaidAuthConnection.portfolioId,
 			async (trx) => {
-				// Not pretty but if a user has set up their account  via onboarding and has not connected plaid yet
+				// Not pretty but if a user has set up their accounts via onboarding before connecting plaid (Etrade does this)
 				// we need to update/connect the account with the plaid account data before upserting by adding the plaidAccountMask
-				if (existingAccountId && accounts[0]) {
-					await trx
-						.updateTable('Account')
-						// @ts-expect-error not sure
-						.set(accounts[0])
-						.where('id', '=', existingAccountId)
-						.execute();
+				const unconnectedAccounts = await trx
+					.selectFrom('Account')
+					.select(['Account.id', 'Account.name'])
+					.innerJoin(
+						'PortfolioConnect',
+						'Account.portfolioConnectId',
+						'PortfolioConnect.id',
+					)
+					.where('Account.authConnectionId', 'is', null)
+					.where(
+						'PortfolioConnect.authConnectionId',
+						'=',
+						plaidAuthConnection.id,
+					)
+					.execute();
+
+				for (const account of unconnectedAccounts) {
+					const matchedPlaidAccount = accounts.find(
+						(plaidAccount) =>
+							plaidAccount.plaidAccountMask &&
+							account.name?.includes(plaidAccount.plaidAccountMask),
+					);
+					if (matchedPlaidAccount) {
+						// MUST UPDATE THE ACCOUNT WITH THE PLAID ACCOUNT DATA so the upsert below works for the existing etrade account
+						await trx
+							.updateTable('Account')
+							// @ts-expect-error - matchedPlaidAccount is an AccountBase
+							.set(matchedPlaidAccount)
+							.where('id', '=', account.id)
+							.execute();
+					}
 				}
 
 				return await trx
@@ -1064,7 +1154,6 @@ export class PlaidService {
 							.doUpdateSet({
 								name: (eb) => eb.ref('excluded.name'),
 								description: (eb) => eb.ref('excluded.description'),
-								institution: (eb) => eb.ref('excluded.institution'),
 								type: (eb) => eb.ref('excluded.type'),
 								subType: (eb) => eb.ref('excluded.subType'),
 								mode: (eb) => eb.ref('excluded.mode'),
@@ -1167,7 +1256,6 @@ export class PlaidService {
 				available: new Decimal(plaidAccount.balances.available ?? 0).toString(),
 				current: new Decimal(plaidAccount.balances.current ?? 0).toString(),
 				externalId: plaidAccount.account_id,
-				institution: AccountInstitution.BROKERAGE,
 				plaidAccountMask: plaidAccount.mask,
 				provider: AccountProvider.PLAID,
 				skipSetup: taxAdvantadedSubTypes.has(plaidAccount.subtype ?? ''),
@@ -1177,6 +1265,7 @@ export class PlaidService {
 				createdById: plaidAuthConnection.userId,
 				// !IMPORTANT - This changes if you reauth to the same account - we never weant to be recreating links to an account in a portfolio
 				portfolioId: plaidAuthConnection.portfolioId,
+				portfolioConnectId: plaidAuthConnection.portfolioConnectId,
 			};
 			return upsertAccount;
 		});
@@ -1360,5 +1449,124 @@ export class PlaidService {
 			this.logger.error(`Failed to fetch institution ${institutionId}:`, error);
 			throw error;
 		}
+	}
+
+	/**
+	 * Fetches a paginated list of institutions from Plaid
+	 * @param params - Pagination and filter parameters
+	 * @returns Promise with institutions array and total count
+	 * @example
+	 * const result = await plaidService.getInstitutions({
+	 *   count: 100,
+	 *   offset: 0,
+	 *   countryCodes: ['US']
+	 * });
+	 */
+	async getInstitutions(params: {
+		count: number;
+		offset: number;
+		countryCodes: string[];
+		// biome-ignore lint/suspicious/noExplicitAny: <from api>
+	}): Promise<{ institutions: any[]; total: number }> {
+		try {
+			const response = await this.client.institutionsGet({
+				count: params.count,
+				offset: params.offset,
+				country_codes: params.countryCodes as CountryCode[],
+				options: {
+					include_optional_metadata: true,
+				},
+			});
+
+			return {
+				institutions: response.data.institutions,
+				total: response.data.total,
+			};
+		} catch (error) {
+			this.logger.error('Failed to fetch institutions from Plaid:', error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Fetches all institutions from Plaid with automatic pagination and upserts to database
+	 * @returns Promise<number> - Total number of institutions synced
+	 * @example
+	 * const count = await plaidService.refreshAllInstitutions();
+	 * console.log(`Synced ${count} institutions`);
+	 */
+	@TimeMethod()
+	async refreshAllInstitutions(): Promise<number> {
+		const BATCH_SIZE = 100;
+		const countryCodes = ['US'];
+		let offset = 0;
+		let total = 0;
+		let institutionsSynced = 0;
+
+		this.logger.log('Starting Plaid institutions sync...');
+
+		do {
+			const { institutions, total: totalCount } = await this.getInstitutions({
+				count: BATCH_SIZE,
+				offset,
+				countryCodes,
+			});
+
+			total = totalCount;
+
+			// Upsert institutions in batch
+			await this.prismaService.rlsBypassClient().$transaction(
+				institutions.map((institution) =>
+					this.prismaService.rlsBypassClient().plaidInstitution.upsert({
+						where: { id: institution.institution_id },
+						create: {
+							id: institution.institution_id,
+							name: institution.name,
+							countryCode: institution.country_codes || [],
+							url: institution.url || null,
+							primaryColor: institution.primary_color || null,
+							logo: institution.logo || null,
+							oauth: institution.oauth || false,
+							products: institution.products || [],
+							routingNumbers: institution.routing_numbers || [],
+							dtcNumbers: institution.dtc_numbers || [],
+							status: institution.status || {},
+							raw: institution,
+							lastSyncedAt: new Date(),
+						},
+						update: {
+							name: institution.name,
+							countryCode: institution.country_codes || [],
+							url: institution.url || null,
+							primaryColor: institution.primary_color || null,
+							logo: institution.logo || null,
+							oauth: institution.oauth || false,
+							products: institution.products || [],
+							routingNumbers: institution.routing_numbers || [],
+							dtcNumbers: institution.dtc_numbers || [],
+							status: institution.status || {},
+							raw: institution,
+							lastSyncedAt: new Date(),
+							updatedAt: new Date(),
+						},
+					}),
+				),
+			);
+
+			institutionsSynced += institutions.length;
+			offset += BATCH_SIZE;
+
+			this.logger.log(
+				`Synced ${institutionsSynced}/${total} institutions (${Math.round((institutionsSynced / total) * 100)}%)`,
+			);
+
+			// Rate limiting: 100ms delay between batches
+			if (offset < total) {
+				await new Promise((resolve) => setTimeout(resolve, 100));
+			}
+		} while (offset < total);
+
+		this.logger.log(`Completed institutions sync: ${institutionsSynced} total`);
+		return institutionsSynced;
 	}
 }

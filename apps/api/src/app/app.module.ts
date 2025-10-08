@@ -19,7 +19,6 @@ import { CronTasksModule } from '~/cron-tasks/cron-tasks.module';
 import { DatabaseModule } from '~/database/database.module';
 import { EmailModule } from '~/email/email.module';
 import { envSchema } from '~/env/env.schema';
-import { EtradeModule } from '~/etrade/etrade.module';
 import { FileModule } from '~/file/file.module';
 import { HealthModule } from '~/health/health.module';
 import { LogsModule } from '~/logs/logs.module';
@@ -30,9 +29,11 @@ import { MultiChangeSetModule } from '~/multi-change-set/multi-change-set.module
 import { NotificationModule } from '~/notification/notification.module';
 import { OauthModule } from '~/oauth/oauth.module';
 import { PlaidModule } from '~/plaid/plaid.module';
+import { PlaidInstitutionModule } from '~/plaid-institution/plaid-institution.module';
 import { PlaidMergeModule } from '~/plaid-merge/plaid-merge.module';
 import { PolygonModule } from '~/polygon/polygon.module';
 import { PortfolioModule } from '~/portfolio/portfolio.module';
+import { PortfolioConnectModule } from '~/portfolio-connect/portfolio-connect.module';
 import { PortfolioSnapshotModule } from '~/portfolio-snapshot/portfolio-snapshot.module';
 import { PositionModule } from '~/position/position.module';
 import { PriceHourlyVectorModule } from '~/price-hourly-vector/price-hourly-vector.module';
@@ -95,11 +96,12 @@ const BigIntID = new GraphQLScalarType({
 		PortfolioModule,
 		PortfolioSnapshotModule,
 		PlaidModule,
+		PlaidInstitutionModule,
+		PortfolioConnectModule,
 		AccountModule,
 		ClerkModule,
 		PolygonModule,
 		OauthModule,
-		EtradeModule,
 		LotApplicationModule,
 		AssetModule,
 		TransactionModule,

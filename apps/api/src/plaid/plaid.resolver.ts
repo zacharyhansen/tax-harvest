@@ -5,7 +5,7 @@ import type { GraphQLResolveInfo } from 'graphql';
 import { ClerkContext } from '../auth/decorators/clerk-context.decorator';
 import { AdminGuard } from '../auth/guards/admin.guard';
 import type { ClerkClaims } from '../auth/types';
-import { Account } from '../generated/graphql';
+import { PortfolioConnect } from '../generated/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaSelect } from '../utilities/prisma/prisma-select';
 import {
@@ -42,9 +42,9 @@ export class PlaidResolver {
 		return plaidResponse.data.link_token;
 	}
 
-	@Mutation(() => [Account], {
+	@Mutation(() => PortfolioConnect, {
 		description:
-			'Set up plaid auth connection and create accounts from syncing plaid',
+			'Set up plaid auth connection and create accounts from syncing plaid (collected into a PortfolioConnect record). Create the portfolio connect if it does not exist (Etrade creates a connect first then syncs).',
 		name: 'setAccessTokenAndSyncAccounts',
 	})
 	async setAccessTokenAndSyncAccounts(
@@ -62,30 +62,23 @@ export class PlaidResolver {
 			type: () => PlaidLinkOnSuccessMetadata,
 		})
 		metaData: PlaidLinkOnSuccessMetadata,
-		@Args('existingAccountId', {
-			nullable: true,
+		@Args('existingPortfolioConnectId', {
 			type: () => String,
+			nullable: true,
 		})
-		existingAccountId?: string,
+		existingPortfolioConnectId: string | null,
 	) {
-		const { select } = new PrismaSelect<Prisma.AccountSelect>(info).value;
+		const { select } = new PrismaSelect<Prisma.PortfolioConnectSelect>(info)
+			.value;
 
-		const accounts = await this.plaidService.setAccessToken({
+		return this.plaidService.setAccessToken({
 			metaData,
 			portfolioId: currentUser.metadata.portfolioId,
 			publicToken,
 			userId: currentUser.sub,
-			existingAccountId,
+			existingPortfolioConnectId,
+			select,
 		});
-
-		return this.prismaService
-			.rlsPortfolioClient(currentUser.metadata.portfolioId)
-			.account.findMany({
-				select,
-				where: {
-					id: { in: accounts.map((a) => a.id) },
-				},
-			});
 	}
 
 	/**
@@ -103,9 +96,9 @@ export class PlaidResolver {
 	 */
 	@Query(() => PlaidInstitutionInfo, {
 		description: 'Get institution information from Plaid',
-		name: 'plaidInstitution',
+		name: 'plaidInstitutionInfo',
 	})
-	async plaidInstitution(
+	async plaidInstitutionInfo(
 		@Args('institutionId', { type: () => String })
 		institutionId: string,
 	) {

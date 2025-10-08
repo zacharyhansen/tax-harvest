@@ -35,15 +35,18 @@ export class LotService {
 		portfolioId: string;
 	}) {
 		const assets = new Set(lots.map((lot) => lot.assetSymbol));
-		await this.db
-			.insertInto('Asset')
-			.values(
-				Array.from(assets).map((asset) => ({
-					symbol: asset,
-				})),
-			)
-			.onConflict((eb) => eb.doNothing())
-			.execute();
+
+		if (assets.size > 0) {
+			await this.db
+				.insertInto('Asset')
+				.values(
+					Array.from(assets).map((asset) => ({
+						symbol: asset,
+					})),
+				)
+				.onConflict((eb) => eb.doNothing())
+				.execute();
+		}
 
 		return this.prismaService.rlsPortfolioClient(portfolioId).$transaction(
 			async (trx) => {

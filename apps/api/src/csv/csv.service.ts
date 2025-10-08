@@ -169,6 +169,7 @@ export class CsvService {
 	async etradeCSVToLots({ content }: { content: string }): Promise<{
 		records: EtradeCSVLotRecord[];
 		lotSeededDate: Date | undefined;
+		accountName: string;
 	}> {
 		const fromLine = CsvService.etradeDetectLotHeaderLine(content);
 		const records: EtradeCSVLotRecord[] = [];
@@ -200,8 +201,9 @@ export class CsvService {
 		}
 
 		const lotSeededDate = this.etradeLotSeededDate(content);
+		const accountName = CsvService.etradeExtractAccountName(content);
 
-		return { records, lotSeededDate };
+		return { records, lotSeededDate, accountName };
 	}
 
 	etradeLotSeededDate(content: string) {
@@ -285,6 +287,60 @@ export class CsvService {
 
 		// Return line number + 1 for `from_line` (since csv-parse uses 1-based indexing)
 		return headerLineIndex === -1 ? -1 : headerLineIndex + 1;
+	}
+
+	/**
+	 * Extracts the account name from E*TRADE CSV content.
+	 * The account name is found in the "Account Summary" section on line 3.
+	 * @param content - The CSV content as a string
+	 * @returns The extracted account name, or empty string if not found
+	 * @example
+	 * ```typescript
+	 * const csvContent = 'Account Summary\nAccount,Net Account Value,...\n"Individual Brokerage -9871",192946.27,...';
+	 * const accountName = CsvService.etradeExtractAccountName(csvContent);
+	 * // Returns: "Individual Brokerage -9871"
+	 * ```
+	 */
+	static etradeExtractAccountName(content: string): string {
+		const lines = content.split('\n');
+
+		// The account name is typically on line 3 (index 2) in the format:
+		// "Account Name -XXXX",value1,value2,...
+		// First, verify we have an Account Summary section
+		const hasAccountSummary = lines.some((line) =>
+			line.includes('Account Summary'),
+		);
+
+		if (!hasAccountSummary) {
+			return '';
+		}
+
+		// Find the line with Account header (line 2)
+		const accountHeaderIndex = lines.findIndex((line) =>
+			/^Account,/.test(line),
+		);
+
+		if (accountHeaderIndex === -1 || accountHeaderIndex + 1 >= lines.length) {
+			return '';
+		}
+
+		// The account data is on the next line
+		const accountDataLine = lines[accountHeaderIndex + 1];
+
+		// Extract the first cell which contains the account name
+		// It may be quoted, so we need to handle that
+		const match = accountDataLine.match(/^"([^"]+)"/);
+		if (match) {
+			return match[1];
+		}
+
+		// If not quoted, extract up to the first comma
+		const firstCommaIndex = accountDataLine.indexOf(',');
+		if (firstCommaIndex > 0) {
+			return accountDataLine.substring(0, firstCommaIndex).trim();
+		}
+
+		return '';
 	}
 
 	static csvToString(filePath: string): string {

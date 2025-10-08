@@ -97,4 +97,21 @@ export class CronTasksService {
 			HarvestNotificationFrequency.QUARTERLY,
 		);
 	}
+
+	/**
+	 * Nightly sync of Plaid institutions
+	 * Runs at 3 AM daily to refresh institution data from Plaid API
+	 */
+	// @Cron(CronExpression.EVERY_DAY_AT_3AM, {
+	// 	name: 'refresh_plaid_institutions',
+	// })
+	// async refreshPlaidInstitutions() {
+	// 	this.logger.log('Starting nightly Plaid institutions refresh');
+	// 	try {
+	// 		const count = await this.plaidService.refreshAllInstitutions();
+	// 		this.logger.log(`Successfully synced ${count} institutions`);
+	// 	} catch (error) {
+	// 		this.logger.error('Failed to refresh Plaid institutions:', error);
+	// 	}
+	// }
 }

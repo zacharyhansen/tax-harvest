@@ -160,20 +160,6 @@
           "maxLength": null
         },
         {
-          "id": "public.Account.institution",
-          "name": "institution",
-          "columnName": "institution",
-          "type": "AccountInstitution",
-          "isRequired": false,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.Account.type",
           "name": "type",
           "columnName": "type",
@@ -692,6 +678,20 @@
           "maxLength": null
         },
         {
+          "id": "public.Account.portfolioConnectId",
+          "name": "portfolioConnectId",
+          "columnName": "portfolioConnectId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
           "name": "AuthConnection",
           "type": "AuthConnection",
           "isRequired": false,
@@ -717,6 +717,24 @@
           "relationName": "AccountToPortfolio",
           "relationFromFields": [
             "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PortfolioConnect",
+          "type": "PortfolioConnect",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "AccountToPortfolioConnect",
+          "relationFromFields": [
+            "portfolioConnectId"
           ],
           "relationToFields": [
             "id"
@@ -2586,7 +2604,7 @@
           "name": "plaidInstitutionId",
           "columnName": "plaidInstitutionId",
           "type": "text",
-          "isRequired": false,
+          "isRequired": true,
           "kind": "scalar",
           "isList": false,
           "isGenerated": false,
@@ -2638,6 +2656,38 @@
           "maxLength": null
         },
         {
+          "id": "public.AuthConnection.portfolioConnectId",
+          "name": "portfolioConnectId",
+          "columnName": "portfolioConnectId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "PlaidInstitution",
+          "type": "PlaidInstitution",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "AuthConnectionToPlaidInstitution",
+          "relationFromFields": [
+            "plaidInstitutionId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Portfolio",
           "type": "Portfolio",
           "isRequired": true,
@@ -2645,6 +2695,24 @@
           "relationName": "AuthConnectionToPortfolio",
           "relationFromFields": [
             "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PortfolioConnect",
+          "type": "PortfolioConnect",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "AuthConnectionToPortfolioConnect",
+          "relationFromFields": [
+            "portfolioConnectId"
           ],
           "relationToFields": [
             "id"
@@ -2714,6 +2782,13 @@
           "name": "AuthConnection_externalId_key",
           "fields": [
             "externalId"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "AuthConnection_portfolioConnectId_key",
+          "fields": [
+            "portfolioConnectId"
           ],
           "nullNotDistinct": false
         },
@@ -5196,20 +5271,6 @@
           "maxLength": null
         },
         {
-          "id": "public.LotUpload.fileId",
-          "name": "fileId",
-          "columnName": "fileId",
-          "type": "uuid",
-          "isRequired": true,
-          "kind": "scalar",
-          "isList": false,
-          "isGenerated": false,
-          "sequence": false,
-          "hasDefaultValue": false,
-          "isId": false,
-          "maxLength": null
-        },
-        {
           "id": "public.LotUpload.supportedAccountLotProvider",
           "name": "supportedAccountLotProvider",
           "columnName": "supportedAccountLotProvider",
@@ -5227,6 +5288,20 @@
           "id": "public.LotUpload.applied",
           "name": "applied",
           "columnName": "applied",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.LotUpload.usePositionsAsLots",
+          "name": "usePositionsAsLots",
+          "columnName": "usePositionsAsLots",
           "type": "bool",
           "isRequired": true,
           "kind": "scalar",
@@ -5996,6 +6071,260 @@
         }
       ]
     },
+    "PlaidInstitution": {
+      "id": "public.PlaidInstitution",
+      "schemaName": "public",
+      "tableName": "PlaidInstitution",
+      "fields": [
+        {
+          "id": "public.PlaidInstitution.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.name",
+          "name": "name",
+          "columnName": "name",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.countryCode",
+          "name": "countryCode",
+          "columnName": "countryCode",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.url",
+          "name": "url",
+          "columnName": "url",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.primaryColor",
+          "name": "primaryColor",
+          "columnName": "primaryColor",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.logo",
+          "name": "logo",
+          "columnName": "logo",
+          "type": "text",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.oauth",
+          "name": "oauth",
+          "columnName": "oauth",
+          "type": "bool",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.products",
+          "name": "products",
+          "columnName": "products",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.routingNumbers",
+          "name": "routingNumbers",
+          "columnName": "routingNumbers",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.dtcNumbers",
+          "name": "dtcNumbers",
+          "columnName": "dtcNumbers",
+          "type": "text[]",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.status",
+          "name": "status",
+          "columnName": "status",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.raw",
+          "name": "raw",
+          "columnName": "raw",
+          "type": "jsonb",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PlaidInstitution.lastSyncedAt",
+          "name": "lastSyncedAt",
+          "columnName": "lastSyncedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "AuthConnection",
+          "type": "AuthConnection",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AuthConnectionToPlaidInstitution",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "PortfolioConnect",
+          "type": "PortfolioConnect",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PortfolioConnectToPlaidInstitution",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "PlaidInstitution_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
     "PlaidMerge": {
       "id": "public.PlaidMerge",
       "schemaName": "public",
@@ -6632,6 +6961,20 @@
           "hasDefaultValue": false
         },
         {
+          "name": "PortfolioConnect",
+          "type": "PortfolioConnect",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "PortfolioConnectToPortfolio",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
           "name": "Position",
           "type": "Position",
           "isRequired": false,
@@ -7193,6 +7536,213 @@
           "name": "PortfolioBalanceSnapshot_pkey",
           "fields": [
             "id"
+          ],
+          "nullNotDistinct": false
+        }
+      ]
+    },
+    "PortfolioConnect": {
+      "id": "public.PortfolioConnect",
+      "schemaName": "public",
+      "tableName": "PortfolioConnect",
+      "fields": [
+        {
+          "id": "public.PortfolioConnect.id",
+          "name": "id",
+          "columnName": "id",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": true,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioConnect.portfolioId",
+          "name": "portfolioId",
+          "columnName": "portfolioId",
+          "type": "uuid",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioConnect.createdAt",
+          "name": "createdAt",
+          "columnName": "createdAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioConnect.persistedSnapshot",
+          "name": "persistedSnapshot",
+          "columnName": "persistedSnapshot",
+          "type": "jsonb",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioConnect.authConnectionId",
+          "name": "authConnectionId",
+          "columnName": "authConnectionId",
+          "type": "uuid",
+          "isRequired": false,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioConnect.plaidInstitutionId",
+          "name": "plaidInstitutionId",
+          "columnName": "plaidInstitutionId",
+          "type": "text",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioConnect.updatedAt",
+          "name": "updatedAt",
+          "columnName": "updatedAt",
+          "type": "timestamp",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "id": "public.PortfolioConnect.state",
+          "name": "state",
+          "columnName": "state",
+          "type": "PorfolioConnectState",
+          "isRequired": true,
+          "kind": "scalar",
+          "isList": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": true,
+          "isId": false,
+          "maxLength": null
+        },
+        {
+          "name": "PlaidInstitution",
+          "type": "PlaidInstitution",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PortfolioConnectToPlaidInstitution",
+          "relationFromFields": [
+            "plaidInstitutionId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Portfolio",
+          "type": "Portfolio",
+          "isRequired": true,
+          "kind": "object",
+          "relationName": "PortfolioConnectToPortfolio",
+          "relationFromFields": [
+            "portfolioId"
+          ],
+          "relationToFields": [
+            "id"
+          ],
+          "isList": false,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "Account",
+          "type": "Account",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AccountToPortfolioConnect",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        },
+        {
+          "name": "AuthConnection",
+          "type": "AuthConnection",
+          "isRequired": false,
+          "kind": "object",
+          "relationName": "AuthConnectionToPortfolioConnect",
+          "relationFromFields": [],
+          "relationToFields": [],
+          "isList": true,
+          "isId": false,
+          "isGenerated": false,
+          "sequence": false,
+          "hasDefaultValue": false
+        }
+      ],
+      "uniqueConstraints": [
+        {
+          "name": "PortfolioConnect_pkey",
+          "fields": [
+            "id"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "PortfolioConnect_authConnectionId_key",
+          "fields": [
+            "authConnectionId"
+          ],
+          "nullNotDistinct": false
+        },
+        {
+          "name": "PortfolioConnect_portfolioId_plaidInstitutionId_key",
+          "fields": [
+            "plaidInstitutionId",
+            "portfolioId"
           ],
           "nullNotDistinct": false
         }
@@ -10145,80 +10695,6 @@
     }
   },
   "enums": {
-    "AccountInstitution": {
-      "schemaName": "public",
-      "values": [
-        {
-          "name": "AUTO"
-        },
-        {
-          "name": "AUTOLOAN"
-        },
-        {
-          "name": "BETA"
-        },
-        {
-          "name": "BROKERAGE"
-        },
-        {
-          "name": "CC_BALANCETRANSFER"
-        },
-        {
-          "name": "EXTERNAL"
-        },
-        {
-          "name": "FUTURES"
-        },
-        {
-          "name": "GANIS"
-        },
-        {
-          "name": "GENPACT"
-        },
-        {
-          "name": "GENPACT_LEAD"
-        },
-        {
-          "name": "GLOBALTRADING"
-        },
-        {
-          "name": "HEIL"
-        },
-        {
-          "name": "HELOC"
-        },
-        {
-          "name": "LENDING"
-        },
-        {
-          "name": "LOYALTY"
-        },
-        {
-          "name": "MORTGAGE"
-        },
-        {
-          "name": "NONUS"
-        },
-        {
-          "name": "ONTRACK"
-        },
-        {
-          "name": "RJO"
-        },
-        {
-          "name": "SBASKET"
-        },
-        {
-          "name": "STOCKPLAN"
-        },
-        {
-          "name": "VISA"
-        },
-        {
-          "name": "WDBH"
-        }
-      ]
-    },
     "AccountMode": {
       "schemaName": "public",
       "values": [
@@ -10802,6 +11278,20 @@
         },
         {
           "name": "SYNCED"
+        }
+      ]
+    },
+    "PorfolioConnectState": {
+      "schemaName": "public",
+      "values": [
+        {
+          "name": "COMPLETED"
+        },
+        {
+          "name": "ERROR"
+        },
+        {
+          "name": "PENDING"
         }
       ]
     },

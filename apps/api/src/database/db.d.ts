@@ -77,7 +77,6 @@ export interface Account {
   fundsWithheldFromPurchasingPower: Numeric | null;
   fundsWithheldFromWithdrawal: Numeric | null;
   id: Generated<string>;
-  institution: "AUTO" | "AUTOLOAN" | "BETA" | "BROKERAGE" | "CC_BALANCETRANSFER" | "EXTERNAL" | "FUTURES" | "GANIS" | "GENPACT" | "GENPACT_LEAD" | "GLOBALTRADING" | "HEIL" | "HELOC" | "LENDING" | "LOYALTY" | "MORTGAGE" | "NONUS" | "ONTRACK" | "RJO" | "SBASKET" | "STOCKPLAN" | "VISA" | "WDBH" | null;
   key: string | null;
   liveURL: string | null;
   liveURLCreated: Timestamp | null;
@@ -90,6 +89,7 @@ export interface Account {
   name: string | null;
   optionLevel: "LEVEL_1" | "LEVEL_2" | "LEVEL_3" | "LEVEL_4" | "NO_OPTIONS" | null;
   plaidAccountMask: string | null;
+  portfolioConnectId: string;
   portfolioId: string;
   provider: Generated<"ETRADE" | "PLAID" | "SYSTEM" | "UNCONNECTED">;
   raw: Json | null;
@@ -186,7 +186,8 @@ export interface AuthConnection {
   id: Generated<string>;
   isSyncing: Generated<boolean>;
   lastTransactionSyncedAtPlaid: Timestamp | null;
-  plaidInstitutionId: string | null;
+  plaidInstitutionId: string;
+  portfolioConnectId: string;
   portfolioId: string;
   secret: string | null;
   source: "ETRADE_ACCESS" | "ETRADE_REQUEST" | "LOCAL" | "PLAID";
@@ -352,11 +353,11 @@ export interface LotUpload {
   accountId: string;
   applied: Generated<boolean>;
   createdAt: Generated<Timestamp>;
-  fileId: string;
   id: Generated<string>;
   portfolioId: string;
   supportedAccountLotProvider: "ETRADE" | "SCHWAB";
   updatedAt: Generated<Timestamp>;
+  usePositionsAsLots: Generated<boolean>;
 }
 
 export interface LotUploadFile {
@@ -397,6 +398,24 @@ export interface Notification {
   level: Generated<"ERROR" | "INFO" | "WARNING">;
   portfolioId: string;
   title: string;
+}
+
+export interface PlaidInstitution {
+  countryCode: string[] | null;
+  createdAt: Generated<Timestamp>;
+  dtcNumbers: Generated<string[] | null>;
+  id: string;
+  lastSyncedAt: Generated<Timestamp>;
+  logo: string | null;
+  name: string;
+  oauth: Generated<boolean>;
+  primaryColor: string | null;
+  products: string[] | null;
+  raw: Json | null;
+  routingNumbers: Generated<string[] | null>;
+  status: Json;
+  updatedAt: Generated<Timestamp>;
+  url: string | null;
 }
 
 export interface PlaidMerge {
@@ -456,6 +475,17 @@ export interface PortfolioBalanceSnapshot {
   unrealizedLoss: Generated<Numeric>;
   unrealizedProfit: Generated<Numeric>;
   withdrawal: Generated<Numeric>;
+}
+
+export interface PortfolioConnect {
+  authConnectionId: string | null;
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  persistedSnapshot: Generated<Json>;
+  plaidInstitutionId: string;
+  portfolioId: string;
+  state: Generated<"COMPLETED" | "ERROR" | "PENDING">;
+  updatedAt: Generated<Timestamp>;
 }
 
 export interface Position {
@@ -646,9 +676,11 @@ export interface DB {
   LotUploadFile: LotUploadFile;
   MergeError: MergeError;
   Notification: Notification;
+  PlaidInstitution: PlaidInstitution;
   PlaidMerge: PlaidMerge;
   Portfolio: Portfolio;
   PortfolioBalanceSnapshot: PortfolioBalanceSnapshot;
+  PortfolioConnect: PortfolioConnect;
   Position: Position;
   PositionSnapshot: PositionSnapshot;
   PositionSnapshotOnPortfolioBalanceSnapshot: PositionSnapshotOnPortfolioBalanceSnapshot;

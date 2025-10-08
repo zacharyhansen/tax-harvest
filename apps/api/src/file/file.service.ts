@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import type { Account, File, Prisma } from '@prisma/client';
-
 import { CsvService } from '../csv/csv.service';
 import { GoogleStorageService } from '../google-storage/google-storage.service';
 import { LotService } from '../lot/lot.service';
@@ -127,9 +126,10 @@ export class FileService {
 		fileContent: string;
 		portfolioId: string;
 	}) {
-		const { records, lotSeededDate } = await this.csvService.etradeCSVToLots({
-			content: fileContent,
-		});
+		const { records, lotSeededDate, accountName } =
+			await this.csvService.etradeCSVToLots({
+				content: fileContent,
+			});
 
 		const lots = this.csvService.etradeTransformCSVRecords({
 			records,
@@ -151,6 +151,13 @@ export class FileService {
 			),
 			lotSeededDate,
 			portfolioId,
+		});
+
+		await this.prismaService.rlsPortfolioClient(portfolioId).account.update({
+			where: { id: file.accountId },
+			data: {
+				name: accountName,
+			},
 		});
 	}
 

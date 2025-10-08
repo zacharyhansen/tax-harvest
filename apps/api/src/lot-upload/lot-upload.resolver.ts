@@ -4,7 +4,6 @@ import {
 	Info,
 	InputType,
 	Mutation,
-	ObjectType,
 	Query,
 	Resolver,
 } from '@nestjs/graphql';
@@ -15,6 +14,7 @@ import {
 	LotUpload,
 	LotUploadFile,
 	LotUploadFileCreateManyInput,
+	LotUploadUpdateInput,
 	LotUploadWhereInput,
 } from '~/generated/graphql';
 import { PrismaSelect } from '~/utilities/prisma/prisma-select';
@@ -105,7 +105,6 @@ export class LotUploadResolver {
 							data: {
 								portfolioId,
 								accountId: input.accountId,
-								fileId: file.id,
 								supportedAccountLotProvider: 'ETRADE',
 								applied: false,
 							},
@@ -129,9 +128,9 @@ export class LotUploadResolver {
 			case 'SCHWAB_POSITIONS': {
 				// Initialize Schwab upload with placeholders
 				upload = await this.lotUploadService.initSchwabPositionsUpload({
-					content,
 					accountId: input.accountId,
 					portfolioId,
+					content,
 					fileId: file.id,
 				});
 				break;
@@ -149,8 +148,8 @@ export class LotUploadResolver {
 
 		if (csvType === 'ETRADE_LOTS' && upload) {
 			// Auto-apply E*Trade uploads
-			await this.lotUploadService.applyLotUpload({
-				lotUploadId: upload.id,
+			await this.lotUploadService.applyLotUploads({
+				lotUploadIds: [upload.id],
 				portfolioId,
 			});
 		}
@@ -233,21 +232,43 @@ export class LotUploadResolver {
 	 * Validates all required files are present and processes lots
 	 */
 	@Mutation(() => Boolean, {
-		name: 'applyLotUpload',
+		name: 'applyLotUploads',
 		description: 'Apply a lot upload to the account',
 	})
-	async applyLotUpload(
+	async applyLotUploads(
 		@ClerkContext() clerkContext: ClerkClaims,
-		@Args('lotUploadId') lotUploadId: string,
+		@Args('lotUploadIds', { type: () => [String] }) lotUploadIds: string[],
 	): Promise<boolean> {
 		const portfolioId = clerkContext.metadata.portfolioId;
 
-		await this.lotUploadService.applyLotUpload({
-			lotUploadId,
+		await this.lotUploadService.applyLotUploads({
+			lotUploadIds,
 			portfolioId,
 		});
 
 		return true;
+	}
+
+	@Mutation(() => LotUpload, {
+		name: 'updateLotUpload',
+		description: 'Update a lot upload',
+	})
+	async updateLotUpload(
+		@ClerkContext() clerkContext: ClerkClaims,
+		@Info() info: GraphQLResolveInfo,
+		@Args('lotUploadId', { type: () => String }) lotUploadId: string,
+		@Args('data', { type: () => LotUploadUpdateInput })
+		data: Prisma.LotUploadUpdateInput,
+	): Promise<LotUpload> {
+		const portfolioId = clerkContext.metadata.portfolioId;
+
+		const { select } = new PrismaSelect<Prisma.LotUploadSelect>(info).value;
+
+		return this.prismaService.rlsPortfolioClient(portfolioId).lotUpload.update({
+			where: { id: lotUploadId },
+			data,
+			select,
+		});
 	}
 
 	@Query(() => [LotUpload], {

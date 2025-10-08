@@ -1,6 +1,7 @@
-import { notEqual } from 'node:assert';
 import { Injectable } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
+import { Insertable } from 'kysely';
+import { LotUploadFile } from '~/database/db';
 import { CsvService } from '../csv/csv.service';
 import { GoogleStorageService } from '../google-storage/google-storage.service';
 import { LotService } from '../lot/lot.service';
@@ -19,6 +20,71 @@ export class LotUploadService {
 		private readonly googleStorageService: GoogleStorageService,
 	) {}
 
+	async initSchwabPositionsUploadForOnboarding({
+		portfolioId,
+		accountIds,
+	}: {
+		accountIds: string[];
+		portfolioId: string;
+	}) {
+		const positions = await this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.position.findMany({
+				where: {
+					accountId: { in: accountIds },
+				},
+			});
+
+		console.log({ positions, accountIds });
+
+		return this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.$transaction(async (trx) => {
+				for (const accountId of accountIds) {
+					// Get unique symbols that need lot detail files
+					const symbols = new Set(
+						positions
+							.filter(
+								(p) =>
+									p.accountId === accountId &&
+									p.assetSymbol !== 'CUR:USD' &&
+									p.assetSymbol !== 'UNKNOWN',
+							)
+							.map((p) => p.assetSymbol),
+					);
+					console.log({ symbols: Array.from(symbols) });
+					// Create the lot upload
+					const lotUpload = await trx.lotUpload.create({
+						data: {
+							portfolioId,
+							accountId,
+							supportedAccountLotProvider: 'SCHWAB',
+							applied: false,
+						},
+					});
+
+					// Create placeholder entries for each lot detail file needed
+					const lotFileEntries: Insertable<LotUploadFile>[] = [];
+					for (const symbol of symbols) {
+						lotFileEntries.push({
+							portfolioId,
+							accountId,
+							fileId: null, // Will be filled when file is uploaded
+							type: 'SCHWAB_LOTS' as const,
+							lotUploadId: lotUpload.id,
+							assetSymbol: symbol,
+						});
+					}
+					console.log({ lotFileEntries });
+					if (lotFileEntries.length > 0) {
+						await trx.lotUploadFile.createMany({
+							data: lotFileEntries,
+						});
+					}
+				}
+			});
+	}
+
 	/**
 	 * Initializes a lot upload for Schwab positions file
 	 * Creates LotUpload and LotUploadFile entries for each position
@@ -36,13 +102,26 @@ export class LotUploadService {
 		portfolioId: string;
 		fileId: string;
 	}) {
+		const internalAccount = await this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.account.findUniqueOrThrow({
+				where: {
+					id: accountId,
+				},
+			});
+
 		const { accounts } =
 			await this.csvService.schwabPositionsToRecords(content);
 
 		// Find the account in the parsed data
-		const accountData = accounts[0]; // For now, assuming first account
+		const accountData = accounts.find((a) =>
+			a.accountName.includes(internalAccount.plaidAccountMask || '__________'),
+		);
+
 		if (!accountData) {
-			throw new Error('No account data found in Schwab positions file');
+			throw new Error(
+				`No account data found in Schwab positions file for account: ${internalAccount.name}`,
+			);
 		}
 
 		// Get unique symbols that need lot detail files
@@ -60,7 +139,6 @@ export class LotUploadService {
 					data: {
 						portfolioId,
 						accountId,
-						fileId,
 						supportedAccountLotProvider: 'SCHWAB',
 						applied: false,
 					},
@@ -100,16 +178,16 @@ export class LotUploadService {
 	}
 
 	async getLotUploadWithFiles({
-		lotUploadId,
+		lotUploadIds,
 		portfolioId,
 	}: {
-		lotUploadId: string;
+		lotUploadIds: string[];
 		portfolioId: string;
 	}) {
 		return this.prismaService
 			.rlsPortfolioClient(portfolioId)
-			.lotUpload.findUniqueOrThrow({
-				where: { id: lotUploadId },
+			.lotUpload.findMany({
+				where: { id: { in: lotUploadIds } },
 				include: {
 					LotUploadFile: {
 						include: {
@@ -120,51 +198,46 @@ export class LotUploadService {
 			});
 	}
 
-	/**
-	 * Validates and applies a lot upload to an account
-	 * For E*Trade: Immediately processes and applies lots
-	 * For Schwab: Validates all files are present, then processes and applies
-	 * @param params - Application parameters
-	 */
-	async applyLotUpload({
-		lotUploadId,
+	async applyLotUploads({
+		lotUploadIds,
 		portfolioId,
 	}: {
-		lotUploadId: string;
+		lotUploadIds: string[];
 		portfolioId: string;
 	}) {
-		const lotUpload = await this.getLotUploadWithFiles({
-			lotUploadId,
+		const lotUploads = await this.getLotUploadWithFiles({
+			lotUploadIds,
 			portfolioId,
 		});
 
-		// Validate based on provider
-		if (lotUpload.supportedAccountLotProvider === 'SCHWAB') {
-			await this.applySchwabLotUpload(lotUpload, portfolioId);
-		} else if (lotUpload.supportedAccountLotProvider === 'ETRADE') {
-			await this.applyEtradeLotUpload(lotUpload, portfolioId);
-		} else {
-			throw new Error(
-				`Unsupported provider: ${lotUpload.supportedAccountLotProvider}`,
-			);
-		}
+		for (const lotUpload of lotUploads) {
+			if (lotUpload.supportedAccountLotProvider === 'SCHWAB') {
+				await this.applySchwabLotUpload(lotUpload, portfolioId);
+			} else if (lotUpload.supportedAccountLotProvider === 'ETRADE') {
+				await this.applyEtradeLotUpload(lotUpload, portfolioId);
+			} else {
+				throw new Error(
+					`Unsupported provider: ${lotUpload.supportedAccountLotProvider}`,
+				);
+			}
 
-		// Mark as applied
-		await this.prismaService.rlsPortfolioClient(portfolioId).lotUpload.update({
-			where: { id: lotUploadId },
-			data: { applied: true },
-		});
+			await this.prismaService
+				.rlsPortfolioClient(portfolioId)
+				.lotUpload.updateMany({
+					where: { id: { in: lotUploadIds } },
+					data: { applied: true },
+				});
 
-		await this.prismaService
-			.rlsPortfolioClient(portfolioId)
-			.lotUpload.updateMany({
-				where: {
-					id: {
-						not: lotUploadId,
+			await this.prismaService
+				.rlsPortfolioClient(portfolioId)
+				.lotUpload.updateMany({
+					where: {
+						id: { notIn: lotUploadIds },
+						accountId: { in: lotUploads.map((l) => l.accountId) },
 					},
-				},
-				data: { applied: false },
-			});
+					data: { applied: false },
+				});
+		}
 	}
 
 	async lotUpload({
@@ -191,9 +264,14 @@ export class LotUploadService {
 	 * Applies Schwab lot upload after validating all files are present
 	 */
 	private async applySchwabLotUpload(
-		lotUpload: Awaited<ReturnType<typeof this.getLotUploadWithFiles>>,
+		lotUpload: Awaited<ReturnType<typeof this.getLotUploadWithFiles>>[number],
 		portfolioId: string,
 	) {
+		if (lotUpload.usePositionsAsLots) {
+			await this.applyPositionsAsLots(lotUpload, portfolioId);
+			return;
+		}
+
 		// Check that all SCHWAB_LOTS files have been uploaded
 		const missingFiles = lotUpload.LotUploadFile.filter(
 			(f) => f.type === 'SCHWAB_LOTS' && !f.fileId,
@@ -209,9 +287,9 @@ export class LotUploadService {
 		const allLots: Prisma.LotCreateManyInput[] = [];
 
 		for (const file of lotUpload.LotUploadFile) {
-			if (file.type === 'SCHWAB_LOTS' && file.fileId) {
+			if (file.type === 'SCHWAB_LOTS' && file.file?.gcpFilename) {
 				const content = await this.googleStorageService.getGCPFileAsString({
-					gcpFileName: file.fileId,
+					gcpFileName: file.file.gcpFilename,
 				});
 
 				const { lots } = await this.csvService.schwabLotDetailsToLots(content);
@@ -238,11 +316,42 @@ export class LotUploadService {
 		});
 	}
 
+	async applyPositionsAsLots(
+		lotUpload: Awaited<ReturnType<typeof this.getLotUploadWithFiles>>[number],
+		portfolioId: string,
+	) {
+		const allLots: Prisma.LotCreateManyInput[] = [];
+
+		const positions = await this.prismaService
+			.rlsPortfolioClient(portfolioId)
+			.position.findMany({
+				where: { accountId: lotUpload.accountId },
+			});
+
+		for (const position of positions) {
+			allLots.push({
+				assetSymbol: position.assetSymbol,
+				acquiredDate: position.dateAcquired ?? new Date(),
+				price: position.costPerShare ?? 0,
+				remainingQty: position.quantity,
+				accountId: lotUpload.accountId,
+				portfolioId,
+			});
+		}
+
+		// Apply lots to account
+		await this.lotService.resetLotsForAccount({
+			accountId: lotUpload.accountId,
+			lots: allLots,
+			portfolioId,
+		});
+	}
+
 	/**
 	 * Applies E*Trade lot upload immediately
 	 */
 	private async applyEtradeLotUpload(
-		lotUpload: Awaited<ReturnType<typeof this.getLotUploadWithFiles>>,
+		lotUpload: Awaited<ReturnType<typeof this.getLotUploadWithFiles>>[number],
 		portfolioId: string,
 	) {
 		const lotUploadFile = lotUpload.LotUploadFile.find(

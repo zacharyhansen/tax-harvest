@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { LotApplicationModule } from '~/lot-application/lot-application.module';
+import { LotUploadModule } from '~/lot-upload/lot-upload.module';
 import { PositionModule } from '~/position/position.module';
 import { PlaidController } from './plaid.controller';
 import { PlaidResolver } from './plaid.resolver';
@@ -9,6 +10,6 @@ import { PlaidService } from './plaid.service';
 	controllers: [PlaidController],
 	exports: [PlaidService],
 	providers: [PlaidService, PlaidResolver],
-	imports: [PositionModule, LotApplicationModule],
+	imports: [PositionModule, LotApplicationModule, LotUploadModule],
 })
 export class PlaidModule {}

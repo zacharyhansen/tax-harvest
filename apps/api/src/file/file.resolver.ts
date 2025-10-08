@@ -22,6 +22,21 @@ import { GoogleStorageService } from '../google-storage/google-storage.service';
 import { PrismaSelect } from '../utilities/prisma/prisma-select';
 import { FileService } from './file.service';
 
+// @InputType()
+// class SchwabLotFileUploadPayload {
+// 	@Field(() => String)
+// 	gcpFilename: string;
+
+// 	@Field(() => String)
+// 	displayName: string;
+
+// 	@Field(() => String)
+// 	type: string;
+
+// 	@Field(() => String)
+// 	positionId: string;
+// }
+
 export
 @InputType()
 class InitFileUploadPayload {
@@ -40,6 +55,9 @@ export
 class InitAccountFileUploadPayload {
 	@Field(() => String)
 	name: string;
+
+	@Field(() => String)
+	portfolioConnectId: string;
 
 	@Field(() => Number)
 	deferredLoss: number;
@@ -147,6 +165,8 @@ export class FileResolver {
 
 	@Mutation(() => InitAccountFileUploadResponse, {
 		name: 'initAccountFileUpload',
+		description:
+			'Initialize a file upload and account creation for the file. Should only be used for E*Trade accounts.',
 	})
 	async initAccountFileUpload(
 		@ClerkContext()
@@ -171,27 +191,40 @@ export class FileResolver {
 			throw new Error('Only one of accountData or accountId can be provided');
 		}
 
+		// Etrade Use Case (no account exists yet since we havent synced palid)
+		if (accountData) {
+			return this.fileService.initAccountFileUpload({
+				accountCreateInput: accountData
+					? {
+							name: accountData.name,
+							description: accountData.description,
+							createdBy: { connect: { id: clerkContext.sub } },
+							portfolio: { connect: { id: clerkContext.metadata.portfolioId } },
+							portfolioConnect: {
+								connect: { id: accountData.portfolioConnectId },
+							},
+							realizedPAndL: {
+								create: [
+									{
+										dividend: accountData.dividend.toString(),
+										longTermCapitalGain:
+											accountData.longTermCapitalGain.toString(),
+										shortTermCapitalGain:
+											accountData.shortTermCapitalGain.toString(),
+										portfolioId: clerkContext.metadata.portfolioId,
+									},
+								],
+							},
+						}
+					: undefined,
+				accountId,
+				fileData,
+				portfolioId: clerkContext.metadata.portfolioId,
+				userId: clerkContext.sub,
+			});
+		}
+
 		const result = await this.fileService.initAccountFileUpload({
-			accountCreateInput: accountData
-				? {
-						name: accountData.name,
-						description: accountData.description,
-						createdBy: { connect: { id: clerkContext.sub } },
-						portfolio: { connect: { id: clerkContext.metadata.portfolioId } },
-						realizedPAndL: {
-							create: [
-								{
-									dividend: accountData.dividend.toString(),
-									longTermCapitalGain:
-										accountData.longTermCapitalGain.toString(),
-									shortTermCapitalGain:
-										accountData.shortTermCapitalGain.toString(),
-									portfolioId: clerkContext.metadata.portfolioId,
-								},
-							],
-						},
-					}
-				: undefined,
 			accountId,
 			fileData,
 			portfolioId: clerkContext.metadata.portfolioId,
@@ -199,6 +232,28 @@ export class FileResolver {
 		});
 		return result;
 	}
+
+	// @Mutation(() => InitAccountFileUploadResponse, {
+	// 	name: 'schwabLotFileUpload',
+	// 	description:
+	// 		'Initialize a file upload and account creation for the file. Should only be used for Schwab lot detail files.',
+	// })
+	// async schwabLotFileUpload(
+	// 	@ClerkContext()
+	// 	clerkContext: ClerkClaims,
+	// 	@Info()
+	// 	_info: GraphQLResolveInfo,
+	// 	@Args('fileData', { type: () => [SchwabLotFileUploadPayload] })
+	// 	fileData: SchwabLotFileUploadPayload[],
+	// ): Promise<InitAccountFileUploadResponse> {
+	// 	const position = await this.prismaService
+	// 		.rlsPortfolioClient(clerkContext.metadata.portfolioId)
+	// 		.position.findMany({
+	// 			where: { id: { in: fileData.map((f) => BigInt(f.positionId)) } },
+	// 		});
+
+	// 	return result;
+	// }
 
 	@Query(() => SignedUrlsForUploadPayload, {
 		description: 'Get file upload url',

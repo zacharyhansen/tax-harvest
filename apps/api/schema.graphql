@@ -48,9 +48,6 @@ type Account {
 
   """Internal account identifier"""
   id: ID!
-
-  """What institution does this account fall under"""
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -80,6 +77,8 @@ type Account {
   plaidAccountMask: String
   plaidMerge: [PlaidMerge!]
   portfolio: Portfolio!
+  portfolioConnect: PortfolioConnect!
+  portfolioConnectId: String!
 
   """Which portfolio does this account belong to"""
   portfolioId: String!
@@ -183,7 +182,6 @@ type AccountCountAggregate {
   fundsWithheldFromPurchasingPower: Int!
   fundsWithheldFromWithdrawal: Int!
   id: Int!
-  institution: Int!
   key: Int!
   liveURL: Int!
   liveURLCreated: Int!
@@ -196,6 +194,7 @@ type AccountCountAggregate {
   name: Int!
   optionLevel: Int!
   plaidAccountMask: Int!
+  portfolioConnectId: Int!
   portfolioId: Int!
   provider: Int!
   raw: Int!
@@ -237,7 +236,6 @@ input AccountCreateInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -259,6 +257,7 @@ input AccountCreateInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -300,7 +299,6 @@ input AccountCreateManyAuthConnectionInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -313,6 +311,7 @@ input AccountCreateManyAuthConnectionInput {
   name: String
   optionLevel: OptionLevel
   plaidAccountMask: String
+  portfolioConnectId: String!
   provider: AccountProvider
   raw: JSON
   setRealizedValues: Boolean
@@ -355,7 +354,62 @@ input AccountCreateManyCreatedByInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
+  key: String
+  liveURL: String
+  liveURLCreated: DateTime
+  lotSeededDate: DateTime
+  marginBuyingPower: Decimal
+  marginBuyingPowerDT: Decimal
+  marginOpenOrderReserveDT: Decimal
+  marketValueTotal: Decimal
+  mode: AccountMode
+  name: String
+  optionLevel: OptionLevel
+  plaidAccountMask: String
+  portfolioConnectId: String!
+  provider: AccountProvider
+  raw: JSON
+  setRealizedValues: Boolean
+  skipSetup: Boolean
+  status: AccountStatus
+  subType: String
+  supportedLotProvider: SupportedAccountLotProvider
+  type: String
+  updatedAt: DateTime
+  uploadedPositions: Boolean
+}
+
+input AccountCreateManyCreatedByInputEnvelope {
+  data: [AccountCreateManyCreatedByInput!]!
+  skipDuplicates: Boolean
+}
+
+input AccountCreateManyPortfolioConnectInput {
+  accountValueTotal: Decimal
+  authConnectionId: String
+  available: Decimal
+  balanceAccount: Decimal
+  balanceMoneyMarket: Decimal
+  balanceShortAdjustment: Decimal
+  cashAvailableForInvestment: Decimal
+  cashBalance: Decimal
+  cashBuyingPower: Decimal
+  cashForOpenOrders: Decimal
+  cashNet: Decimal
+  cashOpenOrderReserveDT: Decimal
+  cashSettledForInvestment: Decimal
+  cashUnsettledForInvestment: Decimal
+  closedDate: DateTime
+  createdAt: DateTime
+  createdById: String!
+  current: Decimal
+  description: String
+  equityRegt: Decimal
+  equityRegtPercent: Decimal
+  externalId: String
+  fundsWithheldFromPurchasingPower: Decimal
+  fundsWithheldFromWithdrawal: Decimal
+  id: String
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -380,8 +434,8 @@ input AccountCreateManyCreatedByInput {
   uploadedPositions: Boolean
 }
 
-input AccountCreateManyCreatedByInputEnvelope {
-  data: [AccountCreateManyCreatedByInput!]!
+input AccountCreateManyPortfolioConnectInputEnvelope {
+  data: [AccountCreateManyPortfolioConnectInput!]!
   skipDuplicates: Boolean
 }
 
@@ -411,7 +465,6 @@ input AccountCreateManyPortfolioInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -424,6 +477,7 @@ input AccountCreateManyPortfolioInput {
   name: String
   optionLevel: OptionLevel
   plaidAccountMask: String
+  portfolioConnectId: String!
   provider: AccountProvider
   raw: JSON
   setRealizedValues: Boolean
@@ -453,6 +507,13 @@ input AccountCreateNestedManyWithoutCreatedByInput {
   connectOrCreate: [AccountCreateOrConnectWithoutCreatedByInput!]
   create: [AccountCreateWithoutCreatedByInput!]
   createMany: AccountCreateManyCreatedByInputEnvelope
+}
+
+input AccountCreateNestedManyWithoutPortfolioConnectInput {
+  connect: [AccountWhereUniqueInput!]
+  connectOrCreate: [AccountCreateOrConnectWithoutPortfolioConnectInput!]
+  create: [AccountCreateWithoutPortfolioConnectInput!]
+  createMany: AccountCreateManyPortfolioConnectInputEnvelope
 }
 
 input AccountCreateNestedManyWithoutPortfolioInput {
@@ -617,6 +678,11 @@ input AccountCreateOrConnectWithoutPlaidMergeInput {
   where: AccountWhereUniqueInput!
 }
 
+input AccountCreateOrConnectWithoutPortfolioConnectInput {
+  create: AccountCreateWithoutPortfolioConnectInput!
+  where: AccountWhereUniqueInput!
+}
+
 input AccountCreateOrConnectWithoutPortfolioInput {
   create: AccountCreateWithoutPortfolioInput!
   where: AccountWhereUniqueInput!
@@ -669,7 +735,6 @@ input AccountCreateWithoutAccountRealizedPAndLHistoryInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -691,6 +756,7 @@ input AccountCreateWithoutAccountRealizedPAndLHistoryInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -734,7 +800,6 @@ input AccountCreateWithoutAssetMergeInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -756,6 +821,7 @@ input AccountCreateWithoutAssetMergeInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -799,7 +865,6 @@ input AccountCreateWithoutAuthConnectionInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -821,6 +886,7 @@ input AccountCreateWithoutAuthConnectionInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -865,7 +931,6 @@ input AccountCreateWithoutCreatedByInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -887,6 +952,7 @@ input AccountCreateWithoutCreatedByInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -930,7 +996,6 @@ input AccountCreateWithoutFilesInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -952,6 +1017,7 @@ input AccountCreateWithoutFilesInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -996,7 +1062,6 @@ input AccountCreateWithoutLotChangeInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1017,6 +1082,7 @@ input AccountCreateWithoutLotChangeInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1061,7 +1127,6 @@ input AccountCreateWithoutLotChangeListInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1082,6 +1147,7 @@ input AccountCreateWithoutLotChangeListInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1126,7 +1192,6 @@ input AccountCreateWithoutLotUploadFileInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1147,6 +1212,7 @@ input AccountCreateWithoutLotUploadFileInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1191,7 +1257,6 @@ input AccountCreateWithoutLotUploadInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1212,6 +1277,7 @@ input AccountCreateWithoutLotUploadInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1256,7 +1322,6 @@ input AccountCreateWithoutLotsInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1277,6 +1342,7 @@ input AccountCreateWithoutLotsInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1321,7 +1387,6 @@ input AccountCreateWithoutMergeErrorInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1342,6 +1407,7 @@ input AccountCreateWithoutMergeErrorInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1386,7 +1452,6 @@ input AccountCreateWithoutNotificationInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1407,6 +1472,7 @@ input AccountCreateWithoutNotificationInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1451,7 +1517,6 @@ input AccountCreateWithoutPlaidMergeInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1471,6 +1536,72 @@ input AccountCreateWithoutPlaidMergeInput {
   notification: NotificationCreateNestedManyWithoutAccountInput
   optionLevel: OptionLevel
   plaidAccountMask: String
+  portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
+  positions: PositionCreateNestedManyWithoutAccountInput
+  provider: AccountProvider
+  raw: JSON
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutAccountInput
+  setRealizedValues: Boolean
+  skipSetup: Boolean
+  status: AccountStatus
+  subType: String
+  supportedLotProvider: SupportedAccountLotProvider
+  transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutAccountInput
+  transactions: TransactionCreateNestedManyWithoutAccountInput
+  type: String
+  updatedAt: DateTime
+  uploadedPositions: Boolean
+}
+
+input AccountCreateWithoutPortfolioConnectInput {
+  accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutAccountInput
+  accountValueTotal: Decimal
+  assetMerge: AssetMergeCreateNestedManyWithoutAccountInput
+  authConnection: AuthConnectionCreateNestedOneWithoutAccountsInput
+  available: Decimal
+  balanceAccount: Decimal
+  balanceMoneyMarket: Decimal
+  balanceShortAdjustment: Decimal
+  cashAvailableForInvestment: Decimal
+  cashBalance: Decimal
+  cashBuyingPower: Decimal
+  cashForOpenOrders: Decimal
+  cashNet: Decimal
+  cashOpenOrderReserveDT: Decimal
+  cashSettledForInvestment: Decimal
+  cashUnsettledForInvestment: Decimal
+  closedDate: DateTime
+  createdAt: DateTime
+  current: Decimal
+  description: String
+  equityRegt: Decimal
+  equityRegtPercent: Decimal
+  externalId: String
+  files: FileCreateNestedManyWithoutAccountInput
+  fundsWithheldFromPurchasingPower: Decimal
+  fundsWithheldFromWithdrawal: Decimal
+  id: String
+  key: String
+  liveURL: String
+  liveURLCreated: DateTime
+  lotChange: LotChangeCreateNestedManyWithoutAccountInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutAccountInput
+  lotSeededDate: DateTime
+  lotUpload: LotUploadCreateNestedManyWithoutAccountInput
+  lotUploadFile: LotUploadFileCreateNestedManyWithoutAccountInput
+  lots: LotCreateNestedManyWithoutAccountInput
+  marginBuyingPower: Decimal
+  marginBuyingPowerDT: Decimal
+  marginOpenOrderReserveDT: Decimal
+  marketValueTotal: Decimal
+  mergeError: MergeErrorCreateNestedManyWithoutAccountInput
+  mode: AccountMode
+  name: String
+  notification: NotificationCreateNestedManyWithoutAccountInput
+  optionLevel: OptionLevel
+  plaidAccountMask: String
+  plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
@@ -1516,7 +1647,6 @@ input AccountCreateWithoutPortfolioInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1537,6 +1667,7 @@ input AccountCreateWithoutPortfolioInput {
   optionLevel: OptionLevel
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1581,7 +1712,6 @@ input AccountCreateWithoutPositionsInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1603,6 +1733,7 @@ input AccountCreateWithoutPositionsInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   provider: AccountProvider
   raw: JSON
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutAccountInput
@@ -1646,7 +1777,6 @@ input AccountCreateWithoutRealizedPAndLInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1668,6 +1798,7 @@ input AccountCreateWithoutRealizedPAndLInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1711,7 +1842,6 @@ input AccountCreateWithoutTransactionOnAssetMergeInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1733,6 +1863,7 @@ input AccountCreateWithoutTransactionOnAssetMergeInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1776,7 +1907,6 @@ input AccountCreateWithoutTransactionsInput {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1798,6 +1928,7 @@ input AccountCreateWithoutTransactionsInput {
   plaidAccountMask: String
   plaidMerge: PlaidMergeCreateNestedManyWithoutAccountInput
   portfolio: PortfolioCreateNestedOneWithoutAccountsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAccountInput!
   positions: PositionCreateNestedManyWithoutAccountInput
   provider: AccountProvider
   raw: JSON
@@ -1811,32 +1942,6 @@ input AccountCreateWithoutTransactionsInput {
   type: String
   updatedAt: DateTime
   uploadedPositions: Boolean
-}
-
-enum AccountInstitution {
-  AUTO
-  AUTOLOAN
-  BETA
-  BROKERAGE
-  CC_BALANCETRANSFER
-  EXTERNAL
-  FUTURES
-  GANIS
-  GENPACT
-  GENPACT_LEAD
-  GLOBALTRADING
-  HEIL
-  HELOC
-  LENDING
-  LOYALTY
-  MORTGAGE
-  NONUS
-  ONTRACK
-  RJO
-  SBASKET
-  STOCKPLAN
-  VISA
-  WDBH
 }
 
 input AccountListRelationFilter {
@@ -1871,7 +1976,6 @@ type AccountMaxAggregate {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1884,6 +1988,7 @@ type AccountMaxAggregate {
   name: String
   optionLevel: OptionLevel
   plaidAccountMask: String
+  portfolioConnectId: String
   portfolioId: String
   provider: AccountProvider
   setRealizedValues: Boolean
@@ -1922,7 +2027,6 @@ type AccountMinAggregate {
   fundsWithheldFromPurchasingPower: Decimal
   fundsWithheldFromWithdrawal: Decimal
   id: String
-  institution: AccountInstitution
   key: String
   liveURL: String
   liveURLCreated: DateTime
@@ -1935,6 +2039,7 @@ type AccountMinAggregate {
   name: String
   optionLevel: OptionLevel
   plaidAccountMask: String
+  portfolioConnectId: String
   portfolioId: String
   provider: AccountProvider
   setRealizedValues: Boolean
@@ -2744,7 +2849,6 @@ input AccountScalarWhereInput {
   fundsWithheldFromPurchasingPower: DecimalNullableFilter
   fundsWithheldFromWithdrawal: DecimalNullableFilter
   id: UuidFilter
-  institution: EnumAccountInstitutionNullableFilter
   key: StringNullableFilter
   liveURL: StringNullableFilter
   liveURLCreated: DateTimeNullableFilter
@@ -2757,6 +2861,7 @@ input AccountScalarWhereInput {
   name: StringNullableFilter
   optionLevel: EnumOptionLevelNullableFilter
   plaidAccountMask: StringNullableFilter
+  portfolioConnectId: UuidFilter
   portfolioId: UuidFilter
   provider: EnumAccountProviderFilter
   raw: JsonNullableFilter
@@ -2829,7 +2934,6 @@ input AccountUpdateInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -2851,6 +2955,7 @@ input AccountUpdateInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -2891,7 +2996,6 @@ input AccountUpdateManyMutationInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -2922,6 +3026,11 @@ input AccountUpdateManyWithWhereWithoutAuthConnectionInput {
 }
 
 input AccountUpdateManyWithWhereWithoutCreatedByInput {
+  data: AccountUpdateManyMutationInput!
+  where: AccountScalarWhereInput!
+}
+
+input AccountUpdateManyWithWhereWithoutPortfolioConnectInput {
   data: AccountUpdateManyMutationInput!
   where: AccountScalarWhereInput!
 }
@@ -2957,6 +3066,20 @@ input AccountUpdateManyWithoutCreatedByNestedInput {
   update: [AccountUpdateWithWhereUniqueWithoutCreatedByInput!]
   updateMany: [AccountUpdateManyWithWhereWithoutCreatedByInput!]
   upsert: [AccountUpsertWithWhereUniqueWithoutCreatedByInput!]
+}
+
+input AccountUpdateManyWithoutPortfolioConnectNestedInput {
+  connect: [AccountWhereUniqueInput!]
+  connectOrCreate: [AccountCreateOrConnectWithoutPortfolioConnectInput!]
+  create: [AccountCreateWithoutPortfolioConnectInput!]
+  createMany: AccountCreateManyPortfolioConnectInputEnvelope
+  delete: [AccountWhereUniqueInput!]
+  deleteMany: [AccountScalarWhereInput!]
+  disconnect: [AccountWhereUniqueInput!]
+  set: [AccountWhereUniqueInput!]
+  update: [AccountUpdateWithWhereUniqueWithoutPortfolioConnectInput!]
+  updateMany: [AccountUpdateManyWithWhereWithoutPortfolioConnectInput!]
+  upsert: [AccountUpsertWithWhereUniqueWithoutPortfolioConnectInput!]
 }
 
 input AccountUpdateManyWithoutPortfolioNestedInput {
@@ -3180,6 +3303,11 @@ input AccountUpdateWithWhereUniqueWithoutCreatedByInput {
   where: AccountWhereUniqueInput!
 }
 
+input AccountUpdateWithWhereUniqueWithoutPortfolioConnectInput {
+  data: AccountUpdateWithoutPortfolioConnectInput!
+  where: AccountWhereUniqueInput!
+}
+
 input AccountUpdateWithWhereUniqueWithoutPortfolioInput {
   data: AccountUpdateWithoutPortfolioInput!
   where: AccountWhereUniqueInput!
@@ -3213,7 +3341,6 @@ input AccountUpdateWithoutAccountRealizedPAndLHistoryInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3235,6 +3362,7 @@ input AccountUpdateWithoutAccountRealizedPAndLHistoryInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3279,7 +3407,6 @@ input AccountUpdateWithoutAssetMergeInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3301,6 +3428,7 @@ input AccountUpdateWithoutAssetMergeInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3345,7 +3473,6 @@ input AccountUpdateWithoutAuthConnectionInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3367,6 +3494,7 @@ input AccountUpdateWithoutAuthConnectionInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3411,7 +3539,6 @@ input AccountUpdateWithoutCreatedByInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3433,6 +3560,7 @@ input AccountUpdateWithoutCreatedByInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3477,7 +3605,6 @@ input AccountUpdateWithoutFilesInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3499,6 +3626,7 @@ input AccountUpdateWithoutFilesInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3544,7 +3672,6 @@ input AccountUpdateWithoutLotChangeInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3565,6 +3692,7 @@ input AccountUpdateWithoutLotChangeInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3610,7 +3738,6 @@ input AccountUpdateWithoutLotChangeListInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3631,6 +3758,7 @@ input AccountUpdateWithoutLotChangeListInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3676,7 +3804,6 @@ input AccountUpdateWithoutLotUploadFileInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3697,6 +3824,7 @@ input AccountUpdateWithoutLotUploadFileInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3742,7 +3870,6 @@ input AccountUpdateWithoutLotUploadInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3763,6 +3890,7 @@ input AccountUpdateWithoutLotUploadInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3808,7 +3936,6 @@ input AccountUpdateWithoutLotsInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3829,6 +3956,7 @@ input AccountUpdateWithoutLotsInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3874,7 +4002,6 @@ input AccountUpdateWithoutMergeErrorInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3895,6 +4022,7 @@ input AccountUpdateWithoutMergeErrorInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -3940,7 +4068,6 @@ input AccountUpdateWithoutNotificationInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -3961,6 +4088,7 @@ input AccountUpdateWithoutNotificationInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -4006,7 +4134,6 @@ input AccountUpdateWithoutPlaidMergeInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -4026,6 +4153,73 @@ input AccountUpdateWithoutPlaidMergeInput {
   notification: NotificationUpdateManyWithoutAccountNestedInput
   optionLevel: NullableEnumOptionLevelFieldUpdateOperationsInput
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
+  positions: PositionUpdateManyWithoutAccountNestedInput
+  provider: EnumAccountProviderFieldUpdateOperationsInput
+  raw: JSON
+  realizedPAndL: RealizedPAndLUpdateManyWithoutAccountNestedInput
+  setRealizedValues: BoolFieldUpdateOperationsInput
+  skipSetup: BoolFieldUpdateOperationsInput
+  status: EnumAccountStatusFieldUpdateOperationsInput
+  subType: NullableStringFieldUpdateOperationsInput
+  supportedLotProvider: NullableEnumSupportedAccountLotProviderFieldUpdateOperationsInput
+  transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutAccountNestedInput
+  transactions: TransactionUpdateManyWithoutAccountNestedInput
+  type: StringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  uploadedPositions: BoolFieldUpdateOperationsInput
+}
+
+input AccountUpdateWithoutPortfolioConnectInput {
+  accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutAccountNestedInput
+  accountValueTotal: NullableDecimalFieldUpdateOperationsInput
+  assetMerge: AssetMergeUpdateManyWithoutAccountNestedInput
+  authConnection: AuthConnectionUpdateOneWithoutAccountsNestedInput
+  available: DecimalFieldUpdateOperationsInput
+  balanceAccount: NullableDecimalFieldUpdateOperationsInput
+  balanceMoneyMarket: NullableDecimalFieldUpdateOperationsInput
+  balanceShortAdjustment: NullableDecimalFieldUpdateOperationsInput
+  cashAvailableForInvestment: NullableDecimalFieldUpdateOperationsInput
+  cashBalance: NullableDecimalFieldUpdateOperationsInput
+  cashBuyingPower: NullableDecimalFieldUpdateOperationsInput
+  cashForOpenOrders: NullableDecimalFieldUpdateOperationsInput
+  cashNet: NullableDecimalFieldUpdateOperationsInput
+  cashOpenOrderReserveDT: NullableDecimalFieldUpdateOperationsInput
+  cashSettledForInvestment: NullableDecimalFieldUpdateOperationsInput
+  cashUnsettledForInvestment: NullableDecimalFieldUpdateOperationsInput
+  closedDate: NullableDateTimeFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutAccountNestedInput
+  current: DecimalFieldUpdateOperationsInput
+  description: NullableStringFieldUpdateOperationsInput
+  equityRegt: NullableDecimalFieldUpdateOperationsInput
+  equityRegtPercent: NullableDecimalFieldUpdateOperationsInput
+  externalId: NullableStringFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutAccountNestedInput
+  fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
+  fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  key: NullableStringFieldUpdateOperationsInput
+  liveURL: NullableStringFieldUpdateOperationsInput
+  liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
+  lotChange: LotChangeUpdateManyWithoutAccountNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutAccountNestedInput
+  lotSeededDate: NullableDateTimeFieldUpdateOperationsInput
+  lotUpload: LotUploadUpdateManyWithoutAccountNestedInput
+  lotUploadFile: LotUploadFileUpdateManyWithoutAccountNestedInput
+  lots: LotUpdateManyWithoutAccountNestedInput
+  marginBuyingPower: NullableDecimalFieldUpdateOperationsInput
+  marginBuyingPowerDT: NullableDecimalFieldUpdateOperationsInput
+  marginOpenOrderReserveDT: NullableDecimalFieldUpdateOperationsInput
+  marketValueTotal: NullableDecimalFieldUpdateOperationsInput
+  mergeError: MergeErrorUpdateManyWithoutAccountNestedInput
+  mode: NullableEnumAccountModeFieldUpdateOperationsInput
+  name: NullableStringFieldUpdateOperationsInput
+  notification: NotificationUpdateManyWithoutAccountNestedInput
+  optionLevel: NullableEnumOptionLevelFieldUpdateOperationsInput
+  plaidAccountMask: NullableStringFieldUpdateOperationsInput
+  plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
@@ -4072,7 +4266,6 @@ input AccountUpdateWithoutPortfolioInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -4093,6 +4286,7 @@ input AccountUpdateWithoutPortfolioInput {
   optionLevel: NullableEnumOptionLevelFieldUpdateOperationsInput
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -4138,7 +4332,6 @@ input AccountUpdateWithoutPositionsInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -4160,6 +4353,7 @@ input AccountUpdateWithoutPositionsInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
   realizedPAndL: RealizedPAndLUpdateManyWithoutAccountNestedInput
@@ -4204,7 +4398,6 @@ input AccountUpdateWithoutRealizedPAndLInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -4226,6 +4419,7 @@ input AccountUpdateWithoutRealizedPAndLInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -4270,7 +4464,6 @@ input AccountUpdateWithoutTransactionOnAssetMergeInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -4292,6 +4485,7 @@ input AccountUpdateWithoutTransactionOnAssetMergeInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -4336,7 +4530,6 @@ input AccountUpdateWithoutTransactionsInput {
   fundsWithheldFromPurchasingPower: NullableDecimalFieldUpdateOperationsInput
   fundsWithheldFromWithdrawal: NullableDecimalFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
-  institution: NullableEnumAccountInstitutionFieldUpdateOperationsInput
   key: NullableStringFieldUpdateOperationsInput
   liveURL: NullableStringFieldUpdateOperationsInput
   liveURLCreated: NullableDateTimeFieldUpdateOperationsInput
@@ -4358,6 +4551,7 @@ input AccountUpdateWithoutTransactionsInput {
   plaidAccountMask: NullableStringFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutAccountNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAccountsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput
   positions: PositionUpdateManyWithoutAccountNestedInput
   provider: EnumAccountProviderFieldUpdateOperationsInput
   raw: JSON
@@ -4382,6 +4576,12 @@ input AccountUpsertWithWhereUniqueWithoutAuthConnectionInput {
 input AccountUpsertWithWhereUniqueWithoutCreatedByInput {
   create: AccountCreateWithoutCreatedByInput!
   update: AccountUpdateWithoutCreatedByInput!
+  where: AccountWhereUniqueInput!
+}
+
+input AccountUpsertWithWhereUniqueWithoutPortfolioConnectInput {
+  create: AccountCreateWithoutPortfolioConnectInput!
+  update: AccountUpdateWithoutPortfolioConnectInput!
   where: AccountWhereUniqueInput!
 }
 
@@ -4515,7 +4715,6 @@ input AccountWhereInput {
   fundsWithheldFromPurchasingPower: DecimalNullableFilter
   fundsWithheldFromWithdrawal: DecimalNullableFilter
   id: UuidFilter
-  institution: EnumAccountInstitutionNullableFilter
   key: StringNullableFilter
   liveURL: StringNullableFilter
   liveURLCreated: DateTimeNullableFilter
@@ -4537,6 +4736,8 @@ input AccountWhereInput {
   plaidAccountMask: StringNullableFilter
   plaidMerge: PlaidMergeListRelationFilter
   portfolio: PortfolioScalarRelationFilter
+  portfolioConnect: PortfolioConnectScalarRelationFilter
+  portfolioConnectId: UuidFilter
   portfolioId: UuidFilter
   positions: PositionListRelationFilter
   provider: EnumAccountProviderFilter
@@ -4589,7 +4790,6 @@ input AccountWhereUniqueInput {
   fundsWithheldFromPurchasingPower: DecimalNullableFilter
   fundsWithheldFromWithdrawal: DecimalNullableFilter
   id: String
-  institution: EnumAccountInstitutionNullableFilter
   key: StringNullableFilter
   liveURL: StringNullableFilter
   liveURLCreated: DateTimeNullableFilter
@@ -4611,6 +4811,8 @@ input AccountWhereUniqueInput {
   plaidAccountMask: StringNullableFilter
   plaidMerge: PlaidMergeListRelationFilter
   portfolio: PortfolioScalarRelationFilter
+  portfolioConnect: PortfolioConnectScalarRelationFilter
+  portfolioConnectId: UuidFilter
   portfolioId: UuidFilter
   positions: PositionListRelationFilter
   provider: EnumAccountProviderFilter
@@ -7428,11 +7630,8 @@ input AssetWhereUniqueInput {
   vectorGraphs: VectorGraphListRelationFilter
 }
 
-"""
-An authorized connection to some external system (pretty much one ot one to a plaid Link/item)
-"""
+"""An authorized connection to Plaid (one ot one to a plaid Link/item)"""
 type AuthConnection {
-  PositionSnapshot: [PositionSnapshot!]
   _count: AuthConnectionCount!
   accounts: [Account!]
 
@@ -7455,13 +7654,19 @@ type AuthConnection {
 
   """When was the last transaction sync Plaid"""
   lastTransactionSyncedAtPlaid: DateTime
+  plaidInstitution: PlaidInstitution!
 
-  """Plaid institution id"""
-  plaidInstitutionId: String
+  """Plaid institution id (from plaid API)"""
+  plaidInstitutionId: String!
   portfolio: Portfolio!
+  portfolioConnect: PortfolioConnect!
+
+  """Plaid institution id (from our database)"""
+  portfolioConnectId: String!
 
   """The portfolio this provider belongs to"""
   portfolioId: String!
+  positionSnapshot: [PositionSnapshot!]
 
   """Source of the auth"""
   source: AuthSource!
@@ -7486,8 +7691,8 @@ type AuthConnection {
 }
 
 type AuthConnectionCount {
-  PositionSnapshot: Int!
   accounts: Int!
+  positionSnapshot: Int!
 }
 
 type AuthConnectionCountAggregate {
@@ -7499,6 +7704,7 @@ type AuthConnectionCountAggregate {
   isSyncing: Int!
   lastTransactionSyncedAtPlaid: Int!
   plaidInstitutionId: Int!
+  portfolioConnectId: Int!
   portfolioId: Int!
   source: Int!
   syncedAt: Int!
@@ -7508,6 +7714,28 @@ type AuthConnectionCountAggregate {
   verificationUrl: Int!
 }
 
+input AuthConnectionCreateManyPlaidInstitutionInput {
+  authedAt: DateTime
+  createdAt: DateTime
+  externalId: String!
+  id: String
+  isSyncing: Boolean
+  lastTransactionSyncedAtPlaid: DateTime
+  portfolioConnectId: String!
+  portfolioId: String!
+  source: AuthSource!
+  syncedAt: DateTime
+  type: AuthType!
+  updatedAt: DateTime
+  userId: String!
+  verificationUrl: String
+}
+
+input AuthConnectionCreateManyPlaidInstitutionInputEnvelope {
+  data: [AuthConnectionCreateManyPlaidInstitutionInput!]!
+  skipDuplicates: Boolean
+}
+
 input AuthConnectionCreateManyPortfolioInput {
   authedAt: DateTime
   createdAt: DateTime
@@ -7515,7 +7743,8 @@ input AuthConnectionCreateManyPortfolioInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitutionId: String!
+  portfolioConnectId: String!
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
@@ -7536,7 +7765,8 @@ input AuthConnectionCreateManyUserInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitutionId: String!
+  portfolioConnectId: String!
   portfolioId: String!
   source: AuthSource!
   syncedAt: DateTime
@@ -7548,6 +7778,13 @@ input AuthConnectionCreateManyUserInput {
 input AuthConnectionCreateManyUserInputEnvelope {
   data: [AuthConnectionCreateManyUserInput!]!
   skipDuplicates: Boolean
+}
+
+input AuthConnectionCreateNestedManyWithoutPlaidInstitutionInput {
+  connect: [AuthConnectionWhereUniqueInput!]
+  connectOrCreate: [AuthConnectionCreateOrConnectWithoutPlaidInstitutionInput!]
+  create: [AuthConnectionCreateWithoutPlaidInstitutionInput!]
+  createMany: AuthConnectionCreateManyPlaidInstitutionInputEnvelope
 }
 
 input AuthConnectionCreateNestedManyWithoutPortfolioInput {
@@ -7570,6 +7807,12 @@ input AuthConnectionCreateNestedOneWithoutAccountsInput {
   create: AuthConnectionCreateWithoutAccountsInput
 }
 
+input AuthConnectionCreateNestedOneWithoutPortfolioConnectInput {
+  connect: AuthConnectionWhereUniqueInput
+  connectOrCreate: AuthConnectionCreateOrConnectWithoutPortfolioConnectInput
+  create: AuthConnectionCreateWithoutPortfolioConnectInput
+}
+
 input AuthConnectionCreateNestedOneWithoutPositionSnapshotInput {
   connect: AuthConnectionWhereUniqueInput
   connectOrCreate: AuthConnectionCreateOrConnectWithoutPositionSnapshotInput
@@ -7578,6 +7821,16 @@ input AuthConnectionCreateNestedOneWithoutPositionSnapshotInput {
 
 input AuthConnectionCreateOrConnectWithoutAccountsInput {
   create: AuthConnectionCreateWithoutAccountsInput!
+  where: AuthConnectionWhereUniqueInput!
+}
+
+input AuthConnectionCreateOrConnectWithoutPlaidInstitutionInput {
+  create: AuthConnectionCreateWithoutPlaidInstitutionInput!
+  where: AuthConnectionWhereUniqueInput!
+}
+
+input AuthConnectionCreateOrConnectWithoutPortfolioConnectInput {
+  create: AuthConnectionCreateWithoutPortfolioConnectInput!
   where: AuthConnectionWhereUniqueInput!
 }
 
@@ -7597,15 +7850,54 @@ input AuthConnectionCreateOrConnectWithoutUserInput {
 }
 
 input AuthConnectionCreateWithoutAccountsInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutAuthConnectionInput
   authedAt: DateTime
   createdAt: DateTime
   externalId: String!
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitution: PlaidInstitutionCreateNestedOneWithoutAuthConnectionInput!
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAuthConnectionInput!
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutAuthConnectionInput
+  source: AuthSource!
+  syncedAt: DateTime
+  type: AuthType!
+  updatedAt: DateTime
+  user: UserCreateNestedOneWithoutAuthConnectionsInput!
+  verificationUrl: String
+}
+
+input AuthConnectionCreateWithoutPlaidInstitutionInput {
+  accounts: AccountCreateNestedManyWithoutAuthConnectionInput
+  authedAt: DateTime
+  createdAt: DateTime
+  externalId: String!
+  id: String
+  isSyncing: Boolean
+  lastTransactionSyncedAtPlaid: DateTime
+  portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAuthConnectionInput!
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutAuthConnectionInput
+  source: AuthSource!
+  syncedAt: DateTime
+  type: AuthType!
+  updatedAt: DateTime
+  user: UserCreateNestedOneWithoutAuthConnectionsInput!
+  verificationUrl: String
+}
+
+input AuthConnectionCreateWithoutPortfolioConnectInput {
+  accounts: AccountCreateNestedManyWithoutAuthConnectionInput
+  authedAt: DateTime
+  createdAt: DateTime
+  externalId: String!
+  id: String
+  isSyncing: Boolean
+  lastTransactionSyncedAtPlaid: DateTime
+  plaidInstitution: PlaidInstitutionCreateNestedOneWithoutAuthConnectionInput!
+  portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutAuthConnectionInput
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
@@ -7615,7 +7907,6 @@ input AuthConnectionCreateWithoutAccountsInput {
 }
 
 input AuthConnectionCreateWithoutPortfolioInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutAuthConnectionInput
   accounts: AccountCreateNestedManyWithoutAuthConnectionInput
   authedAt: DateTime
   createdAt: DateTime
@@ -7623,7 +7914,9 @@ input AuthConnectionCreateWithoutPortfolioInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitution: PlaidInstitutionCreateNestedOneWithoutAuthConnectionInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAuthConnectionInput!
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutAuthConnectionInput
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
@@ -7640,8 +7933,9 @@ input AuthConnectionCreateWithoutPositionSnapshotInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitution: PlaidInstitutionCreateNestedOneWithoutAuthConnectionInput!
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAuthConnectionInput!
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
@@ -7651,7 +7945,6 @@ input AuthConnectionCreateWithoutPositionSnapshotInput {
 }
 
 input AuthConnectionCreateWithoutUserInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutAuthConnectionInput
   accounts: AccountCreateNestedManyWithoutAuthConnectionInput
   authedAt: DateTime
   createdAt: DateTime
@@ -7659,8 +7952,10 @@ input AuthConnectionCreateWithoutUserInput {
   id: String
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
-  plaidInstitutionId: String
+  plaidInstitution: PlaidInstitutionCreateNestedOneWithoutAuthConnectionInput!
   portfolio: PortfolioCreateNestedOneWithoutAuthConnectionsInput!
+  portfolioConnect: PortfolioConnectCreateNestedOneWithoutAuthConnectionInput!
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutAuthConnectionInput
   source: AuthSource!
   syncedAt: DateTime
   type: AuthType!
@@ -7669,7 +7964,6 @@ input AuthConnectionCreateWithoutUserInput {
 }
 
 type AuthConnectionExt {
-  PositionSnapshot: [PositionSnapshot!]
   _count: AuthConnectionCount!
   _requiresReAuth: Boolean!
   accounts: [Account!]
@@ -7693,13 +7987,19 @@ type AuthConnectionExt {
 
   """When was the last transaction sync Plaid"""
   lastTransactionSyncedAtPlaid: DateTime
+  plaidInstitution: PlaidInstitution!
 
-  """Plaid institution id"""
-  plaidInstitutionId: String
+  """Plaid institution id (from plaid API)"""
+  plaidInstitutionId: String!
   portfolio: Portfolio!
+  portfolioConnect: PortfolioConnect!
+
+  """Plaid institution id (from our database)"""
+  portfolioConnectId: String!
 
   """The portfolio this provider belongs to"""
   portfolioId: String!
+  positionSnapshot: [PositionSnapshot!]
 
   """Source of the auth"""
   source: AuthSource!
@@ -7737,6 +8037,7 @@ type AuthConnectionMaxAggregate {
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
   plaidInstitutionId: String
+  portfolioConnectId: String
   portfolioId: String
   source: AuthSource
   syncedAt: DateTime
@@ -7754,6 +8055,7 @@ type AuthConnectionMinAggregate {
   isSyncing: Boolean
   lastTransactionSyncedAtPlaid: DateTime
   plaidInstitutionId: String
+  portfolioConnectId: String
   portfolioId: String
   source: AuthSource
   syncedAt: DateTime
@@ -7783,7 +8085,8 @@ input AuthConnectionScalarWhereInput {
   id: UuidFilter
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
-  plaidInstitutionId: StringNullableFilter
+  plaidInstitutionId: StringFilter
+  portfolioConnectId: UuidFilter
   portfolioId: UuidFilter
   source: EnumAuthSourceFilter
   syncedAt: DateTimeNullableFilter
@@ -7807,12 +8110,16 @@ input AuthConnectionUpdateManyMutationInput {
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
-  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
   type: EnumAuthTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   verificationUrl: NullableStringFieldUpdateOperationsInput
+}
+
+input AuthConnectionUpdateManyWithWhereWithoutPlaidInstitutionInput {
+  data: AuthConnectionUpdateManyMutationInput!
+  where: AuthConnectionScalarWhereInput!
 }
 
 input AuthConnectionUpdateManyWithWhereWithoutPortfolioInput {
@@ -7823,6 +8130,20 @@ input AuthConnectionUpdateManyWithWhereWithoutPortfolioInput {
 input AuthConnectionUpdateManyWithWhereWithoutUserInput {
   data: AuthConnectionUpdateManyMutationInput!
   where: AuthConnectionScalarWhereInput!
+}
+
+input AuthConnectionUpdateManyWithoutPlaidInstitutionNestedInput {
+  connect: [AuthConnectionWhereUniqueInput!]
+  connectOrCreate: [AuthConnectionCreateOrConnectWithoutPlaidInstitutionInput!]
+  create: [AuthConnectionCreateWithoutPlaidInstitutionInput!]
+  createMany: AuthConnectionCreateManyPlaidInstitutionInputEnvelope
+  delete: [AuthConnectionWhereUniqueInput!]
+  deleteMany: [AuthConnectionScalarWhereInput!]
+  disconnect: [AuthConnectionWhereUniqueInput!]
+  set: [AuthConnectionWhereUniqueInput!]
+  update: [AuthConnectionUpdateWithWhereUniqueWithoutPlaidInstitutionInput!]
+  updateMany: [AuthConnectionUpdateManyWithWhereWithoutPlaidInstitutionInput!]
+  upsert: [AuthConnectionUpsertWithWhereUniqueWithoutPlaidInstitutionInput!]
 }
 
 input AuthConnectionUpdateManyWithoutPortfolioNestedInput {
@@ -7871,14 +8192,34 @@ input AuthConnectionUpdateOneWithoutAccountsNestedInput {
   upsert: AuthConnectionUpsertWithoutAccountsInput
 }
 
+input AuthConnectionUpdateOneWithoutPortfolioConnectNestedInput {
+  connect: AuthConnectionWhereUniqueInput
+  connectOrCreate: AuthConnectionCreateOrConnectWithoutPortfolioConnectInput
+  create: AuthConnectionCreateWithoutPortfolioConnectInput
+  delete: AuthConnectionWhereInput
+  disconnect: AuthConnectionWhereInput
+  update: AuthConnectionUpdateToOneWithWhereWithoutPortfolioConnectInput
+  upsert: AuthConnectionUpsertWithoutPortfolioConnectInput
+}
+
 input AuthConnectionUpdateToOneWithWhereWithoutAccountsInput {
   data: AuthConnectionUpdateWithoutAccountsInput!
+  where: AuthConnectionWhereInput
+}
+
+input AuthConnectionUpdateToOneWithWhereWithoutPortfolioConnectInput {
+  data: AuthConnectionUpdateWithoutPortfolioConnectInput!
   where: AuthConnectionWhereInput
 }
 
 input AuthConnectionUpdateToOneWithWhereWithoutPositionSnapshotInput {
   data: AuthConnectionUpdateWithoutPositionSnapshotInput!
   where: AuthConnectionWhereInput
+}
+
+input AuthConnectionUpdateWithWhereUniqueWithoutPlaidInstitutionInput {
+  data: AuthConnectionUpdateWithoutPlaidInstitutionInput!
+  where: AuthConnectionWhereUniqueInput!
 }
 
 input AuthConnectionUpdateWithWhereUniqueWithoutPortfolioInput {
@@ -7892,15 +8233,54 @@ input AuthConnectionUpdateWithWhereUniqueWithoutUserInput {
 }
 
 input AuthConnectionUpdateWithoutAccountsInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutAuthConnectionNestedInput
   authedAt: DateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
   externalId: StringFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
-  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutAuthConnectionNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAuthConnectionNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutAuthConnectionNestedInput
+  source: EnumAuthSourceFieldUpdateOperationsInput
+  syncedAt: NullableDateTimeFieldUpdateOperationsInput
+  type: EnumAuthTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  user: UserUpdateOneRequiredWithoutAuthConnectionsNestedInput
+  verificationUrl: NullableStringFieldUpdateOperationsInput
+}
+
+input AuthConnectionUpdateWithoutPlaidInstitutionInput {
+  accounts: AccountUpdateManyWithoutAuthConnectionNestedInput
+  authedAt: DateTimeFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  externalId: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  isSyncing: BoolFieldUpdateOperationsInput
+  lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAuthConnectionNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutAuthConnectionNestedInput
+  source: EnumAuthSourceFieldUpdateOperationsInput
+  syncedAt: NullableDateTimeFieldUpdateOperationsInput
+  type: EnumAuthTypeFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  user: UserUpdateOneRequiredWithoutAuthConnectionsNestedInput
+  verificationUrl: NullableStringFieldUpdateOperationsInput
+}
+
+input AuthConnectionUpdateWithoutPortfolioConnectInput {
+  accounts: AccountUpdateManyWithoutAuthConnectionNestedInput
+  authedAt: DateTimeFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  externalId: StringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  isSyncing: BoolFieldUpdateOperationsInput
+  lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutAuthConnectionNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutAuthConnectionNestedInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
   type: EnumAuthTypeFieldUpdateOperationsInput
@@ -7910,7 +8290,6 @@ input AuthConnectionUpdateWithoutAccountsInput {
 }
 
 input AuthConnectionUpdateWithoutPortfolioInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutAuthConnectionNestedInput
   accounts: AccountUpdateManyWithoutAuthConnectionNestedInput
   authedAt: DateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -7918,7 +8297,9 @@ input AuthConnectionUpdateWithoutPortfolioInput {
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
-  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutAuthConnectionNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAuthConnectionNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutAuthConnectionNestedInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
   type: EnumAuthTypeFieldUpdateOperationsInput
@@ -7935,8 +8316,9 @@ input AuthConnectionUpdateWithoutPositionSnapshotInput {
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
-  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutAuthConnectionNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAuthConnectionNestedInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
   type: EnumAuthTypeFieldUpdateOperationsInput
@@ -7946,7 +8328,6 @@ input AuthConnectionUpdateWithoutPositionSnapshotInput {
 }
 
 input AuthConnectionUpdateWithoutUserInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutAuthConnectionNestedInput
   accounts: AccountUpdateManyWithoutAuthConnectionNestedInput
   authedAt: DateTimeFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
@@ -7954,13 +8335,21 @@ input AuthConnectionUpdateWithoutUserInput {
   id: StringFieldUpdateOperationsInput
   isSyncing: BoolFieldUpdateOperationsInput
   lastTransactionSyncedAtPlaid: NullableDateTimeFieldUpdateOperationsInput
-  plaidInstitutionId: NullableStringFieldUpdateOperationsInput
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutAuthConnectionNestedInput
   portfolio: PortfolioUpdateOneRequiredWithoutAuthConnectionsNestedInput
+  portfolioConnect: PortfolioConnectUpdateOneRequiredWithoutAuthConnectionNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutAuthConnectionNestedInput
   source: EnumAuthSourceFieldUpdateOperationsInput
   syncedAt: NullableDateTimeFieldUpdateOperationsInput
   type: EnumAuthTypeFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
   verificationUrl: NullableStringFieldUpdateOperationsInput
+}
+
+input AuthConnectionUpsertWithWhereUniqueWithoutPlaidInstitutionInput {
+  create: AuthConnectionCreateWithoutPlaidInstitutionInput!
+  update: AuthConnectionUpdateWithoutPlaidInstitutionInput!
+  where: AuthConnectionWhereUniqueInput!
 }
 
 input AuthConnectionUpsertWithWhereUniqueWithoutPortfolioInput {
@@ -7981,6 +8370,12 @@ input AuthConnectionUpsertWithoutAccountsInput {
   where: AuthConnectionWhereInput
 }
 
+input AuthConnectionUpsertWithoutPortfolioConnectInput {
+  create: AuthConnectionCreateWithoutPortfolioConnectInput!
+  update: AuthConnectionUpdateWithoutPortfolioConnectInput!
+  where: AuthConnectionWhereInput
+}
+
 input AuthConnectionUpsertWithoutPositionSnapshotInput {
   create: AuthConnectionCreateWithoutPositionSnapshotInput!
   update: AuthConnectionUpdateWithoutPositionSnapshotInput!
@@ -7991,7 +8386,6 @@ input AuthConnectionWhereInput {
   AND: [AuthConnectionWhereInput!]
   NOT: [AuthConnectionWhereInput!]
   OR: [AuthConnectionWhereInput!]
-  PositionSnapshot: PositionSnapshotListRelationFilter
   accounts: AccountListRelationFilter
   authedAt: DateTimeFilter
   createdAt: DateTimeFilter
@@ -7999,9 +8393,13 @@ input AuthConnectionWhereInput {
   id: UuidFilter
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
-  plaidInstitutionId: StringNullableFilter
+  plaidInstitution: PlaidInstitutionScalarRelationFilter
+  plaidInstitutionId: StringFilter
   portfolio: PortfolioScalarRelationFilter
+  portfolioConnect: PortfolioConnectScalarRelationFilter
+  portfolioConnectId: UuidFilter
   portfolioId: UuidFilter
+  positionSnapshot: PositionSnapshotListRelationFilter
   source: EnumAuthSourceFilter
   syncedAt: DateTimeNullableFilter
   type: EnumAuthTypeFilter
@@ -8015,7 +8413,6 @@ input AuthConnectionWhereUniqueInput {
   AND: [AuthConnectionWhereInput!]
   NOT: [AuthConnectionWhereInput!]
   OR: [AuthConnectionWhereInput!]
-  PositionSnapshot: PositionSnapshotListRelationFilter
   accounts: AccountListRelationFilter
   authedAt: DateTimeFilter
   createdAt: DateTimeFilter
@@ -8023,9 +8420,13 @@ input AuthConnectionWhereUniqueInput {
   id: String
   isSyncing: BoolFilter
   lastTransactionSyncedAtPlaid: DateTimeNullableFilter
-  plaidInstitutionId: StringNullableFilter
+  plaidInstitution: PlaidInstitutionScalarRelationFilter
+  plaidInstitutionId: StringFilter
   portfolio: PortfolioScalarRelationFilter
+  portfolioConnect: PortfolioConnectScalarRelationFilter
+  portfolioConnectId: String
   portfolioId: UuidFilter
+  positionSnapshot: PositionSnapshotListRelationFilter
   source: EnumAuthSourceFilter
   source_userId_portfolioId_plaidInstitutionId: AuthConnectionSourceUserIdPortfolioIdPlaidInstitutionIdCompoundUniqueInput
   syncedAt: DateTimeNullableFilter
@@ -8173,13 +8574,6 @@ input DirectedHarvestLot {
   counterTransaction: Boolean
   lotId: String!
   quantity: Float!
-}
-
-input EnumAccountInstitutionNullableFilter {
-  equals: AccountInstitution
-  in: [AccountInstitution!]
-  not: NestedEnumAccountInstitutionNullableFilter
-  notIn: [AccountInstitution!]
 }
 
 input EnumAccountModeNullableFilter {
@@ -8377,6 +8771,17 @@ input EnumOrderTypeFilter {
   in: [OrderType!]
   not: NestedEnumOrderTypeFilter
   notIn: [OrderType!]
+}
+
+input EnumPorfolioConnectStateFieldUpdateOperationsInput {
+  set: PorfolioConnectState
+}
+
+input EnumPorfolioConnectStateFilter {
+  equals: PorfolioConnectState
+  in: [PorfolioConnectState!]
+  not: NestedEnumPorfolioConnectStateFilter
+  notIn: [PorfolioConnectState!]
 }
 
 input EnumPortfolioRoleFieldUpdateOperationsInput {
@@ -11056,6 +11461,7 @@ input InitAccountFileUploadPayload {
   dividend: Float!
   longTermCapitalGain: Float!
   name: String!
+  portfolioConnectId: String!
   shortTermCapitalGain: Float!
 }
 
@@ -13776,12 +14182,16 @@ type LotUpload {
   accountId: String!
   applied: Boolean!
   createdAt: DateTime!
-  fileId: String!
   id: ID!
   portfolio: Portfolio!
   portfolioId: String!
   supportedAccountLotProvider: SupportedAccountLotProvider!
   updatedAt: DateTime!
+
+  """
+  If an account is skipped from onboarding, we can use the positions to generate lots
+  """
+  usePositionsAsLots: Boolean!
 }
 
 type LotUploadCount {
@@ -13793,21 +14203,21 @@ type LotUploadCountAggregate {
   accountId: Int!
   applied: Int!
   createdAt: Int!
-  fileId: Int!
   id: Int!
   portfolioId: Int!
   supportedAccountLotProvider: Int!
   updatedAt: Int!
+  usePositionsAsLots: Int!
 }
 
 input LotUploadCreateManyAccountInput {
   applied: Boolean
   createdAt: DateTime
-  fileId: String!
   id: String
   portfolioId: String!
   supportedAccountLotProvider: SupportedAccountLotProvider!
   updatedAt: DateTime
+  usePositionsAsLots: Boolean
 }
 
 input LotUploadCreateManyAccountInputEnvelope {
@@ -13819,10 +14229,10 @@ input LotUploadCreateManyPortfolioInput {
   accountId: String!
   applied: Boolean
   createdAt: DateTime
-  fileId: String!
   id: String
   supportedAccountLotProvider: SupportedAccountLotProvider!
   updatedAt: DateTime
+  usePositionsAsLots: Boolean
 }
 
 input LotUploadCreateManyPortfolioInputEnvelope {
@@ -13869,22 +14279,22 @@ input LotUploadCreateWithoutAccountInput {
   LotUploadFile: LotUploadFileCreateNestedManyWithoutLotUploadInput
   applied: Boolean
   createdAt: DateTime
-  fileId: String!
   id: String
   portfolio: PortfolioCreateNestedOneWithoutLotUploadInput!
   supportedAccountLotProvider: SupportedAccountLotProvider!
   updatedAt: DateTime
+  usePositionsAsLots: Boolean
 }
 
 input LotUploadCreateWithoutLotUploadFileInput {
   account: AccountCreateNestedOneWithoutLotUploadInput!
   applied: Boolean
   createdAt: DateTime
-  fileId: String!
   id: String
   portfolio: PortfolioCreateNestedOneWithoutLotUploadInput!
   supportedAccountLotProvider: SupportedAccountLotProvider!
   updatedAt: DateTime
+  usePositionsAsLots: Boolean
 }
 
 input LotUploadCreateWithoutPortfolioInput {
@@ -13892,10 +14302,10 @@ input LotUploadCreateWithoutPortfolioInput {
   account: AccountCreateNestedOneWithoutLotUploadInput!
   applied: Boolean
   createdAt: DateTime
-  fileId: String!
   id: String
   supportedAccountLotProvider: SupportedAccountLotProvider!
   updatedAt: DateTime
+  usePositionsAsLots: Boolean
 }
 
 type LotUploadFile {
@@ -14452,22 +14862,22 @@ type LotUploadMaxAggregate {
   accountId: String
   applied: Boolean
   createdAt: DateTime
-  fileId: String
   id: String
   portfolioId: String
   supportedAccountLotProvider: SupportedAccountLotProvider
   updatedAt: DateTime
+  usePositionsAsLots: Boolean
 }
 
 type LotUploadMinAggregate {
   accountId: String
   applied: Boolean
   createdAt: DateTime
-  fileId: String
   id: String
   portfolioId: String
   supportedAccountLotProvider: SupportedAccountLotProvider
   updatedAt: DateTime
+  usePositionsAsLots: Boolean
 }
 
 input LotUploadScalarRelationFilter {
@@ -14482,20 +14892,32 @@ input LotUploadScalarWhereInput {
   accountId: UuidFilter
   applied: BoolFilter
   createdAt: DateTimeFilter
-  fileId: UuidFilter
   id: UuidFilter
   portfolioId: UuidFilter
   supportedAccountLotProvider: EnumSupportedAccountLotProviderFilter
   updatedAt: DateTimeFilter
+  usePositionsAsLots: BoolFilter
+}
+
+input LotUploadUpdateInput {
+  LotUploadFile: LotUploadFileUpdateManyWithoutLotUploadNestedInput
+  account: AccountUpdateOneRequiredWithoutLotUploadNestedInput
+  applied: BoolFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutLotUploadNestedInput
+  supportedAccountLotProvider: EnumSupportedAccountLotProviderFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  usePositionsAsLots: BoolFieldUpdateOperationsInput
 }
 
 input LotUploadUpdateManyMutationInput {
   applied: BoolFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  fileId: StringFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   supportedAccountLotProvider: EnumSupportedAccountLotProviderFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
+  usePositionsAsLots: BoolFieldUpdateOperationsInput
 }
 
 input LotUploadUpdateManyWithWhereWithoutAccountInput {
@@ -14563,22 +14985,22 @@ input LotUploadUpdateWithoutAccountInput {
   LotUploadFile: LotUploadFileUpdateManyWithoutLotUploadNestedInput
   applied: BoolFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  fileId: StringFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutLotUploadNestedInput
   supportedAccountLotProvider: EnumSupportedAccountLotProviderFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
+  usePositionsAsLots: BoolFieldUpdateOperationsInput
 }
 
 input LotUploadUpdateWithoutLotUploadFileInput {
   account: AccountUpdateOneRequiredWithoutLotUploadNestedInput
   applied: BoolFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  fileId: StringFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   portfolio: PortfolioUpdateOneRequiredWithoutLotUploadNestedInput
   supportedAccountLotProvider: EnumSupportedAccountLotProviderFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
+  usePositionsAsLots: BoolFieldUpdateOperationsInput
 }
 
 input LotUploadUpdateWithoutPortfolioInput {
@@ -14586,10 +15008,10 @@ input LotUploadUpdateWithoutPortfolioInput {
   account: AccountUpdateOneRequiredWithoutLotUploadNestedInput
   applied: BoolFieldUpdateOperationsInput
   createdAt: DateTimeFieldUpdateOperationsInput
-  fileId: StringFieldUpdateOperationsInput
   id: StringFieldUpdateOperationsInput
   supportedAccountLotProvider: EnumSupportedAccountLotProviderFieldUpdateOperationsInput
   updatedAt: DateTimeFieldUpdateOperationsInput
+  usePositionsAsLots: BoolFieldUpdateOperationsInput
 }
 
 input LotUploadUpsertWithWhereUniqueWithoutAccountInput {
@@ -14619,12 +15041,12 @@ input LotUploadWhereInput {
   accountId: UuidFilter
   applied: BoolFilter
   createdAt: DateTimeFilter
-  fileId: UuidFilter
   id: UuidFilter
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   supportedAccountLotProvider: EnumSupportedAccountLotProviderFilter
   updatedAt: DateTimeFilter
+  usePositionsAsLots: BoolFilter
 }
 
 input LotUploadWhereUniqueInput {
@@ -14636,12 +15058,12 @@ input LotUploadWhereUniqueInput {
   accountId: UuidFilter
   applied: BoolFilter
   createdAt: DateTimeFilter
-  fileId: UuidFilter
   id: String
   portfolio: PortfolioScalarRelationFilter
   portfolioId: UuidFilter
   supportedAccountLotProvider: EnumSupportedAccountLotProviderFilter
   updatedAt: DateTimeFilter
+  usePositionsAsLots: BoolFilter
 }
 
 input LotUpsertWithWhereUniqueWithoutAccountInput {
@@ -15422,18 +15844,19 @@ input MergeErrorWhereUniqueInput {
 }
 
 type Mutation {
-  accessOauthConnection(authSource: AuthSource!, portfolioId: String!, verifier: String!): AuthConnectionExt!
-
   """
   Add User to Portfolio. True if user added, False if user is invited as they do not exist
   """
   addUserToPortfolio(email: String!): Boolean!
 
+  """Manually refresh institutions from Plaid API (admin-only)"""
+  adminRefreshPlaidInstitutions: Boolean!
+
   """Admin-only: Sync a specific Plaid auth connection"""
   adminSyncPlaidItem(authConnectionId: String!): Boolean!
 
   """Apply a lot upload to the account"""
-  applyLotUpload(lotUploadId: String!): Boolean!
+  applyLotUploads(lotUploadIds: [String!]!): Boolean!
 
   """Create a new connected account"""
   createAccountForPortfolio(accountCreateInput: AccountCreateInput!): Account!
@@ -15444,6 +15867,7 @@ type Mutation {
 
   """Create a portfolio for a user"""
   createPortfolio(portfolioInsertObject: PortfolioCreateInput!): Portfolio!
+  createPortfolioConnect(plaidInstitutionId: String!): PortfolioConnect!
 
   """Delete a connected account and all associated data"""
   deleteAccount(accountWhereUniqueInput: AccountWhereUniqueInput!): Account!
@@ -15453,9 +15877,14 @@ type Mutation {
 
   """Delete multiple harvests by their IDs"""
   deleteHarvests(ids: [String!]!): Boolean!
+  deletePortfolioConnect(id: String!): PortfolioConnect!
 
   """Finalize harvest for review"""
   finalizeHarvest(id: String): Harvest!
+
+  """
+  Initialize a file upload and account creation for the file. Should only be used for E*Trade accounts.
+  """
   initAccountFileUpload(accountData: InitAccountFileUploadPayload, accountId: String, fileData: [InitFileUploadPayload!]!): InitAccountFileUploadResponse!
 
   """Initialize a lot upload from a CSV file"""
@@ -15475,12 +15904,13 @@ type Mutation {
   sendNotificationsByFrequency(frequency: HarvestNotificationFrequency!): Boolean!
   sendWashSaleNotificationsForDate(date: DateTime!): Boolean!
 
-  """Set up plaid auth connection and create accounts from syncing plaid"""
-  setAccessTokenAndSyncAccounts(existingAccountId: String, metaData: PlaidLinkOnSuccessMetadata!, publicToken: String!): [Account!]!
+  """
+  Set up plaid auth connection and create accounts from syncing plaid (collected into a PortfolioConnect record). Create the portfolio connect if it does not exist (Etrade creates a connect first then syncs).
+  """
+  setAccessTokenAndSyncAccounts(existingPortfolioConnectId: String, metaData: PlaidLinkOnSuccessMetadata!, publicToken: String!): PortfolioConnect!
 
   """Log the user into a different portfolio"""
   switchPortfolio(porfolioId: String!): Portfolio!
-  syncAuthConnection(id: String!): AuthConnectionExt!
 
   """Update a connected account"""
   updateAccount(accountUpdateInput: AccountUpdateInput!, accountWhereUniqueInput: AccountWhereUniqueInput!): Account!
@@ -15499,10 +15929,14 @@ type Mutation {
 
   """Pull hourly price data for all assets within the window."""
   updateHourlyAssetPrices(from: DateTime!, to: DateTime!): String!
+
+  """Update a lot upload"""
+  updateLotUpload(data: LotUploadUpdateInput!, lotUploadId: String!): LotUpload!
   updateMergeError(data: MergeErrorUpdateInput!, id: String!): MergeError!
 
   """Update a portfolio"""
   updatePortfolio(data: PortfolioUpdateInput!): Portfolio!
+  updatePortfolioConnect(data: PortfolioConnectUpdateInput!, id: String!): PortfolioConnect!
 
   """Update User"""
   updateUser(data: UserUpdateInput!): User!
@@ -15591,13 +16025,6 @@ input NestedDecimalNullableFilter {
   lte: Decimal
   not: NestedDecimalNullableFilter
   notIn: [Decimal!]
-}
-
-input NestedEnumAccountInstitutionNullableFilter {
-  equals: AccountInstitution
-  in: [AccountInstitution!]
-  not: NestedEnumAccountInstitutionNullableFilter
-  notIn: [AccountInstitution!]
 }
 
 input NestedEnumAccountModeNullableFilter {
@@ -15731,6 +16158,13 @@ input NestedEnumOrderTypeFilter {
   in: [OrderType!]
   not: NestedEnumOrderTypeFilter
   notIn: [OrderType!]
+}
+
+input NestedEnumPorfolioConnectStateFilter {
+  equals: PorfolioConnectState
+  in: [PorfolioConnectState!]
+  not: NestedEnumPorfolioConnectStateFilter
+  notIn: [PorfolioConnectState!]
 }
 
 input NestedEnumPortfolioRoleFilter {
@@ -16148,10 +16582,6 @@ input NullableDecimalFieldUpdateOperationsInput {
   set: Decimal
 }
 
-input NullableEnumAccountInstitutionFieldUpdateOperationsInput {
-  set: AccountInstitution
-}
-
 input NullableEnumAccountModeFieldUpdateOperationsInput {
   set: AccountMode
 }
@@ -16231,9 +16661,126 @@ input PlaidAccount {
   verification_status: String
 }
 
-input PlaidInstitution {
-  institution_id: String!
+"""Plaid institution data synced nightly from Plaid API"""
+type PlaidInstitution {
+  _count: PlaidInstitutionCount!
+  authConnection: [AuthConnection!]
+  countryCode: [String!]
+  createdAt: DateTime!
+  dtcNumbers: [String!]
+  id: ID!
+  lastSyncedAt: DateTime!
+  logo: String
   name: String!
+  oauth: Boolean!
+  portfolioConnect: [PortfolioConnect!]
+  primaryColor: String
+  products: [String!]
+  raw: JSON
+  routingNumbers: [String!]
+  status: JSON!
+  updatedAt: DateTime!
+  url: String
+}
+
+type PlaidInstitutionCount {
+  authConnection: Int!
+  portfolioConnect: Int!
+}
+
+type PlaidInstitutionCountAggregate {
+  _all: Int!
+  countryCode: Int!
+  createdAt: Int!
+  dtcNumbers: Int!
+  id: Int!
+  lastSyncedAt: Int!
+  logo: Int!
+  name: Int!
+  oauth: Int!
+  primaryColor: Int!
+  products: Int!
+  raw: Int!
+  routingNumbers: Int!
+  status: Int!
+  updatedAt: Int!
+  url: Int!
+}
+
+input PlaidInstitutionCreateNestedOneWithoutAuthConnectionInput {
+  connect: PlaidInstitutionWhereUniqueInput
+  connectOrCreate: PlaidInstitutionCreateOrConnectWithoutAuthConnectionInput
+  create: PlaidInstitutionCreateWithoutAuthConnectionInput
+}
+
+input PlaidInstitutionCreateNestedOneWithoutPortfolioConnectInput {
+  connect: PlaidInstitutionWhereUniqueInput
+  connectOrCreate: PlaidInstitutionCreateOrConnectWithoutPortfolioConnectInput
+  create: PlaidInstitutionCreateWithoutPortfolioConnectInput
+}
+
+input PlaidInstitutionCreateOrConnectWithoutAuthConnectionInput {
+  create: PlaidInstitutionCreateWithoutAuthConnectionInput!
+  where: PlaidInstitutionWhereUniqueInput!
+}
+
+input PlaidInstitutionCreateOrConnectWithoutPortfolioConnectInput {
+  create: PlaidInstitutionCreateWithoutPortfolioConnectInput!
+  where: PlaidInstitutionWhereUniqueInput!
+}
+
+input PlaidInstitutionCreateWithoutAuthConnectionInput {
+  countryCode: PlaidInstitutionCreatecountryCodeInput
+  createdAt: DateTime
+  dtcNumbers: PlaidInstitutionCreatedtcNumbersInput
+  id: String!
+  lastSyncedAt: DateTime
+  logo: String
+  name: String!
+  oauth: Boolean
+  portfolioConnect: PortfolioConnectCreateNestedManyWithoutPlaidInstitutionInput
+  primaryColor: String
+  products: PlaidInstitutionCreateproductsInput
+  raw: JSON
+  routingNumbers: PlaidInstitutionCreateroutingNumbersInput
+  status: JSON!
+  updatedAt: DateTime
+  url: String
+}
+
+input PlaidInstitutionCreateWithoutPortfolioConnectInput {
+  authConnection: AuthConnectionCreateNestedManyWithoutPlaidInstitutionInput
+  countryCode: PlaidInstitutionCreatecountryCodeInput
+  createdAt: DateTime
+  dtcNumbers: PlaidInstitutionCreatedtcNumbersInput
+  id: String!
+  lastSyncedAt: DateTime
+  logo: String
+  name: String!
+  oauth: Boolean
+  primaryColor: String
+  products: PlaidInstitutionCreateproductsInput
+  raw: JSON
+  routingNumbers: PlaidInstitutionCreateroutingNumbersInput
+  status: JSON!
+  updatedAt: DateTime
+  url: String
+}
+
+input PlaidInstitutionCreatecountryCodeInput {
+  set: [String!]!
+}
+
+input PlaidInstitutionCreatedtcNumbersInput {
+  set: [String!]!
+}
+
+input PlaidInstitutionCreateproductsInput {
+  set: [String!]!
+}
+
+input PlaidInstitutionCreateroutingNumbersInput {
+  set: [String!]!
 }
 
 type PlaidInstitutionInfo {
@@ -16246,9 +16793,185 @@ type PlaidInstitutionInfo {
   url: String
 }
 
+input PlaidInstitutionInput {
+  institution_id: String!
+  name: String!
+}
+
+type PlaidInstitutionMaxAggregate {
+  createdAt: DateTime
+  id: String
+  lastSyncedAt: DateTime
+  logo: String
+  name: String
+  oauth: Boolean
+  primaryColor: String
+  updatedAt: DateTime
+  url: String
+}
+
+type PlaidInstitutionMinAggregate {
+  createdAt: DateTime
+  id: String
+  lastSyncedAt: DateTime
+  logo: String
+  name: String
+  oauth: Boolean
+  primaryColor: String
+  updatedAt: DateTime
+  url: String
+}
+
+input PlaidInstitutionScalarRelationFilter {
+  is: PlaidInstitutionWhereInput
+  isNot: PlaidInstitutionWhereInput
+}
+
+input PlaidInstitutionUpdateOneRequiredWithoutAuthConnectionNestedInput {
+  connect: PlaidInstitutionWhereUniqueInput
+  connectOrCreate: PlaidInstitutionCreateOrConnectWithoutAuthConnectionInput
+  create: PlaidInstitutionCreateWithoutAuthConnectionInput
+  update: PlaidInstitutionUpdateToOneWithWhereWithoutAuthConnectionInput
+  upsert: PlaidInstitutionUpsertWithoutAuthConnectionInput
+}
+
+input PlaidInstitutionUpdateOneRequiredWithoutPortfolioConnectNestedInput {
+  connect: PlaidInstitutionWhereUniqueInput
+  connectOrCreate: PlaidInstitutionCreateOrConnectWithoutPortfolioConnectInput
+  create: PlaidInstitutionCreateWithoutPortfolioConnectInput
+  update: PlaidInstitutionUpdateToOneWithWhereWithoutPortfolioConnectInput
+  upsert: PlaidInstitutionUpsertWithoutPortfolioConnectInput
+}
+
+input PlaidInstitutionUpdateToOneWithWhereWithoutAuthConnectionInput {
+  data: PlaidInstitutionUpdateWithoutAuthConnectionInput!
+  where: PlaidInstitutionWhereInput
+}
+
+input PlaidInstitutionUpdateToOneWithWhereWithoutPortfolioConnectInput {
+  data: PlaidInstitutionUpdateWithoutPortfolioConnectInput!
+  where: PlaidInstitutionWhereInput
+}
+
+input PlaidInstitutionUpdateWithoutAuthConnectionInput {
+  countryCode: PlaidInstitutionUpdatecountryCodeInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  dtcNumbers: PlaidInstitutionUpdatedtcNumbersInput
+  id: StringFieldUpdateOperationsInput
+  lastSyncedAt: DateTimeFieldUpdateOperationsInput
+  logo: NullableStringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  oauth: BoolFieldUpdateOperationsInput
+  portfolioConnect: PortfolioConnectUpdateManyWithoutPlaidInstitutionNestedInput
+  primaryColor: NullableStringFieldUpdateOperationsInput
+  products: PlaidInstitutionUpdateproductsInput
+  raw: JSON
+  routingNumbers: PlaidInstitutionUpdateroutingNumbersInput
+  status: JSON
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  url: NullableStringFieldUpdateOperationsInput
+}
+
+input PlaidInstitutionUpdateWithoutPortfolioConnectInput {
+  authConnection: AuthConnectionUpdateManyWithoutPlaidInstitutionNestedInput
+  countryCode: PlaidInstitutionUpdatecountryCodeInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  dtcNumbers: PlaidInstitutionUpdatedtcNumbersInput
+  id: StringFieldUpdateOperationsInput
+  lastSyncedAt: DateTimeFieldUpdateOperationsInput
+  logo: NullableStringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  oauth: BoolFieldUpdateOperationsInput
+  primaryColor: NullableStringFieldUpdateOperationsInput
+  products: PlaidInstitutionUpdateproductsInput
+  raw: JSON
+  routingNumbers: PlaidInstitutionUpdateroutingNumbersInput
+  status: JSON
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  url: NullableStringFieldUpdateOperationsInput
+}
+
+input PlaidInstitutionUpdatecountryCodeInput {
+  push: [String!]
+  set: [String!]
+}
+
+input PlaidInstitutionUpdatedtcNumbersInput {
+  push: [String!]
+  set: [String!]
+}
+
+input PlaidInstitutionUpdateproductsInput {
+  push: [String!]
+  set: [String!]
+}
+
+input PlaidInstitutionUpdateroutingNumbersInput {
+  push: [String!]
+  set: [String!]
+}
+
+input PlaidInstitutionUpsertWithoutAuthConnectionInput {
+  create: PlaidInstitutionCreateWithoutAuthConnectionInput!
+  update: PlaidInstitutionUpdateWithoutAuthConnectionInput!
+  where: PlaidInstitutionWhereInput
+}
+
+input PlaidInstitutionUpsertWithoutPortfolioConnectInput {
+  create: PlaidInstitutionCreateWithoutPortfolioConnectInput!
+  update: PlaidInstitutionUpdateWithoutPortfolioConnectInput!
+  where: PlaidInstitutionWhereInput
+}
+
+input PlaidInstitutionWhereInput {
+  AND: [PlaidInstitutionWhereInput!]
+  NOT: [PlaidInstitutionWhereInput!]
+  OR: [PlaidInstitutionWhereInput!]
+  authConnection: AuthConnectionListRelationFilter
+  countryCode: StringNullableListFilter
+  createdAt: DateTimeFilter
+  dtcNumbers: StringNullableListFilter
+  id: StringFilter
+  lastSyncedAt: DateTimeFilter
+  logo: StringNullableFilter
+  name: StringFilter
+  oauth: BoolFilter
+  portfolioConnect: PortfolioConnectListRelationFilter
+  primaryColor: StringNullableFilter
+  products: StringNullableListFilter
+  raw: JsonNullableFilter
+  routingNumbers: StringNullableListFilter
+  status: JsonFilter
+  updatedAt: DateTimeFilter
+  url: StringNullableFilter
+}
+
+input PlaidInstitutionWhereUniqueInput {
+  AND: [PlaidInstitutionWhereInput!]
+  NOT: [PlaidInstitutionWhereInput!]
+  OR: [PlaidInstitutionWhereInput!]
+  authConnection: AuthConnectionListRelationFilter
+  countryCode: StringNullableListFilter
+  createdAt: DateTimeFilter
+  dtcNumbers: StringNullableListFilter
+  id: String
+  lastSyncedAt: DateTimeFilter
+  logo: StringNullableFilter
+  name: StringFilter
+  oauth: BoolFilter
+  portfolioConnect: PortfolioConnectListRelationFilter
+  primaryColor: StringNullableFilter
+  products: StringNullableListFilter
+  raw: JsonNullableFilter
+  routingNumbers: StringNullableListFilter
+  status: JsonFilter
+  updatedAt: DateTimeFilter
+  url: StringNullableFilter
+}
+
 input PlaidLinkOnSuccessMetadata {
   accounts: [PlaidAccount!]!
-  institution: PlaidInstitution
+  institution: PlaidInstitutionInput
   link_session_id: String!
   transfer_status: String
 }
@@ -16647,8 +17370,13 @@ type PolygonStockData {
   vw: Float
 }
 
+enum PorfolioConnectState {
+  COMPLETED
+  ERROR
+  PENDING
+}
+
 type Portfolio {
-  PositionSnapshot: [PositionSnapshot!]
   _count: PortfolioCount!
   accountRealizedPAndLHistory: [AccountRealizedPAndLHistory!]
   accounts: [Account!]
@@ -16701,7 +17429,9 @@ type Portfolio {
   notification: [Notification!]
   notificationFrequency: HarvestNotificationFrequency!
   plaidMerge: [PlaidMerge!]
+  porfolioConnect: [PortfolioConnect!]
   portfolioBalanceSnapshot: [PortfolioBalanceSnapshot!]
+  positionSnapshot: [PositionSnapshot!]
   positions: [Position!]
   realizedPAndL: [RealizedPAndL!]
   transactionOnAssetMerge: [TransactionOnAssetMerge!]
@@ -17317,8 +18047,421 @@ input PortfolioBalanceSnapshotWhereUniqueInput {
   withdrawal: DecimalFilter
 }
 
+"""
+The connect onbaording flow that is initiated by the user for a specific institution. This is controlled by the xstate machine
+"""
+type PortfolioConnect {
+  _count: PortfolioConnectCount!
+  account: [Account!]
+  authConnection: AuthConnection
+  authConnectionId: String
+  createdAt: DateTime!
+  id: ID!
+  persistedSnapshot: JSON!
+  plaidInstitution: PlaidInstitution!
+  plaidInstitutionId: String!
+  portfolio: Portfolio!
+  portfolioId: String!
+  state: PorfolioConnectState!
+  updatedAt: DateTime!
+}
+
+type PortfolioConnectCount {
+  account: Int!
+}
+
+type PortfolioConnectCountAggregate {
+  _all: Int!
+  authConnectionId: Int!
+  createdAt: Int!
+  id: Int!
+  persistedSnapshot: Int!
+  plaidInstitutionId: Int!
+  portfolioId: Int!
+  state: Int!
+  updatedAt: Int!
+}
+
+input PortfolioConnectCreateManyPlaidInstitutionInput {
+  authConnectionId: String
+  createdAt: DateTime
+  id: String
+  persistedSnapshot: JSON
+  portfolioId: String!
+  state: PorfolioConnectState
+  updatedAt: DateTime
+}
+
+input PortfolioConnectCreateManyPlaidInstitutionInputEnvelope {
+  data: [PortfolioConnectCreateManyPlaidInstitutionInput!]!
+  skipDuplicates: Boolean
+}
+
+input PortfolioConnectCreateManyPortfolioInput {
+  authConnectionId: String
+  createdAt: DateTime
+  id: String
+  persistedSnapshot: JSON
+  plaidInstitutionId: String!
+  state: PorfolioConnectState
+  updatedAt: DateTime
+}
+
+input PortfolioConnectCreateManyPortfolioInputEnvelope {
+  data: [PortfolioConnectCreateManyPortfolioInput!]!
+  skipDuplicates: Boolean
+}
+
+input PortfolioConnectCreateNestedManyWithoutPlaidInstitutionInput {
+  connect: [PortfolioConnectWhereUniqueInput!]
+  connectOrCreate: [PortfolioConnectCreateOrConnectWithoutPlaidInstitutionInput!]
+  create: [PortfolioConnectCreateWithoutPlaidInstitutionInput!]
+  createMany: PortfolioConnectCreateManyPlaidInstitutionInputEnvelope
+}
+
+input PortfolioConnectCreateNestedManyWithoutPortfolioInput {
+  connect: [PortfolioConnectWhereUniqueInput!]
+  connectOrCreate: [PortfolioConnectCreateOrConnectWithoutPortfolioInput!]
+  create: [PortfolioConnectCreateWithoutPortfolioInput!]
+  createMany: PortfolioConnectCreateManyPortfolioInputEnvelope
+}
+
+input PortfolioConnectCreateNestedOneWithoutAccountInput {
+  connect: PortfolioConnectWhereUniqueInput
+  connectOrCreate: PortfolioConnectCreateOrConnectWithoutAccountInput
+  create: PortfolioConnectCreateWithoutAccountInput
+}
+
+input PortfolioConnectCreateNestedOneWithoutAuthConnectionInput {
+  connect: PortfolioConnectWhereUniqueInput
+  connectOrCreate: PortfolioConnectCreateOrConnectWithoutAuthConnectionInput
+  create: PortfolioConnectCreateWithoutAuthConnectionInput
+}
+
+input PortfolioConnectCreateOrConnectWithoutAccountInput {
+  create: PortfolioConnectCreateWithoutAccountInput!
+  where: PortfolioConnectWhereUniqueInput!
+}
+
+input PortfolioConnectCreateOrConnectWithoutAuthConnectionInput {
+  create: PortfolioConnectCreateWithoutAuthConnectionInput!
+  where: PortfolioConnectWhereUniqueInput!
+}
+
+input PortfolioConnectCreateOrConnectWithoutPlaidInstitutionInput {
+  create: PortfolioConnectCreateWithoutPlaidInstitutionInput!
+  where: PortfolioConnectWhereUniqueInput!
+}
+
+input PortfolioConnectCreateOrConnectWithoutPortfolioInput {
+  create: PortfolioConnectCreateWithoutPortfolioInput!
+  where: PortfolioConnectWhereUniqueInput!
+}
+
+input PortfolioConnectCreateWithoutAccountInput {
+  authConnection: AuthConnectionCreateNestedOneWithoutPortfolioConnectInput
+  authConnectionId: String
+  createdAt: DateTime
+  id: String
+  persistedSnapshot: JSON
+  plaidInstitution: PlaidInstitutionCreateNestedOneWithoutPortfolioConnectInput!
+  portfolio: PortfolioCreateNestedOneWithoutPorfolioConnectInput!
+  state: PorfolioConnectState
+  updatedAt: DateTime
+}
+
+input PortfolioConnectCreateWithoutAuthConnectionInput {
+  account: AccountCreateNestedManyWithoutPortfolioConnectInput
+  authConnectionId: String
+  createdAt: DateTime
+  id: String
+  persistedSnapshot: JSON
+  plaidInstitution: PlaidInstitutionCreateNestedOneWithoutPortfolioConnectInput!
+  portfolio: PortfolioCreateNestedOneWithoutPorfolioConnectInput!
+  state: PorfolioConnectState
+  updatedAt: DateTime
+}
+
+input PortfolioConnectCreateWithoutPlaidInstitutionInput {
+  account: AccountCreateNestedManyWithoutPortfolioConnectInput
+  authConnection: AuthConnectionCreateNestedOneWithoutPortfolioConnectInput
+  authConnectionId: String
+  createdAt: DateTime
+  id: String
+  persistedSnapshot: JSON
+  portfolio: PortfolioCreateNestedOneWithoutPorfolioConnectInput!
+  state: PorfolioConnectState
+  updatedAt: DateTime
+}
+
+input PortfolioConnectCreateWithoutPortfolioInput {
+  account: AccountCreateNestedManyWithoutPortfolioConnectInput
+  authConnection: AuthConnectionCreateNestedOneWithoutPortfolioConnectInput
+  authConnectionId: String
+  createdAt: DateTime
+  id: String
+  persistedSnapshot: JSON
+  plaidInstitution: PlaidInstitutionCreateNestedOneWithoutPortfolioConnectInput!
+  state: PorfolioConnectState
+  updatedAt: DateTime
+}
+
+input PortfolioConnectListRelationFilter {
+  every: PortfolioConnectWhereInput
+  none: PortfolioConnectWhereInput
+  some: PortfolioConnectWhereInput
+}
+
+type PortfolioConnectMaxAggregate {
+  authConnectionId: String
+  createdAt: DateTime
+  id: String
+  plaidInstitutionId: String
+  portfolioId: String
+  state: PorfolioConnectState
+  updatedAt: DateTime
+}
+
+type PortfolioConnectMinAggregate {
+  authConnectionId: String
+  createdAt: DateTime
+  id: String
+  plaidInstitutionId: String
+  portfolioId: String
+  state: PorfolioConnectState
+  updatedAt: DateTime
+}
+
+input PortfolioConnectPortfolioIdPlaidInstitutionIdCompoundUniqueInput {
+  plaidInstitutionId: String!
+  portfolioId: String!
+}
+
+input PortfolioConnectScalarRelationFilter {
+  is: PortfolioConnectWhereInput
+  isNot: PortfolioConnectWhereInput
+}
+
+input PortfolioConnectScalarWhereInput {
+  AND: [PortfolioConnectScalarWhereInput!]
+  NOT: [PortfolioConnectScalarWhereInput!]
+  OR: [PortfolioConnectScalarWhereInput!]
+  authConnectionId: UuidNullableFilter
+  createdAt: DateTimeFilter
+  id: UuidFilter
+  persistedSnapshot: JsonFilter
+  plaidInstitutionId: StringFilter
+  portfolioId: UuidFilter
+  state: EnumPorfolioConnectStateFilter
+  updatedAt: DateTimeFilter
+}
+
+input PortfolioConnectUpdateInput {
+  account: AccountUpdateManyWithoutPortfolioConnectNestedInput
+  authConnection: AuthConnectionUpdateOneWithoutPortfolioConnectNestedInput
+  authConnectionId: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  persistedSnapshot: JSON
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutPortfolioConnectNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutPorfolioConnectNestedInput
+  state: EnumPorfolioConnectStateFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input PortfolioConnectUpdateManyMutationInput {
+  authConnectionId: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  persistedSnapshot: JSON
+  state: EnumPorfolioConnectStateFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input PortfolioConnectUpdateManyWithWhereWithoutPlaidInstitutionInput {
+  data: PortfolioConnectUpdateManyMutationInput!
+  where: PortfolioConnectScalarWhereInput!
+}
+
+input PortfolioConnectUpdateManyWithWhereWithoutPortfolioInput {
+  data: PortfolioConnectUpdateManyMutationInput!
+  where: PortfolioConnectScalarWhereInput!
+}
+
+input PortfolioConnectUpdateManyWithoutPlaidInstitutionNestedInput {
+  connect: [PortfolioConnectWhereUniqueInput!]
+  connectOrCreate: [PortfolioConnectCreateOrConnectWithoutPlaidInstitutionInput!]
+  create: [PortfolioConnectCreateWithoutPlaidInstitutionInput!]
+  createMany: PortfolioConnectCreateManyPlaidInstitutionInputEnvelope
+  delete: [PortfolioConnectWhereUniqueInput!]
+  deleteMany: [PortfolioConnectScalarWhereInput!]
+  disconnect: [PortfolioConnectWhereUniqueInput!]
+  set: [PortfolioConnectWhereUniqueInput!]
+  update: [PortfolioConnectUpdateWithWhereUniqueWithoutPlaidInstitutionInput!]
+  updateMany: [PortfolioConnectUpdateManyWithWhereWithoutPlaidInstitutionInput!]
+  upsert: [PortfolioConnectUpsertWithWhereUniqueWithoutPlaidInstitutionInput!]
+}
+
+input PortfolioConnectUpdateManyWithoutPortfolioNestedInput {
+  connect: [PortfolioConnectWhereUniqueInput!]
+  connectOrCreate: [PortfolioConnectCreateOrConnectWithoutPortfolioInput!]
+  create: [PortfolioConnectCreateWithoutPortfolioInput!]
+  createMany: PortfolioConnectCreateManyPortfolioInputEnvelope
+  delete: [PortfolioConnectWhereUniqueInput!]
+  deleteMany: [PortfolioConnectScalarWhereInput!]
+  disconnect: [PortfolioConnectWhereUniqueInput!]
+  set: [PortfolioConnectWhereUniqueInput!]
+  update: [PortfolioConnectUpdateWithWhereUniqueWithoutPortfolioInput!]
+  updateMany: [PortfolioConnectUpdateManyWithWhereWithoutPortfolioInput!]
+  upsert: [PortfolioConnectUpsertWithWhereUniqueWithoutPortfolioInput!]
+}
+
+input PortfolioConnectUpdateOneRequiredWithoutAccountNestedInput {
+  connect: PortfolioConnectWhereUniqueInput
+  connectOrCreate: PortfolioConnectCreateOrConnectWithoutAccountInput
+  create: PortfolioConnectCreateWithoutAccountInput
+  update: PortfolioConnectUpdateToOneWithWhereWithoutAccountInput
+  upsert: PortfolioConnectUpsertWithoutAccountInput
+}
+
+input PortfolioConnectUpdateOneRequiredWithoutAuthConnectionNestedInput {
+  connect: PortfolioConnectWhereUniqueInput
+  connectOrCreate: PortfolioConnectCreateOrConnectWithoutAuthConnectionInput
+  create: PortfolioConnectCreateWithoutAuthConnectionInput
+  update: PortfolioConnectUpdateToOneWithWhereWithoutAuthConnectionInput
+  upsert: PortfolioConnectUpsertWithoutAuthConnectionInput
+}
+
+input PortfolioConnectUpdateToOneWithWhereWithoutAccountInput {
+  data: PortfolioConnectUpdateWithoutAccountInput!
+  where: PortfolioConnectWhereInput
+}
+
+input PortfolioConnectUpdateToOneWithWhereWithoutAuthConnectionInput {
+  data: PortfolioConnectUpdateWithoutAuthConnectionInput!
+  where: PortfolioConnectWhereInput
+}
+
+input PortfolioConnectUpdateWithWhereUniqueWithoutPlaidInstitutionInput {
+  data: PortfolioConnectUpdateWithoutPlaidInstitutionInput!
+  where: PortfolioConnectWhereUniqueInput!
+}
+
+input PortfolioConnectUpdateWithWhereUniqueWithoutPortfolioInput {
+  data: PortfolioConnectUpdateWithoutPortfolioInput!
+  where: PortfolioConnectWhereUniqueInput!
+}
+
+input PortfolioConnectUpdateWithoutAccountInput {
+  authConnection: AuthConnectionUpdateOneWithoutPortfolioConnectNestedInput
+  authConnectionId: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  persistedSnapshot: JSON
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutPortfolioConnectNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutPorfolioConnectNestedInput
+  state: EnumPorfolioConnectStateFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input PortfolioConnectUpdateWithoutAuthConnectionInput {
+  account: AccountUpdateManyWithoutPortfolioConnectNestedInput
+  authConnectionId: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  persistedSnapshot: JSON
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutPortfolioConnectNestedInput
+  portfolio: PortfolioUpdateOneRequiredWithoutPorfolioConnectNestedInput
+  state: EnumPorfolioConnectStateFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input PortfolioConnectUpdateWithoutPlaidInstitutionInput {
+  account: AccountUpdateManyWithoutPortfolioConnectNestedInput
+  authConnection: AuthConnectionUpdateOneWithoutPortfolioConnectNestedInput
+  authConnectionId: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  persistedSnapshot: JSON
+  portfolio: PortfolioUpdateOneRequiredWithoutPorfolioConnectNestedInput
+  state: EnumPorfolioConnectStateFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input PortfolioConnectUpdateWithoutPortfolioInput {
+  account: AccountUpdateManyWithoutPortfolioConnectNestedInput
+  authConnection: AuthConnectionUpdateOneWithoutPortfolioConnectNestedInput
+  authConnectionId: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  persistedSnapshot: JSON
+  plaidInstitution: PlaidInstitutionUpdateOneRequiredWithoutPortfolioConnectNestedInput
+  state: EnumPorfolioConnectStateFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input PortfolioConnectUpsertWithWhereUniqueWithoutPlaidInstitutionInput {
+  create: PortfolioConnectCreateWithoutPlaidInstitutionInput!
+  update: PortfolioConnectUpdateWithoutPlaidInstitutionInput!
+  where: PortfolioConnectWhereUniqueInput!
+}
+
+input PortfolioConnectUpsertWithWhereUniqueWithoutPortfolioInput {
+  create: PortfolioConnectCreateWithoutPortfolioInput!
+  update: PortfolioConnectUpdateWithoutPortfolioInput!
+  where: PortfolioConnectWhereUniqueInput!
+}
+
+input PortfolioConnectUpsertWithoutAccountInput {
+  create: PortfolioConnectCreateWithoutAccountInput!
+  update: PortfolioConnectUpdateWithoutAccountInput!
+  where: PortfolioConnectWhereInput
+}
+
+input PortfolioConnectUpsertWithoutAuthConnectionInput {
+  create: PortfolioConnectCreateWithoutAuthConnectionInput!
+  update: PortfolioConnectUpdateWithoutAuthConnectionInput!
+  where: PortfolioConnectWhereInput
+}
+
+input PortfolioConnectWhereInput {
+  AND: [PortfolioConnectWhereInput!]
+  NOT: [PortfolioConnectWhereInput!]
+  OR: [PortfolioConnectWhereInput!]
+  account: AccountListRelationFilter
+  authConnection: AuthConnectionNullableScalarRelationFilter
+  authConnectionId: UuidNullableFilter
+  createdAt: DateTimeFilter
+  id: UuidFilter
+  persistedSnapshot: JsonFilter
+  plaidInstitution: PlaidInstitutionScalarRelationFilter
+  plaidInstitutionId: StringFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  state: EnumPorfolioConnectStateFilter
+  updatedAt: DateTimeFilter
+}
+
+input PortfolioConnectWhereUniqueInput {
+  AND: [PortfolioConnectWhereInput!]
+  NOT: [PortfolioConnectWhereInput!]
+  OR: [PortfolioConnectWhereInput!]
+  account: AccountListRelationFilter
+  authConnection: AuthConnectionNullableScalarRelationFilter
+  authConnectionId: String
+  createdAt: DateTimeFilter
+  id: String
+  persistedSnapshot: JsonFilter
+  plaidInstitution: PlaidInstitutionScalarRelationFilter
+  plaidInstitutionId: StringFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  portfolioId_plaidInstitutionId: PortfolioConnectPortfolioIdPlaidInstitutionIdCompoundUniqueInput
+  state: EnumPorfolioConnectStateFilter
+  updatedAt: DateTimeFilter
+}
+
 type PortfolioCount {
-  PositionSnapshot: Int!
   accountRealizedPAndLHistory: Int!
   accounts: Int!
   assetMerge: Int!
@@ -17336,7 +18479,9 @@ type PortfolioCount {
   mergeError: Int!
   notification: Int!
   plaidMerge: Int!
+  porfolioConnect: Int!
   portfolioBalanceSnapshot: Int!
+  positionSnapshot: Int!
   positions: Int!
   realizedPAndL: Int!
   transactionOnAssetMerge: Int!
@@ -17363,7 +18508,6 @@ type PortfolioCountAggregate {
 }
 
 input PortfolioCreateInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17394,7 +18538,9 @@ input PortfolioCreateInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17533,6 +18679,12 @@ input PortfolioCreateNestedOneWithoutPlaidMergeInput {
   create: PortfolioCreateWithoutPlaidMergeInput
 }
 
+input PortfolioCreateNestedOneWithoutPorfolioConnectInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutPorfolioConnectInput
+  create: PortfolioCreateWithoutPorfolioConnectInput
+}
+
 input PortfolioCreateNestedOneWithoutPortfolioBalanceSnapshotInput {
   connect: PortfolioWhereUniqueInput
   connectOrCreate: PortfolioCreateOrConnectWithoutPortfolioBalanceSnapshotInput
@@ -17665,6 +18817,11 @@ input PortfolioCreateOrConnectWithoutPlaidMergeInput {
   where: PortfolioWhereUniqueInput!
 }
 
+input PortfolioCreateOrConnectWithoutPorfolioConnectInput {
+  create: PortfolioCreateWithoutPorfolioConnectInput!
+  where: PortfolioWhereUniqueInput!
+}
+
 input PortfolioCreateOrConnectWithoutPortfolioBalanceSnapshotInput {
   create: PortfolioCreateWithoutPortfolioBalanceSnapshotInput!
   where: PortfolioWhereUniqueInput!
@@ -17701,7 +18858,6 @@ input PortfolioCreateOrConnectWithoutUsersOnPortfoliosInput {
 }
 
 input PortfolioCreateWithoutAccountRealizedPAndLHistoryInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
@@ -17731,7 +18887,9 @@ input PortfolioCreateWithoutAccountRealizedPAndLHistoryInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17741,7 +18899,6 @@ input PortfolioCreateWithoutAccountRealizedPAndLHistoryInput {
 }
 
 input PortfolioCreateWithoutAccountsInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
@@ -17771,7 +18928,9 @@ input PortfolioCreateWithoutAccountsInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17781,7 +18940,6 @@ input PortfolioCreateWithoutAccountsInput {
 }
 
 input PortfolioCreateWithoutAssetMergeInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
@@ -17811,7 +18969,9 @@ input PortfolioCreateWithoutAssetMergeInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17821,7 +18981,6 @@ input PortfolioCreateWithoutAssetMergeInput {
 }
 
 input PortfolioCreateWithoutAuthConnectionsInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17851,7 +19010,9 @@ input PortfolioCreateWithoutAuthConnectionsInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17861,7 +19022,6 @@ input PortfolioCreateWithoutAuthConnectionsInput {
 }
 
 input PortfolioCreateWithoutCreatedByInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17891,7 +19051,9 @@ input PortfolioCreateWithoutCreatedByInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17901,7 +19063,6 @@ input PortfolioCreateWithoutCreatedByInput {
 }
 
 input PortfolioCreateWithoutFilesInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17931,7 +19092,9 @@ input PortfolioCreateWithoutFilesInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17941,7 +19104,6 @@ input PortfolioCreateWithoutFilesInput {
 }
 
 input PortfolioCreateWithoutHarvestTransactionInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17971,7 +19133,9 @@ input PortfolioCreateWithoutHarvestTransactionInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -17981,7 +19145,6 @@ input PortfolioCreateWithoutHarvestTransactionInput {
 }
 
 input PortfolioCreateWithoutHarvestTransactionItemInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18011,7 +19174,9 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18021,7 +19186,6 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
 }
 
 input PortfolioCreateWithoutHarvestsInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18051,7 +19215,9 @@ input PortfolioCreateWithoutHarvestsInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18061,7 +19227,6 @@ input PortfolioCreateWithoutHarvestsInput {
 }
 
 input PortfolioCreateWithoutLogInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18091,7 +19256,9 @@ input PortfolioCreateWithoutLogInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18101,7 +19268,6 @@ input PortfolioCreateWithoutLogInput {
 }
 
 input PortfolioCreateWithoutLotChangeInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18131,7 +19297,9 @@ input PortfolioCreateWithoutLotChangeInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18141,7 +19309,6 @@ input PortfolioCreateWithoutLotChangeInput {
 }
 
 input PortfolioCreateWithoutLotChangeListInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18171,7 +19338,9 @@ input PortfolioCreateWithoutLotChangeListInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18181,7 +19350,6 @@ input PortfolioCreateWithoutLotChangeListInput {
 }
 
 input PortfolioCreateWithoutLotUploadFileInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18211,7 +19379,9 @@ input PortfolioCreateWithoutLotUploadFileInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18221,7 +19391,6 @@ input PortfolioCreateWithoutLotUploadFileInput {
 }
 
 input PortfolioCreateWithoutLotUploadInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18251,7 +19420,9 @@ input PortfolioCreateWithoutLotUploadInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18261,7 +19432,6 @@ input PortfolioCreateWithoutLotUploadInput {
 }
 
 input PortfolioCreateWithoutLotsInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18291,7 +19461,9 @@ input PortfolioCreateWithoutLotsInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18301,7 +19473,6 @@ input PortfolioCreateWithoutLotsInput {
 }
 
 input PortfolioCreateWithoutMergeErrorInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18331,7 +19502,9 @@ input PortfolioCreateWithoutMergeErrorInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18341,7 +19514,6 @@ input PortfolioCreateWithoutMergeErrorInput {
 }
 
 input PortfolioCreateWithoutNotificationInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18371,7 +19543,9 @@ input PortfolioCreateWithoutNotificationInput {
   name: String
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18381,7 +19555,6 @@ input PortfolioCreateWithoutNotificationInput {
 }
 
 input PortfolioCreateWithoutPlaidMergeInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18411,7 +19584,9 @@ input PortfolioCreateWithoutPlaidMergeInput {
   name: String
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18420,8 +19595,7 @@ input PortfolioCreateWithoutPlaidMergeInput {
   usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
 }
 
-input PortfolioCreateWithoutPortfolioBalanceSnapshotInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
+input PortfolioCreateWithoutPorfolioConnectInput {
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18452,6 +19626,49 @@ input PortfolioCreateWithoutPortfolioBalanceSnapshotInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
+  positions: PositionCreateNestedManyWithoutPortfolioInput
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
+  transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
+  transactions: TransactionCreateNestedManyWithoutPortfolioInput
+  updatedAt: DateTime
+  usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
+}
+
+input PortfolioCreateWithoutPortfolioBalanceSnapshotInput {
+  accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
+  accounts: AccountCreateNestedManyWithoutPortfolioInput
+  assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
+  authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
+  createdAt: DateTime
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
+  files: FileCreateNestedManyWithoutPortfolioInput
+  harvestCycleWeeks: Int
+  harvestShareDollarThreshold: Decimal
+  harvestTickerBucketDollarSizeLong: Decimal
+  harvestTickerBucketDollarSizeShort: Decimal
+  harvestTickerBucketLowerLimitLong: Decimal
+  harvestTickerBucketLowerLimitShort: Decimal
+  harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
+  harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
+  harvests: HarvestCreateNestedManyWithoutPortfolioInput
+  id: String
+  log: LogCreateNestedManyWithoutPortfolioInput
+  lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
+  lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
+  lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
+  minimumLotPAndL: Decimal
+  name: String
+  notification: NotificationCreateNestedManyWithoutPortfolioInput
+  notificationFrequency: HarvestNotificationFrequency
+  plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18491,6 +19708,7 @@ input PortfolioCreateWithoutPositionSnapshotInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
@@ -18501,7 +19719,6 @@ input PortfolioCreateWithoutPositionSnapshotInput {
 }
 
 input PortfolioCreateWithoutPositionsInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18532,7 +19749,9 @@ input PortfolioCreateWithoutPositionsInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
   transactions: TransactionCreateNestedManyWithoutPortfolioInput
@@ -18541,7 +19760,6 @@ input PortfolioCreateWithoutPositionsInput {
 }
 
 input PortfolioCreateWithoutRealizedPAndLInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18572,7 +19790,9 @@ input PortfolioCreateWithoutRealizedPAndLInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
   transactions: TransactionCreateNestedManyWithoutPortfolioInput
@@ -18581,7 +19801,6 @@ input PortfolioCreateWithoutRealizedPAndLInput {
 }
 
 input PortfolioCreateWithoutTransactionOnAssetMergeInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18612,7 +19831,9 @@ input PortfolioCreateWithoutTransactionOnAssetMergeInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactions: TransactionCreateNestedManyWithoutPortfolioInput
@@ -18621,7 +19842,6 @@ input PortfolioCreateWithoutTransactionOnAssetMergeInput {
 }
 
 input PortfolioCreateWithoutTransactionsInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18652,7 +19872,9 @@ input PortfolioCreateWithoutTransactionsInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18661,7 +19883,6 @@ input PortfolioCreateWithoutTransactionsInput {
 }
 
 input PortfolioCreateWithoutUsersOnPortfoliosInput {
-  PositionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
   accounts: AccountCreateNestedManyWithoutPortfolioInput
   assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18692,7 +19913,9 @@ input PortfolioCreateWithoutUsersOnPortfoliosInput {
   notification: NotificationCreateNestedManyWithoutPortfolioInput
   notificationFrequency: HarvestNotificationFrequency
   plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
   positions: PositionCreateNestedManyWithoutPortfolioInput
   realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
   transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
@@ -18843,7 +20066,6 @@ type PortfolioSummaryUnrealized {
 }
 
 input PortfolioUpdateInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -18874,7 +20096,9 @@ input PortfolioUpdateInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19054,6 +20278,14 @@ input PortfolioUpdateOneRequiredWithoutPlaidMergeNestedInput {
   upsert: PortfolioUpsertWithoutPlaidMergeInput
 }
 
+input PortfolioUpdateOneRequiredWithoutPorfolioConnectNestedInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutPorfolioConnectInput
+  create: PortfolioCreateWithoutPorfolioConnectInput
+  update: PortfolioUpdateToOneWithWhereWithoutPorfolioConnectInput
+  upsert: PortfolioUpsertWithoutPorfolioConnectInput
+}
+
 input PortfolioUpdateOneRequiredWithoutPortfolioBalanceSnapshotNestedInput {
   connect: PortfolioWhereUniqueInput
   connectOrCreate: PortfolioCreateOrConnectWithoutPortfolioBalanceSnapshotInput
@@ -19195,6 +20427,11 @@ input PortfolioUpdateToOneWithWhereWithoutPlaidMergeInput {
   where: PortfolioWhereInput
 }
 
+input PortfolioUpdateToOneWithWhereWithoutPorfolioConnectInput {
+  data: PortfolioUpdateWithoutPorfolioConnectInput!
+  where: PortfolioWhereInput
+}
+
 input PortfolioUpdateToOneWithWhereWithoutPortfolioBalanceSnapshotInput {
   data: PortfolioUpdateWithoutPortfolioBalanceSnapshotInput!
   where: PortfolioWhereInput
@@ -19236,7 +20473,6 @@ input PortfolioUpdateWithWhereUniqueWithoutCreatedByInput {
 }
 
 input PortfolioUpdateWithoutAccountRealizedPAndLHistoryInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
@@ -19266,7 +20502,9 @@ input PortfolioUpdateWithoutAccountRealizedPAndLHistoryInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19276,7 +20514,6 @@ input PortfolioUpdateWithoutAccountRealizedPAndLHistoryInput {
 }
 
 input PortfolioUpdateWithoutAccountsInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
@@ -19306,7 +20543,9 @@ input PortfolioUpdateWithoutAccountsInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19316,7 +20555,6 @@ input PortfolioUpdateWithoutAccountsInput {
 }
 
 input PortfolioUpdateWithoutAssetMergeInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
@@ -19346,7 +20584,9 @@ input PortfolioUpdateWithoutAssetMergeInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19356,7 +20596,6 @@ input PortfolioUpdateWithoutAssetMergeInput {
 }
 
 input PortfolioUpdateWithoutAuthConnectionsInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19386,7 +20625,9 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19396,7 +20637,6 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
 }
 
 input PortfolioUpdateWithoutCreatedByInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19426,7 +20666,9 @@ input PortfolioUpdateWithoutCreatedByInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19436,7 +20678,6 @@ input PortfolioUpdateWithoutCreatedByInput {
 }
 
 input PortfolioUpdateWithoutFilesInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19466,7 +20707,9 @@ input PortfolioUpdateWithoutFilesInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19476,7 +20719,6 @@ input PortfolioUpdateWithoutFilesInput {
 }
 
 input PortfolioUpdateWithoutHarvestTransactionInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19506,7 +20748,9 @@ input PortfolioUpdateWithoutHarvestTransactionInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19516,7 +20760,6 @@ input PortfolioUpdateWithoutHarvestTransactionInput {
 }
 
 input PortfolioUpdateWithoutHarvestTransactionItemInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19546,7 +20789,9 @@ input PortfolioUpdateWithoutHarvestTransactionItemInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19556,7 +20801,6 @@ input PortfolioUpdateWithoutHarvestTransactionItemInput {
 }
 
 input PortfolioUpdateWithoutHarvestsInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19586,7 +20830,9 @@ input PortfolioUpdateWithoutHarvestsInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19596,7 +20842,6 @@ input PortfolioUpdateWithoutHarvestsInput {
 }
 
 input PortfolioUpdateWithoutLogInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19626,7 +20871,9 @@ input PortfolioUpdateWithoutLogInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19636,7 +20883,6 @@ input PortfolioUpdateWithoutLogInput {
 }
 
 input PortfolioUpdateWithoutLotChangeInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19666,7 +20912,9 @@ input PortfolioUpdateWithoutLotChangeInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19676,7 +20924,6 @@ input PortfolioUpdateWithoutLotChangeInput {
 }
 
 input PortfolioUpdateWithoutLotChangeListInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19706,7 +20953,9 @@ input PortfolioUpdateWithoutLotChangeListInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19716,7 +20965,6 @@ input PortfolioUpdateWithoutLotChangeListInput {
 }
 
 input PortfolioUpdateWithoutLotUploadFileInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19746,7 +20994,9 @@ input PortfolioUpdateWithoutLotUploadFileInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19756,7 +21006,6 @@ input PortfolioUpdateWithoutLotUploadFileInput {
 }
 
 input PortfolioUpdateWithoutLotUploadInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19786,7 +21035,9 @@ input PortfolioUpdateWithoutLotUploadInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19796,7 +21047,6 @@ input PortfolioUpdateWithoutLotUploadInput {
 }
 
 input PortfolioUpdateWithoutLotsInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19826,7 +21076,9 @@ input PortfolioUpdateWithoutLotsInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19836,7 +21088,6 @@ input PortfolioUpdateWithoutLotsInput {
 }
 
 input PortfolioUpdateWithoutMergeErrorInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19866,7 +21117,9 @@ input PortfolioUpdateWithoutMergeErrorInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19876,7 +21129,6 @@ input PortfolioUpdateWithoutMergeErrorInput {
 }
 
 input PortfolioUpdateWithoutNotificationInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19906,7 +21158,9 @@ input PortfolioUpdateWithoutNotificationInput {
   name: StringFieldUpdateOperationsInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19916,7 +21170,6 @@ input PortfolioUpdateWithoutNotificationInput {
 }
 
 input PortfolioUpdateWithoutPlaidMergeInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19946,7 +21199,9 @@ input PortfolioUpdateWithoutPlaidMergeInput {
   name: StringFieldUpdateOperationsInput
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19955,8 +21210,7 @@ input PortfolioUpdateWithoutPlaidMergeInput {
   usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
 }
 
-input PortfolioUpdateWithoutPortfolioBalanceSnapshotInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
+input PortfolioUpdateWithoutPorfolioConnectInput {
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -19987,6 +21241,49 @@ input PortfolioUpdateWithoutPortfolioBalanceSnapshotInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
+  positions: PositionUpdateManyWithoutPortfolioNestedInput
+  realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
+  transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
+  transactions: TransactionUpdateManyWithoutPortfolioNestedInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
+}
+
+input PortfolioUpdateWithoutPortfolioBalanceSnapshotInput {
+  accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
+  accounts: AccountUpdateManyWithoutPortfolioNestedInput
+  assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
+  authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutPortfolioNestedInput
+  harvestCycleWeeks: IntFieldUpdateOperationsInput
+  harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeShort: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
+  harvestTransaction: HarvestTransactionUpdateManyWithoutPortfolioNestedInput
+  harvestTransactionItem: HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput
+  harvests: HarvestUpdateManyWithoutPortfolioNestedInput
+  id: StringFieldUpdateOperationsInput
+  log: LogUpdateManyWithoutPortfolioNestedInput
+  lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
+  lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
+  lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
+  plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -20026,6 +21323,7 @@ input PortfolioUpdateWithoutPositionSnapshotInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
@@ -20036,7 +21334,6 @@ input PortfolioUpdateWithoutPositionSnapshotInput {
 }
 
 input PortfolioUpdateWithoutPositionsInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -20067,7 +21364,9 @@ input PortfolioUpdateWithoutPositionsInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
   transactions: TransactionUpdateManyWithoutPortfolioNestedInput
@@ -20076,7 +21375,6 @@ input PortfolioUpdateWithoutPositionsInput {
 }
 
 input PortfolioUpdateWithoutRealizedPAndLInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -20107,7 +21405,9 @@ input PortfolioUpdateWithoutRealizedPAndLInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
   transactions: TransactionUpdateManyWithoutPortfolioNestedInput
@@ -20116,7 +21416,6 @@ input PortfolioUpdateWithoutRealizedPAndLInput {
 }
 
 input PortfolioUpdateWithoutTransactionOnAssetMergeInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -20147,7 +21446,9 @@ input PortfolioUpdateWithoutTransactionOnAssetMergeInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactions: TransactionUpdateManyWithoutPortfolioNestedInput
@@ -20156,7 +21457,6 @@ input PortfolioUpdateWithoutTransactionOnAssetMergeInput {
 }
 
 input PortfolioUpdateWithoutTransactionsInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -20187,7 +21487,9 @@ input PortfolioUpdateWithoutTransactionsInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -20196,7 +21498,6 @@ input PortfolioUpdateWithoutTransactionsInput {
 }
 
 input PortfolioUpdateWithoutUsersOnPortfoliosInput {
-  PositionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
   accounts: AccountUpdateManyWithoutPortfolioNestedInput
   assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -20227,7 +21528,9 @@ input PortfolioUpdateWithoutUsersOnPortfoliosInput {
   notification: NotificationUpdateManyWithoutPortfolioNestedInput
   notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
   plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
   positions: PositionUpdateManyWithoutPortfolioNestedInput
   realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
   transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
@@ -20343,6 +21646,12 @@ input PortfolioUpsertWithoutPlaidMergeInput {
   where: PortfolioWhereInput
 }
 
+input PortfolioUpsertWithoutPorfolioConnectInput {
+  create: PortfolioCreateWithoutPorfolioConnectInput!
+  update: PortfolioUpdateWithoutPorfolioConnectInput!
+  where: PortfolioWhereInput
+}
+
 input PortfolioUpsertWithoutPortfolioBalanceSnapshotInput {
   create: PortfolioCreateWithoutPortfolioBalanceSnapshotInput!
   update: PortfolioUpdateWithoutPortfolioBalanceSnapshotInput!
@@ -20389,7 +21698,6 @@ input PortfolioWhereInput {
   AND: [PortfolioWhereInput!]
   NOT: [PortfolioWhereInput!]
   OR: [PortfolioWhereInput!]
-  PositionSnapshot: PositionSnapshotListRelationFilter
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryListRelationFilter
   accounts: AccountListRelationFilter
   assetMerge: AssetMergeListRelationFilter
@@ -20421,7 +21729,9 @@ input PortfolioWhereInput {
   notification: NotificationListRelationFilter
   notificationFrequency: EnumHarvestNotificationFrequencyFilter
   plaidMerge: PlaidMergeListRelationFilter
+  porfolioConnect: PortfolioConnectListRelationFilter
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotListRelationFilter
+  positionSnapshot: PositionSnapshotListRelationFilter
   positions: PositionListRelationFilter
   realizedPAndL: RealizedPAndLListRelationFilter
   transactionOnAssetMerge: TransactionOnAssetMergeListRelationFilter
@@ -20434,7 +21744,6 @@ input PortfolioWhereUniqueInput {
   AND: [PortfolioWhereInput!]
   NOT: [PortfolioWhereInput!]
   OR: [PortfolioWhereInput!]
-  PositionSnapshot: PositionSnapshotListRelationFilter
   accountRealizedPAndLHistory: AccountRealizedPAndLHistoryListRelationFilter
   accounts: AccountListRelationFilter
   assetMerge: AssetMergeListRelationFilter
@@ -20466,7 +21775,9 @@ input PortfolioWhereUniqueInput {
   notification: NotificationListRelationFilter
   notificationFrequency: EnumHarvestNotificationFrequencyFilter
   plaidMerge: PlaidMergeListRelationFilter
+  porfolioConnect: PortfolioConnectListRelationFilter
   portfolioBalanceSnapshot: PortfolioBalanceSnapshotListRelationFilter
+  positionSnapshot: PositionSnapshotListRelationFilter
   positions: PositionListRelationFilter
   realizedPAndL: RealizedPAndLListRelationFilter
   transactionOnAssetMerge: TransactionOnAssetMergeListRelationFilter
@@ -22642,15 +23953,27 @@ type Query {
   lots(includeTaxAdvantaged: Boolean, where: LotWhereInput): [Lot!]!
   mergeError(id: String!): MergeError
   mergeErrors: [MergeError!]!
+  newConnectPlaidInstitutionOptions: [PlaidInstitution!]!
   plaidAuthConnections: [AuthConnection!]!
 
+  """Get a single Plaid institution (admin-only)"""
+  plaidInstitution(institutionId: String!): PlaidInstitution
+
   """Get institution information from Plaid"""
-  plaidInstitution(institutionId: String!): PlaidInstitutionInfo!
+  plaidInstitutionInfo(institutionId: String!): PlaidInstitutionInfo!
+
+  """Get all Plaid institutions (admin-only)"""
+  plaidInstitutions(skip: Int, take: Int, where: PlaidInstitutionWhereInput): [PlaidInstitution!]!
+
+  """Get total count of Plaid institutions (admin-only)"""
+  plaidInstitutionsCount(where: PlaidInstitutionWhereInput): Int!
   plaidMerge(plaidMergeId: String!): PlaidMerge
   plaidMerges(orderBy: PlaidMergeOrderByRelationAggregateInput): [PlaidMerge!]!
 
   """Get authenticated portfolio"""
   portfolioAuthed: Portfolio!
+  portfolioConnect(id: String!): PortfolioConnect!
+  portfolioConnections(where: PortfolioConnectWhereInput): [PortfolioConnect!]!
 
   """Get portfolio performance data broken down by accounts"""
   portfolioPerformanceByAccount(input: AccountPerformanceInput!): [AccountPerformanceDataPoint!]!
@@ -22665,7 +23988,6 @@ type Query {
   """Get all portfolios for a user"""
   portfolios: [Portfolio!]!
   products(active: String): [StripeProduct!]!
-  requestOauthConnection(authSource: AuthSource!, portfolioId: String!): AuthConnectionExt!
 
   """Get accounts that need setup"""
   setupAccounts: [Account!]!
@@ -23708,6 +25030,14 @@ input StringNullableFilter {
   not: NestedStringNullableFilter
   notIn: [String!]
   startsWith: String
+}
+
+input StringNullableListFilter {
+  equals: [String!]
+  has: String
+  hasEvery: [String!]
+  hasSome: [String!]
+  isEmpty: Boolean
 }
 
 type StripeMarketingFeature {

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { type AuthConnection, AuthSource, type Prisma } from '@prisma/client';
-import { EtradeService } from '../etrade/etrade.service';
+import { type AuthConnection, AuthSource } from '@prisma/client';
 import { PlaidService } from '../plaid/plaid.service';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -8,107 +7,8 @@ import { PrismaService } from '../prisma/prisma.service';
 export class AuthConnectionService {
 	constructor(
 		readonly prismaService: PrismaService,
-		private readonly etradeService: EtradeService,
 		private readonly plaidService: PlaidService,
 	) {}
-
-	async syncAuthConnection({
-		authConnection,
-		id,
-		select,
-		userId,
-		portfolioId,
-	}: {
-		id?: string;
-		authConnection?: AuthConnection;
-		userId: string;
-		select: Prisma.AuthConnectionSelect;
-		portfolioId: string;
-	}): Promise<AuthConnection> {
-		if (!id && !authConnection) {
-			throw new Error('You must provide an id or existing connection to sync');
-		}
-
-		const connection =
-			authConnection ??
-			(await this.prismaService
-				.rlsPortfolioClient(portfolioId)
-				.authConnection.findUniqueOrThrow({
-					where: {
-						id,
-						portfolioId,
-					},
-				}));
-
-		switch (connection.source) {
-			case AuthSource.ETRADE_ACCESS: {
-				return this.etradeService.sync({
-					authConnection: connection,
-					select,
-					userId,
-				});
-			}
-			case AuthSource.PLAID: {
-				await this.plaidService.syncPlaidItem({
-					plaidAuthConnection: connection,
-				});
-				return connection;
-			}
-			default: {
-				throw new Error(`Not implemented: ${connection.source}`);
-			}
-		}
-	}
-
-	resolveRequestOauth({
-		authSource,
-		portfolioId,
-		userId,
-	}: {
-		portfolioId: string;
-		userId: string;
-		authSource: AuthSource;
-	}) {
-		switch (authSource) {
-			case AuthSource.ETRADE_REQUEST: {
-				return this.etradeService.requestOauthConnection({
-					portfolioId,
-					userId,
-				});
-			}
-			default: {
-				throw new Error(`Not implemented: ${authSource}`);
-			}
-		}
-	}
-
-	resolveAccessOauth({
-		authSource,
-		portfolioId,
-		select,
-		userId,
-		verifier,
-	}: {
-		portfolioId: string;
-		userId: string;
-		authSource: AuthSource;
-		verifier: string;
-		select: Prisma.AuthConnectionSelect;
-	}) {
-		switch (authSource) {
-			case AuthSource.ETRADE_ACCESS: {
-				return this.etradeService.accessOauthConnection({
-					portfolioId,
-					select,
-					userId,
-					verifier,
-				});
-			}
-			default: {
-				throw new Error(`Not implemented: ${authSource}`);
-			}
-		}
-	}
 
 	requiresReAuth(source: AuthSource, authedAt: Date) {
 		switch (source) {
