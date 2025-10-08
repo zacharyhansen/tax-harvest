@@ -7,7 +7,6 @@ query PlaidMerges {
 		account {
 			id
 			name
-			institution
 		}
 		portfolioId
 		assetMerge {
@@ -32,7 +31,6 @@ query PlaidMerge($plaidMergeId: String!) {
 		account {
 			id
 			name
-			institution
 			type
 		}
 		portfolio {

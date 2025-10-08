@@ -125,8 +125,7 @@ export default function PlaidMergePage(props: {
 										{plaidMerge.account?.name || 'N/A'}
 									</div>
 									<p className="text-sm text-muted-foreground mt-1">
-										{plaidMerge.account?.institution} •{' '}
-										{plaidMerge.account?.type}
+										• {plaidMerge.account?.type}
 									</p>
 								</CardContent>
 							</Card>

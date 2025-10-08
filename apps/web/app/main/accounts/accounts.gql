@@ -6,7 +6,6 @@ fragment AccountTableItem on Account {
 	provider
 	externalId
 	key
-	institution
 	mode
 	status
 	optionLevel
@@ -23,9 +22,14 @@ fragment AccountTableItem on Account {
 		...UserItem
 	}
 	authConnectionId
-	# authConnectionExt {
-	#   ...AccountTableAuthConnection
-	# }
+	portfolioConnect {
+		plaidInstitution {
+			id
+			name
+			logo
+			primaryColor
+		}
+	}
 }
 
 query Accounts($where: AccountWhereInput) {
@@ -43,11 +47,5 @@ mutation CreateAccountForPortfolio($accountCreateInput: AccountCreateInput!) {
 	createAccountForPortfolio(accountCreateInput: $accountCreateInput) {
 		id
 		...AccountTableItem
-	}
-}
-
-mutation SyncAccount($authConnectionId: String!) {
-	syncAuthConnection(id: $authConnectionId) {
-		id
 	}
 }

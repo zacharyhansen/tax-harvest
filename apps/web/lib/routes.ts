@@ -22,6 +22,10 @@ export const TypedRoutes = {
 	admin: makeRoute(() => `/main/admin`),
 	aiAdvisor: makeRoute(() => `/main/admin/ai-advisor`),
 	connect: makeRoute(() => `/connect`),
+	connectById: makeRoute(
+		({ id }) => `/connect/${id}`,
+		z.object({ id: z.string() }),
+	),
 	explore: makeRoute(() => `/explore`),
 	harvests: makeRoute(() => `/main/harvests`),
 	harvest: makeRoute(
@@ -37,6 +41,11 @@ export const TypedRoutes = {
 		}),
 	),
 	home: makeRoute(() => `/main/home`),
+	institutions: makeRoute(() => `/main/admin/institutions`),
+	institution: makeRoute(
+		({ institutionId }) => `/main/admin/institutions/${institutionId}`,
+		z.object({ institutionId: z.string() }),
+	),
 	invite: makeRoute(() => `/main/invite`),
 	lotSelection: makeRoute(
 		({ type }) => `/main/harvest-flow/lot-selection/${type}`,

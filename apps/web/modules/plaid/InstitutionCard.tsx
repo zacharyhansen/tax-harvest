@@ -9,6 +9,8 @@ import {
 	RefreshCw,
 	User,
 } from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
 	type PlaidAuthConnectionFragment,
 	usePlaidInstitutionQuery,
@@ -35,12 +37,6 @@ interface InstitutionCardProps {
  * @param onAccountClick - Optional callback when an account is clicked
  * @param redirectTo - Where to redirect after adding accounts (default: '/main/home')
  *
- * @example
- * <InstitutionCard
- *   authConnection={connection}
- *   showDeleteButton={true}
- *   onAccountClick={(id) => router.push(`/accounts/${id}`)}
- * />
  */
 export function InstitutionCard({
 	authConnection,
@@ -49,6 +45,7 @@ export function InstitutionCard({
 	onAccountClick,
 	redirectTo = '/main/home',
 }: InstitutionCardProps) {
+	const router = useRouter();
 	const { data: institutionData, loading } = usePlaidInstitutionQuery({
 		// biome-ignore lint/style/noNonNullAssertion: <ok>
 		variables: { institutionId: authConnection.plaidInstitutionId! },
@@ -74,20 +71,22 @@ export function InstitutionCard({
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						{institution?.logo ? (
-							// biome-ignore lint/performance/noImgElement: <ok>
-							<img
-								src={institution.logo}
+							<Image
+								src={`data:image/jpeg;base64,${institution.logo}`}
 								alt={institution.name}
-								className="h-10 w-10 rounded object-contain"
+								className="h-12 w-12 object-contain rounded p-1"
 								style={{
-									backgroundColor: institution.primary_color || '#f5f5f5',
+									backgroundColor: institution.primaryColor || '#f5f5f5',
 								}}
+								unoptimized
+								width={40}
+								height={40}
 							/>
 						) : (
 							<div
 								className="bg-secondary flex h-10 w-10 items-center justify-center rounded"
 								style={{
-									backgroundColor: institution?.primary_color || '',
+									backgroundColor: institution?.primaryColor || '',
 								}}
 							>
 								<Building2 className="h-5 w-5" />
@@ -145,7 +144,10 @@ export function InstitutionCard({
 										token={updateTokenData.linkToken}
 										size="sm"
 										iconLeft={<Plus className="h-4 w-4" />}
-										redirectTo={redirectTo}
+										onSuccessfulLink={() => {
+											router.push(redirectTo);
+										}}
+										plaidInstitutionId={authConnection.plaidInstitutionId}
 									>
 										Add Accounts
 									</PlaidLink>

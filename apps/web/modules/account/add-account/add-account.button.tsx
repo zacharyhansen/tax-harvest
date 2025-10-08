@@ -4,10 +4,10 @@ import Link from 'next/link';
 
 export function AddAccountButton({ ...props }: ButtonProps) {
 	return (
-		<Link href="/onboarding/upload">
+		<Link href="/connect">
 			<Button {...props}>
 				<Plus className="mr-2 size-4" />
-				Add Account
+				Link Investments
 			</Button>
 		</Link>
 	);

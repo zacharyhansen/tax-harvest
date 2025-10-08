@@ -109,8 +109,10 @@ export default function AccountPnlHistoryPage() {
 										<div>
 											<CardTitle className="text-lg">{account.name}</CardTitle>
 											<CardDescription className="mt-1">
-												{account.institution && (
-													<span>{account.institution} • </span>
+												{account.portfolioConnect?.plaidInstitution.name && (
+													<span>
+														{account.portfolioConnect?.plaidInstitution.name} •{' '}
+													</span>
 												)}
 												<Badge variant="secondary" className="text-xs">
 													{account.type}

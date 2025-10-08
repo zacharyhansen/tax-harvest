@@ -1,0 +1,54 @@
+# Fragment for institution summary (card display)
+fragment PlaidInstitutionSummary on PlaidInstitution {
+	id
+	name
+	logo
+	primaryColor
+	countryCode
+	oauth
+	products
+	lastSyncedAt
+}
+
+# Fragment for institution detail (full data)
+fragment PlaidInstitutionDetail on PlaidInstitution {
+	id
+	name
+	logo
+	primaryColor
+	url
+	countryCode
+	oauth
+	products
+	routingNumbers
+	dtcNumbers
+	status
+	raw
+	createdAt
+	updatedAt
+	lastSyncedAt
+}
+
+# Query for institutions list
+query PlaidInstitutions(
+	$where: PlaidInstitutionWhereInput
+	$skip: Int
+	$take: Int
+) {
+	plaidInstitutions(where: $where, skip: $skip, take: $take) {
+		...PlaidInstitutionSummary
+	}
+	plaidInstitutionsCount(where: $where)
+}
+
+# Query for single institution
+query PlaidInstitution($institutionId: String!) {
+	plaidInstitution(institutionId: $institutionId) {
+		...PlaidInstitutionDetail
+	}
+}
+
+# Mutation for manual refresh
+mutation AdminRefreshPlaidInstitutions {
+	adminRefreshPlaidInstitutions
+}

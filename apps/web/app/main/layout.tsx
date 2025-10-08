@@ -17,10 +17,9 @@ import { motion } from 'framer-motion';
 import { Building2, FileSpreadsheet, Shield, TrendingUp } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import NextTopLoader from 'nextjs-toploader';
-import { SetUpStatus, usePortfolioSummaryQuery } from '~/generated/gql';
-import { AddAccountButton } from '~/modules/account/add-account/add-account.button';
-import { useBreadcrumbs } from '~/modules/hooks/use-breadcrumbs';
+import { usePortfolioConnectionsSetupQuery } from '~/generated/gql';
 import { PortfolioProvider, PortfolioSwitcher } from '~/modules/portfolio';
+import { InstitutionCardList } from '../connect/components/institution-card-list';
 import ApolloProviderWrapper from './ApolloProviderWrapper';
 import LoadingScreen from './loading';
 import { NavTree } from './nav-tree';
@@ -128,8 +127,7 @@ const _buttonVariants = {
 };
 
 function OnboardingWrapper({ children }: { children: React.ReactNode }) {
-	const { data, loading } = usePortfolioSummaryQuery();
-	const _breadcrumbs = useBreadcrumbs() || [];
+	const { data, loading } = usePortfolioConnectionsSetupQuery({});
 	const pathname = usePathname();
 	const clerkUser = useUser();
 
@@ -137,7 +135,14 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
 		return <LoadingScreen />;
 	}
 
-	if (data?.portfolioSummary.setUpStatus === SetUpStatus.NoAccounts) {
+	// If we have no connections or there are pending ones show those to the user
+	if (
+		!data?.portfolioConnections ||
+		data?.portfolioConnections.length === 0 ||
+		data?.portfolioConnections.filter(
+			(connection) => connection.state === 'PENDING',
+		).length > 0
+	) {
 		return (
 			<motion.div
 				className="container mx-auto flex max-h-screen max-w-6xl flex-col items-center gap-8 overflow-y-auto px-4 py-8 md:py-16"
@@ -171,10 +176,10 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
 				</motion.div>
 
 				<motion.div
-					className="flex flex-col items-center gap-4"
+					className="w-full flex flex-col items-center gap-4"
 					variants={itemVariants}
 				>
-					<AddAccountButton size="lg" className="px-8 py-6 text-lg" />
+					<InstitutionCardList />
 
 					<motion.p
 						className="text-muted-foreground text-center text-sm"

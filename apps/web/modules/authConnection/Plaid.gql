@@ -12,6 +12,12 @@ fragment PlaidAuthConnection on AuthConnection {
 		email
 		phoneNumber
 	}
+	plaidInstitution {
+		id
+		logo
+		name
+		primaryColor
+	}
 	accounts {
 		id
 		name
@@ -30,8 +36,8 @@ query PlaidAuthConnections {
 	}
 }
 
-query PlaidInstitution($institutionId: String!) {
-	plaidInstitution(institutionId: $institutionId) {
+query PlaidInstitutionInfo($institutionId: String!) {
+	plaidInstitutionInfo(institutionId: $institutionId) {
 		institution_id
 		name
 		logo
@@ -42,22 +48,45 @@ query PlaidInstitution($institutionId: String!) {
 	}
 }
 
+fragment PortfolioConnectPlaidSyncResult on PortfolioConnect {
+	id
+	plaidInstitutionId
+	state
+	persistedSnapshot
+	createdAt
+	updatedAt
+	account {
+		id
+		name
+		plaidAccountMask
+		type
+		subType
+		status
+		balanceAccount
+		accountValueTotal
+		positions {
+			id
+			assetSymbol
+			pricePaid
+			quantity
+			dateAcquired
+			dateExpiration
+			commissionTotal
+			feesOther
+		}
+	}
+}
+
 mutation PlaidSetAccessTokenAndSyncAccounts(
 	$publicToken: String!
 	$metaData: PlaidLinkOnSuccessMetadata!
-	$existingAccountId: String
+	$existingPortfolioConnectId: String
 ) {
 	setAccessTokenAndSyncAccounts(
 		publicToken: $publicToken
 		metaData: $metaData
-		existingAccountId: $existingAccountId
+		existingPortfolioConnectId: $existingPortfolioConnectId
 	) {
-		id
-	}
-}
-
-mutation PlaidSync($authConnectionId: String!) {
-	syncAuthConnection(id: $authConnectionId) {
-		id
+		...PortfolioConnectPlaidSyncResult
 	}
 }

@@ -18,7 +18,11 @@ import { UserProvider } from '../main/user.provider';
 // Ag grid register
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-export default function MainLayout({
+/**
+ * Layout for the connect flow
+ * Provides authentication, Apollo client, theme providers, and XState machine context
+ */
+export default function ConnectLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
@@ -32,11 +36,7 @@ export default function MainLayout({
 						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 							<UserProvider>
 								<PortfolioProvider>
-									<div className="bg-background/50 min-h-screen backdrop-blur-sm">
-										<div className="flex min-h-screen items-center justify-center p-4">
-											{children}
-										</div>
-									</div>
+									{children}
 									<Toaster />
 								</PortfolioProvider>
 							</UserProvider>

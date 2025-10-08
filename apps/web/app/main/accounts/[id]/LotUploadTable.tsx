@@ -1,11 +1,6 @@
 'use client';
 
 import { Button } from '@repo/ui/components/button';
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from '@repo/ui/components/collapsible';
 import { FileUploader } from '@repo/ui/components/file-uploader';
 import {
 	Table,
@@ -16,18 +11,11 @@ import {
 	TableRow,
 } from '@repo/ui/components/table';
 import { toast } from '@repo/ui/components/toast-sonner';
-import {
-	ChevronDown,
-	ChevronRight,
-	FileText,
-	Loader2,
-	RefreshCcw,
-	Upload,
-} from 'lucide-react';
+import { FileText, Loader2, RefreshCcw } from 'lucide-react';
 import { useState } from 'react';
 import {
-	LotUploadFileType,
-	useApplyLotUploadMutation,
+	type LotUploadFileType,
+	useApplyLotUploadsMutation,
 	useLotUploadsQuery,
 	useUploadLotFileSchwabMutation,
 } from '~/generated/gql';
@@ -110,7 +98,7 @@ export default function LotUploadTable({ accountId }: LotUploadTableProps) {
 										? {
 												id: file.file.id,
 												displayName: file.file.displayName,
-										  }
+											}
 										: null,
 								})),
 							}}
@@ -147,7 +135,7 @@ interface LotUploadRowProps {
 }
 
 /**
- * Individual row component for displaying lot upload information with expandable sub-rows
+ * Individual row component for displaying lot upload information with file upload inputs
  * @param upload - The lot upload data to display
  * @param accountId - The account ID for file uploads
  * @param onApplied - Callback when lot upload is applied
@@ -162,8 +150,7 @@ function LotUploadRow({
 	onFileUploaded,
 }: LotUploadRowProps) {
 	const [isApplying, setIsApplying] = useState(false);
-	const [isExpanded, setIsExpanded] = useState(false);
-	const [applyLotUpload] = useApplyLotUploadMutation();
+	const [applyLotUpload] = useApplyLotUploadsMutation();
 
 	/**
 	 * Handles applying the lot upload to the account
@@ -174,7 +161,7 @@ function LotUploadRow({
 
 			const { data, errors } = await applyLotUpload({
 				variables: {
-					lotUploadId: upload.id,
+					lotUploadIds: [upload.id],
 				},
 			});
 
@@ -183,7 +170,7 @@ function LotUploadRow({
 				throw new Error(`Failed to apply lot upload: ${errors[0]?.message}`);
 			}
 
-			if (data?.applyLotUpload) {
+			if (data?.applyLotUploads) {
 				toast.success('Lot upload applied successfully');
 				onApplied();
 			} else {
@@ -211,26 +198,11 @@ function LotUploadRow({
 	return (
 		<>
 			<TableRow>
+				<TableCell></TableCell>
 				<TableCell>
-					{isSchwab && hasPendingFiles && (
-						<CollapsibleTrigger asChild>
-							<Button
-								variant="ghost"
-								size="sm"
-								onClick={() => setIsExpanded(!isExpanded)}
-								className="p-0 h-6 w-6"
-							>
-								{isExpanded ? (
-									<ChevronDown className="h-4 w-4" />
-								) : (
-									<ChevronRight className="h-4 w-4" />
-								)}
-							</Button>
-						</CollapsibleTrigger>
-					)}
-				</TableCell>
-				<TableCell>
-					<span className="font-medium">{upload.supportedAccountLotProvider}</span>
+					<span className="font-medium">
+						{upload.supportedAccountLotProvider}
+					</span>
 				</TableCell>
 				<TableCell>
 					<div className="flex flex-col space-y-1">
@@ -282,40 +254,35 @@ function LotUploadRow({
 								<RefreshCcw className="h-3 w-3" />
 							)}
 							<span>
-								{isApplying ? 'Applying...' : upload.applied ? 'Reapply' : 'Apply'}
+								{isApplying
+									? 'Applying...'
+									: upload.applied
+										? 'Reapply'
+										: 'Apply'}
 							</span>
 						</Button>
 					)}
 				</TableCell>
 			</TableRow>
-			{isSchwab && hasPendingFiles && (
-				<Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
-					<CollapsibleContent asChild>
-						<>
-							{upload.LotUploadFile.filter((file) => !file.fileId).map((file) => (
-								<TableRow key={file.id} className="bg-muted/20">
-									<TableCell></TableCell>
-									<TableCell colSpan={2}>
-										<div className="flex items-center space-x-2 pl-4">
-											<FileText className="h-4 w-4 text-muted-foreground" />
-											<span className="text-sm font-medium">{file.type}</span>
-										</div>
-									</TableCell>
-									<TableCell colSpan={3}>
-										<LotFileUploader
-											lotUploadFileId={file.id}
-											lotUploadId={upload.id}
-											fileType={file.type}
-											accountId={accountId}
-											onUploaded={onFileUploaded}
-										/>
-									</TableCell>
-								</TableRow>
-							))}
-						</>
-					</CollapsibleContent>
-				</Collapsible>
-			)}
+			{isSchwab &&
+				hasPendingFiles &&
+				upload.LotUploadFile.filter((file) => !file.fileId).map((file) => (
+					<TableRow key={file.id} className="border-l-2 border-l-muted">
+						<TableCell className="w-12"></TableCell>
+						<TableCell className="text-sm text-muted-foreground">
+							{file.type}
+						</TableCell>
+						<TableCell colSpan={4}>
+							<LotFileUploader
+								lotUploadFileId={file.id}
+								lotUploadId={upload.id}
+								fileType={file.type}
+								accountId={accountId}
+								onUploaded={onFileUploaded}
+							/>
+						</TableCell>
+					</TableRow>
+				))}
 		</>
 	);
 }

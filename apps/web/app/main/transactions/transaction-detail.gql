@@ -25,7 +25,6 @@ query TransactionDetail($transactionId: String!) {
 		account {
 			id
 			name
-			institution
 			type
 			authConnection {
 				id

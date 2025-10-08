@@ -1,33 +1,49 @@
-query LotUploads($where: LotUploadWhereInput!) {
-  lotUploads(where: $where) {
-    id
-    createdAt
-    applied
-    supportedAccountLotProvider
-    LotUploadFile {
-      id
-      type
-      fileId
-      file {
-        id
-        displayName
-      }
-    }
-  }
+fragment LotUploadItem on LotUpload {
+	id
+	createdAt
+	updatedAt
+	portfolioId
+	accountId
+	applied
+	supportedAccountLotProvider
+	usePositionsAsLots
+	LotUploadFile {
+		id
+		type
+		fileId
+		assetSymbol
+		file {
+			id
+			displayName
+		}
+	}
 }
 
-mutation ApplyLotUpload($lotUploadId: String!) {
-  applyLotUpload(lotUploadId: $lotUploadId)
+query LotUploads($where: LotUploadWhereInput!) {
+	lotUploads(where: $where) {
+		...LotUploadItem
+	}
+}
+
+mutation ApplyLotUploads($lotUploadIds: [String!]!) {
+	applyLotUploads(lotUploadIds: $lotUploadIds)
 }
 
 mutation UploadLotFileSchwab($input: UploadLotFileInput!) {
-  uploadLotFileSchwab(input: $input) {
-    id
-    type
-    fileId
-    file {
-      id
-      displayName
-    }
-  }
+	uploadLotFileSchwab(input: $input) {
+		id
+		type
+		fileId
+		assetSymbol
+		file {
+			id
+			displayName
+		}
+	}
+}
+
+mutation UpdateLotUpload($lotUploadId: String!, $data: LotUploadUpdateInput!) {
+	updateLotUpload(lotUploadId: $lotUploadId, data: $data) {
+		...LotUploadItem
+	}
 }

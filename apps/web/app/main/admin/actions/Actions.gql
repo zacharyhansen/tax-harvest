@@ -27,6 +27,12 @@ query AdminPlaidAuthConnections {
 		authedAt
 		syncedAt
 		portfolioId
+		plaidInstitution {
+			id
+			logo
+			name
+			primaryColor
+		}
 		user {
 			id
 			email

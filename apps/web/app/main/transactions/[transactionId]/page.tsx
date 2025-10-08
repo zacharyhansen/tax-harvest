@@ -114,7 +114,6 @@ export default function TransactionDetailPage(props: {
 		account: {
 			id: transaction.account?.id,
 			name: transaction.account?.name,
-			institution: transaction.account?.institution,
 			type: transaction.account?.type,
 			source: transaction.account?.authConnection?.source,
 		},

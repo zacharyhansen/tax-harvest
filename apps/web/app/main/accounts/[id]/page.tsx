@@ -20,7 +20,6 @@ import { toast } from '@repo/ui/components/toast-sonner';
 import InputField from '@repo/ui/form-builder/fields/input.field';
 import { useStandardForm } from '@repo/ui/hooks/use-standard-form';
 import {
-	Building2,
 	DollarSign,
 	FileText,
 	Settings,
@@ -45,8 +44,8 @@ import { Format } from '~/modules/utils';
 import { zodNumber } from '~/modules/utils/zod-utils';
 import AccountFilesTable from './AccountFilesTable';
 import AccountLotsTable from './AccountLotsTable';
-import LotUploadTable from './LotUploadTable';
 import DeleteAccountDialog from './DeleteAccountDialog';
+import LotUploadTable from './LotUploadTable';
 
 export default function AccountPage(props: {
 	params: Promise<{ id: string }>;
@@ -98,7 +97,8 @@ function AccountDetails({ account }: { account: AccountItemFragment }) {
 							{account.name}
 						</h1>
 						<p className="text-muted-foreground">
-							{account.type} • {account.provider} • {account.institution}
+							{account.type} • {account.provider} •{' '}
+							{account.portfolioConnect.plaidInstitution.name}
 						</p>
 					</div>
 				</div>

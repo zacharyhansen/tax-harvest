@@ -2,6 +2,7 @@ import type { NavGroup } from '@repo/ui/layouts/dashboard';
 import {
 	AlertTriangle,
 	Bot,
+	Building2,
 	ChartArea,
 	Logs,
 	Merge,
@@ -86,6 +87,11 @@ export const NavTree: NavGroup[] = [
 				title: 'Logs',
 				url: TypedRoutes.logs(),
 				icon: Logs,
+			},
+			{
+				title: 'Institutions',
+				url: TypedRoutes.institutions(),
+				icon: Building2,
 			},
 			{
 				title: 'Plaid Merges',

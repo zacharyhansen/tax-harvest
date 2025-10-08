@@ -1,0 +1,106 @@
+mutation CreatePortfolioConnect($plaidInstitutionId: String!) {
+	createPortfolioConnect(plaidInstitutionId: $plaidInstitutionId) {
+		...PortfolioConnectItemDetail
+	}
+}
+
+mutation UpdatePortfolioConnectSnapshot(
+	$id: String!
+	$data: PortfolioConnectUpdateInput!
+) {
+	updatePortfolioConnect(id: $id, data: $data) {
+		...PortfolioConnectItemDetail
+	}
+}
+
+query GetExistingPortfolioConnect {
+	portfolioConnections {
+		id
+		persistedSnapshot
+		state
+		portfolioId
+		plaidInstitution {
+			id
+			name
+			logo
+			primaryColor
+		}
+	}
+}
+
+query NewConnectPlaidInstitutionOptions {
+	newConnectPlaidInstitutionOptions {
+		id
+		name
+		logo
+		primaryColor
+	}
+}
+
+fragment PortfolioConnectItem on PortfolioConnect {
+	id
+	portfolioId
+	plaidInstitutionId
+	state
+	persistedSnapshot
+	createdAt
+	updatedAt
+	plaidInstitution {
+		id
+		name
+		logo
+		primaryColor
+	}
+}
+
+fragment PortfolioConnectItemDetail on PortfolioConnect {
+	id
+	portfolioId
+	plaidInstitutionId
+	state
+	persistedSnapshot
+	createdAt
+	updatedAt
+	authConnectionId
+	plaidInstitution {
+		id
+		name
+		logo
+		primaryColor
+	}
+	account {
+		id
+		name
+		type
+		portfolioId
+		portfolioConnectId
+		plaidAccountMask
+		lotUpload {
+			...LotUploadItem
+		}
+		positions {
+			id
+			assetSymbol
+			dateAcquired
+			quantity
+		}
+	}
+}
+
+query PortfolioConnections($where: PortfolioConnectWhereInput!) {
+	portfolioConnections(where: $where) {
+		...PortfolioConnectItem
+	}
+}
+
+query PortfolioConnect($id: String!) {
+	portfolioConnect(id: $id) {
+		...PortfolioConnectItemDetail
+	}
+}
+
+mutation DeletePortfolioConnect($id: String!) {
+	deletePortfolioConnect(id: $id) {
+		id
+	}
+}

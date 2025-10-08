@@ -29,8 +29,12 @@ fragment AccountPnlHistoryItem on AccountRealizedPAndLHistory {
 	account {
 		id
 		name
-		institution
 		type
+		portfolioConnect {
+			plaidInstitution {
+				name
+			}
+		}
 	}
 	plaidMerge {
 		id
@@ -52,8 +56,12 @@ query AccountsWithPnl {
 	accounts {
 		id
 		name
-		institution
 		type
+		portfolioConnect {
+			plaidInstitution {
+				name
+			}
+		}
 		_count {
 			accountRealizedPAndLHistory
 		}

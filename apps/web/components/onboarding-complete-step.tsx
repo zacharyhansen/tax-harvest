@@ -9,9 +9,13 @@ import {
 } from '@repo/ui/components/card';
 import { cn } from '@repo/ui/utils';
 import { Decimal } from 'decimal.js';
-import { ArrowRight, FileText } from 'lucide-react';
+import { FileText, Info, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { HarvestType, useHarvestEvalResultQuery } from '~/generated/gql';
+import {
+	HarvestType,
+	type PortfolioConnectItemDetailFragment,
+	useHarvestEvalResultQuery,
+} from '~/generated/gql';
 import { clientEnvironment } from '~/lib/env/clientEnvironment';
 import { Format, MoneyUtil } from '~/modules/utils';
 
@@ -31,7 +35,11 @@ interface Opportunity {
  * OnboardingCompleteStep component that displays tax opportunities analysis for CSV upload
  * with onboarding-specific messaging that encourages Plaid connection for better analysis
  */
-export function OnboardingCompleteStep() {
+export function OnboardingCompleteStep({
+	portfolioConnectItem,
+}: {
+	portfolioConnectItem: PortfolioConnectItemDetailFragment;
+}) {
 	const [taxSavings, setTaxSavings] = useState(0);
 
 	const { data, loading } = useHarvestEvalResultQuery({
@@ -43,7 +51,9 @@ export function OnboardingCompleteStep() {
 				purchaseDateAfter: null,
 			},
 		},
+		fetchPolicy: 'cache-first',
 	});
+
 	const getAllOpportunities = () => {
 		if (!data?.harvestEvalResult) return [];
 
@@ -142,7 +152,8 @@ export function OnboardingCompleteStep() {
 			<div className="p-8">
 				<div className="py-8 text-center">
 					<h2 className="mb-4 text-xl font-semibold">
-						Analyzing Your CSV Data...
+						Analyzing Your Data{' '}
+						<Loader2 className="inline-block animate-spin" />
 					</h2>
 					<div className="mb-8 text-5xl font-bold text-green-500">
 						<NumberFlow
@@ -188,8 +199,8 @@ export function OnboardingCompleteStep() {
 							</p>
 						</div>
 
-						<Alert className="">
-							<ArrowRight className="" />
+						<Alert variant="info" className="">
+							<Info className="" />
 							<AlertTitle className="">
 								Connect Plaid for Complete Analysis
 							</AlertTitle>
@@ -215,10 +226,10 @@ export function OnboardingCompleteStep() {
 	}
 
 	return (
-		<div className="p-8">
-			<div className="py-8 text-center">
+		<div className="p-8 max-h-[60vh] overflow-y-auto">
+			<div className="text-center">
 				<h2 className="mb-4 text-xl font-semibold">
-					Tax Savings Found in CSV Data
+					Tax Savings Found for {portfolioConnectItem.plaidInstitution.name}
 				</h2>
 				<p className="mb-8 text-gray-400">
 					Based on your uploaded portfolio data, we've identified potential
@@ -234,14 +245,14 @@ export function OnboardingCompleteStep() {
 
 				{/* Real Tax Opportunities Display */}
 				{opportunities.length > 0 && (
-					<div className="mb-8">
+					<div className="mb-2">
 						<h3 className="mb-4 text-left text-lg font-semibold">
 							{data?.harvestEvalResult.harvestType ===
 							HarvestType.ReduceCostBasis
-								? `Cost Basis Reset Opportunities from CSV (${opportunities.length}):`
+								? `(${opportunities.length}) Cost Basis Reset Opportunities from ${portfolioConnectItem.plaidInstitution.name}:`
 								: data?.harvestEvalResult.harvestType ===
 										HarvestType.ReduceTaxes
-									? `Tax Loss Harvesting Opportunities from CSV (${opportunities.length}):`
+									? `(${opportunities.length}) Tax Loss Harvesting Opportunities from ${portfolioConnectItem.plaidInstitution.name}:`
 									: `Tax Opportunities from CSV (${opportunities.length}):`}
 						</h3>
 						<div className="max-h-96 space-y-3 overflow-y-auto">

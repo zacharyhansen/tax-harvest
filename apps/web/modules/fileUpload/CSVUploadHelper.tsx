@@ -50,7 +50,27 @@ const brokers: Broker[] = [
 			],
 		},
 	},
-	// Add more brokers here in the future
+	{
+		id: 'schwab',
+		name: 'Charles Schwab',
+		instructions: {
+			title: 'How to download your Schwab positions CSV',
+			description:
+				'Follow these steps to export your portfolio data from Charles Schwab',
+			steps: [
+				{
+					text: 'Log into Schwab and navigate to your Positions page',
+					link: 'https://client.schwab.com/app/accounts/positions',
+				},
+				{
+					text: 'Click the "Export" button in the top right corner of the positions table',
+				},
+				{
+					text: 'Select "Tax Lots" from the export options to download the CSV file with complete lot information',
+				},
+			],
+		},
+	},
 ];
 
 export function CSVUploadHelper() {
@@ -167,7 +187,7 @@ export function CSVUploadHelper() {
 														rel="noopener noreferrer"
 														className="text-primary inline-flex items-center gap-1 text-xs hover:underline"
 													>
-														Open in E*TRADE
+														Open in {selectedBroker.name}
 														<ExternalLink className="h-3 w-3" />
 													</a>
 												)}

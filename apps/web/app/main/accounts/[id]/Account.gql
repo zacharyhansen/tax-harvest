@@ -7,7 +7,6 @@ fragment AccountItem on Account {
 	externalId
 	key
 	description
-	institution
 	mode
 	status
 	optionLevel
@@ -26,6 +25,14 @@ fragment AccountItem on Account {
 		id
 		source
 		plaidInstitutionId
+	}
+	portfolioConnect {
+		plaidInstitution {
+			id
+			name
+			logo
+			primaryColor
+		}
 	}
 	createdBy {
 		id

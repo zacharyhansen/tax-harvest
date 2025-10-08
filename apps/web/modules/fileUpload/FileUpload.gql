@@ -18,17 +18,6 @@ fragment FileItem on File {
 	type
 }
 
-fragment LotUploadItem on LotUpload {
-	id
-	createdAt
-	updatedAt
-	portfolioId
-	accountId
-	fileId
-	applied
-	supportedAccountLotProvider
-}
-
 mutation InitLotUpload($input: FileCreateManyInput!) {
 	initLotUpload(input: $input) {
 		...LotUploadItem

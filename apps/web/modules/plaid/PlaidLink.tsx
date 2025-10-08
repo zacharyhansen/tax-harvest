@@ -4,43 +4,58 @@ import type { ButtonProps } from '@repo/ui/components/button';
 import { Button } from '@repo/ui/components/button';
 import { toast } from '@repo/ui/components/toast-sonner';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import type {
 	PlaidLinkError,
 	PlaidLinkOnExit,
 	PlaidLinkOnSuccess,
+	PlaidLinkOnSuccessMetadata,
 	PlaidLinkOptions,
 } from 'react-plaid-link';
 import { usePlaidLink } from 'react-plaid-link';
 
-import { usePlaidSetAccessTokenAndSyncAccountsMutation } from '~/generated/gql';
+import {
+	type PortfolioConnectPlaidSyncResultFragment,
+	usePlaidSetAccessTokenAndSyncAccountsMutation,
+} from '~/generated/gql';
 
 import plaidIcon from '../../public/icons/plaid.svg';
 
 type PlaidLinkProps = {
 	token: string;
-	redirectTo?: string;
-	accountMappingUrl?: string;
-	existingAccountId?: string;
+	portfolioConnectId?: string;
+	plaidInstitutionId: string;
+	portfolioConnectCallback?: (
+		portfolioConnect: PortfolioConnectPlaidSyncResultFragment,
+	) => void;
+	onSuccessfulLink?: (metaData: PlaidLinkOnSuccessMetadata) => void;
+	onError?: (error: ApolloError) => void;
 } & ButtonProps;
 
 export default function PlaidLink({
 	token,
-	redirectTo,
-	accountMappingUrl,
-	existingAccountId,
+	portfolioConnectCallback,
+	portfolioConnectId,
+	plaidInstitutionId,
+	onSuccessfulLink,
+	onError,
 	...buttonProps
 }: PlaidLinkProps) {
-	const nextRouter = useRouter();
-	const router = redirectTo || accountMappingUrl ? nextRouter : null;
+	const [linkError, setLinkError] = useState<string | null>(null);
 	const [mutate] = usePlaidSetAccessTokenAndSyncAccountsMutation();
 
 	const onSuccess: PlaidLinkOnSuccess = useCallback<PlaidLinkOnSuccess>(
 		(public_token, metaData) => {
+			if (metaData.institution?.institution_id !== plaidInstitutionId) {
+				setLinkError(
+					'You have attempted to link to a different institution. Please try again with the correct institution.',
+				);
+				return;
+			}
+			onSuccessfulLink?.(metaData);
 			toast.promise(
 				mutate({
-					refetchQueries: 'active',
+					// refetchQueries: 'active',
 					variables: {
 						metaData: {
 							accounts: metaData.accounts.map((account) => ({
@@ -63,43 +78,40 @@ export default function PlaidLink({
 							transfer_status: metaData.transfer_status,
 						},
 						publicToken: public_token,
-						existingAccountId,
+						existingPortfolioConnectId: portfolioConnectId ?? null,
 					},
 				})
 					.then((result) => {
-						const accounts = result.data?.setAccessTokenAndSyncAccounts || [];
-
-						// Clean up the stored account ID since linking is complete
-						if (existingAccountId) {
-							localStorage.removeItem('onboardingAccountId');
-						}
-
-						// Handle redirect logic based on number of accounts
-						if (router) {
-							if (accounts.length > 1 && accountMappingUrl) {
-								// Multiple accounts - redirect to mapping page
-								router.push(accountMappingUrl);
-							} else if (redirectTo) {
-								// Single account or no mapping URL - use normal redirect
-								router.push(redirectTo);
-							}
+						if (
+							portfolioConnectCallback &&
+							result.data?.setAccessTokenAndSyncAccounts
+						) {
+							portfolioConnectCallback(
+								result.data.setAccessTokenAndSyncAccounts,
+							);
 						}
 					})
 					.catch((error: ApolloError) => {
 						console.error('Plaid sync error:', error);
+						onError?.(error as ApolloError);
 						throw new Error(error.message || 'Failed to sync accounts');
 					}),
 				{
 					error: (error) => `Failed to sync accounts: ${error.message}`,
 					loading:
 						'We are syncing your account and transaction data, this may take a moment',
-					success: redirectTo
-						? 'Sync complete! Redirecting...'
-						: 'Sync complete',
+					success: 'Sync complete',
 				},
 			);
 		},
-		[mutate, redirectTo, accountMappingUrl, router, existingAccountId],
+		[
+			mutate,
+			portfolioConnectId,
+			portfolioConnectCallback,
+			onSuccessfulLink,
+			onError,
+			plaidInstitutionId,
+		],
 	);
 
 	const onExit: PlaidLinkOnExit = useCallback(
@@ -143,22 +155,29 @@ export default function PlaidLink({
 	}
 
 	return (
-		<Button
-			{...buttonProps}
-			onClick={(e) => {
-				e.stopPropagation();
-				open();
-			}}
-			disabled={!ready}
-			iconLeft={
-				buttonProps.children ? (
-					buttonProps.iconLeft
-				) : (
-					<Image src={plaidIcon} alt="Plaid" width={24} height={24} />
-				)
-			}
-		>
-			{buttonProps.children || 'Connect'}
-		</Button>
+		<>
+			<Button
+				{...buttonProps}
+				onClick={(e) => {
+					e.stopPropagation();
+					open();
+				}}
+				disabled={!ready}
+				iconLeft={
+					buttonProps.children ? (
+						buttonProps.iconLeft
+					) : (
+						<Image src={plaidIcon} alt="Plaid" width={24} height={24} />
+					)
+				}
+			>
+				{buttonProps.children || 'Connect'}
+			</Button>
+			{linkError && (
+				<Alert className="mt-2" variant="destructive">
+					{linkError}
+				</Alert>
+			)}
+		</>
 	);
 }

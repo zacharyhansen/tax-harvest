@@ -1,12 +1,13 @@
 import { useSession } from '@clerk/nextjs';
+import { Button } from '@repo/ui/components/button';
 import { SidebarProvider } from '@repo/ui/components/sidebar';
 import type { ReactNode } from 'react';
-
 import { createContext, use, useMemo, useState } from 'react';
 import LoadingScreen from '~/app/main/loading';
 import type { PortfolioItemFragment } from '~/generated/gql';
 import { usePortfolioAuthedQuery } from '~/generated/gql';
 import { ErrorPage } from '~/modules/utility-components';
+import CreatePortfolioDialog from '../CreatePortfolioDialog';
 import { PortfolioSwitcher } from '../portfolio-switcher';
 
 const PortfolioContext = createContext<{
@@ -47,7 +48,12 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 				// @ts-expect-error we throw an error if nots not defined
 				value={ctx}
 			>
-				<ErrorPage message="Unable to load portfolio. Please switch to a different portfolio.">
+				<ErrorPage message="Unable to load portfolio. Please switch to a different portfolio or create a new one.">
+					<CreatePortfolioDialog>
+						<Button className="w-full" variant="outline">
+							Create Portfolio
+						</Button>
+					</CreatePortfolioDialog>
 					<div className="flex h-full w-full items-center justify-center p-4">
 						<SidebarProvider>
 							<PortfolioSwitcher />
