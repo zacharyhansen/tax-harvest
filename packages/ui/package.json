@@ -108,7 +108,7 @@
 		"@types/react-dom": "^19.0.3",
 		"@vitejs/plugin-react": "^4.3.1",
 		"@vitest/coverage-v8": "^2.1.1",
-		"chromatic": "^11.20.2",
+		"chromatic": "^13.3.1",
 		"happy-dom": "^15.7.4",
 		"postcss": "^8.4.47",
 		"prop-types": "^15.8.1",
