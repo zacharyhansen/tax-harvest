@@ -519,7 +519,7 @@ export class PlaidService {
 			nonLotTransactions,
 			unknownTransactions,
 		} = this.lotApplicationService.processLotsAndTransactions({
-			lots: initialLots,
+			lots: initialLots.slice(),
 			transactions,
 			finalPositions,
 			plaidMergeId: plaidMerge.id,

@@ -749,9 +749,11 @@ export default function TransactionDetailPage(props: {
 															</TableRow>
 														</TableHeader>
 														<TableBody>
-															{/* biome-ignore lint/suspicious/noExplicitAny: <ok> */}
 															{(() => {
-																const lots = [...(item.assetMerge.lotData as any[])].sort((a, b) => {
+																const lots = [
+																	// biome-ignore lint/suspicious/noExplicitAny: <ok>
+																	...(item.assetMerge.lotData as any[]),
+																].sort((a, b) => {
 																	const dateA = a.acquiredDate
 																		? new Date(a.acquiredDate).getTime()
 																		: 0;
@@ -761,8 +763,18 @@ export default function TransactionDetailPage(props: {
 																	return dateB - dateA; // Sort descending (newest first)
 																});
 
-																const totalQty = lots.reduce((sum, lot) => sum + parseFloat(lot.remainingQty || '0'), 0);
-																const totalCost = lots.reduce((sum, lot) => sum + (parseFloat(lot.price || '0') * parseFloat(lot.remainingQty || '0')), 0);
+																const totalQty = lots.reduce(
+																	(sum, lot) =>
+																		sum + parseFloat(lot.remainingQty || '0'),
+																	0,
+																);
+																const totalCost = lots.reduce(
+																	(sum, lot) =>
+																		sum +
+																		parseFloat(lot.price || '0') *
+																			parseFloat(lot.remainingQty || '0'),
+																	0,
+																);
 
 																return (
 																	<>
@@ -788,7 +800,9 @@ export default function TransactionDetailPage(props: {
 																				<TableCell className="text-right">
 																					{formatCurrency(
 																						parseFloat(lot.price || '0') *
-																							parseFloat(lot.remainingQty || '0'),
+																							parseFloat(
+																								lot.remainingQty || '0',
+																							),
 																					)}
 																				</TableCell>
 																				<TableCell>
@@ -797,7 +811,10 @@ export default function TransactionDetailPage(props: {
 																			</TableRow>
 																		))}
 																		<TableRow className="font-semibold bg-muted/50">
-																			<TableCell colSpan={3} className="text-right">
+																			<TableCell
+																				colSpan={3}
+																				className="text-right"
+																			>
 																				Total:
 																			</TableCell>
 																			<TableCell className="text-right">
