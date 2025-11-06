@@ -5,6 +5,10 @@ fragment Log on Log {
 	responseStatus
 	source
 	type
+	portfolio {
+		id
+		name
+	}
 	mergeError {
 		id
 		assetSymbol

@@ -1113,7 +1113,7 @@ export default function PlaidMergePage(props: {
 																					// biome-ignore lint/suspicious/noExplicitAny: <ok>
 																					.map((lot: any) => {
 																						const amount =
-																							Number(lot.quantity || 0) *
+																							Number(lot.remainingQty || 0) *
 																							Number(lot.price || 0);
 																						return (
 																							<TableRow key={lot.lotId}>
@@ -1130,7 +1130,7 @@ export default function PlaidMergePage(props: {
 																								</TableCell>
 																								<TableCell className="text-right">
 																									{Number(
-																										lot.quantity || 0,
+																										lot.remainingQty || 0,
 																									).toFixed(4)}
 																								</TableCell>
 																								<TableCell className="text-right">
@@ -1159,7 +1159,7 @@ export default function PlaidMergePage(props: {
 																							.reduce(
 																								(sum, lot) =>
 																									sum +
-																									Number(lot.quantity || 0),
+																									Number(lot.remainingQty || 0),
 																								0,
 																							)
 																							.toFixed(4)}
@@ -1172,7 +1172,9 @@ export default function PlaidMergePage(props: {
 																							.reduce(
 																								(sum, lot) =>
 																									sum +
-																									Number(lot.quantity || 0) *
+																									Number(
+																										lot.remainingQty || 0,
+																									) *
 																										Number(lot.price || 0),
 																								0,
 																							)

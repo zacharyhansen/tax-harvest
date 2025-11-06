@@ -44,6 +44,11 @@ export default function LogsPage() {
 				},
 			},
 			{
+				headerName: 'Account',
+				field: 'portfolio.name',
+				width: 200,
+			},
+			{
 				headerName: 'Description',
 				field: 'description',
 				flex: 1,

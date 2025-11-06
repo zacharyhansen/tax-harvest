@@ -1194,7 +1194,9 @@ export class PlaidService {
 			});
 		switch (webhookData.webhook_code) {
 			case 'DEFAULT_UPDATE': {
-				this.logger.log('Processing Plaid holdings DEFAULT_UPDATE');
+				this.logger.log(
+					'Processing Plaid INVESTMENTS_TRANSACTIONS DEFAULT_UPDATE',
+				);
 
 				await this.syncPlaidItem({
 					plaidAuthConnection: authConnection,
@@ -1210,8 +1212,8 @@ export class PlaidService {
 
 	async processWebhook(webhookData: PlaidWebhook): Promise<void> {
 		switch (webhookData.webhook_type) {
-			case 'HOLDINGS': {
-				this.logger.log('Processing Plaid holdings update');
+			case 'INVESTMENTS_TRANSACTIONS': {
+				this.logger.log('Processing Plaid INVESTMENTS_TRANSACTIONS');
 				await this.handleHoldingsUpdate(webhookData);
 				break;
 			}

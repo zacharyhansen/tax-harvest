@@ -28018,14 +28018,14 @@ export type AdminRefreshPlaidInstitutionsMutationVariables = Exact<{ [key: strin
 
 export type AdminRefreshPlaidInstitutionsMutation = { __typename?: 'Mutation', adminRefreshPlaidInstitutions: boolean };
 
-export type LogFragment = { __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType, mergeError?: Array<{ __typename?: 'MergeError', id: string, assetSymbol: string, type: MergeErrorType, resolved: boolean }> | null };
+export type LogFragment = { __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType, portfolio: { __typename?: 'Portfolio', id: string, name: string }, mergeError?: Array<{ __typename?: 'MergeError', id: string, assetSymbol: string, type: MergeErrorType, resolved: boolean }> | null };
 
 export type LogsQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationProps>;
 }>;
 
 
-export type LogsQuery = { __typename?: 'Query', logsCount: number, logs: Array<{ __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType, mergeError?: Array<{ __typename?: 'MergeError', id: string, assetSymbol: string, type: MergeErrorType, resolved: boolean }> | null }> };
+export type LogsQuery = { __typename?: 'Query', logsCount: number, logs: Array<{ __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType, portfolio: { __typename?: 'Portfolio', id: string, name: string }, mergeError?: Array<{ __typename?: 'MergeError', id: string, assetSymbol: string, type: MergeErrorType, resolved: boolean }> | null }> };
 
 export type LogDetailsFragment = { __typename?: 'Log', id: string, createdAt: any, description?: string | null, responseStatus?: number | null, source?: AuthSource | null, type: LogType, data: any, mergeError?: Array<{ __typename?: 'MergeError', id: string, assetSymbol: string, type: MergeErrorType, resolved: boolean, targetValue?: string | null, targetQuantity?: string | null }> | null };
 
@@ -28746,6 +28746,10 @@ export const LogFragmentDoc = gql`
   responseStatus
   source
   type
+  portfolio {
+    id
+    name
+  }
   mergeError {
     id
     assetSymbol

@@ -38,7 +38,8 @@ export class PlaidController {
 			this.logger.log('Processing Plaid webhook:', body);
 
 			switch (body.webhook_type) {
-				case 'HOLDINGS': {
+				// Only trigger on investments transactions webhook (not holdings updates as those may be out of date)
+				case 'INVESTMENTS_TRANSACTIONS': {
 					await this.plaidService.processWebhook(body);
 					this.logger.log('Successfully processed Plaid webhook:', body);
 					break;
@@ -48,10 +49,7 @@ export class PlaidController {
 				}
 			}
 
-			return res.code(200).send({
-				message: 'Webhook processed successfully',
-				success: true,
-			});
+			return res.code(200).send();
 		} catch (error) {
 			this.logger.error('Webhook processing error:', error);
 			return res.code(400).send({
