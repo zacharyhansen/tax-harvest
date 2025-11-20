@@ -33,7 +33,7 @@ export default function HarvestsLayout({
 		tabs.find((tab) => pathname === tab.href)?.value ?? 'overview';
 
 	return (
-		<div className="container relative mx-auto flex h-full grow flex-col p-4">
+		<div className="container relative mx-auto flex h-full flex-col p-4">
 			<Tabs value={currentTab} className="">
 				<TabsList className="">
 					{tabs.map((tab) => (
@@ -45,7 +45,9 @@ export default function HarvestsLayout({
 					))}
 				</TabsList>
 			</Tabs>
-			{children}
+			<div className="flex flex-col gap-4 pt-4 overflow-y-auto h-full max-h-screen pb-42">
+				{children}
+			</div>
 		</div>
 	);
 }

@@ -195,12 +195,9 @@ export function HarvestCard({
 									<Clock className="text-muted-foreground mt-0.5 h-5 w-5 flex-shrink-0" />
 									<p className="text-muted-foreground leading-relaxed">
 										This recommendation will expire on{' '}
-										{formatDate(
-											harvest.harvestTransactions?.[0]?.harvestTransactionItem
-												.lotAcquiredDate,
-										)}{' '}
-										at 3PM EST. Log in to your brokerage to sell these stocks
-										before that date.
+										{formatDate(harvest.recommendationExpiresDate)} at 3PM EST.
+										Log in to your brokerage to sell these stocks before that
+										date.
 									</p>
 								</div>
 
@@ -209,8 +206,9 @@ export function HarvestCard({
 									<p className="text-muted-foreground leading-relaxed">
 										We will remind you on{' '}
 										{formatDate(repurchaseDate, withMonthAndDayFormatter)} to
-										rebuy the stock. If you sell the stock after Today+1, change
-										your reminder date to be 31 days after you sell the stock to
+										rebuy the stock. If you sell the stock after{' '}
+										{formatDate(harvest.recommendationExpiresDate)}, change your
+										reminder date to be 31 days after you sell the stock to
 										avoid the IRS Wash Sale rule
 									</p>
 								</div>
