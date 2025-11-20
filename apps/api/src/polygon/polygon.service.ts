@@ -204,6 +204,20 @@ export class PolygonService {
 			});
 	}
 
+	/**
+	 * Validates that ticker data contains a valid price
+	 * @param tickerData Polygon ticker snapshot data
+	 * @returns true if price is valid (> 0 and not undefined)
+	 * @example
+	 * isValidPrice({ ticker: 'AAPL', day: { c: 150.25 } }) // returns true
+	 * isValidPrice({ ticker: 'AAPL', day: { c: 0 } }) // returns false
+	 * isValidPrice({ ticker: 'AAPL', day: {} }) // returns false
+	 */
+	private isValidPrice(tickerData: { day?: { c?: number } }): boolean {
+		const closePrice = tickerData.day?.c;
+		return closePrice !== undefined && closePrice !== null && closePrice > 0;
+	}
+
 	async updateAllAssetPrices() {
 		const batchSize = 100;
 		return this.polygonClient.stocks
@@ -211,30 +225,56 @@ export class PolygonService {
 			.then(async (results) => {
 				const tickers = results.tickers ?? [];
 				this.logger.log(`Updating ${tickers.length} assets`);
+
+				let validCount = 0;
+				let invalidCount = 0;
+
 				for (let i = 0; i < tickers.length; i += batchSize) {
 					const batch = tickers.slice(i, i + batchSize);
+					const validTickers: typeof batch = [];
+
+					for (const tickerData of batch) {
+						if (!tickerData.ticker) {
+							continue; // Skip if no symbol
+						}
+
+						if (this.isValidPrice(tickerData)) {
+							validTickers.push(tickerData);
+							validCount++;
+						} else {
+							invalidCount++;
+							this.logger.warn(
+								`Skipping price update for ${tickerData.ticker}: ` +
+									`invalid price (${tickerData.day?.c}). Retaining existing price.`,
+							);
+						}
+					}
+
+					// Only proceed if we have valid tickers to update
+					if (validTickers.length === 0) {
+						continue;
+					}
+
 					await this.db
 						.insertInto('Asset')
 						.values(
-							batch
-								.map((tickerData) => {
-									return {
-										lastClose: tickerData.day?.c,
-										lastHigh: tickerData.day?.h,
-										lastLow: tickerData.day?.l,
-										lastOpen: tickerData.day?.o,
-										lastPrice: tickerData.day?.c,
-										lastUpdated: tickerData.updated
-											? new Date(tickerData.updated / 1000)
-											: new Date(),
-										lastVolume: tickerData.day?.v,
-										lastVolumeWeighted: tickerData.day?.vw,
-										symbol: tickerData.ticker ?? '',
-										todaysChange: tickerData.todaysChange,
-										todaysChangePerc: tickerData.todaysChangePerc,
-									};
-								})
-								.filter((insertObjects) => insertObjects.symbol),
+							validTickers.map((tickerData) => {
+								return {
+									lastClose: tickerData.day?.c,
+									lastHigh: tickerData.day?.h,
+									lastLow: tickerData.day?.l,
+									lastOpen: tickerData.day?.o,
+									lastPrice: tickerData.day?.c,
+									lastUpdated: tickerData.updated
+										? new Date(tickerData.updated / 1000)
+										: new Date(),
+									lastVolume: tickerData.day?.v,
+									lastVolumeWeighted: tickerData.day?.vw,
+									symbol: tickerData.ticker ?? '',
+									todaysChange: tickerData.todaysChange,
+									todaysChangePerc: tickerData.todaysChangePerc,
+								};
+							}),
 						)
 						.onConflict((oc) =>
 							oc.column('symbol').doUpdateSet((eb) => ({
@@ -252,6 +292,10 @@ export class PolygonService {
 						)
 						.execute();
 				}
+
+				this.logger.log(
+					`Price update complete: ${validCount} updated, ${invalidCount} skipped`,
+				);
 			});
 	}
 

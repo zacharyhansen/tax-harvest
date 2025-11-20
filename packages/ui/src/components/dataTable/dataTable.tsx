@@ -225,10 +225,14 @@ function DataTable<TData, TValue>({
 				leafRows
 					.reduce((sum, row) => sum + Number(row.getValue(columnId) || 0), 0)
 					.toFixed(2),
-			sumMoney: (columnId, leafRows) =>
-				`$${leafRows
-					.reduce((sum, row) => sum + Number(row.getValue(columnId) || 0), 0)
-					.toFixed(2)}`,
+			sumMoney: (columnId, leafRows) => {
+				const total = leafRows
+					.reduce((sum, row) => sum + Number(row.getValue(columnId) || 0), 0);
+				return new Intl.NumberFormat('en-US', {
+					style: 'currency',
+					currency: 'USD',
+				}).format(total);
+			},
 
 			...customAggregationFns,
 		},
@@ -351,6 +355,7 @@ function DataTable<TData, TValue>({
 							<TableRow
 								key={row.id}
 								data-state={row.getIsSelected() && 'selected'}
+								className="group"
 							>
 								{row.getVisibleCells().map((cell) =>
 									!data.length && loading ? (

@@ -33,7 +33,7 @@ export default function ConnectLayout({
 			<ApolloProviderWrapper>
 				<SignedIn>
 					<MediaProvider>
-						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+						<ThemeProvider attribute="class">
 							<UserProvider>
 								<PortfolioProvider>
 									{children}

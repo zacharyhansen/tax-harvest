@@ -31,6 +31,8 @@
   --sidebar-accent-foreground: hsl(0 0% 0%);
   --sidebar-border: hsl(223.8136 0.0001% 92.1478%);
   --sidebar-ring: hsl(0 0% 0%);
+  --theader: hsl(223.8136 0.0001% 92.1478%);
+  /* Table header color (light) */
   --font-sans: Space Grotesk, serif;
   --font-serif: Georgia, serif;
   --font-mono: Geist Mono, monospace;
@@ -50,6 +52,10 @@
   --shadow-2xl: 0px 1px 2px 0px hsl(0 0% 0% / 0.45);
 }
 
+/**
+ * Dark theme overrides.
+ * Table header color is #0F0F11 for dark mode.
+ */
 .dark {
   --background: hsl(0 0% 0%);
   --foreground: hsl(223.8136 -172.5242% 100%);
@@ -83,6 +89,8 @@
   --sidebar-accent-foreground: hsl(223.8136 -172.5242% 100%);
   --sidebar-border: hsl(223.8136 0% 19.8916%);
   --sidebar-ring: hsl(223.8136 0% 64.471%);
+  --theader: #0F0F11;
+  /* Table header color (dark) */
   --font-sans: Space Grotesk, serif;
   --font-serif: Georgia, serif;
   --font-mono: Geist Mono, monospace;
@@ -135,6 +143,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-theader: var(--theader);
 
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);

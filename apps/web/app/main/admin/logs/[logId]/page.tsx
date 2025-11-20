@@ -40,6 +40,7 @@ export default function LogPage(props: {
 	return (
 		<PageWrapper
 			title="Log Explorer"
+			className="h-screen pb-20"
 			description={
 				<div className="space-y-4">
 					<div className="grid grid-cols-2 gap-2">

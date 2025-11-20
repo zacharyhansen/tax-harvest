@@ -89,6 +89,7 @@ export default function MergeErrorDetailPage({
 	return (
 		<PageWrapper
 			title="Merge Error Details"
+			className="h-screen pb-20"
 			description={
 				<div className="flex items-center gap-4">
 					<Button

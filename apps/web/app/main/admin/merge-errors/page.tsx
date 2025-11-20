@@ -161,7 +161,7 @@ export default function MergeErrorsPage() {
 	}
 
 	return (
-		<PageWrapper title="Merge Errors">
+		<PageWrapper title="Merge Errors" className="h-screen pb-20">
 			<AgGridWrapper>
 				<AgGridReact
 					loading={loading}

@@ -174,6 +174,7 @@ export default function InstitutionsPage() {
 		<PageWrapper
 			title="Plaid Institutions"
 			description={`${data?.plaidInstitutionsCount || 0} supported institutions`}
+			className="h-screen pb-20"
 			cornerElement={
 				<Button
 					onClick={handleRefresh}

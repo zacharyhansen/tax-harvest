@@ -57,6 +57,7 @@ export default function PlaidHistoryPage() {
 				headerName: 'Merge Errors',
 				field: 'mergeErrorCount',
 				width: 120,
+				// biome-ignore lint/suspicious/noExplicitAny: <ok>
 				cellRenderer: (params: any) => {
 					let errorCount = 0;
 					// biome-ignore lint/suspicious/noExplicitAny: <ok>
@@ -64,19 +65,21 @@ export default function PlaidHistoryPage() {
 						if (am.mergeError) {
 							// Check if mergeError is an array
 							if (Array.isArray(am.mergeError)) {
-								// biome-ignore lint/suspicious/noExplicitAny: <ok>
-								errorCount += am.mergeError.filter((error: any) => !error.resolved).length;
+								errorCount += am.mergeError.filter(
+									// biome-ignore lint/suspicious/noExplicitAny: <ok>
+									(error: any) => !error.resolved,
+								).length;
 							} else if (!am.mergeError.resolved) {
 								// Single error object
 								errorCount += 1;
 							}
 						}
 					});
-					
+
 					if (errorCount === 0) {
 						return null;
 					}
-					
+
 					return <Badge variant="destructive">{errorCount}</Badge>;
 				},
 			},
@@ -88,7 +91,7 @@ export default function PlaidHistoryPage() {
 	}
 
 	return (
-		<PageWrapper title="Plaid Merges">
+		<PageWrapper title="Plaid Merges" className="h-screen pb-20">
 			<AgGridWrapper>
 				<AgGridReact
 					columnDefs={columnDefs}

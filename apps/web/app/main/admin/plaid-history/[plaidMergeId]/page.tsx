@@ -90,6 +90,7 @@ export default function PlaidMergePage(props: {
 	return (
 		<PageWrapper
 			title="PlaidMerge Details"
+			className="h-screen pb-20"
 			description={
 				<div className="flex gap-4 text-sm text-muted-foreground">
 					<span>ID: {plaidMerge.id}</span>

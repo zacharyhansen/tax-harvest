@@ -82,6 +82,7 @@ export default function AccountPnlHistoryPage() {
 		<PageWrapper
 			title="Account P&L History"
 			description="View realized profit and loss history for all accounts"
+			className="h-screen pb-20"
 		>
 			<div className="grid gap-4">
 				{accountsLoading ? (

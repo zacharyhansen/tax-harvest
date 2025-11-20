@@ -3,7 +3,7 @@ import { cn } from '@repo/ui/utils';
 import { cva } from 'class-variance-authority';
 import { ChevronDown } from 'lucide-react';
 
-import type * as React from 'react';
+import * as React from 'react';
 
 const NavigationMenu = ({
 	ref,
@@ -101,28 +101,36 @@ NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName;
 
 const NavigationMenuLink = NavigationMenuPrimitive.Link;
 
-const NavigationMenuViewport = ({
-	ref,
-	className,
-	...props
-}: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport> & {
-	ref?: React.RefObject<React.ElementRef<
-		typeof NavigationMenuPrimitive.Viewport
-	> | null>;
-}) => (
-	<div className={cn('absolute left-0 top-full flex justify-center')}>
-		<NavigationMenuPrimitive.Viewport
+const NavigationMenuViewport = React.forwardRef<
+	React.ElementRef<typeof NavigationMenuPrimitive.Indicator>,
+	React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Indicator>
+>(({ className, ...props }, ref) => (
+	<>
+		<NavigationMenuPrimitive.Indicator
+			ref={ref}
+			aria-hidden={false}
 			className={cn(
-				'origin-top-center bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 relative mt-1.5 h-(--radix-navigation-menu-viewport-height) w-full overflow-hidden rounded-lg border shadow-lg md:w-(--radix-navigation-menu-viewport-width)',
+				'z-[1] [transition:width,_transform_400ms_ease]',
+				'data-[state=hidden]:animate-fade-out data-[state=visible]:animate-fade-in',
 				className,
 			)}
-			ref={ref}
 			{...props}
-		/>
-	</div>
-);
-NavigationMenuViewport.displayName =
-	NavigationMenuPrimitive.Viewport.displayName;
+		>
+			<div className="perspective-[2000px] absolute left-0 top-0 bg-background">
+				<NavigationMenuPrimitive.Viewport
+					className={cn(
+						'mt-4',
+						'border-border-primary-default relative h-[var(--radix-navigation-menu-viewport-height)] w-[var(--radix-navigation-menu-viewport-width)] origin-[top_center] overflow-hidden rounded-xl border transition-[width,_height] duration-300',
+						'data-[state=closed]:animate-scale-out data-[state=open]:animate-scale-in ',
+					)}
+				/>
+			</div>
+		</NavigationMenuPrimitive.Indicator>
+		<NavigationMenuPrimitive.Viewport className="hidden" />
+	</>
+));
+
+NavigationMenuViewport.displayName = 'NavigationMenuViewport ';
 
 const NavigationMenuIndicator = ({
 	ref,

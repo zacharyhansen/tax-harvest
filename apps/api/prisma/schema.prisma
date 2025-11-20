@@ -113,6 +113,7 @@ model Portfolio {
   lotUploadFile               LotUploadFile[]
   positionSnapshot            PositionSnapshot[]
   porfolioConnect             PortfolioConnect[]
+  lotModels                   LotModel[]
 }
 
 enum PorfolioConnectState {
@@ -709,9 +710,35 @@ model Lot {
   harvestTransactionItems HarvestTransactionItem[]
   portfolio               Portfolio                @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
   LotChange               LotChange[]
+  lotOnLotModels          LotOnLotModel[]
 
   @@unique([positionId, externalId])
   @@index([accountId])
+}
+
+model LotModel {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  portfolioId String   @db.Uuid
+
+  portfolio      Portfolio       @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  lotOnLotModels LotOnLotModel[]
+
+  @@index([portfolioId, createdAt(sort: Desc)])
+}
+
+model LotOnLotModel {
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  lotModelId String   @db.Uuid
+  lotId      String   @db.Uuid
+  quantity   Decimal  @db.Decimal(14, 4)
+
+  lotModel LotModel @relation(fields: [lotModelId], references: [id], onDelete: Cascade)
+  lot      Lot      @relation(fields: [lotId], references: [id], onDelete: Cascade)
+
+  @@id([lotModelId, lotId])
 }
 
 enum PortfolioRole {

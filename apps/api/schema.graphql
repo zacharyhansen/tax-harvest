@@ -8457,6 +8457,10 @@ enum AuthType {
   PLAID_LINK
 }
 
+type BatchPayload {
+  count: Float!
+}
+
 """
 The `BigInt` scalar type represents non-fractional signed whole numeric values.
 """
@@ -11921,6 +11925,7 @@ type Lot {
   id: ID!
   legNo: Int
   locationCode: Int
+  lotOnLotModels: [LotOnLotModel!]
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
@@ -12973,6 +12978,7 @@ input LotChangeWhereUniqueInput {
 type LotCount {
   LotChange: Int!
   harvestTransactionItems: Int!
+  lotOnLotModels: Int!
 }
 
 type LotCountAggregate {
@@ -13259,6 +13265,12 @@ input LotCreateNestedOneWithoutLotChangeInput {
   create: LotCreateWithoutLotChangeInput
 }
 
+input LotCreateNestedOneWithoutLotOnLotModelsInput {
+  connect: LotWhereUniqueInput
+  connectOrCreate: LotCreateOrConnectWithoutLotOnLotModelsInput
+  create: LotCreateWithoutLotOnLotModelsInput
+}
+
 input LotCreateOrConnectWithoutAccountInput {
   create: LotCreateWithoutAccountInput!
   where: LotWhereUniqueInput!
@@ -13281,6 +13293,11 @@ input LotCreateOrConnectWithoutHarvestTransactionItemsInput {
 
 input LotCreateOrConnectWithoutLotChangeInput {
   create: LotCreateWithoutLotChangeInput!
+  where: LotWhereUniqueInput!
+}
+
+input LotCreateOrConnectWithoutLotOnLotModelsInput {
+  create: LotCreateWithoutLotOnLotModelsInput!
   where: LotWhereUniqueInput!
 }
 
@@ -13315,6 +13332,7 @@ input LotCreateWithoutAccountInput {
   id: String
   legNo: Int
   locationCode: Int
+  lotOnLotModels: LotOnLotModelCreateNestedManyWithoutLotInput
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
@@ -13352,6 +13370,7 @@ input LotCreateWithoutAssetInput {
   id: String
   legNo: Int
   locationCode: Int
+  lotOnLotModels: LotOnLotModelCreateNestedManyWithoutLotInput
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
@@ -13389,6 +13408,7 @@ input LotCreateWithoutFileInput {
   id: String
   legNo: Int
   locationCode: Int
+  lotOnLotModels: LotOnLotModelCreateNestedManyWithoutLotInput
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
@@ -13426,6 +13446,7 @@ input LotCreateWithoutHarvestTransactionItemsInput {
   id: String
   legNo: Int
   locationCode: Int
+  lotOnLotModels: LotOnLotModelCreateNestedManyWithoutLotInput
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
@@ -13443,6 +13464,45 @@ input LotCreateWithoutHarvestTransactionItemsInput {
 }
 
 input LotCreateWithoutLotChangeInput {
+  account: AccountCreateNestedOneWithoutLotsInput!
+  acquiredDate: DateTime!
+  adjPrice: Decimal
+  asset: AssetCreateNestedOneWithoutLotsInput!
+  availableQty: Decimal
+  commPerShare: Decimal
+  costTotal: Decimal
+  createdAt: DateTime
+  exchangeRate: Decimal
+  excludeFromHarvest: Int
+  externalId: String
+  feesPerShare: Decimal
+  file: FileCreateNestedOneWithoutLotsInput
+  gainDay: Decimal
+  gainDayPct: Decimal
+  gainTotal: Decimal
+  harvestTransactionItems: HarvestTransactionItemCreateNestedManyWithoutLotSoldInput
+  id: String
+  legNo: Int
+  locationCode: Int
+  lotOnLotModels: LotOnLotModelCreateNestedManyWithoutLotInput
+  lotSourceCode: Int
+  marketValue: Decimal
+  orderNo: Decimal
+  originalQty: Decimal
+  paymentCurrency: String
+  portfolio: PortfolioCreateNestedOneWithoutLotsInput!
+  position: PositionCreateNestedOneWithoutLotsInput
+  price: Decimal!
+  remainingQty: Decimal!
+  settlementCurrency: String
+  shortType: Int
+  termCode: Int
+  totalCostForGainPct: Decimal
+  updatedAt: DateTime
+}
+
+input LotCreateWithoutLotOnLotModelsInput {
+  LotChange: LotChangeCreateNestedManyWithoutLotInput
   account: AccountCreateNestedOneWithoutLotsInput!
   acquiredDate: DateTime!
   adjPrice: Decimal
@@ -13501,6 +13561,7 @@ input LotCreateWithoutPortfolioInput {
   id: String
   legNo: Int
   locationCode: Int
+  lotOnLotModels: LotOnLotModelCreateNestedManyWithoutLotInput
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
@@ -13538,6 +13599,7 @@ input LotCreateWithoutPositionInput {
   id: String
   legNo: Int
   locationCode: Int
+  lotOnLotModels: LotOnLotModelCreateNestedManyWithoutLotInput
   lotSourceCode: Int
   marketValue: Decimal
   orderNo: Decimal
@@ -13658,9 +13720,446 @@ type LotMinAggregate {
   updatedAt: DateTime
 }
 
+type LotModel {
+  _count: LotModelCount!
+  createdAt: DateTime!
+  id: ID!
+  lotOnLotModels: [LotOnLotModel!]
+  portfolio: Portfolio!
+  portfolioId: String!
+  updatedAt: DateTime!
+}
+
+type LotModelCount {
+  lotOnLotModels: Int!
+}
+
+type LotModelCountAggregate {
+  _all: Int!
+  createdAt: Int!
+  id: Int!
+  portfolioId: Int!
+  updatedAt: Int!
+}
+
+input LotModelCreateManyPortfolioInput {
+  createdAt: DateTime
+  id: String
+  updatedAt: DateTime
+}
+
+input LotModelCreateManyPortfolioInputEnvelope {
+  data: [LotModelCreateManyPortfolioInput!]!
+  skipDuplicates: Boolean
+}
+
+input LotModelCreateNestedManyWithoutPortfolioInput {
+  connect: [LotModelWhereUniqueInput!]
+  connectOrCreate: [LotModelCreateOrConnectWithoutPortfolioInput!]
+  create: [LotModelCreateWithoutPortfolioInput!]
+  createMany: LotModelCreateManyPortfolioInputEnvelope
+}
+
+input LotModelCreateNestedOneWithoutLotOnLotModelsInput {
+  connect: LotModelWhereUniqueInput
+  connectOrCreate: LotModelCreateOrConnectWithoutLotOnLotModelsInput
+  create: LotModelCreateWithoutLotOnLotModelsInput
+}
+
+input LotModelCreateOrConnectWithoutLotOnLotModelsInput {
+  create: LotModelCreateWithoutLotOnLotModelsInput!
+  where: LotModelWhereUniqueInput!
+}
+
+input LotModelCreateOrConnectWithoutPortfolioInput {
+  create: LotModelCreateWithoutPortfolioInput!
+  where: LotModelWhereUniqueInput!
+}
+
+input LotModelCreateWithoutLotOnLotModelsInput {
+  createdAt: DateTime
+  id: String
+  portfolio: PortfolioCreateNestedOneWithoutLotModelsInput!
+  updatedAt: DateTime
+}
+
+input LotModelCreateWithoutPortfolioInput {
+  createdAt: DateTime
+  id: String
+  lotOnLotModels: LotOnLotModelCreateNestedManyWithoutLotModelInput
+  updatedAt: DateTime
+}
+
+input LotModelListRelationFilter {
+  every: LotModelWhereInput
+  none: LotModelWhereInput
+  some: LotModelWhereInput
+}
+
+type LotModelMaxAggregate {
+  createdAt: DateTime
+  id: String
+  portfolioId: String
+  updatedAt: DateTime
+}
+
+type LotModelMinAggregate {
+  createdAt: DateTime
+  id: String
+  portfolioId: String
+  updatedAt: DateTime
+}
+
+input LotModelScalarRelationFilter {
+  is: LotModelWhereInput
+  isNot: LotModelWhereInput
+}
+
+input LotModelScalarWhereInput {
+  AND: [LotModelScalarWhereInput!]
+  NOT: [LotModelScalarWhereInput!]
+  OR: [LotModelScalarWhereInput!]
+  createdAt: DateTimeFilter
+  id: UuidFilter
+  portfolioId: UuidFilter
+  updatedAt: DateTimeFilter
+}
+
+input LotModelUpdateManyMutationInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotModelUpdateManyWithWhereWithoutPortfolioInput {
+  data: LotModelUpdateManyMutationInput!
+  where: LotModelScalarWhereInput!
+}
+
+input LotModelUpdateManyWithoutPortfolioNestedInput {
+  connect: [LotModelWhereUniqueInput!]
+  connectOrCreate: [LotModelCreateOrConnectWithoutPortfolioInput!]
+  create: [LotModelCreateWithoutPortfolioInput!]
+  createMany: LotModelCreateManyPortfolioInputEnvelope
+  delete: [LotModelWhereUniqueInput!]
+  deleteMany: [LotModelScalarWhereInput!]
+  disconnect: [LotModelWhereUniqueInput!]
+  set: [LotModelWhereUniqueInput!]
+  update: [LotModelUpdateWithWhereUniqueWithoutPortfolioInput!]
+  updateMany: [LotModelUpdateManyWithWhereWithoutPortfolioInput!]
+  upsert: [LotModelUpsertWithWhereUniqueWithoutPortfolioInput!]
+}
+
+input LotModelUpdateOneRequiredWithoutLotOnLotModelsNestedInput {
+  connect: LotModelWhereUniqueInput
+  connectOrCreate: LotModelCreateOrConnectWithoutLotOnLotModelsInput
+  create: LotModelCreateWithoutLotOnLotModelsInput
+  update: LotModelUpdateToOneWithWhereWithoutLotOnLotModelsInput
+  upsert: LotModelUpsertWithoutLotOnLotModelsInput
+}
+
+input LotModelUpdateToOneWithWhereWithoutLotOnLotModelsInput {
+  data: LotModelUpdateWithoutLotOnLotModelsInput!
+  where: LotModelWhereInput
+}
+
+input LotModelUpdateWithWhereUniqueWithoutPortfolioInput {
+  data: LotModelUpdateWithoutPortfolioInput!
+  where: LotModelWhereUniqueInput!
+}
+
+input LotModelUpdateWithoutLotOnLotModelsInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutLotModelsNestedInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotModelUpdateWithoutPortfolioInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  lotOnLotModels: LotOnLotModelUpdateManyWithoutLotModelNestedInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotModelUpsertWithWhereUniqueWithoutPortfolioInput {
+  create: LotModelCreateWithoutPortfolioInput!
+  update: LotModelUpdateWithoutPortfolioInput!
+  where: LotModelWhereUniqueInput!
+}
+
+input LotModelUpsertWithoutLotOnLotModelsInput {
+  create: LotModelCreateWithoutLotOnLotModelsInput!
+  update: LotModelUpdateWithoutLotOnLotModelsInput!
+  where: LotModelWhereInput
+}
+
+input LotModelWhereInput {
+  AND: [LotModelWhereInput!]
+  NOT: [LotModelWhereInput!]
+  OR: [LotModelWhereInput!]
+  createdAt: DateTimeFilter
+  id: UuidFilter
+  lotOnLotModels: LotOnLotModelListRelationFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  updatedAt: DateTimeFilter
+}
+
+input LotModelWhereUniqueInput {
+  AND: [LotModelWhereInput!]
+  NOT: [LotModelWhereInput!]
+  OR: [LotModelWhereInput!]
+  createdAt: DateTimeFilter
+  id: String
+  lotOnLotModels: LotOnLotModelListRelationFilter
+  portfolio: PortfolioScalarRelationFilter
+  portfolioId: UuidFilter
+  updatedAt: DateTimeFilter
+}
+
 input LotNullableScalarRelationFilter {
   is: LotWhereInput
   isNot: LotWhereInput
+}
+
+type LotOnLotModel {
+  createdAt: DateTime!
+  lot: Lot!
+  lotId: String!
+  lotModel: LotModel!
+  lotModelId: String!
+  quantity: Decimal!
+  updatedAt: DateTime!
+}
+
+type LotOnLotModelAvgAggregate {
+  quantity: Decimal
+}
+
+type LotOnLotModelCountAggregate {
+  _all: Int!
+  createdAt: Int!
+  lotId: Int!
+  lotModelId: Int!
+  quantity: Int!
+  updatedAt: Int!
+}
+
+input LotOnLotModelCreateManyLotInput {
+  createdAt: DateTime
+  lotModelId: String!
+  quantity: Decimal!
+  updatedAt: DateTime
+}
+
+input LotOnLotModelCreateManyLotInputEnvelope {
+  data: [LotOnLotModelCreateManyLotInput!]!
+  skipDuplicates: Boolean
+}
+
+input LotOnLotModelCreateManyLotModelInput {
+  createdAt: DateTime
+  lotId: String!
+  quantity: Decimal!
+  updatedAt: DateTime
+}
+
+input LotOnLotModelCreateManyLotModelInputEnvelope {
+  data: [LotOnLotModelCreateManyLotModelInput!]!
+  skipDuplicates: Boolean
+}
+
+input LotOnLotModelCreateNestedManyWithoutLotInput {
+  connect: [LotOnLotModelWhereUniqueInput!]
+  connectOrCreate: [LotOnLotModelCreateOrConnectWithoutLotInput!]
+  create: [LotOnLotModelCreateWithoutLotInput!]
+  createMany: LotOnLotModelCreateManyLotInputEnvelope
+}
+
+input LotOnLotModelCreateNestedManyWithoutLotModelInput {
+  connect: [LotOnLotModelWhereUniqueInput!]
+  connectOrCreate: [LotOnLotModelCreateOrConnectWithoutLotModelInput!]
+  create: [LotOnLotModelCreateWithoutLotModelInput!]
+  createMany: LotOnLotModelCreateManyLotModelInputEnvelope
+}
+
+input LotOnLotModelCreateOrConnectWithoutLotInput {
+  create: LotOnLotModelCreateWithoutLotInput!
+  where: LotOnLotModelWhereUniqueInput!
+}
+
+input LotOnLotModelCreateOrConnectWithoutLotModelInput {
+  create: LotOnLotModelCreateWithoutLotModelInput!
+  where: LotOnLotModelWhereUniqueInput!
+}
+
+input LotOnLotModelCreateWithoutLotInput {
+  createdAt: DateTime
+  lotModel: LotModelCreateNestedOneWithoutLotOnLotModelsInput!
+  quantity: Decimal!
+  updatedAt: DateTime
+}
+
+input LotOnLotModelCreateWithoutLotModelInput {
+  createdAt: DateTime
+  lot: LotCreateNestedOneWithoutLotOnLotModelsInput!
+  quantity: Decimal!
+  updatedAt: DateTime
+}
+
+input LotOnLotModelInput {
+  lotId: String!
+  quantity: Float!
+}
+
+input LotOnLotModelListRelationFilter {
+  every: LotOnLotModelWhereInput
+  none: LotOnLotModelWhereInput
+  some: LotOnLotModelWhereInput
+}
+
+input LotOnLotModelLotModelIdLotIdCompoundUniqueInput {
+  lotId: String!
+  lotModelId: String!
+}
+
+type LotOnLotModelMaxAggregate {
+  createdAt: DateTime
+  lotId: String
+  lotModelId: String
+  quantity: Decimal
+  updatedAt: DateTime
+}
+
+type LotOnLotModelMinAggregate {
+  createdAt: DateTime
+  lotId: String
+  lotModelId: String
+  quantity: Decimal
+  updatedAt: DateTime
+}
+
+input LotOnLotModelScalarWhereInput {
+  AND: [LotOnLotModelScalarWhereInput!]
+  NOT: [LotOnLotModelScalarWhereInput!]
+  OR: [LotOnLotModelScalarWhereInput!]
+  createdAt: DateTimeFilter
+  lotId: UuidFilter
+  lotModelId: UuidFilter
+  quantity: DecimalFilter
+  updatedAt: DateTimeFilter
+}
+
+type LotOnLotModelSumAggregate {
+  quantity: Decimal
+}
+
+input LotOnLotModelUpdateManyMutationInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  quantity: DecimalFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotOnLotModelUpdateManyWithWhereWithoutLotInput {
+  data: LotOnLotModelUpdateManyMutationInput!
+  where: LotOnLotModelScalarWhereInput!
+}
+
+input LotOnLotModelUpdateManyWithWhereWithoutLotModelInput {
+  data: LotOnLotModelUpdateManyMutationInput!
+  where: LotOnLotModelScalarWhereInput!
+}
+
+input LotOnLotModelUpdateManyWithoutLotModelNestedInput {
+  connect: [LotOnLotModelWhereUniqueInput!]
+  connectOrCreate: [LotOnLotModelCreateOrConnectWithoutLotModelInput!]
+  create: [LotOnLotModelCreateWithoutLotModelInput!]
+  createMany: LotOnLotModelCreateManyLotModelInputEnvelope
+  delete: [LotOnLotModelWhereUniqueInput!]
+  deleteMany: [LotOnLotModelScalarWhereInput!]
+  disconnect: [LotOnLotModelWhereUniqueInput!]
+  set: [LotOnLotModelWhereUniqueInput!]
+  update: [LotOnLotModelUpdateWithWhereUniqueWithoutLotModelInput!]
+  updateMany: [LotOnLotModelUpdateManyWithWhereWithoutLotModelInput!]
+  upsert: [LotOnLotModelUpsertWithWhereUniqueWithoutLotModelInput!]
+}
+
+input LotOnLotModelUpdateManyWithoutLotNestedInput {
+  connect: [LotOnLotModelWhereUniqueInput!]
+  connectOrCreate: [LotOnLotModelCreateOrConnectWithoutLotInput!]
+  create: [LotOnLotModelCreateWithoutLotInput!]
+  createMany: LotOnLotModelCreateManyLotInputEnvelope
+  delete: [LotOnLotModelWhereUniqueInput!]
+  deleteMany: [LotOnLotModelScalarWhereInput!]
+  disconnect: [LotOnLotModelWhereUniqueInput!]
+  set: [LotOnLotModelWhereUniqueInput!]
+  update: [LotOnLotModelUpdateWithWhereUniqueWithoutLotInput!]
+  updateMany: [LotOnLotModelUpdateManyWithWhereWithoutLotInput!]
+  upsert: [LotOnLotModelUpsertWithWhereUniqueWithoutLotInput!]
+}
+
+input LotOnLotModelUpdateWithWhereUniqueWithoutLotInput {
+  data: LotOnLotModelUpdateWithoutLotInput!
+  where: LotOnLotModelWhereUniqueInput!
+}
+
+input LotOnLotModelUpdateWithWhereUniqueWithoutLotModelInput {
+  data: LotOnLotModelUpdateWithoutLotModelInput!
+  where: LotOnLotModelWhereUniqueInput!
+}
+
+input LotOnLotModelUpdateWithoutLotInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  lotModel: LotModelUpdateOneRequiredWithoutLotOnLotModelsNestedInput
+  quantity: DecimalFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotOnLotModelUpdateWithoutLotModelInput {
+  createdAt: DateTimeFieldUpdateOperationsInput
+  lot: LotUpdateOneRequiredWithoutLotOnLotModelsNestedInput
+  quantity: DecimalFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotOnLotModelUpsertWithWhereUniqueWithoutLotInput {
+  create: LotOnLotModelCreateWithoutLotInput!
+  update: LotOnLotModelUpdateWithoutLotInput!
+  where: LotOnLotModelWhereUniqueInput!
+}
+
+input LotOnLotModelUpsertWithWhereUniqueWithoutLotModelInput {
+  create: LotOnLotModelCreateWithoutLotModelInput!
+  update: LotOnLotModelUpdateWithoutLotModelInput!
+  where: LotOnLotModelWhereUniqueInput!
+}
+
+input LotOnLotModelWhereInput {
+  AND: [LotOnLotModelWhereInput!]
+  NOT: [LotOnLotModelWhereInput!]
+  OR: [LotOnLotModelWhereInput!]
+  createdAt: DateTimeFilter
+  lot: LotScalarRelationFilter
+  lotId: UuidFilter
+  lotModel: LotModelScalarRelationFilter
+  lotModelId: UuidFilter
+  quantity: DecimalFilter
+  updatedAt: DateTimeFilter
+}
+
+input LotOnLotModelWhereUniqueInput {
+  AND: [LotOnLotModelWhereInput!]
+  NOT: [LotOnLotModelWhereInput!]
+  OR: [LotOnLotModelWhereInput!]
+  createdAt: DateTimeFilter
+  lot: LotScalarRelationFilter
+  lotId: UuidFilter
+  lotModel: LotModelScalarRelationFilter
+  lotModelId: UuidFilter
+  lotModelId_lotId: LotOnLotModelLotModelIdLotIdCompoundUniqueInput
+  quantity: DecimalFilter
+  updatedAt: DateTimeFilter
 }
 
 input LotPositionIdExternalIdCompoundUniqueInput {
@@ -13871,6 +14370,14 @@ input LotUpdateOneRequiredWithoutLotChangeNestedInput {
   upsert: LotUpsertWithoutLotChangeInput
 }
 
+input LotUpdateOneRequiredWithoutLotOnLotModelsNestedInput {
+  connect: LotWhereUniqueInput
+  connectOrCreate: LotCreateOrConnectWithoutLotOnLotModelsInput
+  create: LotCreateWithoutLotOnLotModelsInput
+  update: LotUpdateToOneWithWhereWithoutLotOnLotModelsInput
+  upsert: LotUpsertWithoutLotOnLotModelsInput
+}
+
 input LotUpdateOneWithoutHarvestTransactionItemsNestedInput {
   connect: LotWhereUniqueInput
   connectOrCreate: LotCreateOrConnectWithoutHarvestTransactionItemsInput
@@ -13888,6 +14395,11 @@ input LotUpdateToOneWithWhereWithoutHarvestTransactionItemsInput {
 
 input LotUpdateToOneWithWhereWithoutLotChangeInput {
   data: LotUpdateWithoutLotChangeInput!
+  where: LotWhereInput
+}
+
+input LotUpdateToOneWithWhereWithoutLotOnLotModelsInput {
+  data: LotUpdateWithoutLotOnLotModelsInput!
   where: LotWhereInput
 }
 
@@ -13937,6 +14449,7 @@ input LotUpdateWithoutAccountInput {
   id: StringFieldUpdateOperationsInput
   legNo: NullableIntFieldUpdateOperationsInput
   locationCode: NullableIntFieldUpdateOperationsInput
+  lotOnLotModels: LotOnLotModelUpdateManyWithoutLotNestedInput
   lotSourceCode: NullableIntFieldUpdateOperationsInput
   marketValue: NullableDecimalFieldUpdateOperationsInput
   orderNo: NullableDecimalFieldUpdateOperationsInput
@@ -13974,6 +14487,7 @@ input LotUpdateWithoutAssetInput {
   id: StringFieldUpdateOperationsInput
   legNo: NullableIntFieldUpdateOperationsInput
   locationCode: NullableIntFieldUpdateOperationsInput
+  lotOnLotModels: LotOnLotModelUpdateManyWithoutLotNestedInput
   lotSourceCode: NullableIntFieldUpdateOperationsInput
   marketValue: NullableDecimalFieldUpdateOperationsInput
   orderNo: NullableDecimalFieldUpdateOperationsInput
@@ -14011,6 +14525,7 @@ input LotUpdateWithoutFileInput {
   id: StringFieldUpdateOperationsInput
   legNo: NullableIntFieldUpdateOperationsInput
   locationCode: NullableIntFieldUpdateOperationsInput
+  lotOnLotModels: LotOnLotModelUpdateManyWithoutLotNestedInput
   lotSourceCode: NullableIntFieldUpdateOperationsInput
   marketValue: NullableDecimalFieldUpdateOperationsInput
   orderNo: NullableDecimalFieldUpdateOperationsInput
@@ -14048,6 +14563,7 @@ input LotUpdateWithoutHarvestTransactionItemsInput {
   id: StringFieldUpdateOperationsInput
   legNo: NullableIntFieldUpdateOperationsInput
   locationCode: NullableIntFieldUpdateOperationsInput
+  lotOnLotModels: LotOnLotModelUpdateManyWithoutLotNestedInput
   lotSourceCode: NullableIntFieldUpdateOperationsInput
   marketValue: NullableDecimalFieldUpdateOperationsInput
   orderNo: NullableDecimalFieldUpdateOperationsInput
@@ -14065,6 +14581,45 @@ input LotUpdateWithoutHarvestTransactionItemsInput {
 }
 
 input LotUpdateWithoutLotChangeInput {
+  account: AccountUpdateOneRequiredWithoutLotsNestedInput
+  acquiredDate: DateTimeFieldUpdateOperationsInput
+  adjPrice: NullableDecimalFieldUpdateOperationsInput
+  asset: AssetUpdateOneRequiredWithoutLotsNestedInput
+  availableQty: NullableDecimalFieldUpdateOperationsInput
+  commPerShare: NullableDecimalFieldUpdateOperationsInput
+  costTotal: NullableDecimalFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  exchangeRate: NullableDecimalFieldUpdateOperationsInput
+  excludeFromHarvest: IntFieldUpdateOperationsInput
+  externalId: NullableStringFieldUpdateOperationsInput
+  feesPerShare: NullableDecimalFieldUpdateOperationsInput
+  file: FileUpdateOneWithoutLotsNestedInput
+  gainDay: NullableDecimalFieldUpdateOperationsInput
+  gainDayPct: NullableDecimalFieldUpdateOperationsInput
+  gainTotal: NullableDecimalFieldUpdateOperationsInput
+  harvestTransactionItems: HarvestTransactionItemUpdateManyWithoutLotSoldNestedInput
+  id: StringFieldUpdateOperationsInput
+  legNo: NullableIntFieldUpdateOperationsInput
+  locationCode: NullableIntFieldUpdateOperationsInput
+  lotOnLotModels: LotOnLotModelUpdateManyWithoutLotNestedInput
+  lotSourceCode: NullableIntFieldUpdateOperationsInput
+  marketValue: NullableDecimalFieldUpdateOperationsInput
+  orderNo: NullableDecimalFieldUpdateOperationsInput
+  originalQty: NullableDecimalFieldUpdateOperationsInput
+  paymentCurrency: NullableStringFieldUpdateOperationsInput
+  portfolio: PortfolioUpdateOneRequiredWithoutLotsNestedInput
+  position: PositionUpdateOneWithoutLotsNestedInput
+  price: DecimalFieldUpdateOperationsInput
+  remainingQty: DecimalFieldUpdateOperationsInput
+  settlementCurrency: NullableStringFieldUpdateOperationsInput
+  shortType: NullableIntFieldUpdateOperationsInput
+  termCode: NullableIntFieldUpdateOperationsInput
+  totalCostForGainPct: NullableDecimalFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input LotUpdateWithoutLotOnLotModelsInput {
+  LotChange: LotChangeUpdateManyWithoutLotNestedInput
   account: AccountUpdateOneRequiredWithoutLotsNestedInput
   acquiredDate: DateTimeFieldUpdateOperationsInput
   adjPrice: NullableDecimalFieldUpdateOperationsInput
@@ -14123,6 +14678,7 @@ input LotUpdateWithoutPortfolioInput {
   id: StringFieldUpdateOperationsInput
   legNo: NullableIntFieldUpdateOperationsInput
   locationCode: NullableIntFieldUpdateOperationsInput
+  lotOnLotModels: LotOnLotModelUpdateManyWithoutLotNestedInput
   lotSourceCode: NullableIntFieldUpdateOperationsInput
   marketValue: NullableDecimalFieldUpdateOperationsInput
   orderNo: NullableDecimalFieldUpdateOperationsInput
@@ -14160,6 +14716,7 @@ input LotUpdateWithoutPositionInput {
   id: StringFieldUpdateOperationsInput
   legNo: NullableIntFieldUpdateOperationsInput
   locationCode: NullableIntFieldUpdateOperationsInput
+  lotOnLotModels: LotOnLotModelUpdateManyWithoutLotNestedInput
   lotSourceCode: NullableIntFieldUpdateOperationsInput
   marketValue: NullableDecimalFieldUpdateOperationsInput
   orderNo: NullableDecimalFieldUpdateOperationsInput
@@ -15108,6 +15665,12 @@ input LotUpsertWithoutLotChangeInput {
   where: LotWhereInput
 }
 
+input LotUpsertWithoutLotOnLotModelsInput {
+  create: LotCreateWithoutLotOnLotModelsInput!
+  update: LotUpdateWithoutLotOnLotModelsInput!
+  where: LotWhereInput
+}
+
 enum LotValueType {
   GAIN
   LOSS
@@ -15141,6 +15704,7 @@ input LotWhereInput {
   id: UuidFilter
   legNo: IntNullableFilter
   locationCode: IntNullableFilter
+  lotOnLotModels: LotOnLotModelListRelationFilter
   lotSourceCode: IntNullableFilter
   marketValue: DecimalNullableFilter
   orderNo: DecimalNullableFilter
@@ -15187,6 +15751,7 @@ input LotWhereUniqueInput {
   id: String
   legNo: IntNullableFilter
   locationCode: IntNullableFilter
+  lotOnLotModels: LotOnLotModelListRelationFilter
   lotSourceCode: IntNullableFilter
   marketValue: DecimalNullableFilter
   orderNo: DecimalNullableFilter
@@ -15858,12 +16423,18 @@ type Mutation {
   """Apply a lot upload to the account"""
   applyLotUploads(lotUploadIds: [String!]!): Boolean!
 
+  """Clear all lots from a model"""
+  clearLotModel(lotModelId: String!): BatchPayload!
+
   """Create a new connected account"""
   createAccountForPortfolio(accountCreateInput: AccountCreateInput!): Account!
   createFiles(data: [FileCreateManyInput!]!): [File!]!
 
   """Create harvest based on selected DirectedHarvestLot"""
   createHarvest(directedHarvestLots: [DirectedHarvestLot!]!, harvestType: HarvestType!): Harvest!
+
+  """Create a new lot model with optional lot associations"""
+  createLotModel(lotOnLotModels: [LotOnLotModelInput!]): LotModel!
 
   """Create a portfolio for a user"""
   createPortfolio(portfolioInsertObject: PortfolioCreateInput!): Portfolio!
@@ -15877,6 +16448,12 @@ type Mutation {
 
   """Delete multiple harvests by their IDs"""
   deleteHarvests(ids: [String!]!): Boolean!
+
+  """Delete a lot model"""
+  deleteLotModel(lotModelId: String!): LotModel!
+
+  """Remove a lot from a model"""
+  deleteLotOnLotModel(lotId: String!, lotModelId: String!): LotOnLotModel!
   deletePortfolioConnect(id: String!): PortfolioConnect!
 
   """Finalize harvest for review"""
@@ -15889,6 +16466,9 @@ type Mutation {
 
   """Initialize a lot upload from a CSV file"""
   initLotUpload(input: FileCreateManyInput!): [LotUpload!]!
+
+  """Add a lot to a model"""
+  insertLotOnLotModel(lotId: String!, lotModelId: String!, quantity: Float!): LotOnLotModel!
 
   """Insert RealizedPAndL"""
   insertRealizedPAndL(input: RealizedPAndLCreateInput!): RealizedPAndL!
@@ -17418,6 +17998,7 @@ type Portfolio {
   log: [Log!]
   lotChange: [LotChange!]
   lotChangeList: [LotChangeList!]
+  lotModels: [LotModel!]
   lotUpload: [LotUpload!]
   lotUploadFile: [LotUploadFile!]
   lots: [Lot!]
@@ -18473,6 +19054,7 @@ type PortfolioCount {
   log: Int!
   lotChange: Int!
   lotChangeList: Int!
+  lotModels: Int!
   lotUpload: Int!
   lotUploadFile: Int!
   lots: Int!
@@ -18529,6 +19111,7 @@ input PortfolioCreateInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -18641,6 +19224,12 @@ input PortfolioCreateNestedOneWithoutLotChangeListInput {
   connect: PortfolioWhereUniqueInput
   connectOrCreate: PortfolioCreateOrConnectWithoutLotChangeListInput
   create: PortfolioCreateWithoutLotChangeListInput
+}
+
+input PortfolioCreateNestedOneWithoutLotModelsInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutLotModelsInput
+  create: PortfolioCreateWithoutLotModelsInput
 }
 
 input PortfolioCreateNestedOneWithoutLotUploadFileInput {
@@ -18787,6 +19376,11 @@ input PortfolioCreateOrConnectWithoutLotChangeListInput {
   where: PortfolioWhereUniqueInput!
 }
 
+input PortfolioCreateOrConnectWithoutLotModelsInput {
+  create: PortfolioCreateWithoutLotModelsInput!
+  where: PortfolioWhereUniqueInput!
+}
+
 input PortfolioCreateOrConnectWithoutLotUploadFileInput {
   create: PortfolioCreateWithoutLotUploadFileInput!
   where: PortfolioWhereUniqueInput!
@@ -18878,6 +19472,7 @@ input PortfolioCreateWithoutAccountRealizedPAndLHistoryInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -18919,6 +19514,7 @@ input PortfolioCreateWithoutAccountsInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -18960,6 +19556,7 @@ input PortfolioCreateWithoutAssetMergeInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19001,6 +19598,7 @@ input PortfolioCreateWithoutAuthConnectionsInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19042,6 +19640,7 @@ input PortfolioCreateWithoutCreatedByInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19083,6 +19682,7 @@ input PortfolioCreateWithoutFilesInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19124,6 +19724,7 @@ input PortfolioCreateWithoutHarvestTransactionInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19165,6 +19766,7 @@ input PortfolioCreateWithoutHarvestTransactionItemInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19206,6 +19808,7 @@ input PortfolioCreateWithoutHarvestsInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19247,6 +19850,7 @@ input PortfolioCreateWithoutLogInput {
   id: String
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19288,6 +19892,7 @@ input PortfolioCreateWithoutLotChangeInput {
   id: String
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19329,6 +19934,49 @@ input PortfolioCreateWithoutLotChangeListInput {
   id: String
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
+  lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
+  lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
+  lots: LotCreateNestedManyWithoutPortfolioInput
+  mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
+  minimumLotPAndL: Decimal
+  name: String
+  notification: NotificationCreateNestedManyWithoutPortfolioInput
+  notificationFrequency: HarvestNotificationFrequency
+  plaidMerge: PlaidMergeCreateNestedManyWithoutPortfolioInput
+  porfolioConnect: PortfolioConnectCreateNestedManyWithoutPortfolioInput
+  portfolioBalanceSnapshot: PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput
+  positionSnapshot: PositionSnapshotCreateNestedManyWithoutPortfolioInput
+  positions: PositionCreateNestedManyWithoutPortfolioInput
+  realizedPAndL: RealizedPAndLCreateNestedManyWithoutPortfolioInput
+  transactionOnAssetMerge: TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput
+  transactions: TransactionCreateNestedManyWithoutPortfolioInput
+  updatedAt: DateTime
+  usersOnPortfolios: UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput
+}
+
+input PortfolioCreateWithoutLotModelsInput {
+  accountRealizedPAndLHistory: AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput
+  accounts: AccountCreateNestedManyWithoutPortfolioInput
+  assetMerge: AssetMergeCreateNestedManyWithoutPortfolioInput
+  authConnections: AuthConnectionCreateNestedManyWithoutPortfolioInput
+  createdAt: DateTime
+  createdBy: UserCreateNestedOneWithoutPortfolioInput!
+  endOfYearTaxOpportunityNotification: Boolean
+  files: FileCreateNestedManyWithoutPortfolioInput
+  harvestCycleWeeks: Int
+  harvestShareDollarThreshold: Decimal
+  harvestTickerBucketDollarSizeLong: Decimal
+  harvestTickerBucketDollarSizeShort: Decimal
+  harvestTickerBucketLowerLimitLong: Decimal
+  harvestTickerBucketLowerLimitShort: Decimal
+  harvestTransaction: HarvestTransactionCreateNestedManyWithoutPortfolioInput
+  harvestTransactionItem: HarvestTransactionItemCreateNestedManyWithoutPortfolioInput
+  harvests: HarvestCreateNestedManyWithoutPortfolioInput
+  id: String
+  log: LogCreateNestedManyWithoutPortfolioInput
+  lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
+  lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19371,6 +20019,7 @@ input PortfolioCreateWithoutLotUploadFileInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
@@ -19412,6 +20061,7 @@ input PortfolioCreateWithoutLotUploadInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
   mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
@@ -19453,6 +20103,7 @@ input PortfolioCreateWithoutLotsInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   mergeError: MergeErrorCreateNestedManyWithoutPortfolioInput
@@ -19494,6 +20145,7 @@ input PortfolioCreateWithoutMergeErrorInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19535,6 +20187,7 @@ input PortfolioCreateWithoutNotificationInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19576,6 +20229,7 @@ input PortfolioCreateWithoutPlaidMergeInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19617,6 +20271,7 @@ input PortfolioCreateWithoutPorfolioConnectInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19658,6 +20313,7 @@ input PortfolioCreateWithoutPortfolioBalanceSnapshotInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19699,6 +20355,7 @@ input PortfolioCreateWithoutPositionSnapshotInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19740,6 +20397,7 @@ input PortfolioCreateWithoutPositionsInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19781,6 +20439,7 @@ input PortfolioCreateWithoutRealizedPAndLInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19822,6 +20481,7 @@ input PortfolioCreateWithoutTransactionOnAssetMergeInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19863,6 +20523,7 @@ input PortfolioCreateWithoutTransactionsInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -19904,6 +20565,7 @@ input PortfolioCreateWithoutUsersOnPortfoliosInput {
   log: LogCreateNestedManyWithoutPortfolioInput
   lotChange: LotChangeCreateNestedManyWithoutPortfolioInput
   lotChangeList: LotChangeListCreateNestedManyWithoutPortfolioInput
+  lotModels: LotModelCreateNestedManyWithoutPortfolioInput
   lotUpload: LotUploadCreateNestedManyWithoutPortfolioInput
   lotUploadFile: LotUploadFileCreateNestedManyWithoutPortfolioInput
   lots: LotCreateNestedManyWithoutPortfolioInput
@@ -20087,6 +20749,7 @@ input PortfolioUpdateInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20228,6 +20891,14 @@ input PortfolioUpdateOneRequiredWithoutLotChangeNestedInput {
   create: PortfolioCreateWithoutLotChangeInput
   update: PortfolioUpdateToOneWithWhereWithoutLotChangeInput
   upsert: PortfolioUpsertWithoutLotChangeInput
+}
+
+input PortfolioUpdateOneRequiredWithoutLotModelsNestedInput {
+  connect: PortfolioWhereUniqueInput
+  connectOrCreate: PortfolioCreateOrConnectWithoutLotModelsInput
+  create: PortfolioCreateWithoutLotModelsInput
+  update: PortfolioUpdateToOneWithWhereWithoutLotModelsInput
+  upsert: PortfolioUpsertWithoutLotModelsInput
 }
 
 input PortfolioUpdateOneRequiredWithoutLotUploadFileNestedInput {
@@ -20397,6 +21068,11 @@ input PortfolioUpdateToOneWithWhereWithoutLotChangeListInput {
   where: PortfolioWhereInput
 }
 
+input PortfolioUpdateToOneWithWhereWithoutLotModelsInput {
+  data: PortfolioUpdateWithoutLotModelsInput!
+  where: PortfolioWhereInput
+}
+
 input PortfolioUpdateToOneWithWhereWithoutLotUploadFileInput {
   data: PortfolioUpdateWithoutLotUploadFileInput!
   where: PortfolioWhereInput
@@ -20493,6 +21169,7 @@ input PortfolioUpdateWithoutAccountRealizedPAndLHistoryInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20534,6 +21211,7 @@ input PortfolioUpdateWithoutAccountsInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20575,6 +21253,7 @@ input PortfolioUpdateWithoutAssetMergeInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20616,6 +21295,7 @@ input PortfolioUpdateWithoutAuthConnectionsInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20657,6 +21337,7 @@ input PortfolioUpdateWithoutCreatedByInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20698,6 +21379,7 @@ input PortfolioUpdateWithoutFilesInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20739,6 +21421,7 @@ input PortfolioUpdateWithoutHarvestTransactionInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20780,6 +21463,7 @@ input PortfolioUpdateWithoutHarvestTransactionItemInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20821,6 +21505,7 @@ input PortfolioUpdateWithoutHarvestsInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20862,6 +21547,7 @@ input PortfolioUpdateWithoutLogInput {
   id: StringFieldUpdateOperationsInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20903,6 +21589,7 @@ input PortfolioUpdateWithoutLotChangeInput {
   id: StringFieldUpdateOperationsInput
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20944,6 +21631,49 @@ input PortfolioUpdateWithoutLotChangeListInput {
   id: StringFieldUpdateOperationsInput
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
+  lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
+  lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
+  lots: LotUpdateManyWithoutPortfolioNestedInput
+  mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
+  minimumLotPAndL: DecimalFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  notification: NotificationUpdateManyWithoutPortfolioNestedInput
+  notificationFrequency: EnumHarvestNotificationFrequencyFieldUpdateOperationsInput
+  plaidMerge: PlaidMergeUpdateManyWithoutPortfolioNestedInput
+  porfolioConnect: PortfolioConnectUpdateManyWithoutPortfolioNestedInput
+  portfolioBalanceSnapshot: PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput
+  positionSnapshot: PositionSnapshotUpdateManyWithoutPortfolioNestedInput
+  positions: PositionUpdateManyWithoutPortfolioNestedInput
+  realizedPAndL: RealizedPAndLUpdateManyWithoutPortfolioNestedInput
+  transactionOnAssetMerge: TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput
+  transactions: TransactionUpdateManyWithoutPortfolioNestedInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  usersOnPortfolios: UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput
+}
+
+input PortfolioUpdateWithoutLotModelsInput {
+  accountRealizedPAndLHistory: AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput
+  accounts: AccountUpdateManyWithoutPortfolioNestedInput
+  assetMerge: AssetMergeUpdateManyWithoutPortfolioNestedInput
+  authConnections: AuthConnectionUpdateManyWithoutPortfolioNestedInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  createdBy: UserUpdateOneRequiredWithoutPortfolioNestedInput
+  endOfYearTaxOpportunityNotification: BoolFieldUpdateOperationsInput
+  files: FileUpdateManyWithoutPortfolioNestedInput
+  harvestCycleWeeks: IntFieldUpdateOperationsInput
+  harvestShareDollarThreshold: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketDollarSizeShort: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitLong: DecimalFieldUpdateOperationsInput
+  harvestTickerBucketLowerLimitShort: DecimalFieldUpdateOperationsInput
+  harvestTransaction: HarvestTransactionUpdateManyWithoutPortfolioNestedInput
+  harvestTransactionItem: HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput
+  harvests: HarvestUpdateManyWithoutPortfolioNestedInput
+  id: StringFieldUpdateOperationsInput
+  log: LogUpdateManyWithoutPortfolioNestedInput
+  lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
+  lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -20986,6 +21716,7 @@ input PortfolioUpdateWithoutLotUploadFileInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
   mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
@@ -21027,6 +21758,7 @@ input PortfolioUpdateWithoutLotUploadInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
   mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
@@ -21068,6 +21800,7 @@ input PortfolioUpdateWithoutLotsInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   mergeError: MergeErrorUpdateManyWithoutPortfolioNestedInput
@@ -21109,6 +21842,7 @@ input PortfolioUpdateWithoutMergeErrorInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21150,6 +21884,7 @@ input PortfolioUpdateWithoutNotificationInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21191,6 +21926,7 @@ input PortfolioUpdateWithoutPlaidMergeInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21232,6 +21968,7 @@ input PortfolioUpdateWithoutPorfolioConnectInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21273,6 +22010,7 @@ input PortfolioUpdateWithoutPortfolioBalanceSnapshotInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21314,6 +22052,7 @@ input PortfolioUpdateWithoutPositionSnapshotInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21355,6 +22094,7 @@ input PortfolioUpdateWithoutPositionsInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21396,6 +22136,7 @@ input PortfolioUpdateWithoutRealizedPAndLInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21437,6 +22178,7 @@ input PortfolioUpdateWithoutTransactionOnAssetMergeInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21478,6 +22220,7 @@ input PortfolioUpdateWithoutTransactionsInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21519,6 +22262,7 @@ input PortfolioUpdateWithoutUsersOnPortfoliosInput {
   log: LogUpdateManyWithoutPortfolioNestedInput
   lotChange: LotChangeUpdateManyWithoutPortfolioNestedInput
   lotChangeList: LotChangeListUpdateManyWithoutPortfolioNestedInput
+  lotModels: LotModelUpdateManyWithoutPortfolioNestedInput
   lotUpload: LotUploadUpdateManyWithoutPortfolioNestedInput
   lotUploadFile: LotUploadFileUpdateManyWithoutPortfolioNestedInput
   lots: LotUpdateManyWithoutPortfolioNestedInput
@@ -21607,6 +22351,12 @@ input PortfolioUpsertWithoutLotChangeInput {
 input PortfolioUpsertWithoutLotChangeListInput {
   create: PortfolioCreateWithoutLotChangeListInput!
   update: PortfolioUpdateWithoutLotChangeListInput!
+  where: PortfolioWhereInput
+}
+
+input PortfolioUpsertWithoutLotModelsInput {
+  create: PortfolioCreateWithoutLotModelsInput!
+  update: PortfolioUpdateWithoutLotModelsInput!
   where: PortfolioWhereInput
 }
 
@@ -21720,6 +22470,7 @@ input PortfolioWhereInput {
   log: LogListRelationFilter
   lotChange: LotChangeListRelationFilter
   lotChangeList: LotChangeListListRelationFilter
+  lotModels: LotModelListRelationFilter
   lotUpload: LotUploadListRelationFilter
   lotUploadFile: LotUploadFileListRelationFilter
   lots: LotListRelationFilter
@@ -21766,6 +22517,7 @@ input PortfolioWhereUniqueInput {
   log: LogListRelationFilter
   lotChange: LotChangeListRelationFilter
   lotChangeList: LotChangeListListRelationFilter
+  lotModels: LotModelListRelationFilter
   lotUpload: LotUploadListRelationFilter
   lotUploadFile: LotUploadFileListRelationFilter
   lots: LotListRelationFilter
@@ -23947,6 +24699,12 @@ type Query {
 
   """Lot current view"""
   lotCurrent(lotIds: [String!], lotValueType: LotValueType, minTotalPAndL: Float): [LotCurrent!]!
+
+  """Get a lot model by ID"""
+  lotModel(lotModelId: String!): LotModel
+
+  """List all lot models for a portfolio"""
+  lotModels: [LotModel!]!
 
   """Get all lot uploads"""
   lotUploads(where: LotUploadWhereInput!): [LotUpload!]!

@@ -50,6 +50,7 @@ export default function ActionsPage() {
 		<PageWrapper
 			title="System Actions"
 			description="Invoce actions within the platform."
+			className="h-screen pb-20"
 		>
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 				<Card className="flex flex-col">

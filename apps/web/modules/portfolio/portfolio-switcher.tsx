@@ -9,7 +9,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
-import { SidebarMenuButton, useSidebar } from '@repo/ui/components/sidebar';
 import { toast } from '@repo/ui/components/toast-sonner';
 import { ChevronsUpDown, Wallet2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -21,7 +20,6 @@ import CreatePortfolioDialog from './CreatePortfolioDialog';
 import { usePortfolio } from './providers/PortfolioProvider';
 
 export function PortfolioSwitcher() {
-	const { isMobile } = useSidebar();
 	const { data } = usePortfoliosQuery();
 	const { portfolio, reload } = usePortfolio();
 	const [switchPortfolio] = useSwitchPortfolioMutation({
@@ -33,26 +31,28 @@ export function PortfolioSwitcher() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<SidebarMenuButton
-					size="lg"
-					className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground mb-0 py-0"
+				<Button
+					variant="outline"
+					className="w-full justify-between data-[state=open]:bg-accent"
 				>
-					<div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-						<Wallet2 className="size-4" />
+					<div className="flex items-center gap-2">
+						<div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+							<Wallet2 className="size-4" />
+						</div>
+						<div className="grid flex-1 text-left text-sm leading-tight">
+							<div className="text-xs">Portfolio</div>
+							<span className="truncate text-sm font-semibold">
+								{portfolio.name}
+							</span>
+						</div>
 					</div>
-					<div className="grid flex-1 text-left text-sm leading-tight">
-						<div className="text-xs">Portfolio</div>
-						<span className="truncate text-sm font-semibold">
-							{portfolio.name}
-						</span>
-					</div>
-					<ChevronsUpDown className="ml-auto" />
-				</SidebarMenuButton>
+					<ChevronsUpDown className="ml-auto size-4" />
+				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent
-				className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+				className="min-w-56 rounded-lg"
 				align="start"
-				side={isMobile ? 'bottom' : 'right'}
+				side="bottom"
 				sideOffset={4}
 			>
 				<DropdownMenuLabel className="text-muted-foreground text-xs">

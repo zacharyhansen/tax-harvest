@@ -349,6 +349,21 @@ export interface LotCurrent {
   value: Numeric | null;
 }
 
+export interface LotModel {
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  portfolioId: string;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface LotOnLotModel {
+  createdAt: Generated<Timestamp>;
+  lotId: string;
+  lotModelId: string;
+  quantity: Numeric;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface LotUpload {
   accountId: string;
   applied: Generated<boolean>;
@@ -672,6 +687,8 @@ export interface DB {
   LotChange: LotChange;
   LotChangeList: LotChangeList;
   LotCurrent: LotCurrent;
+  LotModel: LotModel;
+  LotOnLotModel: LotOnLotModel;
   LotUpload: LotUpload;
   LotUploadFile: LotUploadFile;
   MergeError: MergeError;

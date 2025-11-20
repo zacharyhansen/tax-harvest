@@ -23,6 +23,7 @@ import {
 } from '~/generated/gql';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { zodNumber } from '~/modules/utils/zod-utils';
+import { PortfolioSwitcher } from '~/modules/portfolio';
 
 const formSchema = z.object({
 	harvestCycleWeeks: zodNumber.pipe(z.coerce.number().gte(1)),
@@ -164,6 +165,20 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
 						Manage your portfolio settings and preferences.
 					</p>
 				</div>
+
+				{/* Portfolio Switcher Card */}
+				<Card className="w-full">
+					<CardHeader>
+						<CardTitle>Switch Portfolio</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p className="text-sm text-muted-foreground mb-4">
+							Select a different portfolio to manage its settings and view its data.
+						</p>
+						<PortfolioSwitcher />
+					</CardContent>
+				</Card>
+
 				<Card className="w-full">
 					<CardHeader>
 						<CardTitle>Attributes</CardTitle>

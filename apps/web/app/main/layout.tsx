@@ -6,24 +6,42 @@ import {
 	SignedIn,
 	SignedOut,
 	UserButton,
-	useUser,
 } from '@clerk/nextjs';
+import { Button } from '@repo/ui/components/button';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@repo/ui/components/dropdown-menu';
 import { Toaster } from '@repo/ui/components/sonner';
-import { Dashboard } from '@repo/ui/layouts/dashboard';
+import { toast } from '@repo/ui/components/toast-sonner';
 import MediaProvider from '@repo/ui/providers/media-provider';
 import { ThemeProvider } from '@repo/ui/providers/theme-provider';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { motion } from 'framer-motion';
-import { Building2, FileSpreadsheet, Shield, TrendingUp } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import {
+	Building2,
+	ChevronsUpDown,
+	FileSpreadsheet,
+	Shield,
+	TrendingUp,
+	Wallet2,
+} from 'lucide-react';
 import NextTopLoader from 'nextjs-toploader';
-import { usePortfolioConnectionsSetupQuery } from '~/generated/gql';
-import { PortfolioProvider, PortfolioSwitcher } from '~/modules/portfolio';
+import { useRouter } from 'next/navigation';
+import {
+	usePortfolioConnectionsSetupQuery,
+	usePortfoliosQuery,
+	useSwitchPortfolioMutation,
+} from '~/generated/gql';
+import { PortfolioProvider, usePortfolio } from '~/modules/portfolio';
 import { InstitutionCardList } from '../connect/components/institution-card-list';
 import ApolloProviderWrapper from './ApolloProviderWrapper';
 import LoadingScreen from './loading';
-import { NavTree } from './nav-tree';
-import ThemeButton from './theme-button';
+import { TopNavigation } from './top-navigation';
 import { UserProvider } from './user.provider';
 
 // Ag grid register
@@ -40,7 +58,7 @@ export default function MainLayout({
 			<ApolloProviderWrapper>
 				<SignedIn>
 					<MediaProvider>
-						<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+						<ThemeProvider attribute="class">
 							<UserProvider>
 								<PortfolioProvider>
 									<OnboardingWrapper>{children}</OnboardingWrapper>
@@ -84,56 +102,37 @@ const itemVariants = {
 	},
 };
 
-const _imageVariants = {
-	hidden: {
-		opacity: 0,
-		scale: 0.8,
-		y: 50,
-	},
-	visible: {
-		opacity: 1,
-		scale: 1,
-		y: 0,
-		transition: {
-			duration: 1,
-			ease: [0.25, 0.46, 0.45, 0.94],
-		},
-	},
-};
-
-const _buttonVariants = {
-	hidden: {
-		opacity: 0,
-		y: 30,
-	},
-	visible: {
-		opacity: 1,
-		y: 0,
-		transition: {
-			duration: 0.8,
-			ease: [0.25, 0.46, 0.45, 0.94],
-		},
-	},
-	hover: {
-		scale: 1.05,
-		transition: {
-			duration: 0.2,
-			ease: 'easeInOut',
-		},
-	},
-	tap: {
-		scale: 0.95,
-	},
-};
-
+/**
+ * OnboardingWrapper component that shows onboarding UI when portfolio has pending connections,
+ * otherwise displays the normal app layout with navigation.
+ *
+ * @example
+ * ```tsx
+ * <OnboardingWrapper>
+ *   <MainContent />
+ * </OnboardingWrapper>
+ * ```
+ */
 function OnboardingWrapper({ children }: { children: React.ReactNode }) {
 	const { data, loading } = usePortfolioConnectionsSetupQuery({});
-	const pathname = usePathname();
-	const clerkUser = useUser();
+	const { data: portfoliosData } = usePortfoliosQuery();
+	const { portfolio, reload } = usePortfolio();
+	const [switchPortfolio] = useSwitchPortfolioMutation({
+		onError: () => {
+			toast.error('Unable to switch portfolio');
+		},
+	});
+	const router = useRouter();
 
 	if (loading) {
 		return <LoadingScreen />;
 	}
+
+	// Filter portfolios that are not pending (have completed connections)
+	const completedPortfolios =
+		portfoliosData?.portfolios.filter(
+			(p) => p.id !== portfolio.id && p.id !== portfolio.id,
+		) || [];
 
 	// If we have no connections or there are pending ones show those to the user
 	if (
@@ -228,30 +227,74 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
 						</p>
 					</motion.div>
 				</motion.div>
+
+				{/* Portfolio Switcher and User Button */}
+				<motion.div
+					className={`flex items-center gap-4 w-full max-w-xs ${completedPortfolios.length === 0 ? 'justify-center' : ''}`}
+					variants={itemVariants}
+				>
+					{completedPortfolios.length > 0 && (
+						<div className="flex-1">
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button
+										variant="outline"
+										className="w-full justify-between data-[state=open]:bg-accent h-auto py-3 px-4"
+									>
+										<div className="flex items-center gap-2">
+											<div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+												<Wallet2 className="size-4" />
+											</div>
+											<div className="grid flex-1 text-left text-sm leading-tight">
+												<div className="text-xs">Portfolio</div>
+												<span className="truncate text-sm font-semibold">
+													{portfolio.name}
+												</span>
+											</div>
+										</div>
+										<ChevronsUpDown className="ml-auto size-4" />
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent
+									className="min-w-56 rounded-lg"
+									align="start"
+									side="bottom"
+									sideOffset={4}
+								>
+									<DropdownMenuLabel className="text-muted-foreground text-xs">
+										Switch to Portfolio
+									</DropdownMenuLabel>
+									{completedPortfolios.map((p) => (
+										<DropdownMenuItem
+											key={p.id}
+											onClick={() => {
+												router.replace('?');
+												void switchPortfolio({
+													onCompleted: reload,
+													variables: {
+														porfolioId: p.id,
+													},
+												});
+											}}
+											className="gap-2 p-2"
+										>
+											{p.name}
+										</DropdownMenuItem>
+									))}
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</div>
+					)}
+					<UserButton />
+				</motion.div>
 			</motion.div>
 		);
 	}
 
 	return (
-		<Dashboard
-			pathname={pathname}
-			header={<PortfolioSwitcher />}
-			sidebarOptions={
-				<SignedIn>
-					<UserButton />
-					<ThemeButton />
-				</SignedIn>
-			}
-			navGroups={NavTree}
-			userRole={clerkUser.user?.publicMetadata.role as string | undefined}
-			footer={
-				<div className="flex items-center justify-center gap-2 group-data-[state=collapsed]:flex-col">
-					<ThemeButton />
-					<UserButton />
-				</div>
-			}
-		>
-			{children}
-		</Dashboard>
+		<div className="flex min-h-screen flex-col">
+			<TopNavigation />
+			<main className="flex-1">{children}</main>
+		</div>
 	);
 }

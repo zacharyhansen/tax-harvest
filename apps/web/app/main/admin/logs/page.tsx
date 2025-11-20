@@ -94,7 +94,7 @@ export default function LogsPage() {
 	}
 
 	return (
-		<PageWrapper>
+		<PageWrapper className="h-screen pb-20">
 			<AgGridWrapper>
 				<AgGridReact
 					columnDefs={columnDefs}

@@ -78,6 +78,7 @@ export default function InstitutionDetailPage(props: {
 	return (
 		<PageWrapper
 			title={institution.name}
+			className="h-screen pb-20"
 			description={
 				<div className="flex items-center gap-4">
 					<Button

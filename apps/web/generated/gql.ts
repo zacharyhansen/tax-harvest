@@ -8451,6 +8451,11 @@ export enum AuthType {
   PlaidLink = 'PLAID_LINK'
 }
 
+export type BatchPayload = {
+  __typename?: 'BatchPayload';
+  count: Scalars['Float']['output'];
+};
+
 export type BigIntFieldUpdateOperationsInput = {
   decrement?: InputMaybe<Scalars['BigInt']['input']>;
   divide?: InputMaybe<Scalars['BigInt']['input']>;
@@ -11904,6 +11909,7 @@ export type Lot = {
   id: Scalars['ID']['output'];
   legNo?: Maybe<Scalars['Int']['output']>;
   locationCode?: Maybe<Scalars['Int']['output']>;
+  lotOnLotModels?: Maybe<Array<LotOnLotModel>>;
   lotSourceCode?: Maybe<Scalars['Int']['output']>;
   marketValue?: Maybe<Scalars['Decimal']['output']>;
   orderNo?: Maybe<Scalars['Decimal']['output']>;
@@ -12966,6 +12972,7 @@ export type LotCount = {
   __typename?: 'LotCount';
   LotChange: Scalars['Int']['output'];
   harvestTransactionItems: Scalars['Int']['output'];
+  lotOnLotModels: Scalars['Int']['output'];
 };
 
 export type LotCountAggregate = {
@@ -13253,6 +13260,12 @@ export type LotCreateNestedOneWithoutLotChangeInput = {
   create?: InputMaybe<LotCreateWithoutLotChangeInput>;
 };
 
+export type LotCreateNestedOneWithoutLotOnLotModelsInput = {
+  connect?: InputMaybe<LotWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<LotCreateOrConnectWithoutLotOnLotModelsInput>;
+  create?: InputMaybe<LotCreateWithoutLotOnLotModelsInput>;
+};
+
 export type LotCreateOrConnectWithoutAccountInput = {
   create: LotCreateWithoutAccountInput;
   where: LotWhereUniqueInput;
@@ -13275,6 +13288,11 @@ export type LotCreateOrConnectWithoutHarvestTransactionItemsInput = {
 
 export type LotCreateOrConnectWithoutLotChangeInput = {
   create: LotCreateWithoutLotChangeInput;
+  where: LotWhereUniqueInput;
+};
+
+export type LotCreateOrConnectWithoutLotOnLotModelsInput = {
+  create: LotCreateWithoutLotOnLotModelsInput;
   where: LotWhereUniqueInput;
 };
 
@@ -13309,6 +13327,7 @@ export type LotCreateWithoutAccountInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   legNo?: InputMaybe<Scalars['Int']['input']>;
   locationCode?: InputMaybe<Scalars['Int']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelCreateNestedManyWithoutLotInput>;
   lotSourceCode?: InputMaybe<Scalars['Int']['input']>;
   marketValue?: InputMaybe<Scalars['Decimal']['input']>;
   orderNo?: InputMaybe<Scalars['Decimal']['input']>;
@@ -13346,6 +13365,7 @@ export type LotCreateWithoutAssetInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   legNo?: InputMaybe<Scalars['Int']['input']>;
   locationCode?: InputMaybe<Scalars['Int']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelCreateNestedManyWithoutLotInput>;
   lotSourceCode?: InputMaybe<Scalars['Int']['input']>;
   marketValue?: InputMaybe<Scalars['Decimal']['input']>;
   orderNo?: InputMaybe<Scalars['Decimal']['input']>;
@@ -13383,6 +13403,7 @@ export type LotCreateWithoutFileInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   legNo?: InputMaybe<Scalars['Int']['input']>;
   locationCode?: InputMaybe<Scalars['Int']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelCreateNestedManyWithoutLotInput>;
   lotSourceCode?: InputMaybe<Scalars['Int']['input']>;
   marketValue?: InputMaybe<Scalars['Decimal']['input']>;
   orderNo?: InputMaybe<Scalars['Decimal']['input']>;
@@ -13420,6 +13441,7 @@ export type LotCreateWithoutHarvestTransactionItemsInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   legNo?: InputMaybe<Scalars['Int']['input']>;
   locationCode?: InputMaybe<Scalars['Int']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelCreateNestedManyWithoutLotInput>;
   lotSourceCode?: InputMaybe<Scalars['Int']['input']>;
   marketValue?: InputMaybe<Scalars['Decimal']['input']>;
   orderNo?: InputMaybe<Scalars['Decimal']['input']>;
@@ -13437,6 +13459,45 @@ export type LotCreateWithoutHarvestTransactionItemsInput = {
 };
 
 export type LotCreateWithoutLotChangeInput = {
+  account: AccountCreateNestedOneWithoutLotsInput;
+  acquiredDate: Scalars['DateTime']['input'];
+  adjPrice?: InputMaybe<Scalars['Decimal']['input']>;
+  asset: AssetCreateNestedOneWithoutLotsInput;
+  availableQty?: InputMaybe<Scalars['Decimal']['input']>;
+  commPerShare?: InputMaybe<Scalars['Decimal']['input']>;
+  costTotal?: InputMaybe<Scalars['Decimal']['input']>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  exchangeRate?: InputMaybe<Scalars['Decimal']['input']>;
+  excludeFromHarvest?: InputMaybe<Scalars['Int']['input']>;
+  externalId?: InputMaybe<Scalars['String']['input']>;
+  feesPerShare?: InputMaybe<Scalars['Decimal']['input']>;
+  file?: InputMaybe<FileCreateNestedOneWithoutLotsInput>;
+  gainDay?: InputMaybe<Scalars['Decimal']['input']>;
+  gainDayPct?: InputMaybe<Scalars['Decimal']['input']>;
+  gainTotal?: InputMaybe<Scalars['Decimal']['input']>;
+  harvestTransactionItems?: InputMaybe<HarvestTransactionItemCreateNestedManyWithoutLotSoldInput>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  legNo?: InputMaybe<Scalars['Int']['input']>;
+  locationCode?: InputMaybe<Scalars['Int']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelCreateNestedManyWithoutLotInput>;
+  lotSourceCode?: InputMaybe<Scalars['Int']['input']>;
+  marketValue?: InputMaybe<Scalars['Decimal']['input']>;
+  orderNo?: InputMaybe<Scalars['Decimal']['input']>;
+  originalQty?: InputMaybe<Scalars['Decimal']['input']>;
+  paymentCurrency?: InputMaybe<Scalars['String']['input']>;
+  portfolio: PortfolioCreateNestedOneWithoutLotsInput;
+  position?: InputMaybe<PositionCreateNestedOneWithoutLotsInput>;
+  price: Scalars['Decimal']['input'];
+  remainingQty: Scalars['Decimal']['input'];
+  settlementCurrency?: InputMaybe<Scalars['String']['input']>;
+  shortType?: InputMaybe<Scalars['Int']['input']>;
+  termCode?: InputMaybe<Scalars['Int']['input']>;
+  totalCostForGainPct?: InputMaybe<Scalars['Decimal']['input']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type LotCreateWithoutLotOnLotModelsInput = {
+  LotChange?: InputMaybe<LotChangeCreateNestedManyWithoutLotInput>;
   account: AccountCreateNestedOneWithoutLotsInput;
   acquiredDate: Scalars['DateTime']['input'];
   adjPrice?: InputMaybe<Scalars['Decimal']['input']>;
@@ -13495,6 +13556,7 @@ export type LotCreateWithoutPortfolioInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   legNo?: InputMaybe<Scalars['Int']['input']>;
   locationCode?: InputMaybe<Scalars['Int']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelCreateNestedManyWithoutLotInput>;
   lotSourceCode?: InputMaybe<Scalars['Int']['input']>;
   marketValue?: InputMaybe<Scalars['Decimal']['input']>;
   orderNo?: InputMaybe<Scalars['Decimal']['input']>;
@@ -13532,6 +13594,7 @@ export type LotCreateWithoutPositionInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   legNo?: InputMaybe<Scalars['Int']['input']>;
   locationCode?: InputMaybe<Scalars['Int']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelCreateNestedManyWithoutLotInput>;
   lotSourceCode?: InputMaybe<Scalars['Int']['input']>;
   marketValue?: InputMaybe<Scalars['Decimal']['input']>;
   orderNo?: InputMaybe<Scalars['Decimal']['input']>;
@@ -13650,9 +13713,457 @@ export type LotMinAggregate = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type LotModel = {
+  __typename?: 'LotModel';
+  _count: LotModelCount;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  lotOnLotModels?: Maybe<Array<LotOnLotModel>>;
+  portfolio: Portfolio;
+  portfolioId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type LotModelCount = {
+  __typename?: 'LotModelCount';
+  lotOnLotModels: Scalars['Int']['output'];
+};
+
+export type LotModelCountAggregate = {
+  __typename?: 'LotModelCountAggregate';
+  _all: Scalars['Int']['output'];
+  createdAt: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  portfolioId: Scalars['Int']['output'];
+  updatedAt: Scalars['Int']['output'];
+};
+
+export type LotModelCreateManyPortfolioInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type LotModelCreateManyPortfolioInputEnvelope = {
+  data: Array<LotModelCreateManyPortfolioInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type LotModelCreateNestedManyWithoutPortfolioInput = {
+  connect?: InputMaybe<Array<LotModelWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<LotModelCreateOrConnectWithoutPortfolioInput>>;
+  create?: InputMaybe<Array<LotModelCreateWithoutPortfolioInput>>;
+  createMany?: InputMaybe<LotModelCreateManyPortfolioInputEnvelope>;
+};
+
+export type LotModelCreateNestedOneWithoutLotOnLotModelsInput = {
+  connect?: InputMaybe<LotModelWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<LotModelCreateOrConnectWithoutLotOnLotModelsInput>;
+  create?: InputMaybe<LotModelCreateWithoutLotOnLotModelsInput>;
+};
+
+export type LotModelCreateOrConnectWithoutLotOnLotModelsInput = {
+  create: LotModelCreateWithoutLotOnLotModelsInput;
+  where: LotModelWhereUniqueInput;
+};
+
+export type LotModelCreateOrConnectWithoutPortfolioInput = {
+  create: LotModelCreateWithoutPortfolioInput;
+  where: LotModelWhereUniqueInput;
+};
+
+export type LotModelCreateWithoutLotOnLotModelsInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  portfolio: PortfolioCreateNestedOneWithoutLotModelsInput;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type LotModelCreateWithoutPortfolioInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelCreateNestedManyWithoutLotModelInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type LotModelListRelationFilter = {
+  every?: InputMaybe<LotModelWhereInput>;
+  none?: InputMaybe<LotModelWhereInput>;
+  some?: InputMaybe<LotModelWhereInput>;
+};
+
+export type LotModelMaxAggregate = {
+  __typename?: 'LotModelMaxAggregate';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  portfolioId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type LotModelMinAggregate = {
+  __typename?: 'LotModelMinAggregate';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  portfolioId?: Maybe<Scalars['String']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type LotModelScalarRelationFilter = {
+  is?: InputMaybe<LotModelWhereInput>;
+  isNot?: InputMaybe<LotModelWhereInput>;
+};
+
+export type LotModelScalarWhereInput = {
+  AND?: InputMaybe<Array<LotModelScalarWhereInput>>;
+  NOT?: InputMaybe<Array<LotModelScalarWhereInput>>;
+  OR?: InputMaybe<Array<LotModelScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<UuidFilter>;
+  portfolioId?: InputMaybe<UuidFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type LotModelUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type LotModelUpdateManyWithWhereWithoutPortfolioInput = {
+  data: LotModelUpdateManyMutationInput;
+  where: LotModelScalarWhereInput;
+};
+
+export type LotModelUpdateManyWithoutPortfolioNestedInput = {
+  connect?: InputMaybe<Array<LotModelWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<LotModelCreateOrConnectWithoutPortfolioInput>>;
+  create?: InputMaybe<Array<LotModelCreateWithoutPortfolioInput>>;
+  createMany?: InputMaybe<LotModelCreateManyPortfolioInputEnvelope>;
+  delete?: InputMaybe<Array<LotModelWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<LotModelScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<LotModelWhereUniqueInput>>;
+  set?: InputMaybe<Array<LotModelWhereUniqueInput>>;
+  update?: InputMaybe<Array<LotModelUpdateWithWhereUniqueWithoutPortfolioInput>>;
+  updateMany?: InputMaybe<Array<LotModelUpdateManyWithWhereWithoutPortfolioInput>>;
+  upsert?: InputMaybe<Array<LotModelUpsertWithWhereUniqueWithoutPortfolioInput>>;
+};
+
+export type LotModelUpdateOneRequiredWithoutLotOnLotModelsNestedInput = {
+  connect?: InputMaybe<LotModelWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<LotModelCreateOrConnectWithoutLotOnLotModelsInput>;
+  create?: InputMaybe<LotModelCreateWithoutLotOnLotModelsInput>;
+  update?: InputMaybe<LotModelUpdateToOneWithWhereWithoutLotOnLotModelsInput>;
+  upsert?: InputMaybe<LotModelUpsertWithoutLotOnLotModelsInput>;
+};
+
+export type LotModelUpdateToOneWithWhereWithoutLotOnLotModelsInput = {
+  data: LotModelUpdateWithoutLotOnLotModelsInput;
+  where?: InputMaybe<LotModelWhereInput>;
+};
+
+export type LotModelUpdateWithWhereUniqueWithoutPortfolioInput = {
+  data: LotModelUpdateWithoutPortfolioInput;
+  where: LotModelWhereUniqueInput;
+};
+
+export type LotModelUpdateWithoutLotOnLotModelsInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutLotModelsNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type LotModelUpdateWithoutPortfolioInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelUpdateManyWithoutLotModelNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type LotModelUpsertWithWhereUniqueWithoutPortfolioInput = {
+  create: LotModelCreateWithoutPortfolioInput;
+  update: LotModelUpdateWithoutPortfolioInput;
+  where: LotModelWhereUniqueInput;
+};
+
+export type LotModelUpsertWithoutLotOnLotModelsInput = {
+  create: LotModelCreateWithoutLotOnLotModelsInput;
+  update: LotModelUpdateWithoutLotOnLotModelsInput;
+  where?: InputMaybe<LotModelWhereInput>;
+};
+
+export type LotModelWhereInput = {
+  AND?: InputMaybe<Array<LotModelWhereInput>>;
+  NOT?: InputMaybe<Array<LotModelWhereInput>>;
+  OR?: InputMaybe<Array<LotModelWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<UuidFilter>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelListRelationFilter>;
+  portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
+  portfolioId?: InputMaybe<UuidFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type LotModelWhereUniqueInput = {
+  AND?: InputMaybe<Array<LotModelWhereInput>>;
+  NOT?: InputMaybe<Array<LotModelWhereInput>>;
+  OR?: InputMaybe<Array<LotModelWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelListRelationFilter>;
+  portfolio?: InputMaybe<PortfolioScalarRelationFilter>;
+  portfolioId?: InputMaybe<UuidFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
 export type LotNullableScalarRelationFilter = {
   is?: InputMaybe<LotWhereInput>;
   isNot?: InputMaybe<LotWhereInput>;
+};
+
+export type LotOnLotModel = {
+  __typename?: 'LotOnLotModel';
+  createdAt: Scalars['DateTime']['output'];
+  lot: Lot;
+  lotId: Scalars['String']['output'];
+  lotModel: LotModel;
+  lotModelId: Scalars['String']['output'];
+  quantity: Scalars['Decimal']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type LotOnLotModelAvgAggregate = {
+  __typename?: 'LotOnLotModelAvgAggregate';
+  quantity?: Maybe<Scalars['Decimal']['output']>;
+};
+
+export type LotOnLotModelCountAggregate = {
+  __typename?: 'LotOnLotModelCountAggregate';
+  _all: Scalars['Int']['output'];
+  createdAt: Scalars['Int']['output'];
+  lotId: Scalars['Int']['output'];
+  lotModelId: Scalars['Int']['output'];
+  quantity: Scalars['Int']['output'];
+  updatedAt: Scalars['Int']['output'];
+};
+
+export type LotOnLotModelCreateManyLotInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  lotModelId: Scalars['String']['input'];
+  quantity: Scalars['Decimal']['input'];
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type LotOnLotModelCreateManyLotInputEnvelope = {
+  data: Array<LotOnLotModelCreateManyLotInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type LotOnLotModelCreateManyLotModelInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  lotId: Scalars['String']['input'];
+  quantity: Scalars['Decimal']['input'];
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type LotOnLotModelCreateManyLotModelInputEnvelope = {
+  data: Array<LotOnLotModelCreateManyLotModelInput>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type LotOnLotModelCreateNestedManyWithoutLotInput = {
+  connect?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<LotOnLotModelCreateOrConnectWithoutLotInput>>;
+  create?: InputMaybe<Array<LotOnLotModelCreateWithoutLotInput>>;
+  createMany?: InputMaybe<LotOnLotModelCreateManyLotInputEnvelope>;
+};
+
+export type LotOnLotModelCreateNestedManyWithoutLotModelInput = {
+  connect?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<LotOnLotModelCreateOrConnectWithoutLotModelInput>>;
+  create?: InputMaybe<Array<LotOnLotModelCreateWithoutLotModelInput>>;
+  createMany?: InputMaybe<LotOnLotModelCreateManyLotModelInputEnvelope>;
+};
+
+export type LotOnLotModelCreateOrConnectWithoutLotInput = {
+  create: LotOnLotModelCreateWithoutLotInput;
+  where: LotOnLotModelWhereUniqueInput;
+};
+
+export type LotOnLotModelCreateOrConnectWithoutLotModelInput = {
+  create: LotOnLotModelCreateWithoutLotModelInput;
+  where: LotOnLotModelWhereUniqueInput;
+};
+
+export type LotOnLotModelCreateWithoutLotInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  lotModel: LotModelCreateNestedOneWithoutLotOnLotModelsInput;
+  quantity: Scalars['Decimal']['input'];
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type LotOnLotModelCreateWithoutLotModelInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  lot: LotCreateNestedOneWithoutLotOnLotModelsInput;
+  quantity: Scalars['Decimal']['input'];
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type LotOnLotModelInput = {
+  lotId: Scalars['String']['input'];
+  quantity: Scalars['Float']['input'];
+};
+
+export type LotOnLotModelListRelationFilter = {
+  every?: InputMaybe<LotOnLotModelWhereInput>;
+  none?: InputMaybe<LotOnLotModelWhereInput>;
+  some?: InputMaybe<LotOnLotModelWhereInput>;
+};
+
+export type LotOnLotModelLotModelIdLotIdCompoundUniqueInput = {
+  lotId: Scalars['String']['input'];
+  lotModelId: Scalars['String']['input'];
+};
+
+export type LotOnLotModelMaxAggregate = {
+  __typename?: 'LotOnLotModelMaxAggregate';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  lotId?: Maybe<Scalars['String']['output']>;
+  lotModelId?: Maybe<Scalars['String']['output']>;
+  quantity?: Maybe<Scalars['Decimal']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type LotOnLotModelMinAggregate = {
+  __typename?: 'LotOnLotModelMinAggregate';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  lotId?: Maybe<Scalars['String']['output']>;
+  lotModelId?: Maybe<Scalars['String']['output']>;
+  quantity?: Maybe<Scalars['Decimal']['output']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type LotOnLotModelScalarWhereInput = {
+  AND?: InputMaybe<Array<LotOnLotModelScalarWhereInput>>;
+  NOT?: InputMaybe<Array<LotOnLotModelScalarWhereInput>>;
+  OR?: InputMaybe<Array<LotOnLotModelScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  lotId?: InputMaybe<UuidFilter>;
+  lotModelId?: InputMaybe<UuidFilter>;
+  quantity?: InputMaybe<DecimalFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type LotOnLotModelSumAggregate = {
+  __typename?: 'LotOnLotModelSumAggregate';
+  quantity?: Maybe<Scalars['Decimal']['output']>;
+};
+
+export type LotOnLotModelUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  quantity?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type LotOnLotModelUpdateManyWithWhereWithoutLotInput = {
+  data: LotOnLotModelUpdateManyMutationInput;
+  where: LotOnLotModelScalarWhereInput;
+};
+
+export type LotOnLotModelUpdateManyWithWhereWithoutLotModelInput = {
+  data: LotOnLotModelUpdateManyMutationInput;
+  where: LotOnLotModelScalarWhereInput;
+};
+
+export type LotOnLotModelUpdateManyWithoutLotModelNestedInput = {
+  connect?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<LotOnLotModelCreateOrConnectWithoutLotModelInput>>;
+  create?: InputMaybe<Array<LotOnLotModelCreateWithoutLotModelInput>>;
+  createMany?: InputMaybe<LotOnLotModelCreateManyLotModelInputEnvelope>;
+  delete?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<LotOnLotModelScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  set?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  update?: InputMaybe<Array<LotOnLotModelUpdateWithWhereUniqueWithoutLotModelInput>>;
+  updateMany?: InputMaybe<Array<LotOnLotModelUpdateManyWithWhereWithoutLotModelInput>>;
+  upsert?: InputMaybe<Array<LotOnLotModelUpsertWithWhereUniqueWithoutLotModelInput>>;
+};
+
+export type LotOnLotModelUpdateManyWithoutLotNestedInput = {
+  connect?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<LotOnLotModelCreateOrConnectWithoutLotInput>>;
+  create?: InputMaybe<Array<LotOnLotModelCreateWithoutLotInput>>;
+  createMany?: InputMaybe<LotOnLotModelCreateManyLotInputEnvelope>;
+  delete?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<LotOnLotModelScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  set?: InputMaybe<Array<LotOnLotModelWhereUniqueInput>>;
+  update?: InputMaybe<Array<LotOnLotModelUpdateWithWhereUniqueWithoutLotInput>>;
+  updateMany?: InputMaybe<Array<LotOnLotModelUpdateManyWithWhereWithoutLotInput>>;
+  upsert?: InputMaybe<Array<LotOnLotModelUpsertWithWhereUniqueWithoutLotInput>>;
+};
+
+export type LotOnLotModelUpdateWithWhereUniqueWithoutLotInput = {
+  data: LotOnLotModelUpdateWithoutLotInput;
+  where: LotOnLotModelWhereUniqueInput;
+};
+
+export type LotOnLotModelUpdateWithWhereUniqueWithoutLotModelInput = {
+  data: LotOnLotModelUpdateWithoutLotModelInput;
+  where: LotOnLotModelWhereUniqueInput;
+};
+
+export type LotOnLotModelUpdateWithoutLotInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lotModel?: InputMaybe<LotModelUpdateOneRequiredWithoutLotOnLotModelsNestedInput>;
+  quantity?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type LotOnLotModelUpdateWithoutLotModelInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  lot?: InputMaybe<LotUpdateOneRequiredWithoutLotOnLotModelsNestedInput>;
+  quantity?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type LotOnLotModelUpsertWithWhereUniqueWithoutLotInput = {
+  create: LotOnLotModelCreateWithoutLotInput;
+  update: LotOnLotModelUpdateWithoutLotInput;
+  where: LotOnLotModelWhereUniqueInput;
+};
+
+export type LotOnLotModelUpsertWithWhereUniqueWithoutLotModelInput = {
+  create: LotOnLotModelCreateWithoutLotModelInput;
+  update: LotOnLotModelUpdateWithoutLotModelInput;
+  where: LotOnLotModelWhereUniqueInput;
+};
+
+export type LotOnLotModelWhereInput = {
+  AND?: InputMaybe<Array<LotOnLotModelWhereInput>>;
+  NOT?: InputMaybe<Array<LotOnLotModelWhereInput>>;
+  OR?: InputMaybe<Array<LotOnLotModelWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  lot?: InputMaybe<LotScalarRelationFilter>;
+  lotId?: InputMaybe<UuidFilter>;
+  lotModel?: InputMaybe<LotModelScalarRelationFilter>;
+  lotModelId?: InputMaybe<UuidFilter>;
+  quantity?: InputMaybe<DecimalFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type LotOnLotModelWhereUniqueInput = {
+  AND?: InputMaybe<Array<LotOnLotModelWhereInput>>;
+  NOT?: InputMaybe<Array<LotOnLotModelWhereInput>>;
+  OR?: InputMaybe<Array<LotOnLotModelWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  lot?: InputMaybe<LotScalarRelationFilter>;
+  lotId?: InputMaybe<UuidFilter>;
+  lotModel?: InputMaybe<LotModelScalarRelationFilter>;
+  lotModelId?: InputMaybe<UuidFilter>;
+  lotModelId_lotId?: InputMaybe<LotOnLotModelLotModelIdLotIdCompoundUniqueInput>;
+  quantity?: InputMaybe<DecimalFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type LotPositionIdExternalIdCompoundUniqueInput = {
@@ -13864,6 +14375,14 @@ export type LotUpdateOneRequiredWithoutLotChangeNestedInput = {
   upsert?: InputMaybe<LotUpsertWithoutLotChangeInput>;
 };
 
+export type LotUpdateOneRequiredWithoutLotOnLotModelsNestedInput = {
+  connect?: InputMaybe<LotWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<LotCreateOrConnectWithoutLotOnLotModelsInput>;
+  create?: InputMaybe<LotCreateWithoutLotOnLotModelsInput>;
+  update?: InputMaybe<LotUpdateToOneWithWhereWithoutLotOnLotModelsInput>;
+  upsert?: InputMaybe<LotUpsertWithoutLotOnLotModelsInput>;
+};
+
 export type LotUpdateOneWithoutHarvestTransactionItemsNestedInput = {
   connect?: InputMaybe<LotWhereUniqueInput>;
   connectOrCreate?: InputMaybe<LotCreateOrConnectWithoutHarvestTransactionItemsInput>;
@@ -13881,6 +14400,11 @@ export type LotUpdateToOneWithWhereWithoutHarvestTransactionItemsInput = {
 
 export type LotUpdateToOneWithWhereWithoutLotChangeInput = {
   data: LotUpdateWithoutLotChangeInput;
+  where?: InputMaybe<LotWhereInput>;
+};
+
+export type LotUpdateToOneWithWhereWithoutLotOnLotModelsInput = {
+  data: LotUpdateWithoutLotOnLotModelsInput;
   where?: InputMaybe<LotWhereInput>;
 };
 
@@ -13930,6 +14454,7 @@ export type LotUpdateWithoutAccountInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   legNo?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   locationCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelUpdateManyWithoutLotNestedInput>;
   lotSourceCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   marketValue?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   orderNo?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
@@ -13967,6 +14492,7 @@ export type LotUpdateWithoutAssetInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   legNo?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   locationCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelUpdateManyWithoutLotNestedInput>;
   lotSourceCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   marketValue?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   orderNo?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
@@ -14004,6 +14530,7 @@ export type LotUpdateWithoutFileInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   legNo?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   locationCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelUpdateManyWithoutLotNestedInput>;
   lotSourceCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   marketValue?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   orderNo?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
@@ -14041,6 +14568,7 @@ export type LotUpdateWithoutHarvestTransactionItemsInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   legNo?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   locationCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelUpdateManyWithoutLotNestedInput>;
   lotSourceCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   marketValue?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   orderNo?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
@@ -14058,6 +14586,45 @@ export type LotUpdateWithoutHarvestTransactionItemsInput = {
 };
 
 export type LotUpdateWithoutLotChangeInput = {
+  account?: InputMaybe<AccountUpdateOneRequiredWithoutLotsNestedInput>;
+  acquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  adjPrice?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  asset?: InputMaybe<AssetUpdateOneRequiredWithoutLotsNestedInput>;
+  availableQty?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  commPerShare?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  costTotal?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  exchangeRate?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  excludeFromHarvest?: InputMaybe<IntFieldUpdateOperationsInput>;
+  externalId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  feesPerShare?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  file?: InputMaybe<FileUpdateOneWithoutLotsNestedInput>;
+  gainDay?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  gainDayPct?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  gainTotal?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  harvestTransactionItems?: InputMaybe<HarvestTransactionItemUpdateManyWithoutLotSoldNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  legNo?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  locationCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelUpdateManyWithoutLotNestedInput>;
+  lotSourceCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  marketValue?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  orderNo?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  originalQty?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  paymentCurrency?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  portfolio?: InputMaybe<PortfolioUpdateOneRequiredWithoutLotsNestedInput>;
+  position?: InputMaybe<PositionUpdateOneWithoutLotsNestedInput>;
+  price?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  remainingQty?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  settlementCurrency?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  shortType?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  termCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  totalCostForGainPct?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type LotUpdateWithoutLotOnLotModelsInput = {
+  LotChange?: InputMaybe<LotChangeUpdateManyWithoutLotNestedInput>;
   account?: InputMaybe<AccountUpdateOneRequiredWithoutLotsNestedInput>;
   acquiredDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   adjPrice?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
@@ -14116,6 +14683,7 @@ export type LotUpdateWithoutPortfolioInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   legNo?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   locationCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelUpdateManyWithoutLotNestedInput>;
   lotSourceCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   marketValue?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   orderNo?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
@@ -14153,6 +14721,7 @@ export type LotUpdateWithoutPositionInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   legNo?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   locationCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelUpdateManyWithoutLotNestedInput>;
   lotSourceCode?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   marketValue?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
   orderNo?: InputMaybe<NullableDecimalFieldUpdateOperationsInput>;
@@ -15104,6 +15673,12 @@ export type LotUpsertWithoutLotChangeInput = {
   where?: InputMaybe<LotWhereInput>;
 };
 
+export type LotUpsertWithoutLotOnLotModelsInput = {
+  create: LotCreateWithoutLotOnLotModelsInput;
+  update: LotUpdateWithoutLotOnLotModelsInput;
+  where?: InputMaybe<LotWhereInput>;
+};
+
 export enum LotValueType {
   Gain = 'GAIN',
   Loss = 'LOSS'
@@ -15137,6 +15712,7 @@ export type LotWhereInput = {
   id?: InputMaybe<UuidFilter>;
   legNo?: InputMaybe<IntNullableFilter>;
   locationCode?: InputMaybe<IntNullableFilter>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelListRelationFilter>;
   lotSourceCode?: InputMaybe<IntNullableFilter>;
   marketValue?: InputMaybe<DecimalNullableFilter>;
   orderNo?: InputMaybe<DecimalNullableFilter>;
@@ -15183,6 +15759,7 @@ export type LotWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   legNo?: InputMaybe<IntNullableFilter>;
   locationCode?: InputMaybe<IntNullableFilter>;
+  lotOnLotModels?: InputMaybe<LotOnLotModelListRelationFilter>;
   lotSourceCode?: InputMaybe<IntNullableFilter>;
   marketValue?: InputMaybe<DecimalNullableFilter>;
   orderNo?: InputMaybe<DecimalNullableFilter>;
@@ -15856,11 +16433,15 @@ export type Mutation = {
   adminSyncPlaidItem: Scalars['Boolean']['output'];
   /** Apply a lot upload to the account */
   applyLotUploads: Scalars['Boolean']['output'];
+  /** Clear all lots from a model */
+  clearLotModel: BatchPayload;
   /** Create a new connected account */
   createAccountForPortfolio: Account;
   createFiles: Array<File>;
   /** Create harvest based on selected DirectedHarvestLot */
   createHarvest: Harvest;
+  /** Create a new lot model with optional lot associations */
+  createLotModel: LotModel;
   /** Create a portfolio for a user */
   createPortfolio: Portfolio;
   createPortfolioConnect: PortfolioConnect;
@@ -15870,6 +16451,10 @@ export type Mutation = {
   deleteAuthConnection: AuthConnection;
   /** Delete multiple harvests by their IDs */
   deleteHarvests: Scalars['Boolean']['output'];
+  /** Delete a lot model */
+  deleteLotModel: LotModel;
+  /** Remove a lot from a model */
+  deleteLotOnLotModel: LotOnLotModel;
   deletePortfolioConnect: PortfolioConnect;
   /** Finalize harvest for review */
   finalizeHarvest: Harvest;
@@ -15877,6 +16462,8 @@ export type Mutation = {
   initAccountFileUpload: InitAccountFileUploadResponse;
   /** Initialize a lot upload from a CSV file */
   initLotUpload: Array<LotUpload>;
+  /** Add a lot to a model */
+  insertLotOnLotModel: LotOnLotModel;
   /** Insert RealizedPAndL */
   insertRealizedPAndL: RealizedPAndL;
   /** Invite User to Platform */
@@ -15935,6 +16522,11 @@ export type MutationApplyLotUploadsArgs = {
 };
 
 
+export type MutationClearLotModelArgs = {
+  lotModelId: Scalars['String']['input'];
+};
+
+
 export type MutationCreateAccountForPortfolioArgs = {
   accountCreateInput: AccountCreateInput;
 };
@@ -15948,6 +16540,11 @@ export type MutationCreateFilesArgs = {
 export type MutationCreateHarvestArgs = {
   directedHarvestLots: Array<DirectedHarvestLot>;
   harvestType: HarvestType;
+};
+
+
+export type MutationCreateLotModelArgs = {
+  lotOnLotModels?: InputMaybe<Array<LotOnLotModelInput>>;
 };
 
 
@@ -15976,6 +16573,17 @@ export type MutationDeleteHarvestsArgs = {
 };
 
 
+export type MutationDeleteLotModelArgs = {
+  lotModelId: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteLotOnLotModelArgs = {
+  lotId: Scalars['String']['input'];
+  lotModelId: Scalars['String']['input'];
+};
+
+
 export type MutationDeletePortfolioConnectArgs = {
   id: Scalars['String']['input'];
 };
@@ -15995,6 +16603,13 @@ export type MutationInitAccountFileUploadArgs = {
 
 export type MutationInitLotUploadArgs = {
   input: FileCreateManyInput;
+};
+
+
+export type MutationInsertLotOnLotModelArgs = {
+  lotId: Scalars['String']['input'];
+  lotModelId: Scalars['String']['input'];
+  quantity: Scalars['Float']['input'];
 };
 
 
@@ -17579,6 +18194,7 @@ export type Portfolio = {
   log?: Maybe<Array<Log>>;
   lotChange?: Maybe<Array<LotChange>>;
   lotChangeList?: Maybe<Array<LotChangeList>>;
+  lotModels?: Maybe<Array<LotModel>>;
   lotUpload?: Maybe<Array<LotUpload>>;
   lotUploadFile?: Maybe<Array<LotUploadFile>>;
   lots?: Maybe<Array<Lot>>;
@@ -18645,6 +19261,7 @@ export type PortfolioCount = {
   log: Scalars['Int']['output'];
   lotChange: Scalars['Int']['output'];
   lotChangeList: Scalars['Int']['output'];
+  lotModels: Scalars['Int']['output'];
   lotUpload: Scalars['Int']['output'];
   lotUploadFile: Scalars['Int']['output'];
   lots: Scalars['Int']['output'];
@@ -18702,6 +19319,7 @@ export type PortfolioCreateInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -18814,6 +19432,12 @@ export type PortfolioCreateNestedOneWithoutLotChangeListInput = {
   connect?: InputMaybe<PortfolioWhereUniqueInput>;
   connectOrCreate?: InputMaybe<PortfolioCreateOrConnectWithoutLotChangeListInput>;
   create?: InputMaybe<PortfolioCreateWithoutLotChangeListInput>;
+};
+
+export type PortfolioCreateNestedOneWithoutLotModelsInput = {
+  connect?: InputMaybe<PortfolioWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<PortfolioCreateOrConnectWithoutLotModelsInput>;
+  create?: InputMaybe<PortfolioCreateWithoutLotModelsInput>;
 };
 
 export type PortfolioCreateNestedOneWithoutLotUploadFileInput = {
@@ -18960,6 +19584,11 @@ export type PortfolioCreateOrConnectWithoutLotChangeListInput = {
   where: PortfolioWhereUniqueInput;
 };
 
+export type PortfolioCreateOrConnectWithoutLotModelsInput = {
+  create: PortfolioCreateWithoutLotModelsInput;
+  where: PortfolioWhereUniqueInput;
+};
+
 export type PortfolioCreateOrConnectWithoutLotUploadFileInput = {
   create: PortfolioCreateWithoutLotUploadFileInput;
   where: PortfolioWhereUniqueInput;
@@ -19051,6 +19680,7 @@ export type PortfolioCreateWithoutAccountRealizedPAndLHistoryInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19092,6 +19722,7 @@ export type PortfolioCreateWithoutAccountsInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19133,6 +19764,7 @@ export type PortfolioCreateWithoutAssetMergeInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19174,6 +19806,7 @@ export type PortfolioCreateWithoutAuthConnectionsInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19215,6 +19848,7 @@ export type PortfolioCreateWithoutCreatedByInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19256,6 +19890,7 @@ export type PortfolioCreateWithoutFilesInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19297,6 +19932,7 @@ export type PortfolioCreateWithoutHarvestTransactionInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19338,6 +19974,7 @@ export type PortfolioCreateWithoutHarvestTransactionItemInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19379,6 +20016,7 @@ export type PortfolioCreateWithoutHarvestsInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19420,6 +20058,7 @@ export type PortfolioCreateWithoutLogInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19461,6 +20100,7 @@ export type PortfolioCreateWithoutLotChangeInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19502,6 +20142,49 @@ export type PortfolioCreateWithoutLotChangeListInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
+  lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
+  lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
+  lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
+  mergeError?: InputMaybe<MergeErrorCreateNestedManyWithoutPortfolioInput>;
+  minimumLotPAndL?: InputMaybe<Scalars['Decimal']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  notification?: InputMaybe<NotificationCreateNestedManyWithoutPortfolioInput>;
+  notificationFrequency?: InputMaybe<HarvestNotificationFrequency>;
+  plaidMerge?: InputMaybe<PlaidMergeCreateNestedManyWithoutPortfolioInput>;
+  porfolioConnect?: InputMaybe<PortfolioConnectCreateNestedManyWithoutPortfolioInput>;
+  portfolioBalanceSnapshot?: InputMaybe<PortfolioBalanceSnapshotCreateNestedManyWithoutPortfolioInput>;
+  positionSnapshot?: InputMaybe<PositionSnapshotCreateNestedManyWithoutPortfolioInput>;
+  positions?: InputMaybe<PositionCreateNestedManyWithoutPortfolioInput>;
+  realizedPAndL?: InputMaybe<RealizedPAndLCreateNestedManyWithoutPortfolioInput>;
+  transactionOnAssetMerge?: InputMaybe<TransactionOnAssetMergeCreateNestedManyWithoutPortfolioInput>;
+  transactions?: InputMaybe<TransactionCreateNestedManyWithoutPortfolioInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  usersOnPortfolios?: InputMaybe<UsersOnPortfoliosCreateNestedManyWithoutPortfolioInput>;
+};
+
+export type PortfolioCreateWithoutLotModelsInput = {
+  accountRealizedPAndLHistory?: InputMaybe<AccountRealizedPAndLHistoryCreateNestedManyWithoutPortfolioInput>;
+  accounts?: InputMaybe<AccountCreateNestedManyWithoutPortfolioInput>;
+  assetMerge?: InputMaybe<AssetMergeCreateNestedManyWithoutPortfolioInput>;
+  authConnections?: InputMaybe<AuthConnectionCreateNestedManyWithoutPortfolioInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  createdBy: UserCreateNestedOneWithoutPortfolioInput;
+  endOfYearTaxOpportunityNotification?: InputMaybe<Scalars['Boolean']['input']>;
+  files?: InputMaybe<FileCreateNestedManyWithoutPortfolioInput>;
+  harvestCycleWeeks?: InputMaybe<Scalars['Int']['input']>;
+  harvestShareDollarThreshold?: InputMaybe<Scalars['Decimal']['input']>;
+  harvestTickerBucketDollarSizeLong?: InputMaybe<Scalars['Decimal']['input']>;
+  harvestTickerBucketDollarSizeShort?: InputMaybe<Scalars['Decimal']['input']>;
+  harvestTickerBucketLowerLimitLong?: InputMaybe<Scalars['Decimal']['input']>;
+  harvestTickerBucketLowerLimitShort?: InputMaybe<Scalars['Decimal']['input']>;
+  harvestTransaction?: InputMaybe<HarvestTransactionCreateNestedManyWithoutPortfolioInput>;
+  harvestTransactionItem?: InputMaybe<HarvestTransactionItemCreateNestedManyWithoutPortfolioInput>;
+  harvests?: InputMaybe<HarvestCreateNestedManyWithoutPortfolioInput>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
+  lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
+  lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19544,6 +20227,7 @@ export type PortfolioCreateWithoutLotUploadFileInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
   mergeError?: InputMaybe<MergeErrorCreateNestedManyWithoutPortfolioInput>;
@@ -19585,6 +20269,7 @@ export type PortfolioCreateWithoutLotUploadInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
   mergeError?: InputMaybe<MergeErrorCreateNestedManyWithoutPortfolioInput>;
@@ -19626,6 +20311,7 @@ export type PortfolioCreateWithoutLotsInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   mergeError?: InputMaybe<MergeErrorCreateNestedManyWithoutPortfolioInput>;
@@ -19667,6 +20353,7 @@ export type PortfolioCreateWithoutMergeErrorInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19708,6 +20395,7 @@ export type PortfolioCreateWithoutNotificationInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19749,6 +20437,7 @@ export type PortfolioCreateWithoutPlaidMergeInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19790,6 +20479,7 @@ export type PortfolioCreateWithoutPorfolioConnectInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19831,6 +20521,7 @@ export type PortfolioCreateWithoutPortfolioBalanceSnapshotInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19872,6 +20563,7 @@ export type PortfolioCreateWithoutPositionSnapshotInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19913,6 +20605,7 @@ export type PortfolioCreateWithoutPositionsInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19954,6 +20647,7 @@ export type PortfolioCreateWithoutRealizedPAndLInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -19995,6 +20689,7 @@ export type PortfolioCreateWithoutTransactionOnAssetMergeInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -20036,6 +20731,7 @@ export type PortfolioCreateWithoutTransactionsInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -20077,6 +20773,7 @@ export type PortfolioCreateWithoutUsersOnPortfoliosInput = {
   log?: InputMaybe<LogCreateNestedManyWithoutPortfolioInput>;
   lotChange?: InputMaybe<LotChangeCreateNestedManyWithoutPortfolioInput>;
   lotChangeList?: InputMaybe<LotChangeListCreateNestedManyWithoutPortfolioInput>;
+  lotModels?: InputMaybe<LotModelCreateNestedManyWithoutPortfolioInput>;
   lotUpload?: InputMaybe<LotUploadCreateNestedManyWithoutPortfolioInput>;
   lotUploadFile?: InputMaybe<LotUploadFileCreateNestedManyWithoutPortfolioInput>;
   lots?: InputMaybe<LotCreateNestedManyWithoutPortfolioInput>;
@@ -20262,6 +20959,7 @@ export type PortfolioUpdateInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20403,6 +21101,14 @@ export type PortfolioUpdateOneRequiredWithoutLotChangeNestedInput = {
   create?: InputMaybe<PortfolioCreateWithoutLotChangeInput>;
   update?: InputMaybe<PortfolioUpdateToOneWithWhereWithoutLotChangeInput>;
   upsert?: InputMaybe<PortfolioUpsertWithoutLotChangeInput>;
+};
+
+export type PortfolioUpdateOneRequiredWithoutLotModelsNestedInput = {
+  connect?: InputMaybe<PortfolioWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<PortfolioCreateOrConnectWithoutLotModelsInput>;
+  create?: InputMaybe<PortfolioCreateWithoutLotModelsInput>;
+  update?: InputMaybe<PortfolioUpdateToOneWithWhereWithoutLotModelsInput>;
+  upsert?: InputMaybe<PortfolioUpsertWithoutLotModelsInput>;
 };
 
 export type PortfolioUpdateOneRequiredWithoutLotUploadFileNestedInput = {
@@ -20572,6 +21278,11 @@ export type PortfolioUpdateToOneWithWhereWithoutLotChangeListInput = {
   where?: InputMaybe<PortfolioWhereInput>;
 };
 
+export type PortfolioUpdateToOneWithWhereWithoutLotModelsInput = {
+  data: PortfolioUpdateWithoutLotModelsInput;
+  where?: InputMaybe<PortfolioWhereInput>;
+};
+
 export type PortfolioUpdateToOneWithWhereWithoutLotUploadFileInput = {
   data: PortfolioUpdateWithoutLotUploadFileInput;
   where?: InputMaybe<PortfolioWhereInput>;
@@ -20668,6 +21379,7 @@ export type PortfolioUpdateWithoutAccountRealizedPAndLHistoryInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20709,6 +21421,7 @@ export type PortfolioUpdateWithoutAccountsInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20750,6 +21463,7 @@ export type PortfolioUpdateWithoutAssetMergeInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20791,6 +21505,7 @@ export type PortfolioUpdateWithoutAuthConnectionsInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20832,6 +21547,7 @@ export type PortfolioUpdateWithoutCreatedByInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20873,6 +21589,7 @@ export type PortfolioUpdateWithoutFilesInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20914,6 +21631,7 @@ export type PortfolioUpdateWithoutHarvestTransactionInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20955,6 +21673,7 @@ export type PortfolioUpdateWithoutHarvestTransactionItemInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -20996,6 +21715,7 @@ export type PortfolioUpdateWithoutHarvestsInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21037,6 +21757,7 @@ export type PortfolioUpdateWithoutLogInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21078,6 +21799,7 @@ export type PortfolioUpdateWithoutLotChangeInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21119,6 +21841,49 @@ export type PortfolioUpdateWithoutLotChangeListInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
+  lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
+  lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
+  lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
+  mergeError?: InputMaybe<MergeErrorUpdateManyWithoutPortfolioNestedInput>;
+  minimumLotPAndL?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  notification?: InputMaybe<NotificationUpdateManyWithoutPortfolioNestedInput>;
+  notificationFrequency?: InputMaybe<EnumHarvestNotificationFrequencyFieldUpdateOperationsInput>;
+  plaidMerge?: InputMaybe<PlaidMergeUpdateManyWithoutPortfolioNestedInput>;
+  porfolioConnect?: InputMaybe<PortfolioConnectUpdateManyWithoutPortfolioNestedInput>;
+  portfolioBalanceSnapshot?: InputMaybe<PortfolioBalanceSnapshotUpdateManyWithoutPortfolioNestedInput>;
+  positionSnapshot?: InputMaybe<PositionSnapshotUpdateManyWithoutPortfolioNestedInput>;
+  positions?: InputMaybe<PositionUpdateManyWithoutPortfolioNestedInput>;
+  realizedPAndL?: InputMaybe<RealizedPAndLUpdateManyWithoutPortfolioNestedInput>;
+  transactionOnAssetMerge?: InputMaybe<TransactionOnAssetMergeUpdateManyWithoutPortfolioNestedInput>;
+  transactions?: InputMaybe<TransactionUpdateManyWithoutPortfolioNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  usersOnPortfolios?: InputMaybe<UsersOnPortfoliosUpdateManyWithoutPortfolioNestedInput>;
+};
+
+export type PortfolioUpdateWithoutLotModelsInput = {
+  accountRealizedPAndLHistory?: InputMaybe<AccountRealizedPAndLHistoryUpdateManyWithoutPortfolioNestedInput>;
+  accounts?: InputMaybe<AccountUpdateManyWithoutPortfolioNestedInput>;
+  assetMerge?: InputMaybe<AssetMergeUpdateManyWithoutPortfolioNestedInput>;
+  authConnections?: InputMaybe<AuthConnectionUpdateManyWithoutPortfolioNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneRequiredWithoutPortfolioNestedInput>;
+  endOfYearTaxOpportunityNotification?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  files?: InputMaybe<FileUpdateManyWithoutPortfolioNestedInput>;
+  harvestCycleWeeks?: InputMaybe<IntFieldUpdateOperationsInput>;
+  harvestShareDollarThreshold?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  harvestTickerBucketDollarSizeLong?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  harvestTickerBucketDollarSizeShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  harvestTickerBucketLowerLimitLong?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  harvestTickerBucketLowerLimitShort?: InputMaybe<DecimalFieldUpdateOperationsInput>;
+  harvestTransaction?: InputMaybe<HarvestTransactionUpdateManyWithoutPortfolioNestedInput>;
+  harvestTransactionItem?: InputMaybe<HarvestTransactionItemUpdateManyWithoutPortfolioNestedInput>;
+  harvests?: InputMaybe<HarvestUpdateManyWithoutPortfolioNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
+  lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
+  lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21161,6 +21926,7 @@ export type PortfolioUpdateWithoutLotUploadFileInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
   mergeError?: InputMaybe<MergeErrorUpdateManyWithoutPortfolioNestedInput>;
@@ -21202,6 +21968,7 @@ export type PortfolioUpdateWithoutLotUploadInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
   mergeError?: InputMaybe<MergeErrorUpdateManyWithoutPortfolioNestedInput>;
@@ -21243,6 +22010,7 @@ export type PortfolioUpdateWithoutLotsInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   mergeError?: InputMaybe<MergeErrorUpdateManyWithoutPortfolioNestedInput>;
@@ -21284,6 +22052,7 @@ export type PortfolioUpdateWithoutMergeErrorInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21325,6 +22094,7 @@ export type PortfolioUpdateWithoutNotificationInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21366,6 +22136,7 @@ export type PortfolioUpdateWithoutPlaidMergeInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21407,6 +22178,7 @@ export type PortfolioUpdateWithoutPorfolioConnectInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21448,6 +22220,7 @@ export type PortfolioUpdateWithoutPortfolioBalanceSnapshotInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21489,6 +22262,7 @@ export type PortfolioUpdateWithoutPositionSnapshotInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21530,6 +22304,7 @@ export type PortfolioUpdateWithoutPositionsInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21571,6 +22346,7 @@ export type PortfolioUpdateWithoutRealizedPAndLInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21612,6 +22388,7 @@ export type PortfolioUpdateWithoutTransactionOnAssetMergeInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21653,6 +22430,7 @@ export type PortfolioUpdateWithoutTransactionsInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21694,6 +22472,7 @@ export type PortfolioUpdateWithoutUsersOnPortfoliosInput = {
   log?: InputMaybe<LogUpdateManyWithoutPortfolioNestedInput>;
   lotChange?: InputMaybe<LotChangeUpdateManyWithoutPortfolioNestedInput>;
   lotChangeList?: InputMaybe<LotChangeListUpdateManyWithoutPortfolioNestedInput>;
+  lotModels?: InputMaybe<LotModelUpdateManyWithoutPortfolioNestedInput>;
   lotUpload?: InputMaybe<LotUploadUpdateManyWithoutPortfolioNestedInput>;
   lotUploadFile?: InputMaybe<LotUploadFileUpdateManyWithoutPortfolioNestedInput>;
   lots?: InputMaybe<LotUpdateManyWithoutPortfolioNestedInput>;
@@ -21782,6 +22561,12 @@ export type PortfolioUpsertWithoutLotChangeInput = {
 export type PortfolioUpsertWithoutLotChangeListInput = {
   create: PortfolioCreateWithoutLotChangeListInput;
   update: PortfolioUpdateWithoutLotChangeListInput;
+  where?: InputMaybe<PortfolioWhereInput>;
+};
+
+export type PortfolioUpsertWithoutLotModelsInput = {
+  create: PortfolioCreateWithoutLotModelsInput;
+  update: PortfolioUpdateWithoutLotModelsInput;
   where?: InputMaybe<PortfolioWhereInput>;
 };
 
@@ -21895,6 +22680,7 @@ export type PortfolioWhereInput = {
   log?: InputMaybe<LogListRelationFilter>;
   lotChange?: InputMaybe<LotChangeListRelationFilter>;
   lotChangeList?: InputMaybe<LotChangeListListRelationFilter>;
+  lotModels?: InputMaybe<LotModelListRelationFilter>;
   lotUpload?: InputMaybe<LotUploadListRelationFilter>;
   lotUploadFile?: InputMaybe<LotUploadFileListRelationFilter>;
   lots?: InputMaybe<LotListRelationFilter>;
@@ -21941,6 +22727,7 @@ export type PortfolioWhereUniqueInput = {
   log?: InputMaybe<LogListRelationFilter>;
   lotChange?: InputMaybe<LotChangeListRelationFilter>;
   lotChangeList?: InputMaybe<LotChangeListListRelationFilter>;
+  lotModels?: InputMaybe<LotModelListRelationFilter>;
   lotUpload?: InputMaybe<LotUploadListRelationFilter>;
   lotUploadFile?: InputMaybe<LotUploadFileListRelationFilter>;
   lots?: InputMaybe<LotListRelationFilter>;
@@ -24126,6 +24913,10 @@ export type Query = {
   logsCount: Scalars['Int']['output'];
   /** Lot current view */
   lotCurrent: Array<LotCurrent>;
+  /** Get a lot model by ID */
+  lotModel?: Maybe<LotModel>;
+  /** List all lot models for a portfolio */
+  lotModels: Array<LotModel>;
   /** Get all lot uploads */
   lotUploads: Array<LotUpload>;
   lots: Array<Lot>;
@@ -24258,6 +25049,11 @@ export type QueryLotCurrentArgs = {
   lotIds?: InputMaybe<Array<Scalars['String']['input']>>;
   lotValueType?: InputMaybe<LotValueType>;
   minTotalPAndL?: InputMaybe<Scalars['Float']['input']>;
+};
+
+
+export type QueryLotModelArgs = {
+  lotModelId: Scalars['String']['input'];
 };
 
 
@@ -28387,6 +29183,58 @@ export type FinalizeHarvestMutationVariables = Exact<{
 
 export type FinalizeHarvestMutation = { __typename?: 'Mutation', finalizeHarvest: { __typename?: 'Harvest', id: string, date: any, step: HarvestStep, amount: string, type: HarvestType, label: string, notify: boolean, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null }> | null } };
 
+export type LotModelItemFragment = { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', lastPrice: string } } }> | null };
+
+export type LotModelsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LotModelsQuery = { __typename?: 'Query', lotModels: Array<{ __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', lastPrice: string } } }> | null }> };
+
+export type LotModelQueryVariables = Exact<{
+  lotModelId: Scalars['String']['input'];
+}>;
+
+
+export type LotModelQuery = { __typename?: 'Query', lotModel?: { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', lastPrice: string } } }> | null } | null };
+
+export type CreateLotModelMutationVariables = Exact<{
+  lotOnLotModels?: InputMaybe<Array<LotOnLotModelInput> | LotOnLotModelInput>;
+}>;
+
+
+export type CreateLotModelMutation = { __typename?: 'Mutation', createLotModel: { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', lastPrice: string } } }> | null } };
+
+export type InsertLotOnLotModelMutationVariables = Exact<{
+  lotModelId: Scalars['String']['input'];
+  lotId: Scalars['String']['input'];
+  quantity: Scalars['Float']['input'];
+}>;
+
+
+export type InsertLotOnLotModelMutation = { __typename?: 'Mutation', insertLotOnLotModel: { __typename?: 'LotOnLotModel', lotId: string, quantity: string } };
+
+export type DeleteLotOnLotModelMutationVariables = Exact<{
+  lotModelId: Scalars['String']['input'];
+  lotId: Scalars['String']['input'];
+}>;
+
+
+export type DeleteLotOnLotModelMutation = { __typename?: 'Mutation', deleteLotOnLotModel: { __typename?: 'LotOnLotModel', lotId: string } };
+
+export type DeleteLotModelMutationVariables = Exact<{
+  lotModelId: Scalars['String']['input'];
+}>;
+
+
+export type DeleteLotModelMutation = { __typename?: 'Mutation', deleteLotModel: { __typename?: 'LotModel', id: string } };
+
+export type ClearLotModelMutationVariables = Exact<{
+  lotModelId: Scalars['String']['input'];
+}>;
+
+
+export type ClearLotModelMutation = { __typename?: 'Mutation', clearLotModel: { __typename?: 'BatchPayload', count: number } };
+
 export type PortfolioLotsQueryVariables = Exact<{
   where?: InputMaybe<LotWhereInput>;
   includeTaxAdvantaged?: InputMaybe<Scalars['Boolean']['input']>;
@@ -29263,6 +30111,28 @@ export const HarvestItemFragmentDoc = gql`
   }
 }
     ${HarvestTransactionRecordFragmentDoc}`;
+export const LotModelItemFragmentDoc = gql`
+    fragment LotModelItem on LotModel {
+  id
+  createdAt
+  updatedAt
+  portfolioId
+  lotOnLotModels {
+    lotId
+    quantity
+    lot {
+      id
+      assetSymbol
+      remainingQty
+      price
+      acquiredDate
+      asset {
+        lastPrice
+      }
+    }
+  }
+}
+    `;
 export const PortfolioItemFragmentDoc = gql`
     fragment PortfolioItem on Portfolio {
   id
@@ -32626,6 +33496,254 @@ export function useFinalizeHarvestMutation(baseOptions?: Apollo.MutationHookOpti
 export type FinalizeHarvestMutationHookResult = ReturnType<typeof useFinalizeHarvestMutation>;
 export type FinalizeHarvestMutationResult = Apollo.MutationResult<FinalizeHarvestMutation>;
 export type FinalizeHarvestMutationOptions = Apollo.BaseMutationOptions<FinalizeHarvestMutation, FinalizeHarvestMutationVariables>;
+export const LotModelsDocument = gql`
+    query LotModels {
+  lotModels {
+    ...LotModelItem
+  }
+}
+    ${LotModelItemFragmentDoc}`;
+
+/**
+ * __useLotModelsQuery__
+ *
+ * To run a query within a React component, call `useLotModelsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLotModelsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLotModelsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLotModelsQuery(baseOptions?: Apollo.QueryHookOptions<LotModelsQuery, LotModelsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LotModelsQuery, LotModelsQueryVariables>(LotModelsDocument, options);
+      }
+export function useLotModelsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LotModelsQuery, LotModelsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LotModelsQuery, LotModelsQueryVariables>(LotModelsDocument, options);
+        }
+export function useLotModelsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LotModelsQuery, LotModelsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LotModelsQuery, LotModelsQueryVariables>(LotModelsDocument, options);
+        }
+export type LotModelsQueryHookResult = ReturnType<typeof useLotModelsQuery>;
+export type LotModelsLazyQueryHookResult = ReturnType<typeof useLotModelsLazyQuery>;
+export type LotModelsSuspenseQueryHookResult = ReturnType<typeof useLotModelsSuspenseQuery>;
+export type LotModelsQueryResult = Apollo.QueryResult<LotModelsQuery, LotModelsQueryVariables>;
+export const LotModelDocument = gql`
+    query LotModel($lotModelId: String!) {
+  lotModel(lotModelId: $lotModelId) {
+    ...LotModelItem
+  }
+}
+    ${LotModelItemFragmentDoc}`;
+
+/**
+ * __useLotModelQuery__
+ *
+ * To run a query within a React component, call `useLotModelQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLotModelQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLotModelQuery({
+ *   variables: {
+ *      lotModelId: // value for 'lotModelId'
+ *   },
+ * });
+ */
+export function useLotModelQuery(baseOptions: Apollo.QueryHookOptions<LotModelQuery, LotModelQueryVariables> & ({ variables: LotModelQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LotModelQuery, LotModelQueryVariables>(LotModelDocument, options);
+      }
+export function useLotModelLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LotModelQuery, LotModelQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LotModelQuery, LotModelQueryVariables>(LotModelDocument, options);
+        }
+export function useLotModelSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LotModelQuery, LotModelQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LotModelQuery, LotModelQueryVariables>(LotModelDocument, options);
+        }
+export type LotModelQueryHookResult = ReturnType<typeof useLotModelQuery>;
+export type LotModelLazyQueryHookResult = ReturnType<typeof useLotModelLazyQuery>;
+export type LotModelSuspenseQueryHookResult = ReturnType<typeof useLotModelSuspenseQuery>;
+export type LotModelQueryResult = Apollo.QueryResult<LotModelQuery, LotModelQueryVariables>;
+export const CreateLotModelDocument = gql`
+    mutation CreateLotModel($lotOnLotModels: [LotOnLotModelInput!]) {
+  createLotModel(lotOnLotModels: $lotOnLotModels) {
+    ...LotModelItem
+  }
+}
+    ${LotModelItemFragmentDoc}`;
+export type CreateLotModelMutationFn = Apollo.MutationFunction<CreateLotModelMutation, CreateLotModelMutationVariables>;
+
+/**
+ * __useCreateLotModelMutation__
+ *
+ * To run a mutation, you first call `useCreateLotModelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateLotModelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createLotModelMutation, { data, loading, error }] = useCreateLotModelMutation({
+ *   variables: {
+ *      lotOnLotModels: // value for 'lotOnLotModels'
+ *   },
+ * });
+ */
+export function useCreateLotModelMutation(baseOptions?: Apollo.MutationHookOptions<CreateLotModelMutation, CreateLotModelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateLotModelMutation, CreateLotModelMutationVariables>(CreateLotModelDocument, options);
+      }
+export type CreateLotModelMutationHookResult = ReturnType<typeof useCreateLotModelMutation>;
+export type CreateLotModelMutationResult = Apollo.MutationResult<CreateLotModelMutation>;
+export type CreateLotModelMutationOptions = Apollo.BaseMutationOptions<CreateLotModelMutation, CreateLotModelMutationVariables>;
+export const InsertLotOnLotModelDocument = gql`
+    mutation InsertLotOnLotModel($lotModelId: String!, $lotId: String!, $quantity: Float!) {
+  insertLotOnLotModel(lotModelId: $lotModelId, lotId: $lotId, quantity: $quantity) {
+    lotId
+    quantity
+  }
+}
+    `;
+export type InsertLotOnLotModelMutationFn = Apollo.MutationFunction<InsertLotOnLotModelMutation, InsertLotOnLotModelMutationVariables>;
+
+/**
+ * __useInsertLotOnLotModelMutation__
+ *
+ * To run a mutation, you first call `useInsertLotOnLotModelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertLotOnLotModelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertLotOnLotModelMutation, { data, loading, error }] = useInsertLotOnLotModelMutation({
+ *   variables: {
+ *      lotModelId: // value for 'lotModelId'
+ *      lotId: // value for 'lotId'
+ *      quantity: // value for 'quantity'
+ *   },
+ * });
+ */
+export function useInsertLotOnLotModelMutation(baseOptions?: Apollo.MutationHookOptions<InsertLotOnLotModelMutation, InsertLotOnLotModelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertLotOnLotModelMutation, InsertLotOnLotModelMutationVariables>(InsertLotOnLotModelDocument, options);
+      }
+export type InsertLotOnLotModelMutationHookResult = ReturnType<typeof useInsertLotOnLotModelMutation>;
+export type InsertLotOnLotModelMutationResult = Apollo.MutationResult<InsertLotOnLotModelMutation>;
+export type InsertLotOnLotModelMutationOptions = Apollo.BaseMutationOptions<InsertLotOnLotModelMutation, InsertLotOnLotModelMutationVariables>;
+export const DeleteLotOnLotModelDocument = gql`
+    mutation DeleteLotOnLotModel($lotModelId: String!, $lotId: String!) {
+  deleteLotOnLotModel(lotModelId: $lotModelId, lotId: $lotId) {
+    lotId
+  }
+}
+    `;
+export type DeleteLotOnLotModelMutationFn = Apollo.MutationFunction<DeleteLotOnLotModelMutation, DeleteLotOnLotModelMutationVariables>;
+
+/**
+ * __useDeleteLotOnLotModelMutation__
+ *
+ * To run a mutation, you first call `useDeleteLotOnLotModelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteLotOnLotModelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteLotOnLotModelMutation, { data, loading, error }] = useDeleteLotOnLotModelMutation({
+ *   variables: {
+ *      lotModelId: // value for 'lotModelId'
+ *      lotId: // value for 'lotId'
+ *   },
+ * });
+ */
+export function useDeleteLotOnLotModelMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLotOnLotModelMutation, DeleteLotOnLotModelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteLotOnLotModelMutation, DeleteLotOnLotModelMutationVariables>(DeleteLotOnLotModelDocument, options);
+      }
+export type DeleteLotOnLotModelMutationHookResult = ReturnType<typeof useDeleteLotOnLotModelMutation>;
+export type DeleteLotOnLotModelMutationResult = Apollo.MutationResult<DeleteLotOnLotModelMutation>;
+export type DeleteLotOnLotModelMutationOptions = Apollo.BaseMutationOptions<DeleteLotOnLotModelMutation, DeleteLotOnLotModelMutationVariables>;
+export const DeleteLotModelDocument = gql`
+    mutation DeleteLotModel($lotModelId: String!) {
+  deleteLotModel(lotModelId: $lotModelId) {
+    id
+  }
+}
+    `;
+export type DeleteLotModelMutationFn = Apollo.MutationFunction<DeleteLotModelMutation, DeleteLotModelMutationVariables>;
+
+/**
+ * __useDeleteLotModelMutation__
+ *
+ * To run a mutation, you first call `useDeleteLotModelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteLotModelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteLotModelMutation, { data, loading, error }] = useDeleteLotModelMutation({
+ *   variables: {
+ *      lotModelId: // value for 'lotModelId'
+ *   },
+ * });
+ */
+export function useDeleteLotModelMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLotModelMutation, DeleteLotModelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteLotModelMutation, DeleteLotModelMutationVariables>(DeleteLotModelDocument, options);
+      }
+export type DeleteLotModelMutationHookResult = ReturnType<typeof useDeleteLotModelMutation>;
+export type DeleteLotModelMutationResult = Apollo.MutationResult<DeleteLotModelMutation>;
+export type DeleteLotModelMutationOptions = Apollo.BaseMutationOptions<DeleteLotModelMutation, DeleteLotModelMutationVariables>;
+export const ClearLotModelDocument = gql`
+    mutation ClearLotModel($lotModelId: String!) {
+  clearLotModel(lotModelId: $lotModelId) {
+    count
+  }
+}
+    `;
+export type ClearLotModelMutationFn = Apollo.MutationFunction<ClearLotModelMutation, ClearLotModelMutationVariables>;
+
+/**
+ * __useClearLotModelMutation__
+ *
+ * To run a mutation, you first call `useClearLotModelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearLotModelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clearLotModelMutation, { data, loading, error }] = useClearLotModelMutation({
+ *   variables: {
+ *      lotModelId: // value for 'lotModelId'
+ *   },
+ * });
+ */
+export function useClearLotModelMutation(baseOptions?: Apollo.MutationHookOptions<ClearLotModelMutation, ClearLotModelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ClearLotModelMutation, ClearLotModelMutationVariables>(ClearLotModelDocument, options);
+      }
+export type ClearLotModelMutationHookResult = ReturnType<typeof useClearLotModelMutation>;
+export type ClearLotModelMutationResult = Apollo.MutationResult<ClearLotModelMutation>;
+export type ClearLotModelMutationOptions = Apollo.BaseMutationOptions<ClearLotModelMutation, ClearLotModelMutationVariables>;
 export const PortfolioLotsDocument = gql`
     query PortfolioLots($where: LotWhereInput, $includeTaxAdvantaged: Boolean) {
   lots(where: $where, includeTaxAdvantaged: $includeTaxAdvantaged) {

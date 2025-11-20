@@ -13,7 +13,7 @@ import Link from 'next/link';
 export default function LandingPage() {
 	return (
 		<MediaProvider>
-			<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+			<ThemeProvider attribute="class">
 				<div className="relative min-h-screen">
 					{/* Background with overlay */}
 					<div className="absolute inset-0 bg-[url('/images/coverImage.jpg')] bg-cover bg-center bg-no-repeat" />

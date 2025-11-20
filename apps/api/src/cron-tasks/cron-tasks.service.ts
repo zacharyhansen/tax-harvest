@@ -18,9 +18,14 @@ export class CronTasksService {
 
 	@Cron('*/15 * * * *', { name: 'update_asset_last_price' })
 	async updateAssetsLastPrice() {
-		this.logger.log(`Updating all asset prices`);
-		await this.polygonService.updateAllAssetPrices();
-		this.logger.log(`Updated all asset prices`);
+		try {
+			this.logger.log(`Updating all asset prices`);
+			await this.polygonService.updateAllAssetPrices();
+			this.logger.log(`Updated all asset prices`);
+		} catch (error) {
+			this.logger.error('Failed to update asset prices:', error);
+			// Don't throw - let cron continue to run on schedule
+		}
 	}
 
 	// @Cron(CronExpression.EVERY_WEEK, { name: 'ingest_hourly_asset_prices' })

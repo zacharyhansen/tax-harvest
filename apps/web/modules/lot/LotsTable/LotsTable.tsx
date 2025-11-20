@@ -8,10 +8,17 @@ import type { LotItemFragment } from '~/generated/gql';
 import { usePortfolioLotsQuery } from '~/generated/gql';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { Format, isOlderThanOneYear } from '~/modules/utils';
+import { LotModelActions } from './LotModelActions';
 
 const columnHelper = createColumnHelper<LotItemFragment>();
 
 const columnDef: ColumnDef<LotItemFragment, never>[] = [
+	// Actions Column (Add to Model button) - FIRST COLUMN
+	columnHelper.display({
+		id: 'actions',
+		size: 150,
+		cell: ({ row }) => <LotModelActions lot={row.original} />,
+	}),
 	columnHelper.accessor('assetSymbol', {
 		enableGrouping: true,
 		header: 'Asset',
@@ -161,6 +168,39 @@ const columnDef: ColumnDef<LotItemFragment, never>[] = [
 		header: 'Total Gain %',
 		size: 130,
 	}),
+	// Tax Bill Column (mock data for now)
+	columnHelper.accessor(
+		(row) => {
+			// Mock calculation: 25% of gains if positive, 0 if negative
+			const costBasis = Number(row.remainingQty || 0) * Number(row.price || 0);
+			const currentValue =
+				Number(row.remainingQty || 0) * Number(row.asset.lastPrice || 0);
+			const gain = currentValue - costBasis;
+			return gain > 0 ? gain * 0.25 : 0;
+		},
+		{
+			id: 'taxBill',
+			header: 'Tax Bill',
+			cell: DataTable.MoneyCell,
+			aggregationFn: 'sumMoney',
+			footer: ({ table }) => {
+				const total = table
+					.getFilteredRowModel()
+					.rows.reduce(
+						(sum, row) => sum + Number(row.getValue('taxBill') || 0),
+						0,
+					)
+					.toFixed(2);
+				return (
+					<DataTable.FooterCell
+						label="Unrealized Tax Bill"
+						value={Format.money(total)}
+					/>
+				);
+			},
+			size: 130,
+		},
+	),
 	// columnHelper.accessor("gainDay", {
 	//   cell: DataTable.MoneyCell,
 	//   header: "Day's P/L",
@@ -194,7 +234,7 @@ export default function LotsTable() {
 
 	return (
 		<DataTable
-			className="min-h-[700px]"
+			className="w-full min-h-[700px]"
 			columns={columnDef}
 			data={data?.lots ?? []}
 			noResultsAlert="This portfolio has no positions."

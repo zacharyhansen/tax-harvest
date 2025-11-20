@@ -24,6 +24,7 @@ import { HealthModule } from '~/health/health.module';
 import { LogsModule } from '~/logs/logs.module';
 import { LotModule } from '~/lot/lot.module';
 import { LotApplicationModule } from '~/lot-application/lot-application.module';
+import { LotModelModule } from '~/lot-model/lot-model.module';
 import { LotUploadModule } from '~/lot-upload/lot-upload.module';
 import { MultiChangeSetModule } from '~/multi-change-set/multi-change-set.module';
 import { NotificationModule } from '~/notification/notification.module';
@@ -110,6 +111,7 @@ const BigIntID = new GraphQLScalarType({
 		PriceHourlyVectorModule,
 		VectorGraphModule,
 		LotModule,
+		LotModelModule,
 		LotUploadModule,
 		HealthModule,
 		FileModule,
