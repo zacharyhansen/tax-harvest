@@ -16,6 +16,119 @@ query PortfolioSummary {
 			longTermCapitalGain
 			shortTermCapitalGain
 			gainTotal
+			estimatedTaxBill {
+				total
+				shortTermCapitalGain {
+					total
+					rate
+					result
+				}
+				longTermCapitalGain {
+					total
+					rate
+					result
+				}
+				dividend {
+					total
+					rate
+					result
+				}
+				qualifiedDividend {
+					total
+					rate
+					result
+				}
+				nonQualifiedDividend {
+					total
+					rate
+					result
+				}
+				dividendReinvestment {
+					total
+					rate
+					result
+				}
+				interest {
+					total
+					rate
+					result
+				}
+				interestReinvestment {
+					total
+					rate
+					result
+				}
+				distribution {
+					total
+					rate
+					result
+				}
+				accountFee {
+					total
+					rate
+					result
+				}
+				managementFee {
+					total
+					rate
+					result
+				}
+				fundFee {
+					total
+					rate
+					result
+				}
+				taxWithheld {
+					total
+					rate
+					result
+				}
+				nonResidentTax {
+					total
+					rate
+					result
+				}
+				deposit {
+					total
+					rate
+					result
+				}
+				withdrawal {
+					total
+					rate
+					result
+				}
+				contribution {
+					total
+					rate
+					result
+				}
+				returnOfPrincipal {
+					total
+					rate
+					result
+				}
+				loanPayment {
+					total
+					rate
+					result
+				}
+				marginExpense {
+					total
+					rate
+					result
+				}
+				stockDistribution {
+					total
+					rate
+					result
+				}
+				unqualifiedGain {
+					total
+					rate
+					result
+				}
+			}
 		}
 		unrealized {
 			gainTotal

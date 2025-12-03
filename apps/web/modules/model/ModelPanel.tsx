@@ -70,6 +70,9 @@ export function ModelPanel() {
 				cell: ({ row }) => (
 					<span className="font-semibold">{row.original.assetSymbol}</span>
 				),
+				meta: {
+					searchable: true,
+				},
 				size: 80,
 			},
 			{

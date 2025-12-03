@@ -8846,6 +8846,34 @@ input EnumVectorWindowFilter {
   notIn: [VectorWindow!]
 }
 
+type EstimatedTaxBill {
+  accountFee: TaxCalculation!
+  contribution: TaxCalculation!
+  deposit: TaxCalculation!
+  distribution: TaxCalculation!
+  dividend: TaxCalculation!
+  dividendReinvestment: TaxCalculation!
+  fundFee: TaxCalculation!
+  interest: TaxCalculation!
+  interestReinvestment: TaxCalculation!
+  loanPayment: TaxCalculation!
+  longTermCapitalGain: TaxCalculation!
+  managementFee: TaxCalculation!
+  marginExpense: TaxCalculation!
+  nonQualifiedDividend: TaxCalculation!
+  nonResidentTax: TaxCalculation!
+  qualifiedDividend: TaxCalculation!
+  returnOfPrincipal: TaxCalculation!
+  shortTermCapitalGain: TaxCalculation!
+  stockDistribution: TaxCalculation!
+  taxWithheld: TaxCalculation!
+
+  """Total estimated tax bill across all categories"""
+  total: Float!
+  unqualifiedGain: TaxCalculation!
+  withdrawal: TaxCalculation!
+}
+
 type File {
   LotUploadFile: [LotUploadFile!]
   _count: FileCount!
@@ -20692,6 +20720,9 @@ type PortfolioSummaryRealized {
   distribution: Float!
   dividend: Float!
   dividendReinvestment: Float!
+
+  """Estimated tax bill based on realized gains and losses"""
+  estimatedTaxBill: EstimatedTaxBill!
   fundFee: Float!
 
   """Total realized gain or loss derived from the relevant fields"""
@@ -25818,6 +25849,17 @@ type StripeSession {
 enum SupportedAccountLotProvider {
   ETRADE
   SCHWAB
+}
+
+type TaxCalculation {
+  """The tax rate applied"""
+  rate: Float!
+
+  """The calculated tax amount (total * rate)"""
+  result: Float!
+
+  """The base amount before tax"""
+  total: Float!
 }
 
 enum TaxGain {

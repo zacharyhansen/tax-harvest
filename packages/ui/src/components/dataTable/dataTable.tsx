@@ -419,7 +419,7 @@ function DataTable<TData, TValue>({
 														cell.column.columnDef.cell,
 													cell.getContext(),
 												)
-											) : cell.getIsPlaceholder() ? null : (
+											) : (
 												flexRender(
 													cell.column.columnDef.cell,
 													cell.getContext(),

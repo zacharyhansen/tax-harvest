@@ -13,17 +13,24 @@ import { LotModelActions } from './LotModelActions';
 const columnHelper = createColumnHelper<LotItemFragment>();
 
 const columnDef: ColumnDef<LotItemFragment, never>[] = [
-	// Actions Column (Add to Model button) - FIRST COLUMN
-	columnHelper.display({
-		id: 'actions',
-		size: 150,
-		cell: ({ row }) => <LotModelActions lot={row.original} />,
-	}),
 	columnHelper.accessor('assetSymbol', {
 		enableGrouping: true,
 		header: 'Asset',
 		meta: {
 			searchable: true,
+			preventRowClick: true,
+		},
+		cell: ({ row, getValue, table }) => {
+			// Grouped rows show the asset symbol with expand/collapse
+			if (row.getIsGrouped()) {
+				return getValue();
+			}
+			// Leaf rows in a grouped table show the action buttons
+			if (table.getState().grouping.length > 0 && row.depth > 0) {
+				return <LotModelActions lot={row.original} />;
+			}
+			// Non-grouped table shows asset symbol
+			return getValue();
 		},
 		size: 130,
 	}),

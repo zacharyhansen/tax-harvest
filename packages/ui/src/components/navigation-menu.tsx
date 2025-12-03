@@ -116,7 +116,7 @@ const NavigationMenuViewport = React.forwardRef<
 			)}
 			{...props}
 		>
-			<div className="perspective-[2000px] absolute left-0 top-0 bg-background">
+			<div className="perspective-[2000px] absolute right-0 top-0 bg-background">
 				<NavigationMenuPrimitive.Viewport
 					className={cn(
 						'mt-4',

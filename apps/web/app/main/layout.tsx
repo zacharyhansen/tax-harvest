@@ -13,7 +13,6 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
 import { Toaster } from '@repo/ui/components/sonner';
@@ -30,8 +29,8 @@ import {
 	TrendingUp,
 	Wallet2,
 } from 'lucide-react';
-import NextTopLoader from 'nextjs-toploader';
 import { useRouter } from 'next/navigation';
+import NextTopLoader from 'nextjs-toploader';
 import {
 	usePortfolioConnectionsSetupQuery,
 	usePortfoliosQuery,

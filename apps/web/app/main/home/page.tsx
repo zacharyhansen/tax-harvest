@@ -1,6 +1,5 @@
 'use client';
 
-import { cn } from '@repo/ui/utils';
 import { SetUpStatus, usePortfolioSummaryQuery } from '~/generated/gql';
 import { NoAccounts } from '~/modules/account';
 import { PageWrapper } from '~/modules/layout';
@@ -9,7 +8,6 @@ import {
 	ModelPanel,
 	ModelStateProvider,
 	ModelSummaryFooter,
-	useModelState,
 } from '~/modules/model';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 
@@ -17,7 +15,7 @@ function HomePageContent() {
 	return (
 		<div className="relative flex flex-col w-full h-screen overflow-hidden">
 			{/* Main scrollable content area */}
-			<div className="mx-auto flex flex-col h-full pb-[150px] pt-[10px]">
+			<div className="mx-auto flex flex-col h-full pb-[150px] pt-[10px] overflow-x-auto max-w-full px-5">
 				<LotsTable />
 			</div>
 

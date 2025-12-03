@@ -8828,6 +8828,34 @@ export type EnumVectorWindowFilter = {
   notIn?: InputMaybe<Array<VectorWindow>>;
 };
 
+export type EstimatedTaxBill = {
+  __typename?: 'EstimatedTaxBill';
+  accountFee: TaxCalculation;
+  contribution: TaxCalculation;
+  deposit: TaxCalculation;
+  distribution: TaxCalculation;
+  dividend: TaxCalculation;
+  dividendReinvestment: TaxCalculation;
+  fundFee: TaxCalculation;
+  interest: TaxCalculation;
+  interestReinvestment: TaxCalculation;
+  loanPayment: TaxCalculation;
+  longTermCapitalGain: TaxCalculation;
+  managementFee: TaxCalculation;
+  marginExpense: TaxCalculation;
+  nonQualifiedDividend: TaxCalculation;
+  nonResidentTax: TaxCalculation;
+  qualifiedDividend: TaxCalculation;
+  returnOfPrincipal: TaxCalculation;
+  shortTermCapitalGain: TaxCalculation;
+  stockDistribution: TaxCalculation;
+  taxWithheld: TaxCalculation;
+  /** Total estimated tax bill across all categories */
+  total: Scalars['Float']['output'];
+  unqualifiedGain: TaxCalculation;
+  withdrawal: TaxCalculation;
+};
+
 export type File = {
   __typename?: 'File';
   LotUploadFile?: Maybe<Array<LotUploadFile>>;
@@ -20904,6 +20932,8 @@ export type PortfolioSummaryRealized = {
   distribution: Scalars['Float']['output'];
   dividend: Scalars['Float']['output'];
   dividendReinvestment: Scalars['Float']['output'];
+  /** Estimated tax bill based on realized gains and losses */
+  estimatedTaxBill: EstimatedTaxBill;
   fundFee: Scalars['Float']['output'];
   /** Total realized gain or loss derived from the relevant fields */
   gainTotal: Scalars['Float']['output'];
@@ -26210,6 +26240,16 @@ export enum SupportedAccountLotProvider {
   Schwab = 'SCHWAB'
 }
 
+export type TaxCalculation = {
+  __typename?: 'TaxCalculation';
+  /** The tax rate applied */
+  rate: Scalars['Float']['output'];
+  /** The calculated tax amount (total * rate) */
+  result: Scalars['Float']['output'];
+  /** The base amount before tax */
+  total: Scalars['Float']['output'];
+};
+
 export enum TaxGain {
   Long = 'LONG',
   Short = 'SHORT'
@@ -28915,7 +28955,7 @@ export type AccountSummaryFragment = { __typename?: 'Account', id: string, uploa
 export type PortfolioSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PortfolioSummaryQuery = { __typename?: 'Query', portfolioSummary: { __typename?: 'PortfolioSummary', setUpStatus: SetUpStatus, realized: { __typename?: 'PortfolioSummaryRealized', dividend: number, longTermCapitalGain: number, shortTermCapitalGain: number, gainTotal: number }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, accountCount: number, positionCount: number }, harvest: { __typename?: 'HarvestPotential', realized: number, unrealized: number, total: number } } };
+export type PortfolioSummaryQuery = { __typename?: 'Query', portfolioSummary: { __typename?: 'PortfolioSummary', setUpStatus: SetUpStatus, realized: { __typename?: 'PortfolioSummaryRealized', dividend: number, longTermCapitalGain: number, shortTermCapitalGain: number, gainTotal: number, estimatedTaxBill: { __typename?: 'EstimatedTaxBill', total: number, shortTermCapitalGain: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, longTermCapitalGain: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, dividend: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, qualifiedDividend: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, nonQualifiedDividend: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, dividendReinvestment: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, interest: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, interestReinvestment: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, distribution: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, accountFee: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, managementFee: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, fundFee: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, taxWithheld: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, nonResidentTax: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, deposit: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, withdrawal: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, contribution: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, returnOfPrincipal: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, loanPayment: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, marginExpense: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, stockDistribution: { __typename?: 'TaxCalculation', total: number, rate: number, result: number }, unqualifiedGain: { __typename?: 'TaxCalculation', total: number, rate: number, result: number } } }, unrealized: { __typename?: 'PortfolioSummaryUnrealized', gainTotal: number, lossTotal: number, accountCount: number, positionCount: number }, harvest: { __typename?: 'HarvestPotential', realized: number, unrealized: number, total: number } } };
 
 export type AccountSummariesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -31993,6 +32033,119 @@ export const PortfolioSummaryDocument = gql`
       longTermCapitalGain
       shortTermCapitalGain
       gainTotal
+      estimatedTaxBill {
+        total
+        shortTermCapitalGain {
+          total
+          rate
+          result
+        }
+        longTermCapitalGain {
+          total
+          rate
+          result
+        }
+        dividend {
+          total
+          rate
+          result
+        }
+        qualifiedDividend {
+          total
+          rate
+          result
+        }
+        nonQualifiedDividend {
+          total
+          rate
+          result
+        }
+        dividendReinvestment {
+          total
+          rate
+          result
+        }
+        interest {
+          total
+          rate
+          result
+        }
+        interestReinvestment {
+          total
+          rate
+          result
+        }
+        distribution {
+          total
+          rate
+          result
+        }
+        accountFee {
+          total
+          rate
+          result
+        }
+        managementFee {
+          total
+          rate
+          result
+        }
+        fundFee {
+          total
+          rate
+          result
+        }
+        taxWithheld {
+          total
+          rate
+          result
+        }
+        nonResidentTax {
+          total
+          rate
+          result
+        }
+        deposit {
+          total
+          rate
+          result
+        }
+        withdrawal {
+          total
+          rate
+          result
+        }
+        contribution {
+          total
+          rate
+          result
+        }
+        returnOfPrincipal {
+          total
+          rate
+          result
+        }
+        loanPayment {
+          total
+          rate
+          result
+        }
+        marginExpense {
+          total
+          rate
+          result
+        }
+        stockDistribution {
+          total
+          rate
+          result
+        }
+        unqualifiedGain {
+          total
+          rate
+          result
+        }
+      }
     }
     unrealized {
       gainTotal

@@ -38,12 +38,101 @@ export class PortfolioSummaryUnrealized {
 }
 
 @ObjectType()
+export class TaxCalculation {
+	@Field({ description: 'The base amount before tax' })
+	total: number;
+
+	@Field({ description: 'The tax rate applied' })
+	rate: number;
+
+	@Field({ description: 'The calculated tax amount (total * rate)' })
+	result: number;
+}
+
+@ObjectType()
+export class EstimatedTaxBill {
+	@Field({ description: 'Total estimated tax bill across all categories' })
+	total: number;
+
+	@Field(() => TaxCalculation)
+	shortTermCapitalGain: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	longTermCapitalGain: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	dividend: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	qualifiedDividend: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	nonQualifiedDividend: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	dividendReinvestment: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	interest: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	interestReinvestment: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	distribution: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	accountFee: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	managementFee: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	fundFee: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	taxWithheld: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	nonResidentTax: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	deposit: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	withdrawal: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	contribution: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	returnOfPrincipal: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	loanPayment: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	marginExpense: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	stockDistribution: TaxCalculation;
+
+	@Field(() => TaxCalculation)
+	unqualifiedGain: TaxCalculation;
+}
+
+@ObjectType()
 export class PortfolioSummaryRealized {
 	// Derived fields -------------------------------------------------------------
 	@Field({
 		description: 'Total realized gain or loss derived from the relevant fields',
 	})
 	gainTotal: number;
+
+	@Field(() => EstimatedTaxBill, {
+		description: 'Estimated tax bill based on realized gains and losses',
+	})
+	estimatedTaxBill: EstimatedTaxBill;
 
 	// 1-1 databse column fields --------------------------------------------------
 	@Field({ description: 'Total current plaid amount' })

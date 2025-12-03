@@ -30,6 +30,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 			portfolio: data?.portfolioAuthed ?? '',
 			reload: async () => {
 				setReloading(true);
+				await session?.clearCache();
 				await session?.reload();
 				await refetch();
 				setReloading(false);

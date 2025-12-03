@@ -9,6 +9,18 @@ export const envSchema = z.object({
 	MATCH_PERCENTAGE_DIFFERENCE: z.coerce.number(),
 	PORT: z.string(),
 	CRON_ENABLED: z.coerce.boolean(),
+	// Tax Rates
+	SHORT_TERM_CAPITAL_GAINS_TAX_RATE: z.coerce.number().default(0.37),
+	LONG_TERM_CAPITAL_GAINS_TAX_RATE: z.coerce.number().default(0.20),
+	DIVIDEND_TAX_RATE: z.coerce.number().default(0.37),
+	QUALIFIED_DIVIDEND_TAX_RATE: z.coerce.number().default(0.20),
+	NON_QUALIFIED_DIVIDEND_TAX_RATE: z.coerce.number().default(0.37),
+	DIVIDEND_REINVESTMENT_TAX_RATE: z.coerce.number().default(0.37),
+	INTEREST_TAX_RATE: z.coerce.number().default(0.37),
+	INTEREST_REINVESTMENT_TAX_RATE: z.coerce.number().default(0.37),
+	DISTRIBUTION_TAX_RATE: z.coerce.number().default(0.37),
+	STOCK_DISTRIBUTION_TAX_RATE: z.coerce.number().default(0.20),
+	UNQUALIFIED_GAIN_TAX_RATE: z.coerce.number().default(0.37),
 	// Database
 	DATABASE_URL: z.string(),
 	// Clerk
