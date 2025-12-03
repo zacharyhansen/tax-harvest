@@ -6,13 +6,16 @@ import type { ColumnDef } from '@tanstack/react-table';
 import {
 	ChevronLeft,
 	ChevronRight,
+	TrendingUp as TrendingUpIcon,
 	Trash2,
 	TrendingDown,
 	TrendingUp,
 	X,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { usePortfolioLotsQuery } from '~/generated/gql';
+import { TypedRoutes } from '~/lib/routes';
 import { Format, isOlderThanOneYear } from '~/modules/utils';
 import { DateFormatter } from '~/modules/utils/DateFormatter';
 import { useModelState } from './ModelStateProvider';
@@ -36,6 +39,7 @@ type ModelLot = {
  * ```
  */
 export function ModelPanel() {
+	const router = useRouter();
 	const {
 		modelLotIds,
 		sortedLotIds,
@@ -266,7 +270,15 @@ export function ModelPanel() {
 
 					{/* Footer */}
 					{modelLots.length > 0 && (
-						<div className="border-t p-4 flex justify-end">
+						<div className="border-t p-4 flex justify-between">
+							<Button
+								variant="default"
+								size="sm"
+								onClick={() => router.push(TypedRoutes.autoInvesting())}
+							>
+								<TrendingUpIcon className="h-4 w-4 mr-2" />
+								Auto Invest
+							</Button>
 							<Button variant="destructive" size="sm" onClick={deleteModel}>
 								<Trash2 className="h-4 w-4 mr-2" />
 								Delete Model

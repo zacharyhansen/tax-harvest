@@ -103,7 +103,7 @@ export default function HarvestsPage() {
 	}
 
 	return (
-		<div className="grow pt-4">
+		<div className="pt-4 h-screen">
 			<GridTable<HarvestTableItemFragment>
 				rowData={data?.harvests}
 				columnDefs={columnDefs}

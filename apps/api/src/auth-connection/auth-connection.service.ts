@@ -67,7 +67,15 @@ export class AuthConnectionService {
 					},
 				});
 
+				// Track unique portfolio connect IDs to delete
+				const portfolioConnectIds = new Set<string>();
+
 				for (const account of accounts) {
+					// Track the portfolio connect ID
+					if (account.portfolioConnectId) {
+						portfolioConnectIds.add(account.portfolioConnectId);
+					}
+
 					// Delete related data for each account
 					await trx.position.deleteMany({
 						where: { accountId: account.id },
@@ -83,6 +91,21 @@ export class AuthConnectionService {
 					await trx.account.delete({
 						where: { id: account.id },
 					});
+				}
+
+				// Delete orphaned portfolio connect records
+				for (const portfolioConnectId of portfolioConnectIds) {
+					// Check if any other accounts still reference this portfolio connect
+					const remainingAccounts = await trx.account.count({
+						where: { portfolioConnectId },
+					});
+
+					// If no accounts remain, delete the portfolio connect
+					if (remainingAccounts === 0) {
+						await trx.portfolioConnect.delete({
+							where: { id: portfolioConnectId },
+						});
+					}
 				}
 
 				// Finally delete the auth connection

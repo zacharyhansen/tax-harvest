@@ -22,9 +22,40 @@ import HarvestUnrealizedOrders_3 from './test/harvest_3/unrealizedOrders.json';
 const mockRealized = (
 	input: Partial<PortfolioSummaryRealized> = {},
 ): PortfolioSummaryRealized => {
+	const createMockTaxCalc = (total: number) => ({
+		total,
+		rate: 0,
+		result: 0,
+	});
+
 	return {
 		// Derived fields -------------------------------------------------------------
 		gainTotal: input.gainTotal ?? 0,
+		estimatedTaxBill: input.estimatedTaxBill ?? {
+			total: 0,
+			shortTermCapitalGain: createMockTaxCalc(0),
+			longTermCapitalGain: createMockTaxCalc(0),
+			dividend: createMockTaxCalc(0),
+			qualifiedDividend: createMockTaxCalc(0),
+			nonQualifiedDividend: createMockTaxCalc(0),
+			dividendReinvestment: createMockTaxCalc(0),
+			interest: createMockTaxCalc(0),
+			interestReinvestment: createMockTaxCalc(0),
+			distribution: createMockTaxCalc(0),
+			accountFee: createMockTaxCalc(0),
+			managementFee: createMockTaxCalc(0),
+			fundFee: createMockTaxCalc(0),
+			taxWithheld: createMockTaxCalc(0),
+			nonResidentTax: createMockTaxCalc(0),
+			deposit: createMockTaxCalc(0),
+			withdrawal: createMockTaxCalc(0),
+			contribution: createMockTaxCalc(0),
+			returnOfPrincipal: createMockTaxCalc(0),
+			loanPayment: createMockTaxCalc(0),
+			marginExpense: createMockTaxCalc(0),
+			stockDistribution: createMockTaxCalc(0),
+			unqualifiedGain: createMockTaxCalc(0),
+		},
 		// 1-1 databse column fields --------------------------------------------------
 		current: input.current ?? 0,
 		available: input.available ?? 0,

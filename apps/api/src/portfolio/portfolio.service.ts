@@ -27,7 +27,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import {
 	type DirectedHarvestLot,
-	type EstimatedTaxBill,
 	type HarvestEvalResult,
 	type HarvestResult,
 	type PortfolioSummary,
@@ -86,18 +85,19 @@ export class PortfolioService {
 		portfolioId?: string,
 	) {
 		const user = await this.userService.asserUserExists(userId);
-		return this.prismaService.rlsBypassClient().portfolio.findUniqueOrThrow({
-			where: {
-				id: portfolioId,
-				usersOnPortfolios: {
-					some: {
-						userId: user.id,
+		return this.prismaService
+			.rlsBypassClient()
+			.portfolio.findUniqueOrThrow({
+				where: {
+					id: portfolioId,
+					usersOnPortfolios: {
+						some: {
+							userId: user.id,
+						},
 					},
 				},
-			},
-		});
-
-		// .catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId))
+			})
+			.catch(() => this.assertUserHasDefaultPortfolio(user.id, portfolioId));
 	}
 
 	getPortfolioByPortfolioId(
@@ -279,10 +279,8 @@ export class PortfolioService {
 		).plus(summaryCurrentLots.realizedLongTermDollarChangeFromCurrentHarvest);
 
 		// Calculate estimated tax bill for current realized values
-		const estimatedTaxBill = PortfolioService.calculateEstimatedTaxBill(
-			realized,
-			this.configService,
-		);
+		const estimatedTaxBill =
+			this.realizedPAndLService.calculateEstimatedTaxBill(realized);
 
 		// Calculate estimated tax bill including current harvest
 		const realizedWithHarvest = {
@@ -295,10 +293,7 @@ export class PortfolioService {
 			longTermCapitalGain: longTermCapitalGainWithHarvest.toNumber(),
 		};
 		const estimatedTaxBillWithHarvest =
-			PortfolioService.calculateEstimatedTaxBill(
-				realizedWithHarvest,
-				this.configService,
-			);
+			this.realizedPAndLService.calculateEstimatedTaxBill(realizedWithHarvest);
 
 		return {
 			...PortfolioService.calculateHarvest({
@@ -335,145 +330,6 @@ export class PortfolioService {
 					: setupAccounts.length > 0
 						? SetUpStatus.ACCOUNT_SETUP_REQUIRED
 						: SetUpStatus.COMPLETE,
-		};
-	}
-
-	/**
-	 * Calculate estimated tax bill based on realized gains and losses
-	 * @param realized - Portfolio realized summary with all P&L fields
-	 * @param configService - Config service to get tax rates
-	 * @returns Estimated tax bill breakdown by category with total, rate, and result for each
-	 * @example
-	 * const taxBill = PortfolioService.calculateEstimatedTaxBill(realized, configService);
-	 */
-	static calculateEstimatedTaxBill(
-		realized: PortfolioSummaryRealized,
-		configService: ConfigService,
-	): EstimatedTaxBill {
-		// Helper function to create tax calculation object
-		const createTaxCalc = (
-			total: number,
-			rateKey: string,
-		): { total: number; rate: number; result: number } => {
-			const rate = configService.get<number>(rateKey) || 0;
-			const taxableAmount = Math.max(0, total);
-			return {
-				total: taxableAmount,
-				rate,
-				result: taxableAmount * rate,
-			};
-		};
-
-		// Helper for non-taxable items
-		const createNonTaxable = (
-			total: number,
-		): { total: number; rate: number; result: number } => ({
-			total,
-			rate: 0,
-			result: 0,
-		});
-
-		// Calculate tax for each category
-		const shortTermCapitalGain = createTaxCalc(
-			realized.shortTermCapitalGain,
-			'SHORT_TERM_CAPITAL_GAINS_TAX_RATE',
-		);
-
-		const longTermCapitalGain = createTaxCalc(
-			realized.longTermCapitalGain,
-			'LONG_TERM_CAPITAL_GAINS_TAX_RATE',
-		);
-
-		const dividend = createTaxCalc(realized.dividend, 'DIVIDEND_TAX_RATE');
-
-		const qualifiedDividend = createTaxCalc(
-			realized.qualifiedDividend,
-			'QUALIFIED_DIVIDEND_TAX_RATE',
-		);
-
-		const nonQualifiedDividend = createTaxCalc(
-			realized.nonQualifiedDividend,
-			'NON_QUALIFIED_DIVIDEND_TAX_RATE',
-		);
-
-		const dividendReinvestment = createTaxCalc(
-			realized.dividendReinvestment,
-			'DIVIDEND_REINVESTMENT_TAX_RATE',
-		);
-
-		const interest = createTaxCalc(realized.interest, 'INTEREST_TAX_RATE');
-
-		const interestReinvestment = createTaxCalc(
-			realized.interestReinvestment,
-			'INTEREST_REINVESTMENT_TAX_RATE',
-		);
-
-		const distribution = createTaxCalc(
-			realized.distribution,
-			'DISTRIBUTION_TAX_RATE',
-		);
-
-		const stockDistribution = createTaxCalc(
-			realized.stockDistribution,
-			'STOCK_DISTRIBUTION_TAX_RATE',
-		);
-
-		const unqualifiedGain = createTaxCalc(
-			realized.unqualifiedGain,
-			'UNQUALIFIED_GAIN_TAX_RATE',
-		);
-
-		// Most other fields (fees, deposits, etc.) are not taxable income
-		const accountFee = createNonTaxable(realized.accountFee);
-		const managementFee = createNonTaxable(realized.managementFee);
-		const fundFee = createNonTaxable(realized.fundFee);
-		const taxWithheld = createNonTaxable(realized.taxWithheld);
-		const nonResidentTax = createNonTaxable(realized.nonResidentTax);
-		const deposit = createNonTaxable(realized.deposit);
-		const withdrawal = createNonTaxable(realized.withdrawal);
-		const contribution = createNonTaxable(realized.contribution);
-		const returnOfPrincipal = createNonTaxable(realized.returnOfPrincipal);
-		const loanPayment = createNonTaxable(realized.loanPayment);
-		const marginExpense = createNonTaxable(realized.marginExpense);
-
-		// Sum all the result fields to get total tax
-		const total =
-			shortTermCapitalGain.result +
-			longTermCapitalGain.result +
-			dividend.result +
-			qualifiedDividend.result +
-			nonQualifiedDividend.result +
-			dividendReinvestment.result +
-			interest.result +
-			interestReinvestment.result +
-			distribution.result +
-			stockDistribution.result +
-			unqualifiedGain.result;
-
-		return {
-			total,
-			shortTermCapitalGain,
-			longTermCapitalGain,
-			dividend,
-			qualifiedDividend,
-			nonQualifiedDividend,
-			dividendReinvestment,
-			interest,
-			interestReinvestment,
-			distribution,
-			accountFee,
-			managementFee,
-			fundFee,
-			taxWithheld,
-			nonResidentTax,
-			deposit,
-			withdrawal,
-			contribution,
-			returnOfPrincipal,
-			loanPayment,
-			marginExpense,
-			stockDistribution,
-			unqualifiedGain,
 		};
 	}
 

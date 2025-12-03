@@ -54,6 +54,7 @@ const navItems = [
 		icon: Scissors,
 	},
 	{ href: 'harvests' as const, label: 'Harvests', icon: Wheat },
+	{ href: 'autoInvesting' as const, label: 'Auto Invest', icon: Bot },
 ];
 
 const accountNavItems = [

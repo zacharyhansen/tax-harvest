@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { OnEvent } from '@nestjs/event-emitter';
 import type { Prisma, ProfitAndLossType, RealizedPAndL } from '@prisma/client';
 import { Decimal } from 'decimal.js';
@@ -77,6 +78,7 @@ export class RealizedPandLService {
 		private readonly positionService: PositionService,
 		private readonly prismaService: PrismaService,
 		private readonly lotService: LotService,
+		private readonly configService: ConfigService,
 	) {}
 
 	@OnEvent(EventId.ACCOUNTS_SYNCED)
@@ -341,7 +343,7 @@ export class RealizedPandLService {
 		}
 	}
 
-	queryRealizedPAndL({
+	async queryRealizedPAndL({
 		portfolioId,
 		startOfYear,
 	}: {
@@ -358,7 +360,7 @@ export class RealizedPandLService {
 				.orderBy('createdAt', 'desc')
 				.distinctOn('accountId');
 
-			return await trx
+			const dbResult = await trx
 				.selectFrom(sub.as('account_p_l'))
 				.select('account_p_l.portfolioId')
 				.select((eb) =>
@@ -462,6 +464,151 @@ export class RealizedPandLService {
 				)
 				.groupBy('account_p_l.portfolioId')
 				.executeTakeFirstOrThrow();
+
+			// Calculate estimated tax bill
+			const estimatedTaxBill = this.calculateEstimatedTaxBill(dbResult);
+
+			return {
+				...dbResult,
+				estimatedTaxBill,
+			};
 		});
+	}
+
+	/**
+	 * Calculate estimated tax bill based on realized gains and losses
+	 * @param realized - Portfolio realized summary with all P&L fields
+	 * @returns Estimated tax bill breakdown by category with total, rate, and result for each
+	 * @example
+	 * const taxBill = realizedPandLService.calculateEstimatedTaxBill(realized);
+	 */
+	calculateEstimatedTaxBill(
+		realized: Omit<PortfolioSummaryRealized, 'estimatedTaxBill'>,
+	) {
+		// Helper function to create tax calculation object
+		const createTaxCalc = (
+			total: number,
+			rateKey: string,
+		): { total: number; rate: number; result: number } => {
+			const rate = this.configService.get<number>(rateKey) || 0;
+			const taxableAmount = Math.max(0, total);
+			return {
+				total: taxableAmount,
+				rate,
+				result: taxableAmount * rate,
+			};
+		};
+
+		// Helper for non-taxable items
+		const createNonTaxable = (
+			total: number,
+		): { total: number; rate: number; result: number } => ({
+			total,
+			rate: 0,
+			result: 0,
+		});
+
+		// Calculate tax for each category
+		const shortTermCapitalGain = createTaxCalc(
+			realized.shortTermCapitalGain,
+			'SHORT_TERM_CAPITAL_GAINS_TAX_RATE',
+		);
+
+		const longTermCapitalGain = createTaxCalc(
+			realized.longTermCapitalGain,
+			'LONG_TERM_CAPITAL_GAINS_TAX_RATE',
+		);
+
+		const dividend = createTaxCalc(realized.dividend, 'DIVIDEND_TAX_RATE');
+
+		const qualifiedDividend = createTaxCalc(
+			realized.qualifiedDividend,
+			'QUALIFIED_DIVIDEND_TAX_RATE',
+		);
+
+		const nonQualifiedDividend = createTaxCalc(
+			realized.nonQualifiedDividend,
+			'NON_QUALIFIED_DIVIDEND_TAX_RATE',
+		);
+
+		const dividendReinvestment = createTaxCalc(
+			realized.dividendReinvestment,
+			'DIVIDEND_REINVESTMENT_TAX_RATE',
+		);
+
+		const interest = createTaxCalc(realized.interest, 'INTEREST_TAX_RATE');
+
+		const interestReinvestment = createTaxCalc(
+			realized.interestReinvestment,
+			'INTEREST_REINVESTMENT_TAX_RATE',
+		);
+
+		const distribution = createTaxCalc(
+			realized.distribution,
+			'DISTRIBUTION_TAX_RATE',
+		);
+
+		const stockDistribution = createTaxCalc(
+			realized.stockDistribution,
+			'STOCK_DISTRIBUTION_TAX_RATE',
+		);
+
+		const unqualifiedGain = createTaxCalc(
+			realized.unqualifiedGain,
+			'UNQUALIFIED_GAIN_TAX_RATE',
+		);
+
+		// Most other fields (fees, deposits, etc.) are not taxable income
+		const accountFee = createNonTaxable(realized.accountFee);
+		const managementFee = createNonTaxable(realized.managementFee);
+		const fundFee = createNonTaxable(realized.fundFee);
+		const taxWithheld = createNonTaxable(realized.taxWithheld);
+		const nonResidentTax = createNonTaxable(realized.nonResidentTax);
+		const deposit = createNonTaxable(realized.deposit);
+		const withdrawal = createNonTaxable(realized.withdrawal);
+		const contribution = createNonTaxable(realized.contribution);
+		const returnOfPrincipal = createNonTaxable(realized.returnOfPrincipal);
+		const loanPayment = createNonTaxable(realized.loanPayment);
+		const marginExpense = createNonTaxable(realized.marginExpense);
+
+		// Sum all the result fields to get total tax
+		const total =
+			shortTermCapitalGain.result +
+			longTermCapitalGain.result +
+			dividend.result +
+			qualifiedDividend.result +
+			nonQualifiedDividend.result +
+			dividendReinvestment.result +
+			interest.result +
+			interestReinvestment.result +
+			distribution.result +
+			stockDistribution.result +
+			unqualifiedGain.result;
+
+		return {
+			total,
+			shortTermCapitalGain,
+			longTermCapitalGain,
+			dividend,
+			qualifiedDividend,
+			nonQualifiedDividend,
+			dividendReinvestment,
+			interest,
+			interestReinvestment,
+			distribution,
+			accountFee,
+			managementFee,
+			fundFee,
+			taxWithheld,
+			nonResidentTax,
+			deposit,
+			withdrawal,
+			contribution,
+			returnOfPrincipal,
+			loanPayment,
+			marginExpense,
+			stockDistribution,
+			unqualifiedGain,
+		};
 	}
 }

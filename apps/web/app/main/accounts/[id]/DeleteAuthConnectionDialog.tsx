@@ -67,7 +67,11 @@ export default function DeleteAuthConnectionDialog({
 			onError: (error: any) => {
 				toast.error(`Failed to remove connection: ${error.message}`);
 			},
-			refetchQueries: ['PlaidAuthConnections'],
+			refetchQueries: [
+				'PlaidAuthConnections',
+				'GetExistingPortfolioConnect',
+				'NewConnectPlaidInstitutionOptions',
+			],
 		},
 	);
 

@@ -89,7 +89,7 @@ model Portfolio {
 
   accounts                    Account[]
   usersOnPortfolios           UsersOnPortfolios[]
-  createdBy                   User                          @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdBy                   User                          @relation(fields: [createdById], references: [id], onDelete: Cascade)
   authConnections             AuthConnection[]
   harvests                    Harvest[]
   log                         Log[]

@@ -1,8 +1,9 @@
-import { useSession } from '@clerk/nextjs';
+import { useApolloClient } from '@apollo/client';
+import { useSession, useUser } from '@clerk/nextjs';
 import { Button } from '@repo/ui/components/button';
 import { SidebarProvider } from '@repo/ui/components/sidebar';
 import type { ReactNode } from 'react';
-import { createContext, use, useMemo, useState } from 'react';
+import { createContext, use, useEffect, useMemo, useState } from 'react';
 import LoadingScreen from '~/app/main/loading';
 import type { PortfolioItemFragment } from '~/generated/gql';
 import { usePortfolioAuthedQuery } from '~/generated/gql';
@@ -22,8 +23,10 @@ const PortfolioContext = createContext<{
 
 export function PortfolioProvider({ children }: { children: ReactNode }) {
 	const { session } = useSession();
+	const apolloClient = useApolloClient();
 	const [reloading, setReloading] = useState(false);
-	const { data, error, loading, refetch } = usePortfolioAuthedQuery();
+	const { data, error, loading } = usePortfolioAuthedQuery();
+	const { user } = useUser();
 
 	const ctx = useMemo(
 		() => ({
@@ -32,12 +35,23 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 				setReloading(true);
 				await session?.clearCache();
 				await session?.reload();
-				await refetch();
+				await apolloClient.resetStore();
+				await apolloClient.refetchQueries({ include: 'all' });
 				setReloading(false);
 			},
 		}),
-		[data?.portfolioAuthed, session, refetch],
+		[data?.portfolioAuthed, session, apolloClient],
 	);
+
+	// If at any point for new users or switching portfolios we reload to make sure the user is authed for the correct portfolio
+	useEffect(() => {
+		if (
+			data?.portfolioAuthed &&
+			user?.publicMetadata.portfolioId !== data?.portfolioAuthed.id
+		) {
+			ctx.reload();
+		}
+	}, [data, user?.publicMetadata.portfolioId, ctx.reload]);
 
 	if (loading || reloading) {
 		return <LoadingScreen />;

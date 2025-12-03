@@ -49,6 +49,10 @@ export default function DeleteAccountDialog({
 		onError: (error: any) => {
 			toast.error(`Failed to delete account: ${error.message}`);
 		},
+		refetchQueries: [
+			'GetExistingPortfolioConnect',
+			'NewConnectPlaidInstitutionOptions',
+		],
 	});
 
 	const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -19,6 +19,7 @@ export const TypedRoutes = {
 		z.object({ id: z.string() }),
 	),
 	actions: makeRoute(() => `/main/admin/actions`),
+	autoInvesting: makeRoute(() => `/main/auto-investing`),
 	admin: makeRoute(() => `/main/admin`),
 	aiAdvisor: makeRoute(() => `/main/admin/ai-advisor`),
 	connect: makeRoute(() => `/connect`),

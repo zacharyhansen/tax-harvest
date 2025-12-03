@@ -97,7 +97,12 @@ export default function InvitePage() {
 
 	return (
 		<div className="container mx-auto max-w-2xl py-8">
-			<h1 className="mb-8 text-3xl font-bold">Invite Friends</h1>
+			<h1 className="mb-8 text-3xl font-bold">
+				Invite Friends
+				{portfolioData?.portfolioAuthed.name
+					? ` - ${portfolioData.portfolioAuthed.name}`
+					: ''}
+			</h1>
 
 			<Tabs defaultValue="platform" className="w-full">
 				<TabsList className="mb-8 grid w-full grid-cols-2">
