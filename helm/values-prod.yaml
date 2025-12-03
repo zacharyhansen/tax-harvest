@@ -12,7 +12,7 @@ global:
     annotations:
       networking.gke.io/managed-certificates: harvester-prod-cert
       kubernetes.io/ingress.global-static-ip-name: prod-taxharvest-static-ip
-      kubernetes.io/ingress.allow-http: 'false'
+      kubernetes.io/ingress.allow-http: "false"
       kubernetes.io/ingress.class: gce
     rules:
       - host: app.taxharvest.ai
@@ -28,7 +28,7 @@ api:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v3.1.2
+    tag: v3.2.16
     pullPolicy: Always
   env:
     extras:
@@ -46,7 +46,7 @@ web:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web-prod
-    tag: v3.1.2
+    tag: v3.2.16
     pullPolicy: Always
 
 secrets:
@@ -94,7 +94,6 @@ secrets:
       data:
         - secretKey: SENDGRID_API_KEY
           remoteKey: PROD_SENDGRID_API_KEY
-
 # argocd:
 #   enabled: true
 #   namespace: argocd
