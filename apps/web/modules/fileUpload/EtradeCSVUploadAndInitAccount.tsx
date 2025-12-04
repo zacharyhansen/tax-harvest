@@ -38,9 +38,7 @@ export default function EtradeCSVUploadAndInitAccount({
 			title="Add Current Etrade Positions"
 			description="The positions will replace any existing positions for this account in the portfolio."
 			maxSize={1024 * 1024 * 2}
-			onUpload={async (files) => {
-				console.log('upload', files);
-			}}
+			onUpload={async () => {}}
 			disabled={false}
 			accept={{
 				'text/csv': [],

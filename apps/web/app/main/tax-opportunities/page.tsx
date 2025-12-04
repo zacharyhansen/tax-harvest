@@ -83,7 +83,6 @@ export default function TaxOpportunitiesPage() {
 		if (!container) return;
 
 		const handleScroll = () => {
-			console.log('container.scrollTop', container.scrollTop);
 			setIsCollapsed(container.scrollTop > 1);
 		};
 

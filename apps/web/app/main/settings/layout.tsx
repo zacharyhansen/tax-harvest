@@ -12,7 +12,9 @@ export default function SettingsLayout({
 				<aside className="w-56">
 					<Sidebar />
 				</aside>
-				<main className="flex-1">{children}</main>
+				<main className="flex-1 overflow-auto max-h-[calc(100vh-100px)] p-4">
+					{children}
+				</main>
 			</div>
 		</div>
 	);

@@ -47,7 +47,6 @@ export function useUploadFiles({
 					throw err;
 				});
 
-				console.log('onFileUploaded', onFileUploaded);
 				if (onFileUploaded) {
 					await onFileUploaded(fileInput);
 				}

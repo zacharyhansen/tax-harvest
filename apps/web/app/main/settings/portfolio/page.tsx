@@ -21,9 +21,9 @@ import {
 	usePortfolioDetailAuthedQuery,
 	useUpdatePortfolioMutation,
 } from '~/generated/gql';
+import { PortfolioSwitcher } from '~/modules/portfolio';
 import { ErrorPage, LoadingPage } from '~/modules/utility-components';
 import { zodNumber } from '~/modules/utils/zod-utils';
-import { PortfolioSwitcher } from '~/modules/portfolio';
 
 const formSchema = z.object({
 	harvestCycleWeeks: zodNumber.pipe(z.coerce.number().gte(1)),
@@ -156,7 +156,7 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
 
 	return (
 		<FormProvider {...form}>
-			<div className="space-y-6">
+			<div className="space-y-6 overflow-y-auto">
 				<div>
 					<h1 className="text-3xl font-bold tracking-tight">
 						Portfolio Settings
@@ -173,7 +173,8 @@ function Form({ portfolio }: { portfolio: PortfolioDetailItemFragment }) {
 					</CardHeader>
 					<CardContent>
 						<p className="text-sm text-muted-foreground mb-4">
-							Select a different portfolio to manage its settings and view its data.
+							Select a different portfolio to manage its settings and view its
+							data.
 						</p>
 						<PortfolioSwitcher />
 					</CardContent>

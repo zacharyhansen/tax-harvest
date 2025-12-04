@@ -99,7 +99,6 @@ export default function MergeErrorsPage() {
 				width: 120,
 				//@ts-expect-error <ok>
 				cellRenderer: (params) => {
-					console.log(params.data);
 					return <Badge>{params.data?.assetSymbol}</Badge>;
 				},
 			},

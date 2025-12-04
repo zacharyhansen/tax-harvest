@@ -123,8 +123,6 @@ function OnboardingWrapper({ children }: { children: React.ReactNode }) {
 	});
 	const router = useRouter();
 
-	console.log('portfolio', portfolio);
-
 	if (loading) {
 		return <LoadingScreen />;
 	}
