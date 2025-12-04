@@ -292,16 +292,18 @@ export function OnboardingCompleteStep({
 							))}
 						</div>
 
-						<Alert className="mt-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/20">
-							<AlertTitle className="text-blue-900 dark:text-blue-100">
-								Connect Plaid to Discover More
-							</AlertTitle>
-							<AlertDescription className="text-blue-700 dark:text-blue-200">
-								This analysis is based on your CSV data. Connecting Plaid will
-								provide real-time portfolio data and may reveal additional
-								harvesting opportunities not captured in your upload.
-							</AlertDescription>
-						</Alert>
+						{!portfolioConnectItem.authConnectionId && (
+							<Alert className="mt-6 border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/20">
+								<AlertTitle className="text-blue-900 dark:text-blue-100">
+									Connect Plaid to Discover More
+								</AlertTitle>
+								<AlertDescription className="text-blue-700 dark:text-blue-200">
+									This analysis is based on your CSV data. Connecting Plaid will
+									provide real-time portfolio data and may reveal additional
+									harvesting opportunities not captured in your upload.
+								</AlertDescription>
+							</Alert>
+						)}
 					</div>
 				)}
 			</div>
