@@ -28,8 +28,8 @@ export function Complete() {
 					harvesting opportunities.
 				</p>
 
-				<Link href={TypedRoutes.taxOpportunities()}>
-					<Button size="lg">Go to Tax-Loss Harvesting</Button>
+				<Link href={TypedRoutes.home()}>
+					<Button size="lg">Start Tax Modeling</Button>
 				</Link>
 			</div>
 		</div>

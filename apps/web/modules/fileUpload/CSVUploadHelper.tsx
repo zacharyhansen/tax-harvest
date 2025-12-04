@@ -63,10 +63,12 @@ const brokers: Broker[] = [
 					link: 'https://client.schwab.com/app/accounts/positions',
 				},
 				{
-					text: 'Click the "Export" button in the top right corner of the positions table',
+					text: 'For each position, use the "hamburger" menu to the right of the position to select "Lot Details"',
+					image: '/images/schwab/lot-csv.png',
 				},
 				{
-					text: 'Select "Tax Lots" from the export options to download the CSV file with complete lot information',
+					text: 'Select "Export" in the top right corner of the modal to download the CSV file with complete lot information',
+					image: '/images/schwab/lot-details.png',
 				},
 			],
 		},
