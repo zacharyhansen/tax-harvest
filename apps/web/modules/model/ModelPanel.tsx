@@ -1,5 +1,6 @@
 'use client';
 
+import NumberFlow from '@number-flow/react';
 import { Button } from '@repo/ui/components/button';
 import DataTable from '@repo/ui/components/dataTable/dataTable';
 import type { ColumnDef } from '@tanstack/react-table';
@@ -165,128 +166,145 @@ export function ModelPanel() {
 
 	return (
 		<>
-			{/* Minimized state - small tab on right edge */}
-			{isPanelMinimized && (
+			{/* Full panel */}
+			<div
+				className={`fixed right-0 top-12 bottom-0 w-[700px] z-40 border-l bg-background shadow-lg flex flex-col transition-transform duration-300 ease-in-out ${
+					isPanelMinimized ? 'translate-x-full' : 'translate-x-0'
+				}`}
+			>
+				{/* Toggle button - attached to panel left edge */}
 				<button
 					type="button"
-					className="fixed right-0 top-20 z-50 cursor-pointer bg-primary text-primary-foreground px-2 py-8 rounded-l-lg flex flex-col items-center gap-2 hover:bg-primary/90 transition-colors"
-					onClick={() => setIsPanelMinimized(false)}
+					className="absolute left-0 top-8 -translate-x-full z-50 cursor-pointer bg-primary text-primary-foreground px-2 py-8 rounded-l-lg flex flex-col items-center gap-2 hover:bg-primary/90 transition-all duration-300 ease-in-out"
+					onClick={() => setIsPanelMinimized(!isPanelMinimized)}
 				>
-					<ChevronLeft className="h-4 w-4 [writing-mode:vertical-rl]" />
+					{isPanelMinimized ? (
+						<ChevronLeft className="h-4 w-4 [writing-mode:vertical-rl]" />
+					) : (
+						<ChevronRight className="h-4 w-4 [writing-mode:vertical-rl]" />
+					)}
 					<span className="[writing-mode:vertical-rl] rotate-180 text-sm font-semibold">
 						Model ({modelLots.length})
 					</span>
 				</button>
-			)}
 
-			{/* Full panel */}
-			{!isPanelMinimized && (
-				<div className="fixed right-0 top-12 bottom-0 w-[700px] z-40 border-l bg-background shadow-lg flex flex-col">
-					{/* Minimize button on left border */}
-					<button
-						type="button"
-						className="absolute left-0 top-20 -translate-x-full z-50 cursor-pointer bg-primary text-primary-foreground px-2 py-8 rounded-l-lg flex flex-col items-center gap-2 hover:bg-primary/90 transition-colors"
-						onClick={() => setIsPanelMinimized(true)}
-					>
-						<ChevronRight className="h-4 w-4 [writing-mode:vertical-rl]" />
-						<span className="[writing-mode:vertical-rl] rotate-180 text-sm font-semibold">
-							Model ({modelLots.length})
-						</span>
-					</button>
+				{/* Header */}
+				{(() => {
+					const shortTermGains = modelLots.reduce((sum, lot) => {
+						const isLongTerm = isOlderThanOneYear(lot.acquiredDate);
+						if (isLongTerm) return sum;
+						const costBasis = Number(lot.remainingQty) * Number(lot.price);
+						const currentValue =
+							Number(lot.remainingQty) * Number(lot.asset.lastPrice);
+						return sum + (currentValue - costBasis);
+					}, 0);
 
-					{/* Header */}
-					{(() => {
-						const shortTermGains = modelLots.reduce((sum, lot) => {
-							const isLongTerm = isOlderThanOneYear(lot.acquiredDate);
-							if (isLongTerm) return sum;
-							const costBasis = Number(lot.remainingQty) * Number(lot.price);
-							const currentValue =
-								Number(lot.remainingQty) * Number(lot.asset.lastPrice);
-							return sum + (currentValue - costBasis);
-						}, 0);
+					const longTermGains = modelLots.reduce((sum, lot) => {
+						const isLongTerm = isOlderThanOneYear(lot.acquiredDate);
+						if (!isLongTerm) return sum;
+						const costBasis = Number(lot.remainingQty) * Number(lot.price);
+						const currentValue =
+							Number(lot.remainingQty) * Number(lot.asset.lastPrice);
+						return sum + (currentValue - costBasis);
+					}, 0);
 
-						const longTermGains = modelLots.reduce((sum, lot) => {
-							const isLongTerm = isOlderThanOneYear(lot.acquiredDate);
-							if (!isLongTerm) return sum;
-							const costBasis = Number(lot.remainingQty) * Number(lot.price);
-							const currentValue =
-								Number(lot.remainingQty) * Number(lot.asset.lastPrice);
-							return sum + (currentValue - costBasis);
-						}, 0);
+					// Simple tax calculation: 37% for short-term, 20% for long-term
+					const projectedTaxBill =
+						shortTermGains * 0.37 + longTermGains * 0.2;
 
-						// Simple tax calculation: 37% for short-term, 20% for long-term
-						const projectedTaxBill =
-							shortTermGains * 0.37 + longTermGains * 0.2;
-
-						return (
-							<div className="border-b p-4 space-y-3">
-								<div className="flex items-center justify-between">
-									<h2 className="text-lg font-semibold">Tax Model</h2>
-									<div className="text-right">
-										<div className="text-xs text-muted-foreground">
-											Projected Tax Bill
-										</div>
-										<div className="text-2xl font-bold">
-											{Format.money(projectedTaxBill)}
-										</div>
+					return (
+						<div className="border-b p-4 space-y-3">
+							<div className="flex items-center justify-between">
+								<h2 className="text-lg font-semibold">Tax Model</h2>
+								<div className="text-right">
+									<div className="text-xs text-muted-foreground">
+										Projected Tax Bill
+									</div>
+									<div className="text-2xl font-bold">
+										<NumberFlow
+											value={projectedTaxBill}
+											format={{
+												style: 'currency',
+												currency: 'USD',
+												minimumFractionDigits: 2,
+												maximumFractionDigits: 2,
+											}}
+										/>
 									</div>
 								</div>
-								{modelLots.length > 0 && (
-									<>
-										<div className="flex items-center justify-between text-sm">
-											<span>Short Term Gains</span>
-											<span className="font-semibold">
-												{Format.money(shortTermGains)}
-											</span>
-										</div>
-										<div className="flex items-center justify-between text-sm">
-											<span>Long Term Gains</span>
-											<span className="font-semibold">
-												{Format.money(longTermGains)}
-											</span>
-										</div>
-									</>
-								)}
 							</div>
-						);
-					})()}
-
-					{/* Table */}
-					<div className="flex-1 overflow-auto p-4">
-						<DataTable
-							columns={columns}
-							data={modelLots}
-							noResultsAlert={
-								<div className="text-center text-muted-foreground py-8">
-									<p>No lots in model</p>
-									<p className="text-sm mt-2">
-										Hover over lots in the table to add them
-									</p>
-								</div>
-							}
-							className="h-full"
-						/>
-					</div>
-
-					{/* Footer */}
-					{modelLots.length > 0 && (
-						<div className="border-t p-4 flex justify-between">
-							<Button
-								variant="default"
-								size="sm"
-								onClick={() => router.push(TypedRoutes.autoInvesting())}
-							>
-								<TrendingUpIcon className="h-4 w-4 mr-2" />
-								Auto Invest
-							</Button>
-							<Button variant="destructive" size="sm" onClick={deleteModel}>
-								<Trash2 className="h-4 w-4 mr-2" />
-								Delete Model
-							</Button>
+							{modelLots.length > 0 && (
+								<>
+									<div className="flex items-center justify-between text-sm">
+										<span>Short Term Gains</span>
+										<span className="font-semibold">
+											<NumberFlow
+												value={shortTermGains}
+												format={{
+													style: 'currency',
+													currency: 'USD',
+													minimumFractionDigits: 2,
+													maximumFractionDigits: 2,
+												}}
+											/>
+										</span>
+									</div>
+									<div className="flex items-center justify-between text-sm">
+										<span>Long Term Gains</span>
+										<span className="font-semibold">
+											<NumberFlow
+												value={longTermGains}
+												format={{
+													style: 'currency',
+													currency: 'USD',
+													minimumFractionDigits: 2,
+													maximumFractionDigits: 2,
+												}}
+											/>
+										</span>
+									</div>
+								</>
+							)}
 						</div>
-					)}
+					);
+				})()}
+
+				{/* Table */}
+				<div className="flex-1 overflow-auto p-4">
+					<DataTable
+						columns={columns}
+						data={modelLots}
+						noResultsAlert={
+							<div className="text-center text-muted-foreground py-8">
+								<p>No lots in model</p>
+								<p className="text-sm mt-2">
+									Hover over lots in the table to add them
+								</p>
+							</div>
+						}
+						className="h-full"
+						enableRowAnimations
+					/>
 				</div>
-			)}
+
+				{/* Footer */}
+				{modelLots.length > 0 && (
+					<div className="border-t p-4 flex justify-between">
+						<Button
+							variant="default"
+							size="sm"
+							onClick={() => router.push(TypedRoutes.autoInvesting())}
+						>
+							<TrendingUpIcon className="h-4 w-4 mr-2" />
+							Auto Invest
+						</Button>
+						<Button variant="destructive" size="sm" onClick={deleteModel}>
+							<Trash2 className="h-4 w-4 mr-2" />
+							Delete Model
+						</Button>
+					</div>
+				)}
+			</div>
 		</>
 	);
 }

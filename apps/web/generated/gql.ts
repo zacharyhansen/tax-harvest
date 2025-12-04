@@ -29223,26 +29223,28 @@ export type FinalizeHarvestMutationVariables = Exact<{
 
 export type FinalizeHarvestMutation = { __typename?: 'Mutation', finalizeHarvest: { __typename?: 'Harvest', id: string, date: any, step: HarvestStep, amount: string, type: HarvestType, label: string, notify: boolean, harvestTransactions?: Array<{ __typename?: 'HarvestTransaction', id: string, revert: boolean, counterTransaction: boolean, harvestTransactionItem: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } }, replacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertHarvestTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null, revertReplacementTransactionItem?: { __typename?: 'HarvestTransactionItem', id: string, quantity: string, completedDate?: any | null, orderType: OrderType, lotSold?: { __typename?: 'Lot', id: string, acquiredDate: any } | null, asset: { __typename?: 'Asset', lastPrice: string, symbol: string } } | null }> | null } };
 
-export type LotModelItemFragment = { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', lastPrice: string } } }> | null };
+export type LotOnLotModelItemFragmentFragment = { __typename?: 'LotOnLotModel', lotId: string, quantity: string, lotModelId: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', symbol: string, lastPrice: string } } };
+
+export type LotModelItemFragment = { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lotModelId: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', symbol: string, lastPrice: string } } }> | null };
 
 export type LotModelsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LotModelsQuery = { __typename?: 'Query', lotModels: Array<{ __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', lastPrice: string } } }> | null }> };
+export type LotModelsQuery = { __typename?: 'Query', lotModels: Array<{ __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lotModelId: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', symbol: string, lastPrice: string } } }> | null }> };
 
 export type LotModelQueryVariables = Exact<{
   lotModelId: Scalars['String']['input'];
 }>;
 
 
-export type LotModelQuery = { __typename?: 'Query', lotModel?: { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', lastPrice: string } } }> | null } | null };
+export type LotModelQuery = { __typename?: 'Query', lotModel?: { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lotModelId: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', symbol: string, lastPrice: string } } }> | null } | null };
 
 export type CreateLotModelMutationVariables = Exact<{
   lotOnLotModels?: InputMaybe<Array<LotOnLotModelInput> | LotOnLotModelInput>;
 }>;
 
 
-export type CreateLotModelMutation = { __typename?: 'Mutation', createLotModel: { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', lastPrice: string } } }> | null } };
+export type CreateLotModelMutation = { __typename?: 'Mutation', createLotModel: { __typename?: 'LotModel', id: string, createdAt: any, updatedAt: any, portfolioId: string, lotOnLotModels?: Array<{ __typename?: 'LotOnLotModel', lotId: string, quantity: string, lotModelId: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', symbol: string, lastPrice: string } } }> | null } };
 
 export type InsertLotOnLotModelMutationVariables = Exact<{
   lotModelId: Scalars['String']['input'];
@@ -29251,7 +29253,7 @@ export type InsertLotOnLotModelMutationVariables = Exact<{
 }>;
 
 
-export type InsertLotOnLotModelMutation = { __typename?: 'Mutation', insertLotOnLotModel: { __typename?: 'LotOnLotModel', lotId: string, quantity: string } };
+export type InsertLotOnLotModelMutation = { __typename?: 'Mutation', insertLotOnLotModel: { __typename?: 'LotOnLotModel', lotId: string, quantity: string, lotModelId: string, lot: { __typename?: 'Lot', id: string, assetSymbol: string, remainingQty: string, price: string, acquiredDate: any, asset: { __typename?: 'Asset', symbol: string, lastPrice: string } } } };
 
 export type DeleteLotOnLotModelMutationVariables = Exact<{
   lotModelId: Scalars['String']['input'];
@@ -29259,7 +29261,7 @@ export type DeleteLotOnLotModelMutationVariables = Exact<{
 }>;
 
 
-export type DeleteLotOnLotModelMutation = { __typename?: 'Mutation', deleteLotOnLotModel: { __typename?: 'LotOnLotModel', lotId: string } };
+export type DeleteLotOnLotModelMutation = { __typename?: 'Mutation', deleteLotOnLotModel: { __typename?: 'LotOnLotModel', lotId: string, lotModelId: string } };
 
 export type DeleteLotModelMutationVariables = Exact<{
   lotModelId: Scalars['String']['input'];
@@ -30151,6 +30153,24 @@ export const HarvestItemFragmentDoc = gql`
   }
 }
     ${HarvestTransactionRecordFragmentDoc}`;
+export const LotOnLotModelItemFragmentFragmentDoc = gql`
+    fragment LotOnLotModelItemFragment on LotOnLotModel {
+  lotId
+  quantity
+  lotModelId
+  lot {
+    id
+    assetSymbol
+    remainingQty
+    price
+    acquiredDate
+    asset {
+      symbol
+      lastPrice
+    }
+  }
+}
+    `;
 export const LotModelItemFragmentDoc = gql`
     fragment LotModelItem on LotModel {
   id
@@ -30158,21 +30178,10 @@ export const LotModelItemFragmentDoc = gql`
   updatedAt
   portfolioId
   lotOnLotModels {
-    lotId
-    quantity
-    lot {
-      id
-      assetSymbol
-      remainingQty
-      price
-      acquiredDate
-      asset {
-        lastPrice
-      }
-    }
+    ...LotOnLotModelItemFragment
   }
 }
-    `;
+    ${LotOnLotModelItemFragmentFragmentDoc}`;
 export const PortfolioItemFragmentDoc = gql`
     fragment PortfolioItem on Portfolio {
   id
@@ -33764,11 +33773,10 @@ export type CreateLotModelMutationOptions = Apollo.BaseMutationOptions<CreateLot
 export const InsertLotOnLotModelDocument = gql`
     mutation InsertLotOnLotModel($lotModelId: String!, $lotId: String!, $quantity: Float!) {
   insertLotOnLotModel(lotModelId: $lotModelId, lotId: $lotId, quantity: $quantity) {
-    lotId
-    quantity
+    ...LotOnLotModelItemFragment
   }
 }
-    `;
+    ${LotOnLotModelItemFragmentFragmentDoc}`;
 export type InsertLotOnLotModelMutationFn = Apollo.MutationFunction<InsertLotOnLotModelMutation, InsertLotOnLotModelMutationVariables>;
 
 /**
@@ -33801,6 +33809,7 @@ export const DeleteLotOnLotModelDocument = gql`
     mutation DeleteLotOnLotModel($lotModelId: String!, $lotId: String!) {
   deleteLotOnLotModel(lotModelId: $lotModelId, lotId: $lotId) {
     lotId
+    lotModelId
   }
 }
     `;

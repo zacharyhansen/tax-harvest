@@ -1,21 +1,27 @@
+fragment LotOnLotModelItemFragment on LotOnLotModel {
+	lotId
+	quantity
+	lotModelId
+	lot {
+		id
+		assetSymbol
+		remainingQty
+		price
+		acquiredDate
+		asset {
+			symbol
+			lastPrice
+		}
+	}
+}
+
 fragment LotModelItem on LotModel {
 	id
 	createdAt
 	updatedAt
 	portfolioId
 	lotOnLotModels {
-		lotId
-		quantity
-		lot {
-			id
-			assetSymbol
-			remainingQty
-			price
-			acquiredDate
-			asset {
-				lastPrice
-			}
-		}
+		...LotOnLotModelItemFragment
 	}
 }
 
@@ -47,14 +53,14 @@ mutation InsertLotOnLotModel(
 		lotId: $lotId
 		quantity: $quantity
 	) {
-		lotId
-		quantity
+		...LotOnLotModelItemFragment
 	}
 }
 
 mutation DeleteLotOnLotModel($lotModelId: String!, $lotId: String!) {
 	deleteLotOnLotModel(lotModelId: $lotModelId, lotId: $lotId) {
 		lotId
+		lotModelId
 	}
 }
 

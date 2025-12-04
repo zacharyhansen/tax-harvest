@@ -11,6 +11,8 @@ import {
 	useState,
 } from 'react';
 import {
+	LotModelItemFragmentDoc,
+	LotOnLotModelItemFragmentFragmentDoc,
 	useCreateLotModelMutation,
 	useDeleteLotModelMutation,
 	useDeleteLotOnLotModelMutation,
@@ -134,7 +136,22 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 						variables: {
 							lotOnLotModels: [{ lotId, quantity }],
 						},
-						refetchQueries: ['LotModels'],
+						update: (cache, { data }) => {
+							if (data?.createLotModel) {
+								const newModel = data.createLotModel;
+								cache.modify({
+									fields: {
+										lotModels(existingModels = []) {
+											const newModelRef = cache.writeFragment({
+												data: newModel,
+												fragment: LotModelItemFragmentDoc,
+											});
+											return [newModelRef, ...existingModels];
+										},
+									},
+								});
+							}
+						},
 						onCompleted: (data) => {
 							if (data?.createLotModel) {
 								setCurrentModelId(data.createLotModel.id);
@@ -145,13 +162,12 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 						},
 					}),
 					{
-						loading: 'Creating model...',
 						success: 'Lot added to new model',
 						error: 'Failed to create model',
 					},
 				);
 			} else {
-				// Add to existing model
+				// Add to existing model - optimistic update
 				await toast.promise(
 					insertLotOnLotModel({
 						variables: {
@@ -159,9 +175,27 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 							lotId,
 							quantity,
 						},
-						refetchQueries: ['LotModels'],
-						onCompleted: () => Promise.resolve(),
+						update: (cache, { data }) => {
+							if (data?.insertLotOnLotModel) {
+								cache.modify({
+									id: cache.identify({
+										__typename: 'LotModel',
+										id: currentModelId,
+									}),
+									fields: {
+										lotOnLotModels(existingLots = []) {
+											const newLotRef = cache.writeFragment({
+												data: data.insertLotOnLotModel,
+												fragment: LotOnLotModelItemFragmentFragmentDoc,
+											});
+											return [...existingLots, newLotRef];
+										},
+									},
+								});
+							}
+						},
 						onError: (err) => {
+							console.error('Failed to add lot to model', err);
 							throw err;
 						},
 					}),
@@ -183,20 +217,43 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 	const removeLot = useCallback(
 		async (lotId: string) => {
 			if (!currentModelId) return;
-			await toast.promise(
+			toast.promise(
 				deleteLotOnLotModel({
 					variables: {
 						lotModelId: currentModelId,
 						lotId,
 					},
-					refetchQueries: ['LotModels'],
-					onCompleted: () => Promise.resolve(),
-					onError: (err) => {
-						throw err;
+					optimisticResponse: {
+						__typename: 'Mutation',
+						deleteLotOnLotModel: {
+							__typename: 'LotOnLotModel',
+							lotId,
+							lotModelId: currentModelId,
+						},
+					},
+					update: (cache) => {
+						cache.modify({
+							id: cache.identify({
+								__typename: 'LotModel',
+								id: currentModelId,
+							}),
+							fields: {
+								lotOnLotModels(existingLots = [], { readField }) {
+									// biome-ignore lint/suspicious/noExplicitAny: <ok>
+									return existingLots.filter((lotRef: any) => {
+										const refLotId = readField('lotId', lotRef);
+										const refLotModelId = readField('lotModelId', lotRef);
+										// Keep the lot if it doesn't match both the lotId AND lotModelId being deleted
+										return !(
+											refLotId === lotId && refLotModelId === currentModelId
+										);
+									});
+								},
+							},
+						});
 					},
 				}),
 				{
-					loading: 'Removing lot from model...',
 					success: 'Lot removed from model',
 					error: 'Failed to remove lot',
 				},

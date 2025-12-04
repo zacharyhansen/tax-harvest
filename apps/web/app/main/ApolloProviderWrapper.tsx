@@ -38,6 +38,12 @@ function ApolloProviderWrapper({ children }: { children: ReactNode }) {
 					HarvestLotCurrent: {
 						keyFields: ['id', 'harvestQuantity'],
 					},
+					LotOnLotModel: {
+						keyFields: ['lotModelId', 'lotId'],
+					},
+					Asset: {
+						keyFields: ['symbol'],
+					},
 				},
 			}),
 			credentials: 'include',

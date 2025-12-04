@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import type * as React from 'react';
 
 import { cn } from '../utils';
@@ -66,19 +67,40 @@ TableFooter.displayName = 'TableFooter';
 const TableRow = ({
 	ref,
 	className,
+	animate,
 	...props
 }: React.HTMLAttributes<HTMLTableRowElement> & {
 	ref?: React.RefObject<HTMLTableRowElement | null>;
-}) => (
-	<tr
-		ref={ref}
-		className={cn(
-			'hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors',
-			className,
-		)}
-		{...props}
-	/>
-);
+	animate?: boolean;
+}) => {
+	const baseClassName = cn(
+		'hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors',
+		className,
+	);
+
+	if (animate) {
+		return (
+			<motion.tr
+				ref={ref as any}
+				className={baseClassName}
+				layout
+				initial={{ opacity: 0, y: -20, scale: 0.95 }}
+				animate={{ opacity: 1, y: 0, scale: 1 }}
+				exit={{ opacity: 0, x: 20, scale: 0.95 }}
+				transition={{
+					layout: { type: 'spring', stiffness: 500, damping: 30 },
+					opacity: { duration: 0.2 },
+					y: { duration: 0.25, ease: 'easeOut' },
+					x: { duration: 0.2, ease: 'easeIn' },
+					scale: { duration: 0.2 },
+				}}
+				{...(props as any)}
+			/>
+		);
+	}
+
+	return <tr ref={ref} className={baseClassName} {...props} />;
+};
 TableRow.displayName = 'TableRow';
 
 const TableHead = ({

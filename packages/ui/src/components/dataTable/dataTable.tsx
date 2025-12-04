@@ -30,8 +30,9 @@ import {
 	useReactTable,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
+import { AnimatePresence } from 'framer-motion';
 import { CircleArrowDown, CircleArrowUp } from 'lucide-react';
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 import React, { useCallback, useMemo } from 'react';
 import { Alert } from '../alert';
@@ -118,6 +119,14 @@ type DataTableProps<TData, TValue> = {
 	header?: ReactNode;
 	onUpdateCell?: (rowIndex: number, columnId: string, value: unknown) => void;
 	className?: string;
+	/**
+	 * Optional custom row wrapper component for animations
+	 */
+	rowComponent?: ComponentType<{ children: ReactNode; rowId: string }>;
+	/**
+	 * Enable AnimatePresence wrapper for row animations
+	 */
+	enableRowAnimations?: boolean;
 };
 
 function DataTable<TData, TValue>({
@@ -135,6 +144,8 @@ function DataTable<TData, TValue>({
 	onUpdateCell,
 	rowSelectionState,
 	className,
+	rowComponent: RowComponent,
+	enableRowAnimations = false,
 }: DataTableProps<TData, TValue>) {
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [columnVisibility, setColumnVisibility] =
@@ -350,92 +361,193 @@ function DataTable<TData, TValue>({
 					))}
 				</TableHeader>
 				<TableBody className="block min-w-fit overflow-y-auto">
-					{table.getRowModel().rows.length ? (
-						table.getRowModel().rows.map((row) => (
-							<TableRow
-								key={row.id}
-								data-state={row.getIsSelected() && 'selected'}
-								className="group"
-							>
-								{row.getVisibleCells().map((cell) =>
-									!data.length && loading ? (
-										<TableCell
-											key={cell.id}
-											className="bg-cyan-300"
-											style={{
-												maxWidth: cell.column.getSize(),
-												minWidth: cell.column.getSize(),
-												width: cell.column.getSize(),
-											}}
-										>
-											<Skeleton className="h-8 w-full" />
-										</TableCell>
-									) : (
-										<TableCell
-											key={cell.id}
-											className={clsx({
-												'bg-secondary': row.getIsGrouped(),
-												'font-bold': cell.getIsAggregated(),
-											})}
-											style={{
-												maxWidth: cell.column.getSize(),
-												minWidth: cell.column.getSize(),
-												width: cell.column.getSize(),
-											}}
-											onClick={
-												onRowClick &&
-												!cell.column.columnDef.meta?.preventRowClick
-													? () => onRowClick(row)
-													: undefined
-											}
-										>
-											{cell.getIsGrouped() ? (
-												<button
-													className="flex items-center space-x-2"
-													onClick={row.getToggleExpandedHandler()}
-													type="button"
+					{enableRowAnimations ? (
+						<AnimatePresence mode="popLayout">
+							{table.getRowModel().rows.length ? (
+								table.getRowModel().rows.map((row) => (
+									<TableRow
+										key={row.id}
+										data-state={row.getIsSelected() && 'selected'}
+										className="group"
+										animate={true}
+									>
+										{row.getVisibleCells().map((cell) =>
+											!data.length && loading ? (
+												<TableCell
+													key={cell.id}
+													className="bg-cyan-300"
+													style={{
+														maxWidth: cell.column.getSize(),
+														minWidth: cell.column.getSize(),
+														width: cell.column.getSize(),
+													}}
 												>
-													{row.getIsExpanded() ? (
-														<ChevronDownIcon className="size-4" />
-													) : (
-														<ChevronRightIcon className="size-4" />
-													)}
-													<div className="flex flex-col items-start text-xs">
-														<div className="font-bold">
-															{flexRender(
-																cell.column.columnDef.cell,
-																cell.getContext(),
-															)}
-														</div>
-														<div className="text-xs font-light text-secondary-foreground">
-															{row.subRows.length}{' '}
-															{row.subRows.length === 1 ? 'row' : 'rows'}
-														</div>
-													</div>
-												</button>
-											) : cell.getIsAggregated() ? (
-												flexRender(
-													cell.column.columnDef.aggregatedCell ??
-														cell.column.columnDef.cell,
-													cell.getContext(),
-												)
+													<Skeleton className="h-8 w-full" />
+												</TableCell>
 											) : (
-												flexRender(
-													cell.column.columnDef.cell,
-													cell.getContext(),
-												)
-											)}
-										</TableCell>
-									),
-								)}
-							</TableRow>
-						))
+												<TableCell
+													key={cell.id}
+													className={clsx({
+														'bg-secondary': row.getIsGrouped(),
+														'font-bold': cell.getIsAggregated(),
+													})}
+													style={{
+														maxWidth: cell.column.getSize(),
+														minWidth: cell.column.getSize(),
+														width: cell.column.getSize(),
+													}}
+													onClick={
+														onRowClick &&
+														!cell.column.columnDef.meta?.preventRowClick
+															? () => onRowClick(row)
+															: undefined
+													}
+												>
+													{cell.getIsGrouped() ? (
+														<button
+															className="flex items-center space-x-2"
+															onClick={row.getToggleExpandedHandler()}
+															type="button"
+														>
+															{row.getIsExpanded() ? (
+																<ChevronDownIcon className="size-4" />
+															) : (
+																<ChevronRightIcon className="size-4" />
+															)}
+															<div className="flex flex-col items-start text-xs">
+																<div className="font-bold">
+																	{flexRender(
+																		cell.column.columnDef.cell,
+																		cell.getContext(),
+																	)}
+																</div>
+																<div className="text-xs font-light text-secondary-foreground">
+																	{row.subRows.length}{' '}
+																	{row.subRows.length === 1 ? 'row' : 'rows'}
+																</div>
+															</div>
+														</button>
+													) : cell.getIsAggregated() ? (
+														flexRender(
+															cell.column.columnDef.aggregatedCell ??
+																cell.column.columnDef.cell,
+															cell.getContext(),
+														)
+													) : (
+														flexRender(
+															cell.column.columnDef.cell,
+															cell.getContext(),
+														)
+													)}
+												</TableCell>
+											),
+										)}
+									</TableRow>
+								))
+							) : (
+								<TableRow key="no-results">
+									<TableCell
+										colSpan={columns.length}
+										className="h-24 text-center"
+									>
+										{noResultsAlert}
+									</TableCell>
+								</TableRow>
+							)}
+						</AnimatePresence>
 					) : (
-						<TableRow>
-							<TableCell colSpan={columns.length} className="h-24 text-center">
-								{noResultsAlert}
-							</TableCell>
-						</TableRow>
+						<>
+							{table.getRowModel().rows.length ? (
+								table.getRowModel().rows.map((row) => (
+									<TableRow
+										key={row.id}
+										data-state={row.getIsSelected() && 'selected'}
+										className="group"
+									>
+										{row.getVisibleCells().map((cell) =>
+											!data.length && loading ? (
+												<TableCell
+													key={cell.id}
+													className="bg-cyan-300"
+													style={{
+														maxWidth: cell.column.getSize(),
+														minWidth: cell.column.getSize(),
+														width: cell.column.getSize(),
+													}}
+												>
+													<Skeleton className="h-8 w-full" />
+												</TableCell>
+											) : (
+												<TableCell
+													key={cell.id}
+													className={clsx({
+														'bg-secondary': row.getIsGrouped(),
+														'font-bold': cell.getIsAggregated(),
+													})}
+													style={{
+														maxWidth: cell.column.getSize(),
+														minWidth: cell.column.getSize(),
+														width: cell.column.getSize(),
+													}}
+													onClick={
+														onRowClick &&
+														!cell.column.columnDef.meta?.preventRowClick
+															? () => onRowClick(row)
+															: undefined
+													}
+												>
+													{cell.getIsGrouped() ? (
+														<button
+															className="flex items-center space-x-2"
+															onClick={row.getToggleExpandedHandler()}
+															type="button"
+														>
+															{row.getIsExpanded() ? (
+																<ChevronDownIcon className="size-4" />
+															) : (
+																<ChevronRightIcon className="size-4" />
+															)}
+															<div className="flex flex-col items-start text-xs">
+																<div className="font-bold">
+																	{flexRender(
+																		cell.column.columnDef.cell,
+																		cell.getContext(),
+																	)}
+																</div>
+																<div className="text-xs font-light text-secondary-foreground">
+																	{row.subRows.length}{' '}
+																	{row.subRows.length === 1 ? 'row' : 'rows'}
+																</div>
+															</div>
+														</button>
+													) : cell.getIsAggregated() ? (
+														flexRender(
+															cell.column.columnDef.aggregatedCell ??
+																cell.column.columnDef.cell,
+															cell.getContext(),
+														)
+													) : (
+														flexRender(
+															cell.column.columnDef.cell,
+															cell.getContext(),
+														)
+													)}
+												</TableCell>
+											),
+										)}
+									</TableRow>
+								))
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={columns.length}
+										className="h-24 text-center"
+									>
+										{noResultsAlert}
+									</TableCell>
+								</TableRow>
+							)}
+						</>
 					)}
 				</TableBody>
 				{hasFooter ? (
