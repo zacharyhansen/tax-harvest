@@ -1,27 +1,26 @@
 'use client';
 
+import { toast } from '@repo/ui/components/toast-sonner';
 import {
 	createContext,
+	type ReactNode,
+	useCallback,
 	useContext,
-	useState,
 	useEffect,
 	useMemo,
-	useCallback,
-	type ReactNode,
+	useState,
 } from 'react';
 import {
 	useCreateLotModelMutation,
-	useInsertLotOnLotModelMutation,
-	useDeleteLotOnLotModelMutation,
 	useDeleteLotModelMutation,
+	useDeleteLotOnLotModelMutation,
+	useInsertLotOnLotModelMutation,
 	useLotModelsQuery,
 } from '~/generated/gql';
-import { toast } from '@repo/ui/components/toast-sonner';
 
 type ModelStateStorage = {
 	isPanelOpen: boolean;
 	isPanelMinimized: boolean;
-	currentModelId: string | null;
 };
 
 interface ModelStateContextValue {
@@ -69,7 +68,7 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 	// Query existing models
 	const { data: modelsData } = useLotModelsQuery();
 
-	// Load panel state and current model from localStorage on mount
+	// Load panel state from localStorage on mount
 	useEffect(() => {
 		const stored = localStorage.getItem(STORAGE_KEY);
 		if (stored) {
@@ -77,7 +76,6 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 				const state = JSON.parse(stored) as ModelStateStorage;
 				setIsPanelOpen(state.isPanelOpen ?? false);
 				setIsPanelMinimized(state.isPanelMinimized ?? false);
-				setCurrentModelId(state.currentModelId ?? null);
 			} catch (e) {
 				console.error('Failed to parse model state from localStorage', e);
 			}
@@ -86,10 +84,14 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 
 	// Load the most recent model if no model is selected and models exist
 	useEffect(() => {
-		if (!currentModelId && modelsData?.lotModels && modelsData.lotModels.length > 0) {
+		if (
+			!currentModelId &&
+			modelsData?.lotModels &&
+			modelsData.lotModels.length > 0
+		) {
 			// Models are already sorted by createdAt desc from the query
 			const mostRecentModel = modelsData.lotModels[0];
-			setCurrentModelId(mostRecentModel.id);
+			setCurrentModelId(mostRecentModel?.id ?? null);
 		}
 	}, [currentModelId, modelsData]);
 
@@ -98,10 +100,9 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 		const state: ModelStateStorage = {
 			isPanelOpen,
 			isPanelMinimized,
-			currentModelId,
 		};
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-	}, [isPanelOpen, isPanelMinimized, currentModelId]);
+	}, [isPanelOpen, isPanelMinimized]);
 
 	// Get current model data from GraphQL
 	const currentModel = useMemo(() => {
@@ -111,7 +112,7 @@ export function ModelStateProvider({ children }: { children: ReactNode }) {
 
 	// Extract lot IDs from current model
 	const modelLotIds = useMemo(() => {
-		return currentModel?.lotOnLotModels.map((lom) => lom.lotId) ?? [];
+		return currentModel?.lotOnLotModels?.map((lom) => lom.lotId) ?? [];
 	}, [currentModel]);
 
 	// Create sorted lot IDs based on order in database
