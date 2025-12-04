@@ -23,12 +23,11 @@ global:
           - path: /
             pathType: Prefix
             service: web
-
 api:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-api/harvester-api
-    tag: v3.2.16
+    tag: v3.2.18
     pullPolicy: Always
   env:
     extras:
@@ -41,14 +40,12 @@ api:
       CLIENT_ORIGIN: https://app.taxharvest.ai
       ORIGIN: https://app.taxharvest.ai/core
       STRIPE_PUBLISHABLE_KEY: pk_live_5qIntVhFeqoTw1Pehq7YOJvx004hj6d7sk
-
 web:
   replicaCount: 1
   image:
     repository: us-central1-docker.pkg.dev/harvester-ai-428202/harvester-web/harvester-web-prod
-    tag: v3.2.16
+    tag: v3.2.18
     pullPolicy: Always
-
 secrets:
   externalSecrets:
     - name: database
