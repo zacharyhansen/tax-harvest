@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: PR Scope Labeler 🏷️
-        uses: actions/labeler@v5
+        uses: actions/labeler@v6
         with:
           configuration-path: .github/pr-scope-labeler.yml
           sync-labels: true
